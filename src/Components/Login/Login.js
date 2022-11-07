@@ -13,7 +13,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/login',{'username':username,'password':password}).then((res) => {
+    await axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/login',{'username':username,'password':password}).then((res) => {
             localStorage.setItem('auth',res.data.auth)
             localStorage.setItem('department',res.data.user.department)
             localStorage.setItem('emailWork',res.data.user.emailWork)

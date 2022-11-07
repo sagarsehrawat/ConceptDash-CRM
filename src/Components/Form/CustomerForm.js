@@ -52,7 +52,7 @@ function CustomerForm() {
   const [companies, setcompanies] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/companyNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/companyNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setcompanies(res.data.res)
           console.log(res.data);
         }).catch((err) => {
@@ -65,7 +65,7 @@ function CustomerForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmit(true);
-    axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/contact', {
+    axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/contact', {
       'companyId':form.company,
       'salutation':form.salutation,
       'firstName':form.firstname,

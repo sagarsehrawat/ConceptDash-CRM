@@ -12,7 +12,7 @@ function TimeSheet() {
     
     useEffect(() => {
         const call = async () => {
-            await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/timesheet',{headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':localStorage.getItem('employeeId')}}).then(async (res) => {
+            await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/timesheet',{headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':localStorage.getItem('employeeId')}}).then(async (res) => {
                 // settimesheet(res.data.res)
                 // console.log(res.data);
                 // console.log(res.data.res[0].Date)

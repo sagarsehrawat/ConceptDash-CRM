@@ -14,7 +14,7 @@ function EmployeeForm() {
     const [jobTitles, setjobTitles] = useState([])
     useEffect(() => {
         const call = async () => {
-          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/jobTitles', {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'department':dept }}).then((res) => {
+          await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/jobTitles', {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'department':dept }}).then((res) => {
             setjobTitles(res.data.res)
             console.log(res.data);
           }).catch((err) => {
@@ -98,7 +98,7 @@ function EmployeeForm() {
     const handleSubmit = (e) => {
       e.preventDefault();
       setIsSubmit(true);
-      axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/employee', {
+      axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/employee', {
         'username':form.username,
         'password':form.password,
         'department':form.department,
@@ -154,7 +154,7 @@ function EmployeeForm() {
     const [employees, setemployees] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setemployees(res.data.res)
         }).catch((err) => {
           console.log(err)

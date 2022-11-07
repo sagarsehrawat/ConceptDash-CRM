@@ -30,7 +30,7 @@ const Dashboard = () => {
     const [tasks, settasks] = useState([])
     useEffect(() => {
           const call = async () => {
-            await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/tasksById', {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':localStorage.getItem('employeeId')}}).then((res) => {
+            await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/tasksById', {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':localStorage.getItem('employeeId')}}).then((res) => {
                 settasks(res.data.res)
                 console.log(res.data.res);
             }).catch((err) => {

@@ -13,7 +13,7 @@ function ProjectTable() {
     useEffect(() => {
       setIsLoading(true);
         const call = async () => {
-          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projects', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+          await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projects', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
             setprojects(res.data.res)
             setIsLoading(false)
           }).catch((err) => {

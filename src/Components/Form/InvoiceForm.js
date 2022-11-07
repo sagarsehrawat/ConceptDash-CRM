@@ -25,7 +25,7 @@ function InvoiceForm() {
     const handleSubmit = (e) => {
       e.preventDefault();
       setIsSubmit(true);
-      axios.post('http://localhost:8080/api/addNewSupplier', {
+      axios.post('https://localhost:8080/api/addNewSupplier', {
         'orderID':form.orderID,
         'invoiceDate':form.invoiceDate,
         'dueDate':form.dueDate,

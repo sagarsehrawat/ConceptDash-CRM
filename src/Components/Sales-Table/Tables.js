@@ -5,7 +5,7 @@ import { TableRow, TableHead, TableContainer, TableCell, TableBody, Table, Paper
 function Tables() {
     const [sales, setsales] = useState([])
     useEffect(() => {
-        axios.get('http://localhost:8080/api/getAllSales').then((res) => {
+        axios.get('https://localhost:8080/api/getAllSales').then((res) => {
             setsales(res.data.res)
         }).catch((err) => {
             console.log(err)

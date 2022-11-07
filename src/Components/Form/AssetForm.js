@@ -10,7 +10,7 @@ function AssetForm() {
   const [employees, setemployees] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setemployees(res.data.res)
         }).catch((err) => {
           console.log(err)
@@ -39,7 +39,7 @@ function AssetForm() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/asset', {
+        axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/asset', {
             'employeeId':form.employee,
             'category':form.assetCategory,
             'hardwareDetails':form.hardwareDetails,

@@ -22,19 +22,19 @@ const handleShow = () => setShow(true);
   const [categories, setcategories] = useState([]);
   useEffect(() => {
     const call = async () => {
-      await axios.get('http://localhost:8080/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+      await axios.get('https://localhost:8080/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setemployees(res.data.res)
         console.log(res.data);
       }).catch((err) => {
         console.log(err)
       })
-      await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/departments', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+      await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/departments', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setdepts(res.data.res)
         console.log(res.data);
       }).catch((err) => {
         console.log(err)
       })
-      await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projectCategories', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+      await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projectCategories', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setcategories(res.data.res)
         console.log(res.data);
       }).catch((err) => {
@@ -75,7 +75,7 @@ let currentDate = `${year}-${month}-${day}`;
     e.preventDefault();
     setIsSubmit(true);
     console.log(form.dueDate);
-    axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/project', {
+    axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/project', {
       'projectName':form.projectName,
       'dateCreated': currentDate,
       'dueDate':form.dueDate,

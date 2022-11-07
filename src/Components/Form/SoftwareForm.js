@@ -27,7 +27,7 @@ function SoftwareForm() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/software', {
+        axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/software', {
             'software':form.software,
             'manufacturer':form.manufacturer,
             'version':form.version,

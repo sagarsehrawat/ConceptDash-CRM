@@ -43,19 +43,19 @@ function UpdateProjectForm() {
   const [categories, setcategories] = useState([]);
   useEffect(() => {
     const call = async () => {
-      await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+      await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setemployees(res.data.res)
         console.log(res.data);
       }).catch((err) => {
         console.log(err)
       })
-      await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/departments', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+      await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/departments', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setdepts(res.data.res)
         console.log(res.data);
       }).catch((err) => {
         console.log(err)
       })
-      await axios.get('hhttp://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projectCategories', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+      await axios.get('hhttps://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projectCategories', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setcategories(res.data.res)
         console.log(res.data);
       }).catch((err) => {
@@ -121,7 +121,7 @@ function UpdateProjectForm() {
     e.preventDefault();
     setIsSubmit(true);
     console.log(form.dueDate);
-    axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/update/project', {
+    axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/update/project', {
       'projectName':form.projectName,
       'dueDate':form.dueDate,
       'stage':form.projectStage,

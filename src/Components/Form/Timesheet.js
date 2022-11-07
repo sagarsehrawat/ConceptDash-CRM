@@ -19,7 +19,7 @@ function Timesheet() {
   const handleShow = () => setShow(true);
     useEffect(() => {
         const call = async () => {
-          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+          await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
             setemployees(res.data.res)
           }).catch((err) => {
             console.log(err)
@@ -29,7 +29,7 @@ function Timesheet() {
       },[])
       useEffect(() => {
         const call = async () => {
-          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projectNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+          await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projectNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
             setprojects(res.data.res)
           }).catch((err) => {
             console.log(err)
@@ -54,7 +54,7 @@ function Timesheet() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/timesheet', {
+        axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/timesheet', {
           'projectId':form.project,
           'employeeId': localStorage.getItem('employeeId'),
           'date':form.date,

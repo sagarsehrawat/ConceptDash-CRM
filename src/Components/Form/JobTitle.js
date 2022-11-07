@@ -22,7 +22,7 @@ function JobTitle() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/jobTitle', {
+        axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/jobTitle', {
             'jobTitle':form.jobTitle,
             'department':form.department,
             'hourlyRate':form.hourlyRate,

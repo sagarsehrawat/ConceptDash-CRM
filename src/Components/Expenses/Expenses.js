@@ -22,10 +22,10 @@ function TimeSheetTable() {
     };
     useEffect(() => {
         const call = async () => {
-          const res = await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/expenseCat',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}});
+          const res = await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/expenseCat',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}});
           setexpenseCat(res.data.res)
           console.log(res.data);
-          const res1 = await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/expenseTrans',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}});
+          const res1 = await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/expenseTrans',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}});
           setexpenseTrans(res1.data.res);
           console.log(res1.data);
         }

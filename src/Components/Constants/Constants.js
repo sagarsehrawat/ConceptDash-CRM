@@ -1,4 +1,4 @@
-export const HOST = 'http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com'
+export const HOST = 'https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com'
 export const GET_ALL_USERS = '/api/get/customers'
 export const ADD_NEW_USER = '/api/addNewUser'
 export const GET_ALL_SHIPPERS = '/api/get/shippers'
