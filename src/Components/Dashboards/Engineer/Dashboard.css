@@ -1,0 +1,38 @@
+body{
+    background-image: linear-gradient(to left, #553c9a, #b393d3);
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+.header{
+    white-space: nowrap;
+    text-align: center;
+    width: 95%;
+}
+.child{
+    display: inline-block;
+    
+}
+.button{
+    float: right;
+}
+.tableCont{
+    /* background-image: linear-gradient(to right,rgb(184, 184, 243), lightblue); */
+}
+.card-img{
+    width: 6rem;
+}
+
+.body-2{
+    margin-top: 3rem;
+}
+
+.fees{
+    margin-top: 2rem;
+    width: 200px;
+    height: 200px;
+    line-height: 200px;
+    border-radius: 50%;
+    font-size: 50px;
+    text-align: center;
+    background: radial-gradient(circle, #5c0067 0%, #000000 100%);
+}
