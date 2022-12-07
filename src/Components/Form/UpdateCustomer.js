@@ -2,190 +2,302 @@ import React, { useEffect, useState } from 'react'
 import './Form.css'
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
-import { HOST, GET_EMPLOYEENAMES, GET_DEPARTMENTS, GET_PROJECT_CATEGORIES, ADD_PROJECT } from '../Constants/Constants';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Select from 'react-select';
-import { useNavigate,useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import {useLocation} from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
+import { HOST, GET_COMPANY_NAMES, UPDATE_CLIENT } from '../Constants/Constants';
 
-function ProjectForm() {
-  const [isSubmit, setIsSubmit] = useState(false);
-  const [employees, setemployees] = useState([]);
-  const [depts, setdepts] = useState([]);
-  const [show, setShow] = useState(false);
+function UpdateCustomer() {
+    const location = useLocation();
+    console.log(location.state);
+    const [isSubmit, setIsSubmit] = useState(false);
+    const [company, setcompany] = useState(location.state.Company_ID)
+    const [sal, setsal] = useState(location.state.Salutation)
+    const [fname, setfname] = useState(location.state.First_Name)
+    const [lname, setlname] = useState(location.state.Last_Name)
+    const [ework, setework] = useState(location.state.Email_Work)
+    const [bphone, setbphone] = useState(location.state.Business_Phone)
+    const [address, setaddress] = useState(location.state.Address)
+    const [city, setcity] = useState(location.state.City)
+    const [state, setstate] = useState(location.state.Province)
+    const [zip, setzip] = useState(location.state.ZIP)
+    const [country, setcountry] = useState(location.state.Country)
+    const [epersonal, setepersonal] = useState(location.state.Email_Personal)
+    const [mobile, setmobile] = useState(location.state.Mobile_Phone)
+    const [attachments, setattachments] = useState(location.state.Attachments)
+    const [notes, setnotes] = useState(location.state.Notes)
 
-const handleClose = () => setShow(false);
-const handleShow = () => setShow(true);
-  const [categories, setcategories] = useState([]);
-  useEffect(() => {
-    const call = async () => {
-      await axios.get(HOST + GET_EMPLOYEENAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
-        setemployees(res.data.res)
-        console.log(res.data);
-      }).catch((err) => {
-        console.log(err)
+    const [birthday, setbirthday] = useState(location.state.Birthday?location.state.Birthday.substring(0,10):'')
+    const [anniv, setanniv] = useState(location.state.Anniversary?location.state.Anniversary.substring(0,10):'')
+    const [sport, setsport] = useState(location.state.Sports)
+    const [act, setact] = useState(location.state.Activites)
+    const [bev, setbev] = useState(location.state.Beverage)
+    const [alco, setalco] = useState(location.state.Alcohol)
+    const [tdest, settdest] = useState(location.state.Travel_Destination)
+    const [sname, setsname] = useState(location.state.Spouse_Name)
+    const [child, setchild] = useState(location.state.Children)
+    const [tv, settv] = useState(location.state.TV_Show)
+    const [movie, setmovie] = useState(location.state.Movies)
+    const [actor, setactor] = useState(location.state.Actor)
+    const [dislike, setdislike] = useState(location.state.Dislikes)
+    const [jtitle, setjtitle] = useState(location.state.Job_Title)
+
+    const [form, setform] = useState({
+        'company':company,
+        'salutation':sal,
+        'firstname':fname,
+        'lastname':lname,
+        'emailWork':ework,
+        'emailPersonal':epersonal,
+        'jobTitle':jtitle,
+        'business':bphone,
+        'mobile':mobile,
+        'address':address,
+        'city':city,
+        'state':state,
+        'zip':zip,
+        'country':country,
+        'attachments':attachments,
+        'notes':notes,
+        'birthday':birthday,
+        'anniversary':anniv,
+        'sports':sport,
+        'activity':act,
+        'beverage':bev,
+        'alcohol':alco,
+        'travelDest':tdest,
+        'spouseName':sname,
+        'children':child,
+        'tvShow':tv,
+        'movie':movie,
+        'actor':actor,
+        'dislikes':dislike,
       })
-      await axios.get(HOST + GET_DEPARTMENTS, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
-        setdepts(res.data.res)
-        console.log(res.data);
-      }).catch((err) => {
-        console.log(err)
-      })
-      await axios.get(HOST + GET_PROJECT_CATEGORIES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
-        setcategories(res.data.res)
-        console.log(res.data);
-      }).catch((err) => {
-        console.log(err)
-      })
-    }
-    call()
-  },[])
-  const [form, setform] = useState({
-    'projectName':"",
-    'dueDate':"",
-    'dateCreated':"",
-    'projectStage':"",
-    'followNotes':"",
-    'nextFollow':"",
-    'tentativeClosing':"",
-    'projectValue':"",
-    'city':"",
-    'state':"",
-    'department':"",
-    'assignedTo':"",
-    'projectManager':'',
-    'projectCategory':'',
-    'status':''
-  })
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    const newForm = form;
-    newForm[name] = value;
-    setform(newForm);
-  };
-const date  =new Date();
-let day = date.getDate();
-let month = date.getMonth() + 1;
-let year = date.getFullYear();
-let currentDate = `${year}-${month}-${day}`;
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsSubmit(true);
-    console.log(form.dueDate);
-    axios.post(HOST + ADD_PROJECT, {
-      'projectName':form.projectName,
-      'dateCreated': currentDate,
-      'dueDate':form.dueDate,
-      'stage':form.projectStage,
-      'followUpNotes':form.followNotes,
-      'nextFollowUp':form.nextFollow,
-      'tentClosing':form.tentativeClosing,
-      'value':form.projectValue,
-      'city':form.city,
-      'province':form.state,
-      'department':DisplayValue.toString(),
-      'teamMembers':DisplayValue.toString(),
-      'projectManager':form.projectManager,
-      'projectCategory':form.projectCategory,
-      'status':form.status
-    }, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
-      console.log(res);
-      if(res.data.success) {
-        handleShow()
-      }
-      }).catch((err) => {
+      const handleChange = (e) => {
+        const { name, value } = e.target;
+        if(name==='salutation') {
+          setsal(value)
+        }
+        if(name==='company') {
+            setcompany(value)
+        }
+        if(name==='firstname') {
+          setfname(value)
+        }
+        if(name==='lastname') {
+          setlname(value)
+        }
+        if(name==='emailWork') {
+          setework(value)
+        }
+        if(name==='emailPersonal') {
+          setepersonal(value)
+        }
+        if(name==='mobile') {
+          setmobile(value)
+        }
+        if(name==='jobTitle') {
+            setjtitle(value)
+        }
+        if(name==='address') {
+          setaddress(value)
+        }
+        if(name==='business') {
+          setbphone(value)
+        }
+        if(name==='city') {
+          setcity(value)
+        }
+        if(name==='state') {
+          setstate(value)
+        }
+        if(name==='country') {
+          setcountry(value)
+        }
+        if(name==='zip') {
+          setzip(value)
+        }
+        if(name==='notes') {
+          setnotes(value)
+        }
+        if(name==='attachments') {
+          setattachments(value)
+        }
+        if(name==='birthday') {
+          setbirthday(value)
+        }
+        if(name==='anniversary') {
+          setanniv(value)
+        }
+        if(name==='sports') {
+          setsport(value)
+        }
+        if(name==='activity') {
+          setact(value)
+        }
+        if(name==='beverage') {
+          setbev(value)
+        }
+        if(name==='alcohol') {
+          setalco(value)
+        }
+        if(name==='travelDest') {
+          settdest(value)
+        }
+        if(name==='spouseName') {
+          setsname(value)
+        }
+        if(name==='children') {
+          setchild(value)
+        }
+        if(name==='tvShow') {
+          settv(value)
+        }
+        if(name==='movie') {
+          setmovie(value)
+        }
+        if(name==='actor') {
+          setactor(value)
+        }
+        if(name==='dislikes') {
+          setdislike(value)
+        }
+        const newForm = form
+        newForm[name] = value
+        setform(newForm);
+      };
+      const navigate = useNavigate();
+      const [nav, setnav] = useState(1)
+      const [show, setShow] = useState(false);
+        const handleClose = () => setShow(false);
+        const handleShow = () => setShow(true);
+            const callFunc = ()=>{
+            handleClose();
+            navigate('/admin')
+            }
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        setIsSubmit(true);
+        axios.post(HOST + UPDATE_CLIENT, {
+          'clientId':location.state.ID,
+          'salutation':form.salutation,
+          'companyId':form.company,
+          'firstName':form.firstname,
+          'lastName':form.lastname,
+          'emailWork':form.emailWork,
+          'jobTitle':form.jobTitle,
+          'emailPersonal':form.emailPersonal,
+          'businessPhone':form.business,
+          'mobilePhone':form.mobile,
+          'address':form.address,
+          'city':form.city,
+          'province':form.state,
+          'zip':form.zip,
+          'country':form.country,
+          'notes':form.notes,
+          'attachment':form.attachments,
+          'birthday':form.birthday,
+          'anniversary':form.anniversary,
+          'sports':form.sports,
+          'activities':form.activity,
+          'beverage':form.beverage,
+          'alcohol':form.alcohol,
+          'travelDestination':form.travelDest,
+          'spouseName':form.spouseName,
+          'children':form.children,
+          'tvShow':form.tvShow,
+          'movies':form.movie,
+          'actor':form.actor,
+          'tvShow':form.tvShow,
+          'dislikes':form.dislikes,
+        },
+         {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+          console.log(res);
+          if(res.data.success) {
+            handleShow()
+          }
+          }).catch((err) => {
+              console.log(err)
+          })
+      };
+      const [companies, setcompanies] = useState([])
+    useEffect(() => {
+      const call = async () => {
+        await axios.get(HOST + GET_COMPANY_NAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+          setcompanies(res.data.res)
+          console.log(res.data);
+        }).catch((err) => {
           console.log(err)
-      })
-  };
-  let attendees = [];
-    employees.map((e)=>{
-      attendees.push({
-        label: e.Full_Name,
-        value: e.Full_Name
-      })
-    })
-    let [DisplayValue, getValue] = useState()
-    let doChange=(e)=>{
-      getValue(Array.isArray(e)?e.map(x=>x.value):[])
-    }
-
-    let departments = [];
-    depts.map((e)=>{
-      departments.push({
-        label: e.Department,
-        value: e.Department
-      })
-    })
-    let [DisplayValue1, getValue1] = useState()
-    let doChange1=(e)=>{
-      getValue1(Array.isArray(e)?e.map(x=>x.value):[])
-    }
-    const navigate = useNavigate()
-    const callFunc = ()=>{
-      handleClose();
-      navigate('/engineers')
-    }
+        })
+      }
+      call()
+    },[])
   return (
-    <>
-    <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh','textDecoration':'underline'}}>New Project</h1>
+    <div>
+        <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh'}}>Update Contact</h1>
   <Form className='form-main'>
   <Row className="mb-4">
         <Form.Group as={Col} >
-          <Form.Control name='projectName' type="text" placeholder="Project Name*" onChange={handleChange} required/>
-        </Form.Group>
-      </Row>
-      <Row className="mb-4">
-        <Form.Group as={Col}>
-        <Form.Label>Project Due Date</Form.Label>
-          <Form.Control name='dueDate' type="date" placeholder="Project Due Date*" onChange={handleChange} required/>
-        </Form.Group>
-      </Row>
-      <Row className="mb-4">
-        <Form.Group as={Col}>
-        <Select isMulti onChange={doChange1} options={departments} name="employee" placeholder='Select Department(s)'>Team Members</Select>
+          <Form.Select defaultValue={company} onChange={handleChange} name='company'>
+          {companies.map((option) => (
+            <option value={option.ID}>
+              {option.Name}
+            </option>
+          ))}
+          </Form.Select>
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control name='followNotes' type="text" placeholder="Follow Up Notes" onChange={handleChange} />
+        <Button style={{'width':'100%','backgroundColor':'grey','border':'none'}} onClick={(e) => {navigate("/companyform")}}>Add Company</Button>
         </Form.Group>
-        <Form.Group as={Col}>
-          <Form.Control name='stage' type="text" placeholder="Project Stage" onChange={handleChange} />
-        </Form.Group>
-      </Row>
-      <Row className="mb-4">
-        <Form.Group as={Col} >
-        <Form.Label>Next Follow Up</Form.Label>
-            <Form.Control name='nextFollow' type="date" placeholder="Next Follow Up" onChange={handleChange} />
-        </Form.Group>
-        <Form.Group as={Col}>
-        <Form.Label>Tentative Closing Date</Form.Label>
-          <Form.Control name="tentativeClosing" type="date" placeholder="Tentative Closing*" onChange={handleChange} required/>
-        </Form.Group>
-       
+          
         
       </Row>
       <Row className="mb-4">
-        <Form.Group as={Col}>
-          <Form.Control name='projectValue' type="text" placeholder="Project Value*" onChange={handleChange} required />
-        </Form.Group>
-        <Form.Group as={Col}>
-          <Form.Select name='projectCategory' onChange={handleChange}>
-            <option value=''>Project Category</option>
-          {categories.length!==0?categories.map((option) => (
-          <option value={option.Design_Project}>
-            {option.Design_Project}
-          </option>
-        )):
-        <option value=''>None</option>
-        }
+      <Form.Group as={Col}>
+        <Form.Select defaultValue={sal} name="salutation" type="text" onChange={handleChange} required>
+          <option value="Mr.">Mr.</option>
+          <option value="Mrs.">Mrs.</option>
+          <option value="Ms.">Ms.</option>
+          <option value="">None</option>
         </Form.Select>
         </Form.Group>
+        <Form.Group as={Col}>
+          <Form.Control value={fname} onChange={handleChange} name='firstname' type="text" placeholder="First Name*" required/>
+        </Form.Group>
+
+        <Form.Group as={Col}>
+          <Form.Control value={lname} onChange={handleChange} name='lastname' type="text" placeholder="Last Name" />
+        </Form.Group>
       </Row>
       <Row className="mb-4">
+        <Form.Group as={Col} controlId="formGridEmail">
+          <Form.Control value={epersonal} onChange={handleChange} name='emailPersonal' type="email" placeholder="Email Personal" />
+        </Form.Group>
+        <Form.Group as={Col} controlId="formGridEmail">
+          <Form.Control value={ework} onChange={handleChange} name='emailWork' type="email" placeholder="Email Work" />
+        </Form.Group>
+      </Row>
+      <Form.Group className="mb-4" as={Col} >
+          <Form.Control value={jtitle} onChange={handleChange} name='jobTitle' type="text" placeholder="Job Title"/>
+      </Form.Group>
+      <Row className="mb-4">
+        <Form.Group as={Col}>
+          <Form.Control value={bphone} onChange={handleChange} name='business' type="tel" placeholder="Business Phone"/>
+        </Form.Group>
+        <Form.Group as={Col}>
+          <Form.Control value={mobile} onChange={handleChange} name='mobile' type="tel" placeholder="Mobile Phone" />
+        </Form.Group>
+      </Row>
+      <Form.Group className="mb-4" controlId="formGridAddress1">
+        <Form.Control value={address} onChange={handleChange} name='address' placeholder="Address" />
+      </Form.Group>
+
+      <Row className="mb-4">
         <Form.Group as={Col} controlId="formGridCity">
-        
-        <Form.Select onChange={handleChange} name='city'>
+        <Form.Select defaultValue={city} onChange={handleChange} name='city'>
                   <option value="">Select City</option>
                   <option value="Airdrie">Airdrie</option>
                   <option value="Athabasca">Athabasca</option>
@@ -1269,15 +1381,15 @@ let currentDate = `${year}-${month}-${day}`;
           </Form.Select>
         </Form.Group>
         <Form.Group as={Col} controlId="formGridState">
-        <Form.Select onChange={handleChange} name='state'>
-                  <option selected>Select Province</option>
+        <Form.Select defaultValue={state} onChange={handleChange} name='state'>
+                  <option value=''>Select Province</option>
                   <option value="Alberta">Alberta</option>
                   <option value="British Columbia">British Columbia</option>
                   <option value="Manitoba">Manitoba</option>
                   <option value="New Brunswick">New Brunswick</option>
                   <option value="Newfoundland and Labrador">Newfoundland and Labrador</option>
                   <option value="Nova Scotia">Nova Scotia</option>
-                  <option value="Ontario">Ontario</option>
+                  <option value="Ontario" selected>Ontario</option>
                   <option value="Prince Edward Island">Prince Edward Island</option>
                   <option value="Quebec">Quebec</option>
                   <option value="Saskatchewan">Saskatchewan</option>
@@ -1286,40 +1398,354 @@ let currentDate = `${year}-${month}-${day}`;
                   <option value="Yukon">Yukon</option>
           </Form.Select>
         </Form.Group>
+
+        <Form.Group as={Col} controlId="formGridCountry">
+          <Form.Select defaultValue={country} onChange={handleChange} name='country'>
+          <option value="Afghanistan">Afghanistan</option>
+                    <option value="Åland Islands">Åland Islands</option>
+                    <option value="Albania">Albania</option>
+                    <option value="Algeria">Algeria</option>
+                    <option value="American Samoa">American Samoa</option>
+                    <option value="Andorra">Andorra</option>
+                    <option value="Angola">Angola</option>
+                    <option value="Anguilla">Anguilla</option>
+                    <option value="Antarctica">Antarctica</option>
+                    <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+                    <option value="Argentina">Argentina</option>
+                    <option value="Armenia">Armenia</option>
+                    <option value="Aruba">Aruba</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Austria">Austria</option>
+                    <option value="Azerbaijan">Azerbaijan</option>
+                    <option value="Bahamas">Bahamas</option>
+                    <option value="Bahrain">Bahrain</option>
+                    <option value="Bangladesh">Bangladesh</option>
+                    <option value="Barbados">Barbados</option>
+                    <option value="Belarus">Belarus</option>
+                    <option value="Belgium">Belgium</option>
+                    <option value="Belize">Belize</option>
+                    <option value="Benin">Benin</option>
+                    <option value="Bermuda">Bermuda</option>
+                    <option value="Bhutan">Bhutan</option>
+                    <option value="Bolivia">Bolivia</option>
+                    <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+                    <option value="Botswana">Botswana</option>
+                    <option value="Bouvet Island">Bouvet Island</option>
+                    <option value="Brazil">Brazil</option>
+                    <option value="British Indian Ocean Territory">British Indian Ocean Territory</option>
+                    <option value="Brunei Darussalam">Brunei Darussalam</option>
+                    <option value="Bulgaria">Bulgaria</option>
+                    <option value="Burkina Faso">Burkina Faso</option>
+                    <option value="Burundi">Burundi</option>
+                    <option value="Cambodia">Cambodia</option>
+                    <option value="Cameroon">Cameroon</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Cape Verde">Cape Verde</option>
+                    <option value="Cayman Islands">Cayman Islands</option>
+                    <option value="Central African Republic">Central African Republic</option>
+                    <option value="Chad">Chad</option>
+                    <option value="Chile">Chile</option>
+                    <option value="China">China</option>
+                    <option value="Christmas Island">Christmas Island</option>
+                    <option value="Cocos (Keeling) Islands">Cocos (Keeling) Islands</option>
+                    <option value="Colombia">Colombia</option>
+                    <option value="Comoros">Comoros</option>
+                    <option value="Congo">Congo</option>
+                    <option value="Congo, The Democratic Republic of The">Congo, The Democratic Republic of The</option>
+                    <option value="Cook Islands">Cook Islands</option>
+                    <option value="Costa Rica">Costa Rica</option>
+                    <option value="Cote D'ivoire">Cote D'ivoire</option>
+                    <option value="Croatia">Croatia</option>
+                    <option value="Cuba">Cuba</option>
+                    <option value="Cyprus">Cyprus</option>
+                    <option value="Czech Republic">Czech Republic</option>
+                    <option value="Denmark">Denmark</option>
+                    <option value="Djibouti">Djibouti</option>
+                    <option value="Dominica">Dominica</option>
+                    <option value="Dominican Republic">Dominican Republic</option>
+                    <option value="Ecuador">Ecuador</option>
+                    <option value="Egypt">Egypt</option>
+                    <option value="El Salvador">El Salvador</option>
+                    <option value="Equatorial Guinea">Equatorial Guinea</option>
+                    <option value="Eritrea">Eritrea</option>
+                    <option value="Estonia">Estonia</option>
+                    <option value="Ethiopia">Ethiopia</option>
+                    <option value="Falkland Islands (Malvinas)">Falkland Islands (Malvinas)</option>
+                    <option value="Faroe Islands">Faroe Islands</option>
+                    <option value="Fiji">Fiji</option>
+                    <option value="Finland">Finland</option>
+                    <option value="France">France</option>
+                    <option value="French Guiana">French Guiana</option>
+                    <option value="French Polynesia">French Polynesia</option>
+                    <option value="French Southern Territories">French Southern Territories</option>
+                    <option value="Gabon">Gabon</option>
+                    <option value="Gambia">Gambia</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Germany">Germany</option>
+                    <option value="Ghana">Ghana</option>
+                    <option value="Gibraltar">Gibraltar</option>
+                    <option value="Greece">Greece</option>
+                    <option value="Greenland">Greenland</option>
+                    <option value="Grenada">Grenada</option>
+                    <option value="Guadeloupe">Guadeloupe</option>
+                    <option value="Guam">Guam</option>
+                    <option value="Guatemala">Guatemala</option>
+                    <option value="Guernsey">Guernsey</option>
+                    <option value="Guinea">Guinea</option>
+                    <option value="Guinea-bissau">Guinea-bissau</option>
+                    <option value="Guyana">Guyana</option>
+                    <option value="Haiti">Haiti</option>
+                    <option value="Heard Island and Mcdonald Islands">Heard Island and Mcdonald Islands</option>
+                    <option value="Holy See (Vatican City State)">Holy See (Vatican City State)</option>
+                    <option value="Honduras">Honduras</option>
+                    <option value="Hong Kong">Hong Kong</option>
+                    <option value="Hungary">Hungary</option>
+                    <option value="Iceland">Iceland</option>
+                    <option value="India">India</option>
+                    <option value="Indonesia">Indonesia</option>
+                    <option value="Iran, Islamic Republic of">Iran, Islamic Republic of</option>
+                    <option value="Iraq">Iraq</option>
+                    <option value="Ireland">Ireland</option>
+                    <option value="Isle of Man">Isle of Man</option>
+                    <option value="Israel">Israel</option>
+                    <option value="Italy">Italy</option>
+                    <option value="Jamaica">Jamaica</option>
+                    <option value="Japan">Japan</option>
+                    <option value="Jersey">Jersey</option>
+                    <option value="Jordan">Jordan</option>
+                    <option value="Kazakhstan">Kazakhstan</option>
+                    <option value="Kenya">Kenya</option>
+                    <option value="Kiribati">Kiribati</option>
+                    <option value="Korea, Democratic People's Republic of">Korea, Democratic People's Republic of</option>
+                    <option value="Korea, Republic of">Korea, Republic of</option>
+                    <option value="Kuwait">Kuwait</option>
+                    <option value="Kyrgyzstan">Kyrgyzstan</option>
+                    <option value="Lao People's Democratic Republic">Lao People's Democratic Republic</option>
+                    <option value="Latvia">Latvia</option>
+                    <option value="Lebanon">Lebanon</option>
+                    <option value="Lesotho">Lesotho</option>
+                    <option value="Liberia">Liberia</option>
+                    <option value="Libyan Arab Jamahiriya">Libyan Arab Jamahiriya</option>
+                    <option value="Liechtenstein">Liechtenstein</option>
+                    <option value="Lithuania">Lithuania</option>
+                    <option value="Luxembourg">Luxembourg</option>
+                    <option value="Macao">Macao</option>
+                    <option value="Macedonia, The Former Yugoslav Republic of">Macedonia, The Former Yugoslav Republic of</option>
+                    <option value="Madagascar">Madagascar</option>
+                    <option value="Malawi">Malawi</option>
+                    <option value="Malaysia">Malaysia</option>
+                    <option value="Maldives">Maldives</option>
+                    <option value="Mali">Mali</option>
+                    <option value="Malta">Malta</option>
+                    <option value="Marshall Islands">Marshall Islands</option>
+                    <option value="Martinique">Martinique</option>
+                    <option value="Mauritania">Mauritania</option>
+                    <option value="Mauritius">Mauritius</option>
+                    <option value="Mayotte">Mayotte</option>
+                    <option value="Mexico">Mexico</option>
+                    <option value="Micronesia, Federated States of">Micronesia, Federated States of</option>
+                    <option value="Moldova, Republic of">Moldova, Republic of</option>
+                    <option value="Monaco">Monaco</option>
+                    <option value="Mongolia">Mongolia</option>
+                    <option value="Montenegro">Montenegro</option>
+                    <option value="Montserrat">Montserrat</option>
+                    <option value="Morocco">Morocco</option>
+                    <option value="Mozambique">Mozambique</option>
+                    <option value="Myanmar">Myanmar</option>
+                    <option value="Namibia">Namibia</option>
+                    <option value="Nauru">Nauru</option>
+                    <option value="Nepal">Nepal</option>
+                    <option value="Netherlands">Netherlands</option>
+                    <option value="Netherlands Antilles">Netherlands Antilles</option>
+                    <option value="New Caledonia">New Caledonia</option>
+                    <option value="New Zealand">New Zealand</option>
+                    <option value="Nicaragua">Nicaragua</option>
+                    <option value="Niger">Niger</option>
+                    <option value="Nigeria">Nigeria</option>
+                    <option value="Niue">Niue</option>
+                    <option value="Norfolk Island">Norfolk Island</option>
+                    <option value="Northern Mariana Islands">Northern Mariana Islands</option>
+                    <option value="Norway">Norway</option>
+                    <option value="Oman">Oman</option>
+                    <option value="Pakistan">Pakistan</option>
+                    <option value="Palau">Palau</option>
+                    <option value="Palestinian Territory, Occupied">Palestinian Territory, Occupied</option>
+                    <option value="Panama">Panama</option>
+                    <option value="Papua New Guinea">Papua New Guinea</option>
+                    <option value="Paraguay">Paraguay</option>
+                    <option value="Peru">Peru</option>
+                    <option value="Philippines">Philippines</option>
+                    <option value="Pitcairn">Pitcairn</option>
+                    <option value="Poland">Poland</option>
+                    <option value="Portugal">Portugal</option>
+                    <option value="Puerto Rico">Puerto Rico</option>
+                    <option value="Qatar">Qatar</option>
+                    <option value="Reunion">Reunion</option>
+                    <option value="Romania">Romania</option>
+                    <option value="Russian Federation">Russian Federation</option>
+                    <option value="Rwanda">Rwanda</option>
+                    <option value="Saint Helena">Saint Helena</option>
+                    <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+                    <option value="Saint Lucia">Saint Lucia</option>
+                    <option value="Saint Pierre and Miquelon">Saint Pierre and Miquelon</option>
+                    <option value="Saint Vincent and The Grenadines">Saint Vincent and The Grenadines</option>
+                    <option value="Samoa">Samoa</option>
+                    <option value="San Marino">San Marino</option>
+                    <option value="Sao Tome and Principe">Sao Tome and Principe</option>
+                    <option value="Saudi Arabia">Saudi Arabia</option>
+                    <option value="Senegal">Senegal</option>
+                    <option value="Serbia">Serbia</option>
+                    <option value="Seychelles">Seychelles</option>
+                    <option value="Sierra Leone">Sierra Leone</option>
+                    <option value="Singapore">Singapore</option>
+                    <option value="Slovakia">Slovakia</option>
+                    <option value="Slovenia">Slovenia</option>
+                    <option value="Solomon Islands">Solomon Islands</option>
+                    <option value="Somalia">Somalia</option>
+                    <option value="South Africa">South Africa</option>
+                    <option value="South Georgia and The South Sandwich Islands">South Georgia and The South Sandwich Islands</option>
+                    <option value="Spain">Spain</option>
+                    <option value="Sri Lanka">Sri Lanka</option>
+                    <option value="Sudan">Sudan</option>
+                    <option value="Suriname">Suriname</option>
+                    <option value="Svalbard and Jan Mayen">Svalbard and Jan Mayen</option>
+                    <option value="Swaziland">Swaziland</option>
+                    <option value="Sweden">Sweden</option>
+                    <option value="Switzerland">Switzerland</option>
+                    <option value="Syrian Arab Republic">Syrian Arab Republic</option>
+                    <option value="Taiwan">Taiwan</option>
+                    <option value="Tajikistan">Tajikistan</option>
+                    <option value="Tanzania, United Republic of">Tanzania, United Republic of</option>
+                    <option value="Thailand">Thailand</option>
+                    <option value="Timor-leste">Timor-leste</option>
+                    <option value="Togo">Togo</option>
+                    <option value="Tokelau">Tokelau</option>
+                    <option value="Tonga">Tonga</option>
+                    <option value="Trinidad and Tobago">Trinidad and Tobago</option>
+                    <option value="Tunisia">Tunisia</option>
+                    <option value="Turkey">Turkey</option>
+                    <option value="Turkmenistan">Turkmenistan</option>
+                    <option value="Turks and Caicos Islands">Turks and Caicos Islands</option>
+                    <option value="Tuvalu">Tuvalu</option>
+                    <option value="Uganda">Uganda</option>
+                    <option value="Ukraine">Ukraine</option>
+                    <option value="United Arab Emirates">United Arab Emirates</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="United States" >United States</option>
+                    <option value="United States Minor Outlying Islands">United States Minor Outlying Islands</option>
+                    <option value="Uruguay">Uruguay</option>
+                    <option value="Uzbekistan">Uzbekistan</option>
+                    <option value="Vanuatu">Vanuatu</option>
+                    <option value="Venezuela">Venezuela</option>
+                    <option value="Viet Nam">Viet Nam</option>
+                    <option value="Virgin Islands, British">Virgin Islands, British</option>
+                    <option value="Virgin Islands, U.S.">Virgin Islands, U.S.</option>
+                    <option value="Wallis and Futuna">Wallis and Futuna</option>
+                    <option value="Western Sahara">Western Sahara</option>
+                    <option value="Yemen">Yemen</option>
+                    <option value="Zambia">Zambia</option>
+                    <option value="Zimbabwe">Zimbabwe</option>
+          </Form.Select>
+        </Form.Group>
+        <Form.Group  as={Col} controlId="formGridZip">
+          <Form.Control value={zip} onChange={handleChange} name='zip' type='text' pattern="[0-9]{6}" placeholder='Pin Code'/>
+        </Form.Group>
       </Row>
       <Row className="mb-4">
-      <Form.Group as={Col}>
-        <Select isMulti onChange={doChange} options={attendees} name="employee" placeholder='Team Members'>Team Members</Select>
+
+        <Form.Group as={Col} controlId="exampleForm.ControlTextarea1">
+          <Form.Control value={notes} onChange={handleChange} name='notes' as="textarea" rows={1} type="text" placeholder="Notes" />
+        </Form.Group>
+
+        <Form.Group as={Col}>
+          <Form.Control  onChange={handleChange} name='attachments' type="file" placeholder="Attachments" />
+        </Form.Group>
+      </Row>
+      <h2 style={{'margin':'auto', 'width':'30%', 'marginTop':'5vh', 'marginBottom':'2vh','textDecoration':'underline'}}>Personal Details</h2>
+      <Row className="mb-4">
+        <Form.Group as={Col}>
+          <Form.Label>Birthday</Form.Label>
+          <Form.Control value={birthday} name='birthday' type="date" placeholder="Birthday" onChange={handleChange} />
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Select name='projectManager' onChange={handleChange}>
-            <option value=''>Select Employee</option>
-          {employees.length!==0?employees.map((option) => (
-          <option value={option.Full_Name}>
-            {option.Full_Name}
-          </option>
-        )):
-        <option value=''>None</option>
-        }
+        <Form.Label>Anniversary</Form.Label>
+          <Form.Control value={anniv} name='anniversary' type="date" placeholder="Anniversary" onChange={handleChange} />
+        </Form.Group>
+      </Row>
+      <Row className="mb-4">
+        <Form.Group as={Col}>
+          {/* <Form.Label>Birthday</Form.Label> */}
+          {/* <Form.Control name='sports' type="date" placeholder="Birthday" onChange={handleChange} /> */}
+          <Form.Select defaultValue={sport} onChange={handleChange} name='sports'>
+            <option value="">Select Sports</option>
+            <option value="Soccer">Soccer</option>
+            <option value="Hockey">Hockey</option>
+            <option value="Basketball">Basketball</option>
+            <option value="Baseball">Baseball</option>
+            <option value="Boxing">Boxing</option>
+            <option value="MMA">MMA</option>
+            <option value="Others">Others</option>
+          </Form.Select>
+        </Form.Group>
+        <Form.Group as={Col}>
+        {/* <Form.Label>Anniversary</Form.Label> */}
+        {/* <Form.Control name='anniversary' type="date" placeholder="Anniversary" onChange={handleChange} /> */}
+        <Form.Select defaultValue={act} onChange={handleChange} name='activity'>
+          <option value="">Select Activity</option>
+          <option value="Walking">Walking</option>
+          <option value="Running">Running</option>
+          <option value="Travelling">Travelling</option>
         </Form.Select>
         </Form.Group>
       </Row>
       <Row className="mb-4">
-      <Form.Group as={Col}>
-      <Form.Select name='status' onChange={handleChange}>
-        <option value="">Status</option>
-        <option value="Not Started Yet">Not Started Yet</option>
-        <option value="Completed">Completed</option>
-        <option value="Ongoing">Ongoing</option>
-      </Form.Select>
-      </Form.Group>
+        <Form.Group as={Col}>
+          <Form.Select defaultValue={bev} onChange={handleChange} name='beverage'>
+            <option value="">Select Beverage</option>
+            <option value="Coffee">Coffee</option>
+            <option value="Tea">Tea</option>
+            <option value="Ice Cap">Ice Cap</option>
+          </Form.Select>
+        </Form.Group>
+        <Form.Group as={Col}>
+        <Form.Select defaultValue={alco} onChange={handleChange} name='alcohol'>
+          <option value="">Select Alcohol</option>
+          <option value="Vodka">Vodka</option>
+          <option value="Scotch">Scotch</option>
+          <option value="Beer">Beer</option>
+          <option value="Tequila">Tequila</option>
+          <option value="Rum">Rum</option>
+          <option value="Cocktail">Cocktail</option>
+        </Form.Select>
+        </Form.Group>
       </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Relevent Files</Form.Label>
-          <Form.Control name='attachments' type="file" placeholder="Attachments*" onChange={handleChange} required />
-          </Form.Group>
-        </Row>
+      <Row className="mb-4">
+        <Form.Group as={Col}>
+          <Form.Control value={tdest} name='travelDest' type='text' placeholder='Travel Destination' onChange={handleChange}/>
+        </Form.Group>
+      </Row>
+      <Row className="mb-4">
+        <Form.Group as={Col}>
+          <Form.Control value={sname} name='spouseName' type='text' placeholder='Spouse Name' onChange={handleChange}/>
+        </Form.Group>
+        <Form.Group as={Col}>
+          <Form.Control value={child} name='children' type='text' placeholder='Children' onChange={handleChange}/>
+        </Form.Group>
+      </Row>
+      <Row className="mb-4">
+        <Form.Group as={Col}>
+          <Form.Control value={tv} name='tvShow' type='text' placeholder='TV Show' onChange={handleChange}/>
+        </Form.Group>
+        <Form.Group as={Col}>
+          <Form.Control value={movie} name='movie' type='text' placeholder='Movie' onChange={handleChange}/>
+        </Form.Group>
+        <Form.Group as={Col}>
+          <Form.Control value={actor} name='actor' type='text' placeholder='Actor' onChange={handleChange}/>
+        </Form.Group>
+        <Form.Group as={Col}>
+          <Form.Control value={dislike} name='dislikes' type='text' placeholder='Dislikes' onChange={handleChange}/>
+        </Form.Group>
+      </Row>
       <Button className='submit-btn' variant="primary" type="submit" onClick={handleSubmit}>
         Submit
       </Button>
@@ -1328,15 +1754,15 @@ let currentDate = `${year}-${month}-${day}`;
         <Modal.Header closeButton>
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Task Updated Successfully</Modal.Body>
+        <Modal.Body>Custmer Updated Successfully</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={callFunc}>
             Close
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </div>
   )
 }
 
-export default ProjectForm
+export default UpdateCustomer

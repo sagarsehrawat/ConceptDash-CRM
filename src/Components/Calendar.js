@@ -1,10 +1,7 @@
 import FullCalendar, { preventDefault } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
-import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import { gapi } from 'gapi-script'
-import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import {
     useState,
     useEffect
@@ -15,6 +12,7 @@ import Modal from 'react-bootstrap/Modal';
 import Select from 'react-select';
 import Form from 'react-bootstrap/Form';
 import axios from "axios";
+import { HOST, GET_EMPLOYEENAMES, GET_PROJECT_NAMES, ADD_TIMESHEET } from "./Constants/Constants";
 const style = {
   position: 'absolute',
   top: '50%',
@@ -88,12 +86,12 @@ const style = {
     const [projects, setprojects] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+        await axios.get(HOST + GET_EMPLOYEENAMES,{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
           setemployees(res.data.res)
         }).catch((err) => {
           console.log(err)
         })
-        await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projectNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get(HOST + GET_PROJECT_NAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
             setprojects(res.data.res)
           }).catch((err) => {
             console.log(err)
@@ -149,10 +147,10 @@ const openSignInPopup = () => {
 
 const initClient = () => {
   
-  if(localStorage.getItem("access_token")) {
+  if(!localStorage.getItem("access_token")) {
     openSignInPopup();
   }
-   else if (!localStorage.getItem("access_token")) {
+   else if (localStorage.getItem("access_token")) {
      // Get events if access token is found without sign in popup
      fetch(
     `https://www.googleapis.com/calendar/v3/calendars/primary/events?key=AIzaSyCD_8FIN6MsCjNbFY7GxOWxwDm7kmn-tX4&orderBy=startTime&singleEvents=true`,
@@ -192,12 +190,22 @@ const handleChange = (e) => {
   newForm[name] = value;
   setform(newForm);
 };
+function makeid(length) {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
 const calendarID = 'primary'
 const handleSubmit = (e)=>{
   e.preventDefault();
         // setIsSubmit(true);
         console.log(e);
-        axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/timesheet', {
+        axios.post(HOST + ADD_TIMESHEET, {
           'projectId':form.project,
           'employeeId': localStorage.getItem('employeeId'),
           'date':(new Date(start)).toISOString(),
@@ -210,12 +218,13 @@ const handleSubmit = (e)=>{
               console.log(err)
           })
 }
-let requestID = (new Date(start)).getTime()-(new Date()).getTime()
+let requestID = (new Date(start)).getTime()-(new Date()).getUTCMilliseconds()
+console.log(requestID);
 const addEvent = () => {
   function initiate() {
     gapi.client
       .request({
-        path: `https://www.googleapis.com/calendar/v3/calendars/${calendarID}/events`,
+        path: `https://www.googleapis.com/calendar/v3/calendars/${calendarID}/events?conferenceDataVersion=1`,
         method: "POST",
         body: {
           'conferenceDataVersion': 1,
@@ -235,7 +244,7 @@ const addEvent = () => {
                 "conferenceSolutionKey": {
                     "type": "hangoutsMeet"
                 },
-                "requestId": requestID.toString()
+                "requestId": makeid(20)
             }
         },
           'reminders': {
@@ -251,6 +260,7 @@ const addEvent = () => {
       .then(
         (response) => {
           return [true, response];
+          console.log(response);
         },
         function (err) {
           console.log(err);
@@ -282,6 +292,7 @@ const callFunc=(e)=>{
   handleSubmit(e);
 }
 const formatEvents = (list) => {
+  console.log(list);
   return list.map((item) => ({
     title: item.summary,
     start: item.start.dateTime || item.start.date,
@@ -306,6 +317,7 @@ const [show, setShow] = useState(false);
       setend(newValue)
     }
   }
+  // console.log(events);
 return (
   <>
   <Button onClick={handleShow} style={{'marginTop':'1vh', 'marginLeft':'40%', 'backgroundColor':'green','marginBottom':'3vh'}} variant="contained" >Create Event</Button>

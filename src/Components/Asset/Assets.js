@@ -8,7 +8,6 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import axios from 'axios'
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter,dateFilter } from 'react-bootstrap-table2-filter';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import LoadingSpinner from '../Loader/Loader';
 
@@ -26,7 +25,7 @@ function Assets() {
     useEffect(() => {
       setIsLoading(true);
         const call = async () => {
-          await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/assets', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/assets', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
             setassets(res.data.res)
             setIsLoading(false)
           }).catch((err) => {
@@ -38,7 +37,7 @@ function Assets() {
       useEffect(() => {
         setIsLoading(true);
         const call = async () => {
-          await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/softwares', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/softwares', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
             setsoftware(res.data.res)
             setIsLoading(false)
           }).catch((err) => {

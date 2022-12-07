@@ -3,6 +3,7 @@ import './Form.css'
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { HOST, GET_EMPLOYEENAMES, ADD_ASSET } from '../Constants/Constants';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
@@ -10,7 +11,7 @@ function AssetForm() {
   const [employees, setemployees] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get(HOST + GET_EMPLOYEENAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setemployees(res.data.res)
         }).catch((err) => {
           console.log(err)
@@ -39,7 +40,7 @@ function AssetForm() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/asset', {
+        axios.post(HOST + ADD_ASSET, {
             'employeeId':form.employee,
             'category':form.assetCategory,
             'hardwareDetails':form.hardwareDetails,

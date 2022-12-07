@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
+import { HOST, GET_TIMESHEET } from '../Constants/Constants';
 import { useNavigate } from 'react-router-dom'
 
 function TimeSheet() {
@@ -12,12 +13,7 @@ function TimeSheet() {
     
     useEffect(() => {
         const call = async () => {
-            await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/timesheet',{headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':localStorage.getItem('employeeId')}}).then(async (res) => {
-                // settimesheet(res.data.res)
-                // console.log(res.data);
-                // console.log(res.data.res[0].Date)
-                // console.log(`${res.data.res[0].Date.substring(0,11)}${res.data.res[0].Start_Time.substring(0,5)}+05:30`);
-                // console.log(res.data.res[0].Date)
+            await axios.get(HOST + GET_TIMESHEET,{headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':localStorage.getItem('employeeId')}}).then(async (res) => {
                 setevent2(formatEvents(res.data.res))
             }).catch((err) => {
               console.log(err)

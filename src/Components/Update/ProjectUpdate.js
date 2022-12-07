@@ -1,6 +1,7 @@
 import {React, useEffect, useState} from 'react'
 import { TableRow, TableHead, TableContainer, TableCell, TableBody, Table, Paper } from '@material-ui/core';
 import axios from 'axios'
+import { HOST, GET_PROJECTS } from '../Constants/Constants';
 import LoadingSpinner from '../Loader/Loader';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom'
@@ -13,7 +14,7 @@ function ProjectUpdate() {
     useEffect(() => {
         setIsLoading(true);
           const call = async () => {
-            await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projects', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+            await axios.get(HOST + GET_PROJECTS, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
               setprojects(res.data.res)
               setdataSource(res.data.res)
               setIsLoading(false)
@@ -76,7 +77,7 @@ function ProjectUpdate() {
                                         key={row.name}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         >
-                                        <TableCell align="right"><Button onClick={(e) => {navigate("/updateProjectForm", {state: row})}} style={{'backgroundColor':'rgb(99, 138, 235)'}}>Edit</Button></TableCell>
+                                        <TableCell align="right"><Button onClick={(e) => {navigate("/updateCompany", {state: row})}} style={{'backgroundColor':'rgb(99, 138, 235)'}}>Edit</Button></TableCell>
                                         <TableCell component="th" scope="row">
                                         {row.Project_Id}
                                         </TableCell>
@@ -105,7 +106,7 @@ function ProjectUpdate() {
                                     key={row.name}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
-                                    <TableCell align="right"><Button onClick={(e) => {navigate("/updateProjectForm", {state: row})}} style={{'backgroundColor':'rgb(99, 138, 235)'}}>Edit</Button></TableCell>
+                                    <TableCell align="right"><Button onClick={(e) => {navigate("/updateCompany", {state: row})}} style={{'backgroundColor':'rgb(99, 138, 235)'}}>Edit</Button></TableCell>
                                     <TableCell component="th" scope="row">
                                     {row.Project_Id}
                                     </TableCell>

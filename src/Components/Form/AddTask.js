@@ -5,8 +5,14 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import { useNavigate,useLocation } from 'react-router-dom'
+import { HOST, GET_EMPLOYEENAMES, ADD_TASK } from '../Constants/Constants';
+import Modal from 'react-bootstrap/Modal';
 
 function AddTask() {
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
     const [isSubmit, setIsSubmit] = useState(false);
     const [employees, setemployees] = useState([]);
     const [form, setform] = useState({
@@ -28,7 +34,7 @@ function AddTask() {
       };
       useEffect(() => {
         const call = async () => {
-          await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+          await axios.get(HOST + GET_EMPLOYEENAMES,{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
             setemployees(res.data.res)
           }).catch((err) => {
             console.log(err)
@@ -39,7 +45,7 @@ function AddTask() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/task', {
+        axios.post(HOST + ADD_TASK, {
             headers:{
                 'auth':'Rose '+ localStorage.getItem('auth')
             },
@@ -55,10 +61,18 @@ function AddTask() {
         },
         {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
           console.log(res);
+          if(res.data.success) {
+            handleShow()
+          }
           }).catch((err) => {
               console.log(err)
           })
       };
+      const navigate = useNavigate()
+      const callFunc = ()=>{
+        handleClose();
+        navigate('/admin')
+      }
   return (
     <div>
          <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh','textDecoration':'underline'}}>Add Task</h1>
@@ -116,6 +130,17 @@ function AddTask() {
         Submit
       </Button>
       </Form>
+      <Modal show={show} onHide={handleClose} >
+        <Modal.Header closeButton>
+          <Modal.Title>Form Submitted</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Task Added Successfully</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={callFunc}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   )
 }

@@ -62,7 +62,7 @@ function QuoteForm() {
     const handleSubmit = (e) => {
       e.preventDefault();
       setIsSubmit(true);
-      axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/supplier', {
+      axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/supplier', {
         'projectName':form.projectName,
         'dateCreated':form.dateCreated,
         'employee':form.employee,

@@ -6,6 +6,8 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from 'react-router-dom'
+import { HOST, GET_COMPANY_NAMES, ADD_CONTACT } from '../Constants/Constants';
+import Modal from 'react-bootstrap/Modal';
 
 // import TextField from '@material-ui/core/TextField';
 function CustomerForm() {
@@ -52,7 +54,7 @@ function CustomerForm() {
   const [companies, setcompanies] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/companyNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get(HOST + GET_COMPANY_NAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setcompanies(res.data.res)
           console.log(res.data);
         }).catch((err) => {
@@ -65,7 +67,7 @@ function CustomerForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmit(true);
-    axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/contact', {
+    axios.post(HOST + ADD_CONTACT, {
       'companyId':form.company,
       'salutation':form.salutation,
       'firstName':form.firstname,
@@ -97,11 +99,20 @@ function CustomerForm() {
       'dislikes':form.dislikes,
     }, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
       console.log(res);
+      if(res.data.success) {
+        handleShow()
+      }
       }).catch((err) => {
           console.log(err)
       })
   };
-  
+  const [show, setShow] = useState(false);
+        const handleClose = () => setShow(false);
+        const handleShow = () => setShow(true);
+            const callFunc = ()=>{
+            handleClose();
+            navigate('/admin')
+            }
     
   return (
     <>
@@ -1634,6 +1645,17 @@ function CustomerForm() {
         Submit
       </Button>
     </Form>
+    <Modal show={show} onHide={handleClose} >
+        <Modal.Header closeButton>
+          <Modal.Title>Form Submitted</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Custmer Added Successfully</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={callFunc}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }

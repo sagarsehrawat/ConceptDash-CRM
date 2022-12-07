@@ -33,6 +33,18 @@ import UpdateEmployeeForm from '../Components/Form/UpdateEmployeeForm';
 import UpdateTask from '../Components/Form/UpdateTask';
 import ProjectUpdate from '../Components/Update/ProjectUpdate';
 import UpdateProjectForm from '../Components/Form/UpdateProjectForm';
+import UpdateCompany from '../Components/Form/UpdateCompany';
+import BudgetsForm from '../Components/Form/BudgetsForm';
+import UpdateBudget from '../Components/Form/UpdateBudget';
+import RFPform from '../Components/Form/RFPform';
+import UpdateRFP from '../Components/Form/UpdateRFP';
+import ProposalForm from '../Components/Form/ProposalForm';
+import UpdateProposal from '../Components/Form/UpdateProposal';
+import UpdateCustomer from '../Components/Form/UpdateCustomer';
+import RFPUpdate from '../Components/Update/RFPUpdate';
+import BudgetUpdate from '../Components/Update/BudgetUpdate';
+import ProposalsUpdate from '../Components/Update/ProposalsUpdate';
+import AddMyTask from '../Components/Form/AddMyTask';
 
 const AllRoutes = () => {
     return (
@@ -63,13 +75,24 @@ const AllRoutes = () => {
                         <Route exact path='/assetform' element={<AssetForm />} />
                         <Route exact path='/addsoftware' element={<SoftwareForm />} />
                         <Route exact path='/jobTitleform' element={<JobTitle />} />
-                        <Route exact path='/jobTitleform' element={<JobTitle />} />
                         <Route exact path='/addtimesheet' element={<Timesheet />} />
                         <Route exact path='/addTask' element={<AddTask />} />
+                        <Route exact path='/addMyTask' element={<AddMyTask />} />
                         <Route exact path='/updateEmployee' element={<UpdateEmployeeForm />} />
                         <Route exact path='/updateTask' element={<UpdateTask />} />
                         <Route exact path='/updateProject' element={<ProjectUpdate />} />
                         <Route exact path='/updateProjectForm' element={<UpdateProjectForm />} />
+                        <Route exact path='/updateCompany' element={<UpdateCompany />} />
+                        <Route exact path='/budgetForm' element={<BudgetsForm />} />
+                        <Route exact path='/updateBudget' element={<UpdateBudget />} />
+                        <Route exact path='/addRFP' element={<RFPform />} />
+                        <Route exact path='/updateRFP' element={<UpdateRFP />} />
+                        <Route exact path='/RFPtable' element={<RFPUpdate />} />
+                        <Route exact path='/Budgettable' element={<BudgetUpdate />} />
+                        <Route exact path='/Proposaltable' element={<ProposalsUpdate />} />
+                        <Route exact path='/addProposal' element={<ProposalForm />} />
+                        <Route exact path='/updateProposal' element={<UpdateProposal />} />
+                        <Route exact path='/customerUpdate' element={<UpdateCustomer />} />
                     </Route>
                 </Routes>
             </Router>

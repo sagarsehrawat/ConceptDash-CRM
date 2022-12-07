@@ -26,6 +26,14 @@ import UpdateEmployeeForm from '../../Form/UpdateEmployeeForm'
 import TimeSheetTable from '../../Expenses/Expenses'
 import Todo from '../../Todo/Todo'
 import Dummy from '../../Dummy/Dummy'
+import ProjectUpdate from '../../Update/ProjectUpdate'
+import EmployeeUpdate from '../../Update/EmployeeUpdate'
+import CompanyUpdate from '../../Update/CompanyUpdate'
+import AssetUpdate from '../../Update/AssetUpdate'
+import BudgetUpdate from '../../Update/BudgetUpdate'
+import RFPUpdate from '../../Update/RFPUpdate'
+import ProposalsUpdate from '../../Update/ProposalsUpdate'
+import CustomerUpdate from '../../Update/CustomerUpdate'
 const Dashboard = () => {
     const navigate = useNavigate()
     const [nav, setnav] = useState(0)
@@ -42,26 +50,20 @@ const Dashboard = () => {
     const handleDash = (e) => {
         if(nav==0) 
             return (<AdminDash/>)
-        if(nav===1)
-            return (<Requests />)
-        if(nav===2)
-            return (<Tables category={"Shippers"} />)
         if(nav===3)
-            return (<Tables category={"Customers"}/>)
-        if(nav===5)
-            return (<PendingReq/>)
+            return (<CustomerUpdate category={"Customers"}/>)
         if(nav===6)
-            return (<EmployeeTable/>)
+            return (<EmployeeUpdate/>)
         if(nav===7)
             return (<SupplierTable/>)
         if(nav===8)
-            return (<ProjectTable/>)
+            return (<ProjectUpdate/>)
         if(nav===9)
             return (<TestDemo/>)
         if(nav===10) 
-            return (<Companies/>)
+            return (<CompanyUpdate/>)
         if(nav===11) 
-            return (<Assets/>)
+            return (<AssetUpdate/>)
         if(nav===12) 
             return (<TimeSheetTable/>)
         if(nav===13) 
@@ -86,8 +88,9 @@ const Dashboard = () => {
                         <img src={logo} height='40' width='55' style={{'marginRight':'1vw'}} alt="Concept Dash" />
                     <Navbar.Brand style={{'fontSize':'1.7rem','cursor':'pointer'}} onClick={(e)=> {e.preventDefault(); setnav(0);}} >CRM</Navbar.Brand>
                     <Nav className="me-auto">
-                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(1);}} style={{'marginLeft':'1.2vw'}} >Budgets</Nav.Link>
-                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(5);}} style={{'marginLeft':'1.2vw'}} >Proposals</Nav.Link>
+                        <Nav.Link onClick={() => {navigate('/Budgettable')}} style={{'marginLeft':'1.2vw'}} >Budgets</Nav.Link>
+                        <Nav.Link onClick={() => {navigate('/RFPtable')}} style={{'marginLeft':'1.2vw'}} >RFPs</Nav.Link>
+                        <Nav.Link onClick={() => {navigate('/Proposaltable')}} style={{'marginLeft':'1.2vw'}} >Proposals</Nav.Link>
                         <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(3);}} style={{'marginLeft':'1.2vw'}} >Customers</Nav.Link>
                         <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(6);}} style={{'marginLeft':'1.2vw'}} >Employees</Nav.Link>
                         <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(8);}} style={{'marginLeft':'1.2vw'}} >Projects</Nav.Link>
@@ -96,8 +99,6 @@ const Dashboard = () => {
                         <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(11);}} style={{'marginLeft':'1.2vw'}}>Assets</Nav.Link>
                         <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(12);}} style={{'marginLeft':'1.2vw'}}>Expenses</Nav.Link>
                         <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(13);}} style={{'marginLeft':'1.2vw'}}>Todo</Nav.Link>
-                        {/* <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(14);}} style={{'marginLeft':'1.2vw'}}>Dummy</Nav.Link> */}
-                        {/* <Nav.Link onClick={handleShow} style={{'marginLeft':'1.2vw'}} >Calendar</Nav.Link> */}
                         
                         <Nav.Link onClick={() => {navigate('/'); localStorage.clear()}} style={{'fontSize':'1rem','marginLeft':'2vw'}} ><b>Log Out</b></Nav.Link>
                     </Nav>

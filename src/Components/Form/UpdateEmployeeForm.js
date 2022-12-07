@@ -5,19 +5,68 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import { HOST, GET_JOB_TITLES, UPDATE_EMPLOYEE, GET_EMPLOYEENAMES } from '../Constants/Constants';
 import { useNavigate } from 'react-router-dom'
 import {useLocation} from 'react-router-dom';
+import Modal from 'react-bootstrap/Modal';
 
 // import TextField from '@material-ui/core/TextField';
 function UpdateEmployeeForm() {
   const location = useLocation();
+  console.log(location.state);
     const [isSubmit, setIsSubmit] = useState(false);
     const [dept, setdept] = useState('');
     const [jobTitles, setjobTitles] = useState([])
-    console.log(location.state);
+    const [sal, setsal] = useState(location.state.Salutation)
+    const [fname, setfname] = useState(location.state.First_Name)
+    const [lname, setlname] = useState(location.state.Last_Name)
+    const [jTitle, setjTitle] = useState(location.state.Job_Title_ID)
+    const [jDate, setjDate] = useState(location.state.Joining_Date.substring(0,10))
+    const [directManager, setdirectManager] = useState(location.state.Direct_Manager_ID)
+    const [deptment, setdeptment] = useState(location.state.Department)
+    const [ework, setework] = useState(location.state.Email_Work)
+    const [bphone, setbphone] = useState(location.state.Business_Phone)
+    const [address, setaddress] = useState(location.state.Address)
+    const [city, setcity] = useState(location.state.City)
+    const [state, setstate] = useState(location.state.Province)
+    const [zip, setzip] = useState(location.state.ZIP)
+    const [country, setcountry] = useState(location.state.Country)
+    const [epersonal, setepersonal] = useState(location.state.Email_Personal)
+    const [mobile, setmobile] = useState(location.state.Mobile_Phone)
+    const [wpage, setwpage] = useState(location.state.Web_Page)
+    const [res, setres] = useState(location.state.Resume)
+    const [attachments, setattachments] = useState(location.state.Attachments)
+    const [notes, setnotes] = useState(location.state.Notes)
+    
+    const [birthday, setbirthday] = useState(location.state.Birthday.substring(0,10))
+    const [anniv, setanniv] = useState(location.state.Anniversary.substring(0,10))
+    const [sport, setsport] = useState(location.state.Sports)
+    const [act, setact] = useState(location.state.Activites)
+    const [bev, setbev] = useState(location.state.Beverage)
+    const [alco, setalco] = useState(location.state.Alcohol)
+    const [tdest, settdest] = useState(location.state.Travel_Destination)
+    const [sname, setsname] = useState(location.state.Spouse_Name)
+    const [child, setchild] = useState(location.state.Children)
+    const [tv, settv] = useState(location.state.TV_Show)
+    const [movie, setmovie] = useState(location.state.Movies)
+    const [actor, setactor] = useState(location.state.Actor)
+    const [dislike, setdislike] = useState(location.state.Dislikes)
+    
+    const [prof, setprof] = useState(location.state.Proficiency)
+    const [exp, setexp] = useState(location.state.Expertise)
+    const [int, setint] = useState(location.state.Interests)
+    const [cocurr, setcocurr] = useState(location.state.Cocurricular)
+    const [train, settrain] = useState(location.state.Trainings)
+    
+    const [str, setstr] = useState(location.state.Strengths)
+    const [weak, setweak] = useState(location.state.Weakness)
+    const [sai, setsai] = useState(location.state.Social_Active_Index)
+
+    const [uname, setuname] = useState(location.state.Username)
+    
     useEffect(() => {
         const call = async () => {
-          await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/jobTitles', {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'department':dept }}).then((res) => {
+          await axios.get(HOST + GET_JOB_TITLES, {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'department':dept }}).then((res) => {
             setjobTitles(res.data.res)
           }).catch((err) => {
             console.log(err)
@@ -26,71 +75,190 @@ function UpdateEmployeeForm() {
         call()
       },[dept])
     const [form, setform] = useState({
-      'salutation':"",
-      'firstname':"",
-      'lastname':"",
-      'department':"",
-      'jobtitle':"",
-      'directManager':"",
-      'emailWork':"",
-      'emailPersonal':"",
-      'joiningDate':'',
-      'business':"",
-      'mobile':"",
-      'address':"",
-      'city':"",
-      'state':"",
-      'zip':"",
-      'country':"",
-      'expertise':"",
-      'webpage':"",
-      'resume':"",
-      'attachments':"",
-      'notes':"",
-      'birthday':"",
-      'anniversary':"",
-      'sports':"",
-      'activity':"",
-      'beverage':"",
-      'alcohol':"",
-      'travelDest':"",
-      'spouseName':"",
-      'children':"",
-      'tvShow':"",
-      'movie':"",
-      'actor':"",
-      'dislikes':"",
-      'proficiency':"",
-      'interests':"",
-      'cocurricular':"",
-      'trainings':"",
-      'strengths':"",
-      'weakness':"",
-      'activeIndex':"",
-      'username':"",
-      'password':"",
-      'confpassword':"",
+      'salutation':sal,
+      'firstname':fname,
+      'lastname':lname,
+      'department':deptment,
+      'jobtitle':jTitle,
+      'directManager':directManager,
+      'emailWork':ework,
+      'emailPersonal':epersonal,
+      'joiningDate':jDate,
+      'business':bphone,
+      'mobile':mobile,
+      'address':address,
+      'city':city,
+      'state':state,
+      'zip':zip,
+      'country':country,
+      'expertise':exp,
+      'webpage':wpage,
+      'resume':res,
+      'attachments':attachments,
+      'notes':notes,
+      'birthday':birthday,
+      'anniversary':anniv,
+      'sports':sport,
+      'activity':act,
+      'beverage':bev,
+      'alcohol':alco,
+      'travelDest':tdest,
+      'spouseName':sname,
+      'children':child,
+      'tvShow':tv,
+      'movie':movie,
+      'actor':actor,
+      'dislikes':dislike,
+      'proficiency':prof,
+      'interests':int,
+      'cocurricular':cocurr,
+      'trainings':train,
+      'strengths':str,
+      'weakness':weak,
+      'activeIndex':sai,
+      'username':uname,
     })
     const handleChange = (e) => {
       const { name, value } = e.target;
-      const newForm = form
+      if(name==='salutation') {
+        setsal(value)
+      }
+      if(name==='firstname') {
+        setfname(value)
+      }
+      if(name==='lastname') {
+        setlname(value)
+      }
+      if(name==='jobtitle') {
+        setjTitle(value)
+      }
+      if(name==='directManager') {
+        setdirectManager(value)
+      }
+      if(name==='department') {
+        setdeptment(value)
+      }
+      if(name==='joiningDate') {
+        setjDate(value)
+      }
+      if(name==='emailWork') {
+        setework(value)
+      }
+      if(name==='emailPersonal') {
+        setepersonal(value)
+      }
+      if(name==='mobile') {
+        setmobile(value)
+      }
+      if(name==='address') {
+        setaddress(value)
+      }
+      if(name==='business') {
+        setbphone(value)
+      }
+      if(name==='city') {
+        setcity(value)
+      }
+      if(name==='state') {
+        setstate(value)
+      }
+      if(name==='country') {
+        setcountry(value)
+      }
+      if(name==='zip') {
+        setzip(value)
+      }
+      if(name==='notes') {
+        setnotes(value)
+      }
+      if(name==='attachments') {
+        setattachments(value)
+      }
+      if(name==='resume') {
+        setres(value)
+      }
+      if(name==='webpage') {
+        setwpage(value)
+      }
+      if(name==='expertise') {
+        setexp(value)
+      }
+      if(name==='birthday') {
+        setbirthday(value)
+      }
+      if(name==='anniversary') {
+        setanniv(value)
+      }
+      if(name==='sports') {
+        setsport(value)
+      }
+      if(name==='activity') {
+        setact(value)
+      }
+      if(name==='beverage') {
+        setbev(value)
+      }
+      if(name==='alcohol') {
+        setalco(value)
+      }
+      if(name==='travelDest') {
+        settdest(value)
+      }
+      if(name==='spouseName') {
+        setsname(value)
+      }
+      if(name==='children') {
+        setchild(value)
+      }
+      if(name==='tvShow') {
+        settv(value)
+      }
+      if(name==='movie') {
+        setmovie(value)
+      }
+      if(name==='actor') {
+        setactor(value)
+      }
+      if(name==='dislikes') {
+        setdislike(value)
+      }
+      if(name==='proficiency') {
+        setprof(value)
+      }
+      if(name==='interests') {
+        setint(value)
+      }
+      if(name==='cocurricular') {
+        setcocurr(value)
+      }
+      if(name==='trainings') {
+        settrain(value)
+      }
+      if(name==='strengths') {
+        setstr(value)
+      }
+      if(name==='weakness') {
+        setweak(value)
+      }
+      if(name==='activeIndex') {
+        setsai(value)
+      }
+      if(name==='username') {
+        setuname(value)
+      }
       if(name==='department') {
         setdept(value)
       }
+      const newForm = form
       newForm[name] = value
       setform(newForm);
     };
     const navigate = useNavigate();
     const [nav, setnav] = useState(1)
-    const formatDate = (dateStr) => {
-      const [year, month, day] = dateStr.split('-');
-      let newDate = `${day}-${month}-${year}`;
-      return newDate;
-    };
     const handleSubmit = (e) => {
       e.preventDefault();
       setIsSubmit(true);
-      axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/update/employee', {
+      axios.post(HOST + UPDATE_EMPLOYEE, {
         'username':form.username,
         'password':form.password,
         'department':form.department,
@@ -135,10 +303,14 @@ function UpdateEmployeeForm() {
         'dislikes':form.dislikes,
         'strengths':form.strengths,
         'weaknesses':form.weakness,
-        'socialActiveIndex':form.activeIndex
+        'socialActiveIndex':form.activeIndex,
+        'id':location.state.Employee_ID
       },
        {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         console.log(res);
+        if(res.data.success) {
+          handleShow()
+        }
         }).catch((err) => {
             console.log(err)
         })
@@ -146,7 +318,7 @@ function UpdateEmployeeForm() {
     const [employees, setemployees] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get(HOST + GET_EMPLOYEENAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setemployees(res.data.res)
         }).catch((err) => {
           console.log(err)
@@ -184,83 +356,13 @@ function UpdateEmployeeForm() {
         label: "IT"
       },
     ]
-    const admin=[
-      {
-        value: 'Senior Engineer',
-        label:'Senior Engineer'
-      }
-    ]
-    const engineer=[
-      {
-        value: 'Engineer-in-Training',
-        label:'Engineer-in-Training'
-      }
-    ]
-    const manager=[
-      {
-        value: 'Engineer',
-        label:'Engineer'
-      },
-      {
-        value:'Intern',
-        label:'Intern'
-      }
-    ]
-    const sales=[
-      {
-        value: 'null',
-        label:'None'
-      }
-    ]
-    const logistics=[
-      {
-        value: 'null',
-        label:'None'
-      }
-    ]
-    const supplier=[
-      {
-        value: 'null',
-        label:'None'
-      }
-    ]
-    const it=[
-      {
-        value: 'Sr Engineer',
-        label:'Sr Engineer'
-      }
-    ]
-    const [selected, setSelected] = useState("");
-
-  // let type=[];
- const [type, settype] = useState([])
-  if (selected === "Admin") {
-    // type = admin;
-    settype(admin)
-    console.log(type);
-  } else if (selected === "Engineer") {
-    // type = engineer;
-    settype(engineer)
-  } else if (selected === "Manager") {
-    // type = manager;
-    settype(manager)
-  } else if (selected === "Sales") {
-    // type = sales;
-    settype(sales)
-  } else if (selected === "Logistics") {
-    // type = logistics;
-    settype(logistics)
-  } else if (selected === "Supplier") {
-    // type = supplier;
-    settype(supplier)
-  } else if (selected === "IT") {
-    // type = it;
-    settype(it)
-  }
-
-  const changeSelectOptionHandler = (event) => {
-    setSelected(event.value);
-  };
+    const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+    const callFunc = ()=>{
+      handleClose();
+      navigate('/admin')
+    }
   return (
     <>
     <h1 style={{'margin':'auto', 'width':'25%', 'marginTop':'5vh','textDecoration':'underline'}}>Update Employee</h1>
@@ -268,7 +370,7 @@ function UpdateEmployeeForm() {
       <Row className="mb-4">
       <Form.Group as={Col} >
           {/* <Form.Control name='salutation' type="text" placeholder="Salutation" onChange={handleChange} /> */}
-          <Form.Select defaultValue={location.state.Salutation} name='salutation' type="text" placeholder="Salutation" onChange={handleChange} >
+          <Form.Select defaultValue={sal}  name='salutation' type="text" placeholder="Salutation" onChange={handleChange} >
             <option value="">Salutation</option>
             <option value="Mr.">Mr.</option>
             <option value="Mrs.">Mrs.</option>
@@ -277,16 +379,16 @@ function UpdateEmployeeForm() {
           </Form.Select>
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control value={location.state.First_Name} name='firstname' type="text" placeholder="First Name*" onChange={handleChange} required/>
+          <Form.Control value={fname} name='firstname' type="text" placeholder="First Name*" onChange={handleChange} required/>
         </Form.Group>
 
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Last_Name} name='lastname' type="text" placeholder="Last Name" onChange={handleChange} />
+          <Form.Control value={lname} name='lastname' type="text" placeholder="Last Name" onChange={handleChange} />
         </Form.Group>
       </Row>
   <Row className="mb-4">
         <Form.Group as={Col} >
-          <Form.Select defaultValue={location.state.Department} name='department' type="text" onChange={handleChange}  required>
+          <Form.Select defaultValue={deptment} name='department' type="text" onChange={handleChange}  required>
             <option value="">Select Department</option>
             {departments.map((option) => (
             <option value={option.value}>
@@ -297,7 +399,7 @@ function UpdateEmployeeForm() {
           </Form.Group>
         <Form.Group as={Col} >
           {/* <Form.Control name='jobtitle' type="text" placeholder="Job Title*" onChange={handleChange} required/> */}
-          <Form.Select defaultValue={location.state.Job_Title_ID} name='jobtitle' type="text" onChange={handleChange} required>
+          <Form.Select name='jobtitle' defaultValue={jTitle} onChange={handleChange} required>
             <option value="">Job Title</option>
             {jobTitles.map((option) => (
             <option value={option.Title_ID}>
@@ -312,7 +414,7 @@ function UpdateEmployeeForm() {
       </Row>
       <Row className="mb-4">
         <Form.Group as={Col}/*  controlId="formGridEmail" */>
-        <Form.Select defaultValue={location.state.Direct_Manager_ID} onChange={handleChange} name='directManager' required>
+        <Form.Select defaultValue={directManager} onChange={handleChange} name='directManager' required>
           <option value="">Direct Manager</option>
         {employees.map((option) => (
           <option value={option.Full_Name}>
@@ -322,51 +424,37 @@ function UpdateEmployeeForm() {
         </Form.Select>
         </Form.Group>
         <Form.Group as={Col} controlId="formGridEmail" >
-          <Form.Control value={location.state.Email_Work} name='emailWork' type="email" placeholder="Email Work*" onChange={handleChange} required/>
+          <Form.Control value={ework} name='emailWork' type="email" placeholder="Email Work*" onChange={handleChange} required/>
         </Form.Group>
         <Form.Group as={Col} controlId="formGridEmail" >
-          <Form.Control value={location.state.Email_Personal} name='emailPersonal' type="email" placeholder="Email Personal" onChange={handleChange} />
+          <Form.Control value={epersonal} name='emailPersonal' type="email" placeholder="Email Personal" onChange={handleChange} />
         </Form.Group>
       </Row>
-      {/* <Row className="mb-4">
-      <Form.Group as={Col} >
-          <Form.Control name='username' type="text" placeholder="Username*" onChange={handleChange} />
-        </Form.Group>
-        <Form.Group as={Col} controlId="formGridPassword">
-          <Form.Control name='password' type="password" placeholder="Password*" onChange={handleChange} />
-        </Form.Group>
-        <Form.Group as={Col} controlId="formGridPassword">
-          <Form.Control name='confpassword' type="password" placeholder="Confirm Password*" onChange={handleChange} />
-        </Form.Group>
-      </Row> */}
-      
+
       <Row className="mb-4">
         <Form.Group as={Col}>
         <Form.Label>Joining Date</Form.Label>
-          <Form.Control value={location.state.Joining_Date} name="joiningDate" type="date" placeholder="Joining Date*" onChange={handleChange}/>
+          <Form.Control value={jDate} name="joiningDate" type="date" placeholder="Joining Date*" onChange={handleChange}/>
         </Form.Group>
-
-        {/* <Form.Group as={Col}>
-        <Form.Label>Resignation Date</Form.Label>
-          <Form.Control name="resignationDate" type="date" placeholder="Resignation Date" onChange={handleChange} />
-        </Form.Group> */}
       </Row>
+
       <Row className="mb-4">
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Business_Phone} name='business' type="tel" placeholder="Business Phone*" onChange={handleChange} required/>
+          <Form.Control value={bphone} name='business' type="tel" placeholder="Business Phone*" onChange={handleChange} required/>
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Mobile_Phone} name='mobile' type="tel" placeholder="Mobile Phone*" onChange={handleChange} required/>
+          <Form.Control value={mobile} name='mobile' type="tel" placeholder="Mobile Phone*" onChange={handleChange} required/>
         </Form.Group>
       </Row>
+      
       <Form.Group className="mb-4" controlId="formGridAddress1">
-        <Form.Control value={location.state.Address} name='address' placeholder="Address" onChange={handleChange} />
+        <Form.Control value={address} name='address' placeholder="Address" onChange={handleChange} />
       </Form.Group>
 
       <Row className="mb-4">
       <Form.Group as={Col} controlId="formGridCity">
         
-        <Form.Select defaultValue={location.state.City} onChange={handleChange} name='city' required>
+        <Form.Select defaultValue={city} onChange={handleChange} name='city' required>
                   <option value="">Select City</option>
                   <option value="Airdrie">Airdrie</option>
                   <option value="Athabasca">Athabasca</option>
@@ -1450,7 +1538,7 @@ function UpdateEmployeeForm() {
           </Form.Select>
         </Form.Group>
         <Form.Group as={Col} controlId="formGridState">
-        <Form.Select defaultValue={location.state.State} onChange={handleChange} name='state'>
+        <Form.Select defaultValue={state} onChange={handleChange} name='state'>
                   <option selected>Select Province</option>
                   <option value="Alberta">Alberta</option>
                   <option value="British Columbia">British Columbia</option>
@@ -1469,7 +1557,7 @@ function UpdateEmployeeForm() {
         </Form.Group>
 
         <Form.Group as={Col} controlId="formGridCountry">
-          <Form.Select defaultValue={location.state.Country} name='country'  onChange={handleChange} >
+          <Form.Select defaultValue={country} name='country'  onChange={handleChange} >
           <option value="Afghanistan">Afghanistan</option>
                     <option value="Åland Islands">Åland Islands</option>
                     <option value="Albania">Albania</option>
@@ -1717,30 +1805,30 @@ function UpdateEmployeeForm() {
           </Form.Select>
         </Form.Group>
         <Form.Group as={Col} controlId="formGridZip">
-          <Form.Control value={location.state.ZIP} name='zip' type='text' pattern="[0-9]{6}" placeholder='Pin Code' onChange={handleChange}/>
+          <Form.Control value={zip} name='zip' type='text' pattern="[0-9]{6}" placeholder='Pin Code' onChange={handleChange}/>
         </Form.Group>
       </Row>
       <Row className="mb-4">
       <Form.Group as={Col}>
-          <Form.Control value={location.state.Expertise} name='expertise' type='text' placeholder='Expertise' onChange={handleChange}/>
+          <Form.Control name='expertise' value={exp} placeholder='Expertise' onChange={handleChange}/>
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Web_Page} name='webpage' type="url" placeholder="Web-Page" onChange={handleChange}/>
+          <Form.Control name='webpage' value={wpage} placeholder="Web-Page" onChange={handleChange}/>
         </Form.Group>
       </Row>
       <Row className="mb-4">
         <Form.Group as={Col}>
           <Form.Label>Resume</Form.Label>
-          <Form.Control value={location.state.Resume} name='resume' type="file" placeholder="Resume" onChange={handleChange} />
+          <Form.Control name='resume' type="file" placeholder="Resume" onChange={handleChange} />
         </Form.Group>
         
         <Form.Group as={Col}>
           <Form.Label>Attachment</Form.Label>
-          <Form.Control value={location.state.Attachments} name='attachments' type="file" placeholder="Attachments" onChange={handleChange} />
+          <Form.Control name='attachments' type="file" placeholder="Attachments" onChange={handleChange} />
         </Form.Group>
       </Row>
       <Form.Group className="mb-4" controlId="exampleForm.ControlTextarea1">
-          <Form.Control value={location.state.Notes} name='notes' as="textarea" rows={1} type="text" placeholder="Notes" onChange={handleChange} />
+          <Form.Control value={notes} name='notes' as="textarea" rows={1} type="text" placeholder="Notes" onChange={handleChange} />
         </Form.Group>
 
 
@@ -1749,18 +1837,18 @@ function UpdateEmployeeForm() {
       <Row className="mb-4">
         <Form.Group as={Col}>
           <Form.Label>Birthday</Form.Label>
-          <Form.Control value={location.state.Birthday} name='birthday' type="date" placeholder="Birthday" onChange={handleChange} />
+          <Form.Control value={birthday} name='birthday' type="date" placeholder="Birthday" onChange={handleChange} />
         </Form.Group>
         <Form.Group as={Col}>
         <Form.Label>Anniversary</Form.Label>
-          <Form.Control value={location.state.Anniversary} name='anniversary' type="date" placeholder="Anniversary" onChange={handleChange} />
+          <Form.Control value={anniv} name='anniversary' type="date" placeholder="Anniversary" onChange={handleChange} />
         </Form.Group>
       </Row>
       <Row className="mb-4">
         <Form.Group as={Col}>
           {/* <Form.Label>Birthday</Form.Label> */}
           {/* <Form.Control name='sports' type="date" placeholder="Birthday" onChange={handleChange} /> */}
-          <Form.Select defaultValue={location.state.Sports} onChange={handleChange} name='sports'>
+          <Form.Select defaultValue={sport} onChange={handleChange} name='sports'>
             <option value="">Select Sports</option>
             <option value="Soccer">Soccer</option>
             <option value="Hockey">Hockey</option>
@@ -1772,9 +1860,7 @@ function UpdateEmployeeForm() {
           </Form.Select>
         </Form.Group>
         <Form.Group as={Col}>
-        {/* <Form.Label>Anniversary</Form.Label> */}
-        {/* <Form.Control name='anniversary' type="date" placeholder="Anniversary" onChange={handleChange} /> */}
-        <Form.Select defaultValue={location.state.Activities} onChange={handleChange} name='activity'>
+          <Form.Select defaultValue={act} onChange={handleChange} name='activity'>
           <option value="">Select Activity</option>
           <option value="Walking">Walking</option>
           <option value="Running">Running</option>
@@ -1784,7 +1870,7 @@ function UpdateEmployeeForm() {
       </Row>
       <Row className="mb-4">
         <Form.Group as={Col}>
-          <Form.Select defaultValue={location.state.Beverage} onChange={handleChange} name='beverage'>
+          <Form.Select defaultValue={bev} onChange={handleChange} name='beverage'>
             <option value="">Select Beverage</option>
             <option value="Coffee">Coffee</option>
             <option value="Tea">Tea</option>
@@ -1792,7 +1878,7 @@ function UpdateEmployeeForm() {
           </Form.Select>
         </Form.Group>
         <Form.Group as={Col}>
-        <Form.Select defaultValue={location.state.Alcohol} onChange={handleChange} name='alcohol'>
+        <Form.Select defaultValue={alco} onChange={handleChange} name='alcohol'>
           <option value="">Select Alcohol</option>
           <option value="Vodka">Vodka</option>
           <option value="Scotch">Scotch</option>
@@ -1805,29 +1891,29 @@ function UpdateEmployeeForm() {
       </Row>
       <Row className="mb-4">
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Travel_Destination} name='travelDest' type='text' placeholder='Travel Destination' onChange={handleChange}/>
+          <Form.Control value={tdest} name='travelDest' type='text' placeholder='Travel Destination' onChange={handleChange}/>
         </Form.Group>
       </Row>
       <Row className="mb-4">
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Spouse_Name} name='spouseName' type='text' placeholder='Spouse Name' onChange={handleChange}/>
+          <Form.Control value={sname} name='spouseName' type='text' placeholder='Spouse Name' onChange={handleChange}/>
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Children} name='children' type='text' placeholder='Children' onChange={handleChange}/>
+          <Form.Control value={child} name='children' type='text' placeholder='Children' onChange={handleChange}/>
         </Form.Group>
       </Row>
       <Row className="mb-4">
         <Form.Group as={Col}>
-          <Form.Control value={location.state.TV_Show} name='tvShow' type='text' placeholder='TV Show' onChange={handleChange}/>
+          <Form.Control value={tv} name='tvShow' type='text' placeholder='TV Show' onChange={handleChange}/>
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Movies} name='movie' type='text' placeholder='Movie' onChange={handleChange}/>
+          <Form.Control value={movie} name='movie' type='text' placeholder='Movie' onChange={handleChange}/>
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Actor} name='actor' type='text' placeholder='Actor' onChange={handleChange}/>
+          <Form.Control value={actor} name='actor' type='text' placeholder='Actor' onChange={handleChange}/>
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Dislikes} name='dislikes' type='text' placeholder='Dislikes' onChange={handleChange}/>
+          <Form.Control value={dislike} name='dislikes' type='text' placeholder='Dislikes' onChange={handleChange}/>
         </Form.Group>
       </Row>
 
@@ -1835,7 +1921,7 @@ function UpdateEmployeeForm() {
       <Row className="mb-4">
         <Form.Group as={Col}>
           {/* <Form.Control name='tvShow' type='text' placeholder='TV Show' onChange={handleChange}/> */}
-          <Form.Select defaultValue={location.state.Proficiency} name='proficiency' onChange={handleChange}>
+          <Form.Select defaultValue={prof} name='proficiency' onChange={handleChange}>
             <option value="">Proficiency</option>
             <option value="AutoCAD">AutoCAD</option>
             <option value="Civil3D">Civil3D</option>
@@ -1845,45 +1931,53 @@ function UpdateEmployeeForm() {
           </Form.Select>
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Interests} name='interests' type='text' onChange={handleChange} placeholder='Interests' />
+          <Form.Control value={int} name='interests' type='text' onChange={handleChange} placeholder='Interests' />
         </Form.Group>
       </Row>
       <Row classname="mb-4">
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Cocurricular} name='cocurricular' type='text' onChange={handleChange} placeholder='Co-Curriculars' />
+          <Form.Control value={cocurr} name='cocurricular' type='text' onChange={handleChange} placeholder='Co-Curriculars' />
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Trainings} name='trainings' type='text' onChange={handleChange} placeholder='Trainings' />
+          <Form.Control value={train} name='trainings' type='text' onChange={handleChange} placeholder='Trainings' />
         </Form.Group>
       </Row>
 
-      <h2 style={{'margin':'auto', 'width':'40%', 'marginTop':'5vh', 'marginBottom':'4vh','textDecoration':'underline'}}>Employee Traits</h2>
+      <h2 style={{'margin':'auto', 'width':'25%', 'marginTop':'5vh', 'marginBottom':'4vh','textDecoration':'underline'}}>Employee Traits</h2>
       <Row classname="mb-4">
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Strengths} name='strengths' type='text' onChange={handleChange} placeholder='Strengths' />
+          <Form.Control value={str} name='strengths' type='text' onChange={handleChange} placeholder='Strengths' />
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Weakness} name='weakness' type='text' onChange={handleChange} placeholder='Weakness' />
+          <Form.Control value={weak} name='weakness' type='text' onChange={handleChange} placeholder='Weakness' />
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control value={location.state.Social_Active_Index} name='activeIndex' type='text' onChange={handleChange} placeholder='Social Active Index' />
+          <Form.Control value={sai} name='activeIndex' type='text' onChange={handleChange} placeholder='Social Active Index' />
         </Form.Group>
       </Row>
-      <h2 style={{'margin':'auto', 'width':'40%', 'marginTop':'5vh', 'marginBottom':'4vh','textDecoration':'underline'}}>Authentication</h2>
+      <h2 style={{'margin':'auto', 'width':'25%', 'marginTop':'5vh', 'marginBottom':'4vh','textDecoration':'underline'}}>Authentication</h2>
       
-      <Form.Group classname='mb-4' >
-          <Form.Control value={location.state.Username} name='username' type="text" placeholder="Username*" onChange={handleChange} required/>
+      <Row classname="mb-4">
+      <Form.Group as={Col}>
+          <Form.Control value={uname} name='username' type="text" placeholder="Username*" onChange={handleChange} required/>
         </Form.Group>
-        <Form.Group classname='mb-4' controlId="formGridPassword">
-          <Form.Control name='password' type="password" placeholder="Password*" onChange={handleChange} required/>
-        </Form.Group>
-        <Form.Group classname='mb-4' controlId="formGridPassword">
-          <Form.Control name='confpassword' type="password" placeholder="Confirm Password*" onChange={handleChange} required/>
-        </Form.Group>
+        </Row>
       <Button className='submit-btn' variant="primary" type="submit" style={{'marginTop':'4vh', 'width':'10vw'}} onClick={handleSubmit}>
         Submit
       </Button>
     </Form>
+    <Modal show={show} onHide={handleClose} >
+        <Modal.Header closeButton>
+          <Modal.Title>Form Submitted</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Employee Updated Successfully</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={callFunc}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      
     </>
   )
 }

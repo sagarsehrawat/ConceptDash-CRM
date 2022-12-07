@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import './Dashboard.css'
-import shipped from '../../../Images/shipped.png'
 import { useNavigate } from 'react-router-dom'
-import newO from '../../../Images/new-orders.jpg'
-import invoice from '../../../Images/invoice.jpg'
 import calendarIcon from '../../../Images/calendar.png'
+import rfpIcon from '../../../Images/rfps.png'
 import upcomingProjects from '../../../Images/upcomingProject.png'
-import pendingProject from '../../../Images/pendingProject.jpg'
 import completedProject from '../../../Images/completedProject.png'
 import allProjects from '../../../Images/allProjects.png'
+import pendingProject from '../../../Images/pendingProject.jpg'
 import timesheet from '../../../Images/timesheet.png'
 import { TableRow, TableHead, TableContainer, TableCell, TableBody, Table, Paper } from '@material-ui/core';
 import axios from 'axios';
@@ -28,10 +26,16 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const [value, setValue] = React.useState("1");
     const [tasks, settasks] = useState([])
+    const [projectTasks, setProjectTasks] = useState([])
     useEffect(() => {
           const call = async () => {
-            await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/tasksById', {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':localStorage.getItem('employeeId')}}).then((res) => {
+            await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/tasksById', {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':localStorage.getItem('employeeId')}}).then((res) => {
                 settasks(res.data.res)
+            }).catch((err) => {
+              console.log(err)
+            })
+            await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projectTasks/id', {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':localStorage.getItem('employeeId')}}).then((res) => {
+                setProjectTasks(res.data.res)
                 console.log(res.data.res);
             }).catch((err) => {
               console.log(err)
@@ -39,6 +43,28 @@ const Dashboard = () => {
           }
           call()
         },[])
+        const [isSubmit, setIsSubmit] = useState(false);
+        const handleSubmit = (e) => {
+            e.preventDefault();
+            setIsSubmit(true);
+            if(e.target.name==='Review Proposal') {
+                axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/update/projectTask5', {
+                    'id':e.target.value,
+                }, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+                  console.log(res);
+                  }).catch((err) => {
+                      console.log(err)
+                  })
+            } else {
+                axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/update/projectTask4', {
+                    'id':e.target.value,
+                }, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+                  console.log(res);
+                  }).catch((err) => {
+                      console.log(err)
+                  })
+            }
+          };
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
@@ -104,76 +130,104 @@ const Dashboard = () => {
   ,{
     dataField:'Completed_Date',
     text:'Completion Date',
-  }
-//   
+  }   
 ]
+const [value1, setValue1] = useState("1");
+const handleChange1 = (event, newValue) => {
+    setValue1(newValue);
+  };
+  const dhm=(ms)=> {
+    const days = Math.floor(ms / (24*60*60*1000));
+    const daysms = ms % (24*60*60*1000);
+    const hours = Math.floor(daysms / (60*60*1000));
+    const hoursms = ms % (60*60*1000);
+    const minutes = Math.floor(hoursms / (60*1000));
+    const minutesms = ms % (60*1000);
+    const sec = Math.floor(minutesms / 1000);
+    if(days<0 || hours<0 || minutes<0 || sec<0) {
+        return null;
+    }
+    return days + "d " + hours + "hrs ";
+  }
     return (
         <div className='mainCont'>
             <div>
-        <Button onClick={() => {navigate('/'); localStorage.clear()}} style={{'float':'right','marginRight':'3vw','marginTop':'1vh'}}> Log Out</Button>
-        <h1 style={{'textAlign':'center','marginTop':'2vh','marginBottom':'3vh','color':'#ffffff','fontSize':'3rem'}}>Engineer Dashboard</h1>
+        <Button className='allBtn' onClick={() => {navigate('/'); localStorage.clear()}} style={{'float':'right','marginRight':'3vw','marginTop':'1vh','box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 1), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}> Log Out</Button>
+        <h1 style={{'marginLeft':'2vw'}}><b> DASHBOARD</b></h1>
         
                 <div className='row d-flex justify-content-around'>
-                    <div className='card col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'#e2d5f0' }}>
+                    <div className='card card1 col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'', 'borderRadius':'0','box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 0.8), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
                         <img src={upcomingProjects} className='card-img' alt="New Orders"/>
-                        <h5 className='card-title' style={{'textAlign':'center'}}>Upcoming Projects</h5>
-                        <p>20</p>
-
-                    </div>
-                    <div className='card col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'#e2d5f0' }}>
-                        <img src={pendingProject} className='card-img' alt="Invoiced Orders"/>
-                        <h5 className='card-title' style={{'textAlign':'center'}}>Pending Projects</h5>
-                        <p>25</p>
-
-                    </div>
-                    <div className='card col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'#e2d5f0' }}>
-                        <img src={completedProject} className='card-img' alt="Shipped Orders"/>
-                        <h5 className='card-title' style={{'textAlign':'center'}}>Projects Completed</h5>
-                        <p>20</p>
-
-                    </div>
-
-                    <div className='card col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'#e2d5f0' }}>
-                        <img src={allProjects} className='card-img' alt="Shipped Orders"/>
-                        <h5 className='card-title' style={{'textAlign':'center'}}>All Projects</h5>
-                        <Button onClick={(e) => {navigate("/updateProject")}} style={{'marginTop':'2vh','backgroundColor':'rgb(99, 138, 235)'}}>Click Here</Button>
+                        <h5 className='card-title' style={{'textAlign':'center'}}>Budgets</h5>
+                        <Button className='allBtn' onClick={(e) => {navigate("/Budgettable")}} style={{'marginTop':'2vh','marginBottom':'2vh','backgroundColor':'#1a73e8','borderRadius':'25px','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>Click Here</Button>
                         
 
                     </div>
-                    
-                    <div className='card col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'#e2d5f0' }}>
-                        <img src={calendarIcon} className='card-img' alt="Closed Orders"/>
-                        <h5 className='card-title'>Calendar</h5>
-                        <Button onClick={handleShow} style={{'marginTop':'2vh','backgroundColor':'rgb(99, 138, 235)'}}>Click Here</Button>
+                    <div className='card card1 col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'', 'borderRadius':'0','box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 0.8), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
+                        <img src={rfpIcon} className='card-img' alt="Invoiced Orders"/>
+                        <h5 className='card-title' style={{'textAlign':'center'}}>RFPs</h5>
+                        <Button className='allBtn' onClick={(e) => {navigate("/RFPtable")}} style={{'marginTop':'2vh','marginBottom':'2vh','backgroundColor':'#1a73e8','borderRadius':'25px','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>Click Here</Button>
+                        
 
                     </div>
-                    <div className='card col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'#e2d5f0' }}>
+                    <div className='card card1 col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'', 'borderRadius':'0','box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 0.8), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
+                        <img src={completedProject} className='card-img' alt="Shipped Orders"/>
+                        <h5 className='card-title' style={{'textAlign':'center'}}>Proposals</h5>
+                        <Button className='allBtn' onClick={(e) => {navigate("/Proposaltable")}} style={{'marginTop':'2vh','marginBottom':'2vh','backgroundColor':'#1a73e8','borderRadius':'25px','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>Click Here</Button>
+                        
+
+                    </div>
+
+                    <div className='card card1 col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'', 'borderRadius':'0','box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 0.8), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
+                        <img src={allProjects} className='card-img' alt="Shipped Orders"/>
+                        <h5 className='card-title' style={{'textAlign':'center'}}>All Projects</h5>
+                        <Button className='allBtn' onClick={(e) => {navigate("/updateProject")}} style={{'marginTop':'2vh','marginBottom':'2vh','backgroundColor':'#1a73e8','borderRadius':'25px','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>Click Here</Button>
+                        
+ 
+                    </div>
+                    
+                    <div className='card card1 col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'', 'borderRadius':'0','box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 0.8), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
+                        <img src={calendarIcon} className='card-img' alt="Closed Orders"/>
+                        <h5 className='card-title'>Calendar</h5>
+                        <Button className='allBtn' onClick={handleShow} style={{'marginTop':'2vh','marginBottom':'2vh','backgroundColor':'#1a73e8','borderRadius':'25px','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>Click Here</Button>
+
+                    </div>
+                    <div className='card card1 col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'', 'borderRadius':'0','box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 0.8), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
                         <img src={timesheet} className='card-img' alt="Closed Orders"/>
                         <h5 className='card-title'>TimeSheet</h5>
-                        <Button onClick={handleShowTS} style={{'marginTop':'2vh','backgroundColor':'rgb(99, 138, 235)'}}>Click Here</Button>
+                        <Button className='allBtn' onClick={handleShowTS} style={{'marginTop':'2vh','marginBottom':'2vh','backgroundColor':'#1a73e8','borderRadius':'25px','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>Click Here</Button>
                     </div>
                 </div>
 
                 <div className='row body-2 d-flex justify-content-around'>
-                    <div className='col-3 card d-flex align-items-center tableCont' style={{ "width": "90%", "padding": "0.8rem", "height": "30rem",'overflowY':'auto','backgroundColor':'#e2d5f0' }}>
+                    <div className='col-3 card d-flex align-items-center tableCont' style={{ "width": "90%", "padding": "0.8rem", "height": "30rem",'overflowY':'auto','backgroundColor':'','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 1), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
                         <h2 style={{'textDecoration':'underline','fontWeight':'bold'}}>My Focus</h2>
-                        {/* <Button variant='success' onClick={(e) => {navigate("/addTask")}} style={{'marginTop':'2vh', 'marginBottom':'2vh','backgroundColor':'rgb(99, 138, 235)'}}>Add Task</Button> */}
+                        <Button className='allBtn' variant='success' onClick={(e) => {navigate("/addMyTask")}} style={{'marginTop':'2vh', 'marginBottom':'2vh','backgroundColor':'#1a73e8','borderRadius':'25px','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>Add to my Focus</Button>
         
                             <div className="" >
-                            <TableContainer component={Paper}>
+                            <Box sx={{ width: "100%", typography: "body1" }}>
+                            <TabContext value={value1}>
+                            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                            <TabList
+                                centered
+                                onChange={handleChange1}
+                                aria-label=""
+                            >
+                                <Tab label="Employee Focus" value="1" />
+                                <Tab label="Project Focus" value="3" />
+                            </TabList>
+                            </Box>
+                                <TabPanel centered value="1">
+                                <TableContainer component={Paper} style={{'box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
                                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                     <TableHead>
                                     <TableRow>
-                                        {/* <TableCell>Task ID</TableCell> */}
                                         <TableCell align="right">Title</TableCell>
                                         <TableCell align="right">Priority</TableCell>
-                                        <TableCell align="right">Status</TableCell>
                                         <TableCell align="right">% Complete</TableCell>
-                                        {/* <TableCell align="right">Assigned To</TableCell> */}
                                         <TableCell align="right">Description</TableCell>
                                         <TableCell align="right">Start Date</TableCell>
                                         <TableCell align="right">Due Date</TableCell>
-                                        {/* <TableCell align="right">Completed On</TableCell> */}
                                         <TableCell align="right">Edit/Update</TableCell>
                                     </TableRow>
                                     </TableHead>
@@ -183,24 +237,50 @@ const Dashboard = () => {
                                         key={row.name}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         >
-                                        {/* <TableCell component="th" scope="row">
-                                        {row.Task_ID}
-                                        </TableCell> */}
                                         <TableCell align="right">{row.Title}</TableCell>
                                         <TableCell align="right">{row.Priority}</TableCell>
-                                        <TableCell align="right">{row.Status}</TableCell>
                                         <TableCell align="right">{row.Percent_Completed}</TableCell>
-                                        {/* <TableCell align="right">{row.Full_Name}</TableCell> */}
                                         <TableCell align="right">{row.Description}</TableCell>
                                         <TableCell align="right">{(row.Start_Date)?row.Start_Date.substring(0,10):''}</TableCell>
                                         <TableCell align="right">{(row.Due_Date)?row.Due_Date.substring(0,10):''}</TableCell>
-                                        {/* <TableCell align="right">{row.Completed_Date}</TableCell> */}
-                                        <TableCell align="right"><Button onClick={(e) => {navigate("/updateTask", {state: row})}} style={{'backgroundColor':'rgb(99, 138, 235)'}}>Edit</Button></TableCell>
+                                        <TableCell align="right"><Button className='allBtn' onClick={(e) => {navigate("/updateTask", {state: row})}} style={{'backgroundColor':'#1a73e8','borderRadius':'25px','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>Edit</Button></TableCell>
                                         </TableRow>
                                     ))}
                                     </TableBody>
                                 </Table>
                                 </TableContainer>
+
+                                </TabPanel>
+                                <TabPanel centered value="3">
+                                <TableContainer component={Paper} style={{'box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                    <TableHead>
+                                    <TableRow>
+                                        <TableCell align="right">Title</TableCell>
+                                        <TableCell align="right">Time Remaining</TableCell>
+                                        <TableCell align="right">Description</TableCell>
+                                        <TableCell align="right">Task Completed</TableCell>
+                                    </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                    {projectTasks.map((row) => (
+                                        <TableRow
+                                        key={row.name}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        >
+                                        <TableCell align="right">{row.Title}</TableCell>
+                                        <TableCell align="right">{row.Due_Date?(dhm(((new Date(row.Due_Date).getTime())-(new Date()).getTime())))?dhm(((new Date(row.Due_Date).getTime())-(new Date()).getTime())):'Missing':''}</TableCell>
+                                        <TableCell align="right">{row.Description}</TableCell>
+                                        {(row.Title!=='Review RFP')?<TableCell align="right"><Button name={row.Title} value={row.Task_ID} onClick={handleSubmit}>Task Done</Button></TableCell>:''}
+                                        </TableRow>
+                                    ))}
+                                    </TableBody>
+                                </Table>
+                                </TableContainer>
+                                </TabPanel>
+                            </TabContext>
+                            </Box>
+                            
                             </div>
                             </div>
                         </div>

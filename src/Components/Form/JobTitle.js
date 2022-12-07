@@ -4,6 +4,7 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
+import { HOST, ADD_JOB_TITLE } from '../Constants/Constants';
 import Row from 'react-bootstrap/Row';
 function JobTitle() {
     const [isSubmit, setIsSubmit] = useState(false);
@@ -22,7 +23,7 @@ function JobTitle() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/jobTitle', {
+        axios.post(HOST + ADD_JOB_TITLE, {
             'jobTitle':form.jobTitle,
             'department':form.department,
             'hourlyRate':form.hourlyRate,

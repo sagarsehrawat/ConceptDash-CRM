@@ -31,7 +31,7 @@ function EmployeeTable() {
 };
 useEffect(() => {
     const call = async () => {
-      const res = await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}});
+      const res = await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}});
       setemployeess(res.data.res)
       console.log(res.data);
     }

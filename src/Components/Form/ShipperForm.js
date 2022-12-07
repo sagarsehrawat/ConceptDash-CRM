@@ -39,7 +39,7 @@ function ShipperForm() {
     const handleSubmit = (e) => {
       e.preventDefault();
       setIsSubmit(true);
-      axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/shipper', {
+      axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/shipper', {
         
         'company':form.company,
         'firstName':form.firstname,

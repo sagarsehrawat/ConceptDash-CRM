@@ -38,7 +38,7 @@ function SupplierForm() {
     const handleSubmit = (e) => {
       e.preventDefault();
       setIsSubmit(true);
-      axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/supplier', {
+      axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/supplier', {
         'company':form.company,
         'firstName':form.firstname,
         'lastName':form.lastname,

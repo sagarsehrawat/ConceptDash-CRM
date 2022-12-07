@@ -4,17 +4,18 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
+import { HOST, GET_JOB_TITLES, ADD_EMPLOYEE } from '../Constants/Constants';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from 'react-router-dom'
+import Modal from 'react-bootstrap/Modal';
 
-// import TextField from '@material-ui/core/TextField';
 function EmployeeForm() {
     const [isSubmit, setIsSubmit] = useState(false);
     const [dept, setdept] = useState('');
     const [jobTitles, setjobTitles] = useState([])
     useEffect(() => {
         const call = async () => {
-          await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/jobTitles', {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'department':dept }}).then((res) => {
+          await axios.get(HOST + GET_JOB_TITLES, {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'department':dept }}).then((res) => {
             setjobTitles(res.data.res)
             console.log(res.data);
           }).catch((err) => {
@@ -75,15 +76,6 @@ function EmployeeForm() {
       if(name==='department') {
         setdept(value)
       }
-      // if(name==="joiningDate" || name==="resignationDate") {
-      //   console.log(value);
-      //   value = formatDate(value);
-      // }
-      // if('password' && name==="confpassword") {
-      //   if(form.password!==value) {
-      //     throw "Passwords Don't Match";
-      //   }
-      // }
       newForm[name] = value
       setform(newForm);
     };
@@ -94,11 +86,18 @@ function EmployeeForm() {
       let newDate = `${day}-${month}-${year}`;
       return newDate;
     };
+    const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+    const callFunc = ()=>{
+      handleClose();
+      navigate('/admin')
+    }
     // const handleChange1=()=>{ {handleChange1}; reformatDate();}
     const handleSubmit = (e) => {
       e.preventDefault();
       setIsSubmit(true);
-      axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/employee', {
+      axios.post(HOST + ADD_EMPLOYEE, {
         'username':form.username,
         'password':form.password,
         'department':form.department,
@@ -147,6 +146,9 @@ function EmployeeForm() {
       },
        {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         console.log(res);
+        if(res.data.success) {
+          handleShow()
+        }
         }).catch((err) => {
             console.log(err)
         })
@@ -154,7 +156,7 @@ function EmployeeForm() {
     const [employees, setemployees] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setemployees(res.data.res)
         }).catch((err) => {
           console.log(err)
@@ -1465,7 +1467,7 @@ function EmployeeForm() {
         </Form.Group>
 
         <Form.Group as={Col} controlId="formGridCountry">
-          <Form.Select name='country' defaultValue="Canada"  onChange={handleChange} >
+          <Form.Select name='country' onChange={handleChange} >
           <option value="Afghanistan">Afghanistan</option>
                     <option value="Åland Islands">Åland Islands</option>
                     <option value="Albania">Albania</option>
@@ -1710,7 +1712,7 @@ function EmployeeForm() {
                     <option value="Yemen">Yemen</option>
                     <option value="Zambia">Zambia</option>
                     <option value="Zimbabwe">Zimbabwe</option>
-          </Form.Select>
+        </Form.Select>
         </Form.Group>
         <Form.Group as={Col} controlId="formGridZip">
           <Form.Control name='zip' type='text' pattern="[0-9]{6}" placeholder='Pin Code' onChange={handleChange}/>
@@ -1888,6 +1890,17 @@ function EmployeeForm() {
         Submit
       </Button>
     </Form>
+    <Modal show={show} onHide={handleClose} >
+        <Modal.Header closeButton>
+          <Modal.Title>Form Submitted</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Employee added Successfully</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={callFunc}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }
