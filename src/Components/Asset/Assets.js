@@ -26,7 +26,7 @@ function Assets() {
     useEffect(() => {
       setIsLoading(true);
         const call = async () => {
-          await axios.get('https://localhost:8080/api/get/assets', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+          await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/assets', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
             setassets(res.data.res)
             setIsLoading(false)
           }).catch((err) => {

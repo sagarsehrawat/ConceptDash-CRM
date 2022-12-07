@@ -5,7 +5,7 @@ import { TableRow, TableHead, TableContainer, TableCell, TableBody, Table, Paper
 function Tables() {
     const [sales, setsales] = useState([])
     useEffect(() => {
-        axios.get('https://localhost:8080/api/getAllSales').then((res) => {
+        axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/getAllSales').then((res) => {
             setsales(res.data.res)
         }).catch((err) => {
             console.log(err)

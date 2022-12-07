@@ -25,7 +25,7 @@ function InvoiceForm() {
     const handleSubmit = (e) => {
       e.preventDefault();
       setIsSubmit(true);
-      axios.post('https://localhost:8080/api/addNewSupplier', {
+      axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/addNewSupplier', {
         'orderID':form.orderID,
         'invoiceDate':form.invoiceDate,
         'dueDate':form.dueDate,

@@ -13,7 +13,7 @@ function QuoteForm() {
     const [distributors, setdistributors] = useState([]);
     useEffect(() => {
       const call = async () => {
-        await axios.get('https://localhost:8080/api/get/distributors', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/distributors', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setdistributors(res.data.res)
           console.log(distributors)
         }).catch((err) => {
@@ -24,7 +24,7 @@ function QuoteForm() {
     },[])
     useEffect(() => {
       const call = async () => {
-        await axios.get('https://localhost:8080/api/get/contractors', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/contractors', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setcontractors(res.data.res)
           console.log(contractors)
         }).catch((err) => {

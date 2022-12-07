@@ -22,7 +22,7 @@ const handleShow = () => setShow(true);
   const [categories, setcategories] = useState([]);
   useEffect(() => {
     const call = async () => {
-      await axios.get('https://localhost:8080/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+      await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setemployees(res.data.res)
         console.log(res.data);
       }).catch((err) => {

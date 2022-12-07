@@ -20,7 +20,7 @@ function EmployeeTable() {
   const [timesheet, settimesheet] = useState([])
   const handleChange1 = async (e) => {
     console.log(e.target.value);
-    await axios.get('https://localhost:8080/api/get/timesheet',{headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':e.target.value}}).then(async (res) => {
+    await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/timesheet',{headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':e.target.value}}).then(async (res) => {
       settimesheet(res.data.res)
       console.log(res.data);
       console.log(timesheet)
