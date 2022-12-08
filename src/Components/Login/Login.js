@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import AuthenticationContext from '../../Context/AuthContext';
 import './Login.css'
 import axios from 'axios';
-import { HOST, LOGIN } from '../Constants/Constants';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,7 +13,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post(HOST + LOGIN,{'username':username,'password':password}).then((res) => {
+    await axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/login',{'username':username,'password':password}).then((res) => {
             localStorage.setItem('auth',res.data.auth)
             localStorage.setItem('department',res.data.user.department)
             localStorage.setItem('emailWork',res.data.user.emailWork)

@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useNavigate,useLocation } from 'react-router-dom'
-import { HOST, GET_EMPLOYEENAMES, ADD_TASK } from '../Constants/Constants';
 import Modal from 'react-bootstrap/Modal';
 
 function AddMyTask() {
@@ -33,7 +32,7 @@ function AddMyTask() {
       };
       useEffect(() => {
         const call = async () => {
-          await axios.get(HOST + GET_EMPLOYEENAMES,{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
             setemployees(res.data.res)
           }).catch((err) => {
             console.log(err)
@@ -44,7 +43,7 @@ function AddMyTask() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post(HOST + ADD_TASK, {
+        axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/task', {
             headers:{
                 'auth':'Rose '+ localStorage.getItem('auth')
             },

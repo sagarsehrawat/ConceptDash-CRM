@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import './Form.css'
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
-import { HOST, GET_EMPLOYEENAMES, GET_DEPARTMENTS, GET_PROJECT_CATEGORIES, UPDATE_PROJECT } from '../Constants/Constants';
+
+// import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -42,19 +43,19 @@ function UpdateProjectForm() {
   const [categories, setcategories] = useState([]);
   useEffect(() => {
     const call = async () => {
-      await axios.get(HOST + GET_EMPLOYEENAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+      await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setemployees(res.data.res)
         console.log(res.data);
       }).catch((err) => {
         console.log(err)
       })
-      await axios.get(HOST + GET_DEPARTMENTS, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+      await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/departments', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setdepts(res.data.res)
         console.log(res.data);
       }).catch((err) => {
         console.log(err)
       })
-      await axios.get(HOST + GET_PROJECT_CATEGORIES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+      await axios.get('hhttp://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projectCategories', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setcategories(res.data.res)
         console.log(res.data);
       }).catch((err) => {
@@ -120,7 +121,7 @@ function UpdateProjectForm() {
     e.preventDefault();
     setIsSubmit(true);
     console.log(form.dueDate);
-    axios.post(HOST + UPDATE_PROJECT, {
+    axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/update/project', {
       'projectName':form.projectName,
       'dueDate':form.dueDate,
       'stage':form.projectStage,

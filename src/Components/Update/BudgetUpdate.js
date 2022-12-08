@@ -1,7 +1,6 @@
 import {React, useEffect, useState} from 'react'
 import { TableRow, TableHead, TableContainer, TableCell, TableBody, Table, Paper } from '@material-ui/core';
 import axios from 'axios'
-import { HOST, GET_BUDGETS } from '../Constants/Constants';
 import LoadingSpinner from '../Loader/Loader';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom'
@@ -14,7 +13,7 @@ function BudgetUpdate() {
     useEffect(() => {
         setIsLoading(true);
           const call = async () => {
-            await axios.get(HOST + GET_BUDGETS, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+            await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/budgets', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
               setbudgets(res.data.res)
               setdataSource(res.data.res)
               console.log(res.data.res);

@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { HOST, GET_CITIES, GET_DEPARTMENTS, GET_PROJECT_CATEGORIES, ADD_BUDGET } from '../Constants/Constants';
 import { useNavigate,useLocation } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal';
 
@@ -40,19 +39,19 @@ function BudgetsForm() {
         const [projectDepts, setprojectDepts] = useState([])
         useEffect(() => {
             const call = async () => {
-                await axios.get(HOST + GET_CITIES, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+                await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/list/cities', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
                 setcities(res.data.res)
                 }).catch((err) => {
                 console.log(err)
                 })
 
-                await axios.get(HOST + GET_DEPARTMENTS, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+                await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/list/departments', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
                 setdepts(res.data.res)
                 }).catch((err) => {
                 console.log(err)
                 })
 
-                await axios.get(HOST + GET_PROJECT_CATEGORIES, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+                await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/list/projectCategories', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
                 setprojectDepts(res.data.res)
                 }).catch((err) => {
                 console.log(err)
@@ -63,7 +62,7 @@ function BudgetsForm() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post(HOST + ADD_BUDGET, {
+        axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/budget', {
             'cityId':form.city,
             'departmentId':form.dept,
             'categoryId':form.projectCat,

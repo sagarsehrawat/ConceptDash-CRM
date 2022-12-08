@@ -1,7 +1,10 @@
 import FullCalendar, { preventDefault } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
+import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import { gapi } from 'gapi-script'
+import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import {
     useState,
     useEffect
@@ -12,7 +15,6 @@ import Modal from 'react-bootstrap/Modal';
 import Select from 'react-select';
 import Form from 'react-bootstrap/Form';
 import axios from "axios";
-import { HOST, GET_EMPLOYEENAMES, GET_PROJECT_NAMES, ADD_TIMESHEET } from "./Constants/Constants";
 const style = {
   position: 'absolute',
   top: '50%',
@@ -86,12 +88,12 @@ const style = {
     const [projects, setprojects] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get(HOST + GET_EMPLOYEENAMES,{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+        await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
           setemployees(res.data.res)
         }).catch((err) => {
           console.log(err)
         })
-        await axios.get(HOST + GET_PROJECT_NAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projectNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
             setprojects(res.data.res)
           }).catch((err) => {
             console.log(err)
@@ -205,7 +207,7 @@ const handleSubmit = (e)=>{
   e.preventDefault();
         // setIsSubmit(true);
         console.log(e);
-        axios.post(HOST + ADD_TIMESHEET, {
+        axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/timesheet', {
           'projectId':form.project,
           'employeeId': localStorage.getItem('employeeId'),
           'date':(new Date(start)).toISOString(),

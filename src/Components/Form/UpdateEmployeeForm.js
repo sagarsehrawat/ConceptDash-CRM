@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { HOST, GET_JOB_TITLES, UPDATE_EMPLOYEE, GET_EMPLOYEENAMES } from '../Constants/Constants';
 import { useNavigate } from 'react-router-dom'
 import {useLocation} from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
@@ -66,7 +65,7 @@ function UpdateEmployeeForm() {
     
     useEffect(() => {
         const call = async () => {
-          await axios.get(HOST + GET_JOB_TITLES, {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'department':dept }}).then((res) => {
+          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/jobTitles', {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'department':dept }}).then((res) => {
             setjobTitles(res.data.res)
           }).catch((err) => {
             console.log(err)
@@ -258,7 +257,7 @@ function UpdateEmployeeForm() {
     const handleSubmit = (e) => {
       e.preventDefault();
       setIsSubmit(true);
-      axios.post(HOST + UPDATE_EMPLOYEE, {
+      axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/update/employee', {
         'username':form.username,
         'password':form.password,
         'department':form.department,
@@ -318,7 +317,7 @@ function UpdateEmployeeForm() {
     const [employees, setemployees] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get(HOST + GET_EMPLOYEENAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setemployees(res.data.res)
         }).catch((err) => {
           console.log(err)

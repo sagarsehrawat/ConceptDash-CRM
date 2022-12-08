@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal';
 import TestDemo from '../../Components/Calendar'
 import axios from 'axios'
-import { GET_ALL_EMPLOYEES, HOST, GET_TASKS } from '../Constants/Constants';
+import { GET_ALL_EMPLOYEES, HOST } from '../Constants/Constants';
 import Form from 'react-bootstrap/Form';
 import LoadingSpinner from '../Loader/Loader';
 function AdminDash() {
@@ -25,7 +25,7 @@ function AdminDash() {
     useEffect(() => {
       setIsLoading(true);
           const call = async () => {
-            await axios.get(HOST + GET_TASKS, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+            await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/tasks', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
                 settasks(res.data.res)
                 setIsLoading(false);
                 settask1(res.data.res[0].Title)

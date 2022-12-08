@@ -4,7 +4,6 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import { HOST, ADD_COMPANY } from '../Constants/Constants';
 import Row from 'react-bootstrap/Row';
 
 function CompanyForm() {
@@ -32,7 +31,7 @@ function CompanyForm() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post(HOST + ADD_COMPANY, {
+        axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/company', {
             'name':form.company,
             'category':form.category,
             'address':form.address,

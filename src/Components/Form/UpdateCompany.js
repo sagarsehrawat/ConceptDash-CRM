@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { HOST, UPDATE_COMPANY } from '../Constants/Constants';
 import { useNavigate,useLocation } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal';
 
@@ -83,7 +82,7 @@ function UpdateCompany() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post(HOST + UPDATE_COMPANY, {
+        axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/update/company', {
             'name':form.company,
             'category':form.category,
             'address':form.address,

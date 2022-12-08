@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from 'react-router-dom'
-import { HOST, GET_COMPANY_NAMES, ADD_CONTACT } from '../Constants/Constants';
 import Modal from 'react-bootstrap/Modal';
 
 // import TextField from '@material-ui/core/TextField';
@@ -54,7 +53,7 @@ function CustomerForm() {
   const [companies, setcompanies] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get(HOST + GET_COMPANY_NAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/companyNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setcompanies(res.data.res)
           console.log(res.data);
         }).catch((err) => {
@@ -67,7 +66,7 @@ function CustomerForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmit(true);
-    axios.post(HOST + ADD_CONTACT, {
+    axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/contact', {
       'companyId':form.company,
       'salutation':form.salutation,
       'firstName':form.firstname,

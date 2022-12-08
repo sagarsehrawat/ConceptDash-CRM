@@ -8,7 +8,6 @@ import Row from 'react-bootstrap/Row';
 import { useNavigate } from 'react-router-dom'
 import {useLocation} from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
-import { HOST, GET_COMPANY_NAMES, UPDATE_CLIENT } from '../Constants/Constants';
 
 function UpdateCustomer() {
     const location = useLocation();
@@ -181,7 +180,7 @@ function UpdateCustomer() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post(HOST + UPDATE_CLIENT, {
+        axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/update/client', {
           'clientId':location.state.ID,
           'salutation':form.salutation,
           'companyId':form.company,
@@ -226,7 +225,7 @@ function UpdateCustomer() {
       const [companies, setcompanies] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get(HOST + GET_COMPANY_NAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/companyNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setcompanies(res.data.res)
           console.log(res.data);
         }).catch((err) => {

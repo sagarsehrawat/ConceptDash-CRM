@@ -4,7 +4,6 @@ import axios from 'axios'
 import LoadingSpinner from '../Loader/Loader';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom'
-import { HOST, GET_ASSETS, GET_SOFTWARES } from '../Constants/Constants';
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -22,14 +21,14 @@ function AssetUpdate() {
         useEffect(() => {
         setIsLoading(true);
             const call = async () => {
-            await axios.get(HOST + GET_ASSETS, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+            await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/assets', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
                 setassets(res.data.res)
                 setdataSource(res.data.res)
                 setIsLoading(false)
                 }).catch((err) => {
                     console.log(err)
                 })
-            await axios.get(HOST + GET_SOFTWARES, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+            await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/softwares', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
                 setsoftware(res.data.res)
                 setdataSourceSoft(res.data.res)
                 setIsLoading(false)

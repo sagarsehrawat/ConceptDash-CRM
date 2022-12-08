@@ -4,7 +4,6 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import { HOST, ADD_ORDER } from '../Constants/Constants';
 import Row from 'react-bootstrap/Row';
 
 function OrderForm() {
@@ -34,7 +33,7 @@ function OrderForm() {
     const handleSubmit = (e) => {
       e.preventDefault();
       setIsSubmit(true);
-      axios.post(HOST + ADD_ORDER, {
+      axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/order', {
       'customerID':form.customerID,
       'productID':form.productID,
       'quantity':form.quantity,

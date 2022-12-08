@@ -4,7 +4,7 @@ import axios from 'axios'
 import LoadingSpinner from '../Loader/Loader';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom'
-import { GET_ALL_EMPLOYEES, HOST, GET_TIMESHEET,GET_EMPLOYEENAMES } from '../Constants/Constants';
+import { GET_ALL_EMPLOYEES, HOST } from '../Constants/Constants';
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -32,7 +32,7 @@ function EmployeeUpdate() {
     },[])
     const [timesheet, settimesheet] = useState([])
     const handleChange1 = async (e) => {
-        await axios.get(HOST + GET_TIMESHEET,{headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':e.target.value}}).then(async (res) => {
+        await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/timesheet',{headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':e.target.value}}).then(async (res) => {
         settimesheet(res.data.res)
         setIsLoading(false)
     }).catch((err) => {
@@ -41,7 +41,7 @@ function EmployeeUpdate() {
     };
     useEffect(() => {
         const call = async () => {
-          const res = await axios.get(HOST + GET_EMPLOYEENAMES,{headers:{'auth':'Rose '+ localStorage.getItem('auth')}});
+          const res = await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}});
           setemployeess(res.data.res)
           console.log(res.data);
         }

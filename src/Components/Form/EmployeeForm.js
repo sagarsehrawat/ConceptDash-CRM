@@ -4,18 +4,18 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import { HOST, GET_JOB_TITLES, ADD_EMPLOYEE } from '../Constants/Constants';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal';
 
+// import TextField from '@material-ui/core/TextField';
 function EmployeeForm() {
     const [isSubmit, setIsSubmit] = useState(false);
     const [dept, setdept] = useState('');
     const [jobTitles, setjobTitles] = useState([])
     useEffect(() => {
         const call = async () => {
-          await axios.get(HOST + GET_JOB_TITLES, {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'department':dept }}).then((res) => {
+          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/jobTitles', {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'department':dept }}).then((res) => {
             setjobTitles(res.data.res)
             console.log(res.data);
           }).catch((err) => {
@@ -76,6 +76,15 @@ function EmployeeForm() {
       if(name==='department') {
         setdept(value)
       }
+      // if(name==="joiningDate" || name==="resignationDate") {
+      //   console.log(value);
+      //   value = formatDate(value);
+      // }
+      // if('password' && name==="confpassword") {
+      //   if(form.password!==value) {
+      //     throw "Passwords Don't Match";
+      //   }
+      // }
       newForm[name] = value
       setform(newForm);
     };
@@ -97,7 +106,7 @@ function EmployeeForm() {
     const handleSubmit = (e) => {
       e.preventDefault();
       setIsSubmit(true);
-      axios.post(HOST + ADD_EMPLOYEE, {
+      axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/employee', {
         'username':form.username,
         'password':form.password,
         'department':form.department,

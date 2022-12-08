@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import './Form.css'
 import axios from 'axios';
-import { HOST, GET_EMPLOYEENAMES, GET_PROJECT_NAMES, ADD_TIMESHEET } from '../Constants/Constants';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Alert from 'react-bootstrap/Alert';
 import Modal from 'react-bootstrap/Modal';
 import { useNavigate,useLocation } from 'react-router-dom'
 
@@ -19,7 +19,7 @@ function Timesheet() {
   const handleShow = () => setShow(true);
     useEffect(() => {
         const call = async () => {
-          await axios.get(HOST + GET_EMPLOYEENAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
             setemployees(res.data.res)
           }).catch((err) => {
             console.log(err)
@@ -29,7 +29,7 @@ function Timesheet() {
       },[])
       useEffect(() => {
         const call = async () => {
-          await axios.get(HOST + GET_PROJECT_NAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/projectNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
             setprojects(res.data.res)
           }).catch((err) => {
             console.log(err)
@@ -54,7 +54,7 @@ function Timesheet() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post(HOST + ADD_TIMESHEET, {
+        axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/timesheet', {
           'projectId':form.project,
           'employeeId': localStorage.getItem('employeeId'),
           'date':form.date,

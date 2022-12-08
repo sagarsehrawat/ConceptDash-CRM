@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './Form.css'
 import axios from 'axios';
-import { HOST, ADD_SOFTWARE } from '../Constants/Constants';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -28,7 +27,7 @@ function SoftwareForm() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post(HOST + ADD_SOFTWARE, {
+        axios.post('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/software', {
             'software':form.software,
             'manufacturer':form.manufacturer,
             'version':form.version,

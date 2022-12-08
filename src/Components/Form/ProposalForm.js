@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { HOST, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_RFP_NAMES, GET_COMPANY_NAMES, ADD_PROPOSAL } from '../Constants/Constants';
 import { useNavigate,useLocation } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal';
 import Select from 'react-select'
@@ -52,35 +51,42 @@ function ProposalForm() {
       };
         const [cities, setcities] = useState([])
         const [depts, setdepts] = useState([]);
+        // const [projectDepts, setprojectDepts] = useState([])
         const [rfps, setrfps] = useState([])
         useEffect(() => {
             const call = async () => {
-                await axios.get(HOST + GET_CITIES, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+                await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/list/cities', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
                 setcities(res.data.res)
                 }).catch((err) => {
                 console.log(err)
                 })
 
-                await axios.get(HOST + GET_DEPARTMENTS, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+                await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/list/departments', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
                 setdepts(res.data.res)
                 }).catch((err) => {
                 console.log(err)
                 })
 
-                await axios.get(HOST + GET_EMPLOYEENAMES,{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+                // await axios.get('http://localhost:8080/api/get/list/projectCategories', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+                // setprojectDepts(res.data.res)
+                // }).catch((err) => {
+                // console.log(err)
+                // })
+
+                await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
                 setemployees(res.data.res)
                 }).catch((err) => {
                   console.log(err)
                 })
 
-                await axios.get(HOST + GET_RFP_NAMES,{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+                await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/list/rfp',{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
                 setrfps(res.data.res)
                 console.log(res.data);
                 }).catch((err) => {
                   console.log(err)
                 })
 
-                await axios.get(HOST + GET_COMPANY_NAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+                await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/companyNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
                 setcompanies(res.data.res)
                 console.log(res.data);
                 }).catch((err) => {
@@ -92,7 +98,7 @@ function ProposalForm() {
       const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmit(true);
-        axios.post(HOST + ADD_PROPOSAL, {
+        axios.post('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/add/proposal', {
           'departmentId':radio?deptid:form.dept,
           'status':form.status,
           'projectManagerId':radio?managerId:form.managerName,
