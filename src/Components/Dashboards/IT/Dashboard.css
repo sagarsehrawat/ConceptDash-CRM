@@ -1,0 +1,28 @@
+.log-dash-body{
+    margin: 3em;
+    z-index: -1;
+}
+
+/* .card{
+    width: 16rem;
+    padding: 0.8rem;
+} */
+
+.card-img{
+    width: 6rem;
+}
+
+.body-2{
+    margin-top: 3rem;
+}
+
+.fees{
+    margin-top: 2rem;
+    width: 200px;
+    height: 200px;
+    line-height: 200px;
+    border-radius: 50%;
+    font-size: 50px;
+    text-align: center;
+    background: radial-gradient(circle, #5c0067 0%, #000000 100%);
+}
