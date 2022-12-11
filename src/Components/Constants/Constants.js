@@ -1,4 +1,4 @@
-export const HOST = 'http://crm-api.conceptdash.ca'
+export const HOST = 'https://crm-api.conceptdash.ca'
 
 // get apis
 export const GET_ALL_USERS = '/api/get/customers'
