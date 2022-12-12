@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { HOST, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_RFP_NAMES, GET_COMPANY_NAMES, ADD_PROPOSAL } from '../Constants/Constants';
+import { HOST, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_RFP_NAMES, GET_COMPANY_NAMES, ADD_PROPOSAL, GET_RFP_ID } from '../Constants/Constants';
 import { useNavigate,useLocation } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal';
 import Select from 'react-select'
@@ -75,14 +75,12 @@ function ProposalForm() {
 
                 await axios.get(HOST + GET_RFP_NAMES,{headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
                 setrfps(res.data.res)
-                console.log(res.data);
                 }).catch((err) => {
                   console.log(err)
                 })
 
                 await axios.get(HOST + GET_COMPANY_NAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
                 setcompanies(res.data.res)
-                console.log(res.data);
                 }).catch((err) => {
                 console.log(err)
                 })
@@ -114,7 +112,6 @@ function ProposalForm() {
           'winningBidderId':form.winningBidder,
           'cityId':radio?cityid:form.city
         }, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
-          console.log(res);
           if(res.data.success) {
             handleShow()
           }
@@ -136,9 +133,8 @@ function ProposalForm() {
       const [managerId, setmanagerId] = useState('')
       const [manager, setmanager] = useState('')
       const handleChange1 = async (e) => {
-      await axios.get('https://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/rfp/id',{headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':e.target.value}}).then(async (res) => {
+      await axios.get(HOST + GET_RFP_ID,{headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':e.target.value}}).then(async (res) => {
         setrfpData(res.data.res)
-        console.log(res.data.res);
         setpName(res.data.res[0].Project_Name);
         setdept(res.data.res[0].Department);
         setdeptid(res.data.res[0].Department_ID);
@@ -146,7 +142,6 @@ function ProposalForm() {
         setcityid(res.data.res[0].City_ID);
         setmanager(res.data.res[0].Manager_Name);
         setmanagerId(res.data.res[0].Project_Manager_ID);
-    //   setamount(res.data.res[0].Budget_Amount);
       }).catch((err) => {
           console.log(err)
       })
@@ -176,6 +171,10 @@ function ProposalForm() {
   }
   return (
     <div>
+      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
+                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
+                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
+            </div>
         <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh','textDecoration':'underline'}}>Add Proposal</h1>
   <Form className='form-main'>
   <Row className="mb-4">

@@ -4,7 +4,7 @@ body{
     font-family: 'Trebuchet MS', sans-serif;
 }
 .mainCont{
-    margin: 2vw;
+    margin-left: 2vw;
 }
 .header{
     white-space: nowrap;

@@ -6,9 +6,11 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import { HOST, ADD_COMPANY } from '../Constants/Constants';
 import Row from 'react-bootstrap/Row';
+import { useNavigate } from 'react-router-dom';
 
 function CompanyForm() {
     const [isSubmit, setIsSubmit] = useState(false);
+    const navigate = useNavigate();
     const [form, setform] = useState({
       'company':"",
       'category':"",
@@ -53,6 +55,10 @@ function CompanyForm() {
       };
   return (
     <div>
+      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
+                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
+                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
+            </div>
         <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh','textDecoration':'underline'}}>Add Company</h1>
   <Form className='form-main'>
   <Row className="mb-4">

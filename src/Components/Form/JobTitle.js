@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import { HOST, ADD_JOB_TITLE } from '../Constants/Constants';
 import Row from 'react-bootstrap/Row';
+import { useNavigate } from 'react-router-dom';
 function JobTitle() {
     const [isSubmit, setIsSubmit] = useState(false);
     const [form, setform] = useState({
@@ -14,6 +15,7 @@ function JobTitle() {
       'hourlyRate':"",
       'multiplier':"",
     })
+    const navigate = useNavigate()
     const handleChange = (e) => {
         const { name, value } = e.target;
         const newForm = form
@@ -66,6 +68,10 @@ function JobTitle() {
       ]
   return (
     <div>
+      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
+                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
+                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
+            </div>
         <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh','textDecoration':'underline'}}>Add Job Title</h1>
   <Form className='form-main'>
   <Row className="mb-4">

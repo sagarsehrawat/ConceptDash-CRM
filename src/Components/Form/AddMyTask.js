@@ -74,6 +74,10 @@ function AddMyTask() {
       }
   return (
     <div>
+      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
+                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
+                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
+            </div>
         <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh','textDecoration':'underline'}}>Add Task</h1>
   <Form className='form-main'>
   <Row className="mb-4">

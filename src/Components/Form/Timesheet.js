@@ -77,6 +77,8 @@ function Timesheet() {
       }
   return (
     <div>
+      <button onClick={() => navigate(-1)}>Go back</button>
+      <button onClick={() => navigate(1)}>Go forward</button>
         <h1 style={{'margin':'auto', 'textAlign':'center','textDecoration':'underline', 'marginTop':'5vh'}}>Add to Timesheet</h1>
         
         <Form className='form-main'>

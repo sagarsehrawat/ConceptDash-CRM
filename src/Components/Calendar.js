@@ -219,7 +219,6 @@ const handleSubmit = (e)=>{
           })
 }
 let requestID = (new Date(start)).getTime()-(new Date()).getUTCMilliseconds()
-console.log(requestID);
 const addEvent = () => {
   function initiate() {
     gapi.client
@@ -320,7 +319,7 @@ const [show, setShow] = useState(false);
   // console.log(events);
 return (
   <>
-  <Button onClick={handleShow} style={{'marginTop':'1vh', 'marginLeft':'40%', 'backgroundColor':'green','marginBottom':'3vh'}} variant="contained" >Create Event</Button>
+  <Button onClick={handleShow} style={{'marginTop':'1vh','textAlign':'center', 'backgroundColor':'lightgreen','marginBottom':'3vh'}} variant="contained" >Create Event</Button>
   <div style={{ 'width':'49vw',/*'height':'9vh','float':'right', */'backgroundColor':'lightblue'}}>
       <FullCalendar
       

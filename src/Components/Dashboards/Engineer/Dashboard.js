@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './Dashboard.css'
 import { useNavigate } from 'react-router-dom'
 import calendarIcon from '../../../Images/calendar.png'
+import Back from '../../../Images/GoBack.png'
 import rfpIcon from '../../../Images/rfps.png'
 import upcomingProjects from '../../../Images/upcomingProject.png'
 import completedProject from '../../../Images/completedProject.png'
@@ -28,10 +29,10 @@ const Dashboard = () => {
 
     const handleClose1 = () => setShow(false);
     const handleShow1 = () => setShow(true);
-    const navigate = useNavigate();
     const [value, setValue] = React.useState("1");
     const [tasks, settasks] = useState([])
     const [projectTasks, setProjectTasks] = useState([])
+    const navigate = useNavigate()
     useEffect(() => {
           const call = async () => {
             await axios.get(HOST + GET_TASKS_BY_ID, {headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':localStorage.getItem('employeeId')}}).then((res) => {
@@ -155,6 +156,10 @@ const handleChange1 = (event, newValue) => {
   }
     return (
         <div className='mainCont'>
+            <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
+                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
+                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
+            </div>
             <div>
         <Button className='allBtn' onClick={() => {navigate('/'); localStorage.clear()}} style={{'float':'right','marginRight':'3vw','marginTop':'1vh','box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 1), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}> Log Out</Button>
         <h1 style={{'marginLeft':'2vw'}}><b> DASHBOARD</b></h1>
@@ -190,12 +195,12 @@ const handleChange1 = (event, newValue) => {
  
                     </div>
                     
-                    <div className='card card1 col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'', 'borderRadius':'0','box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 0.8), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
+                    {/* <div className='card card1 col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'', 'borderRadius':'0','box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 0.8), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
                         <img src={calendarIcon} className='card-img' alt="Closed Orders"/>
                         <h5 className='card-title'>Calendar</h5>
                         <Button className='allBtn' onClick={handleShow} style={{'marginTop':'2vh','marginBottom':'2vh','backgroundColor':'#1a73e8','borderRadius':'25px','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>Click Here</Button>
 
-                    </div>
+                    </div> */}
                     <div className='card card1 col-3 d-flex align-items-center' style={{ "margin": "2vh",'paddingTop':'2vh','width':'10vw','backgroundColor':'', 'borderRadius':'0','box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 0.8), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
                         <img src={timesheet} className='card-img' alt="Closed Orders"/>
                         <h5 className='card-title'>TimeSheet</h5>
@@ -204,7 +209,10 @@ const handleChange1 = (event, newValue) => {
                 </div>
 
                 <div className='row body-2 d-flex justify-content-around'>
-                    <div className='col-3 card d-flex align-items-center tableCont' style={{ "width": "90%", "padding": "0.8rem", "height": "30rem",'overflowY':'auto','backgroundColor':'','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 1), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
+                    
+                    <div className='col-3 card d-flex align-items-center tableCont' style={{ "width": "95%", "padding": "0.8rem", "height": "55rem",'overflowY':'auto','backgroundColor':'','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 1), 0 6px 20px 0 rgba(0, 0, 0, 0.19)','display':'flex','flexDirection':'row' }}>
+                        
+                        <div style={{'textAlign':'center','width':'45%'}}>
                         <h2 style={{'textDecoration':'underline','fontWeight':'bold'}}>My Focus</h2>
                         <Button className='allBtn' variant='success' onClick={(e) => {navigate("/addMyTask")}} style={{'marginTop':'2vh', 'marginBottom':'2vh','backgroundColor':'#1a73e8','borderRadius':'25px','box-shadow': '3px 4px 8px 1px rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>Add to my Focus</Button>
         
@@ -284,8 +292,9 @@ const handleChange1 = (event, newValue) => {
                                 </TabPanel>
                             </TabContext>
                             </Box>
-                            
+                        </div>
                             </div>
+                        <div style={{'textAlign':'center'}}>{<TestDemo/>}</div>
                             </div>
                         </div>
                     </div>
@@ -446,14 +455,14 @@ const handleChange1 = (event, newValue) => {
             // style={{'margin':'2rem'}}
             show={show} 
             onHide={handleClose} 
-            size='lg'
+            size='xl'
             dialogClassName="modal-150w" 
             aria-labelledby="example-custom-modal-styling-title"
                 >
                 <Modal.Header closeButton>
                 <Modal.Title>Calendar</Modal.Title>
                 </Modal.Header>
-                <Modal.Body style={{'marginLeft':'0.5rem'}}>{<TestDemo/>}</Modal.Body>
+                <Modal.Body style={{'marginLeft':'4vw'}}>{<TestDemo/>}</Modal.Body>
                 <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     Close

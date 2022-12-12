@@ -323,14 +323,14 @@ function AdminDash() {
             // style={{'margin':'2rem'}}
             show={show} 
             onHide={handleClose} 
-            size='lg'
+            size='xl'
             dialogClassName="modal-150w" 
             aria-labelledby="example-custom-modal-styling-title"
                 >
                 <Modal.Header closeButton>
                 <Modal.Title>Calendar</Modal.Title>
                 </Modal.Header>
-                <Modal.Body style={{'marginLeft':'0.5rem'}}>{<TestDemo/>}</Modal.Body>
+                <Modal.Body style={{'marginLeft':'4vw'}}>{<TestDemo/>}</Modal.Body>
                 <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     Close

@@ -6,9 +6,11 @@ import Button from 'react-bootstrap/Button';
 import { HOST, GET_EMPLOYEENAMES, ADD_ASSET } from '../Constants/Constants';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import { useNavigate } from 'react-router-dom';
 
 function AssetForm() {
   const [employees, setemployees] = useState([])
+  const navigate = useNavigate();
     useEffect(() => {
       const call = async () => {
         await axios.get(HOST + GET_EMPLOYEENAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
@@ -60,6 +62,10 @@ function AssetForm() {
       };
   return (
     <div>
+      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
+                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
+                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
+            </div>
         <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh','textDecoration':'underline'}}>Add Assets</h1>
   <Form className='form-main'>
   <Row className="mb-4">

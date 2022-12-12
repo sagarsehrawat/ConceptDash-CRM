@@ -70,6 +70,10 @@ function AssetUpdate() {
       }
   return (
     <div>
+      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
+                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
+                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
+            </div>
          <Box sx={{ width: "100%", typography: "body1" }}>
         <TabContext value={value1}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

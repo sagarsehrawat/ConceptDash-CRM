@@ -5,8 +5,10 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import { useNavigate } from 'react-router-dom';
 function InvoiceForm() {
     const [isSubmit, setIsSubmit] = useState(false);
+    const navigate = useNavigate();
     const [form, setform] = useState({
       'orderID':0,
       'invoiceDate':"",
@@ -40,6 +42,10 @@ function InvoiceForm() {
     };
   return (
     <>
+    <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
+                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
+                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
+            </div>
         <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh'}}>New Project</h1>
   <Form className='form-main'>
   <Row className="mb-4">

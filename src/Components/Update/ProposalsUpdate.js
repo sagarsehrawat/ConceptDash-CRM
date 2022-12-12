@@ -42,10 +42,14 @@ function ProposalsUpdate() {
     <div>
         {isLoading?<LoadingSpinner />:
     <div>
+      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
+                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
+                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
+            </div>
       <h1 style={{'margin':'auto', 'textAlign':'center','textDecoration':'underline', 'marginTop':'5vh','marginBottom':'4vh'}}>Proposals</h1>
       <input style={{'marginLeft':'41vw', 'marginBottom':'4vh','width':'20vw'}} type="text" value={value} onChange={filterData} placeholder='Search'/>
       <br />
-      <Button onClick={(e) => {navigate("/addProposal")}} style={{'marginLeft':'45vw', 'marginBottom':'4vh'}}>Add to Proposals</Button>
+      <Button onClick={(e) => {navigate("/addProposal")}} style={{'marginLeft':'45vw', 'marginBottom':'4vh'}}>Add Proposal</Button>
         <TableContainer component={Paper}>
                                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                     <TableHead>

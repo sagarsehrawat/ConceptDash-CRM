@@ -43,6 +43,10 @@ function ProjectUpdate() {
     <>
     {isLoading?<LoadingSpinner />:
     <div>
+      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
+                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
+                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
+            </div>
       <h1 style={{'margin':'auto', 'textAlign':'center','textDecoration':'underline', 'marginTop':'5vh','marginBottom':'4vh'}}>Projects</h1>
       <input style={{'marginLeft':'41vw', 'marginBottom':'4vh','width':'20vw'}} type="text" value={value} onChange={filterData} placeholder='Search'/>
       <br />
@@ -82,14 +86,14 @@ function ProjectUpdate() {
                                         {row.Project_Id}
                                         </TableCell>
                                         <TableCell align="right">{row.Project_Name}</TableCell>
-                                        <TableCell align="right">{row.Date_Created}</TableCell>
-                                        <TableCell align="right">{row.Project_Due_Date}</TableCell>
+                                        <TableCell align="right">{row.Date_Created?row.Date_Created.substring(0,10):''}</TableCell>
+                                        <TableCell align="right">{row.Project_Due_Date?row.Project_Due_Date.substring(0,10):''}</TableCell>
                                         <TableCell align="right">{row.Project_Category}</TableCell>
                                         <TableCell align="right">{row.Project_Stage}</TableCell>
                                         <TableCell align="right">{row.Status}</TableCell>
                                         <TableCell align="right">{row.Follow_Up_Notes}</TableCell>
                                         <TableCell align="right">{row.Next_Follow_Up}</TableCell>
-                                        <TableCell align="right">{row.Tentative_Closing}</TableCell>
+                                        <TableCell align="right">{row.Tentative_Closing?row.Tentative_Closing.substring(0,10):''}</TableCell>
                                         <TableCell align="right">{row.Project_Manager}</TableCell>
                                         <TableCell align="right">{row.Project_Value}</TableCell>
                                         <TableCell align="right">{row.City}</TableCell>
@@ -111,14 +115,14 @@ function ProjectUpdate() {
                                     {row.Project_Id}
                                     </TableCell>
                                     <TableCell align="right">{row.Project_Name}</TableCell>
-                                    <TableCell align="right">{row.Date_Created}</TableCell>
-                                    <TableCell align="right">{row.Project_Due_Date}</TableCell>
+                                    <TableCell align="right">{row.Date_Created?row.Date_Created.substring(0,10):''}</TableCell>
+                                    <TableCell align="right">{row.Project_Due_Date?row.Project_Due_Date.substring(0,10):''}</TableCell>
                                     <TableCell align="right">{row.Project_Category}</TableCell>
                                     <TableCell align="right">{row.Project_Stage}</TableCell>
                                     <TableCell align="right">{row.Status}</TableCell>
                                     <TableCell align="right">{row.Follow_Up_Notes}</TableCell>
                                     <TableCell align="right">{row.Next_Follow_Up}</TableCell>
-                                    <TableCell align="right">{row.Tentative_Closing}</TableCell>
+                                    <TableCell align="right">{row.Tentative_Closing?row.Tentative_Closing.substring(0,10):''}</TableCell>
                                     <TableCell align="right">{row.Project_Manager}</TableCell>
                                     <TableCell align="right">{row.Project_Value}</TableCell>
                                     <TableCell align="right">{row.City}</TableCell>

@@ -6,8 +6,10 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import { useNavigate } from 'react-router-dom';
 
 function SoftwareForm() {
+  const navigate = useNavigate()
     const [isSubmit, setIsSubmit] = useState(false);
     const [form, setform] = useState({
       'software':"",
@@ -46,6 +48,10 @@ function SoftwareForm() {
       };
   return (
     <div>
+      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
+                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
+                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
+            </div>
         <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh','textDecoration':'underline'}}>Add Software</h1>
   <Form className='form-main'>
   <Row className="mb-4">
