@@ -41,6 +41,7 @@ function BudgetUpdate() {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
+          console.log(res.data.res);
           setbudgets(res.data.res);
           setdataSource(res.data.res);
           setIsLoading(false);
