@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState,useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AuthenticationContext from '../../Context/AuthContext';
 import './Login.css'
@@ -6,15 +6,44 @@ import axios from 'axios';
 import { HOST, LOGIN } from '../Constants/Constants';
 
 const Login = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  useEffect(() => {
+    const department = localStorage.getItem('department')
+    if(department) {
+      switch (department) {
+        case 'Admin':
+          navigate('/admin')
+          break;
+        case 'Engineer':
+          navigate('/engineers')
+          break;
+        case 'Manager':
+          navigate('/manager')
+          break;
+        default:
+          break;
+      }
+  }
+  
+    
+  }, [])
+  
+  
   const context = useContext(AuthenticationContext)
   const {user, setUser} = context;
   const [username, setusername] = useState('')
   const [password, setpassword] = useState('')
-
+  
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     await axios.post(HOST + LOGIN,{'username':username,'password':password}).then((res) => {
+      if(res.data.error==="Email or Password is Incorrect") {
+          alert('Incorrect Username or Password');
+      } else {
+        if(!res.data.success)
+          alert('Something Went Wrong...')
+      }
             localStorage.setItem('auth',res.data.auth)
             localStorage.setItem('department',res.data.user.department)
             localStorage.setItem('emailWork',res.data.user.emailWork)
@@ -31,8 +60,8 @@ const Login = () => {
                 break;
               default:
                 break;
-            }
-          }).catch((err) => {
+            }}
+          ).catch((err) => {
             console.log(err)
           })
   }

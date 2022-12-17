@@ -8,6 +8,7 @@ import { HOST, GET_JOB_TITLES, ADD_EMPLOYEE } from '../Constants/Constants';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal';
+import JobTitle from './JobTitle'
 
 function EmployeeForm() {
     const [isSubmit, setIsSubmit] = useState(false);
@@ -87,8 +88,13 @@ function EmployeeForm() {
       return newDate;
     };
     const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const [showTitleForm, setShowTitleForm] = useState(false);
+    const handleCloseTitleForm = () => setShowTitleForm(false);
+    const handleShowTitleForm = () => setShowTitleForm(true);
+
     const callFunc = ()=>{
       handleClose();
       navigate('/admin')
@@ -156,7 +162,7 @@ function EmployeeForm() {
     const [employees, setemployees] = useState([])
     useEffect(() => {
       const call = async () => {
-        await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
+        await axios.get(HOST+'/api/get/employeeNames', {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           setemployees(res.data.res)
         }).catch((err) => {
           console.log(err)
@@ -273,11 +279,6 @@ function EmployeeForm() {
   };
   return (
     <>
-    <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
-                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
-                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
-            </div>
-    <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh','textDecoration':'underline'}}>Add Employee</h1>
   <Form className='form-main'>
       <Row className="mb-4">
       <Form.Group as={Col} >
@@ -320,7 +321,7 @@ function EmployeeForm() {
           </Form.Select>
       </Form.Group>
       <Form.Group as={Col}>
-        <Button style={{'width':'100%','backgroundColor':'grey','border':'none'}} onClick={(e) => {navigate("/jobTitleform")}}>Add Job Title</Button>
+        <Button style={{'width':'100%','backgroundColor':'grey','border':'none'}} onClick={handleShowTitleForm}>Add Job Title</Button>
         </Form.Group>
       </Row>
       <Row className="mb-4">
@@ -1894,16 +1895,21 @@ function EmployeeForm() {
         Submit
       </Button>
     </Form>
+
+
     <Modal show={show} onHide={handleClose} >
         <Modal.Header closeButton>
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>Employee added Successfully</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={callFunc}>
-            Close
-          </Button>
-        </Modal.Footer>
+      </Modal>
+
+
+      <Modal size='lg' show={showTitleForm} onHide={handleCloseTitleForm} >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Job Title</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<JobTitle />}</Modal.Body>
       </Modal>
     </>
   )

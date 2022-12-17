@@ -11,8 +11,20 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Form from 'react-bootstrap/Form';
+import Modal from "react-bootstrap/Modal";
+import UpdateEmployeeForm from '../Form/UpdateEmployeeForm';
+import EmployeeForm from '../Form/EmployeeForm';
 
 function EmployeeUpdate() {
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const [showUpdate, setShowUpdate] = useState(false);
+    const handleCloseUpdate = () => setShowUpdate(false);
+    const handleShowUpdate = () => setShowUpdate(true);
+
     const navigate = useNavigate();
     const [employee, setemployee] = useState([])
     const [isLoading, setIsLoading] = useState(false);
@@ -65,16 +77,17 @@ function EmployeeUpdate() {
         setdataSource([...dataSource])
       }
     }
+    const [rowData, setrowData] = useState([])
+    const handleUpdate = (e)=>{
+    setrowData(e);
+    handleShowUpdate();
+  }
   return (
     <div>
-      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
-                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
-                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
-            </div>
       <br />
         <input style={{'marginLeft':'41vw', 'marginBottom':'4vh','width':'20vw'}} type="text" value={value} onChange={filterData} placeholder='Search'/>
         
-      <Button onClick={(e) => {navigate("/employeeform")}} style={{'marginLeft':'45vw', 'marginBottom':'4vh'}}>Add to Employee</Button>
+      <Button onClick={handleShow} style={{'marginLeft':'45vw', 'marginBottom':'4vh'}}>Add to Employee</Button>
       <br />
         <Box sx={{ width: "100%", typography: "body1" }} style={{'margin':'0'}}>
         <TabContext value={value1}>
@@ -126,7 +139,7 @@ function EmployeeUpdate() {
                                         key={row.name}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         >
-                                        <TableCell align="right"><Button onClick={(e) => {navigate("/updateEmployee", {state: row})}} style={{'backgroundColor':'rgb(99, 138, 235)'}}>Edit</Button></TableCell>
+                                        <TableCell align="right"><Button onClick={()=>{handleUpdate(row)}} style={{'backgroundColor':'rgb(99, 138, 235)'}}>Edit</Button></TableCell>
                                         <TableCell component="th" scope="row">
                                         {row.Employee_ID}
                                         </TableCell>
@@ -157,7 +170,7 @@ function EmployeeUpdate() {
                                         key={row.name}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         >
-                                        <TableCell align="right"><Button onClick={(e) => {navigate("/updateEmployee", {state: row})}} style={{'backgroundColor':'rgb(99, 138, 235)'}}>Edit</Button></TableCell>
+                                        <TableCell align="right"><Button onClick={()=>{handleUpdate(row)}} style={{'backgroundColor':'rgb(99, 138, 235)'}}>Edit</Button></TableCell>
                                         <TableCell component="th" scope="row">
                                         {row.Employee_ID}
                                         </TableCell>
@@ -438,7 +451,35 @@ function EmployeeUpdate() {
         </TabPanel>
         </TabContext>
         </Box>
+    
+        <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        size="xl"
+        keyboard={false}
+        >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Employee</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<EmployeeForm />}</Modal.Body>
+        </Modal> 
+
+        <Modal
+        show={showUpdate}
+        onHide={handleCloseUpdate}
+        backdrop="static"
+        size="xl"
+        keyboard={false}
+        >
+        <Modal.Header closeButton>
+          <Modal.Title>Update Employee</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<UpdateEmployeeForm row={rowData}/>}</Modal.Body>
+        </Modal>
     </div>
+
+
   )
 }
 

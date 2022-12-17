@@ -35,7 +35,6 @@ function TimeSheet() {
         return arr;
       };
     
-      console.log(event2)
     const navigate = useNavigate();
     
   return (

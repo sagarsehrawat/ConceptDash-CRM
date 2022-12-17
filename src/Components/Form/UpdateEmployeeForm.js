@@ -10,59 +10,58 @@ import { useNavigate } from 'react-router-dom'
 import {useLocation} from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 
-// import TextField from '@material-ui/core/TextField';
-function UpdateEmployeeForm() {
-  const location = useLocation();
-  console.log(location.state);
+function UpdateEmployeeForm(props) {
+  console.log(props.row);
+  const managerName = props.row.Manager_Name;
     const [isSubmit, setIsSubmit] = useState(false);
     const [dept, setdept] = useState('');
     const [jobTitles, setjobTitles] = useState([])
-    const [sal, setsal] = useState(location.state.Salutation)
-    const [fname, setfname] = useState(location.state.First_Name)
-    const [lname, setlname] = useState(location.state.Last_Name)
-    const [jTitle, setjTitle] = useState(location.state.Job_Title_ID)
-    const [jDate, setjDate] = useState(location.state.Joining_Date.substring(0,10))
-    const [directManager, setdirectManager] = useState(location.state.Direct_Manager_ID)
-    const [deptment, setdeptment] = useState(location.state.Department)
-    const [ework, setework] = useState(location.state.Email_Work)
-    const [bphone, setbphone] = useState(location.state.Business_Phone)
-    const [address, setaddress] = useState(location.state.Address)
-    const [city, setcity] = useState(location.state.City)
-    const [state, setstate] = useState(location.state.Province)
-    const [zip, setzip] = useState(location.state.ZIP)
-    const [country, setcountry] = useState(location.state.Country)
-    const [epersonal, setepersonal] = useState(location.state.Email_Personal)
-    const [mobile, setmobile] = useState(location.state.Mobile_Phone)
-    const [wpage, setwpage] = useState(location.state.Web_Page)
-    const [res, setres] = useState(location.state.Resume)
-    const [attachments, setattachments] = useState(location.state.Attachments)
-    const [notes, setnotes] = useState(location.state.Notes)
+    const [sal, setsal] = useState(props.row.Salutation)
+    const [fname, setfname] = useState(props.row.First_Name)
+    const [lname, setlname] = useState(props.row.Last_Name)
+    const [jTitle, setjTitle] = useState(props.row.Job_Title_ID)
+    const [jDate, setjDate] = useState(props.row.Joining_Date?props.row.Joining_Date.substring(0,10):'')
+    const [directManager, setdirectManager] = useState(props.row.Direct_Manager_ID)
+    const [deptment, setdeptment] = useState(props.row.Department)
+    const [ework, setework] = useState(props.row.Email_Work)
+    const [bphone, setbphone] = useState(props.row.Business_Phone)
+    const [address, setaddress] = useState(props.row.Address)
+    const [city, setcity] = useState(props.row.City)
+    const [state, setstate] = useState(props.row.Province)
+    const [zip, setzip] = useState(props.row.ZIP)
+    const [country, setcountry] = useState(props.row.Country)
+    const [epersonal, setepersonal] = useState(props.row.Email_Personal)
+    const [mobile, setmobile] = useState(props.row.Mobile_Phone)
+    const [wpage, setwpage] = useState(props.row.Web_Page)
+    const [res, setres] = useState(props.row.Resume)
+    const [attachments, setattachments] = useState(props.row.Attachments)
+    const [notes, setnotes] = useState(props.row.Notes)
     
-    const [birthday, setbirthday] = useState(location.state.Birthday.substring(0,10))
-    const [anniv, setanniv] = useState(location.state.Anniversary.substring(0,10))
-    const [sport, setsport] = useState(location.state.Sports)
-    const [act, setact] = useState(location.state.Activites)
-    const [bev, setbev] = useState(location.state.Beverage)
-    const [alco, setalco] = useState(location.state.Alcohol)
-    const [tdest, settdest] = useState(location.state.Travel_Destination)
-    const [sname, setsname] = useState(location.state.Spouse_Name)
-    const [child, setchild] = useState(location.state.Children)
-    const [tv, settv] = useState(location.state.TV_Show)
-    const [movie, setmovie] = useState(location.state.Movies)
-    const [actor, setactor] = useState(location.state.Actor)
-    const [dislike, setdislike] = useState(location.state.Dislikes)
+    const [birthday, setbirthday] = useState(props.row.Birthday?props.row.Birthday.substring(0,10):'')
+    const [anniv, setanniv] = useState(props.row.Anniversary?props.row.Anniversary.substring(0,10):'')
+    const [sport, setsport] = useState(props.row.Sports)
+    const [act, setact] = useState(props.row.Activites)
+    const [bev, setbev] = useState(props.row.Beverage)
+    const [alco, setalco] = useState(props.row.Alcohol)
+    const [tdest, settdest] = useState(props.row.Travel_Destination)
+    const [sname, setsname] = useState(props.row.Spouse_Name)
+    const [child, setchild] = useState(props.row.Children)
+    const [tv, settv] = useState(props.row.TV_Show)
+    const [movie, setmovie] = useState(props.row.Movies)
+    const [actor, setactor] = useState(props.row.Actor)
+    const [dislike, setdislike] = useState(props.row.Dislikes)
     
-    const [prof, setprof] = useState(location.state.Proficiency)
-    const [exp, setexp] = useState(location.state.Expertise)
-    const [int, setint] = useState(location.state.Interests)
-    const [cocurr, setcocurr] = useState(location.state.Cocurricular)
-    const [train, settrain] = useState(location.state.Trainings)
+    const [prof, setprof] = useState(props.row.Proficiency)
+    const [exp, setexp] = useState(props.row.Expertise)
+    const [int, setint] = useState(props.row.Interests)
+    const [cocurr, setcocurr] = useState(props.row.Cocurricular)
+    const [train, settrain] = useState(props.row.Trainings)
     
-    const [str, setstr] = useState(location.state.Strengths)
-    const [weak, setweak] = useState(location.state.Weakness)
-    const [sai, setsai] = useState(location.state.Social_Active_Index)
+    const [str, setstr] = useState(props.row.Strengths)
+    const [weak, setweak] = useState(props.row.Weakness)
+    const [sai, setsai] = useState(props.row.Social_Active_Index)
 
-    const [uname, setuname] = useState(location.state.Username)
+    const [uname, setuname] = useState(props.row.Username)
     
     useEffect(() => {
         const call = async () => {
@@ -304,7 +303,7 @@ function UpdateEmployeeForm() {
         'strengths':form.strengths,
         'weaknesses':form.weakness,
         'socialActiveIndex':form.activeIndex,
-        'id':location.state.Employee_ID
+        'id':props.row.Employee_ID
       },
        {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         console.log(res);
@@ -365,15 +364,9 @@ function UpdateEmployeeForm() {
     }
   return (
     <>
-    <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
-                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
-                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
-            </div>
-    <h1 style={{'margin':'auto', 'width':'25%', 'marginTop':'5vh','textDecoration':'underline'}}>Update Employee</h1>
   <Form className='form-main'>
       <Row className="mb-4">
       <Form.Group as={Col} >
-          {/* <Form.Control name='salutation' type="text" placeholder="Salutation" onChange={handleChange} /> */}
           <Form.Select defaultValue={sal}  name='salutation' type="text" placeholder="Salutation" onChange={handleChange} >
             <option value="">Salutation</option>
             <option value="Mr.">Mr.</option>
@@ -402,7 +395,6 @@ function UpdateEmployeeForm() {
           </Form.Select>
           </Form.Group>
         <Form.Group as={Col} >
-          {/* <Form.Control name='jobtitle' type="text" placeholder="Job Title*" onChange={handleChange} required/> */}
           <Form.Select name='jobtitle' defaultValue={jTitle} onChange={handleChange} required>
             <option value="">Job Title</option>
             {jobTitles.map((option) => (
@@ -417,11 +409,11 @@ function UpdateEmployeeForm() {
         </Form.Group>
       </Row>
       <Row className="mb-4">
-        <Form.Group as={Col}/*  controlId="formGridEmail" */>
-        <Form.Select defaultValue={directManager} onChange={handleChange} name='directManager' required>
+        <Form.Group as={Col}>
+        <Form.Select onChange={handleChange} name='directManager' required>
           <option value="">Direct Manager</option>
         {employees.map((option) => (
-          <option value={option.Full_Name}>
+          <option value={option.Full_Name} selected={option.Full_Name===managerName}>
             {option.Full_Name}
           </option>
         ))}

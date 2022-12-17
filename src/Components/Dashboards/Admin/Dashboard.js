@@ -37,41 +37,32 @@ import CustomerUpdate from '../../Update/CustomerUpdate'
 const Dashboard = () => {
     const navigate = useNavigate()
     const [nav, setnav] = useState(0)
-    // const toggleNav = (e) => {
-    //     e.preventDefault()
-    //     if(document.getElementById("sidenav").style.width==="15em"){
-    //         document.getElementById("sidenav").style.width = "0em";
-    //     }
-    //     else{
-    //         document.getElementById("sidenav").style.width = "15em";
-    //     }
-    // }
 
     const handleDash = (e) => {
-        if(nav==0) 
+        if(nav===0) 
             return (<AdminDash/>)
-        if(nav===3)
+        if(nav===1) 
+            return (<BudgetUpdate/>)
+        if(nav===2) 
+            return (<RFPUpdate/>)
+        if(nav===3) 
+            return (<ProposalsUpdate/>)
+        if(nav===4)
             return (<CustomerUpdate category={"Customers"}/>)
-        if(nav===6)
+        if(nav===5)
             return (<EmployeeUpdate/>)
-        if(nav===7)
-            return (<SupplierTable/>)
-        if(nav===8)
+        if(nav===6)
             return (<ProjectUpdate/>)
-        if(nav===9)
-            return (<TestDemo/>)
-        if(nav===10) 
+        if(nav===7) 
             return (<CompanyUpdate/>)
-        if(nav===11) 
+        if(nav===8) 
+            return (<Cards/>)
+        if(nav===9) 
             return (<AssetUpdate/>)
-        if(nav===12) 
+        if(nav===10) 
             return (<TimeSheetTable/>)
-        if(nav===13) 
+        if(nav===11) 
             return (<Todo/>)
-        if(nav===14) 
-            return (<Dummy/>)
-        else if(nav===4)
-            return (<Cards />)
         
     }
     const [show, setShow] = useState(false);
@@ -85,22 +76,22 @@ const Dashboard = () => {
                
                 <Navbar sticky="top" bg="dark" variant='dark' style={{'color':'white'}}>
                     <Container>
-                        <img src={logo} height='40' width='55' style={{'marginRight':'1vw'}} alt="Concept Dash" />
-                    <Navbar.Brand style={{'fontSize':'1.7rem','cursor':'pointer'}} onClick={(e)=> {e.preventDefault(); setnav(0);}} >CRM</Navbar.Brand>
+                        {/* <img src={logo} height='40' width='55' style={{'marginRight':'0'}} alt="Concept Dash" /> */}
+                    <Navbar.Brand style={{'fontSize':'2rem','cursor':'pointer'}} onClick={(e)=> {e.preventDefault(); setnav(0);}} >CRM</Navbar.Brand>
                     <Nav className="me-auto">
-                        <Nav.Link onClick={() => {navigate('/Budgettable')}} style={{'marginLeft':'1.2vw'}} >Budgets</Nav.Link>
-                        <Nav.Link onClick={() => {navigate('/RFPtable')}} style={{'marginLeft':'1.2vw'}} >RFPs</Nav.Link>
-                        <Nav.Link onClick={() => {navigate('/Proposaltable')}} style={{'marginLeft':'1.2vw'}} >Proposals</Nav.Link>
-                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(3);}} style={{'marginLeft':'1.2vw'}} >Customers</Nav.Link>
-                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(6);}} style={{'marginLeft':'1.2vw'}} >Employees</Nav.Link>
-                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(8);}} style={{'marginLeft':'1.2vw'}} >Projects</Nav.Link>
-                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(10);}} style={{'marginLeft':'1.2vw'}} >Companies</Nav.Link>
-                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(4);}} style={{'marginLeft':'1.2vw'}} >Marketing</Nav.Link>
-                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(11);}} style={{'marginLeft':'1.2vw'}}>Assets</Nav.Link>
-                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(12);}} style={{'marginLeft':'1.2vw'}}>Expenses</Nav.Link>
-                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(13);}} style={{'marginLeft':'1.2vw'}}>Todo</Nav.Link>
+                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(1);}} style={{'marginLeft':'1.1vw'}} >Budgets</Nav.Link>
+                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(2);}} style={{'marginLeft':'1.1vw'}} >RFPs</Nav.Link>
+                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(3);}} style={{'marginLeft':'1.1vw'}} >Proposals</Nav.Link>
+                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(4);}} style={{'marginLeft':'1.1vw'}} >Customers</Nav.Link>
+                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(5);}} style={{'marginLeft':'1.1vw'}} >Employees</Nav.Link>
+                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(6);}} style={{'marginLeft':'1.1vw'}} >Projects</Nav.Link>
+                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(7);}} style={{'marginLeft':'1.1vw'}} >Companies</Nav.Link>
+                        {/* <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(8);}} style={{'marginLeft':'1.1vw'}} >Marketing</Nav.Link> */}
+                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(9);}} style={{'marginLeft':'1.1vw'}}>Assets</Nav.Link>
+                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(10);}} style={{'marginLeft':'1.1vw'}}>Expenses</Nav.Link>
+                        <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(11);}} style={{'marginLeft':'1.1vw'}}>Todo</Nav.Link>
                         
-                        <Nav.Link onClick={() => {navigate('/'); localStorage.clear()}} style={{'fontSize':'1rem','marginLeft':'2vw'}} ><b>Log Out</b></Nav.Link>
+                        <Nav.Link onClick={() => {navigate('/'); localStorage.clear()}} style={{'fontSize':'1rem','marginLeft':'1vw'}} >Log Out</Nav.Link>
                     </Nav>
                     </Container>
                 </Navbar>

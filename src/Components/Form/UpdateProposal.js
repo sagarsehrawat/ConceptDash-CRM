@@ -11,32 +11,36 @@ import Modal from 'react-bootstrap/Modal';
 import Select from 'react-select'
 import { getDatasetAtEvent } from 'react-chartjs-2';
 
-function UpdateProposal() {
+function UpdateProposal(props) {
     const location = useLocation();
+
     const [isSubmit, setIsSubmit] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const [dept, setdept] = useState(location.state.Department_ID)
-    const [status, setstatus] = useState(location.state.Status)
-    const [manager, setmanager] = useState(location.state.Project_Manager_ID)
-    const [pName, setpName] = useState(location.state.Project_Name)
-    const [qDeadline, setqDeadline] = useState(location.state.Question_Deadline?location.state.Question_Deadline.substring(0,10):'')
-    const [cDeadline, setcDeadline] = useState(location.state.Closing_Deadline?location.state.Closing_Deadline.substring(0,10):'')
-    const [rDate, setrDate] = useState(location.state.Result_Date?location.state.Result_Date.substring(0,10):'')
-    const [city, setcity] = useState(location.state.City_ID)
-    const [team, setteam] = useState(location.state.Team)
-    const [dPrice, setdPrice] = useState(location.state.Design_Price)
-    const [provisionalItems, setprovisionalItems] = useState(location.state.Provisional_Items)
-    const [adminPrice, setadminPrice] = useState(location.state.Contract_Admin_Price)
-    const [consultantPrice, setconsultantPrice] = useState(location.state.Sub_Consultant_Price)
-    const [totalBid, settotalBid] = useState(location.state.Total_Bid)
-    const [planTakers, setplanTakers] = useState(location.state.Plan_Takers)
-    const [bidders, setbidders] = useState(location.state.Bidders)
-    const [bidderPrice, setbidderPrice] = useState(location.state.Bidder_Price)
-    const [bidStatus, setbidStatus] = useState(location.state.Bid_Status)
-    const [winningPrice, setwinningPrice] = useState(location.state.Winning_Price)
-    const [winningBidder, setwinningBidder] = useState(location.state.Winning_Bidder_ID)
+    const depart = props.row.Department;
+    const pro_manager = props.row.Manager_Name;
+    const citi = props.row.City
+
+    const [dept, setdept] = useState(props.row.Department_ID)
+    const [status, setstatus] = useState(props.row.Status)
+    const [manager, setmanager] = useState(props.row.Project_Manager_ID)
+    const [pName, setpName] = useState(props.row.Project_Name)
+    const [qDeadline, setqDeadline] = useState(props.row.Question_Deadline?props.row.Question_Deadline.substring(0,10):'')
+    const [cDeadline, setcDeadline] = useState(props.row.Closing_Deadline?props.row.Closing_Deadline.substring(0,10):'')
+    const [rDate, setrDate] = useState(props.row.Result_Date?props.row.Result_Date.substring(0,10):'')
+    const [city, setcity] = useState(props.row.City_ID)
+    const [team, setteam] = useState(props.row.Team)
+    const [dPrice, setdPrice] = useState(props.row.Design_Price)
+    const [provisionalItems, setprovisionalItems] = useState(props.row.Provisional_Items)
+    const [adminPrice, setadminPrice] = useState(props.row.Contract_Admin_Price)
+    const [consultantPrice, setconsultantPrice] = useState(props.row.Sub_Consultant_Price)
+    const [totalBid, settotalBid] = useState(props.row.Total_Bid)
+    const [planTakers, setplanTakers] = useState(props.row.Plan_Takers)
+    const [bidders, setbidders] = useState(props.row.Bidders)
+    const [bidderPrice, setbidderPrice] = useState(props.row.Bidder_Price)
+    const [winningPrice, setwinningPrice] = useState(props.row.Winning_Price)
+    const [winningBidder, setwinningBidder] = useState(props.row.Winning_Bidder_ID)
     const [form, setform] = useState({
         'dept':dept,
         'status':status,
@@ -55,11 +59,10 @@ function UpdateProposal() {
         'planTakers':planTakers,
         'bidders':bidders,
         'bidderPrice':bidderPrice,
-        'bidStatus':bidStatus,
         'winningPrice':winningPrice,
         'winningBidder':winningBidder,
       })
-    //   console.log(location.state);
+    //   console.log(props.row);
       const handleChange = (e) => {
         const { name, value } = e.target;
         if(name==='dept') {
@@ -112,9 +115,6 @@ function UpdateProposal() {
         }
         if(name==='bidderPrice') {
             setbidderPrice(value)
-        }
-        if(name==='bidStatus') {
-            setbidStatus(value)
         }
         if(name==='winningPrice') {
             setwinningPrice(value)
@@ -179,11 +179,10 @@ function UpdateProposal() {
           'planTakers':DisplayValue1?DisplayValue1.toString():'',
           'bidders':DisplayValue1?DisplayValue1.toString():'',
           'bidderPrice':form.bidderPrice,
-          'bidStatus':form.bidStatus,
           'winningPrice':form.winningPrice,
           'winningBidderId':form.winningBidder,
           'cityId':form.city,
-          'id':location.state.Proposal_ID
+          'id':props.row.Proposal_ID
         }, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
           console.log(res);
           if(res.data.success) {
@@ -194,10 +193,7 @@ function UpdateProposal() {
           })
       };
       const navigate = useNavigate()
-      const callFunc = ()=>{
-        handleClose();
-        navigate('/Proposaltable')
-      }
+      
       let attendees = [];
     employees.map((e)=>{
       attendees.push({
@@ -223,18 +219,13 @@ function UpdateProposal() {
   }
   return (
     <div>
-      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
-                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
-                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
-            </div>
-        <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh','textDecoration':'underline'}}>Update Proposal</h1>
   <Form className='form-main'>
         <Row className="mb-4">
       <Form.Group as={Col}>
-        <Form.Select defaultValue={location.state.Department} onChange={handleChange} name='dept'>
-                  {/* <option value="">Select Department</option> */}
+        <Form.Label>Department</Form.Label>
+        <Form.Select defaultValue={props.row.Department} onChange={handleChange} name='dept'>
                   {depts.length>0?depts.map((e)=>(
-                    <option value={e.Department_ID}>{e.Department}</option>
+                    <option value={e.Department_ID} selected={ e.Department===depart}>{e.Department}</option>
                   )):''}
         </Form.Select>
         </Form.Group>
@@ -242,18 +233,18 @@ function UpdateProposal() {
 
     <Row className="mb-4">
       <Form.Group as={Col}>
-            <Form.Select defaultValue={location.state.Status} name='status' onChange={handleChange}>
-                    {/* <option value="">Select Status</option> */}
+        <Form.Label>Status</Form.Label>
+            <Form.Select defaultValue={props.row.Status} name='status' onChange={handleChange}>
                     <option value="NoGo">NoGo</option>
                     <option value="Go">Go</option>
                     <option value="Review">Review</option>
             </Form.Select>
       </Form.Group>
       <Form.Group as={Col}>
-      <Form.Select defaultValue={location.state.Project_Manager_ID} name='managerName' onChange={handleChange} required>
-            {/* <option value=''>Select Project Manager</option> */}
+        <Form.Label>Project Manager</Form.Label>
+      <Form.Select name='managerName' onChange={handleChange} required>
           {employees.length!==0?employees.map((option) => (
-          <option value={option.Employee_ID}>
+          <option value={option.Employee_ID} selected={ option.Full_Name===pro_manager}>
             {option.Full_Name}
           </option>
         )):
@@ -262,7 +253,8 @@ function UpdateProposal() {
         </Form.Select>
       </Form.Group>
       <Form.Group as={Col}>
-      <Form.Control value={pName} name='projectName' type="text" placeholder="Project Name" onChange={handleChange} />
+        <Form.Label>Project Name</Form.Label>
+      <Form.Control value={pName} name='projectName' type="text" onChange={handleChange} />
       </Form.Group>
     </Row>
     <Row className="mb-4">
@@ -282,57 +274,68 @@ function UpdateProposal() {
 
   <Row className="mb-4">
         <Form.Group as={Col} controlId="formGridCity">
+          <Form.Label>City</Form.Label>
         <Form.Select defaultValue={city} onChange={handleChange} name='city'>
-                  {/* <option value="">Select City</option> */}
                   {cities.length>0?cities.map((e)=>(
-                    <option value={e.City_ID}>{e.City}</option>
+                    <option value={e.City_ID} selected={e.City===citi}>{e.City}</option>
                   )):''}
         </Form.Select>
         </Form.Group>
   </Row>
       <Row className="mb-4">
+
       <Form.Group as={Col}>
+        <Form.Label>Team Members</Form.Label>
         <Select isMulti defaultInputValue={team} onChange={doChange} options={attendees} name="team" placeholder='Team Members'>Team Members</Select>
         </Form.Group>
+      </Row>
+      <Row className="mb-4">
         <Form.Group as={Col}>
-          <Form.Control value={dPrice} name='dPrice' type="number" placeholder="Design Price" onChange={handleChange} />
+          <Form.Label>Design Price</Form.Label>
+          <Form.Control value={dPrice} name='dPrice' type="number" onChange={handleChange} />
         </Form.Group>
         <Form.Group as={Col}>
+          <Form.Label>Provisional Items</Form.Label>
           <Form.Control value={provisionalItems} name='provisionalItems' type="text" placeholder="Provisional Items" onChange={handleChange} />
         </Form.Group>
       </Row>
       <Row className="mb-4">
         <Form.Group as={Col}>
+          <Form.Label>Admin Price</Form.Label>
           <Form.Control value={adminPrice} name='adminPrice' type="number" placeholder="Contract Admin Price" onChange={handleChange} />
         </Form.Group>
         <Form.Group as={Col}>
+          <Form.Label>Consultant Price</Form.Label>
           <Form.Control value={consultantPrice} name='consultantPrice' type="number" placeholder="Consultant Price" onChange={handleChange} />
         </Form.Group>
         <Form.Group as={Col}>
+          <Form.Label>Total Bid</Form.Label>
           <Form.Control value={totalBid} name='totalBid' type="number" placeholder="Total Bid" onChange={handleChange} />
         </Form.Group>
       </Row>
       <Row className="mb-4">
       <Form.Group as={Col}>
+        <Form.Label>Plan Takers</Form.Label>
         <Select isMulti defaultInputValue={planTakers} onChange={doChange1} options={company} name="planTakers" placeholder='Plan Takers'></Select>
         </Form.Group>
         <Form.Group as={Col}>
+          <Form.Label>Bidders</Form.Label>
         <Select isMulti defaultInputValue={bidders} onChange={doChange1} options={company} name="bidders" placeholder='Bidders'></Select>
         </Form.Group>
         <Form.Group as={Col}>
+          <Form.Label>Bidder Price</Form.Label>
           <Form.Control value={bidderPrice} name='bidderPrice' type="number" placeholder="Bidder Price" onChange={handleChange} />
         </Form.Group>
       </Row>
       <Row className="mb-4">
+        
         <Form.Group as={Col}>
-          <Form.Control value={bidStatus} name='bidStatus' type="text" placeholder="Bid Status" onChange={handleChange} />
-        </Form.Group>
-        <Form.Group as={Col}>
+          <Form.Label>Winning Price</Form.Label>
           <Form.Control value={winningPrice} name='winningPrice' type="number" placeholder="Winning Price" onChange={handleChange} />
         </Form.Group>
         <Form.Group as={Col}>
+          <Form.Label>Winning Bider</Form.Label>
         <Form.Select value={winningBidder} onChange={handleChange} name='winningBidder'>
-            {/* <option value="">Select Winning Bidder</option> */}
           {companies.map((option) => (
             <option value={option.ID}>
               {option.Name}
@@ -351,9 +354,6 @@ function UpdateProposal() {
         </Modal.Header>
         <Modal.Body>Proposal Updated Successfully</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={callFunc}>
-            Close
-          </Button>
         </Modal.Footer>
       </Modal>
     </div>

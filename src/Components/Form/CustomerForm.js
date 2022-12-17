@@ -8,8 +8,8 @@ import Row from 'react-bootstrap/Row';
 import { useNavigate } from 'react-router-dom'
 import { HOST, GET_COMPANY_NAMES, ADD_CONTACT } from '../Constants/Constants';
 import Modal from 'react-bootstrap/Modal';
+import CompanyForm from "./CompanyForm";
 
-// import TextField from '@material-ui/core/TextField';
 function CustomerForm() {
   const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
@@ -106,9 +106,13 @@ function CustomerForm() {
           console.log(err)
       })
   };
-  const [show, setShow] = useState(false);
+        const [show, setShow]  = useState(false);
         const handleClose = () => setShow(false);
         const handleShow = () => setShow(true);
+
+        const [showCompanyForm, setShowCompanyForm]  = useState(false);
+        const handleCloseCompanyForm = () => setShowCompanyForm(false);
+        const handleShowCompanyForm = () => setShowCompanyForm(true);
             const callFunc = ()=>{
             handleClose();
             navigate('/admin')
@@ -116,21 +120,11 @@ function CustomerForm() {
     
   return (
     <>
-    <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
-                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
-                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
-            </div>
-    <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh'}}>New Contact</h1>
   <Form className='form-main'>
   <Row className="mb-4">
-  {/* <Form.Group as={Col} >
-          <Form.Control onChange={handleChange} name='category' type="text" placeholder="Category*" />
-        </Form.Group> */}
         <Form.Group as={Col} >
-          {/* <Form.Control onChange={handleChange} name='company' type="text" placeholder="Company" /> */}
           <Form.Select onChange={handleChange} name='company' required>
             <option value="">Select Company</option>
-            {/* <option onClick={(e) => {navigate("/companyform")}}>+ Add Company</option> */}
           {companies.map((option) => (
             <option value={option.ID}>
               {option.Name}
@@ -139,7 +133,7 @@ function CustomerForm() {
           </Form.Select>
         </Form.Group>
         <Form.Group as={Col}>
-        <Button style={{'width':'100%','backgroundColor':'grey','border':'none'}} onClick={(e) => {navigate("/companyform")}}>Add Company</Button>
+        <Button style={{'width':'100%','backgroundColor':'grey','border':'none'}} onClick={handleShowCompanyForm}>Add Company</Button>
         </Form.Group>
           
         
@@ -1648,6 +1642,8 @@ function CustomerForm() {
         Submit
       </Button>
     </Form>
+
+
     <Modal show={show} onHide={handleClose} >
         <Modal.Header closeButton>
           <Modal.Title>Form Submitted</Modal.Title>
@@ -1658,6 +1654,16 @@ function CustomerForm() {
             Close
           </Button>
         </Modal.Footer>
+      </Modal>
+
+      <Modal
+      backdrop="static"
+      size="lg"
+      keyboard={false} show={showCompanyForm} onHide={handleCloseCompanyForm} >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Company</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<CompanyForm />}</Modal.Body>
       </Modal>
     </>
   )

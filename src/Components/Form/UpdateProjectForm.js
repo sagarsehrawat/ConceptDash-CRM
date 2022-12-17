@@ -10,23 +10,19 @@ import Select from 'react-select';
 import { useNavigate,useLocation } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal';
 
-function UpdateProjectForm() {
-  const location = useLocation();
-
-  const [pname, setpname] = useState(location.state.Project_Name)
-  // const [datedue, setdatedue] = useState('')
-  const [pCategory, setpCategory] = useState(location.state.Project_Category)
-  const [pStage, setpStage] = useState(location.state.Project_Stage)
-  const [state, setstate] = useState(location.state.Status)
-  const [fNotes, setfNotes] = useState(location.state.Follow_Up_Notes)
-  // const [nextFollow, setnextFollow] = useState(location.state.Next_Follow_Up)
-  // const [tClosing, settClosing] = useState(location.state.Tenatative_Closing)
-  const [pManager, setpManager] = useState(location.state.Project_Manager)
-  const [pValue, setpValue] = useState(location.state.Project_Value)
-  const [city, setcity] = useState(location.state.City)
-  const [province, setprovince] = useState(location.state.Province)
-  const [dept, setdept] = useState(location.state.Department)
-  const [members, setmembers] = useState(location.state.Team_Members)
+function UpdateProjectForm(props) {
+  console.log(props.row)
+  const [pname, setpname] = useState(props.row.Project_Name)
+  const [pCategory, setpCategory] = useState(props.row.Project_Category)
+  const [pStage, setpStage] = useState(props.row.Project_Stage)
+  const [state, setstate] = useState(props.row.Status)
+  const [fNotes, setfNotes] = useState(props.row.Follow_Up_Notes)
+  const [pManager, setpManager] = useState(props.row.Project_Manager)
+  const [pValue, setpValue] = useState(props.row.Project_Value)
+  const [city, setcity] = useState(props.row.City)
+  const [province, setprovince] = useState(props.row.Province)
+  const [dept, setdept] = useState(props.row.Department)
+  const [members, setmembers] = useState(props.row.Team_Members)
 
 
 
@@ -44,19 +40,16 @@ function UpdateProjectForm() {
     const call = async () => {
       await axios.get(HOST + GET_EMPLOYEENAMES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setemployees(res.data.res)
-        console.log(res.data);
       }).catch((err) => {
         console.log(err)
       })
       await axios.get(HOST + GET_DEPARTMENTS, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setdepts(res.data.res)
-        console.log(res.data);
       }).catch((err) => {
         console.log(err)
       })
       await axios.get(HOST + GET_PROJECT_CATEGORIES, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
         setcategories(res.data.res)
-        console.log(res.data);
       }).catch((err) => {
         console.log(err)
       })
@@ -135,7 +128,7 @@ function UpdateProjectForm() {
       'projectManager':form.projectManager,
       'projectCategory':form.projectCategory,
       'status':form.status,
-      'projectId':location.state.Project_Id
+      'projectId':props.row.Project_Id
     }, {headers:{'auth':'Rose '+ localStorage.getItem('auth') }}).then((res) => {
       console.log(res);
       if(res.data.success) {
@@ -176,7 +169,7 @@ function UpdateProjectForm() {
       handleClose();
       navigate('/updateProject')
     }
-    let value1 = new Date(location.state.Due_Date)
+    let value1 = new Date(props.row.Due_Date)
       let startMonth, startDay;
       if(value1.getMonth()<10) {
         startMonth=`0${value1.getMonth()}`;
@@ -190,7 +183,7 @@ function UpdateProjectForm() {
       }
       let due = `${value1.getFullYear()}-${startMonth}-${startDay}`
 
-      let value2 = new Date(location.state.Next_Follow_Up)
+      let value2 = new Date(props.row.Next_Follow_Up)
       let dueMonth, dueDay;
       if(value2.getMonth()<10) {
         dueMonth=`0${value2.getMonth()}`;
@@ -204,7 +197,7 @@ function UpdateProjectForm() {
       }
       let nextFollow = `${value2.getFullYear()}-${dueMonth}-${dueDay}`
 
-      let value3 = new Date(location.state.Tentative_Closing)
+      let value3 = new Date(props.row.Tentative_Closing)
       let tMonth, tDay;
       if(value2.getMonth()<10) {
         tMonth=`0${value2.getMonth()}`;
@@ -219,11 +212,6 @@ function UpdateProjectForm() {
       let tClosing = `${value2.getFullYear()}-${dueMonth}-${dueDay}`
   return (
     <div>
-      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
-                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
-                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
-            </div>
-         <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh','textDecoration':'underline'}}>Update Project</h1>
   <Form className='form-main'>
   <Row className="mb-4">
         <Form.Group as={Col} >
@@ -1389,7 +1377,7 @@ function UpdateProjectForm() {
           <Form.Select defaultValue={pManager} name='projectManager' onChange={handleChange}>
             <option value=''>Project Manager</option>
           {employees.length!==0?employees.map((option) => (
-          <option value={option.Full_Name}>
+          <option value={option.Full_Name} >
             {option.Full_Name}
           </option>
         )):

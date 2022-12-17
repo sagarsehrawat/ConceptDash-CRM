@@ -88,16 +88,8 @@ function BudgetsForm() {
       }
   return (
     <div>
-      <div style={{'marginLeft':'2vw','marginTop':'2vh','marginBottom':'2vh','marginRight':'3vw'}}>
-                <Button style={{'marginRight':'1vh'}} onClick={() => navigate(-1)}>Back</Button>
-                <Button style={{'float':'right'}} onClick={() => navigate(1)}>Forward</Button>
-            </div>
-        <h1 style={{'margin':'auto', 'width':'20%', 'marginTop':'5vh','textDecoration':'underline'}}>Add Budget</h1>
   <Form className='form-main'>
   <Row className="mb-4">
-        {/* <Form.Group as={Col} >
-          <Form.Control name='company' type="text" placeholder="Company*" onChange={handleChange} required/>
-        </Form.Group> */}
         <Form.Group as={Col} controlId="formGridCity">
         <Form.Select onChange={handleChange} name='city'>
                   <option value="">Select City</option>
@@ -140,16 +132,20 @@ function BudgetsForm() {
       </Row>
       <Row className="mb-4">
         <Form.Group as={Col}>
-          <Form.Control name='projectName' type="text" placeholder="Project Name*" onChange={handleChange} required/>
+          <Form.Label>Project Name*</Form.Label>
+          <Form.Control name='projectName' type="text" onChange={handleChange} required/>
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control name='budgetAmount' type="number" placeholder="Budget Amount*" onChange={handleChange} required/>
+        <Form.Label>Budget Amount*</Form.Label>
+          <Form.Control name='budgetAmount' type="number" onChange={handleChange} required/>
         </Form.Group>
         <Form.Group as={Col}>
+        <Form.Label>Budget Year</Form.Label>
           <Form.Control name='budgetYear' value={year} type="text" placeholder="Budget Year" onChange={handleChange}/>
         </Form.Group>
         <Form.Group as={Col}>
-          <Form.Control name='source' type="text" placeholder="Source" onChange={handleChange}/>
+        <Form.Label>Source</Form.Label>
+          <Form.Control name='source' type="text" onChange={handleChange}/>
         </Form.Group>
       </Row>
       
