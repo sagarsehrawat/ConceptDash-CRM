@@ -14,6 +14,7 @@ import {
   GET_COMPANY_NAMES,
   ADD_PROPOSAL,
   GET_RFP_ID,
+  GET_PROJECT_CATEGORIES
 } from "../Constants/Constants";
 import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
@@ -27,6 +28,7 @@ function ProposalForm() {
   const handleShow = () => setShow(true);
   const [form, setform] = useState({
     'dept': "",
+    'projectCat': "",
     'status': "",
     'managerName': "",
     'projectName': "",
@@ -64,6 +66,7 @@ function ProposalForm() {
   const [cities, setcities] = useState([]);
   const [depts, setdepts] = useState([]);
   const [rfps, setrfps] = useState([]);
+  const [projectDepts, setprojectDepts] = useState([])
   useEffect(() => {
     const call = async () => {
       await axios
@@ -120,6 +123,16 @@ function ProposalForm() {
         .catch((err) => {
           console.log(err);
         });
+      await axios
+        .get(HOST + GET_PROJECT_CATEGORIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setprojectDepts(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     call();
   }, []);
@@ -131,6 +144,7 @@ function ProposalForm() {
         HOST + ADD_PROPOSAL,
         {
           'departmentId': radio ? deptid : form.dept,
+          'projectCatId': radio ? catId : form.projectCat,
           'status': form.status,
           'projectManagerId': radio ? managerId : form.managerName,
           'projectName': radio ? pName : form.projectName,
@@ -156,20 +170,19 @@ function ProposalForm() {
         if (res.data.success) {
           handleShow();
         }
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
   };
   const navigate = useNavigate();
-  const callFunc = () => {
-    handleClose();
-    navigate("/Proposaltable");
-  };
   const [rfpData, setrfpData] = useState([]);
   const [pName, setpName] = useState("");
   const [dept, setdept] = useState("");
   const [deptid, setdeptid] = useState("");
+  const [catId, setcatId] = useState("");
+  const [catid, setcatid] = useState("");
   const [cityid, setcityid] = useState("");
   const [city, setcity] = useState("");
   const [managerId, setmanagerId] = useState("");
@@ -186,6 +199,8 @@ function ProposalForm() {
         setrfpData(res.data.res);
         setpName(res.data.res[0].Project_Name);
         setdept(res.data.res[0].Department);
+        setcatid(res.data.res[0].Project_Category);
+        setcatId(res.data.res[0].Project_Cat_ID);
         setdeptid(res.data.res[0].Department_ID);
         setcity(res.data.res[0].City);
         setcityid(res.data.res[0].City_ID);
@@ -243,15 +258,22 @@ function ProposalForm() {
                     : ""}
                 </Form.Select>
               </Form.Group>
+              <Form.Group as={Col}>
+        <Form.Select onChange={handleChange} name='projectCat'>
+                  <option value="">Select Project Category</option>
+                  {projectDepts.length>0?projectDepts.map((e)=>(
+                    <option value={e.Project_Cat_ID}>{e.Project_Category}</option>
+                  )):''}
+        </Form.Select>
+        </Form.Group>
             </Row>
 
             <Row className="mb-4">
               <Form.Group as={Col}>
                 <Form.Select name="status" onChange={handleChange}>
                   <option value="">Select Status</option>
-                  <option value="Go">Go</option>
-                  <option value="NoGo">NoGo</option>
-                  <option value="Review">Review</option>
+                  <option value="Lost">Lost</option>
+                  <option value="Won">Won</option>
                 </Form.Select>
               </Form.Group>
               <Form.Group as={Col}>
@@ -453,11 +475,25 @@ function ProposalForm() {
                       onChange={handleChange}
                       name="dept"
                     >
-                      {/* <option value="">Select Department</option> */}
                       {depts.length > 0
                         ? depts.map((e) => (
                             <option value={e.Department_ID}>
                               {e.Department}
+                            </option>
+                          ))
+                        : ""}
+                    </Form.Select>
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Form.Select
+                      defaultValue={catid}
+                      onChange={handleChange}
+                      name="projectCat"
+                    >
+                      {projectDepts.length > 0
+                        ? projectDepts.map((e) => (
+                            <option value={e.Project_Cat_ID}>
+                              {e.Project_Category}
                             </option>
                           ))
                         : ""}
@@ -667,11 +703,6 @@ function ProposalForm() {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>Proposal Added Successfully</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={callFunc}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );

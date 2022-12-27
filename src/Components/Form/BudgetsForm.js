@@ -14,6 +14,8 @@ function BudgetsForm() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    let yr = new Date().getFullYear();
+    const [year, setyear] = useState(yr);
     const [form, setform] = useState({
       'city':"",
       'dept':"",
@@ -21,11 +23,9 @@ function BudgetsForm() {
       'budgetCategory':"",
       'projectName':"",
       'budgetAmount':"",
-      'budgetYear':"",
+      'budgetYear':year,
       'source':"",
     })
-    let yr = new Date().getFullYear();
-    const [year, setyear] = useState(yr);
     const handleChange = (e) => {
         const { name, value } = e.target;
         if(name==='budgetYear') {
@@ -82,10 +82,6 @@ function BudgetsForm() {
           })
       };
       const navigate = useNavigate()
-      const callFunc = ()=>{
-        handleClose();
-        navigate('/Budgettable')
-      }
   return (
     <div>
   <Form className='form-main'>
@@ -158,11 +154,6 @@ function BudgetsForm() {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>Budget Added Successfully</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={callFunc}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   )

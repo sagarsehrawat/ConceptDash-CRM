@@ -255,16 +255,6 @@ function AdminDash() {
             >
               Projects
             </h5>
-            {/* <select
-              style={{ marginBottom: "2vh", marginTop: "1vh" }}
-              className="card-title"
-              name=""
-              id=""
-            >
-              <option value="">Project</option>
-              <option value="">Proposals</option>
-              <option value="">Bids</option>
-            </select> */}
             <ListGroup as="ol">
               <ListGroup.Item
                 as="li"
@@ -397,7 +387,7 @@ function AdminDash() {
               >
                 <div className="ms-2 me-auto">
                   <div className="fw-bold">
-                    <Button onClick={handleShow} variant="primary">
+                    <Button style={{backgroundColor: 'rgba(38,141,141,1)'}} onClick={handleShow} variant="primary">
                       Click Here
                     </Button>
                   </div>
@@ -406,15 +396,15 @@ function AdminDash() {
             </ListGroup>
           </div>
           <div className="row d-flex justify-content-around" style={{'marginTop':'2rem'}}>
-            <Card style={{ width: "25rem" }}>
-              <h3 style={{ textAlign: "center" }}>Overall Counts</h3>
-              <Pie data={dataCounts} />
-            </Card>
-            <Card style={{ width: "25rem" }}>
+            <Card style={{ width: "20rem" }}>
               <h3 style={{ textAlign: "center" }}>RFP Analysis</h3>
               <Pie data={dataForRFP} />
             </Card>
-            <Card style={{ width: "25rem" }}>
+            <Card style={{ width: "20rem" }}>
+              <h3 style={{ textAlign: "center" }}>Overall Counts</h3>
+              <Pie data={dataCounts} />
+            </Card>
+            <Card style={{ width: "20rem" }}>
               <h3 style={{ textAlign: "center" }}>Bid Price</h3>
               <Pie data={wonLostProposals} />
             </Card>
@@ -553,7 +543,7 @@ function AdminDash() {
         // style={{'margin':'2rem'}}
         show={show}
         onHide={handleClose}
-        size="xl"
+        size="lg"
         dialogClassName="modal-150w"
         aria-labelledby="example-custom-modal-styling-title"
       >
@@ -561,11 +551,6 @@ function AdminDash() {
           <Modal.Title>Calendar</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ marginLeft: "4vw" }}>{<TestDemo />}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );

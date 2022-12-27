@@ -1,23 +1,16 @@
 import { React, useEffect, useState } from "react";
-import {
-  TableRow,
-  TableHead,
-  TableContainer,
-  TableCell,
-  TableBody,
-  Table,
-  Paper,
-} from "@material-ui/core";
 import axios from "axios";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
-import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import {
   HOST,
   GET_ALL_USERS,
   GET_ALL_SHIPPERS,
   GET_ALL_SUPPLIERS,
+  GET_PAGE_CUSTOMERS,
+  GET_PAGES_CUSTOMERSS,
+  SEARCH_CUSTOMERS
 } from "../Constants/Constants";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -26,9 +19,9 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import CustomerForm from "../Form/CustomerForm";
 import UpdateCustomer from "../Form/UpdateCustomer";
+import './Table.css'
 
 function CustomerUpdate(props) {
-
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -37,10 +30,11 @@ function CustomerUpdate(props) {
   const handleCloseUpdate = () => setShowUpdate(false);
   const handleShowUpdate = () => setShowUpdate(true);
 
-  const navigate = useNavigate();
   const [customers, setcustomers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [dataSource, setdataSource] = useState([]);
+  let d = 0;
+  const [pages, setpages] = useState(1);
+  const [currPage, setcurrPage] = useState(1);
   const category = props.category;
   useEffect(() => {
     const call = async () => {
@@ -51,73 +45,140 @@ function CustomerUpdate(props) {
       else if (category === "Suppliers") apiCall = GET_ALL_SUPPLIERS;
 
       await axios
-        .get(HOST + apiCall, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        .get(HOST + GET_PAGE_CUSTOMERS, {
+          headers: { auth: "Rose " + localStorage.getItem("auth"),
+          limit: 10,
+          offset: d,
+         },
         })
         .then((res) => {
           setcustomers(res.data.res);
-          setdataSource(res.data.res);
-          setIsLoading(false);
         })
         .catch((err) => {
           console.log(err);
         });
+      await axios
+        .get(HOST + GET_PAGES_CUSTOMERSS, {
+          headers: { auth: "Rose " + localStorage.getItem("auth"), limit: 10 },
+        })
+        .then((res) => {
+          setpages(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      setIsLoading(false);
     };
     call();
   }, [category]);
   const [value1, setValue1] = useState("1");
-
   const handleChange = (event, newValue) => {
     setValue1(newValue);
   };
-  const [value, setValue] = useState("");
-  const [tableFilter, settableFilter] = useState([]);
-  const filterData = (e) => {
-    if (e.target.value != "") {
-      setValue(e.target.value);
-      const filterTable = dataSource.filter((o) =>
-        Object.keys(o).some((k) =>
-          String(o[k]).toLowerCase().includes(e.target.value.toLowerCase())
-        )
-      );
-      settableFilter([...filterTable]);
-    } else {
-      setValue(e.target.value);
-      setdataSource([...dataSource]);
-    }
+  const handlePage = async () => {
+    setIsLoading(true);
+    let current = currPage;
+    setcurrPage(current + 1);
+    await axios
+      .get(HOST + GET_PAGE_CUSTOMERS, {
+        headers: {
+          auth: "Rose " + localStorage.getItem("auth"),
+          limit: 10,
+          offset: current * 10,
+        },
+      })
+      .then((res) => {
+        setcustomers(res.data.res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  const [rowData, setrowData] = useState([])
-  const handleUpdate = (e)=>{
+  const handlePagePre = async () => {
+    setIsLoading(true);
+    let current = currPage;
+    setcurrPage(currPage - 1);
+    await axios
+      .get(HOST + GET_PAGE_CUSTOMERS, {
+        headers: {
+          auth: "Rose " + localStorage.getItem("auth"),
+          limit: 10,
+          offset: (current - 2) * 10,
+        },
+      })
+      .then((res) => {
+        setcustomers(res.data.res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const [value, setValue] = useState("");
+  const filterData = async () => {
+    setIsLoading(true);
+    await axios
+      .get(HOST + SEARCH_CUSTOMERS, {
+        headers: {
+          auth: "Rose " + localStorage.getItem("auth"),
+          limit: 10,
+          offset: 0,
+          search: value,
+        },
+      })
+      .then((res) => {
+        setcustomers(res.data.res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const [rowData, setrowData] = useState([]);
+  const handleUpdate = (e) => {
     setrowData(e);
     handleShowUpdate();
-  }
+  };
+  const inputData = (e) => {
+    setValue(e.target.value);
+  };
   return (
     <div>
-      <h1
-        style={{
-          margin: "auto",
-          textAlign: "center",
-          textDecoration: "underline",
-          marginTop: "5vh",
-          marginBottom: "4vh",
-        }}
-      >
-        Customers
-      </h1>
-      <input
-        style={{ marginLeft: "41vw", marginBottom: "4vh", width: "20vw" }}
-        type="text"
-        value={value}
-        onChange={filterData}
-        placeholder="Search"
-      />
-
-      <Button
-        onClick={handleShow}
-        style={{ marginLeft: "45vw", marginBottom: "4vh" }}
-      >
-        Add new Customer
-      </Button>
+      <div className="container-fluid">
+          <h1
+            style={{
+              textAlign: "center",
+              marginTop: "3rem",
+              marginBottom: "1rem",
+              fontFamily: 'roboto',
+              fontWeight:'bold'
+            }}
+          >
+            Customers
+            <Button
+              onClick={handleShow}
+              style={{ float: "right", backgroundColor: "rgba(38,141,141,1)" }}
+              >
+              Add Customer +
+            </Button>
+          </h1>
+          <div style={{ float: "right", marginBottom: '1rem' }}>
+            <input
+              style={{ marginRight: ".5rem" }}
+              type="text"
+              value={value}
+              onChange={inputData}
+              placeholder="Search"
+              />
+            <Button
+              style={{ backgroundColor: "rgba(38,141,141,1)" }}
+              size="sm"
+              onClick={filterData}
+              >
+              Search
+            </Button>
+          </div>
       <br />
       <Box sx={{ width: "100%", typography: "body1" }} style={{ margin: "0" }}>
         <TabContext value={value1}>
@@ -132,159 +193,59 @@ function CustomerUpdate(props) {
               <LoadingSpinner />
             ) : (
               <div className="div1" style={{ overflowX: "auto" }}>
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Edit</TableCell>
-                        <TableCell align="right">Company</TableCell>
-                        <TableCell align="right">Salutation</TableCell>
-                        <TableCell align="right">First Name</TableCell>
-                        <TableCell align="right">Last Name</TableCell>
-                        <TableCell align="right">Email Personal</TableCell>
-                        <TableCell align="right">Email Work</TableCell>
-                        <TableCell align="right">Business Phone</TableCell>
-                        <TableCell align="right">Mobile</TableCell>
-                        <TableCell align="right">Address</TableCell>
-                        <TableCell align="right">City</TableCell>
-                        <TableCell align="right">Province</TableCell>
-                        <TableCell align="right">ZIP</TableCell>
-                        <TableCell align="right">Country</TableCell>
-                        <TableCell align="right">Notes</TableCell>
-                        <TableCell align="right">Attachments</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {value.length > 0
-                        ? tableFilter.map((row) => {
-                            return (
-                              <TableRow
-                                key={row.name}
-                                sx={{
-                                  "&:last-child td, &:last-child th": {
-                                    border: 0,
-                                  },
+                <table className="table">
+                  <thead>
+                    <tr className="heading">
+                      <td>Edit</td>
+                      <td scope="col">Company</td>
+                      <td scope="col">Salutation</td>
+                      <td scope="col">First Name</td>
+                      <td scope="col">Last Name</td>
+                      <td scope="col">Email Personal</td>
+                      <td scope="col">Email Work</td>
+                      <td scope="col">Business Phone</td>
+                      <td scope="col">Mobile</td>
+                      <td scope="col">Address</td>
+                      <td scope="col">City</td>
+                      <td scope="col">ZIP</td>
+                      <td scope="col">Notes</td>
+                      <td scope="col">Attachments</td>
+                    </tr>
+                  </thead>
+                  <tbody class="table-group-divider">
+                    {customers.map((row) => {
+                      return (
+                        <tr>
+                          <td>
+                            <svg width="40" height="40" viewBox="30 0 220 220">
+                              <image
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  handleUpdate(row);
                                 }}
-                              >
-                                <TableCell align="right">
-                                  <Button
-                                    onClick={()=>{handleUpdate(row)}}
-                                    style={{
-                                      backgroundColor: "rgb(99, 138, 235)",
-                                    }}
-                                  >
-                                    Edit
-                                  </Button>
-                                </TableCell>
+                                href="data:image/png;base64,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"
+                              />
+                            </svg>
+                          </td>
 
-                                <TableCell align="right">
-                                  {row.Company_Name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Salutation}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.First_Name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Last_Name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Email_Personal}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Email_Work}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Business_Phone}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Mobile_Phone_Personal}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Address}
-                                </TableCell>
-                                <TableCell align="right">{row.City}</TableCell>
-                                <TableCell align="right">
-                                  {row.Province}
-                                </TableCell>
-                                <TableCell align="right">{row.ZIP}</TableCell>
-                                <TableCell align="right">
-                                  {row.Country}
-                                </TableCell>
-                                <TableCell align="right">{row.Notes}</TableCell>
-                                <TableCell align="right">
-                                  {row.Attachments}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })
-                        : customers.map((row) => {
-                            return (
-                              <TableRow
-                                key={row.name}
-                                sx={{
-                                  "&:last-child td, &:last-child th": {
-                                    border: 0,
-                                  },
-                                }}
-                              >
-                                <TableCell align="right">
-                                  <Button
-                                    onClick={()=>{handleUpdate(row)}}
-                                    style={{
-                                      backgroundColor: "rgb(99, 138, 235)",
-                                    }}
-                                  >
-                                    Edit
-                                  </Button>
-                                </TableCell>
-
-                                <TableCell align="right">
-                                  {row.Company_Name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Salutation}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.First_Name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Last_Name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Email_Personal}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Email_Work}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Business_Phone}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Mobile_Phone_Personal}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Address}
-                                </TableCell>
-                                <TableCell align="right">{row.City}</TableCell>
-                                <TableCell align="right">
-                                  {row.Province}
-                                </TableCell>
-                                <TableCell align="right">{row.ZIP}</TableCell>
-                                <TableCell align="right">
-                                  {row.Country}
-                                </TableCell>
-                                <TableCell align="right">{row.Notes}</TableCell>
-                                <TableCell align="right">
-                                  {row.Attachments}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                          <td>{row.Company_Name}</td>
+                          <td>{row.Salutation}</td>
+                          <td>{row.First_Name}</td>
+                          <td>{row.Last_Name}</td>
+                          <td>{row.Email_Personal}</td>
+                          <td>{row.Email_Work}</td>
+                          <td>{row.Business_Phone}</td>
+                          <td>{row.Mobile_Phone_Personal}</td>
+                          <td>{row.Address}</td>
+                          <td>{row.City}</td>
+                          <td>{row.ZIP}</td>
+                          <td>{row.Notes}</td>
+                          <td>{row.Attachments}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             )}
           </TabPanel>
@@ -293,160 +254,102 @@ function CustomerUpdate(props) {
               <LoadingSpinner />
             ) : (
               <div className="div1">
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align="center">Customer</TableCell>
-                        <TableCell align="right">Birthday</TableCell>
-                        <TableCell align="right">Anniversary</TableCell>
-                        <TableCell align="right">Sports</TableCell>
-                        <TableCell align="right">Activities</TableCell>
-                        <TableCell align="right">Beverage</TableCell>
-                        <TableCell align="right">Alcohol</TableCell>
-                        <TableCell align="right">Travel Destination</TableCell>
-                        <TableCell align="right">Spouse</TableCell>
-                        <TableCell align="right">Children</TableCell>
-                        <TableCell align="right">TV Show</TableCell>
-                        <TableCell align="right">Movies</TableCell>
-                        <TableCell align="right">Actor</TableCell>
-                        <TableCell align="right">Dislikes</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {value.length > 0
-                        ? tableFilter.map((row) => {
-                            return (
-                              <TableRow
-                                key={row.name}
-                                sx={{
-                                  "&:last-child td, &:last-child th": {
-                                    border: 0,
-                                  },
-                                }}
-                              >
-                                <TableCell
-                                  component="th"
-                                  scope="row"
-                                  align="center"
-                                >
-                                  {row.First_Name + " " + row.Last_Name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Birthday
-                                    ? row.Birthday.substring(0, 10)
-                                    : ""}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Anniversary
-                                    ? row.Anniversary.substring(0, 10)
-                                    : ""}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Sports}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Activities}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Beverage}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Alcohol}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Travel_Destination}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Spouse_Name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Children}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.TV_Show}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Movies}
-                                </TableCell>
-                                <TableCell align="right">{row.Actor}</TableCell>
-                                <TableCell align="right">
-                                  {row.Dislikes}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })
-                        : customers.map((row) => {
-                            return (
-                              <TableRow
-                                key={row.name}
-                                sx={{
-                                  "&:last-child td, &:last-child th": {
-                                    border: 0,
-                                  },
-                                }}
-                              >
-                                <TableCell
-                                  component="th"
-                                  scope="row"
-                                  align="center"
-                                >
-                                  {row.First_Name + " " + row.Last_Name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Birthday
-                                    ? row.Birthday.substring(0, 10)
-                                    : ""}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Anniversary
-                                    ? row.Anniversary.substring(0, 10)
-                                    : ""}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Sports}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Activities}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Beverage}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Alcohol}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Travel_Destination}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Spouse_Name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Children}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.TV_Show}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Movies}
-                                </TableCell>
-                                <TableCell align="right">{row.Actor}</TableCell>
-                                <TableCell align="right">
-                                  {row.Dislikes}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                <table className="table">
+                  <thead>
+                    <tr className="heading">
+                      <th scope="col">Customer</th>
+                      <th scope="col">Birthday</th>
+                      <th scope="col">Anniversary</th>
+                      <th scope="col">Sports</th>
+                      <th scope="col">Activities</th>
+                      <th scope="col">Beverage</th>
+                      <th scope="col">Alcohol</th>
+                      <th scope="col">Travel Destination</th>
+                      <th scope="col">Spouse</th>
+                      <th scope="col">Children</th>
+                      <th scope="col">TV Show</th>
+                      <th scope="col">Movies</th>
+                      <th scope="col">Actor</th>
+                      <th scope="col">Dislikes</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-group-divider">
+                    {customers.map((row) => {
+                      return (
+                        <tr>
+                          <td>{row.First_Name + " " + row.Last_Name}</td>
+                          <td>
+                            {row.Birthday ? row.Birthday.substring(0, 10) : ""}
+                          </td>
+                          <td>
+                            {row.Anniversary
+                              ? row.Anniversary.substring(0, 10)
+                              : ""}
+                          </td>
+                          <td>{row.Sports}</td>
+                          <td>{row.Activities}</td>
+                          <td>{row.Beverage}</td>
+                          <td>{row.Alcohol}</td>
+                          <td>{row.Travel_Destination}</td>
+                          <td>{row.Spouse_Name}</td>
+                          <td>{row.Children}</td>
+                          <td>{row.TV_Show}</td>
+                          <td>{row.Movies}</td>
+                          <td>{row.Actor}</td>
+                          <td>{row.Dislikes}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             )}
           </TabPanel>
         </TabContext>
       </Box>
-
-
+      <div
+            className="row justify-content-evenly"
+            style={{ marginTop: "1rem", marginBottom: '1rem' }}
+          >
+            <div style={{ textAlign: "center" }} className="col-1">
+              {currPage === 1 ? (
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  disabled
+                >
+                  &lt;
+                </Button>
+              ) : (
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  onClick={handlePagePre}
+                >
+                  &lt;
+                </Button>
+              )}
+            </div>
+            <div style={{ textAlign: "center" }} className="col-1">
+              Page {currPage}/{pages}
+            </div>
+            <div style={{ textAlign: "center" }} className="col-1">
+              {currPage === pages ? (
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  disabled
+                >
+                  &gt;
+                </Button>
+              ) : (
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  onClick={handlePage}
+                >
+                  &gt;
+                </Button>
+              )}
+            </div>
+          </div>
+      </div>
       <Modal
         show={show}
         onHide={handleClose}
@@ -458,7 +361,7 @@ function CustomerUpdate(props) {
           <Modal.Title>Add Customer</Modal.Title>
         </Modal.Header>
         <Modal.Body>{<CustomerForm />}</Modal.Body>
-      </Modal> 
+      </Modal>
 
       <Modal
         show={showUpdate}
@@ -470,9 +373,8 @@ function CustomerUpdate(props) {
         <Modal.Header closeButton>
           <Modal.Title>Update Customer</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{<UpdateCustomer row={rowData}/>}</Modal.Body>
-      </Modal>                   
-
+        <Modal.Body>{<UpdateCustomer row={rowData} />}</Modal.Body>
+      </Modal>
     </div>
   );
 }

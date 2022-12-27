@@ -1,486 +1,666 @@
-import {React, useEffect, useState} from 'react'
-import { TableRow, TableHead, TableContainer, TableCell, TableBody, Table, Paper } from '@material-ui/core';
-import axios from 'axios'
-import LoadingSpinner from '../Loader/Loader';
-import Button from 'react-bootstrap/Button';
-import { useNavigate } from 'react-router-dom'
-import { GET_ALL_EMPLOYEES, HOST, GET_TIMESHEET,GET_EMPLOYEENAMES } from '../Constants/Constants';
+import { React, useEffect, useState } from "react";
+import {
+  TableRow,
+  TableHead,
+  TableContainer,
+  TableCell,
+  TableBody,
+  Table,
+  Paper,
+} from "@material-ui/core";
+import axios from "axios";
+import './Table.css'
+import LoadingSpinner from "../Loader/Loader";
+import Button from "react-bootstrap/Button";
+import {
+  GET_ALL_EMPLOYEES,
+  HOST,
+  GET_TIMESHEET,
+  GET_EMPLOYEENAMES,
+} from "../Constants/Constants";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import Form from 'react-bootstrap/Form';
+import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import UpdateEmployeeForm from '../Form/UpdateEmployeeForm';
-import EmployeeForm from '../Form/EmployeeForm';
+import UpdateEmployeeForm from "../Form/UpdateEmployeeForm";
+import EmployeeForm from "../Form/EmployeeForm";
 
 function EmployeeUpdate() {
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+  const [showUpdate, setShowUpdate] = useState(false);
+  const handleCloseUpdate = () => setShowUpdate(false);
+  const handleShowUpdate = () => setShowUpdate(true);
 
-    const [showUpdate, setShowUpdate] = useState(false);
-    const handleCloseUpdate = () => setShowUpdate(false);
-    const handleShowUpdate = () => setShowUpdate(true);
-
-    const navigate = useNavigate();
-    const [employee, setemployee] = useState([])
-    const [isLoading, setIsLoading] = useState(false);
-    const [dataSource, setdataSource] = useState([])
-    useEffect(() => {
-        setIsLoading(true);
-          const call = async () => {
-            await axios.get(HOST + GET_ALL_EMPLOYEES, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
-              setemployee(res.data.res)
-              setdataSource(res.data.res)
-              setIsLoading(false)
-            }).catch((err) => {
-              console.log(err)
-            })
-          }
-          call()
-    },[])
-    const [timesheet, settimesheet] = useState([])
-    const handleChange1 = async (e) => {
-        await axios.get(HOST + GET_TIMESHEET,{headers:{'auth':'Rose '+ localStorage.getItem('auth'),'id':e.target.value}}).then(async (res) => {
-        settimesheet(res.data.res)
-        setIsLoading(false)
-    }).catch((err) => {
-        console.log(err)
-    })
+  const [employee, setemployee] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [dataSource, setdataSource] = useState([]);
+  useEffect(() => {
+    setIsLoading(true);
+    const call = async () => {
+      await axios
+        .get(HOST + GET_ALL_EMPLOYEES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setemployee(res.data.res);
+          setdataSource(res.data.res);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
-    useEffect(() => {
-        const call = async () => {
-          const res = await axios.get(HOST + GET_EMPLOYEENAMES,{headers:{'auth':'Rose '+ localStorage.getItem('auth')}});
-          setemployeess(res.data.res)
-          console.log(res.data);
-        }
-        call()
-    },[]);
-    const [employeess, setemployeess] = useState([]);
-    const [value1, setValue1] = useState("1");
-    const handleChange = (event, newValue) => {
-        setValue1(newValue);
-      };
-    const[value, setValue] = useState('')
-    const [tableFilter, settableFilter] = useState([])
-    const filterData = (e) =>{
-      if(e.target.value!=""){
-        setValue(e.target.value);
-        const filterTable = dataSource.filter(o=>Object.keys(o).some(k=>
-          String(o[k]).toLowerCase().includes(e.target.value.toLowerCase())))
-          settableFilter([...filterTable])
-      } else {
-        setValue(e.target.value);
-        setdataSource([...dataSource])
-      }
+    call();
+  }, []);
+  const [timesheet, settimesheet] = useState([]);
+  const handleChange1 = async (e) => {
+    await axios
+      .get(HOST + GET_TIMESHEET, {
+        headers: {
+          auth: "Rose " + localStorage.getItem("auth"),
+          id: e.target.value,
+        },
+      })
+      .then(async (res) => {
+        settimesheet(res.data.res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    const call = async () => {
+      const res = await axios.get(HOST + GET_EMPLOYEENAMES, {
+        headers: { auth: "Rose " + localStorage.getItem("auth") },
+      });
+      setemployeess(res.data.res);
+    };
+    call();
+  }, []);
+  const [employeess, setemployeess] = useState([]);
+  const [value1, setValue1] = useState("1");
+  const handleChange = (event, newValue) => {
+    setValue1(newValue);
+  };
+  const [value, setValue] = useState("");
+  const [tableFilter, settableFilter] = useState([]);
+  const filterData = (e) => {
+    if (e.target.value != "") {
+      setValue(e.target.value);
+      const filterTable = dataSource.filter((o) =>
+        Object.keys(o).some((k) =>
+          String(o[k]).toLowerCase().includes(e.target.value.toLowerCase())
+        )
+      );
+      settableFilter([...filterTable]);
+    } else {
+      setValue(e.target.value);
+      setdataSource([...dataSource]);
     }
-    const [rowData, setrowData] = useState([])
-    const handleUpdate = (e)=>{
+  };
+  const [rowData, setrowData] = useState([]);
+  const handleUpdate = (e) => {
     setrowData(e);
     handleShowUpdate();
-  }
+  };
   return (
     <div>
-      <br />
-        <input style={{'marginLeft':'41vw', 'marginBottom':'4vh','width':'20vw'}} type="text" value={value} onChange={filterData} placeholder='Search'/>
-        
-      <Button onClick={handleShow} style={{'marginLeft':'45vw', 'marginBottom':'4vh'}}>Add to Employee</Button>
-      <br />
-        <Box sx={{ width: "100%", typography: "body1" }} style={{'margin':'0'}}>
-        <TabContext value={value1}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <TabList
-            centered
-            onChange={handleChange}
-            aria-label=""
+      <div className="container-fluid">
+        <h1
+          style={{
+            textAlign: "center",
+            marginTop: "3rem",
+            marginBottom: "1rem",
+            fontFamily: 'roboto',
+            fontWeight: 'bold'
+          }}
+        >
+          EMPLOYEE
+          <Button
+            onClick={handleShow}
+            style={{ float: "right", backgroundColor: "rgba(38,141,141,1)" }}
           >
-            <Tab label="Employees" value="1" />
-            <Tab label="Personal Details" value="2" />
-            <Tab label="Employee Skills" value="3" />
-            <Tab label="Personal Traits" value="5" />
-            <Tab label="TimeSheet" value="4" />
-          </TabList>
+            Add Employee +
+          </Button>
+        </h1>
+        <div style={{ float: "right", marginBottom: "1rem" }}>
+          <input
+            style={{ marginRight: ".5rem" }}
+            type="text"
+            value={value}
+            onChange={filterData}
+            placeholder="Search"
+          />
+        </div>
+        <br />
+        <br />
+        <Box
+          sx={{ width: "100%", typography: "body1" }}
+          style={{ margin: "0" }}
+        >
+          <TabContext value={value1}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <TabList centered onChange={handleChange} aria-label="">
+                <Tab label="Employees" value="1" />
+                <Tab label="Personal Details" value="2" />
+                <Tab label="Employee Skills" value="3" />
+                <Tab label="Personal Traits" value="5" />
+                <Tab label="TimeSheet" value="4" />
+              </TabList>
+            </Box>
+            <TabPanel value="1" style={{ margin: "0" }}>
+              {isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                <div className="div1" style={{ overflowX: "auto" }}>
+                  <table className="table">
+                    <thead>
+                      <tr className="heading">
+                        <th>Edit</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Salutation</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Email Work</th>
+                        <th scope="col">Email Personal</th>
+                        <th scope="col">Job Title</th>
+                        <th scope="col">Joining Date</th>
+                        <th scope="col">Business Phone</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">City</th>
+                        <th scope="col">ZIP</th>
+                        <th scope="col">Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                      {value.length > 0
+                        ? tableFilter.map((row) => {
+                            return (
+                              <tr>
+                                <td>
+                                  <svg
+                                    width="40"
+                                    height="40"
+                                    viewBox="30 0 220 220"
+                                  >
+                                    <image
+                                      style={{ cursor: "pointer" }}
+                                      onClick={() => {
+                                        handleUpdate(row);
+                                      }}
+                                      href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAeFBMVEX///8wMDAAAAAqKiru7u6np6cYGBhERERjY2MTExMGBgbNzc0tLS0jIyOJiYlAQEDi4uIcHBwmJib4+PicnJxWVlaZmZmioqIPDw9cXFy3t7d9fX2Ojo5YWFhJSUmxsbHX19fy8vJsbGzT09M2NjZ1dXXBwcFOTk6wVzgvAAAFd0lEQVR4nO2c62KiMBBGgQgWGraAreK1tbX6/m+4EgISxVJCErLud37VsgXPBmYmYcBxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwBCzyWTsr6CX5OR5i7G/hE4Skrmutxn7a+gjSYl7xvsz9hfRBRd03fBBFWtB1w0eUjEhteBjKia0FKSlYv5wilyQBC8kZZKPFlGTmAmmb3vH8XP6eBGVB5l0OSs+rUI6yomaPEvyi11zwadZ+XkVUPPh5nnphlLkpHPfSdYcwQLzirONR6grBX3p2jkPMvHb7PK7VWg49a9zOb3fGCbureBZ0WN/bSqi+p60YKchH8FUFHScd5OKE1qcoTSNZPCyH/fNg0z2ebNlxc6bg5Gk8c4uimyuIZbyPOiSp9ttq5RtMnEtPp0nbW70i6jfm0uxnbYoLkrF3NdwZJHp+SSlOw07bhbb6fJ2c2lIphoOLVIYtp1GQ6lq0Zi2KyZBaajjP1dEk2GVB5cfebvivBxDb6X80NfoMawqmXOaSLw2xUXI5lLeq+oj36LFUCi26w+Nf/BaVhme/jijx/Cq2OYxp1GaLgwK6jCs5oO1UVXaVIfxI4OCGgzrYrvxK9I8Uf1yBHMD12CBcsPWYjtJL+GGC4ZzhQf9CdWGd4rtS0Tlp2hkSlC14c01WG/wyqE9xOU1aO4GhlrDSvDpWrDeRE0GGYZSw+s1GXEjrQtVk4JKDatKZtsm6DgfL3yxJDJ6j02hYfuSRYNNeQ2GhtIER51hp6Afmk0THGWG7AZoy5pMTVWqmR1BdYZt9bXAq9FSrYEiwx+jaIHJ2YSIGkPx3kQLZottASWGvLL+IciUgvkYrRgqDLujqOFiW0CBIRe8H0Wr6dIoggoMOyqZc5qITBfbAoMNO4PMeFG0ZKhhZ5owuibTxkDDu/PBCn/cU9QZatiyJiNSRVHTpVqDQYZ2pwnOEMPOYtsfqdgWGGDYWWyPnCY48oYWF9sC0oadgiMW2wKyhp2VTLUuOnrfs6RhW5+MgA1RtETO8LdpYqRiW0DKsLrTcn9NJrIgTXBkDO1dk2lDxpDYXmwLSBjuWRtFbOOaTBsShsfCkL50rcnYcA0WSBi+F40i6fudrfakCY6E4bqot9M7jTBcMLJlBKUMWTdj9t26zY5iW0DC0Lt/nVlSbAv0N/zgLbcty7t2pQlOf0O/7Eg7B5NrxWrCa9Ep6sgY8vucZwJRxbooWtLfcHvpGxVGkT8OY5tgf8NZMVKUptfhxreo2BbobTgpAk3qV08UVEKv9qUJTm9D1vqeP1dPMfDUbmOa4PQ2ZIEm/qhTA1vsXdhVbAv0NvwkRev7/vzTgs0xaLr9XgZ2FdsCfQ33h8sfLMq8QcpFqVGX7n+gryELNPHGmT3P129sDKvUYecI9jc8FlmPnKgXpZnwxJt9aYLT1/BPLAwchxIrgwyjr+EnuZbL0iicru9NiMenp+F+RxsDlwU52X7PvyZ7jd9wKD0N+eNKlMRhcHj7fv9I7i3XWENPw6/IJXEQu7v18esfedlMT8ONl+/mqy/rB65BT8PnRPpI++XpdNqZn1vpejrvlslLRkhq/mUKJg3Ph4phqB4YqgOGuoChOmCoCxiqA4a6gKE6YKgLGKoDhrqAoTpgqAsYqgOGuoChOmCoCxiqA4a6+A8MycMbmhvD6TiGu6JN7WDiSEnRpzKC4Wfx8ISBd906zjq+bZw2wZH1UMafvmYWW9ZM5Zlv4NizV4zRLNAMf/G1kSv+imPkmsOTb+UYwGbAS9n7QQ28NbiVlRdf9xrqgISZjteG/4r9Zhp5ugm3izE7qWYT/fxLnWIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABj/AV3BV6LQOGbpAAAAABJRU5ErkJggg=="
+                                    />
+                                  </svg>
+                                </td>
+                                <td>{row.Username}</td>
+                                <td>{row.Salutation}</td>
+                                <td>{row.First_Name}</td>
+                                <td>{row.Last_Name}</td>
+                                <td>{row.Department}</td>
+                                <td>{row.Email_Work}</td>
+                                <td>{row.Email_Personal}</td>
+                                <td>{row.Job_Title_ID}</td>
+                                <td>
+                                  {row.Joining_Date
+                                    ? row.Joining_Date.substring(0, 10)
+                                    : ""}
+                                </td>
+                                <td>{row.Business_Phone}</td>
+                                <td>{row.Mobile_Phone}</td>
+                                <td>{row.Address}</td>
+                                <td>{row.City}</td>
+                                <td>{row.ZIP}</td>
+                                <td>{row.Notes}</td>
+                              </tr>
+                            );
+                          })
+                        : employee.map((row) => {
+                            return (
+                              <tr>
+                                <td>
+                                  <svg
+                                    width="40"
+                                    height="40"
+                                    viewBox="50 0 110 220"
+                                  >
+                                    <image
+                                      style={{ cursor: "pointer" }}
+                                      onClick={() => {
+                                        handleUpdate(row);
+                                      }}
+                                      href="data:image/png;base64,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"
+                                    />
+                                  </svg>
+                                </td>
+                                <td>{row.Username}</td>
+                                <td>{row.Salutation}</td>
+                                <td>{row.First_Name}</td>
+                                <td>{row.Last_Name}</td>
+                                <td>{row.Department}</td>
+                                <td>{row.Email_Work}</td>
+                                <td>{row.Email_Personal}</td>
+                                <td>{row.Job_Title_ID}</td>
+                                <td>
+                                  {row.Joining_Date
+                                    ? row.Joining_Date.substring(0, 10)
+                                    : ""}
+                                </td>
+                                <td>{row.Business_Phone}</td>
+                                <td>{row.Mobile_Phone}</td>
+                                <td>{row.Address}</td>
+                                <td>{row.City}</td>
+                                <td>{row.ZIP}</td>
+                                <td>{row.Notes}</td>
+                              </tr>
+                            );
+                          })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </TabPanel>
+            <TabPanel centered value="2">
+              {isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                <div className="div1">
+                    <table className="table">
+                      <thead>
+                        <tr className="heading">
+                          <th scope="col">Employee</th>
+                          <th scope="col">Birthday</th>
+                          <th scope="col">Anniversary</th>
+                          <th scope="col">Sports</th>
+                          <th scope="col">Activities</th>
+                          <th scope="col">Beverage</th>
+                          <th scope="col">Alcohol</th>
+                          <th scope="col">
+                            Travel Destination
+                          </th>
+                          <th scope="col">Spouse</th>
+                          <th scope="col">Children</th>
+                          <th scope="col">TV Show</th>
+                          <th scope="col">Movies</th>
+                          <th scope="col">Actor</th>
+                          <th scope="col">Dislikes</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-group-divider">
+                        {value.length > 0
+                          ? tableFilter.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    {row.First_Name+ " " +row.Last_Name}
+                                  </td>
+                                  <td>
+                                    {row.Birthday
+                                      ? row.Birthday.substring(0, 10)
+                                      : ''}
+                                  </td>
+                                  <td>
+                                    {row.Anniversary
+                                      ? row.Anniversary.substring(0, 10)
+                                      : ""}
+                                  </td>
+                                  <td>
+                                    {row.Sports}
+                                  </td>
+                                  <td>
+                                    {row.Activities}
+                                  </td>
+                                  <td>
+                                    {row.Beverage}
+                                  </td>
+                                  <td>
+                                    {row.Alcohol}
+                                  </td>
+                                  <td>
+                                    {row.Travel_Destination}
+                                  </td>
+                                  <td>
+                                    {row.Spouse_Name}
+                                  </td>
+                                  <td>
+                                    {row.Children}
+                                  </td>
+                                  <td>
+                                    {row.TV_Show}
+                                  </td>
+                                  <td>
+                                    {row.Movies}
+                                  </td>
+                                  <td>
+                                    {row.Actor}
+                                  </td>
+                                  <td>
+                                    {row.Dislikes}
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          : employee.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    {row.First_Name+ " " +row.Last_Name}
+                                  </td>
+                                  <td>
+                                    {row.Birthday
+                                      ? row.Birthday.substring(0, 10)
+                                      : ''}
+                                  </td>
+                                  <td>
+                                    {row.Anniversary
+                                      ? row.Anniversary.substring(0, 10)
+                                      : ""}
+                                  </td>
+                                  <td>
+                                    {row.Sports}
+                                  </td>
+                                  <td>
+                                    {row.Activities}
+                                  </td>
+                                  <td>
+                                    {row.Beverage}
+                                  </td>
+                                  <td>
+                                    {row.Alcohol}
+                                  </td>
+                                  <td>
+                                    {row.Travel_Destination}
+                                  </td>
+                                  <td>
+                                    {row.Spouse_Name}
+                                  </td>
+                                  <td>
+                                    {row.Children}
+                                  </td>
+                                  <td>
+                                    {row.TV_Show}
+                                  </td>
+                                  <td>
+                                    {row.Movies}
+                                  </td>
+                                  <td>
+                                    {row.Actor}
+                                  </td>
+                                  <td>
+                                    {row.Dislikes}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                      </tbody>
+                    </table>
+                </div>
+              )}
+            </TabPanel>
+            <TabPanel centered value="3">
+              {isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                <div className="div1">
+                    <table className="table">
+                      <thead>
+                        <tr className="heading">
+                          <th scope="col">Employee</th>
+                          <th scope="col">Proficiency</th>
+                          <th scope="col">Expertise</th>
+                          <th scope="col">Interests</th>
+                          <th scope="col">Cocurricular</th>
+                          <th scope="col">Trainings</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-group-divider">
+                        {value.length > 0
+                          ? tableFilter.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    {row.First_Name+ " " +row.Last_Name}
+                                  </td>
+                                  <td>
+                                    {row.Proficiency}
+                                  </td>
+                                  <td>
+                                    {row.Expertise}
+                                  </td>
+                                  <td>
+                                    {row.Interests}
+                                  </td>
+                                  <td>
+                                    {row.Cocurricular}
+                                  </td>
+                                  <td>
+                                    {row.Trainings}
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          : employee.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    {row.First_Name+ " " +row.Last_Name}
+                                  </td>
+                                  <td>
+                                    {row.Proficiency}
+                                  </td>
+                                  <td>
+                                    {row.Expertise}
+                                  </td>
+                                  <td>
+                                    {row.Interests}
+                                  </td>
+                                  <td>
+                                    {row.Cocurricular}
+                                  </td>
+                                  <td>
+                                    {row.Trainings}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                      </tbody>
+                    </table>
+                </div>
+              )}
+            </TabPanel>
+            <TabPanel centered value="5">
+              {isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                <div className="div1">
+                    <table className="table">
+                      <thead>
+                        <tr className="heading">
+                          <th scope="col">Employee</th>
+                          <th scope="col">Strengths</th>
+                          <th scope="col">Weakness</th>
+                          <th scope="col">
+                            Social Active Index
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-group-divider">
+                        {value.length > 0
+                          ? tableFilter.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    {row.First_Name+" "+row.Last_Name}
+                                  </td>
+                                  <td>
+                                    {row.Strengths}
+                                  </td>
+                                  <td>
+                                    {row.Weakness}
+                                  </td>
+                                  <td>
+                                    {row.Social_Active_Index}
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          : employee.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    {row.Employee_ID}
+                                  </td>
+                                  <td>
+                                    {row.Strengths}
+                                  </td>
+                                  <td>
+                                    {row.Weakness}
+                                  </td>
+                                  <td>
+                                    {row.Social_Active_Index}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                      </tbody>
+                    </table>
+                </div>
+              )}
+            </TabPanel>
+            <TabPanel centered value="4">
+              <h1 style={{ textAlign: "center" }}>Select Employee</h1>
+              <Form.Select
+                style={{ marginBottom: "4vh" }}
+                onChange={handleChange1}
+              >
+                {employeess.length !== 0 ? (
+                  employeess.map((options) => (
+                    <option
+                      value={options.Employee_ID}
+                      key={options.Employee_ID}
+                    >
+                      {options.Full_Name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">None</option>
+                )}
+              </Form.Select>
+              {isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Date</TableCell>
+                        <TableCell align="right">Start Time</TableCell>
+                        <TableCell align="right">End Time</TableCell>
+                        <TableCell align="right">Project Name</TableCell>
+                        <TableCell align="right">Comments</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {value.length > 0
+                        ? tableFilter.map((row) => {
+                            return (
+                              <TableRow
+                                key={row.name}
+                                sx={{
+                                  "&:last-child td, &:last-child th": {
+                                    border: 0,
+                                  },
+                                }}
+                              >
+                                <TableCell component="th" scope="row">
+                                  {row.Date}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.Start_Time}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.End_Time}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.Project_Name}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.Comments}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })
+                        : timesheet.map((row) => {
+                            return (
+                              <TableRow
+                                key={row.name}
+                                sx={{
+                                  "&:last-child td, &:last-child th": {
+                                    border: 0,
+                                  },
+                                }}
+                              >
+                                <TableCell component="th" scope="row">
+                                  {row.Date}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.Start_Time}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.End_Time}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.Project_Name}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.Comments}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
+            </TabPanel>
+          </TabContext>
         </Box>
-        <TabPanel value="1" style={{'margin':'0'}}>
-        {isLoading?<LoadingSpinner/>:
-        <div className="div1" style={{'overflowX':'auto'}}>
-          <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                    <TableHead>
-                                    <TableRow>
-                                        <TableCell >Edit</TableCell>
-                                        <TableCell align="right">Employee ID</TableCell>
-                                        <TableCell align="right">Username</TableCell>
-                                        <TableCell align="right">Salutation</TableCell>
-                                        <TableCell align="right">First Name</TableCell>
-                                        <TableCell align="right">Last Name</TableCell>
-                                        <TableCell align="right">Department</TableCell>
-                                        <TableCell align="right">Email Work</TableCell>
-                                        <TableCell align="right">Email Personal</TableCell>
-                                        <TableCell align="right">Job Title</TableCell>
-                                        <TableCell align="right">Joining Date</TableCell>
-                                        <TableCell align="right">Business Phone</TableCell>
-                                        <TableCell align="right">Mobile</TableCell>
-                                        <TableCell align="right">Address</TableCell>
-                                        <TableCell align="right">City</TableCell>
-                                        <TableCell align="right">Province</TableCell>
-                                        <TableCell align="right">ZIP</TableCell>
-                                        <TableCell align="right">Country</TableCell>
-                                        <TableCell align="right">Notes</TableCell>
-                                    </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                    {value.length > 0 ? tableFilter.map((row) => {
-                                      return (
-                                        <TableRow
-                                        key={row.name}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                        <TableCell align="right"><Button onClick={()=>{handleUpdate(row)}} style={{'backgroundColor':'rgb(99, 138, 235)'}}>Edit</Button></TableCell>
-                                        <TableCell component="th" scope="row">
-                                        {row.Employee_ID}
-                                        </TableCell>
-                                        <TableCell align="right">{row.Username}</TableCell>
-                                        <TableCell align="right">{row.Salutation}</TableCell>
-                                        <TableCell align="right">{row.First_Name}</TableCell>
-                                        <TableCell align="right">{row.Last_Name}</TableCell>
-                                        <TableCell align="right">{row.Department}</TableCell>
-                                        <TableCell align="right">{row.Email_Work}</TableCell>
-                                        <TableCell align="right">{row.Email_Personal}</TableCell>
-                                        <TableCell align="right">{row.Job_Title_ID}</TableCell>
-                                        <TableCell align="right">{(row.Joining_Date?row.Joining_Date.substring(0,10):'')}</TableCell>
-                                        <TableCell align="right">{row.Business_Phone}</TableCell>
-                                        <TableCell align="right">{row.Mobile_Phone}</TableCell>
-                                        <TableCell align="right">{row.Address}</TableCell>
-                                        <TableCell align="right">{row.City}</TableCell>
-                                        <TableCell align="right">{row.Province}</TableCell>
-                                        <TableCell align="right">{row.ZIP}</TableCell>
-                                        <TableCell align="right">{row.Country}</TableCell>
-                                        <TableCell align="right">{row.Notes}</TableCell>
-                                        </TableRow>
-                                      )
-                                      })
-                                  :
-                                  employee.map((row) => {
-                                    return (
-                                        <TableRow
-                                        key={row.name}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                        <TableCell align="right"><Button onClick={()=>{handleUpdate(row)}} style={{'backgroundColor':'rgb(99, 138, 235)'}}>Edit</Button></TableCell>
-                                        <TableCell component="th" scope="row">
-                                        {row.Employee_ID}
-                                        </TableCell>
-                                        <TableCell align="right">{row.Username}</TableCell>
-                                        <TableCell align="right">{row.Salutation}</TableCell>
-                                        <TableCell align="right">{row.First_Name}</TableCell>
-                                        <TableCell align="right">{row.Last_Name}</TableCell>
-                                        <TableCell align="right">{row.Department}</TableCell>
-                                        <TableCell align="right">{row.Company}</TableCell>
-                                        <TableCell align="right">{row.Email_Work}</TableCell>
-                                        <TableCell align="right">{row.Email_Personal}</TableCell>
-                                        <TableCell align="right">{row.Job_Title_ID}</TableCell>
-                                        <TableCell align="right">{(row.Joining_Date?row.Joining_Date.substring(0,10):'')}</TableCell>
-                                        <TableCell align="right">{row.Business_Phone}</TableCell>
-                                        <TableCell align="right">{row.Mobile_Phone}</TableCell>
-                                        <TableCell align="right">{row.Address}</TableCell>
-                                        <TableCell align="right">{row.City}</TableCell>
-                                        <TableCell align="right">{row.Province}</TableCell>
-                                        <TableCell align="right">{row.ZIP}</TableCell>
-                                        <TableCell align="right">{row.Country}</TableCell>
-                                        <TableCell align="right">{row.Notes}</TableCell>
-                                        </TableRow>
-                                    )
-                                  })}
-                                    </TableBody>
-                                </Table>
-                                </TableContainer>
-        </div>}
-        </TabPanel>
-        <TabPanel centered value="2">
-        {isLoading?<LoadingSpinner/>:
-        <div className="div1" >
-        <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                    <TableHead>
-                                    <TableRow>
-                                        <TableCell>Employee ID</TableCell>
-                                        <TableCell align="right">Birthday</TableCell>
-                                        <TableCell align="right">Anniversary</TableCell>
-                                        <TableCell align="right">Sports</TableCell>
-                                        <TableCell align="right">Activities</TableCell>
-                                        <TableCell align="right">Beverage</TableCell>
-                                        <TableCell align="right">Alcohol</TableCell>
-                                        <TableCell align="right">Travel Destination</TableCell>
-                                        <TableCell align="right">Spouse</TableCell>
-                                        <TableCell align="right">Children</TableCell>
-                                        <TableCell align="right">TV Show</TableCell>
-                                        <TableCell align="right">Movies</TableCell>
-                                        <TableCell align="right">Actor</TableCell>
-                                        <TableCell align="right">Dislikes</TableCell>
-                                    </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                    {value.length > 0 ? tableFilter.map((row) => {
-                                      return (
-                                        <TableRow
-                                        key={row.name}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                        <TableCell component="th" scope="row">
-                                        {row.Employee_ID}
-                                        </TableCell>
-                                        <TableCell align="right">{row.Birthday?row.Birthday.substring(0,10):''}</TableCell>
-                                        <TableCell align="right">{row.Anniversary?row.Anniversary.substring(0,10):''}</TableCell>
-                                        <TableCell align="right">{row.Sports}</TableCell>
-                                        <TableCell align="right">{row.Activities}</TableCell>
-                                        <TableCell align="right">{row.Beverage}</TableCell>
-                                        <TableCell align="right">{row.Alcohol}</TableCell>
-                                        <TableCell align="right">{row.Travel_Destination}</TableCell>
-                                        <TableCell align="right">{row.Spouse_Name}</TableCell>
-                                        <TableCell align="right">{row.Children}</TableCell>
-                                        <TableCell align="right">{row.TV_Show}</TableCell>
-                                        <TableCell align="right">{row.Movies}</TableCell>
-                                        <TableCell align="right">{row.Actor}</TableCell>
-                                        <TableCell align="right">{row.Dislikes}</TableCell>
-                                        </TableRow>
-                                      )
-                                      })
-                                  :
-                                  employee.map((row) => {
-                                    return (
-                                        <TableRow
-                                        key={row.name}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                        <TableCell component="th" scope="row">
-                                        {row.Employee_ID}
-                                        </TableCell>
-                                        <TableCell align="right">{row.Birthday?row.Birthday.substring(0,10):''}</TableCell>
-                                        <TableCell align="right">{row.Anniversary?row.Anniversary.substring(0,10):''}</TableCell>
-                                        <TableCell align="right">{row.Sports}</TableCell>
-                                        <TableCell align="right">{row.Activities}</TableCell>
-                                        <TableCell align="right">{row.Beverage}</TableCell>
-                                        <TableCell align="right">{row.Alcohol}</TableCell>
-                                        <TableCell align="right">{row.Travel_Destination}</TableCell>
-                                        <TableCell align="right">{row.Spouse_Name}</TableCell>
-                                        <TableCell align="right">{row.Children}</TableCell>
-                                        <TableCell align="right">{row.TV_Show}</TableCell>
-                                        <TableCell align="right">{row.Movies}</TableCell>
-                                        <TableCell align="right">{row.Actor}</TableCell>
-                                        <TableCell align="right">{row.Dislikes}</TableCell>
-                                        </TableRow>
-                                    )
-                                  })}
-                                    </TableBody>
-                                </Table>
-                                </TableContainer>
-      </div>}
-        </TabPanel>
-        <TabPanel centered value="3">
-        {isLoading?<LoadingSpinner/>:
-        <div className="div1" >
-        <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                    <TableHead>
-                                    <TableRow>
-                                        <TableCell>Employee ID</TableCell>
-                                        <TableCell align="right">Proficiency</TableCell>
-                                        <TableCell align="right">Expertise</TableCell>
-                                        <TableCell align="right">Interests</TableCell>
-                                        <TableCell align="right">Cocurricular</TableCell>
-                                        <TableCell align="right">Trainings</TableCell>
-                                    </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                    {value.length > 0 ? tableFilter.map((row) => {
-                                      return (
-                                        <TableRow
-                                        key={row.name}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                        <TableCell component="th" scope="row">
-                                        {row.Employee_ID}
-                                        </TableCell>
-                                        <TableCell align="right">{row.Proficiency}</TableCell>
-                                        <TableCell align="right">{row.Expertise}</TableCell>
-                                        <TableCell align="right">{row.Interests}</TableCell>
-                                        <TableCell align="right">{row.Cocurricular}</TableCell>
-                                        <TableCell align="right">{row.Trainings}</TableCell>
-                                        </TableRow>
-                                      )
-                                      })
-                                  :
-                                  employee.map((row) => {
-                                    return (
-                                        <TableRow
-                                        key={row.name}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                        <TableCell component="th" scope="row">
-                                        {row.Employee_ID}
-                                        </TableCell>
-                                        <TableCell align="right">{row.Proficiency}</TableCell>
-                                        <TableCell align="right">{row.Expertise}</TableCell>
-                                        <TableCell align="right">{row.Interests}</TableCell>
-                                        <TableCell align="right">{row.Cocurricular}</TableCell>
-                                        <TableCell align="right">{row.Trainings}</TableCell>
-                                        </TableRow>
-                                    )
-                                  })}
-                                    </TableBody>
-                                </Table>
-                                </TableContainer>
-      </div>}
-        </TabPanel>
-        <TabPanel centered value="5">
-        {isLoading?<LoadingSpinner/>:
-        <div className="div1" >
-        <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                    <TableHead>
-                                    <TableRow>
-                                        <TableCell>Employee ID</TableCell>
-                                        <TableCell align="right">Strengths</TableCell>
-                                        <TableCell align="right">Weakness</TableCell>
-                                        <TableCell align="right">Social Active Index</TableCell>
-                                    </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                    {value.length > 0 ? tableFilter.map((row) => {
-                                      return (
-                                        <TableRow
-                                        key={row.name}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                        <TableCell component="th" scope="row">
-                                        {row.Employee_ID}
-                                        </TableCell>
-                                        <TableCell align="right">{row.Strengths}</TableCell>
-                                        <TableCell align="right">{row.Weakness}</TableCell>
-                                        <TableCell align="right">{row.Social_Active_Index}</TableCell>
-                                        </TableRow>
-                                      )
-                                      })
-                                  :
-                                  employee.map((row) => {
-                                    return (
-                                        <TableRow
-                                        key={row.name}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                        <TableCell component="th" scope="row">
-                                        {row.Employee_ID}
-                                        </TableCell>
-                                        <TableCell align="right">{row.Strengths}</TableCell>
-                                        <TableCell align="right">{row.Weakness}</TableCell>
-                                        <TableCell align="right">{row.Social_Active_Index}</TableCell>
-                                        </TableRow>
-                                    )
-                                  })}
-                                    </TableBody>
-                                </Table>
-                                </TableContainer>
-      </div>}
-        </TabPanel>
-        <TabPanel centered value="4">
-        <h1 style={{'textAlign':'center'}}>Select Employee</h1>
-        <Form.Select style={{'marginBottom':'4vh'}} onChange={handleChange1}>
-        {employeess.length!==0?employeess.map((options) => (
-          <option value={options.Employee_ID} key={options.Employee_ID}>
-            {options.Full_Name}
-          </option>
-        )):
-        <option value=''>None</option>
-        }
-        
-        </Form.Select>
-        {isLoading?<LoadingSpinner/>:
-        <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-            <TableRow>
-                <TableCell>Date</TableCell>
-                <TableCell align="right">Start Time</TableCell>
-                <TableCell align="right">End Time</TableCell>
-                <TableCell align="right">Project Name</TableCell>
-                <TableCell align="right">Comments</TableCell>
-            </TableRow>
-            </TableHead>
-            <TableBody>
-            {value.length > 0 ? tableFilter.map((row) => {
-              return (
-                <TableRow
-                key={row.name}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                <TableCell component="th" scope="row">
-                {row.Date}
-                </TableCell>
-                <TableCell align="right">{row.Start_Time}</TableCell>
-                <TableCell align="right">{row.End_Time}</TableCell>
-                <TableCell align="right">{row.Project_Name}</TableCell>
-                <TableCell align="right">{row.Comments}</TableCell>
-                </TableRow>
-              )
-              })
-          :
-          timesheet.map((row) => {
-            return (
-                <TableRow
-                key={row.name}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                <TableCell component="th" scope="row">
-                {row.Date}
-                </TableCell>
-                <TableCell align="right">{row.Start_Time}</TableCell>
-                <TableCell align="right">{row.End_Time}</TableCell>
-                <TableCell align="right">{row.Project_Name}</TableCell>
-                <TableCell align="right">{row.Comments}</TableCell>
-                </TableRow>
-            )
-          })}
-            </TableBody>
-        </Table>
-        </TableContainer>
-          }
-        </TabPanel>
-        </TabContext>
-        </Box>
-    
-        <Modal
+      </div>
+      <Modal
         show={show}
         onHide={handleClose}
         backdrop="static"
         size="xl"
         keyboard={false}
-        >
+      >
         <Modal.Header closeButton>
           <Modal.Title>Add Employee</Modal.Title>
         </Modal.Header>
         <Modal.Body>{<EmployeeForm />}</Modal.Body>
-        </Modal> 
+      </Modal>
 
-        <Modal
+      <Modal
         show={showUpdate}
         onHide={handleCloseUpdate}
         backdrop="static"
         size="xl"
         keyboard={false}
-        >
+      >
         <Modal.Header closeButton>
           <Modal.Title>Update Employee</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{<UpdateEmployeeForm row={rowData}/>}</Modal.Body>
-        </Modal>
+        <Modal.Body>{<UpdateEmployeeForm row={rowData} />}</Modal.Body>
+      </Modal>
     </div>
-
-
-  )
+  );
 }
 
-export default EmployeeUpdate
+export default EmployeeUpdate;

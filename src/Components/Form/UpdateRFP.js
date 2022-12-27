@@ -183,11 +183,6 @@ function UpdateRFP(props) {
         console.log(err);
       });
   };
-  const navigate = useNavigate();
-  const callFunc = () => {
-    handleClose();
-    navigate("/RFPtable");
-  };
   return (
     <div>
       <Form className="form-main">
@@ -349,11 +344,6 @@ function UpdateRFP(props) {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>RFP Updated Successfully</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={callFunc}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );

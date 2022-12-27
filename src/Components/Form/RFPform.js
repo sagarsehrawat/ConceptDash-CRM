@@ -448,11 +448,6 @@ function RFPform() {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>RFP Added Successfully</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={callFunc}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );
