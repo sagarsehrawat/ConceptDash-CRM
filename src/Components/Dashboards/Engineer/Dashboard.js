@@ -408,7 +408,8 @@ const Dashboard = () => {
                 </Button>
               </div>
 
-              <div className="">
+              {/* <div className="container"> */}
+              
                 <Box sx={{ width: "100%", typography: "body1" }}>
                   <TabContext value={value1}>
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -558,7 +559,7 @@ const Dashboard = () => {
                     </TabPanel>
                   </TabContext>
                 </Box>
-              </div>
+              {/* </div> */}
             </div>
           </div>
           <div

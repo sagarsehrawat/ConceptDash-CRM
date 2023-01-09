@@ -9,20 +9,9 @@ import { Pie } from "react-chartjs-2";
 import { Card } from "react-bootstrap";
 import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
-import Container from "react-bootstrap/Container";
-import {
-  TableRow,
-  TableHead,
-  TableContainer,
-  TableCell,
-  TableBody,
-  Table,
-  Paper,
-} from "@material-ui/core";
 import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
-import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import TestDemo from "../../Components/Calendar";
 import axios from "axios";
@@ -35,12 +24,16 @@ import {
   PROPOSAL_STATUS_COUNTS,
   BUDGET_AMOUNT,
 } from "../Constants/Constants";
-import Form from "react-bootstrap/Form";
+import AddTask from '../Form/AddTask'
 import LoadingSpinner from "../Loader/Loader";
 function AdminDash() {
   const [show, setShow] = useState(false);
-  const [tasks, settasks] = useState([]);
-  const [task1, settask1] = useState("");
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [showAT, setShowAT] = useState(false);
+  const handleCloseAT = () => setShowAT(false);
+  const handleShowAT = () => setShowAT(true);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -73,27 +66,6 @@ function AdminDash() {
   useEffect(() => {
     setIsLoading(true);
     const call = async () => {
-      await axios
-        .get(HOST + GET_TASKS, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
-        })
-        .then((res) => {
-          settasks(res.data.res);
-          settask1(res.data.res[0].Title);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      await axios
-        .get(HOST + GET_ALL_EMPLOYEES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
-        })
-        .then((res) => {
-          setemployees(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
       await axios
         .get(HOST + BUDGET_AMOUNT, {
           headers: {
@@ -172,11 +144,7 @@ function AdminDash() {
     };
     call();
   }, []);
-  const [employees, setemployees] = useState([]);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const navigate = useNavigate();
 
   const dataCounts = {
     labels: ["Budgets", "RFPs", "Proposals", "Projects"],
@@ -395,6 +363,36 @@ function AdminDash() {
               </ListGroup.Item>
             </ListGroup>
           </div>
+          <div
+            className="card col-3 d-flex align-items-center"
+            style={{
+              width: "12rem",
+              padding: "2rem",
+              backgroundColor: "white",
+            }}
+          >
+            <img src={todoIcon} className="card-img" alt="New Purchases" />
+            <h5
+              style={{ marginBottom: "2vh", marginTop: "3vh" }}
+              className="card-title"
+            >
+              Assign Task
+            </h5>
+            <ListGroup as="ol">
+              <ListGroup.Item
+                as="li"
+                className="d-flex justify-content-between align-items-start"
+              >
+                <div className="ms-2 me-auto">
+                  <div className="fw-bold">
+                    <Button style={{backgroundColor: 'rgba(38,141,141,1)'}} onClick={handleShowAT} variant="primary">
+                      Assign
+                    </Button>
+                  </div>
+                </div>
+              </ListGroup.Item>
+            </ListGroup>
+          </div>
           <div className="row d-flex justify-content-around" style={{'marginTop':'2rem'}}>
             <Card style={{ width: "20rem" }}>
               <h3 style={{ textAlign: "center" }}>RFP Analysis</h3>
@@ -551,6 +549,19 @@ function AdminDash() {
           <Modal.Title>Calendar</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ marginLeft: "4vw" }}>{<TestDemo />}</Modal.Body>
+      </Modal>
+
+      <Modal
+        // style={{'margin':'2rem'}}
+        show={showAT}
+        onHide={handleCloseAT}
+        dialogClassName="modal-150w"
+        aria-labelledby="example-custom-modal-styling-title"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Task</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<AddTask />}</Modal.Body>
       </Modal>
     </div>
   );

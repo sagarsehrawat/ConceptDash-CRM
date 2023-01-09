@@ -27,60 +27,7 @@ const style = {
   p: 4,
 };
 const TestDemo = () => {
-  const timezones = [
-    {
-      value: ":00-04:30",
-      label: "America/Caracas",
-    },
-    {
-      value: ":00-02:30",
-      label: "America/St_Johns",
-    },
-    {
-      value: ":00+05:30",
-      label: "Asia/Calcutta",
-    },
-    {
-      value: ":00+05:30",
-      label: "Asia/Colombo",
-    },
-    {
-      value: ":00+04:30",
-      label: "Asia/Kabul",
-    },
-    {
-      value: ":00+05:45",
-      label: "Asia/Kathmandu",
-    },
-    {
-      value: ":00+05:45",
-      label: "Asia/Katmandu",
-    },
-    {
-      value: ":00+05:30",
-      label: "Asia/Kolkata",
-    },
-    {
-      value: ":00+06:30",
-      label: "Asia/Rangoon",
-    },
-    {
-      value: ":00+04:30",
-      label: "Asia/Tehran",
-    },
-    {
-      value: ":00+09:30",
-      label: "Australia/Adelaide",
-    },
-    {
-      value: ":00+08:40",
-      label: "Australia/Eucla",
-    },
-    {
-      value: ":00-02:30",
-      label: "Canada/Newfoundland",
-    },
-  ];
+  
   const [employees, setemployees] = useState([]);
   const [start, setstart] = useState("");
   const [end, setend] = useState("");
@@ -222,7 +169,7 @@ const TestDemo = () => {
       .post(
         HOST + ADD_TIMESHEET,
         {
-          projectId: form.project,
+          work: form.summary,
           employeeId: localStorage.getItem("employeeId"),
           date: new Date(start).toISOString(),
           startTime: `${new Date(start).getHours()}:${new Date(
@@ -233,7 +180,7 @@ const TestDemo = () => {
           ).getMinutes()}:00`,
           comments: form.description,
         },
-        { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+        { headers: { auth: "Rose " + localStorage.getItem("auth"), attendees: DisplayValue.toString() } }
       )
       .then((res) => {
         console.log(res);
@@ -403,16 +350,21 @@ let offset1 = `${sign}0${hours}:${minutes}`
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3">
-              <Form.Control
+              {/* <Form.Control
                 onChange={handleChange}
                 name="summary"
                 type="text"
                 placeholder="Add Title*"
-              />
+              /> */}
+              <Form.Select name="summary" onChange={handleChange}>
+                <option>Select Meeting</option>
+                <option value='Project Meeting'>Project Meeting</option>
+                <option value='Client Meeting'>Client Meeting</option>
+                <option value='Staff Meeting'>Staff Meeting</option>
+              </Form.Select>
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              {/* <Form.Control name='project' type="text" placeholder="Summary" /> */}
+            {/* <Form.Group className="mb-3">
               <Form.Select onChange={handleChange} name="project">
                 <option value="">Select Project</option>
                 {projects.length !== 0 ? (
@@ -425,7 +377,7 @@ let offset1 = `${sign}0${hours}:${minutes}`
                   <option value="">None</option>
                 )}
               </Form.Select>
-            </Form.Group>
+            </Form.Group> */}
             <Form.Group className="mb-3">
               <Select
                 isMulti
@@ -437,18 +389,6 @@ let offset1 = `${sign}0${hours}:${minutes}`
                 Select Employees
               </Select>
             </Form.Group>
-            {/* <Form.Group className="mb-3">
-              <Form.Select onChange={handleChange} name="timeZone">
-                <option value="">Select TimeZone</option>
-                {timezones.length !== 0 ? (
-                  timezones.map((option) => (
-                    <option value={option.value}>{option.label}</option>
-                  ))
-                ) : (
-                  <option value="">None</option>
-                )}
-              </Form.Select>
-            </Form.Group> */}
             <Form.Group className="mb-3">
               <Form.Label>Start Time</Form.Label>
               <Form.Control

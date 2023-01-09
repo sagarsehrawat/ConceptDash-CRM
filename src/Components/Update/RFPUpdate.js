@@ -5,6 +5,8 @@ import {
   SEARCH_RFPS,
   GET_PAGE_RFPS,
   GET_PAGES_RFPS,
+  GET_DEPARTMENTS,
+  GET_PROJECT_CATEGORIES,
   FILTER_RFPS
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
@@ -19,7 +21,7 @@ function RFPUpdate() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  let limit = 50;
   const [showUpdate, setShowUpdate] = useState(false);
   const handleCloseUpdate = () => setShowUpdate(false);
   const handleShowUpdate = () => setShowUpdate(true);
@@ -29,6 +31,8 @@ function RFPUpdate() {
   let d = 0;
   const [pages, setpages] = useState(1);
   const [currPage, setcurrPage] = useState(1);
+  const [depts, setdepts] = useState([]);
+  const [projectDepts, setprojectDepts] = useState([])
   useEffect(() => {
     setIsLoading(true);
     const call = async () => {
@@ -36,7 +40,7 @@ function RFPUpdate() {
         .get(HOST + GET_PAGE_RFPS, {
           headers: {
             auth: "Rose " + localStorage.getItem("auth"),
-            limit: 10,
+            limit: limit,
             offset: d,
           },
         })
@@ -48,10 +52,32 @@ function RFPUpdate() {
         });
       await axios
         .get(HOST + GET_PAGES_RFPS, {
-          headers: { auth: "Rose " + localStorage.getItem("auth"), limit: 10 },
+          headers: { auth: "Rose " + localStorage.getItem("auth"), limit: limit },
         })
         .then((res) => {
           setpages(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+        await axios
+        .get(HOST + GET_DEPARTMENTS, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setdepts(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      await axios
+        .get(HOST + GET_PROJECT_CATEGORIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setprojectDepts(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -68,8 +94,8 @@ function RFPUpdate() {
       .get(HOST + GET_PAGE_RFPS, {
         headers: {
           auth: "Rose " + localStorage.getItem("auth"),
-          limit: 10,
-          offset: current * 10,
+          limit: limit,
+          offset: current * limit,
         },
       })
       .then((res) => {
@@ -88,8 +114,27 @@ function RFPUpdate() {
       .get(HOST + GET_PAGE_RFPS, {
         headers: {
           auth: "Rose " + localStorage.getItem("auth"),
-          limit: 10,
-          offset: (current - 2) * 10,
+          limit: limit,
+          offset: (current - 2) * limit,
+        },
+      })
+      .then((res) => {
+        setrfps(res.data.res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleFilter = async () => {
+    setIsLoading(true);
+    await axios
+      .get(HOST + FILTER_RFPS, {
+        headers: {
+          auth: "Rose " + localStorage.getItem("auth"),
+          limit: limit,
+          offset: 0,
+          filter: JSON.stringify(returnData)
         },
       })
       .then((res) => {
@@ -107,7 +152,7 @@ function RFPUpdate() {
       .get(HOST + SEARCH_RFPS, {
         headers: {
           auth: "Rose " + localStorage.getItem("auth"),
-          limit: 10,
+          limit: limit,
           offset: 0,
           search: value,
         },
@@ -125,9 +170,49 @@ function RFPUpdate() {
     setrowData(e);
     handleShowUpdate();
   };
+  let filterDepts = [];
+  let filterCategories = [];
+  depts.map((e) => {
+    filterDepts.push({
+      label: e.Department,
+      value: e.Department,
+    });
+  });
+  projectDepts.map((e) => {
+    filterCategories.push({
+      label: e.Project_Category,
+      value: e.Project_Category,
+    });
+  });
   const inputData = (e) => {
     setValue(e.target.value);
   };
+  let [DisplayValue, getValue] = useState([]);
+  let doChange = (e) => {
+    getValue(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
+  let [DisplayValue1, getValue1] = useState([]);
+  let doChange1 = (e) => {
+    getValue1(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
+  let returnData = {
+    'dept':DisplayValue,
+    'cat':DisplayValue1
+  }
+  let deptvalue = []
+  returnData['dept'] && returnData['dept'].map((e)=>{
+    deptvalue.push({
+      label:e,
+      value:e
+    })
+  })
+  let catvalue = []
+  returnData['cat'] && returnData['cat'].map((e)=>{
+    catvalue.push({
+      label:e,
+      value:e
+    })
+  })
   return (
     <div>
       <div className="container-fluid">
@@ -165,6 +250,10 @@ function RFPUpdate() {
           </Button>
         </div>
         <br />
+        <div style={{width:'20rem', display:'inline-block'}} className="container-sm"></div>
+                <div style={{ display:'flex',flexDirection:'row'}}><Select placeholder='Select departments' defaultValue={deptvalue} onChange={doChange} isMulti options={filterDepts}>Select Departments</Select>&nbsp;&nbsp;
+                <Select placeholder='Select Categories' defaultValue={catvalue} onChange={doChange1} isMulti options={filterCategories}></Select>&nbsp;&nbsp;{(deptvalue.length==0 && catvalue.length==0)?<Button style={{ backgroundColor: "rgba(38,141,141,1)" }} disabled onClick={handleFilter}>Filter</Button>:<Button style={{ backgroundColor: "rgba(38,141,141,1)" }} onClick={handleFilter}>Filter</Button>}</div>
+                <br/>
         {isLoading ? (
           <LoadingSpinner />
         ) : (
@@ -174,6 +263,7 @@ function RFPUpdate() {
                 <tr className="heading">
                   <th scope="col">Edit</th>
                   <th scope="col">Department</th>
+                  <th scope="col">Project Category</th>
                   <th scope="col">Action</th>
                   <th scope="col">Amount</th>
                   <th scope="col">Source</th>
@@ -201,6 +291,7 @@ function RFPUpdate() {
                         </svg>
                       </td>
                       <td>{row.Department}</td>
+                      <td>{row.Project_Category}</td>
                       <td>{row.Action}</td>
                       <td>{row.Amount}</td>
                       <td>{row.Source}</td>

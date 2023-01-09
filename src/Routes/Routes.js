@@ -4,11 +4,11 @@ import {
     Routes,
     Route
 } from "react-router-dom";
+import ProtectedRoutes from './ProtectedRoutes';
 import Login from '../Components/Login/Login'
 import Admin from '../Components/Dashboards/Admin/Dashboard'
 import Manager from '../Components/Dashboards/Manager/Dashboard'
 import Supplier from '../Components/Dashboards/Supplier/Suppliers'
-import ProtectedRoutes from './ProtectedRoutes';
 import Logistics from '../Components/Dashboards/Logistics/Logistics'
 import IT from '../Components/Dashboards/IT/It'
 import Sales from '../Components/Dashboards/Sales/Sales';

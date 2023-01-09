@@ -129,6 +129,7 @@ function ProposalForm() {
         })
         .then((res) => {
           setprojectDepts(res.data.res);
+          console.log(res.data.res)
         })
         .catch((err) => {
           console.log(err);
@@ -176,7 +177,6 @@ function ProposalForm() {
         console.log(err);
       });
   };
-  const navigate = useNavigate();
   const [rfpData, setrfpData] = useState([]);
   const [pName, setpName] = useState("");
   const [dept, setdept] = useState("");

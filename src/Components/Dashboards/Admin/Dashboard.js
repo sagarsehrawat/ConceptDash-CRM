@@ -56,7 +56,7 @@ const Dashboard = () => {
         >
           <Container style={{ marginLeft: "2vw" }}>
             <Navbar.Brand
-              style={{ fontSize: "2rem" }}
+              style={{ fontSize: "2rem", cursor:'pointer' }}
               onClick={(e) => {
                 e.preventDefault();
                 setnav(0);
@@ -149,7 +149,7 @@ const Dashboard = () => {
               >
                 Expenses
               </Nav.Link>
-              <Nav.Link
+              {/* <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(11);
@@ -157,7 +157,7 @@ const Dashboard = () => {
                 style={{ fontSize: "1rem",marginLeft: "1.1vw" }}
               >
                 Todo
-              </Nav.Link>
+              </Nav.Link> */}
 
               <Nav.Link
                 onClick={() => {

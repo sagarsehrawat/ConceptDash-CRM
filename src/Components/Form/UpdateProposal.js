@@ -19,7 +19,6 @@ import Modal from "react-bootstrap/Modal";
 import Select from "react-select";
 
 function UpdateProposal(props) {
-  console.log(props.row);
   const [isSubmit, setIsSubmit] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -66,9 +65,6 @@ function UpdateProposal(props) {
     props.row.Winning_Bidder_ID
   );
   let teamData = team ? team.split(",") : "";
-  console.log(team);
-  let planTaker = planTakers ? planTakers.split(",") : "";
-  let bidder = bidders ? bidders.split(",") : "";
   let members = [];
   teamData &&
     teamData.map((e) => {
@@ -77,6 +73,8 @@ function UpdateProposal(props) {
         value: e,
       });
     });
+  let planTaker = planTakers ? planTakers.split(",") : "";
+  let bidder = bidders ? bidders.split(",") : "";
   let planTakersComapnies = [];
   planTaker &&
     planTaker.map((e) => {
@@ -262,14 +260,14 @@ function UpdateProposal(props) {
           questionDeadline: form.qDeadline,
           closingDeadline: form.cDeadline,
           resultDate: form.resultDate,
-          team: DisplayValue ? DisplayValue.toString() : "",
+          team: DisplayValue ? DisplayValue.toString() : team,
           designPrice: form.dPrice,
           provisionalItems: form.provisionalItems,
           contractAdminPrice: form.adminPrice,
           subConsultantPrice: form.consultantPrice,
           totalBid: form.totalBid,
-          planTakers: DisplayValue1 ? DisplayValue1.toString() : "",
-          bidders: DisplayValue1 ? DisplayValue1.toString() : "",
+          planTakers: DisplayValue1 ? DisplayValue1.toString() : planTakers,
+          bidders: DisplayValue1 ? DisplayValue1.toString() : bidders,
           bidderPrice: form.bidderPrice,
           winningPrice: form.winningPrice,
           winningBidderId: form.winningBidder,
