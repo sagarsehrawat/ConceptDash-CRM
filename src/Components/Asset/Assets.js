@@ -1,5 +1,4 @@
 import {React, useEffect, useState} from 'react'
-import { TableRow, TableHead, TableContainer, TableCell, TableBody, Table, Paper } from '@material-ui/core';
 import './Assets.css'
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -10,6 +9,7 @@ import axios from 'axios'
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import LoadingSpinner from '../Loader/Loader';
+import {HOST, GET_ASSETS, GET_SOFTWARES} from '../../Components/Constants/Constants'
 
 
 function Assets() {
@@ -25,7 +25,7 @@ function Assets() {
     useEffect(() => {
       setIsLoading(true);
         const call = async () => {
-          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/assets', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+          await axios.get(HOST + GET_ASSETS, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
             setassets(res.data.res)
             setIsLoading(false)
           }).catch((err) => {
@@ -37,7 +37,7 @@ function Assets() {
       useEffect(() => {
         setIsLoading(true);
         const call = async () => {
-          await axios.get('http://conceptdashcrm-env.eba-bjgvjq2h.ca-central-1.elasticbeanstalk.com/api/get/softwares', {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
+          await axios.get(HOST + GET_SOFTWARES, {headers:{'auth':'Rose '+ localStorage.getItem('auth')}}).then((res) => {
             setsoftware(res.data.res)
             setIsLoading(false)
           }).catch((err) => {

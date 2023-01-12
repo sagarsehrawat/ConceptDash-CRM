@@ -1,15 +1,6 @@
 import { React, useEffect, useState } from "react";
-import {
-  TableRow,
-  TableHead,
-  TableContainer,
-  TableCell,
-  TableBody,
-  Table,
-  Paper,
-} from "@material-ui/core";
 import axios from "axios";
-import './Table.css'
+import "./Table.css";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
 import {
@@ -27,7 +18,9 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import UpdateEmployeeForm from "../Form/UpdateEmployeeForm";
 import EmployeeForm from "../Form/EmployeeForm";
-
+import FullCalendar from "@fullcalendar/react"; // must go before plugins
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
 function EmployeeUpdate() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -36,6 +29,14 @@ function EmployeeUpdate() {
   const [showUpdate, setShowUpdate] = useState(false);
   const handleCloseUpdate = () => setShowUpdate(false);
   const handleShowUpdate = () => setShowUpdate(true);
+
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedevent, setSelectedevent] = useState(false);
+
+  const handleEventClick = (info) => {
+    setSelectedevent(true);
+    setSelectedEvent(info.event);
+  };
 
   const [employee, setemployee] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +60,10 @@ function EmployeeUpdate() {
     call();
   }, []);
   const [timesheet, settimesheet] = useState([]);
+  const [selected, setselected] = useState(false);
   const handleChange1 = async (e) => {
+    setselected(true);
+    setIsLoading(true);
     await axios
       .get(HOST + GET_TIMESHEET, {
         headers: {
@@ -68,12 +72,54 @@ function EmployeeUpdate() {
         },
       })
       .then(async (res) => {
-        settimesheet(res.data.res);
+        settimesheet(formatEvents(res.data.res));
         setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+  let d = new Date();
+  var offset = d.getTimezoneOffset();
+  var hours = Math.floor(Math.abs(offset) / 60);
+  var minutes = Math.abs(offset) % 60;
+  if (minutes === 0) {
+    minutes = "00";
+  }
+  var sign = offset > 0 ? "-" : "+";
+  let offset1 = `${sign}0${hours}:${minutes}`;
+  const formatEvents = (list) => {
+    let arr = [];
+    list.map((item) => {
+      let value1 = new Date(item.Date);
+      console.log(value1);
+      let startMonth, startDay;
+      if (value1.getMonth() + 1 < 10) {
+        startMonth = `0${value1.getMonth() + 1}`;
+      } else {
+        startMonth = value1.getMonth() + 1;
+      }
+      if (value1.getDate() < 10) {
+        startDay = `0${value1.getDate()}`;
+      } else {
+        startDay = value1.getDate();
+      }
+      let entryDate = `${value1.getFullYear()}-${startMonth}-${startDay}T`;
+      console.log(item.Comments);
+      arr.push({
+        title: `${item.Work}:${item.Comments}`,
+        start: `${entryDate.substring(0, 11)}${item.Start_Time.substring(
+          0,
+          5
+        )}${offset1}`,
+        end: `${entryDate.substring(0, 11)}${item.End_Time.substring(
+          0,
+          5
+        )}${offset1}`,
+      });
+    });
+
+    return arr;
   };
   useEffect(() => {
     const call = async () => {
@@ -110,6 +156,7 @@ function EmployeeUpdate() {
     setrowData(e);
     handleShowUpdate();
   };
+  const [title, settitle] = useState("");
   return (
     <div>
       <div className="container-fluid">
@@ -118,8 +165,8 @@ function EmployeeUpdate() {
             textAlign: "center",
             marginTop: "3rem",
             marginBottom: "1rem",
-            fontFamily: 'roboto',
-            fontWeight: 'bold'
+            fontFamily: "roboto",
+            fontWeight: "bold",
           }}
         >
           EMPLOYEE
@@ -273,135 +320,85 @@ function EmployeeUpdate() {
                 <LoadingSpinner />
               ) : (
                 <div className="div1">
-                    <table className="table">
-                      <thead>
-                        <tr className="heading">
-                          <th scope="col">Employee</th>
-                          <th scope="col">Birthday</th>
-                          <th scope="col">Anniversary</th>
-                          <th scope="col">Sports</th>
-                          <th scope="col">Activities</th>
-                          <th scope="col">Beverage</th>
-                          <th scope="col">Alcohol</th>
-                          <th scope="col">
-                            Travel Destination
-                          </th>
-                          <th scope="col">Spouse</th>
-                          <th scope="col">Children</th>
-                          <th scope="col">TV Show</th>
-                          <th scope="col">Movies</th>
-                          <th scope="col">Actor</th>
-                          <th scope="col">Dislikes</th>
-                        </tr>
-                      </thead>
-                      <tbody class="table-group-divider">
-                        {value.length > 0
-                          ? tableFilter.map((row) => {
-                              return (
-                                <tr>
-                                  <td>
-                                    {row.First_Name+ " " +row.Last_Name}
-                                  </td>
-                                  <td>
-                                    {row.Birthday
-                                      ? row.Birthday.substring(0, 10)
-                                      : ''}
-                                  </td>
-                                  <td>
-                                    {row.Anniversary
-                                      ? row.Anniversary.substring(0, 10)
-                                      : ""}
-                                  </td>
-                                  <td>
-                                    {row.Sports}
-                                  </td>
-                                  <td>
-                                    {row.Activities}
-                                  </td>
-                                  <td>
-                                    {row.Beverage}
-                                  </td>
-                                  <td>
-                                    {row.Alcohol}
-                                  </td>
-                                  <td>
-                                    {row.Travel_Destination}
-                                  </td>
-                                  <td>
-                                    {row.Spouse_Name}
-                                  </td>
-                                  <td>
-                                    {row.Children}
-                                  </td>
-                                  <td>
-                                    {row.TV_Show}
-                                  </td>
-                                  <td>
-                                    {row.Movies}
-                                  </td>
-                                  <td>
-                                    {row.Actor}
-                                  </td>
-                                  <td>
-                                    {row.Dislikes}
-                                  </td>
-                                </tr>
-                              );
-                            })
-                          : employee.map((row) => {
-                              return (
-                                <tr>
-                                  <td>
-                                    {row.First_Name+ " " +row.Last_Name}
-                                  </td>
-                                  <td>
-                                    {row.Birthday
-                                      ? row.Birthday.substring(0, 10)
-                                      : ''}
-                                  </td>
-                                  <td>
-                                    {row.Anniversary
-                                      ? row.Anniversary.substring(0, 10)
-                                      : ""}
-                                  </td>
-                                  <td>
-                                    {row.Sports}
-                                  </td>
-                                  <td>
-                                    {row.Activities}
-                                  </td>
-                                  <td>
-                                    {row.Beverage}
-                                  </td>
-                                  <td>
-                                    {row.Alcohol}
-                                  </td>
-                                  <td>
-                                    {row.Travel_Destination}
-                                  </td>
-                                  <td>
-                                    {row.Spouse_Name}
-                                  </td>
-                                  <td>
-                                    {row.Children}
-                                  </td>
-                                  <td>
-                                    {row.TV_Show}
-                                  </td>
-                                  <td>
-                                    {row.Movies}
-                                  </td>
-                                  <td>
-                                    {row.Actor}
-                                  </td>
-                                  <td>
-                                    {row.Dislikes}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                      </tbody>
-                    </table>
+                  <table className="table">
+                    <thead>
+                      <tr className="heading">
+                        <th scope="col">Employee</th>
+                        <th scope="col">Birthday</th>
+                        <th scope="col">Anniversary</th>
+                        <th scope="col">Sports</th>
+                        <th scope="col">Activities</th>
+                        <th scope="col">Beverage</th>
+                        <th scope="col">Alcohol</th>
+                        <th scope="col">Travel Destination</th>
+                        <th scope="col">Spouse</th>
+                        <th scope="col">Children</th>
+                        <th scope="col">TV Show</th>
+                        <th scope="col">Movies</th>
+                        <th scope="col">Actor</th>
+                        <th scope="col">Dislikes</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                      {value.length > 0
+                        ? tableFilter.map((row) => {
+                            return (
+                              <tr>
+                                <td>{row.First_Name + " " + row.Last_Name}</td>
+                                <td>
+                                  {row.Birthday
+                                    ? row.Birthday.substring(0, 10)
+                                    : ""}
+                                </td>
+                                <td>
+                                  {row.Anniversary
+                                    ? row.Anniversary.substring(0, 10)
+                                    : ""}
+                                </td>
+                                <td>{row.Sports}</td>
+                                <td>{row.Activities}</td>
+                                <td>{row.Beverage}</td>
+                                <td>{row.Alcohol}</td>
+                                <td>{row.Travel_Destination}</td>
+                                <td>{row.Spouse_Name}</td>
+                                <td>{row.Children}</td>
+                                <td>{row.TV_Show}</td>
+                                <td>{row.Movies}</td>
+                                <td>{row.Actor}</td>
+                                <td>{row.Dislikes}</td>
+                              </tr>
+                            );
+                          })
+                        : employee.map((row) => {
+                            return (
+                              <tr>
+                                <td>{row.First_Name + " " + row.Last_Name}</td>
+                                <td>
+                                  {row.Birthday
+                                    ? row.Birthday.substring(0, 10)
+                                    : ""}
+                                </td>
+                                <td>
+                                  {row.Anniversary
+                                    ? row.Anniversary.substring(0, 10)
+                                    : ""}
+                                </td>
+                                <td>{row.Sports}</td>
+                                <td>{row.Activities}</td>
+                                <td>{row.Beverage}</td>
+                                <td>{row.Alcohol}</td>
+                                <td>{row.Travel_Destination}</td>
+                                <td>{row.Spouse_Name}</td>
+                                <td>{row.Children}</td>
+                                <td>{row.TV_Show}</td>
+                                <td>{row.Movies}</td>
+                                <td>{row.Actor}</td>
+                                <td>{row.Dislikes}</td>
+                              </tr>
+                            );
+                          })}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </TabPanel>
@@ -410,69 +407,45 @@ function EmployeeUpdate() {
                 <LoadingSpinner />
               ) : (
                 <div className="div1">
-                    <table className="table">
-                      <thead>
-                        <tr className="heading">
-                          <th scope="col">Employee</th>
-                          <th scope="col">Proficiency</th>
-                          <th scope="col">Expertise</th>
-                          <th scope="col">Interests</th>
-                          <th scope="col">Cocurricular</th>
-                          <th scope="col">Trainings</th>
-                        </tr>
-                      </thead>
-                      <tbody class="table-group-divider">
-                        {value.length > 0
-                          ? tableFilter.map((row) => {
-                              return (
-                                <tr>
-                                  <td>
-                                    {row.First_Name+ " " +row.Last_Name}
-                                  </td>
-                                  <td>
-                                    {row.Proficiency}
-                                  </td>
-                                  <td>
-                                    {row.Expertise}
-                                  </td>
-                                  <td>
-                                    {row.Interests}
-                                  </td>
-                                  <td>
-                                    {row.Cocurricular}
-                                  </td>
-                                  <td>
-                                    {row.Trainings}
-                                  </td>
-                                </tr>
-                              );
-                            })
-                          : employee.map((row) => {
-                              return (
-                                <tr>
-                                  <td>
-                                    {row.First_Name+ " " +row.Last_Name}
-                                  </td>
-                                  <td>
-                                    {row.Proficiency}
-                                  </td>
-                                  <td>
-                                    {row.Expertise}
-                                  </td>
-                                  <td>
-                                    {row.Interests}
-                                  </td>
-                                  <td>
-                                    {row.Cocurricular}
-                                  </td>
-                                  <td>
-                                    {row.Trainings}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                      </tbody>
-                    </table>
+                  <table className="table">
+                    <thead>
+                      <tr className="heading">
+                        <th scope="col">Employee</th>
+                        <th scope="col">Proficiency</th>
+                        <th scope="col">Expertise</th>
+                        <th scope="col">Interests</th>
+                        <th scope="col">Cocurricular</th>
+                        <th scope="col">Trainings</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                      {value.length > 0
+                        ? tableFilter.map((row) => {
+                            return (
+                              <tr>
+                                <td>{row.First_Name + " " + row.Last_Name}</td>
+                                <td>{row.Proficiency}</td>
+                                <td>{row.Expertise}</td>
+                                <td>{row.Interests}</td>
+                                <td>{row.Cocurricular}</td>
+                                <td>{row.Trainings}</td>
+                              </tr>
+                            );
+                          })
+                        : employee.map((row) => {
+                            return (
+                              <tr>
+                                <td>{row.First_Name + " " + row.Last_Name}</td>
+                                <td>{row.Proficiency}</td>
+                                <td>{row.Expertise}</td>
+                                <td>{row.Interests}</td>
+                                <td>{row.Cocurricular}</td>
+                                <td>{row.Trainings}</td>
+                              </tr>
+                            );
+                          })}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </TabPanel>
@@ -481,57 +454,39 @@ function EmployeeUpdate() {
                 <LoadingSpinner />
               ) : (
                 <div className="div1">
-                    <table className="table">
-                      <thead>
-                        <tr className="heading">
-                          <th scope="col">Employee</th>
-                          <th scope="col">Strengths</th>
-                          <th scope="col">Weakness</th>
-                          <th scope="col">
-                            Social Active Index
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody class="table-group-divider">
-                        {value.length > 0
-                          ? tableFilter.map((row) => {
-                              return (
-                                <tr>
-                                  <td>
-                                    {row.First_Name+" "+row.Last_Name}
-                                  </td>
-                                  <td>
-                                    {row.Strengths}
-                                  </td>
-                                  <td>
-                                    {row.Weakness}
-                                  </td>
-                                  <td>
-                                    {row.Social_Active_Index}
-                                  </td>
-                                </tr>
-                              );
-                            })
-                          : employee.map((row) => {
-                              return (
-                                <tr>
-                                  <td>
-                                    {row.Employee_ID}
-                                  </td>
-                                  <td>
-                                    {row.Strengths}
-                                  </td>
-                                  <td>
-                                    {row.Weakness}
-                                  </td>
-                                  <td>
-                                    {row.Social_Active_Index}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                      </tbody>
-                    </table>
+                  <table className="table">
+                    <thead>
+                      <tr className="heading">
+                        <th scope="col">Employee</th>
+                        <th scope="col">Strengths</th>
+                        <th scope="col">Weakness</th>
+                        <th scope="col">Social Active Index</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                      {value.length > 0
+                        ? tableFilter.map((row) => {
+                            return (
+                              <tr>
+                                <td>{row.First_Name + " " + row.Last_Name}</td>
+                                <td>{row.Strengths}</td>
+                                <td>{row.Weakness}</td>
+                                <td>{row.Social_Active_Index}</td>
+                              </tr>
+                            );
+                          })
+                        : employee.map((row) => {
+                            return (
+                              <tr>
+                                <td>{row.Employee_ID}</td>
+                                <td>{row.Strengths}</td>
+                                <td>{row.Weakness}</td>
+                                <td>{row.Social_Active_Index}</td>
+                              </tr>
+                            );
+                          })}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </TabPanel>
@@ -557,78 +512,44 @@ function EmployeeUpdate() {
               {isLoading ? (
                 <LoadingSpinner />
               ) : (
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Date</TableCell>
-                        <TableCell align="right">Start Time</TableCell>
-                        <TableCell align="right">End Time</TableCell>
-                        <TableCell align="right">Project Name</TableCell>
-                        <TableCell align="right">Comments</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {value.length > 0
-                        ? tableFilter.map((row) => {
-                            return (
-                              <TableRow
-                                key={row.name}
-                                sx={{
-                                  "&:last-child td, &:last-child th": {
-                                    border: 0,
-                                  },
-                                }}
-                              >
-                                <TableCell component="th" scope="row">
-                                  {row.Date}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Start_Time}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.End_Time}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Project_Name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Comments}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })
-                        : timesheet.map((row) => {
-                            return (
-                              <TableRow
-                                key={row.name}
-                                sx={{
-                                  "&:last-child td, &:last-child th": {
-                                    border: 0,
-                                  },
-                                }}
-                              >
-                                <TableCell component="th" scope="row">
-                                  {row.Date}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Start_Time}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.End_Time}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Project_Name}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Comments}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                <div>
+                  {selected ? (
+                    <div
+                      className="container"
+                      style={{
+                        padding: "1rem",
+                        marginTop: "1rem",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                        {selectedEvent && selectedevent && (
+                          <div style={{textAlign:'center', border:'2px solid black', marginLeft:'40%', paddingBottom:'.5rem', width:'20rem'}}>
+                            <p><b>{selectedEvent.title}</b></p>
+                            <p>
+                              Start Time: {selectedEvent.start.toLocaleString()}
+                            </p>
+                            <p>
+                              End Time: {selectedEvent.end.toLocaleString()}
+                            </p>
+                            <Button onClick={()=>setSelectedevent(false)}>Close</Button>
+                          </div>
+                        )}
+                      <div style={{ width: "80rem" }}>
+                        <FullCalendar
+                          plugins={[dayGridPlugin, interactionPlugin]}
+                          initialView="dayGridWeek"
+                          events={timesheet}
+                          headerToolbar={{
+                            left: "title",
+                          }}
+                          eventClick={handleEventClick}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
               )}
             </TabPanel>
           </TabContext>
@@ -658,6 +579,18 @@ function EmployeeUpdate() {
           <Modal.Title>Update Employee</Modal.Title>
         </Modal.Header>
         <Modal.Body>{<UpdateEmployeeForm row={rowData} />}</Modal.Body>
+      </Modal>
+      <Modal
+        show={showUpdate}
+        onHide={handleCloseUpdate}
+        backdrop="static"
+        size="xl"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Update Employee</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Hello There</Modal.Body>
       </Modal>
     </div>
   );

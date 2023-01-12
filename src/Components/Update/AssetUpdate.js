@@ -50,6 +50,7 @@ function AssetUpdate() {
         })
         .then((res) => {
           setsoftware(res.data.res);
+          console.log(res.data.res);
           setdataSourceSoft(res.data.res);
           setIsLoading(false);
         })
@@ -133,7 +134,6 @@ function AssetUpdate() {
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                        <TableCell>Edit</TableCell>
                         <TableCell align="right">Asset ID</TableCell>
                         <TableCell align="right">Asset Category</TableCell>
                         <TableCell align="right">Hardware Details</TableCell>
@@ -157,7 +157,7 @@ function AssetUpdate() {
                                   },
                                 }}
                               >
-                                <TableCell align="right">
+                                {/* <TableCell align="right">
                                   <Button
                                     onClick={(e) => {
                                       navigate("/updateProjectForm", {
@@ -170,7 +170,7 @@ function AssetUpdate() {
                                   >
                                     Edit
                                   </Button>
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell component="th" scope="row">
                                   {row.Asset_ID}
                                 </TableCell>
@@ -209,7 +209,7 @@ function AssetUpdate() {
                                   },
                                 }}
                               >
-                                <TableCell align="right">
+                                {/* <TableCell align="right">
                                   <Button
                                     onClick={(e) => {
                                       navigate("/updateProjectForm", {
@@ -222,7 +222,7 @@ function AssetUpdate() {
                                   >
                                     Edit
                                   </Button>
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell component="th" scope="row">
                                   {row.Asset_ID}
                                 </TableCell>
@@ -286,7 +286,7 @@ function AssetUpdate() {
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                        <TableCell align="left">Edit</TableCell>
+                        {/* <TableCell align="left">Edit</TableCell> */}
                         <TableCell align="left">Software ID</TableCell>
                         <TableCell align="right">Software</TableCell>
                         <TableCell align="right">Price</TableCell>
@@ -310,7 +310,7 @@ function AssetUpdate() {
                                   },
                                 }}
                               >
-                                <TableCell align="left">
+                                {/* <TableCell align="left">
                                   <Button
                                     onClick={(e) => {
                                       navigate("/updateProjectForm", {
@@ -323,7 +323,7 @@ function AssetUpdate() {
                                   >
                                     Edit
                                   </Button>
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell component="th" scope="row">
                                   {row.Software_ID}
                                 </TableCell>
@@ -360,7 +360,7 @@ function AssetUpdate() {
                                   },
                                 }}
                               >
-                                <TableCell align="left">
+                                {/* <TableCell align="left">
                                   <Button
                                     onClick={(e) => {
                                       navigate("/updateProjectForm", {
@@ -373,7 +373,7 @@ function AssetUpdate() {
                                   >
                                     Edit
                                   </Button>
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell component="th" scope="row">
                                   {row.Software_ID}
                                 </TableCell>

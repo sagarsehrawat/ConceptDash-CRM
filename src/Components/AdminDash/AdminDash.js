@@ -13,18 +13,20 @@ import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import TestDemo from "../../Components/Calendar";
+import TestDemo from "../../Components/Calendar"
+import { Form } from "react-bootstrap";
 import axios from "axios";
 import {
-  GET_ALL_EMPLOYEES,
+  GET_EMPLOYEENAMES,
+  GET_CHART_MEET,
   HOST,
-  GET_TASKS,
   COUNTS,
   RFP_ANALYSIS,
   PROPOSAL_STATUS_COUNTS,
   BUDGET_AMOUNT,
+  GET_WORK_HOURS,
 } from "../Constants/Constants";
-import AddTask from '../Form/AddTask'
+import AddTask from "../Form/AddTask";
 import LoadingSpinner from "../Loader/Loader";
 function AdminDash() {
   const [show, setShow] = useState(false);
@@ -48,6 +50,8 @@ function AdminDash() {
 
   const [wonProposals, setwonProposals] = useState(0);
   const [lostProposals, setlostProposals] = useState(0);
+
+  const [employees, setemployees] = useState([])
 
   const currentYear = new Date().getFullYear();
   const years = [
@@ -140,11 +144,55 @@ function AdminDash() {
         .catch((err) => {
           console.log(err);
         });
+      
+        await axios
+        .get(HOST + GET_EMPLOYEENAMES, {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+          },
+        })
+        .then((res) => {
+          setemployees(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       setIsLoading(false);
     };
     call();
   }, []);
-
+const [meetHours, setmeetHours] = useState([])
+const [workHours, setworkHours] = useState(0)
+const [selected, setselected] = useState(false)
+  const handleChange1 = async (e) => {
+    setselected(true);
+    await axios
+        .get(HOST + GET_CHART_MEET, {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            id: e.target.value
+          },
+        })
+        .then((res) => {
+          setmeetHours(res.data.res)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      await axios
+        .get(HOST + GET_WORK_HOURS, {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            id: e.target.value
+          },
+        })
+        .then((res) => {
+          setworkHours(res.data.res)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  };
 
   const dataCounts = {
     labels: ["Budgets", "RFPs", "Proposals", "Projects"],
@@ -162,6 +210,17 @@ function AdminDash() {
     datasets: [
       {
         data: [goRFP, nogoRFP, reviewRFP],
+        backgroundColor: ["#0674C4", "#DDDDDD", "#64C2A6"],
+        hoverBackgroundColor: ["#74BBFB", "#74BBFB", "#74BBFB"],
+      },
+    ],
+  };
+
+  const meetHoursChart = {
+    labels: [meetHours[0]?meetHours[0].Work:'', meetHours[1]?meetHours[1].Work:'', meetHours[2]?meetHours[2].Work:''],
+    datasets: [
+      {
+        data: [(meetHours[0]?meetHours[0].Time_Worked:0)/60, (meetHours[1]?meetHours[1].Time_Worked:0)/60, (meetHours[2]?meetHours[2].Time_Worked:0)/60],
         backgroundColor: ["#0674C4", "#DDDDDD", "#64C2A6"],
         hoverBackgroundColor: ["#74BBFB", "#74BBFB", "#74BBFB"],
       },
@@ -355,7 +414,11 @@ function AdminDash() {
               >
                 <div className="ms-2 me-auto">
                   <div className="fw-bold">
-                    <Button style={{backgroundColor: 'rgba(38,141,141,1)'}} onClick={handleShow} variant="primary">
+                    <Button
+                      style={{ backgroundColor: "rgba(38,141,141,1)" }}
+                      onClick={handleShow}
+                      variant="primary"
+                    >
                       Click Here
                     </Button>
                   </div>
@@ -385,7 +448,11 @@ function AdminDash() {
               >
                 <div className="ms-2 me-auto">
                   <div className="fw-bold">
-                    <Button style={{backgroundColor: 'rgba(38,141,141,1)'}} onClick={handleShowAT} variant="primary">
+                    <Button
+                      style={{ backgroundColor: "rgba(38,141,141,1)" }}
+                      onClick={handleShowAT}
+                      variant="primary"
+                    >
                       Assign
                     </Button>
                   </div>
@@ -393,7 +460,50 @@ function AdminDash() {
               </ListGroup.Item>
             </ListGroup>
           </div>
-          <div className="row d-flex justify-content-around" style={{'marginTop':'2rem'}}>
+          <div
+          className="container"
+          style={{
+            textAlign: "center",
+            marginTop: "2rem",
+            marginBottom: "2rem",
+            border: "1px solid grey",
+          }}
+        >
+          <h3>Work and Meet Hours</h3>
+          <Form>
+            <Form.Group>
+              <Form.Select
+                style={{ marginBottom: "1rem" }}
+                onChange={handleChange1}
+              >
+                <option>Select Employee</option>
+                {employees.length !== 0 ? (
+                  employees.map((options) => (
+                    <option value={options.Employee_ID}>
+                      {options.Full_Name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">None</option>
+                )}
+              </Form.Select>
+            </Form.Group>
+          </Form>
+          {selected && meetHours?
+          <div
+          className="row d-flex justify-content-around"
+        >
+          <p style={{textAlign:'center', fontWeight:'bold'}}>Working Hours: {workHours[0]?(workHours[0].Time_Worked/60):''}</p>
+          <Card style={{ width: "20rem", marginBottom:'1rem' }}>
+          <h3 style={{ textAlign: "center" }}>Meet Hours</h3>
+          <Pie data={meetHoursChart} />
+        </Card>
+        </div>:''}
+        </div>
+          <div
+            className="row d-flex justify-content-around"
+            style={{ marginTop: "2rem" }}
+          >
             <Card style={{ width: "20rem" }}>
               <h3 style={{ textAlign: "center" }}>RFP Analysis</h3>
               <Pie data={dataForRFP} />
@@ -453,11 +563,11 @@ function AdminDash() {
             backgroundColor: "white",
           }}
         >
-          <Form.Select>
+          <Form.Select onChange={handleMeetHours}>
             {employees.length !== 0 ? (
               employees.map((options) => (
                 <option value={options.Employee_ID} key={options.Employee_ID}>
-                  {options.First_Name + " " + options.Last_Name}
+                  {options.Full_Name}
                 </option>
               ))
             ) : (

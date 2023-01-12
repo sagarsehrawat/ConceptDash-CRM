@@ -38,6 +38,8 @@ export const GET_PROJECT_NAMES= '/api/get/projectNames'
 export const GET_TASKS_BY_ID= '/api/get/tasksById'
 export const GET_PROJECT_TASKS_BY_ID= '/api/get/projectTasks/id'
 export const GET_EMPLOYEE_BY_ID= '/api/get/list/employeeById'
+export const GET_CHART_MEET = '/api/get/chart/meet'
+export const GET_WORK_HOURS = '/api/get/chart/work'
 
 
 
