@@ -12,7 +12,7 @@ import {
   GET_PROJECT_CATEGORIES,
   ADD_BUDGET,
 } from "../Constants/Constants";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 
 function BudgetsForm() {

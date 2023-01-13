@@ -24,7 +24,6 @@ function CompanyUpdate() {
 
   const [companies, setcompanies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [dataSource, setdataSource] = useState([]);
   let d = 0;
   const [pages, setpages] = useState(1);
   const [currPage, setcurrPage] = useState(1);
@@ -41,7 +40,6 @@ function CompanyUpdate() {
         })
         .then((res) => {
           setcompanies(res.data.res);
-          setdataSource(res.data.res);
         })
         .catch((err) => {
           console.log(err);

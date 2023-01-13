@@ -7,7 +7,7 @@ import {
   SEARCH_BUDGETS,
   GET_DEPARTMENTS,
   GET_PROJECT_CATEGORIES,
-  FILTER_BUDGETS
+  FILTER_BUDGETS,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
@@ -33,7 +33,7 @@ function BudgetUpdate() {
   const [pages, setpages] = useState(1);
   const [currPage, setcurrPage] = useState(1);
   const [depts, setdepts] = useState([]);
-  const [projectDepts, setprojectDepts] = useState([])
+  const [projectDepts, setprojectDepts] = useState([]);
   useEffect(() => {
     setIsLoading(true);
     const call = async () => {
@@ -54,7 +54,10 @@ function BudgetUpdate() {
 
       await axios
         .get(HOST + GET_PAGES_BUDGETS, {
-          headers: { auth: "Rose " + localStorage.getItem("auth"), limit: limit },
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            limit: limit,
+          },
         })
         .then((res) => {
           setpages(res.data.res);
@@ -136,7 +139,7 @@ function BudgetUpdate() {
           auth: "Rose " + localStorage.getItem("auth"),
           limit: limit,
           offset: 0,
-          filter: JSON.stringify(returnData)
+          filter: JSON.stringify(returnData),
         },
       })
       .then((res) => {
@@ -199,23 +202,25 @@ function BudgetUpdate() {
     getValue1(Array.isArray(e) ? e.map((x) => x.value) : []);
   };
   let returnData = {
-    'dept':DisplayValue,
-    'cat':DisplayValue1
-  }
-  let deptvalue = []
-  returnData['dept'] && returnData['dept'].map((e)=>{
-    deptvalue.push({
-      label:e,
-      value:e
-    })
-  })
-  let catvalue = []
-  returnData['cat'] && returnData['cat'].map((e)=>{
-    catvalue.push({
-      label:e,
-      value:e
-    })
-  })
+    dept: DisplayValue,
+    cat: DisplayValue1,
+  };
+  let deptvalue = [];
+  returnData["dept"] &&
+    returnData["dept"].map((e) => {
+      deptvalue.push({
+        label: e,
+        value: e,
+      });
+    });
+  let catvalue = [];
+  returnData["cat"] &&
+    returnData["cat"].map((e) => {
+      catvalue.push({
+        label: e,
+        value: e,
+      });
+    });
   return (
     <div>
       {isLoading ? (
@@ -255,11 +260,48 @@ function BudgetUpdate() {
               Search
             </Button>
           </div>
-          <br/>
-          <div style={{width:'20rem', display:'inline-block'}} className="container-sm"></div>
-                <div style={{ display:'flex',flexDirection:'row'}}><Select placeholder='Select departments' defaultValue={deptvalue} onChange={doChange} isMulti options={filterDepts}>Select Departments</Select>&nbsp;&nbsp;
-                <Select placeholder='Select Categories' defaultValue={catvalue} onChange={doChange1} isMulti options={filterCategories}></Select>&nbsp;&nbsp;{(deptvalue.length==0 && catvalue.length==0)?<Button style={{ backgroundColor: "rgba(38,141,141,1)" }} disabled onClick={handleFilter}>Filter</Button>:<Button style={{ backgroundColor: "rgba(38,141,141,1)" }} onClick={handleFilter}>Filter</Button>}</div>
-            
+          <br />
+          <div
+            style={{ width: "20rem", display: "inline-block" }}
+            className="container-sm"
+          ></div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <Select
+              placeholder="Select departments"
+              defaultValue={deptvalue}
+              onChange={doChange}
+              isMulti
+              options={filterDepts}
+            >
+              Select Departments
+            </Select>
+            &nbsp;&nbsp;
+            <Select
+              placeholder="Select Categories"
+              defaultValue={catvalue}
+              onChange={doChange1}
+              isMulti
+              options={filterCategories}
+            ></Select>
+            &nbsp;&nbsp;
+            {deptvalue.length == 0 && catvalue.length == 0 ? (
+              <Button
+                style={{ backgroundColor: "rgba(38,141,141,1)" }}
+                disabled
+                onClick={handleFilter}
+              >
+                Filter
+              </Button>
+            ) : (
+              <Button
+                style={{ backgroundColor: "rgba(38,141,141,1)" }}
+                onClick={handleFilter}
+              >
+                Filter
+              </Button>
+            )}
+          </div>
+
           <br />
           <div className="container-fluid">
             <table className="table">
@@ -307,7 +349,7 @@ function BudgetUpdate() {
           </div>
           <div
             className="row justify-content-evenly"
-            style={{ marginTop: "1rem", marginBottom: '1rem' }}
+            style={{ marginTop: "1rem", marginBottom: "1rem" }}
           >
             <div style={{ textAlign: "center" }} className="col-1">
               {currPage === 1 ? (

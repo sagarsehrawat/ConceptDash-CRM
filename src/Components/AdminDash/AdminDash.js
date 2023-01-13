@@ -77,6 +77,7 @@ function AdminDash() {
           },
         })
         .then((res) => {
+          console.log(res.data.res)
           for (let i = 0; i < res.data.res.length; i++) {
             if (res.data.res[i].Budget_Year === years[0]) {
               setbudget1(res.data.res[i].Total_Budget);

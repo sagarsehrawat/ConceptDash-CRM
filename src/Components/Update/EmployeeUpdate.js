@@ -156,7 +156,6 @@ function EmployeeUpdate() {
     setrowData(e);
     handleShowUpdate();
   };
-  const [title, settitle] = useState("");
   return (
     <div>
       <div className="container-fluid">
@@ -252,10 +251,10 @@ function EmployeeUpdate() {
                                 <td>{row.Salutation}</td>
                                 <td>{row.First_Name}</td>
                                 <td>{row.Last_Name}</td>
-                                <td>{row.Department}</td>
+                                <td>{row.Dept}</td>
                                 <td>{row.Email_Work}</td>
                                 <td>{row.Email_Personal}</td>
-                                <td>{row.Job_Title_ID}</td>
+                                <td>{row.Title?row.Title:''}</td>
                                 <td>
                                   {row.Joining_Date
                                     ? row.Joining_Date.substring(0, 10)
@@ -292,10 +291,10 @@ function EmployeeUpdate() {
                                 <td>{row.Salutation}</td>
                                 <td>{row.First_Name}</td>
                                 <td>{row.Last_Name}</td>
-                                <td>{row.Department}</td>
+                                <td>{row.Dept}</td>
                                 <td>{row.Email_Work}</td>
                                 <td>{row.Email_Personal}</td>
-                                <td>{row.Job_Title_ID}</td>
+                                <td>{row.Title?row.Title:''}</td>
                                 <td>
                                   {row.Joining_Date
                                     ? row.Joining_Date.substring(0, 10)
@@ -478,7 +477,7 @@ function EmployeeUpdate() {
                         : employee.map((row) => {
                             return (
                               <tr>
-                                <td>{row.Employee_ID}</td>
+                                <td>{row.First_Name + " " + row.Last_Name}</td>
                                 <td>{row.Strengths}</td>
                                 <td>{row.Weakness}</td>
                                 <td>{row.Social_Active_Index}</td>
@@ -580,18 +579,7 @@ function EmployeeUpdate() {
         </Modal.Header>
         <Modal.Body>{<UpdateEmployeeForm row={rowData} />}</Modal.Body>
       </Modal>
-      <Modal
-        show={showUpdate}
-        onHide={handleCloseUpdate}
-        backdrop="static"
-        size="xl"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Update Employee</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Hello There</Modal.Body>
-      </Modal>
+      
     </div>
   );
 }

@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import { HOST, ADD_COMPANY, GET_CITIES } from "../Constants/Constants";
 import Row from "react-bootstrap/Row";
-import { useNavigate } from "react-router-dom";
+import Modal from "react-bootstrap/Modal";
 
 function CompanyForm() {
   const [cities, setcities] = useState([])
@@ -29,7 +29,6 @@ function CompanyForm() {
     call();
   }, []);
   const [isSubmit, setIsSubmit] = useState(false);
-  const navigate = useNavigate();
   const [form, setform] = useState({
     company: "",
     category: "",
@@ -70,11 +69,17 @@ function CompanyForm() {
       )
       .then((res) => {
         console.log(res);
+        if (res.data.success) {
+          handleShow();
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
     <div>
       <Form className="form-main">
@@ -89,7 +94,6 @@ function CompanyForm() {
             />
           </Form.Group>
           <Form.Group as={Col}>
-            {/* <Form.Control name='company' type="text" placeholder="Company*" onChange={handleChange} /> */}
             <Form.Select
               name="category"
               type="text"
@@ -200,6 +204,12 @@ function CompanyForm() {
           Submit
         </Button>
       </Form>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Form Submitted</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Employee added Successfully</Modal.Body>
+      </Modal>
     </div>
   );
 }

@@ -14,7 +14,7 @@ import {
   GET_COMPANY_NAMES,
   ADD_PROPOSAL,
   GET_RFP_ID,
-  GET_PROJECT_CATEGORIES
+  GET_PROJECT_CATEGORIES,
 } from "../Constants/Constants";
 import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
@@ -27,26 +27,26 @@ function ProposalForm() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [form, setform] = useState({
-    'dept': "",
-    'projectCat': "",
-    'status': "",
-    'managerName': "",
-    'projectName': "",
-    'qDeadline': "",
-    'cDeadline': "",
-    'resultDate': "",
-    'city': "",
-    'team': "",
-    'dPrice': "",
-    'provisionalItems': "",
-    'adminPrice': "",
-    'consultantPrice': "",
-    'totalBid': "",
-    'planTakers': "",
-    'bidders': "",
-    'bidderPrice': "",
-    'winningPrice': "",
-    'winningBidder': "",
+    dept: "",
+    projectCat: "",
+    status: "",
+    managerName: "",
+    projectName: "",
+    qDeadline: "",
+    cDeadline: "",
+    resultDate: "",
+    city: "",
+    team: "",
+    dPrice: "",
+    provisionalItems: "",
+    adminPrice: "",
+    consultantPrice: "",
+    totalBid: "",
+    planTakers: "",
+    bidders: "",
+    bidderPrice: "",
+    winningPrice: "",
+    winningBidder: "",
   });
   const [radio, setradio] = useState(false);
   const handleRadio = (e) => {
@@ -66,7 +66,7 @@ function ProposalForm() {
   const [cities, setcities] = useState([]);
   const [depts, setdepts] = useState([]);
   const [rfps, setrfps] = useState([]);
-  const [projectDepts, setprojectDepts] = useState([])
+  const [projectDepts, setprojectDepts] = useState([]);
   useEffect(() => {
     const call = async () => {
       await axios
@@ -129,7 +129,7 @@ function ProposalForm() {
         })
         .then((res) => {
           setprojectDepts(res.data.res);
-          console.log(res.data.res)
+          console.log(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -144,26 +144,26 @@ function ProposalForm() {
       .post(
         HOST + ADD_PROPOSAL,
         {
-          'departmentId': radio ? deptid : form.dept,
-          'projectCatId': radio ? catId : form.projectCat,
-          'status': form.status,
-          'projectManagerId': radio ? managerId : form.managerName,
-          'projectName': radio ? pName : form.projectName,
-          'questionDeadline': form.qDeadline,
-          'closingDeadline': form.cDeadline,
-          'resultDate': form.resultDate,
-          'team': DisplayValue ? DisplayValue.toString() : "",
-          'designPrice': form.dPrice,
-          'provisionalItems': form.provisionalItems,
-          'contractAdminPrice': form.adminPrice,
-          'subConsultantPrice': form.consultantPrice,
-          'totalBid': form.totalBid,
-          'planTakers': DisplayValue1 ? DisplayValue1.toString() : "",
-          'bidders': DisplayValue1 ? DisplayValue1.toString() : "",
-          'bidderPrice': form.bidderPrice,
-          'winningPrice': form.winningPrice,
-          'winningBidderId': form.winningBidder,
-          'cityId': radio ? cityid : form.city,
+          departmentId: radio ? deptid : form.dept,
+          projectCatId: radio ? catId : form.projectCat,
+          status: form.status,
+          projectManagerId: radio ? managerId : form.managerName,
+          projectName: radio ? pName : form.projectName,
+          questionDeadline: form.qDeadline,
+          closingDeadline: form.cDeadline,
+          resultDate: form.resultDate,
+          team: DisplayValue ? DisplayValue.toString() : "",
+          designPrice: form.dPrice,
+          provisionalItems: form.provisionalItems,
+          contractAdminPrice: form.adminPrice,
+          subConsultantPrice: form.consultantPrice,
+          totalBid: form.totalBid,
+          planTakers: DisplayValue1 ? DisplayValue1.toString() : "",
+          bidders: DisplayValue1 ? DisplayValue1.toString() : "",
+          bidderPrice: form.bidderPrice,
+          winningPrice: form.winningPrice,
+          winningBidderId: form.winningBidder,
+          cityId: radio ? cityid : form.city,
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
@@ -191,8 +191,8 @@ function ProposalForm() {
     await axios
       .get(HOST + GET_RFP_ID, {
         headers: {
-          'auth': "Rose " + localStorage.getItem("auth"),
-          'id': e.target.value,
+          auth: "Rose " + localStorage.getItem("auth"),
+          id: e.target.value,
         },
       })
       .then(async (res) => {
@@ -259,13 +259,17 @@ function ProposalForm() {
                 </Form.Select>
               </Form.Group>
               <Form.Group as={Col}>
-        <Form.Select onChange={handleChange} name='projectCat'>
+                <Form.Select onChange={handleChange} name="projectCat">
                   <option value="">Select Project Category</option>
-                  {projectDepts.length>0?projectDepts.map((e)=>(
-                    <option value={e.Project_Cat_ID}>{e.Project_Category}</option>
-                  )):''}
-        </Form.Select>
-        </Form.Group>
+                  {projectDepts.length > 0
+                    ? projectDepts.map((e) => (
+                        <option value={e.Project_Cat_ID}>
+                          {e.Project_Category}
+                        </option>
+                      ))
+                    : ""}
+                </Form.Select>
+              </Form.Group>
             </Row>
 
             <Row className="mb-4">
@@ -297,7 +301,7 @@ function ProposalForm() {
             </Row>
             <Row className="mb-4">
               <Form.Group as={Col}>
-              <Form.Label>Project Name</Form.Label>
+                <Form.Label>Project Name</Form.Label>
                 <Form.Control
                   name="projectName"
                   type="text"
@@ -358,7 +362,6 @@ function ProposalForm() {
               </Form.Group>
             </Row>
             <Row className="mb-4">
-              
               <Form.Group as={Col}>
                 <Form.Label>Design Price</Form.Label>
                 <Form.Control
@@ -429,10 +432,8 @@ function ProposalForm() {
                   ))}
                 </Form.Select>
               </Form.Group>
-              
             </Row>
             <Row className="mb-4">
-              
               <Form.Group as={Col}>
                 <Form.Label>Winning Price</Form.Label>
                 <Form.Control
@@ -664,7 +665,6 @@ function ProposalForm() {
                   </Form.Group>
                 </Row>
                 <Row className="mb-4">
-                  
                   <Form.Group as={Col}>
                     <Form.Control
                       name="winningPrice"

@@ -15,7 +15,7 @@ function UpdateCompany(props) {
       await axios
         .get(HOST + GET_CITIES, {
           headers: {
-            auth: "Rose " + localStorage.getItem("auth")
+            auth: "Rose " + localStorage.getItem("auth"),
           },
         })
         .then((res) => {
@@ -32,9 +32,8 @@ function UpdateCompany(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const companyName = props.row.Name
-  const [cities, setcities] = useState([])
+  let displayCity = props.row.City;
+  const [cities, setcities] = useState([]);
   const [cname, setcname] = useState(props.row.Name);
   const [category, setcategory] = useState(props.row.Category);
   const [address, setaddress] = useState(props.row.Address);
@@ -121,7 +120,6 @@ function UpdateCompany(props) {
         console.log(err);
       });
   };
-  const navigate = useNavigate();
   return (
     <div>
       <Form className="form-main">
@@ -168,21 +166,17 @@ function UpdateCompany(props) {
             />
           </Form.Group>
           <Form.Group as={Col} controlId="formGridCity">
-            <Form.Select
-              defaultValue={city}
-              onChange={handleChange}
-              name="city"
-            >
+            <Form.Select onChange={handleChange} name="city">
               <option>Select City</option>
-            {cities.length !== 0 ? (
-              cities.map((options) => (
-                <option value={options.City_ID} key={options.City_ID}>
-                  {options.City}
-                </option>
-              ))
-            ) : (
-              <option value="">None</option>
-            )}
+              {cities.length !== 0 ? (
+                cities.map((options) => (
+                  <option value={options.City_ID} selected={options.City === displayCity} key={options.City_ID}>
+                    {options.City}
+                  </option>
+                ))
+              ) : (
+                <option value="">None</option>
+              )}
             </Form.Select>
           </Form.Group>
         </Row>

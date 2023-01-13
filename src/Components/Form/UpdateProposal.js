@@ -13,7 +13,7 @@ import {
   GET_EMPLOYEENAMES,
   GET_COMPANY_NAMES,
   UPDATE_PROPOSAL,
-  GET_PROJECT_CATEGORIES
+  GET_PROJECT_CATEGORIES,
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import Select from "react-select";
@@ -47,7 +47,6 @@ function UpdateProposal(props) {
     props.row.Result_Date ? props.row.Result_Date.substring(0, 10) : ""
   );
   const [city, setcity] = useState(props.row.City_ID);
-  const [team, setteam] = useState(props.row.Team);
   const [dPrice, setdPrice] = useState(props.row.Design_Price);
   const [provisionalItems, setprovisionalItems] = useState(
     props.row.Provisional_Items
@@ -64,6 +63,7 @@ function UpdateProposal(props) {
   const [winningBidder, setwinningBidder] = useState(
     props.row.Winning_Bidder_ID
   );
+  const [team, setteam] = useState(props.row.Team);
   let teamData = team ? team.split(",") : "";
   let members = [];
   teamData &&
@@ -321,6 +321,7 @@ function UpdateProposal(props) {
               onChange={handleChange}
               name="dept"
             >
+              <option value="">Select Department</option>
               {depts.length > 0
                 ? depts.map((e) => (
                     <option
@@ -340,6 +341,7 @@ function UpdateProposal(props) {
               onChange={handleChange}
               name="projectCat"
             >
+            <option value="">Select Project Category</option>
               {projectDepts.length > 0
                 ? projectDepts.map((e) => (
                     <option
@@ -362,6 +364,7 @@ function UpdateProposal(props) {
               name="status"
               onChange={handleChange}
             >
+            <option value="">Select Status</option>
               <option value="Won">Won</option>
               <option value="Lost">Lost</option>
             </Form.Select>
@@ -369,6 +372,7 @@ function UpdateProposal(props) {
           <Form.Group as={Col}>
             <Form.Label>Project Manager</Form.Label>
             <Form.Select name="managerName" onChange={handleChange} required>
+              <option value="">Select Project Manager</option>
               {employees.length !== 0 ? (
                 employees.map((option) => (
                   <option
@@ -431,6 +435,7 @@ function UpdateProposal(props) {
               onChange={handleChange}
               name="city"
             >
+            <option value="">Select City</option>
               {cities.length > 0
                 ? cities.map((e) => (
                     <option value={e.City_ID} selected={e.City === citi}>
@@ -561,6 +566,7 @@ function UpdateProposal(props) {
               onChange={handleChange}
               name="winningBidder"
             >
+            <option value="">Select Winning Bidder</option>
               {companies.map((option) => (
                 <option value={option.ID}>{option.Name}</option>
               ))}
