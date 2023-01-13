@@ -133,7 +133,7 @@ function UpdateProposal(props) {
     }
     if (name === "qDeadline") {
       setqDeadline(value);
-    }
+    }      
     if (name === "cDeadline") {
       setcDeadline(value);
     }
