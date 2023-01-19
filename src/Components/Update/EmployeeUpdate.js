@@ -210,8 +210,6 @@ function EmployeeUpdate() {
                     <thead>
                       <tr className="heading">
                         <th>Edit</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">Salutation</th>
                         <th scope="col">First Name</th>
                         <th scope="col">Last Name</th>
                         <th scope="col">Department</th>
@@ -247,8 +245,6 @@ function EmployeeUpdate() {
                                     />
                                   </svg>
                                 </td>
-                                <td>{row.Username}</td>
-                                <td>{row.Salutation}</td>
                                 <td>{row.First_Name}</td>
                                 <td>{row.Last_Name}</td>
                                 <td>{row.Dept}</td>
@@ -287,8 +283,6 @@ function EmployeeUpdate() {
                                     />
                                   </svg>
                                 </td>
-                                <td>{row.Username}</td>
-                                <td>{row.Salutation}</td>
                                 <td>{row.First_Name}</td>
                                 <td>{row.Last_Name}</td>
                                 <td>{row.Dept}</td>

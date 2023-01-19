@@ -8,6 +8,7 @@ import {
   GET_DEPARTMENTS,
   GET_PROJECT_CATEGORIES,
   FILTER_BUDGETS,
+  GET_CITIES,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
@@ -34,9 +35,21 @@ function BudgetUpdate() {
   const [currPage, setcurrPage] = useState(1);
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
+  const [cities, setcities] = useState([]);
   useEffect(() => {
     setIsLoading(true);
     const call = async () => {
+      await axios
+        .get(HOST + GET_CITIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setcities(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
       await axios
         .get(HOST + GET_PAGE_BUDGETS, {
           headers: {
@@ -178,6 +191,8 @@ function BudgetUpdate() {
   };
   let filterDepts = [];
   let filterCategories = [];
+  let filterCities = [];
+  
   depts.map((e) => {
     filterDepts.push({
       label: e.Department,
@@ -188,6 +203,12 @@ function BudgetUpdate() {
     filterCategories.push({
       label: e.Project_Category,
       value: e.Project_Category,
+    });
+  });
+  cities.map((e) => {
+    filterCities.push({
+      label: e.City,
+      value: e.City,
     });
   });
   const inputData = (e) => {
@@ -201,9 +222,14 @@ function BudgetUpdate() {
   let doChange1 = (e) => {
     getValue1(Array.isArray(e) ? e.map((x) => x.value) : []);
   };
+  let [DisplayValue2, getValue2] = useState([]);
+  let doChange2 = (e) => {
+    getValue2(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
   let returnData = {
     dept: DisplayValue,
     cat: DisplayValue1,
+    city: DisplayValue2,
   };
   let deptvalue = [];
   returnData["dept"] &&
@@ -217,6 +243,14 @@ function BudgetUpdate() {
   returnData["cat"] &&
     returnData["cat"].map((e) => {
       catvalue.push({
+        label: e,
+        value: e,
+      });
+    });
+  let cityvalue = [];
+  returnData["city"] &&
+    returnData["city"].map((e) => {
+      cityvalue.push({
         label: e,
         value: e,
       });
@@ -261,10 +295,6 @@ function BudgetUpdate() {
             </Button>
           </div>
           <br />
-          <div
-            style={{ width: "20rem", display: "inline-block" }}
-            className="container-sm"
-          ></div>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <Select
               placeholder="Select departments"
@@ -284,7 +314,15 @@ function BudgetUpdate() {
               options={filterCategories}
             ></Select>
             &nbsp;&nbsp;
-            {deptvalue.length == 0 && catvalue.length == 0 ? (
+            <Select
+              placeholder="Select City(s)"
+              defaultValue={cityvalue}
+              onChange={doChange2}
+              isMulti
+              options={filterCities}
+            ></Select>
+            &nbsp;&nbsp;
+            {deptvalue.length == 0 && catvalue.length == 0 && cityvalue.length == 0 ? (
               <Button
                 style={{ backgroundColor: "rgba(38,141,141,1)" }}
                 disabled
@@ -319,7 +357,7 @@ function BudgetUpdate() {
                 </tr>
               </thead>
               <tbody class="table-group-divider">
-                {budgets.map((row) => {
+                {budgets?budgets.map((row) => {
                   return (
                     <tr>
                       <td>
@@ -343,7 +381,7 @@ function BudgetUpdate() {
                       <td>{row.City}</td>
                     </tr>
                   );
-                })}
+                }):""}
               </tbody>
             </table>
           </div>

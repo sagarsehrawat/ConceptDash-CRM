@@ -7,7 +7,8 @@ import {
   GET_PAGES_RFPS,
   GET_DEPARTMENTS,
   GET_PROJECT_CATEGORIES,
-  FILTER_RFPS
+  FILTER_RFPS,
+  GET_CITIES,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
@@ -32,10 +33,22 @@ function RFPUpdate() {
   const [pages, setpages] = useState(1);
   const [currPage, setcurrPage] = useState(1);
   const [depts, setdepts] = useState([]);
-  const [projectDepts, setprojectDepts] = useState([])
+  const [projectDepts, setprojectDepts] = useState([]);
+  const [cities, setcities] = useState([]);
   useEffect(() => {
     setIsLoading(true);
     const call = async () => {
+      await axios
+        .get(HOST + GET_CITIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setcities(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
       await axios
         .get(HOST + GET_PAGE_RFPS, {
           headers: {
@@ -52,7 +65,10 @@ function RFPUpdate() {
         });
       await axios
         .get(HOST + GET_PAGES_RFPS, {
-          headers: { auth: "Rose " + localStorage.getItem("auth"), limit: limit },
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            limit: limit,
+          },
         })
         .then((res) => {
           setpages(res.data.res);
@@ -61,7 +77,7 @@ function RFPUpdate() {
           console.log(err);
         });
 
-        await axios
+      await axios
         .get(HOST + GET_DEPARTMENTS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
@@ -134,7 +150,7 @@ function RFPUpdate() {
           auth: "Rose " + localStorage.getItem("auth"),
           limit: limit,
           offset: 0,
-          filter: JSON.stringify(returnData)
+          filter: JSON.stringify(returnData),
         },
       })
       .then((res) => {
@@ -172,6 +188,7 @@ function RFPUpdate() {
   };
   let filterDepts = [];
   let filterCategories = [];
+  let filterCities = [];
   depts.map((e) => {
     filterDepts.push({
       label: e.Department,
@@ -182,6 +199,12 @@ function RFPUpdate() {
     filterCategories.push({
       label: e.Project_Category,
       value: e.Project_Category,
+    });
+  });
+  cities.map((e) => {
+    filterCities.push({
+      label: e.City,
+      value: e.City,
     });
   });
   const inputData = (e) => {
@@ -195,24 +218,39 @@ function RFPUpdate() {
   let doChange1 = (e) => {
     getValue1(Array.isArray(e) ? e.map((x) => x.value) : []);
   };
+  let [DisplayValue2, getValue2] = useState([]);
+  let doChange2 = (e) => {
+    getValue2(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
   let returnData = {
-    'dept':DisplayValue,
-    'cat':DisplayValue1
-  }
-  let deptvalue = []
-  returnData['dept'] && returnData['dept'].map((e)=>{
-    deptvalue.push({
-      label:e,
-      value:e
-    })
-  })
-  let catvalue = []
-  returnData['cat'] && returnData['cat'].map((e)=>{
-    catvalue.push({
-      label:e,
-      value:e
-    })
-  })
+    dept: DisplayValue,
+    cat: DisplayValue1,
+    city: DisplayValue2,
+  };
+  let deptvalue = [];
+  returnData["dept"] &&
+    returnData["dept"].map((e) => {
+      deptvalue.push({
+        label: e,
+        value: e,
+      });
+    });
+  let catvalue = [];
+  returnData["cat"] &&
+    returnData["cat"].map((e) => {
+      catvalue.push({
+        label: e,
+        value: e,
+      });
+    });
+  let cityvalue = [];
+  returnData["city"] &&
+    returnData["city"].map((e) => {
+      cityvalue.push({
+        label: e,
+        value: e,
+      });
+    });
   return (
     <div>
       <div className="container-fluid">
@@ -250,10 +288,55 @@ function RFPUpdate() {
           </Button>
         </div>
         <br />
-        <div style={{width:'20rem', display:'inline-block'}} className="container-sm"></div>
-                <div style={{ display:'flex',flexDirection:'row'}}><Select placeholder='Select departments' defaultValue={deptvalue} onChange={doChange} isMulti options={filterDepts}>Select Departments</Select>&nbsp;&nbsp;
-                <Select placeholder='Select Categories' defaultValue={catvalue} onChange={doChange1} isMulti options={filterCategories}></Select>&nbsp;&nbsp;{(deptvalue.length==0 && catvalue.length==0)?<Button style={{ backgroundColor: "rgba(38,141,141,1)" }} disabled onClick={handleFilter}>Filter</Button>:<Button style={{ backgroundColor: "rgba(38,141,141,1)" }} onClick={handleFilter}>Filter</Button>}</div>
-                <br/>
+        <div
+          style={{ width: "20rem", display: "inline-block" }}
+          className="container-sm"
+        ></div>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <Select
+            placeholder="Select departments"
+            defaultValue={deptvalue}
+            onChange={doChange}
+            isMulti
+            options={filterDepts}
+          >
+            Select Departments
+          </Select>
+          &nbsp;&nbsp;
+          <Select
+            placeholder="Select Categories"
+            defaultValue={catvalue}
+            onChange={doChange1}
+            isMulti
+            options={filterCategories}
+          ></Select>
+          &nbsp;&nbsp;
+            <Select
+              placeholder="Select City(s)"
+              defaultValue={cityvalue}
+              onChange={doChange2}
+              isMulti
+              options={filterCities}
+            ></Select>
+          &nbsp;&nbsp;
+          {deptvalue.length == 0 && catvalue.length == 0 && cityvalue.length == 0 ? (
+            <Button
+              style={{ backgroundColor: "rgba(38,141,141,1)" }}
+              disabled
+              onClick={handleFilter}
+            >
+              Filter
+            </Button>
+          ) : (
+            <Button
+              style={{ backgroundColor: "rgba(38,141,141,1)" }}
+              onClick={handleFilter}
+            >
+              Filter
+            </Button>
+          )}
+        </div>
+        <br />
         {isLoading ? (
           <LoadingSpinner />
         ) : (

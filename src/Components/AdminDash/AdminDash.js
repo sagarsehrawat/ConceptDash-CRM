@@ -1,10 +1,8 @@
 import { React, useState, useEffect } from "react";
 import projectIcon from "../../Images/images.png";
 import requestIcon from "../../Images/reques.jpg";
-import budgetIcon from "../../Images/budget.png";
 import todoIcon from "../../Images/todo-list-icon-26.jpg";
 import calendarIcon from "../../Images/calendar.png";
-import employeesIcon from "../../Images/black-solid-icon-employee-applicant-man-logo-symbol-146530494.jpg";
 import { Pie } from "react-chartjs-2";
 import { Card } from "react-bootstrap";
 import Chart from "chart.js/auto";
@@ -25,6 +23,7 @@ import {
   PROPOSAL_STATUS_COUNTS,
   BUDGET_AMOUNT,
   GET_WORK_HOURS,
+  GET_PROJECT_STATUS
 } from "../Constants/Constants";
 import AddTask from "../Form/AddTask";
 import LoadingSpinner from "../Loader/Loader";
@@ -66,6 +65,8 @@ function AdminDash() {
   const [budget3, setbudget3] = useState(0);
   const [budget4, setbudget4] = useState(0);
   const [budget5, setbudget5] = useState(0);
+
+  const [status, setstatus] = useState([])
 
   useEffect(() => {
     setIsLoading(true);
@@ -154,6 +155,19 @@ function AdminDash() {
         })
         .then((res) => {
           setemployees(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+        await axios
+        .get(HOST + GET_PROJECT_STATUS, {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+          },
+        })
+        .then((res) => {
+          setstatus(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -292,7 +306,7 @@ const [selected, setselected] = useState(false)
                   <div className="fw-bold">Total</div>
                 </div>
                 <Badge style={{ marginLeft: "4vw" }} bg="primary" pill>
-                  14
+                  {status[0]?status[0].Completed+status[0].Not_Started+status[0].Ongoing:''}
                 </Badge>
               </ListGroup.Item>
               <ListGroup.Item
@@ -300,10 +314,10 @@ const [selected, setselected] = useState(false)
                 className="d-flex justify-content-between align-items-start"
               >
                 <div className="ms-2 me-auto">
-                  <div className="fw-bold">In Progress</div>
+                  <div className="fw-bold">Ongoing</div>
                 </div>
                 <Badge bg="primary" pill>
-                  14
+                {status[0]?status[0].Ongoing:''}
                 </Badge>
               </ListGroup.Item>
               <ListGroup.Item
@@ -311,10 +325,10 @@ const [selected, setselected] = useState(false)
                 className="d-flex justify-content-between align-items-start"
               >
                 <div className="ms-2 me-auto">
-                  <div className="fw-bold">Finished</div>
+                  <div className="fw-bold">Completed</div>
                 </div>
                 <Badge bg="primary" pill>
-                  14
+                {status[0]?status[0].Completed:''}
                 </Badge>
               </ListGroup.Item>
               <ListGroup.Item
@@ -322,15 +336,15 @@ const [selected, setselected] = useState(false)
                 className="d-flex justify-content-between align-items-start"
               >
                 <div className="ms-2 me-auto">
-                  <div className="fw-bold">New</div>
+                  <div className="fw-bold">Not Started</div>
                 </div>
                 <Badge bg="primary" pill>
-                  14
+                {status[0]?status[0].Not_Started:''}
                 </Badge>
               </ListGroup.Item>
             </ListGroup>
           </div>
-          <div
+          {/* <div
             className="card col-3 d-flex align-items-center"
             style={{
               width: "12rem",
@@ -392,7 +406,7 @@ const [selected, setselected] = useState(false)
                 </Badge>
               </ListGroup.Item>
             </ListGroup>
-          </div>
+          </div> */}
           <div
             className="card col-3 d-flex align-items-center"
             style={{

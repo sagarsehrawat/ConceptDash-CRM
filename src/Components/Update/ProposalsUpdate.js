@@ -8,6 +8,7 @@ import {
   FILTER_PROPOSALS,
   GET_DEPARTMENTS,
   GET_PROJECT_CATEGORIES,
+  GET_CITIES,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
@@ -35,10 +36,22 @@ function ProposalsUpdate() {
   const [pages, setpages] = useState(1);
   const [currPage, setcurrPage] = useState(1);
   const [depts, setdepts] = useState([]);
-  const [projectDepts, setprojectDepts] = useState([])
+  const [projectDepts, setprojectDepts] = useState([]);
+  const [cities, setcities] = useState([]);
   useEffect(() => {
     setIsLoading(true);
     const call = async () => {
+      await axios
+        .get(HOST + GET_CITIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setcities(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
       await axios
         .get(HOST + GET_PAGE_PROPOSALS, {
           headers: {
@@ -55,7 +68,10 @@ function ProposalsUpdate() {
         });
       await axios
         .get(HOST + GET_PAGES_PROPOSALS, {
-          headers: { auth: "Rose " + localStorage.getItem("auth"), limit: limit },
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            limit: limit,
+          },
         })
         .then((res) => {
           setpages(res.data.res);
@@ -64,7 +80,7 @@ function ProposalsUpdate() {
           console.log(err);
         });
 
-        await axios
+      await axios
         .get(HOST + GET_DEPARTMENTS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
@@ -137,7 +153,7 @@ function ProposalsUpdate() {
           auth: "Rose " + localStorage.getItem("auth"),
           limit: limit,
           offset: 0,
-          filter: JSON.stringify(returnData)
+          filter: JSON.stringify(returnData),
         },
       })
       .then((res) => {
@@ -174,6 +190,7 @@ function ProposalsUpdate() {
   };
   let filterDepts = [];
   let filterCategories = [];
+  let filterCities = [];
   depts.map((e) => {
     filterDepts.push({
       label: e.Department,
@@ -184,6 +201,12 @@ function ProposalsUpdate() {
     filterCategories.push({
       label: e.Project_Category,
       value: e.Project_Category,
+    });
+  });
+  cities.map((e) => {
+    filterCities.push({
+      label: e.City,
+      value: e.City,
     });
   });
   const inputData = (e) => {
@@ -197,24 +220,39 @@ function ProposalsUpdate() {
   let doChange1 = (e) => {
     getValue1(Array.isArray(e) ? e.map((x) => x.value) : []);
   };
+  let [DisplayValue2, getValue2] = useState([]);
+  let doChange2 = (e) => {
+    getValue2(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
   let returnData = {
-    'dept':DisplayValue,
-    'cat':DisplayValue1
-  }
-  let deptvalue = []
-  returnData['dept'] && returnData['dept'].map((e)=>{
-    deptvalue.push({
-      label:e,
-      value:e
-    })
-  })
-  let catvalue = []
-  returnData['cat'] && returnData['cat'].map((e)=>{
-    catvalue.push({
-      label:e,
-      value:e
-    })
-  })
+    dept: DisplayValue,
+    cat: DisplayValue1,
+    city: DisplayValue2,
+  };
+  let deptvalue = [];
+  returnData["dept"] &&
+    returnData["dept"].map((e) => {
+      deptvalue.push({
+        label: e,
+        value: e,
+      });
+    });
+  let catvalue = [];
+  returnData["cat"] &&
+    returnData["cat"].map((e) => {
+      catvalue.push({
+        label: e,
+        value: e,
+      });
+    });
+  let cityvalue = [];
+  returnData["city"] &&
+    returnData["city"].map((e) => {
+      cityvalue.push({
+        label: e,
+        value: e,
+      });
+    });
   return (
     <div>
       {isLoading ? (
@@ -254,12 +292,57 @@ function ProposalsUpdate() {
               Search
             </Button>
           </div>
-          <br/>
-          <div style={{width:'20rem', display:'inline-block'}} className="container-sm"></div>
-                <div style={{ display:'flex',flexDirection:'row'}}><Select placeholder='Select departments' defaultValue={deptvalue} onChange={doChange} isMulti options={filterDepts}>Select Departments</Select>&nbsp;&nbsp;
-                <Select placeholder='Select Categories' defaultValue={catvalue} onChange={doChange1} isMulti options={filterCategories}></Select>&nbsp;&nbsp;{(deptvalue.length==0 && catvalue.length==0)?<Button style={{ backgroundColor: "rgba(38,141,141,1)" }} disabled onClick={handleFilter}>Filter</Button>:<Button style={{ backgroundColor: "rgba(38,141,141,1)" }} onClick={handleFilter}>Filter</Button>}</div>
-                <br/>
-          <div className="container-fluid">
+          <br />
+          <div
+            style={{ width: "20rem", display: "inline-block" }}
+            className="container-sm"
+          ></div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <Select
+              placeholder="Select departments"
+              defaultValue={deptvalue}
+              onChange={doChange}
+              isMulti
+              options={filterDepts}
+            >
+              Select Departments
+            </Select>
+            &nbsp;&nbsp;
+            <Select
+              placeholder="Select Categories"
+              defaultValue={catvalue}
+              onChange={doChange1}
+              isMulti
+              options={filterCategories}
+            ></Select>
+            &nbsp;&nbsp;
+            <Select
+              placeholder="Select City(s)"
+              defaultValue={cityvalue}
+              onChange={doChange2}
+              isMulti
+              options={filterCities}
+            ></Select>
+            &nbsp;&nbsp;
+            {deptvalue.length == 0 && catvalue.length == 0 && cityvalue.length == 0 ? (
+              <Button
+                style={{ backgroundColor: "rgba(38,141,141,1)" }}
+                disabled
+                onClick={handleFilter}
+              >
+                Filter
+              </Button>
+            ) : (
+              <Button
+                style={{ backgroundColor: "rgba(38,141,141,1)" }}
+                onClick={handleFilter}
+              >
+                Filter
+              </Button>
+            )}
+          </div>
+          <br />
+          <div>
             <table className="table">
               <thead>
                 <tr className="heading">
@@ -267,6 +350,7 @@ function ProposalsUpdate() {
                   <th scope="col">Department</th>
                   <th scope="col">Project Category</th>
                   <th scope="col">Project Name</th>
+                  <th scope="col">City</th>
                   <th scope="col">Question Deadline</th>
                   <th scope="col">Closing Deadline</th>
                   <th scope="col">Result Date</th>
@@ -283,7 +367,6 @@ function ProposalsUpdate() {
                   <th scope="col">Bidder Price</th>
                   <th scope="col">Winning Price</th>
                   <th scope="col">Winning Bidder</th>
-                  <th scope="col">City</th>
                 </tr>
               </thead>
               <tbody class="table-group-divider">
@@ -301,38 +384,38 @@ function ProposalsUpdate() {
                           />
                         </svg>
                       </td>
-                      <td align="right">{row.Department}</td>
-                      <td align="right">{row.Project_Category}</td>
-                      <td align="right">{row.Project_Name}</td>
-                      <td align="right">
+                      <td>{row.Department}</td>
+                      <td>{row.Project_Category}</td>
+                      <td>{row.Project_Name}</td>
+                        <td>{row.City}</td>
+                      <td>
                         {row.Question_Deadline
                           ? row.Question_Deadline.substring(0, 10)
                           : ""}
                       </td>
-                      <td align="right">
+                      <td>
                         {row.Closing_Deadline
                           ? row.Closing_Deadline.substring(0, 10)
                           : ""}
                       </td>
-                      <td align="right">
+                      <td>
                         {row.Result_Date
                           ? row.Result_Date.substring(0, 10)
                           : ""}
                       </td>
-                      <td align="right">{row.Status}</td>
-                      <td align="right">{row.Manager_Name}</td>
-                      <td align="right">{row.Team}</td>
-                      <td align="right">{row.Design_Price}</td>
-                      <td align="right">{row.Provisional_Items}</td>
-                      <td align="right">{row.Contract_Admin_Price}</td>
-                      <td align="right">{row.Sub_Consultant_Price}</td>
-                      <td align="right">{row.Total_Bid}</td>
-                      <td align="right">{row.Plan_Takers}</td>
-                      <td align="right">{row.Bidders}</td>
-                      <td align="right">{row.Bidder_Price}</td>
-                      <td align="right">{row.Winning_Price}</td>
-                      <td align="right">{row.Name}</td>
-                      <td align="right">{row.City}</td>
+                      <td>{row.Status}</td>
+                      <td>{row.Manager_Name}</td>
+                      <td>{row.Team}</td>
+                      <td>{row.Design_Price}</td>
+                      <td>{row.Provisional_Items}</td>
+                      <td>{row.Contract_Admin_Price}</td>
+                      <td>{row.Sub_Consultant_Price}</td>
+                      <td>{row.Total_Bid}</td>
+                      <td>{row.Plan_Takers}</td>
+                      <td>{row.Bidders}</td>
+                      <td>{row.Bidder_Price}</td>
+                      <td>{row.Winning_Price}</td>
+                      <td>{row.Name}</td>
                     </tr>
                   );
                 })}

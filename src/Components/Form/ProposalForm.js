@@ -16,7 +16,6 @@ import {
   GET_RFP_ID,
   GET_PROJECT_CATEGORIES,
 } from "../Constants/Constants";
-import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Select from "react-select";
 
@@ -196,6 +195,7 @@ function ProposalForm() {
         },
       })
       .then(async (res) => {
+        console.log(res.data.res)
         setrfpData(res.data.res);
         setpName(res.data.res[0].Project_Name);
         setdept(res.data.res[0].Department);
@@ -471,14 +471,16 @@ function ProposalForm() {
               <div>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
+                  <Form.Label>Department</Form.Label>
                     <Form.Select
                       defaultValue={dept}
                       onChange={handleChange}
                       name="dept"
                     >
+                      <option>Select Department</option>
                       {depts.length > 0
                         ? depts.map((e) => (
-                            <option value={e.Department_ID}>
+                            <option value={e.Department_ID} selected={e.Department_ID===deptid}>
                               {e.Department}
                             </option>
                           ))
@@ -486,14 +488,16 @@ function ProposalForm() {
                     </Form.Select>
                   </Form.Group>
                   <Form.Group as={Col}>
+                  <Form.Label>Project Category</Form.Label>
                     <Form.Select
                       defaultValue={catid}
                       onChange={handleChange}
                       name="projectCat"
                     >
+                      <option>Select Project Category</option>
                       {projectDepts.length > 0
                         ? projectDepts.map((e) => (
-                            <option value={e.Project_Cat_ID}>
+                            <option value={e.Project_Cat_ID} selected={e.Project_Cat_ID===catId}>
                               {e.Project_Category}
                             </option>
                           ))
@@ -504,6 +508,7 @@ function ProposalForm() {
 
                 <Row className="mb-4">
                   <Form.Group as={Col}>
+                  <Form.Label>Project Status</Form.Label>
                     <Form.Select name="status" onChange={handleChange}>
                       <option value="">Select Status</option>
                       <option value="Go">Go</option>
@@ -512,15 +517,16 @@ function ProposalForm() {
                     </Form.Select>
                   </Form.Group>
                   <Form.Group as={Col}>
+                    <Form.Label>Project Manager</Form.Label>
                     <Form.Select
-                      defaultValue={manager}
                       name="managerName"
                       onChange={handleChange}
                       required
                     >
+                      <option value="">Select Employee</option>
                       {employees.length !== 0 ? (
                         employees.map((option) => (
-                          <option value={option.Employee_ID}>
+                          <option value={option.Employee_ID} selected={option.Employee_ID===managerId}>
                             {option.Full_Name}
                           </option>
                         ))
@@ -530,6 +536,7 @@ function ProposalForm() {
                     </Form.Select>
                   </Form.Group>
                   <Form.Group as={Col}>
+                  <Form.Label>Project Name</Form.Label>
                     <Form.Control
                       value={pName}
                       name="projectName"
@@ -568,14 +575,16 @@ function ProposalForm() {
 
                 <Row className="mb-4">
                   <Form.Group as={Col} controlId="formGridCity">
+                  <Form.Label>City</Form.Label>
                     <Form.Select
                       defaultValue={city}
                       onChange={handleChange}
                       name="city"
                     >
+                      <option value=''>Select City</option>
                       {cities.length > 0
                         ? cities.map((e) => (
-                            <option value={e.City_ID}>{e.City}</option>
+                            <option value={e.City_ID} selected={e.City_ID===cityid}>{e.City}</option>
                           ))
                         : ""}
                     </Form.Select>
@@ -583,6 +592,8 @@ function ProposalForm() {
                 </Row>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
+                    
+                  <Form.Label>Team</Form.Label>
                     <Select
                       isMulti
                       onChange={doChange}
@@ -594,86 +605,88 @@ function ProposalForm() {
                     </Select>
                   </Form.Group>
                   <Form.Group as={Col}>
+                    
+                  <Form.Label>Design Price</Form.Label>
                     <Form.Control
                       name="dPrice"
                       type="number"
-                      placeholder="Design Price"
                       onChange={handleChange}
                     />
                   </Form.Group>
                   <Form.Group as={Col}>
+                  <Form.Label>Provisional Items</Form.Label>
                     <Form.Control
                       name="provisionalItems"
                       type="text"
-                      placeholder="Provisional Items"
                       onChange={handleChange}
                     />
                   </Form.Group>
                 </Row>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
+                  <Form.Label>Contract Admin Price</Form.Label>
                     <Form.Control
                       name="adminPrice"
                       type="number"
-                      placeholder="Contract Admin Price"
                       onChange={handleChange}
                     />
                   </Form.Group>
                   <Form.Group as={Col}>
+                    <Form.Label>Consultant Price</Form.Label>
                     <Form.Control
                       name="consultantPrice"
                       type="number"
-                      placeholder="Consultant Price"
                       onChange={handleChange}
                     />
                   </Form.Group>
                   <Form.Group as={Col}>
+                    <Form.Label>Total Bid</Form.Label>
                     <Form.Control
                       name="totalBid"
                       type="number"
-                      placeholder="Total Bid"
                       onChange={handleChange}
                     />
                   </Form.Group>
                 </Row>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
+                    <Form.Label>Plan Takers</Form.Label>
                     <Select
                       isMulti
                       onChange={doChange1}
                       options={company}
                       name="planTakers"
-                      placeholder="Plan Takers"
                     ></Select>
                   </Form.Group>
                   <Form.Group as={Col}>
+                    <Form.Label>Bidders</Form.Label>
                     <Select
                       isMulti
                       onChange={doChange1}
                       options={company}
                       name="bidders"
-                      placeholder="Bidders"
                     ></Select>
                   </Form.Group>
                   <Form.Group as={Col}>
+                    <Form.Label>Bidder Price</Form.Label>
                     <Form.Control
                       name="bidderPrice"
                       type="number"
-                      placeholder="Bidder Price"
                       onChange={handleChange}
                     />
                   </Form.Group>
                 </Row>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
+                    <Form.Label>Winning Price</Form.Label>
                     <Form.Control
                       name="winningPrice"
                       type="number"
-                      placeholder="Winning Price"
                       onChange={handleChange}
                     />
                   </Form.Group>
                   <Form.Group as={Col}>
+                    <Form.Label>Winning Bidder</Form.Label>
                     <Form.Select onChange={handleChange} name="winningBidder">
                       <option value="">Select Winning Bidder</option>
                       {companies.map((option) => (
