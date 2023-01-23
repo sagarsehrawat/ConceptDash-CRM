@@ -14,7 +14,6 @@ import {
   GET_BUDGET_NAMES,
   ADD_RFP,
 } from "../Constants/Constants";
-import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 
 function RFPform() {
@@ -25,6 +24,7 @@ function RFPform() {
   const handleShow = () => setShow(true);
   const [form, setform] = useState({
     'dept': "",
+    'projectCat': "",
     'action': "",
     'managerName': "",
     'projectName': "",
@@ -118,6 +118,7 @@ function RFPform() {
         HOST + ADD_RFP,
         {
           'departmentId': radio ? deptid : form.dept,
+          'projectCatId': radio ? pCategoryid : form.projectCat,
           'projectManagerId': form.managerName,
           'projectName': radio ? pName : form.projectName,
           'bidDate': form.bidDate,
@@ -139,19 +140,18 @@ function RFPform() {
         console.log(err);
       });
   };
-  const navigate = useNavigate();
-  const callFunc = () => {
-    handleClose();
-    navigate("/RFPtable");
-  };
   const [budgetData, setbudgetData] = useState([]);
   const [pName, setpName] = useState("");
   const [dept, setdept] = useState("");
   const [deptid, setdeptid] = useState("");
+  const [pCategory, setpCategory] = useState("");
+  const [pCategoryid, setpCategoryid] = useState("");
   const [cityid, setcityid] = useState("");
   const [city, setcity] = useState("");
   const [amount, setamount] = useState("");
+  const [source, setsource] = useState("");
   const handleChange1 = async (e) => {
+    console.log(e.target.value)
     await axios
       .get(HOST + "/api/get/budget/id", {
         headers: {
@@ -164,9 +164,12 @@ function RFPform() {
         setpName(res.data.res[0].Project_Name);
         setdept(res.data.res[0].Department);
         setdeptid(res.data.res[0].Department_ID);
+        setpCategory(res.data.res[0].Project_Category);
+        setpCategoryid(res.data.res[0].Project_Cat_ID);
         setcity(res.data.res[0].City);
         setcityid(res.data.res[0].City_ID);
         setamount(res.data.res[0].Budget_Amount);
+        setsource(res.data.res[0].Source);
       })
       .catch((err) => {
         console.log(err);
@@ -192,6 +195,16 @@ function RFPform() {
                   {depts.length > 0
                     ? depts.map((e) => (
                         <option value={e.Department_ID}>{e.Department}</option>
+                      ))
+                    : ""}
+                </Form.Select>
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Select onChange={handleChange} name="dept">
+                  <option value="">Select Project Category</option>
+                  {projectDepts.length > 0
+                    ? projectDepts.map((e) => (
+                        <option value={e.Project_Cat_ID}>{e.Project_Category}</option>
                       ))
                     : ""}
                 </Form.Select>
@@ -260,7 +273,7 @@ function RFPform() {
               <Form.Group as={Col} controlId="formGridCity">
                 <Form.Select onChange={handleChange} name="city">
                   <option value="">Select City</option>
-                  {cities.length > 0
+                  {cities
                     ? cities.map((e) => (
                         <option value={e.City_ID}>{e.City}</option>
                       ))
@@ -321,6 +334,10 @@ function RFPform() {
                   <Form.Group as={Col}>
                     <Form.Label>Department</Form.Label>
                     <Form.Control value={dept} />
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Form.Label>Project Category</Form.Label>
+                    <Form.Control value={pCategory} />
                   </Form.Group>
                 </Row>
 
@@ -410,14 +427,13 @@ function RFPform() {
                     <Form.Control
                       value={amount}
                       name="amount"
-                      type="number"
                       onChange={handleChange}
                     />
                   </Form.Group>
                 </Row>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
-                    <Form.Select name="source" onChange={handleChange}>
+                    <Form.Select defaultValue={source} name="source" onChange={handleChange}>
                       <option>Select Source</option>
                       <option value="ConstructConnect">ConstructConnect</option>
                       <option value="Bids & Tenders">Bids & Tenders</option>

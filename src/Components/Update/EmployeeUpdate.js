@@ -8,8 +8,11 @@ import {
   HOST,
   GET_TIMESHEET,
   GET_EMPLOYEENAMES,
+  SIX_MONTH_EMPLOYEES,
+  GET_DEPARTMENTS
 } from "../Constants/Constants";
 import Box from "@mui/material/Box";
+import Select from "react-select";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -39,6 +42,7 @@ function EmployeeUpdate() {
   };
 
   const [employee, setemployee] = useState([]);
+  const [departments, setdepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dataSource, setdataSource] = useState([]);
   useEffect(() => {
@@ -51,14 +55,43 @@ function EmployeeUpdate() {
         .then((res) => {
           setemployee(res.data.res);
           setdataSource(res.data.res);
-          setIsLoading(false);
         })
         .catch((err) => {
           console.log(err);
         });
+        await axios
+        .get(HOST + GET_DEPARTMENTS, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setdepartments(res.data.res);
+          console.log(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        setIsLoading(false);
     };
     call();
   }, []);
+  const handleFilter = async () => {
+    setIsLoading(true);
+    await axios
+      .get(HOST + SIX_MONTH_EMPLOYEES, {
+        headers: {
+          auth: "Rose " + localStorage.getItem("auth"),
+          filter: JSON.stringify(returnData),
+        },
+      })
+      .then((res) => {
+        setemployee(res.data.res);
+        setdataSource(res.data.res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const [timesheet, settimesheet] = useState([]);
   const [selected, setselected] = useState(false);
   const handleChange1 = async (e) => {
@@ -156,6 +189,33 @@ function EmployeeUpdate() {
     setrowData(e);
     handleShowUpdate();
   };
+  let filterDept = [];
+  departments.map((e) => {
+    filterDept.push({
+      label: e.Department,
+      value: e.Department_ID,
+    });
+  });
+  let [DisplayValue, getValue] = useState([]);
+  let doChange = (e) => {
+    getValue(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
+  const [time, settime] = useState('')
+  let returnData = {
+    dept: DisplayValue,
+    time: time
+  };
+  let deptvalue = [];
+  returnData["dept"] &&
+    returnData["dept"].map((e) => {
+      deptvalue.push({
+        label: e,
+        value: e,
+      });
+    });
+    const handleTime = (e)=>{
+      settime(e.target.value);
+    }
   return (
     <div>
       <div className="container-fluid">
@@ -186,6 +246,42 @@ function EmployeeUpdate() {
           />
         </div>
         <br />
+        <div style={{ display: "flex", flexDirection: "row" }}>
+            <Select
+              placeholder="Select departments"
+              defaultValue={deptvalue}
+              onChange={doChange}
+              isMulti
+              options={filterDept}
+              
+            >
+              Select Departments
+            </Select>
+            &nbsp;&nbsp;
+            <Form.Select style={{width:'15rem'}} onChange={handleTime}>
+              <option value=''>Select Joining Date</option>
+              <option value="DATE_SUB(CURDATE(), INTERVAL 12 MONTH)">Last 12 Months</option>
+              <option value="DATE_SUB(CURDATE(), INTERVAL 6 MONTH)">Last 6 Months</option>
+              <option value="DATE_SUB(CURDATE(), INTERVAL 1 MONTH)">Last 1 Months</option>
+            </Form.Select>
+            &nbsp;&nbsp;
+            {deptvalue.length == 0 ? (
+              <Button
+                style={{ backgroundColor: "rgba(38,141,141,1)" }}
+                disabled
+                onClick={handleFilter}
+              >
+                Filter
+              </Button>
+            ) : (
+              <Button
+                style={{ backgroundColor: "rgba(38,141,141,1)" }}
+                onClick={handleFilter}
+              >
+                Filter
+              </Button>
+            )}
+            </div>
         <br />
         <Box
           sx={{ width: "100%", typography: "body1" }}
