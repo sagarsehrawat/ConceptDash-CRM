@@ -18,6 +18,7 @@ import {
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import Select from "react-select";
+import AddCity from "./AddCity";
 
 function ProposalForm() {
   const [isSubmit, setIsSubmit] = useState(false);
@@ -195,7 +196,7 @@ function ProposalForm() {
         },
       })
       .then(async (res) => {
-        console.log(res.data.res)
+        console.log(res.data.res);
         setrfpData(res.data.res);
         setpName(res.data.res[0].Project_Name);
         setdept(res.data.res[0].Department);
@@ -234,6 +235,9 @@ function ProposalForm() {
   let doChange1 = (e) => {
     getValue1(Array.isArray(e) ? e.map((x) => x.value) : []);
   };
+  const [showCityForm, setShowCityForm] = useState(false);
+  const handleCloseCityForm = () => setShowCityForm(false);
+  const handleShowCityForm = () => setShowCityForm(true);
   return (
     <div>
       <Form className="form-main">
@@ -346,6 +350,18 @@ function ProposalForm() {
                       ))
                     : ""}
                 </Form.Select>
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Button
+                  style={{
+                    width: "100%",
+                    backgroundColor: "grey",
+                    border: "none",
+                  }}
+                  onClick={handleShowCityForm}
+                >
+                  Add City
+                </Button>
               </Form.Group>
             </Row>
             <Row className="mb-4">
@@ -471,7 +487,7 @@ function ProposalForm() {
               <div>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
-                  <Form.Label>Department</Form.Label>
+                    <Form.Label>Department</Form.Label>
                     <Form.Select
                       defaultValue={dept}
                       onChange={handleChange}
@@ -480,7 +496,10 @@ function ProposalForm() {
                       <option>Select Department</option>
                       {depts.length > 0
                         ? depts.map((e) => (
-                            <option value={e.Department_ID} selected={e.Department_ID===deptid}>
+                            <option
+                              value={e.Department_ID}
+                              selected={e.Department_ID === deptid}
+                            >
                               {e.Department}
                             </option>
                           ))
@@ -488,7 +507,7 @@ function ProposalForm() {
                     </Form.Select>
                   </Form.Group>
                   <Form.Group as={Col}>
-                  <Form.Label>Project Category</Form.Label>
+                    <Form.Label>Project Category</Form.Label>
                     <Form.Select
                       defaultValue={catid}
                       onChange={handleChange}
@@ -497,7 +516,10 @@ function ProposalForm() {
                       <option>Select Project Category</option>
                       {projectDepts.length > 0
                         ? projectDepts.map((e) => (
-                            <option value={e.Project_Cat_ID} selected={e.Project_Cat_ID===catId}>
+                            <option
+                              value={e.Project_Cat_ID}
+                              selected={e.Project_Cat_ID === catId}
+                            >
                               {e.Project_Category}
                             </option>
                           ))
@@ -508,7 +530,7 @@ function ProposalForm() {
 
                 <Row className="mb-4">
                   <Form.Group as={Col}>
-                  <Form.Label>Project Status</Form.Label>
+                    <Form.Label>Project Status</Form.Label>
                     <Form.Select name="status" onChange={handleChange}>
                       <option value="">Select Status</option>
                       <option value="Go">Go</option>
@@ -526,7 +548,10 @@ function ProposalForm() {
                       <option value="">Select Employee</option>
                       {employees.length !== 0 ? (
                         employees.map((option) => (
-                          <option value={option.Employee_ID} selected={option.Employee_ID===managerId}>
+                          <option
+                            value={option.Employee_ID}
+                            selected={option.Employee_ID === managerId}
+                          >
                             {option.Full_Name}
                           </option>
                         ))
@@ -536,7 +561,7 @@ function ProposalForm() {
                     </Form.Select>
                   </Form.Group>
                   <Form.Group as={Col}>
-                  <Form.Label>Project Name</Form.Label>
+                    <Form.Label>Project Name</Form.Label>
                     <Form.Control
                       value={pName}
                       name="projectName"
@@ -575,16 +600,21 @@ function ProposalForm() {
 
                 <Row className="mb-4">
                   <Form.Group as={Col} controlId="formGridCity">
-                  <Form.Label>City</Form.Label>
+                    <Form.Label>City</Form.Label>
                     <Form.Select
                       defaultValue={city}
                       onChange={handleChange}
                       name="city"
                     >
-                      <option value=''>Select City</option>
+                      <option value="">Select City</option>
                       {cities.length > 0
                         ? cities.map((e) => (
-                            <option value={e.City_ID} selected={e.City_ID===cityid}>{e.City}</option>
+                            <option
+                              value={e.City_ID}
+                              selected={e.City_ID === cityid}
+                            >
+                              {e.City}
+                            </option>
                           ))
                         : ""}
                     </Form.Select>
@@ -592,8 +622,7 @@ function ProposalForm() {
                 </Row>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
-                    
-                  <Form.Label>Team</Form.Label>
+                    <Form.Label>Team</Form.Label>
                     <Select
                       isMulti
                       onChange={doChange}
@@ -605,8 +634,7 @@ function ProposalForm() {
                     </Select>
                   </Form.Group>
                   <Form.Group as={Col}>
-                    
-                  <Form.Label>Design Price</Form.Label>
+                    <Form.Label>Design Price</Form.Label>
                     <Form.Control
                       name="dPrice"
                       type="number"
@@ -614,7 +642,7 @@ function ProposalForm() {
                     />
                   </Form.Group>
                   <Form.Group as={Col}>
-                  <Form.Label>Provisional Items</Form.Label>
+                    <Form.Label>Provisional Items</Form.Label>
                     <Form.Control
                       name="provisionalItems"
                       type="text"
@@ -624,7 +652,7 @@ function ProposalForm() {
                 </Row>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
-                  <Form.Label>Contract Admin Price</Form.Label>
+                    <Form.Label>Contract Admin Price</Form.Label>
                     <Form.Control
                       name="adminPrice"
                       type="number"
@@ -716,6 +744,18 @@ function ProposalForm() {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>Proposal Added Successfully</Modal.Body>
+      </Modal>
+      <Modal
+        backdrop="static"
+        size="lg"
+        keyboard={false}
+        show={showCityForm}
+        onHide={handleCloseCityForm}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add City</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<AddCity />}</Modal.Body>
       </Modal>
     </div>
   );

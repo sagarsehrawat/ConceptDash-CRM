@@ -15,6 +15,7 @@ import {
   ADD_RFP,
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
+import AddCity from "./AddCity";
 
 function RFPform() {
   const [isSubmit, setIsSubmit] = useState(false);
@@ -151,7 +152,6 @@ function RFPform() {
   const [amount, setamount] = useState("");
   const [source, setsource] = useState("");
   const handleChange1 = async (e) => {
-    console.log(e.target.value)
     await axios
       .get(HOST + "/api/get/budget/id", {
         headers: {
@@ -175,6 +175,9 @@ function RFPform() {
         console.log(err);
       });
   };
+  const [showCityForm, setShowCityForm] = useState(false);
+  const handleCloseCityForm = () => setShowCityForm(false);
+  const handleShowCityForm = () => setShowCityForm(true);
   return (
     <div>
       <Form className="form-main">
@@ -280,6 +283,14 @@ function RFPform() {
                     : ""}
                 </Form.Select>
               </Form.Group>
+              <Form.Group as={Col}>
+            <Button
+              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
+              onClick={handleShowCityForm}
+            >
+              Add City
+            </Button>
+          </Form.Group>
             </Row>
             <Row className="mb-4">
               <Form.Group as={Col}>
@@ -464,6 +475,15 @@ function RFPform() {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>RFP Added Successfully</Modal.Body>
+      </Modal>
+      <Modal
+      backdrop="static"
+      size="lg"
+      keyboard={false} show={showCityForm} onHide={handleCloseCityForm} >
+        <Modal.Header closeButton>
+          <Modal.Title>Add City</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<AddCity />}</Modal.Body>
       </Modal>
     </div>
   );

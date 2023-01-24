@@ -12,8 +12,8 @@ import {
   GET_PROJECT_CATEGORIES,
   ADD_BUDGET,
 } from "../Constants/Constants";
-import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
+import AddCity from "./AddCity";
 
 function BudgetsForm() {
   const [isSubmit, setIsSubmit] = useState(false);
@@ -109,7 +109,9 @@ function BudgetsForm() {
         console.log(err);
       });
   };
-  const navigate = useNavigate();
+  const [showCityForm, setShowCityForm] = useState(false);
+  const handleCloseCityForm = () => setShowCityForm(false);
+  const handleShowCityForm = () => setShowCityForm(true);
   return (
     <div>
       <Form className="form-main">
@@ -121,6 +123,14 @@ function BudgetsForm() {
                 ? cities.map((e) => <option value={e.City_ID}>{e.City}</option>)
                 : ""}
             </Form.Select>
+          </Form.Group>
+          <Form.Group as={Col}>
+            <Button
+              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
+              onClick={handleShowCityForm}
+            >
+              Add City
+            </Button>
           </Form.Group>
         </Row>
 
@@ -209,6 +219,15 @@ function BudgetsForm() {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>Budget Added Successfully</Modal.Body>
+      </Modal>
+      <Modal
+      backdrop="static"
+      size="lg"
+      keyboard={false} show={showCityForm} onHide={handleCloseCityForm} >
+        <Modal.Header closeButton>
+          <Modal.Title>Add City</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<AddCity />}</Modal.Body>
       </Modal>
     </div>
   );

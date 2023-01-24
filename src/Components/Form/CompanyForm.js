@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import { HOST, ADD_COMPANY, GET_CITIES } from "../Constants/Constants";
 import Row from "react-bootstrap/Row";
 import Modal from "react-bootstrap/Modal";
+import AddCity from "./AddCity";
 
 function CompanyForm() {
   const [cities, setcities] = useState([])
@@ -80,6 +81,10 @@ function CompanyForm() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showCityForm, setShowCityForm] = useState(false);
+  const handleCloseCityForm = () => setShowCityForm(false);
+  const handleShowCityForm = () => setShowCityForm(true);
   return (
     <div>
       <Form className="form-main">
@@ -135,6 +140,14 @@ function CompanyForm() {
               <option value="">None</option>
             )}
             </Form.Select>
+          </Form.Group>
+          <Form.Group as={Col}>
+            <Button
+              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
+              onClick={handleShowCityForm}
+            >
+              Add City
+            </Button>
           </Form.Group>
         </Row>
         
@@ -209,6 +222,15 @@ function CompanyForm() {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>Employee added Successfully</Modal.Body>
+      </Modal>
+      <Modal
+      backdrop="static"
+      size="lg"
+      keyboard={false} show={showCityForm} onHide={handleCloseCityForm} >
+        <Modal.Header closeButton>
+          <Modal.Title>Add City</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<AddCity />}</Modal.Body>
       </Modal>
     </div>
   );

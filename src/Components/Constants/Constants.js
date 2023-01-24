@@ -63,6 +63,7 @@ export const ADD_PROPOSAL = '/api/add/proposal'
 export const ADD_RFP = '/api/add/rfp'
 export const ADD_SOFTWARE = '/api/add/software'
 export const ADD_TIMESHEET = '/api/add/timesheet'
+export const ADD_CITY = '/api/add/city'
 
 
 

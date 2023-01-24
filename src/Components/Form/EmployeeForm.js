@@ -15,6 +15,7 @@ import Row from "react-bootstrap/Row";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import JobTitle from "./JobTitle";
+import AddCity from "./AddCity";
 
 function EmployeeForm() {
   const [cities, setcities] = useState([]);
@@ -203,6 +204,9 @@ function EmployeeForm() {
       });
   };
 
+  const [showCityForm, setShowCityForm] = useState(false);
+  const handleCloseCityForm = () => setShowCityForm(false);
+  const handleShowCityForm = () => setShowCityForm(true);
   return (
     <>
       <Form className="form-main">
@@ -241,11 +245,7 @@ function EmployeeForm() {
         </Row>
         <Row className="mb-4">
           <Form.Group as={Col}>
-            <Form.Select
-              name="department"
-              onChange={handleChange}
-              required
-            >
+            <Form.Select name="department" onChange={handleChange} required>
               <option value="">Select Department</option>
               {depts.map((option) => (
                 <option value={option.Department_ID}>
@@ -369,20 +369,48 @@ function EmployeeForm() {
               )}
             </Form.Select>
           </Form.Group>
-          <h2 style={{'margin':'auto', 'width':'30%', 'marginTop':'5vh', 'marginBottom':'2vh','textDecoration':'underline'}}>Personal Details</h2>
-      <Row className="mb-4">
-        <Form.Group as={Col}>
-          <Form.Label>Birthday</Form.Label>
-          <Form.Control name='birthday' type="date" placeholder="Birthday" onChange={handleChange} />
-        </Form.Group>
-        <Form.Group as={Col}>
-        <Form.Label>Anniversary</Form.Label>
-          <Form.Control name='anniversary' type="date" placeholder="Anniversary" onChange={handleChange} />
-        </Form.Group>
-      </Row>
           <Form.Group as={Col}>
-            {/* <Form.Label>Anniversary</Form.Label> */}
-            {/* <Form.Control name='anniversary' type="date" placeholder="Anniversary" onChange={handleChange} /> */}
+            <Button
+              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
+              onClick={handleShowCityForm}
+            >
+              Add City
+            </Button>
+          </Form.Group>
+        </Row>
+        <h2
+          style={{
+            margin: "auto",
+            width: "30%",
+            marginTop: "5vh",
+            marginBottom: "2vh",
+            textDecoration: "underline",
+          }}
+        >
+          Personal Details
+        </h2>
+        <Row className="mb-4">
+          <Form.Group as={Col}>
+            <Form.Label>Birthday</Form.Label>
+            <Form.Control
+              name="birthday"
+              type="date"
+              placeholder="Birthday"
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group as={Col}>
+            <Form.Label>Anniversary</Form.Label>
+            <Form.Control
+              name="anniversary"
+              type="date"
+              placeholder="Anniversary"
+              onChange={handleChange}
+            />
+          </Form.Group>
+        </Row>
+        <Row className="mb-4">
+          <Form.Group as={Col}>
             <Form.Select onChange={handleChange} name="activity">
               <option value="">Select Activity</option>
               <option value="Walking">Walking</option>
@@ -478,9 +506,9 @@ function EmployeeForm() {
         <h2
           style={{
             margin: "auto",
-            width: "25%",
+            width: "30%",
             marginTop: "5vh",
-            marginBottom: "4vh",
+            marginBottom: "2vh",
             textDecoration: "underline",
           }}
         >
@@ -525,21 +553,12 @@ function EmployeeForm() {
             />
           </Form.Group>
         </Row>
-        {/* <h2 style={{'margin':'auto', 'width':'30%', 'marginTop':'5vh', 'marginBottom':'4vh','textDecoration':'underline'}}>Employee Titles</h2>
-      <Row classname="mb-4">
-        <Form.Group as={Col}>
-          <Form.Control name='hrrate' type='text' onChange={handleChange} placeholder='Hourly Rate' />
-        </Form.Group>
-        <Form.Group as={Col}>
-          <Form.Control name='multiplier' type='text' onChange={handleChange} placeholder='Multiplier' />
-        </Form.Group>
-      </Row> */}
         <h2
           style={{
             margin: "auto",
-            width: "40%",
+            width: "30%",
             marginTop: "5vh",
-            marginBottom: "4vh",
+            marginBottom: "2vh",
             textDecoration: "underline",
           }}
         >
@@ -574,9 +593,9 @@ function EmployeeForm() {
         <h2
           style={{
             margin: "auto",
-            width: "40%",
+            width: "30%",
             marginTop: "5vh",
-            marginBottom: "4vh",
+            marginBottom: "2vh",
             textDecoration: "underline",
           }}
         >
@@ -633,6 +652,18 @@ function EmployeeForm() {
           <Modal.Title>Add Job Title</Modal.Title>
         </Modal.Header>
         <Modal.Body>{<JobTitle />}</Modal.Body>
+      </Modal>
+      <Modal
+        backdrop="static"
+        size="lg"
+        keyboard={false}
+        show={showCityForm}
+        onHide={handleCloseCityForm}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add City</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<AddCity />}</Modal.Body>
       </Modal>
     </>
   );

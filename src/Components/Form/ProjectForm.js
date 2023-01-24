@@ -16,6 +16,7 @@ import Row from "react-bootstrap/Row";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
+import AddCity from "./AddCity";
 
 function ProjectForm() {
   const [isSubmit, setIsSubmit] = useState(false);
@@ -56,7 +57,7 @@ function ProjectForm() {
         })
         .then((res) => {
           setdepts(res.data.res);
-          console.log(res.data.res)
+          console.log(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -154,11 +155,9 @@ function ProjectForm() {
       value: e.Department,
     });
   });
-  // let [DisplayValue1, getValue1] = useState();
-  // let doChange1 = (e) => {
-  //   getValue1(Array.isArray(e) ? e.map((x) => x.value) : []);
-  // };
-  const navigate = useNavigate();
+  const [showCityForm, setShowCityForm] = useState(false);
+  const handleCloseCityForm = () => setShowCityForm(false);
+  const handleShowCityForm = () => setShowCityForm(true);
   return (
     <>
       <Form className="form-main">
@@ -269,6 +268,14 @@ function ProjectForm() {
                 : ""}
             </Form.Select>
           </Form.Group>
+          <Form.Group as={Col}>
+            <Button
+              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
+              onClick={handleShowCityForm}
+            >
+              Add City
+            </Button>
+          </Form.Group>
         </Row>
         <Row className="mb-4">
           <Form.Group as={Col}>
@@ -331,6 +338,15 @@ function ProjectForm() {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>Project Added Successfully</Modal.Body>
+      </Modal>
+      <Modal
+      backdrop="static"
+      size="lg"
+      keyboard={false} show={showCityForm} onHide={handleCloseCityForm} >
+        <Modal.Header closeButton>
+          <Modal.Title>Add City</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<AddCity />}</Modal.Body>
       </Modal>
     </>
   );
