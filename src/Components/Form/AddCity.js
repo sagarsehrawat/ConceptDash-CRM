@@ -7,9 +7,12 @@ import Col from "react-bootstrap/Col";
 import { HOST, ADD_CITY } from "../Constants/Constants";
 import Row from "react-bootstrap/Row";
 import Modal from "react-bootstrap/Modal";
+import LoadingSpinner from "../Loader/Loader";
 
-function AddCity() {
+function AddCity(props) {
+  const { setGreen, closeModal, api, apiCall, setRed } = props;
   const [isSubmit, setIsSubmit] = useState(false);
+  const [isLoading, setisLoading] = useState(false)
   const [form, setform] = useState({
     city: "",
     province: "",
@@ -28,6 +31,7 @@ function AddCity() {
     setform(newForm);
   };
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
     axios
@@ -47,21 +51,28 @@ function AddCity() {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res);
+        console.log(res.data)
+        setisLoading(false);
         if (res.data.success) {
-          handleShow();
+          closeModal();
+          setGreen(true);
+          apiCall(api + 1);
+        } else {
+          setRed(true);
         }
       })
       .catch((err) => {
         console.log(err);
+        setRed(true);
       });
   };
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
+    isLoading?<LoadingSpinner/>:
     <div>
-      <Form className="form-main">
+      <Form className="form-main" onSubmit={handleSubmit}>
         <Row className="mb-4">
           <Form.Group as={Col}>
             <Form.Control placeholder="City" name="city" onChange={handleChange} required />
@@ -122,7 +133,6 @@ function AddCity() {
           className="submit-btn"
           variant="primary"
           type="submit"
-          onClick={handleSubmit}
         >
           Submit
         </Button>

@@ -6,10 +6,11 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { HOST, UPDATE_COMPANY, GET_CITIES } from "../Constants/Constants";
-import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
+import LoadingSpinner from "../Loader/Loader";
 
 function UpdateCompany(props) {
+  const { setGreen, closeModal, api, apiCall, setRed } = props
   useEffect(() => {
     const call = async () => {
       await axios
@@ -28,6 +29,8 @@ function UpdateCompany(props) {
     };
     call();
   }, []);
+  const [isLoading, setisLoading] = useState(false)
+
   const [isSubmit, setIsSubmit] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -90,6 +93,7 @@ function UpdateCompany(props) {
     setform(newForm);
   };
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
     axios
@@ -111,16 +115,23 @@ function UpdateCompany(props) {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res);
+        setisLoading(false);
         if (res.data.success) {
-          handleShow();
+          closeModal()
+          setGreen(true);
+          apiCall(api+1)
+        } else {
+          setRed(true)
         }
       })
       .catch((err) => {
+        setisLoading(false);
+        setRed(true);
         console.log(err);
       });
   };
   return (
+    isLoading?<LoadingSpinner/>:
     <div>
       <Form className="form-main">
         <Row className="mb-4">
@@ -170,7 +181,11 @@ function UpdateCompany(props) {
               <option>Select City</option>
               {cities.length !== 0 ? (
                 cities.map((options) => (
-                  <option value={options.City_ID} selected={options.City === displayCity} key={options.City_ID}>
+                  <option
+                    value={options.City_ID}
+                    selected={options.City === displayCity}
+                    key={options.City_ID}
+                  >
                     {options.City}
                   </option>
                 ))

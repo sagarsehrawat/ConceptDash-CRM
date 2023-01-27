@@ -27,7 +27,12 @@ import {
 } from "../Constants/Constants";
 import AddTask from "../Form/AddTask";
 import LoadingSpinner from "../Loader/Loader";
+import GreenAlert from '../Loader/GreenAlert'
+import RedAlert from '../Loader/RedAlert'
+
 function AdminDash() {
+  const [green, setgreen] = useState(false)
+  const [red, setred] = useState(false)
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -265,9 +270,14 @@ const [selected, setselected] = useState(false)
     ],
   };
 
-  return isLoading ? (
+  return( 
+    <>
+    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
+    {red===true ? <RedAlert setRed={setred}/> : <></>}
+    {
+    isLoading ? 
     <LoadingSpinner />
-  ) : (
+   : 
     <div>
       <div
         className="container"
@@ -344,69 +354,6 @@ const [selected, setselected] = useState(false)
               </ListGroup.Item>
             </ListGroup>
           </div>
-          {/* <div
-            className="card col-3 d-flex align-items-center"
-            style={{
-              width: "12rem",
-              padding: "0.5rem",
-              backgroundColor: "white",
-            }}
-          >
-            <img
-              src={requestIcon}
-              className="card-img"
-              alt="Closed Purchases"
-            />
-            <h5 style={{ marginBottom: "1vh" }} className="card-title">
-              Requests
-            </h5>
-            <ListGroup as="ol">
-              <ListGroup.Item
-                as="li"
-                className="d-flex justify-content-between align-items-start"
-              >
-                <div className="ms-2 me-auto">
-                  <div className="fw-bold">Pending</div>
-                </div>
-                <Badge style={{ marginLeft: "2vw" }} bg="primary" pill>
-                  14
-                </Badge>
-              </ListGroup.Item>
-              <ListGroup.Item
-                as="li"
-                className="d-flex justify-content-between align-items-start"
-              >
-                <div className="ms-2 me-auto">
-                  <div className="fw-bold">Accepted</div>
-                </div>
-                <Badge bg="primary" pill>
-                  14
-                </Badge>
-              </ListGroup.Item>
-              <ListGroup.Item
-                as="li"
-                className="d-flex justify-content-between align-items-start"
-              >
-                <div className="ms-2 me-auto">
-                  <div className="fw-bold">Declined</div>
-                </div>
-                <Badge bg="primary" pill>
-                  14
-                </Badge>
-              </ListGroup.Item>
-              <ListGroup.Item
-                as="li"
-                className="d-flex justify-content-between align-items-start"
-              >
-                <div className="ms-2 me-auto">
-                  <div className="fw-bold">Resolved</div>
-                </div>
-                <Badge bg="primary" pill>
-                  14
-                </Badge>
-              </ListGroup.Item>
-            </ListGroup>
-          </div> */}
           <div
             className="card col-3 d-flex align-items-center"
             style={{
@@ -536,130 +483,6 @@ const [selected, setselected] = useState(false)
               <Line height={100} data={data} />
             </Card>
           </div>
-          {/* <div
-          className="card col-3 d-flex align-items-center"
-          style={{ width: "12rem", padding: "2rem", backgroundColor: "white" }}
-        >
-          <img src={todoIcon} className="card-img" alt="New Purchases" />
-          <h5 style={{ marginBottom: "2vh" }} className="card-title">
-            To Do
-          </h5>
-          <ListGroup as="ol">
-            <ListGroup.Item
-              as="li"
-              className="d-flex justify-content-between align-items-start"
-            >
-              <div className="ms-2 me-auto">
-                <div className="fw-bold">{task1}</div>
-              </div>
-              <Badge style={{'marginLeft':'2vw'}} bg="primary" pill>
-          14
-        </Badge>
-            </ListGroup.Item>
-            <ListGroup.Item
-              as="li"
-              className="d-flex justify-content-between align-items-start"
-            >
-              <div className="ms-2 me-auto">
-                <div className="fw-bold"></div>
-              </div>
-              <Badge bg="primary" pill>
-          14
-        </Badge>
-            </ListGroup.Item>
-          </ListGroup>
-          <p>12</p>
-        </div> */}
-          {/* <div
-          className="card col-3 d-flex align-items-center"
-          style={{
-            width: "12rem",
-            padding: "0.5rem",
-            backgroundColor: "white",
-          }}
-        >
-          <Form.Select onChange={handleMeetHours}>
-            {employees.length !== 0 ? (
-              employees.map((options) => (
-                <option value={options.Employee_ID} key={options.Employee_ID}>
-                  {options.Full_Name}
-                </option>
-              ))
-            ) : (
-              <option value="">None</option>
-            )}
-          </Form.Select>
-          <img src={employeesIcon} className="card-img" alt="New Purchases" />
-          <h5 style={{ marginBottom: "2vh" }} className="card-title">
-            Employees
-          </h5>
-          <ListGroup as="ol">
-            <ListGroup.Item
-              as="li"
-              className="d-flex justify-content-between align-items-start"
-            >
-              <div className="ms-2 me-auto">
-                <div className="fw-bold">Utilization Rate </div>
-              </div>
-              <Badge style={{ marginLeft: "2vw" }} bg="primary" pill>
-                -
-              </Badge>
-            </ListGroup.Item>
-            <ListGroup.Item
-              as="li"
-              className="d-flex justify-content-between align-items-start"
-            >
-              <div className="ms-2 me-auto">
-                <div className="fw-bold">Skills</div>
-              </div>
-              <Badge bg="primary" pill>
-                -
-              </Badge>
-            </ListGroup.Item>
-          </ListGroup>
-          <p>12</p>
-        </div> */}
-          {/* <div
-          className="card col-3 d-flex align-items-center"
-          style={{ width: "12rem", padding: "2rem", backgroundColor: "white" }}
-        >
-          <select name="" id="">
-              <option value="">City</option>
-              <option value="">Year</option>
-              <option value="">Department</option>
-            </select>
-          <img
-            style={{ marginTop: "1vh" }}
-            src={budgetIcon}
-            className="card-img"
-            alt="New Purchases"
-          />
-          <h5 style={{ marginBottom: "2vh" }} className="card-title">
-            Budgets
-          </h5>
-          <ListGroup as="ol">
-            <ListGroup.Item
-              as="li"
-              className="d-flex justify-content-between align-items-start"
-            >
-              <div className="ms-2 me-auto">
-                <div className="fw-bold">----</div>
-              </div>
-              <Badge style={{'marginLeft':'2vw'}} bg="primary" pill>
-          14
-        </Badge>
-            </ListGroup.Item>
-            <ListGroup.Item
-        as="li"
-        className="d-flex justify-content-between align-items-start"
-      >
-        <div className="ms-2 me-auto">
-          <div className="fw-bold">Task 2</div>
-        </div>
-      </ListGroup.Item>
-          </ListGroup>
-          <p>12</p>
-        </div>*/}
         </div>
       </div>
       <Modal
@@ -677,7 +500,6 @@ const [selected, setselected] = useState(false)
       </Modal>
 
       <Modal
-        // style={{'margin':'2rem'}}
         show={showAT}
         onHide={handleCloseAT}
         dialogClassName="modal-150w"
@@ -686,10 +508,10 @@ const [selected, setselected] = useState(false)
         <Modal.Header closeButton>
           <Modal.Title>Add Task</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{<AddTask />}</Modal.Body>
+        <Modal.Body>{<AddTask setRed={setred} setGreen={setgreen} closeModal={handleCloseAT}/>}</Modal.Body>
       </Modal>
-    </div>
-  );
-}
+    </div>}
+  </>
+)}
 
 export default AdminDash;

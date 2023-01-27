@@ -5,11 +5,12 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { useNavigate, useLocation } from "react-router-dom";
 import { HOST, GET_EMPLOYEENAMES, ADD_TASK } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
+import LoadingSpinner from "../Loader/Loader";
 
-function AddMyTask() {
+function AddMyTask(props) {
+  const { setGreen, closeModal, api, apiCall, setRed } = props;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -23,7 +24,7 @@ function AddMyTask() {
     startDate: "",
     dueDate: "",
     completedOn: "",
-    attachments: "",
+    // attachments: "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,16 +47,15 @@ function AddMyTask() {
     };
     call();
   }, []);
+  const [isLoading, setisLoading] = useState(false)
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
     axios
       .post(
         HOST + ADD_TASK,
         {
-          headers: {
-            auth: "Rose " + localStorage.getItem("auth"),
-          },
           title: form.title,
           priority: form.priority,
           completedPercent: form.completed,
@@ -64,28 +64,30 @@ function AddMyTask() {
           startDate: form.startDate,
           dueDate: form.dueDate,
           completedOn: form.completedOn,
-          attachments: form.attachments,
+          // attachments: form.attachments,
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res);
+        setisLoading(false);
         if (res.data.success) {
-          handleShow();
+          closeModal();
+          setGreen(true);
+          apiCall(api + 1);
+        } else {
+          setRed(true);
         }
       })
       .catch((err) => {
         console.log(err);
+        setisLoading(false);
+        setRed(true);
       });
   };
-  const navigate = useNavigate();
-  const callFunc = () => {
-    handleClose();
-    navigate("/engineers");
-  };
   return (
+    isLoading?<LoadingSpinner/>:
     <div>
-      <Form className="form-main">
+      <Form className="form-main" onSubmit={handleSubmit}>
         <Row className="mb-4">
           <Form.Group as={Col}>
             <Form.Label>Title*</Form.Label>
@@ -118,6 +120,7 @@ function AddMyTask() {
               name="startDate"
               type="date"
               onChange={handleChange}
+              required
             />
           </Form.Group>
           <Form.Group as={Col}>
@@ -130,6 +133,7 @@ function AddMyTask() {
               name="completedOn"
               type="date"
               onChange={handleChange}
+
             />
           </Form.Group>
         </Row>
@@ -138,12 +142,13 @@ function AddMyTask() {
             <Form.Label>Description</Form.Label>
             <Form.Control
               name="description"
-              type="text"
+              as="textarea"
+              rows = {1}
               onChange={handleChange}
             />
           </Form.Group>
         </Row>
-        <Row className="mb-4">
+        {/* <Row className="mb-4">
           <Form.Group as={Col}>
             <Form.Control
               name="attachments"
@@ -152,12 +157,11 @@ function AddMyTask() {
               onChange={handleChange}
             />
           </Form.Group>
-        </Row>
+        </Row> */}
         <Button
           className="submit-btn"
           variant="primary"
           type="submit"
-          onClick={handleSubmit}
         >
           Submit
         </Button>
@@ -167,11 +171,6 @@ function AddMyTask() {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>Task Added Successfully</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={callFunc}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );

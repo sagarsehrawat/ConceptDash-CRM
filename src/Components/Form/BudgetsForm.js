@@ -14,9 +14,17 @@ import {
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import AddCity from "./AddCity";
+import LoadingSpinner from "../Loader/Loader";
+import GreenAlert from "../Loader/GreenAlert";
+import RedAlert from "../Loader/RedAlert";
 
-function BudgetsForm() {
+function BudgetsForm(props) {
+  const [apiCallCity, setCallCity] = useState(0);
+  const [green, setgreen] = useState(false);
+  const [red, setred] = useState(false);
+  const { setGreen, closeModal, api, apiCall, setRed } = props;
   const [isSubmit, setIsSubmit] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -45,6 +53,7 @@ function BudgetsForm() {
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   useEffect(() => {
+    setisLoading(true)
     const call = async () => {
       await axios
         .get(HOST + GET_CITIES, {
@@ -78,10 +87,12 @@ function BudgetsForm() {
         .catch((err) => {
           console.log(err);
         });
+        setisLoading(false)
     };
     call();
-  }, []);
+  }, [apiCallCity]);
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
     axios
@@ -100,24 +111,34 @@ function BudgetsForm() {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res);
+        setisLoading(false);
         if (res.data.success) {
-          handleShow();
+          closeModal();
+          setGreen(true);
+          apiCall(api + 1);
+        } else {
+          setRed(true);
         }
       })
       .catch((err) => {
         console.log(err);
+        setisLoading(false);
+        setRed(true);
       });
   };
   const [showCityForm, setShowCityForm] = useState(false);
   const handleCloseCityForm = () => setShowCityForm(false);
   const handleShowCityForm = () => setShowCityForm(true);
   return (
+    <>
+    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
+    {red===true ? <RedAlert setRed={setred}/> : <></>}
+    {isLoading?<LoadingSpinner/>:
     <div>
-      <Form className="form-main">
+      <Form className="form-main" onSubmit={handleSubmit}>
         <Row className="mb-4">
           <Form.Group as={Col} controlId="formGridCity">
-            <Form.Select onChange={handleChange} name="city">
+            <Form.Select onChange={handleChange} name="city" required>
               <option value="">Select City</option>
               {cities.length > 0
                 ? cities.map((e) => <option value={e.City_ID}>{e.City}</option>)
@@ -136,7 +157,7 @@ function BudgetsForm() {
 
         <Row className="mb-4">
           <Form.Group as={Col}>
-            <Form.Select onChange={handleChange} name="dept">
+            <Form.Select onChange={handleChange} name="dept" required>
               <option value="">Select Department</option>
               {depts.length > 0
                 ? depts.map((e) => (
@@ -148,7 +169,7 @@ function BudgetsForm() {
         </Row>
         <Row className="mb-4">
           <Form.Group as={Col}>
-            <Form.Select onChange={handleChange} name="projectCat">
+            <Form.Select onChange={handleChange} name="projectCat" required>
               <option value="">Select Project Category</option>
               {projectDepts.length > 0
                 ? projectDepts.map((e) => (
@@ -164,8 +185,8 @@ function BudgetsForm() {
           <Form.Group as={Col}>
             <Form.Select onChange={handleChange} name="budgetCategory">
               <option value="">Select Budget Category</option>
-              <option value="Design Product">Design Product</option>
-              <option value="Product Project">Product Project</option>
+              <option value="Design">Design</option>
+              <option value="Construction">Construction</option>
             </Form.Select>
           </Form.Group>
         </Row>
@@ -208,8 +229,6 @@ function BudgetsForm() {
           className="submit-btn"
           variant="primary"
           type="submit"
-          style={{}}
-          onClick={handleSubmit}
         >
           Submit
         </Button>
@@ -227,9 +246,9 @@ function BudgetsForm() {
         <Modal.Header closeButton>
           <Modal.Title>Add City</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{<AddCity />}</Modal.Body>
+        <Modal.Body>{<AddCity setRed={setred} setGreen={setgreen} closeModal={handleCloseCityForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
       </Modal>
-    </div>
+    </div>}</>
   );
 }
 

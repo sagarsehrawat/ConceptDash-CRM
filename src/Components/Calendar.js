@@ -1,6 +1,6 @@
-import FullCalendar, { preventDefault } from "@fullcalendar/react";
+import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
+import interactionPlugin from "@fullcalendar/interaction";
 import { gapi } from "gapi-script";
 import { useState, useEffect } from "react";
 import * as React from "react";
@@ -15,19 +15,11 @@ import {
   GET_PROJECT_NAMES,
   ADD_TIMESHEET,
 } from "./Constants/Constants";
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import LoadingSpinner from "./Loader/Loader";
+import GreenAlert from "./Loader/GreenAlert";
+import RedAlert from "./Loader/RedAlert";
+
 const TestDemo = () => {
-  
   const [employees, setemployees] = useState([]);
   const [start, setstart] = useState("");
   const [end, setend] = useState("");
@@ -107,6 +99,7 @@ const TestDemo = () => {
   };
 
   const initClient = () => {
+    setisLoading(true);
     if (!localStorage.getItem("access_token")) {
       openSignInPopup();
     } else if (localStorage.getItem("access_token")) {
@@ -134,6 +127,7 @@ const TestDemo = () => {
             setEvents(formatEvents(data.items));
           }
         });
+        setisLoading(false);
     }
   };
   const [form, setform] = useState({
@@ -159,12 +153,13 @@ const TestDemo = () => {
     }
     return result;
   }
-
+  const [isLoading, setisLoading] = useState(false);
+  const [red, setred] = useState(false);
+  const [green, setgreen] = useState(false);
   const calendarID = "primary";
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
-    // setIsSubmit(true);
-    console.log(e);
     axios
       .post(
         HOST + ADD_TIMESHEET,
@@ -180,13 +175,27 @@ const TestDemo = () => {
           ).getMinutes()}:00`,
           comments: form.description,
         },
-        { headers: { auth: "Rose " + localStorage.getItem("auth"), attendees: DisplayValue.toString() } }
+        {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            attendees: DisplayValue.toString(),
+          },
+        }
       )
       .then((res) => {
-        console.log(res);
+        if (res.data.success) {
+          handleClose();
+          setisLoading(false);
+          setgreen(true);
+        } else {
+          setisLoading(false);
+          setred(true);
+        }
       })
       .catch((err) => {
         console.log(err);
+        setisLoading(false);
+        setred(true);
       });
   };
   const addEvent = () => {
@@ -228,7 +237,6 @@ const TestDemo = () => {
         .then(
           (response) => {
             return [true, response];
-            console.log(response);
           },
           function (err) {
             console.log(err);
@@ -272,190 +280,143 @@ const TestDemo = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   var d = new Date();
-var offset = d.getTimezoneOffset();
-var hours = Math.floor(Math.abs(offset) / 60);
-var minutes = Math.abs(offset) % 60;
-if(minutes===0) {
-  minutes = '00'
-}
-var sign = (offset > 0) ? "-" : "+";
-let offset1 = `${sign}0${hours}:${minutes}`
+  var offset = d.getTimezoneOffset();
+  var hours = Math.floor(Math.abs(offset) / 60);
+  var minutes = Math.abs(offset) % 60;
+  if (minutes === 0) {
+    minutes = "00";
+  }
+  var sign = offset > 0 ? "-" : "+";
+  let offset1 = `${sign}0${hours}:${minutes}`;
   const handleChange1 = (e) => {
-      let newValue = e.target.value + ":00"+offset1;
-      setstart(newValue);
-    
+    let newValue = e.target.value + ":00" + offset1;
+    setstart(newValue);
   };
   const handleChange2 = (e) => {
-      let newValue = e.target.value + ":00"+offset1;
-      setend(newValue);
+    let newValue = e.target.value + ":00" + offset1;
+    setend(newValue);
   };
   return (
     <>
-      <Button
-        onClick={handleShow}
-        style={{
-          marginTop: "1vh",
-          textAlign: "center",
-          backgroundColor: "lightgreen",
-        }}
-        variant="contained"
-      >
-        Create Event
-      </Button>
-      <div
-        style={{
-          width: "31vw",
-          height: "50vh",
-          paddingLeft: "1.7rem",
-          paddingRight: "1.7rem",
-        }}
-      >
-        <FullCalendar
-          plugins={[dayGridPlugin, interactionPlugin]}
-          initialView="dayGridWeek"
-          events={events}
-          headerToolbar={{
-            left: "title",
-          }}
-          eventClick={(info) => {
-            var eventObj = info.event;
-
-            if (eventObj.url) {
-              alert(
-                "Clicked " +
-                  eventObj.title +
-                  ".\n" +
-                  "Start time " +
-                  eventObj.start +
-                  ".\n" +
-                  "End time " +
-                  eventObj.end +
-                  ".\n" +
-                  "Will open the meet in a new tab"
-              );
-
-              window.open(eventObj.url);
-
-              info.jsEvent.preventDefault(); // prevents browser from following link in current tab.
-            } else {
-              alert("Clicked " + eventObj.title);
-            }
-          }}
-        />
-      </div>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Event</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              {/* <Form.Control
-                onChange={handleChange}
-                name="summary"
-                type="text"
-                placeholder="Add Title*"
-              /> */}
-              <Form.Select name="summary" onChange={handleChange}>
-                <option>Select Meeting</option>
-                <option value='Project Meeting'>Project Meeting</option>
-                <option value='Client Meeting'>Client Meeting</option>
-                <option value='Staff Meeting'>Staff Meeting</option>
-              </Form.Select>
-            </Form.Group>
-
-            {/* <Form.Group className="mb-3">
-              <Form.Select onChange={handleChange} name="project">
-                <option value="">Select Project</option>
-                {projects.length !== 0 ? (
-                  projects.map((option) => (
-                    <option value={option.Project_ID}>
-                      {option.Project_Name}
-                    </option>
-                  ))
-                ) : (
-                  <option value="">None</option>
-                )}
-              </Form.Select>
-            </Form.Group> */}
-            <Form.Group className="mb-3">
-              <Select
-                isMulti
-                onChange={doChange}
-                options={attendees}
-                name="employee"
-                placeholder="Select Attendees"
-              >
-                Select Employees
-              </Select>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Start Time</Form.Label>
-              <Form.Control
-                name="start"
-                type="datetime-local"
-                onChange={handleChange1}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>End Time</Form.Label>
-              <Form.Control
-                name="end"
-                type="datetime-local"
-                onChange={handleChange2}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Control
-                name="description"
-                type="test"
-                placeholder="Description"
-                onChange={handleChange}
-              />
-            </Form.Group>
-            <Button onClick={callFunc} variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
+    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
+    {red===true ? <RedAlert setRed={setred}/> : <></>}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <div>
+          <Button
+            onClick={handleShow}
+            style={{
+              marginTop: "1vh",
+              textAlign: "center",
+              backgroundColor: "lightgreen",
+            }}
+            variant="contained"
+          >
+            Create Event
           </Button>
-          {/* <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button> */}
-        </Modal.Footer>
-      </Modal>
+          <div
+            style={{
+              width: "31vw",
+              height: "50vh",
+              paddingLeft: "1.7rem",
+              paddingRight: "1.7rem",
+            }}
+          >
+            <FullCalendar
+              plugins={[dayGridPlugin, interactionPlugin]}
+              initialView="dayGridWeek"
+              events={events}
+              headerToolbar={{
+                left: "title",
+              }}
+              eventClick={(info) => {
+                var eventObj = info.event;
+
+                if (eventObj.url) {
+                  alert(
+                    "Clicked " +
+                      eventObj.title +
+                      ".\n" +
+                      "Start time " +
+                      eventObj.start +
+                      ".\n" +
+                      "End time " +
+                      eventObj.end +
+                      ".\n" +
+                      "Will open the meet in a new tab"
+                  );
+
+                  window.open(eventObj.url);
+
+                  info.jsEvent.preventDefault(); // prevents browser from following link in current tab.
+                } else {
+                  alert("Clicked " + eventObj.title);
+                }
+              }}
+            />
+          </div>
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Add Event</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form onSubmit={callFunc}>
+                <Form.Group className="mb-3">
+                  <Form.Select name="summary" onChange={handleChange} required>
+                    <option>Select Meeting</option>
+                    <option value="Project Meeting">Project Meeting</option>
+                    <option value="Client Meeting">Client Meeting</option>
+                    <option value="Staff Meeting">Staff Meeting</option>
+                  </Form.Select>
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Select
+                    isMulti
+                    onChange={doChange}
+                    options={attendees}
+                    name="employee"
+                    placeholder="Select Attendees"
+                  >
+                    Select Employees
+                  </Select>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Start Time</Form.Label>
+                  <Form.Control
+                    name="start"
+                    type="datetime-local"
+                    onChange={handleChange1}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>End Time</Form.Label>
+                  <Form.Control
+                    name="end"
+                    type="datetime-local"
+                    onChange={handleChange2}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Control
+                    name="description"
+                    type="test"
+                    placeholder="Description"
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                  Submit
+                </Button>
+              </Form>
+            </Modal.Body>
+          </Modal>
+        </div>
+      )}
     </>
   );
 };
 export default TestDemo;
-// import React from 'react'
-// import FullCalendar from '@fullcalendar/react' // must go before plugins
-// import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
-// import timeGridPlugin from "@fullcalendar/timegrid"
-
-// export default class TestDemo extends React.Component {
-//   render() {
-//     return (
-//       <FullCalendar
-//         plugins={[ dayGridPlugin ]}
-//         initialView="dayGridMonth"
-//         // customButtons={{
-//         //   myTimeDaybtn:{
-//         //     text:"timeDay",
-//         //     click(){
-//         //       alert("Clicked")
-//         //     }
-//         //   }
-//         // }}
-//         headerToolbar={{
-//           left:"prev,next",
-//           center:"title",
-//           right:"today, dayGridDay, dayGridWeek, dayGridMonth"
-//         }}
-//       />
-//     )
-//   }
-// }

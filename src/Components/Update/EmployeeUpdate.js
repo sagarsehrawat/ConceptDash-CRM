@@ -9,7 +9,7 @@ import {
   GET_TIMESHEET,
   GET_EMPLOYEENAMES,
   SIX_MONTH_EMPLOYEES,
-  GET_DEPARTMENTS
+  GET_DEPARTMENTS,
 } from "../Constants/Constants";
 import Box from "@mui/material/Box";
 import Select from "react-select";
@@ -24,7 +24,14 @@ import EmployeeForm from "../Form/EmployeeForm";
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import GreenAlert from "../Loader/GreenAlert";
+import RedAlert from "../Loader/RedAlert";
+
 function EmployeeUpdate() {
+  const [apiCall, setCall] = useState(0);
+  const [green, setgreen] = useState(false);
+  const [red, setred] = useState(false);
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -59,7 +66,7 @@ function EmployeeUpdate() {
         .catch((err) => {
           console.log(err);
         });
-        await axios
+      await axios
         .get(HOST + GET_DEPARTMENTS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
@@ -70,10 +77,10 @@ function EmployeeUpdate() {
         .catch((err) => {
           console.log(err);
         });
-        setIsLoading(false);
+      setIsLoading(false);
     };
     call();
-  }, []);
+  }, [apiCall]);
   const handleFilter = async () => {
     setIsLoading(true);
     await axios
@@ -200,10 +207,10 @@ function EmployeeUpdate() {
   let doChange = (e) => {
     getValue(Array.isArray(e) ? e.map((x) => x.value) : []);
   };
-  const [time, settime] = useState('')
+  const [time, settime] = useState("");
   let returnData = {
     dept: DisplayValue,
-    time: time
+    time: time,
   };
   let deptvalue = [];
   returnData["dept"] &&
@@ -213,56 +220,64 @@ function EmployeeUpdate() {
         value: e,
       });
     });
-    const handleTime = (e)=>{
-      settime(e.target.value);
-    }
+  const handleTime = (e) => {
+    settime(e.target.value);
+  };
   return (
-    <div>
-      <div className="container-fluid">
-        <h1
-          style={{
-            textAlign: "center",
-            marginTop: "3rem",
-            marginBottom: "1rem",
-            fontFamily: "roboto",
-            fontWeight: "bold",
-          }}
-        >
-          EMPLOYEE
-          <Button
-            onClick={handleShow}
-            style={{ float: "right", backgroundColor: "rgba(38,141,141,1)" }}
+    <>
+    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
+    {red===true ? <RedAlert setRed={setred}/> : <></>}
+      <div>
+        <div className="container-fluid">
+          <h1
+            style={{
+              textAlign: "center",
+              marginTop: "3rem",
+              marginBottom: "1rem",
+              fontFamily: "roboto",
+              fontWeight: "bold",
+            }}
           >
-            Add Employee +
-          </Button>
-        </h1>
-        <div style={{ float: "right", marginBottom: "1rem" }}>
-          <input
-            style={{ marginRight: ".5rem" }}
-            type="text"
-            value={value}
-            onChange={filterData}
-            placeholder="Search"
-          />
-        </div>
-        <br />
-        <div style={{ display: "flex", flexDirection: "row" }}>
+            EMPLOYEE
+            <Button
+              onClick={handleShow}
+              style={{ float: "right", backgroundColor: "rgba(38,141,141,1)" }}
+            >
+              Add Employee +
+            </Button>
+          </h1>
+          <div style={{ float: "right", marginBottom: "1rem" }}>
+            <input
+              style={{ marginRight: ".5rem" }}
+              type="text"
+              value={value}
+              onChange={filterData}
+              placeholder="Search"
+            />
+          </div>
+          <br />
+          <div style={{ display: "flex", flexDirection: "row" }}>
             <Select
               placeholder="Select departments"
               defaultValue={deptvalue}
               onChange={doChange}
               isMulti
               options={filterDept}
-              
             >
               Select Departments
             </Select>
             &nbsp;&nbsp;
-            <Form.Select style={{width:'15rem'}} onChange={handleTime}>
-              <option value=''>Select Joining Date</option>
-              <option value="DATE_SUB(CURDATE(), INTERVAL 12 MONTH)">Last 12 Months</option>
-              <option value="DATE_SUB(CURDATE(), INTERVAL 6 MONTH)">Last 6 Months</option>
-              <option value="DATE_SUB(CURDATE(), INTERVAL 1 MONTH)">Last 1 Months</option>
+            <Form.Select style={{ width: "15rem" }} onChange={handleTime}>
+              <option value="">Select Joining Date</option>
+              <option value="DATE_SUB(CURDATE(), INTERVAL 12 MONTH)">
+                Last 12 Months
+              </option>
+              <option value="DATE_SUB(CURDATE(), INTERVAL 6 MONTH)">
+                Last 6 Months
+              </option>
+              <option value="DATE_SUB(CURDATE(), INTERVAL 1 MONTH)">
+                Last 1 Months
+              </option>
             </Form.Select>
             &nbsp;&nbsp;
             {deptvalue.length == 0 ? (
@@ -281,396 +296,420 @@ function EmployeeUpdate() {
                 Filter
               </Button>
             )}
-            </div>
-        <br />
-        <Box
-          sx={{ width: "100%", typography: "body1" }}
-          style={{ margin: "0" }}
-        >
-          <TabContext value={value1}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList centered onChange={handleChange} aria-label="">
-                <Tab label="Employees" value="1" />
-                <Tab label="Personal Details" value="2" />
-                <Tab label="Employee Skills" value="3" />
-                <Tab label="Personal Traits" value="5" />
-                <Tab label="TimeSheet" value="4" />
-              </TabList>
-            </Box>
-            <TabPanel value="1" style={{ margin: "0" }}>
-              {isLoading ? (
-                <LoadingSpinner />
-              ) : (
-                <div className="div1" style={{ overflowX: "auto" }}>
-                  <table className="table">
-                    <thead>
-                      <tr className="heading">
-                        <th>Edit</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Department</th>
-                        <th scope="col">Email Work</th>
-                        <th scope="col">Email Personal</th>
-                        <th scope="col">Job Title</th>
-                        <th scope="col">Joining Date</th>
-                        <th scope="col">Business Phone</th>
-                        <th scope="col">Mobile</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">City</th>
-                        <th scope="col">ZIP</th>
-                        <th scope="col">Notes</th>
-                      </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                      {value.length > 0
-                        ? tableFilter.map((row) => {
-                            return (
-                              <tr>
-                                <td>
-                                  <svg
-                                    width="40"
-                                    height="40"
-                                    viewBox="30 0 220 220"
-                                  >
-                                    <image
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() => {
-                                        handleUpdate(row);
-                                      }}
-                                      href="data:image/png;base64,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"
-                                    />
-                                  </svg>
-                                </td>
-                                <td>{row.First_Name}</td>
-                                <td>{row.Last_Name}</td>
-                                <td>{row.Dept}</td>
-                                <td>{row.Email_Work}</td>
-                                <td>{row.Email_Personal}</td>
-                                <td>{row.Title?row.Title:''}</td>
-                                <td>
-                                  {row.Joining_Date
-                                    ? row.Joining_Date.substring(0, 10)
-                                    : ""}
-                                </td>
-                                <td>{row.Business_Phone}</td>
-                                <td>{row.Mobile_Phone}</td>
-                                <td>{row.Address}</td>
-                                <td>{row.City}</td>
-                                <td>{row.ZIP}</td>
-                                <td>{row.Notes}</td>
-                              </tr>
-                            );
-                          })
-                        : employee.map((row) => {
-                            return (
-                              <tr>
-                                <td>
-                                  <svg
-                                    width="40"
-                                    height="40"
-                                    viewBox="50 0 110 220"
-                                  >
-                                    <image
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() => {
-                                        handleUpdate(row);
-                                      }}
-                                      href="data:image/png;base64,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"
-                                    />
-                                  </svg>
-                                </td>
-                                <td>{row.First_Name}</td>
-                                <td>{row.Last_Name}</td>
-                                <td>{row.Dept}</td>
-                                <td>{row.Email_Work}</td>
-                                <td>{row.Email_Personal}</td>
-                                <td>{row.Title?row.Title:''}</td>
-                                <td>
-                                  {row.Joining_Date
-                                    ? row.Joining_Date.substring(0, 10)
-                                    : ""}
-                                </td>
-                                <td>{row.Business_Phone}</td>
-                                <td>{row.Mobile_Phone}</td>
-                                <td>{row.Address}</td>
-                                <td>{row.City}</td>
-                                <td>{row.ZIP}</td>
-                                <td>{row.Notes}</td>
-                              </tr>
-                            );
-                          })}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </TabPanel>
-            <TabPanel centered value="2">
-              {isLoading ? (
-                <LoadingSpinner />
-              ) : (
-                <div className="div1">
-                  <table className="table">
-                    <thead>
-                      <tr className="heading">
-                        <th scope="col">Employee</th>
-                        <th scope="col">Birthday</th>
-                        <th scope="col">Anniversary</th>
-                        <th scope="col">Sports</th>
-                        <th scope="col">Activities</th>
-                        <th scope="col">Beverage</th>
-                        <th scope="col">Alcohol</th>
-                        <th scope="col">Travel Destination</th>
-                        <th scope="col">Spouse</th>
-                        <th scope="col">Children</th>
-                        <th scope="col">TV Show</th>
-                        <th scope="col">Movies</th>
-                        <th scope="col">Actor</th>
-                        <th scope="col">Dislikes</th>
-                      </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                      {value.length > 0
-                        ? tableFilter.map((row) => {
-                            return (
-                              <tr>
-                                <td>{row.First_Name + " " + row.Last_Name}</td>
-                                <td>
-                                  {row.Birthday
-                                    ? row.Birthday.substring(0, 10)
-                                    : ""}
-                                </td>
-                                <td>
-                                  {row.Anniversary
-                                    ? row.Anniversary.substring(0, 10)
-                                    : ""}
-                                </td>
-                                <td>{row.Sports}</td>
-                                <td>{row.Activities}</td>
-                                <td>{row.Beverage}</td>
-                                <td>{row.Alcohol}</td>
-                                <td>{row.Travel_Destination}</td>
-                                <td>{row.Spouse_Name}</td>
-                                <td>{row.Children}</td>
-                                <td>{row.TV_Show}</td>
-                                <td>{row.Movies}</td>
-                                <td>{row.Actor}</td>
-                                <td>{row.Dislikes}</td>
-                              </tr>
-                            );
-                          })
-                        : employee.map((row) => {
-                            return (
-                              <tr>
-                                <td>{row.First_Name + " " + row.Last_Name}</td>
-                                <td>
-                                  {row.Birthday
-                                    ? row.Birthday.substring(0, 10)
-                                    : ""}
-                                </td>
-                                <td>
-                                  {row.Anniversary
-                                    ? row.Anniversary.substring(0, 10)
-                                    : ""}
-                                </td>
-                                <td>{row.Sports}</td>
-                                <td>{row.Activities}</td>
-                                <td>{row.Beverage}</td>
-                                <td>{row.Alcohol}</td>
-                                <td>{row.Travel_Destination}</td>
-                                <td>{row.Spouse_Name}</td>
-                                <td>{row.Children}</td>
-                                <td>{row.TV_Show}</td>
-                                <td>{row.Movies}</td>
-                                <td>{row.Actor}</td>
-                                <td>{row.Dislikes}</td>
-                              </tr>
-                            );
-                          })}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </TabPanel>
-            <TabPanel centered value="3">
-              {isLoading ? (
-                <LoadingSpinner />
-              ) : (
-                <div className="div1">
-                  <table className="table">
-                    <thead>
-                      <tr className="heading">
-                        <th scope="col">Employee</th>
-                        <th scope="col">Proficiency</th>
-                        <th scope="col">Expertise</th>
-                        <th scope="col">Interests</th>
-                        <th scope="col">Cocurricular</th>
-                        <th scope="col">Trainings</th>
-                      </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                      {value.length > 0
-                        ? tableFilter.map((row) => {
-                            return (
-                              <tr>
-                                <td>{row.First_Name + " " + row.Last_Name}</td>
-                                <td>{row.Proficiency}</td>
-                                <td>{row.Expertise}</td>
-                                <td>{row.Interests}</td>
-                                <td>{row.Cocurricular}</td>
-                                <td>{row.Trainings}</td>
-                              </tr>
-                            );
-                          })
-                        : employee.map((row) => {
-                            return (
-                              <tr>
-                                <td>{row.First_Name + " " + row.Last_Name}</td>
-                                <td>{row.Proficiency}</td>
-                                <td>{row.Expertise}</td>
-                                <td>{row.Interests}</td>
-                                <td>{row.Cocurricular}</td>
-                                <td>{row.Trainings}</td>
-                              </tr>
-                            );
-                          })}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </TabPanel>
-            <TabPanel centered value="5">
-              {isLoading ? (
-                <LoadingSpinner />
-              ) : (
-                <div className="div1">
-                  <table className="table">
-                    <thead>
-                      <tr className="heading">
-                        <th scope="col">Employee</th>
-                        <th scope="col">Strengths</th>
-                        <th scope="col">Weakness</th>
-                        <th scope="col">Social Active Index</th>
-                      </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                      {value.length > 0
-                        ? tableFilter.map((row) => {
-                            return (
-                              <tr>
-                                <td>{row.First_Name + " " + row.Last_Name}</td>
-                                <td>{row.Strengths}</td>
-                                <td>{row.Weakness}</td>
-                                <td>{row.Social_Active_Index}</td>
-                              </tr>
-                            );
-                          })
-                        : employee.map((row) => {
-                            return (
-                              <tr>
-                                <td>{row.First_Name + " " + row.Last_Name}</td>
-                                <td>{row.Strengths}</td>
-                                <td>{row.Weakness}</td>
-                                <td>{row.Social_Active_Index}</td>
-                              </tr>
-                            );
-                          })}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </TabPanel>
-            <TabPanel centered value="4">
-              <h1 style={{ textAlign: "center" }}>Select Employee</h1>
-              <Form.Select
-                style={{ marginBottom: "4vh" }}
-                onChange={handleChange1}
-              >
-                {employeess.length !== 0 ? (
-                  employeess.map((options) => (
-                    <option
-                      value={options.Employee_ID}
-                      key={options.Employee_ID}
-                    >
-                      {options.Full_Name}
-                    </option>
-                  ))
+          </div>
+          <br />
+          <Box
+            sx={{ width: "100%", typography: "body1" }}
+            style={{ margin: "0" }}
+          >
+            <TabContext value={value1}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList centered onChange={handleChange} aria-label="">
+                  <Tab label="Employees" value="1" />
+                  <Tab label="Personal Details" value="2" />
+                  <Tab label="Employee Skills" value="3" />
+                  <Tab label="Personal Traits" value="5" />
+                  <Tab label="TimeSheet" value="4" />
+                </TabList>
+              </Box>
+              <TabPanel value="1" style={{ margin: "0" }}>
+                {isLoading ? (
+                  <LoadingSpinner />
                 ) : (
-                  <option value="">None</option>
+                  <div className="div1" style={{ overflowX: "auto" }}>
+                    <table className="table">
+                      <thead>
+                        <tr className="heading">
+                          <th>Edit</th>
+                          <th scope="col">First Name</th>
+                          <th scope="col">Last Name</th>
+                          <th scope="col">Department</th>
+                          <th scope="col">Email Work</th>
+                          <th scope="col">Email Personal</th>
+                          <th scope="col">Job Title</th>
+                          <th scope="col">Joining Date</th>
+                          <th scope="col">Business Phone</th>
+                          <th scope="col">Mobile</th>
+                          <th scope="col">Address</th>
+                          <th scope="col">City</th>
+                          <th scope="col">ZIP</th>
+                          <th scope="col">Notes</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-group-divider">
+                        {value.length > 0
+                          ? tableFilter.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    <svg
+                                      width="40"
+                                      height="40"
+                                      viewBox="30 0 220 220"
+                                    >
+                                      <image
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                          handleUpdate(row);
+                                        }}
+                                        href="data:image/png;base64,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"
+                                      />
+                                    </svg>
+                                  </td>
+                                  <td>{row.First_Name}</td>
+                                  <td>{row.Last_Name}</td>
+                                  <td>{row.Dept}</td>
+                                  <td>{row.Email_Work}</td>
+                                  <td>{row.Email_Personal}</td>
+                                  <td>{row.Title ? row.Title : ""}</td>
+                                  <td>
+                                    {row.Joining_Date
+                                      ? row.Joining_Date.substring(0, 10)
+                                      : ""}
+                                  </td>
+                                  <td>{row.Business_Phone}</td>
+                                  <td>{row.Mobile_Phone}</td>
+                                  <td>{row.Address}</td>
+                                  <td>{row.City}</td>
+                                  <td>{row.ZIP}</td>
+                                  <td>{row.Notes}</td>
+                                </tr>
+                              );
+                            })
+                          : employee.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    <svg
+                                      width="40"
+                                      height="40"
+                                      viewBox="50 0 110 220"
+                                    >
+                                      <image
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                          handleUpdate(row);
+                                        }}
+                                        href="data:image/png;base64,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"
+                                      />
+                                    </svg>
+                                  </td>
+                                  <td>{row.First_Name}</td>
+                                  <td>{row.Last_Name}</td>
+                                  <td>{row.Dept}</td>
+                                  <td>{row.Email_Work}</td>
+                                  <td>{row.Email_Personal}</td>
+                                  <td>{row.Title ? row.Title : ""}</td>
+                                  <td>
+                                    {row.Joining_Date
+                                      ? row.Joining_Date.substring(0, 10)
+                                      : ""}
+                                  </td>
+                                  <td>{row.Business_Phone}</td>
+                                  <td>{row.Mobile_Phone}</td>
+                                  <td>{row.Address}</td>
+                                  <td>{row.City}</td>
+                                  <td>{row.ZIP}</td>
+                                  <td>{row.Notes}</td>
+                                </tr>
+                              );
+                            })}
+                      </tbody>
+                    </table>
+                  </div>
                 )}
-              </Form.Select>
-              {isLoading ? (
-                <LoadingSpinner />
-              ) : (
-                <div>
-                  {selected ? (
-                    <div
-                      className="container"
-                      style={{
-                        padding: "1rem",
-                        marginTop: "1rem",
-                        marginBottom: "1rem",
-                      }}
-                    >
+              </TabPanel>
+              <TabPanel centered value="2">
+                {isLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <div className="div1">
+                    <table className="table">
+                      <thead>
+                        <tr className="heading">
+                          <th scope="col">Employee</th>
+                          <th scope="col">Birthday</th>
+                          <th scope="col">Anniversary</th>
+                          <th scope="col">Sports</th>
+                          <th scope="col">Activities</th>
+                          <th scope="col">Beverage</th>
+                          <th scope="col">Alcohol</th>
+                          <th scope="col">Travel Destination</th>
+                          <th scope="col">Spouse</th>
+                          <th scope="col">Children</th>
+                          <th scope="col">TV Show</th>
+                          <th scope="col">Movies</th>
+                          <th scope="col">Actor</th>
+                          <th scope="col">Dislikes</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-group-divider">
+                        {value.length > 0
+                          ? tableFilter.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    {row.First_Name + " " + row.Last_Name}
+                                  </td>
+                                  <td>
+                                    {row.Birthday
+                                      ? row.Birthday.substring(0, 10)
+                                      : ""}
+                                  </td>
+                                  <td>
+                                    {row.Anniversary
+                                      ? row.Anniversary.substring(0, 10)
+                                      : ""}
+                                  </td>
+                                  <td>{row.Sports}</td>
+                                  <td>{row.Activities}</td>
+                                  <td>{row.Beverage}</td>
+                                  <td>{row.Alcohol}</td>
+                                  <td>{row.Travel_Destination}</td>
+                                  <td>{row.Spouse_Name}</td>
+                                  <td>{row.Children}</td>
+                                  <td>{row.TV_Show}</td>
+                                  <td>{row.Movies}</td>
+                                  <td>{row.Actor}</td>
+                                  <td>{row.Dislikes}</td>
+                                </tr>
+                              );
+                            })
+                          : employee.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    {row.First_Name + " " + row.Last_Name}
+                                  </td>
+                                  <td>
+                                    {row.Birthday
+                                      ? row.Birthday.substring(0, 10)
+                                      : ""}
+                                  </td>
+                                  <td>
+                                    {row.Anniversary
+                                      ? row.Anniversary.substring(0, 10)
+                                      : ""}
+                                  </td>
+                                  <td>{row.Sports}</td>
+                                  <td>{row.Activities}</td>
+                                  <td>{row.Beverage}</td>
+                                  <td>{row.Alcohol}</td>
+                                  <td>{row.Travel_Destination}</td>
+                                  <td>{row.Spouse_Name}</td>
+                                  <td>{row.Children}</td>
+                                  <td>{row.TV_Show}</td>
+                                  <td>{row.Movies}</td>
+                                  <td>{row.Actor}</td>
+                                  <td>{row.Dislikes}</td>
+                                </tr>
+                              );
+                            })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </TabPanel>
+              <TabPanel centered value="3">
+                {isLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <div className="div1">
+                    <table className="table">
+                      <thead>
+                        <tr className="heading">
+                          <th scope="col">Employee</th>
+                          <th scope="col">Proficiency</th>
+                          <th scope="col">Expertise</th>
+                          <th scope="col">Interests</th>
+                          <th scope="col">Cocurricular</th>
+                          <th scope="col">Trainings</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-group-divider">
+                        {value.length > 0
+                          ? tableFilter.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    {row.First_Name + " " + row.Last_Name}
+                                  </td>
+                                  <td>{row.Proficiency}</td>
+                                  <td>{row.Expertise}</td>
+                                  <td>{row.Interests}</td>
+                                  <td>{row.Cocurricular}</td>
+                                  <td>{row.Trainings}</td>
+                                </tr>
+                              );
+                            })
+                          : employee.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    {row.First_Name + " " + row.Last_Name}
+                                  </td>
+                                  <td>{row.Proficiency}</td>
+                                  <td>{row.Expertise}</td>
+                                  <td>{row.Interests}</td>
+                                  <td>{row.Cocurricular}</td>
+                                  <td>{row.Trainings}</td>
+                                </tr>
+                              );
+                            })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </TabPanel>
+              <TabPanel centered value="5">
+                {isLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <div className="div1">
+                    <table className="table">
+                      <thead>
+                        <tr className="heading">
+                          <th scope="col">Employee</th>
+                          <th scope="col">Strengths</th>
+                          <th scope="col">Weakness</th>
+                          <th scope="col">Social Active Index</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-group-divider">
+                        {value.length > 0
+                          ? tableFilter.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    {row.First_Name + " " + row.Last_Name}
+                                  </td>
+                                  <td>{row.Strengths}</td>
+                                  <td>{row.Weakness}</td>
+                                  <td>{row.Social_Active_Index}</td>
+                                </tr>
+                              );
+                            })
+                          : employee.map((row) => {
+                              return (
+                                <tr>
+                                  <td>
+                                    {row.First_Name + " " + row.Last_Name}
+                                  </td>
+                                  <td>{row.Strengths}</td>
+                                  <td>{row.Weakness}</td>
+                                  <td>{row.Social_Active_Index}</td>
+                                </tr>
+                              );
+                            })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </TabPanel>
+              <TabPanel centered value="4">
+                <h1 style={{ textAlign: "center" }}>Select Employee</h1>
+                <Form.Select
+                  style={{ marginBottom: "4vh" }}
+                  onChange={handleChange1}
+                >
+                  {employeess.length !== 0 ? (
+                    employeess.map((options) => (
+                      <option
+                        value={options.Employee_ID}
+                        key={options.Employee_ID}
+                      >
+                        {options.Full_Name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">None</option>
+                  )}
+                </Form.Select>
+                {isLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <div>
+                    {selected ? (
+                      <div
+                        className="container"
+                        style={{
+                          padding: "1rem",
+                          marginTop: "1rem",
+                          marginBottom: "1rem",
+                        }}
+                      >
                         {selectedEvent && selectedevent && (
-                          <div style={{textAlign:'center', border:'2px solid black', marginLeft:'40%', paddingBottom:'.5rem', width:'20rem'}}>
-                            <p><b>{selectedEvent.title}</b></p>
+                          <div
+                            style={{
+                              textAlign: "center",
+                              border: "2px solid black",
+                              marginLeft: "40%",
+                              paddingBottom: ".5rem",
+                              width: "20rem",
+                            }}
+                          >
                             <p>
-                              Start Time: {selectedEvent.start.toLocaleString()}
+                              <b>{selectedEvent.title}</b>
                             </p>
                             <p>
-                              End Time: {selectedEvent.end.toLocaleString()}
+                              Start Time: {selectedEvent.start?selectedEvent.start.toLocaleString():''}
                             </p>
-                            <Button onClick={()=>setSelectedevent(false)}>Close</Button>
+                            <p>
+                              End Time: {selectedEvent.end?selectedEvent.end.toLocaleString():''}
+                            </p>
+                            <Button onClick={() => setSelectedevent(false)}>
+                              Close
+                            </Button>
                           </div>
                         )}
-                      <div style={{ width: "80rem" }}>
-                        <FullCalendar
-                          plugins={[dayGridPlugin, interactionPlugin]}
-                          initialView="dayGridWeek"
-                          events={timesheet}
-                          headerToolbar={{
-                            left: "title",
-                          }}
-                          eventClick={handleEventClick}
-                        />
+                        <div style={{ width: "80rem" }}>
+                          <FullCalendar
+                            plugins={[dayGridPlugin, interactionPlugin]}
+                            initialView="dayGridWeek"
+                            events={timesheet}
+                            headerToolbar={{
+                              left: "title",
+                            }}
+                            eventClick={handleEventClick}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              )}
-            </TabPanel>
-          </TabContext>
-        </Box>
-      </div>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        size="xl"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Add Employee</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{<EmployeeForm />}</Modal.Body>
-      </Modal>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                )}
+              </TabPanel>
+            </TabContext>
+          </Box>
+        </div>
+        <Modal
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          size="xl"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Add Employee</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{<EmployeeForm setRed={setred} setGreen={setgreen} closeModal={handleClose} api={apiCall} apiCall={setCall} />}</Modal.Body>
+        </Modal>
 
-      <Modal
-        show={showUpdate}
-        onHide={handleCloseUpdate}
-        backdrop="static"
-        size="xl"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Update Employee</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{<UpdateEmployeeForm row={rowData} />}</Modal.Body>
-      </Modal>
-      
-    </div>
+        <Modal
+          show={showUpdate}
+          onHide={handleCloseUpdate}
+          backdrop="static"
+          size="xl"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Update Employee</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{<UpdateEmployeeForm row={rowData} setRed={setred} setGreen={setgreen} closeModal={handleCloseUpdate} api={apiCall} apiCall={setCall}/>}</Modal.Body>
+        </Modal>
+      </div>
+    </>
   );
 }
 

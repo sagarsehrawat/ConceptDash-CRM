@@ -14,15 +14,23 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Select from "react-select";
-import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import AddCity from "./AddCity";
+import LoadingSpinner from "../Loader/Loader";
+import GreenAlert from "../Loader/GreenAlert";
+import RedAlert from "../Loader/RedAlert";
 
-function ProjectForm() {
+function ProjectForm(props) {
+  const [apiCallCity, setCallCity] = useState(0);
+  const [green, setgreen] = useState(false);
+  const [red, setred] = useState(false);
+  const { setGreen, closeModal, api, apiCall, setRed } = props;
   const [isSubmit, setIsSubmit] = useState(false);
   const [employees, setemployees] = useState([]);
   const [depts, setdepts] = useState([]);
   const [show, setShow] = useState(false);
+
+  const [isLoading, setisLoading] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -36,7 +44,6 @@ function ProjectForm() {
         })
         .then((res) => {
           setemployees(res.data.res);
-          console.log(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -57,7 +64,6 @@ function ProjectForm() {
         })
         .then((res) => {
           setdepts(res.data.res);
-          console.log(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -68,14 +74,13 @@ function ProjectForm() {
         })
         .then((res) => {
           setcategories(res.data.res);
-          console.log(res.data.res);
         })
         .catch((err) => {
           console.log(err);
         });
     };
     call();
-  }, []);
+  }, [apiCallCity]);
   const [form, setform] = useState({
     projectName: "",
     dueDate: "",
@@ -97,12 +102,14 @@ function ProjectForm() {
     newForm[name] = value;
     setform(newForm);
   };
+
   const date = new Date();
   let day = date.getDate();
   let month = date.getMonth() + 1;
   let year = date.getFullYear();
   let currentDate = `${year}-${month}-${day}`;
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
     axios
@@ -119,7 +126,7 @@ function ProjectForm() {
           projectValue: form.projectValue,
           cityId: form.city,
           departmentId: form.dept,
-          teamMembers: DisplayValue.toString(),
+          teamMembers: DisplayValue ? DisplayValue.toString() : "",
           projectManagerId: form.projectManager,
           projectCategoryId: form.projectCategory,
           status: form.status,
@@ -127,13 +134,19 @@ function ProjectForm() {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res);
+        setisLoading(false);
         if (res.data.success) {
-          handleShow();
+          closeModal();
+          setGreen(true);
+          apiCall(api + 1);
+        } else {
+          setRed(true);
         }
       })
       .catch((err) => {
         console.log(err);
+        setisLoading(false);
+        setRed(true);
       });
   };
   let attendees = [];
@@ -160,194 +173,210 @@ function ProjectForm() {
   const handleShowCityForm = () => setShowCityForm(true);
   return (
     <>
-      <Form className="form-main">
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              name="projectName"
-              type="text"
-              placeholder="Project Name*"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Project Due Date</Form.Label>
-            <Form.Control
-              name="dueDate"
-              type="date"
-              placeholder="Project Due Date*"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Select onChange={handleChange} name="dept">
-              <option value="">Select Department</option>
-              {depts.length > 0
-                ? depts.map((e) => (
-                    <option value={e.Department_ID}>{e.Department}</option>
-                  ))
-                : ""}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              name="followNotes"
-              type="text"
-              placeholder="Follow Up Notes"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Select onChange={handleChange} name="projectStage">
-              <option value="">Select Project Stage</option>
-              <option value="Upcoming">Upcoming</option>
-              <option value="Ongoing">Ongoing</option>
-              <option value="Started">Started</option>
-              <option value="Completed">Completed</option>
-            </Form.Select>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Next Follow Up</Form.Label>
-            <Form.Control
-              name="nextFollow"
-              type="date"
-              placeholder="Next Follow Up"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Tentative Closing Date</Form.Label>
-            <Form.Control
-              name="tentativeClosing"
-              type="date"
-              placeholder="Tentative Closing*"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              name="projectValue"
-              type="text"
-              placeholder="Project Value*"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Select name="projectCategory" onChange={handleChange}>
-              <option value="">Project Category</option>
-              {categories.length !== 0 ? (
-                categories.map((option) => (
-                  <option value={option.Project_Cat_ID}>
-                    {option.Project_Category}
-                  </option>
-                ))
-              ) : (
-                <option value="">None</option>
-              )}
-            </Form.Select>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col} controlId="formGridCity">
-            <Form.Select onChange={handleChange} name="city">
-              <option value="">Select City</option>
-              {cities.length > 0
-                ? cities.map((e) => <option value={e.City_ID}>{e.City}</option>)
-                : ""}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Button
-              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
-              onClick={handleShowCityForm}
-            >
-              Add City
+    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
+    {red===true ? <RedAlert setRed={setred}/> : <></>}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <Form className="form-main" onSubmit={handleSubmit}>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
+                <Form.Control
+                  name="projectName"
+                  type="text"
+                  placeholder="Project Name*"
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
+                <Form.Label>Project Due Date</Form.Label>
+                <Form.Control
+                  name="dueDate"
+                  type="date"
+                  placeholder="Project Due Date*"
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
+                <Form.Select onChange={handleChange} name="dept" required>
+                  <option value="">Select Department</option>
+                  {depts.length > 0
+                    ? depts.map((e) => (
+                        <option value={e.Department_ID}>{e.Department}</option>
+                      ))
+                    : ""}
+                </Form.Select>
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Control
+                  name="followNotes"
+                  type="text"
+                  placeholder="Follow Up Notes"
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Select onChange={handleChange} name="projectStage">
+                  <option value="">Select Project Stage</option>
+                  <option value="Upcoming">Upcoming</option>
+                  <option value="Ongoing">Ongoing</option>
+                  <option value="Started">Started</option>
+                  <option value="Completed">Completed</option>
+                </Form.Select>
+              </Form.Group>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
+                <Form.Label>Next Follow Up</Form.Label>
+                <Form.Control
+                  name="nextFollow"
+                  type="date"
+                  placeholder="Next Follow Up"
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Label>Tentative Closing Date</Form.Label>
+                <Form.Control
+                  name="tentativeClosing"
+                  type="date"
+                  placeholder="Tentative Closing*"
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
+                <Form.Control
+                  name="projectValue"
+                  type="text"
+                  placeholder="Project Value*"
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Select name="projectCategory" onChange={handleChange}>
+                  <option value="">Project Category</option>
+                  {categories.length !== 0 ? (
+                    categories.map((option) => (
+                      <option value={option.Project_Cat_ID}>
+                        {option.Project_Category}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">None</option>
+                  )}
+                </Form.Select>
+              </Form.Group>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col} controlId="formGridCity">
+                <Form.Select onChange={handleChange} name="city">
+                  <option value="">Select City</option>
+                  {cities.length > 0
+                    ? cities.map((e) => (
+                        <option value={e.City_ID}>{e.City}</option>
+                      ))
+                    : ""}
+                </Form.Select>
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Button
+                  style={{
+                    width: "100%",
+                    backgroundColor: "grey",
+                    border: "none",
+                  }}
+                  onClick={handleShowCityForm}
+                >
+                  Add City
+                </Button>
+              </Form.Group>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
+                <Select
+                  isMulti
+                  onChange={doChange}
+                  options={attendees}
+                  name="employee"
+                  placeholder="Team Members"
+                >
+                  Team Members
+                </Select>
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Select
+                  name="projectManager"
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Project Manager</option>
+                  {employees.length !== 0 ? (
+                    employees.map((option) => (
+                      <option value={option.Employee_ID}>
+                        {option.Full_Name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">None</option>
+                  )}
+                </Form.Select>
+              </Form.Group>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
+                <Form.Select name="status" onChange={handleChange}>
+                  <option value="">Status</option>
+                  <option value="Not Started Yet">Not Started Yet</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Ongoing">Ongoing</option>
+                </Form.Select>
+              </Form.Group>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
+                <Form.Label>Relevent Files</Form.Label>
+                <Form.Control
+                  name="attachments"
+                  type="file"
+                  placeholder="Attachments*"
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            </Row>
+            <Button className="submit-btn" variant="primary" type="submit">
+              Submit
             </Button>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Select
-              isMulti
-              onChange={doChange}
-              options={attendees}
-              name="employee"
-              placeholder="Team Members"
-            >
-              Team Members
-            </Select>
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Select name="projectManager" onChange={handleChange}>
-              <option value="">Select Project Manager</option>
-              {employees.length !== 0 ? (
-                employees.map((option) => (
-                  <option value={option.Employee_ID}>{option.Full_Name}</option>
-                ))
-              ) : (
-                <option value="">None</option>
-              )}
-            </Form.Select>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Select name="status" onChange={handleChange}>
-              <option value="">Status</option>
-              <option value="Not Started Yet">Not Started Yet</option>
-              <option value="Completed">Completed</option>
-              <option value="Ongoing">Ongoing</option>
-            </Form.Select>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Relevent Files</Form.Label>
-            <Form.Control
-              name="attachments"
-              type="file"
-              placeholder="Attachments*"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-        </Row>
-        <Button
-          className="submit-btn"
-          variant="primary"
-          type="submit"
-          onClick={handleSubmit}
-        >
-          Submit
-        </Button>
-      </Form>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Form Submitted</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Project Added Successfully</Modal.Body>
-      </Modal>
-      <Modal
-      backdrop="static"
-      size="lg"
-      keyboard={false} show={showCityForm} onHide={handleCloseCityForm} >
-        <Modal.Header closeButton>
-          <Modal.Title>Add City</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{<AddCity />}</Modal.Body>
-      </Modal>
+          </Form>
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Form Submitted</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Form Submitted Successfully</Modal.Body>
+          </Modal>
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={showCityForm}
+            onHide={handleCloseCityForm}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add City</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{<AddCity setRed={setred} setGreen={setgreen} closeModal={handleCloseCityForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
+          </Modal>
+        </>
+      )}
     </>
   );
 }

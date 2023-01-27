@@ -14,11 +14,12 @@ import {
   GET_DEPARTMENTS,
 } from "../Constants/Constants";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import JobTitle from "./JobTitle";
+import LoadingSpinner from "../Loader/Loader";
 
 function UpdateEmployeeForm(props) {
+  const { setGreen, closeModal, api, apiCall, setRed } = props;
   const managerName = props.row.Manager_Name;
   const [isSubmit, setIsSubmit] = useState(false);
   const [jobTitles, setjobTitles] = useState([]);
@@ -295,8 +296,8 @@ function UpdateEmployeeForm(props) {
     newForm[name] = value;
     setform(newForm);
   };
-  const navigate = useNavigate();
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
     axios
@@ -350,16 +351,24 @@ function UpdateEmployeeForm(props) {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        setisLoading(false);
         if (res.data.success) {
-          handleShow();
+          closeModal();
+          setGreen(true);
+          apiCall(api + 1);
+        } else {
+          setRed(true);
         }
       })
       .catch((err) => {
+        setisLoading(false);
+        setRed(true);
         console.log(err);
       });
   };
 
+  const [isLoading, setisLoading] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -368,553 +377,563 @@ function UpdateEmployeeForm(props) {
   const handleCloseJTForm = () => setshowJTForm(false);
   const handleShowJTForm = () => setshowJTForm(true);
   return (
+    isLoading?<LoadingSpinner/>:
     <>
-      <Form className="form-main">
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Select
-              defaultValue={sal}
-              name="salutation"
-              type="text"
-              placeholder="Salutation"
-              onChange={handleChange}
-            >
-              <option value="">Salutation</option>
-              <option value="Mr.">Mr.</option>
-              <option value="Mrs.">Mrs.</option>
-              <option value="Ms.">Ms.</option>
-              <option value="None">None</option>
-            </Form.Select>
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              value={fname}
-              name="firstname"
-              type="text"
-              placeholder="First Name*"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+      <div>
+        <Form className="form-main" onSubmit={handleSubmit}>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Select
+                defaultValue={sal}
+                name="salutation"
+                type="text"
+                placeholder="Salutation"
+                onChange={handleChange}
+              >
+                <option value="">Salutation</option>
+                <option value="Mr.">Mr.</option>
+                <option value="Mrs.">Mrs.</option>
+                <option value="Ms.">Ms.</option>
+                <option value="None">None</option>
+              </Form.Select>
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control
+                value={fname}
+                name="firstname"
+                type="text"
+                placeholder="First Name*"
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
 
-          <Form.Group as={Col}>
-            <Form.Control
-              value={lname}
-              name="lastname"
-              type="text"
-              placeholder="Last Name"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Select name="department" onChange={handleChange} required>
-              <option value="">Select Department</option>
-              {depts.map((option) => (
-                <option
-                  value={option.Department_ID}
-                  selected={option.Department_ID === displayDept}
-                >
-                  {option.Department}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Select name="jobtitle" onChange={handleChange} required>
-              <option value="">Job Title</option>
-              {jobTitles.map((option) => (
-                <option
-                  value={option.Title_ID}
-                  selected={option.Title_ID === jobtitle}
-                >
-                  {option.Title}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Button
-              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
-              onClick={handleShowJTForm}
-            >
-              Add Job Title
-            </Button>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Select onChange={handleChange} name="directManager" required>
-              <option value="">Direct Manager</option>
-              {employees.map((option) => (
-                <option
-                  value={option.Full_Name}
-                  selected={option.Full_Name === managerName}
-                >
-                  {option.Full_Name}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Control
-              value={ework}
-              name="emailWork"
-              type="email"
-              placeholder="Email Work*"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Control
-              value={epersonal}
-              name="emailPersonal"
-              type="email"
-              placeholder="Email Personal"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Joining Date</Form.Label>
-            <Form.Control
-              value={jDate}
-              name="joiningDate"
-              type="date"
-              placeholder="Joining Date*"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              value={bphone}
-              name="business"
-              type="tel"
-              placeholder="Business Phone*"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              value={mobile}
-              name="mobile"
-              type="tel"
-              placeholder="Mobile Phone*"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-        </Row>
-
-        <Form.Group className="mb-4" controlId="formGridAddress1">
-          <Form.Control
-            value={address}
-            name="address"
-            placeholder="Address"
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Row className="mb-4">
-          <Form.Group as={Col} controlId="formGridCity">
-            <Form.Select
-              defaultValue={city}
-              onChange={handleChange}
-              name="city"
-              required
-            >
-              <option>Select City</option>
-              {cities.length !== 0 ? (
-                cities.map((options) => (
-                  <option value={options.City_ID} key={options.City_ID}>
-                    {options.City}
+            <Form.Group as={Col}>
+              <Form.Control
+                value={lname}
+                name="lastname"
+                type="text"
+                placeholder="Last Name"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Select name="department" onChange={handleChange} required>
+                <option value="">Select Department</option>
+                {depts.map((option) => (
+                  <option
+                    value={option.Department_ID}
+                    selected={option.Department_ID === displayDept}
+                  >
+                    {option.Department}
                   </option>
-                ))
-              ) : (
-                <option value="">None</option>
-              )}
-            </Form.Select>
+                ))}
+              </Form.Select>
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Select name="jobtitle" onChange={handleChange} required>
+                <option value="">Job Title</option>
+                {jobTitles.map((option) => (
+                  <option
+                    value={option.Title_ID}
+                    selected={option.Title_ID === jobtitle}
+                  >
+                    {option.Title}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Button
+                style={{
+                  width: "100%",
+                  backgroundColor: "grey",
+                  border: "none",
+                }}
+                onClick={handleShowJTForm}
+              >
+                Add Job Title
+              </Button>
+            </Form.Group>
+          </Row>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Select
+                onChange={handleChange}
+                name="directManager"
+                required
+              >
+                <option value="">Direct Manager</option>
+                {employees.map((option) => (
+                  <option
+                    value={option.Full_Name}
+                    selected={option.Full_Name === managerName}
+                  >
+                    {option.Full_Name}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+            <Form.Group as={Col} controlId="formGridEmail">
+              <Form.Control
+                value={ework}
+                name="emailWork"
+                type="email"
+                placeholder="Email Work*"
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group as={Col} controlId="formGridEmail">
+              <Form.Control
+                value={epersonal}
+                name="emailPersonal"
+                type="email"
+                placeholder="Email Personal"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Row>
+
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Label>Joining Date</Form.Label>
+              <Form.Control
+                value={jDate}
+                name="joiningDate"
+                type="date"
+                placeholder="Joining Date*"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Row>
+
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Control
+                value={bphone}
+                name="business"
+                type="tel"
+                placeholder="Business Phone*"
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control
+                value={mobile}
+                name="mobile"
+                type="tel"
+                placeholder="Mobile Phone*"
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          </Row>
+
+          <Form.Group className="mb-4" controlId="formGridAddress1">
+            <Form.Control
+              value={address}
+              name="address"
+              placeholder="Address"
+              onChange={handleChange}
+            />
           </Form.Group>
 
-          <Form.Group as={Col} controlId="formGridZip">
+          <Row className="mb-4">
+            <Form.Group as={Col} controlId="formGridCity">
+              <Form.Select
+                defaultValue={city}
+                onChange={handleChange}
+                name="city"
+                required
+              >
+                <option>Select City</option>
+                {cities.length !== 0 ? (
+                  cities.map((options) => (
+                    <option value={options.City_ID} key={options.City_ID}>
+                      {options.City}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">None</option>
+                )}
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="formGridZip">
+              <Form.Control
+                value={zip}
+                name="zip"
+                type="text"
+                pattern="[0-9]{6}"
+                placeholder="Pin Code"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Control
+                name="expertise"
+                value={exp}
+                placeholder="Expertise"
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control
+                name="webpage"
+                value={wpage}
+                placeholder="Web-Page"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Label>Resume</Form.Label>
+              <Form.Control
+                name="resume"
+                type="file"
+                placeholder="Resume"
+                onChange={handleChange}
+              />
+            </Form.Group>
+
+            <Form.Group as={Col}>
+              <Form.Label>Attachment</Form.Label>
+              <Form.Control
+                name="attachments"
+                type="file"
+                placeholder="Attachments"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Row>
+          <Form.Group className="mb-4" controlId="exampleForm.ControlTextarea1">
             <Form.Control
-              value={zip}
-              name="zip"
+              value={notes}
+              name="notes"
+              as="textarea"
+              rows={1}
               type="text"
-              pattern="[0-9]{6}"
-              placeholder="Pin Code"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              name="expertise"
-              value={exp}
-              placeholder="Expertise"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              name="webpage"
-              value={wpage}
-              placeholder="Web-Page"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Resume</Form.Label>
-            <Form.Control
-              name="resume"
-              type="file"
-              placeholder="Resume"
+              placeholder="Notes"
               onChange={handleChange}
             />
           </Form.Group>
 
-          <Form.Group as={Col}>
-            <Form.Label>Attachment</Form.Label>
-            <Form.Control
-              name="attachments"
-              type="file"
-              placeholder="Attachments"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-        <Form.Group className="mb-4" controlId="exampleForm.ControlTextarea1">
-          <Form.Control
-            value={notes}
-            name="notes"
-            as="textarea"
-            rows={1}
-            type="text"
-            placeholder="Notes"
-            onChange={handleChange}
-          />
-        </Form.Group>
+          {/* personal details */}
+          <h2
+            style={{
+              margin: "auto",
+              width: "30%",
+              marginTop: "5vh",
+              marginBottom: "2vh",
+              textDecoration: "underline",
+            }}
+          >
+            Personal Details
+          </h2>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Label>Birthday</Form.Label>
+              <Form.Control
+                value={birthday}
+                name="birthday"
+                type="date"
+                placeholder="Birthday"
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Label>Anniversary</Form.Label>
+              <Form.Control
+                value={anniv}
+                name="anniversary"
+                type="date"
+                placeholder="Anniversary"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              {/* <Form.Label>Birthday</Form.Label> */}
+              {/* <Form.Control name='sports' type="date" placeholder="Birthday" onChange={handleChange} /> */}
+              <Form.Select
+                defaultValue={sport}
+                onChange={handleChange}
+                name="sports"
+              >
+                <option value="">Select Sports</option>
+                <option value="Soccer">Soccer</option>
+                <option value="Hockey">Hockey</option>
+                <option value="Basketball">Basketball</option>
+                <option value="Baseball">Baseball</option>
+                <option value="Boxing">Boxing</option>
+                <option value="MMA">MMA</option>
+                <option value="Others">Others</option>
+              </Form.Select>
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Select
+                defaultValue={act}
+                onChange={handleChange}
+                name="activity"
+              >
+                <option value="">Select Activity</option>
+                <option value="Walking">Walking</option>
+                <option value="Running">Running</option>
+                <option value="Travelling">Travelling</option>
+              </Form.Select>
+            </Form.Group>
+          </Row>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Select
+                defaultValue={bev}
+                onChange={handleChange}
+                name="beverage"
+              >
+                <option value="">Select Beverage</option>
+                <option value="Coffee">Coffee</option>
+                <option value="Tea">Tea</option>
+                <option value="Ice Cap">Ice Cap</option>
+              </Form.Select>
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Select
+                defaultValue={alco}
+                onChange={handleChange}
+                name="alcohol"
+              >
+                <option value="">Select Alcohol</option>
+                <option value="Vodka">Vodka</option>
+                <option value="Scotch">Scotch</option>
+                <option value="Beer">Beer</option>
+                <option value="Tequila">Tequila</option>
+                <option value="Rum">Rum</option>
+                <option value="Cocktail">Cocktail</option>
+              </Form.Select>
+            </Form.Group>
+          </Row>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Control
+                value={tdest}
+                name="travelDest"
+                type="text"
+                placeholder="Travel Destination"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Control
+                value={sname}
+                name="spouseName"
+                type="text"
+                placeholder="Spouse Name"
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control
+                value={child}
+                name="children"
+                type="text"
+                placeholder="Children"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Control
+                value={tv}
+                name="tvShow"
+                type="text"
+                placeholder="TV Show"
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control
+                value={movie}
+                name="movie"
+                type="text"
+                placeholder="Movie"
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control
+                value={actor}
+                name="actor"
+                type="text"
+                placeholder="Actor"
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control
+                value={dislike}
+                name="dislikes"
+                type="text"
+                placeholder="Dislikes"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Row>
 
-        {/* personal details */}
-        <h2
-          style={{
-            margin: "auto",
-            width: "30%",
-            marginTop: "5vh",
-            marginBottom: "2vh",
-            textDecoration: "underline",
-          }}
-        >
-          Personal Details
-        </h2>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Birthday</Form.Label>
-            <Form.Control
-              value={birthday}
-              name="birthday"
-              type="date"
-              placeholder="Birthday"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Anniversary</Form.Label>
-            <Form.Control
-              value={anniv}
-              name="anniversary"
-              type="date"
-              placeholder="Anniversary"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            {/* <Form.Label>Birthday</Form.Label> */}
-            {/* <Form.Control name='sports' type="date" placeholder="Birthday" onChange={handleChange} /> */}
-            <Form.Select
-              defaultValue={sport}
-              onChange={handleChange}
-              name="sports"
-            >
-              <option value="">Select Sports</option>
-              <option value="Soccer">Soccer</option>
-              <option value="Hockey">Hockey</option>
-              <option value="Basketball">Basketball</option>
-              <option value="Baseball">Baseball</option>
-              <option value="Boxing">Boxing</option>
-              <option value="MMA">MMA</option>
-              <option value="Others">Others</option>
-            </Form.Select>
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Select
-              defaultValue={act}
-              onChange={handleChange}
-              name="activity"
-            >
-              <option value="">Select Activity</option>
-              <option value="Walking">Walking</option>
-              <option value="Running">Running</option>
-              <option value="Travelling">Travelling</option>
-            </Form.Select>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Select
-              defaultValue={bev}
-              onChange={handleChange}
-              name="beverage"
-            >
-              <option value="">Select Beverage</option>
-              <option value="Coffee">Coffee</option>
-              <option value="Tea">Tea</option>
-              <option value="Ice Cap">Ice Cap</option>
-            </Form.Select>
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Select
-              defaultValue={alco}
-              onChange={handleChange}
-              name="alcohol"
-            >
-              <option value="">Select Alcohol</option>
-              <option value="Vodka">Vodka</option>
-              <option value="Scotch">Scotch</option>
-              <option value="Beer">Beer</option>
-              <option value="Tequila">Tequila</option>
-              <option value="Rum">Rum</option>
-              <option value="Cocktail">Cocktail</option>
-            </Form.Select>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              value={tdest}
-              name="travelDest"
-              type="text"
-              placeholder="Travel Destination"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              value={sname}
-              name="spouseName"
-              type="text"
-              placeholder="Spouse Name"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              value={child}
-              name="children"
-              type="text"
-              placeholder="Children"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              value={tv}
-              name="tvShow"
-              type="text"
-              placeholder="TV Show"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              value={movie}
-              name="movie"
-              type="text"
-              placeholder="Movie"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              value={actor}
-              name="actor"
-              type="text"
-              placeholder="Actor"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              value={dislike}
-              name="dislikes"
-              type="text"
-              placeholder="Dislikes"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
+          <h2
+            style={{
+              margin: "auto",
+              width: "25%",
+              marginTop: "5vh",
+              marginBottom: "4vh",
+              textDecoration: "underline",
+            }}
+          >
+            Employee Skills
+          </h2>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              {/* <Form.Control name='tvShow' type='text' placeholder='TV Show' onChange={handleChange}/> */}
+              <Form.Select
+                defaultValue={prof}
+                name="proficiency"
+                onChange={handleChange}
+              >
+                <option value="">Proficiency</option>
+                <option value="AutoCAD">AutoCAD</option>
+                <option value="Civil3D">Civil3D</option>
+                <option value="Microstation">Microstation</option>
+                <option value="Syncro">Syncro</option>
+                <option value="Cidra">Cidra</option>
+              </Form.Select>
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control
+                value={int}
+                name="interests"
+                type="text"
+                onChange={handleChange}
+                placeholder="Interests"
+              />
+            </Form.Group>
+          </Row>
+          <Row classname="mb-4">
+            <Form.Group as={Col}>
+              <Form.Control
+                value={cocurr}
+                name="cocurricular"
+                type="text"
+                onChange={handleChange}
+                placeholder="Co-Curriculars"
+              />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control
+                value={train}
+                name="trainings"
+                type="text"
+                onChange={handleChange}
+                placeholder="Trainings"
+              />
+            </Form.Group>
+          </Row>
 
-        <h2
-          style={{
-            margin: "auto",
-            width: "25%",
-            marginTop: "5vh",
-            marginBottom: "4vh",
-            textDecoration: "underline",
-          }}
-        >
-          Employee Skills
-        </h2>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            {/* <Form.Control name='tvShow' type='text' placeholder='TV Show' onChange={handleChange}/> */}
-            <Form.Select
-              defaultValue={prof}
-              name="proficiency"
-              onChange={handleChange}
-            >
-              <option value="">Proficiency</option>
-              <option value="AutoCAD">AutoCAD</option>
-              <option value="Civil3D">Civil3D</option>
-              <option value="Microstation">Microstation</option>
-              <option value="Syncro">Syncro</option>
-              <option value="Cidra">Cidra</option>
-            </Form.Select>
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              value={int}
-              name="interests"
-              type="text"
-              onChange={handleChange}
-              placeholder="Interests"
-            />
-          </Form.Group>
-        </Row>
-        <Row classname="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              value={cocurr}
-              name="cocurricular"
-              type="text"
-              onChange={handleChange}
-              placeholder="Co-Curriculars"
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              value={train}
-              name="trainings"
-              type="text"
-              onChange={handleChange}
-              placeholder="Trainings"
-            />
-          </Form.Group>
-        </Row>
+          <h2
+            style={{
+              margin: "auto",
+              width: "25%",
+              marginTop: "5vh",
+              marginBottom: "4vh",
+              textDecoration: "underline",
+            }}
+          >
+            Employee Traits
+          </h2>
+          <Row classname="mb-4">
+            <Form.Group as={Col}>
+              <Form.Control
+                value={str}
+                name="strengths"
+                type="text"
+                onChange={handleChange}
+                placeholder="Strengths"
+              />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control
+                value={weak}
+                name="weakness"
+                type="text"
+                onChange={handleChange}
+                placeholder="Weakness"
+              />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control
+                value={sai}
+                name="activeIndex"
+                type="text"
+                onChange={handleChange}
+                placeholder="Social Active Index"
+              />
+            </Form.Group>
+          </Row>
+          <h2
+            style={{
+              margin: "auto",
+              width: "25%",
+              marginTop: "5vh",
+              marginBottom: "4vh",
+              textDecoration: "underline",
+            }}
+          >
+            Authentication
+          </h2>
 
-        <h2
-          style={{
-            margin: "auto",
-            width: "25%",
-            marginTop: "5vh",
-            marginBottom: "4vh",
-            textDecoration: "underline",
-          }}
-        >
-          Employee Traits
-        </h2>
-        <Row classname="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              value={str}
-              name="strengths"
-              type="text"
-              onChange={handleChange}
-              placeholder="Strengths"
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              value={weak}
-              name="weakness"
-              type="text"
-              onChange={handleChange}
-              placeholder="Weakness"
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              value={sai}
-              name="activeIndex"
-              type="text"
-              onChange={handleChange}
-              placeholder="Social Active Index"
-            />
-          </Form.Group>
-        </Row>
-        <h2
-          style={{
-            margin: "auto",
-            width: "25%",
-            marginTop: "5vh",
-            marginBottom: "4vh",
-            textDecoration: "underline",
-          }}
-        >
-          Authentication
-        </h2>
-
-        <Row classname="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              value={uname}
-              name="username"
-              type="text"
-              placeholder="Username*"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-        </Row>
-        <Button
-          className="submit-btn"
-          variant="primary"
-          type="submit"
-          style={{ marginTop: "4vh", width: "10vw" }}
-          onClick={handleSubmit}
-        >
-          Submit
-        </Button>
-      </Form>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Form Submitted</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Employee Updated Successfully</Modal.Body>
-      </Modal>
-      <Modal show={showJTForm} onHide={handleCloseJTForm}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Job Title</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{<JobTitle />}</Modal.Body>
-      </Modal>
+          <Row classname="mb-4">
+            <Form.Group as={Col}>
+              <Form.Control
+                value={uname}
+                name="username"
+                type="text"
+                placeholder="Username*"
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          </Row>
+          <Button
+            className="submit-btn"
+            variant="primary"
+            type="submit"
+            style={{ marginTop: "4vh", width: "10vw" }}
+          >
+            Submit
+          </Button>
+        </Form>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Form Submitted</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Employee Updated Successfully</Modal.Body>
+        </Modal>
+        <Modal show={showJTForm} onHide={handleCloseJTForm}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Job Title</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{<JobTitle />}</Modal.Body>
+        </Modal>
+      </div>
     </>
   );
 }

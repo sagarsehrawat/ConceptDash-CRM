@@ -5,21 +5,19 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { useNavigate, useLocation } from "react-router-dom";
 import {
   HOST,
   GET_CITIES,
   GET_DEPARTMENTS,
   GET_PROJECT_CATEGORIES,
   GET_EMPLOYEENAMES,
-  GET_BUDGET_NAMES,
   UPDATE_RFP,
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
+import LoadingSpinner from "../Loader/Loader";
 
 function UpdateRFP(props) {
-  const location = useLocation();
-  console.log(props.row);
+  const { setGreen, closeModal, api, apiCall, setRed } = props
   const [isSubmit, setIsSubmit] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -31,6 +29,7 @@ function UpdateRFP(props) {
 
   const [projectDepts, setprojectDepts] = useState([]);
   useEffect(() => {
+    setisLoading(true);
     const call = async () => {
       await axios
         .get(HOST + GET_CITIES, {
@@ -74,6 +73,7 @@ function UpdateRFP(props) {
         .catch((err) => {
           console.log(err);
         });
+        setisLoading(false)
     };
     call();
   }, []);
@@ -151,6 +151,7 @@ function UpdateRFP(props) {
     setform(newForm);
   };
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
     axios
@@ -174,16 +175,24 @@ function UpdateRFP(props) {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res);
+        setisLoading(false);
         if (res.data.success) {
-          handleShow();
+          closeModal()
+          setGreen(true);
+          apiCall(api+1)
+        } else {
+          setRed(true)
         }
       })
       .catch((err) => {
+        setisLoading(false);
+        setRed(true);
         console.log(err);
       });
   };
+  const [isLoading, setisLoading] = useState(false)
   return (
+    isLoading?<LoadingSpinner/>:
     <div>
       <Form className="form-main">
         <Row className="mb-4">

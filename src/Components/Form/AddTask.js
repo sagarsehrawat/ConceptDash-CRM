@@ -5,11 +5,14 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { useNavigate, useLocation } from "react-router-dom";
 import { HOST, GET_EMPLOYEENAMES, ADD_TASK } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
+import LoadingSpinner from "../Loader/Loader";
 
-function AddTask() {
+function AddTask(props) {
+  const [isLoading, setisLoading] = useState(false)
+  const { setGreen, closeModal, setRed } = props
+  
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -24,7 +27,6 @@ function AddTask() {
     startDate: "",
     dueDate: "",
     completedOn: "",
-    attachments: "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,8 +50,10 @@ function AddTask() {
     call();
   }, []);
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
+    console.log("submitted");
     axios
       .post(
         HOST + ADD_TASK,
@@ -65,29 +69,31 @@ function AddTask() {
           startDate: form.startDate,
           dueDate: form.dueDate,
           completedOn: form.completedOn,
-          attachments: form.attachments,
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res);
+        setisLoading(false)
         if (res.data.success) {
-          handleShow();
+          closeModal();
+          setGreen(true);
+        } else {
+          setRed(true);
         }
       })
       .catch((err) => {
         console.log(err);
+        setRed(true);
       });
   };
-  const navigate = useNavigate();
   return (
+    isLoading?<LoadingSpinner/>:
     <div>
-      <Form className="form-main">
+      <Form className="form-main" onSubmit={handleSubmit}>
         <Row className="mb-4">
           <Form.Group as={Col}>
             <Form.Control
               name="title"
-              type="text"
               placeholder="Title*"
               onChange={handleChange}
               required
@@ -96,7 +102,7 @@ function AddTask() {
           <Form.Group as={Col}>
             <Form.Control
               name="priority"
-              type="text"
+              required
               placeholder="Priority"
               onChange={handleChange}
             />
@@ -115,7 +121,6 @@ function AddTask() {
         <Row className="mb-4">
           <Form.Group as={Col}>
             <Form.Label>Assigned To</Form.Label>
-            {/* <Form.Control name='acquiredOn' type="date" onChange={handleChange}/> */}
             <Form.Select
               name="assignedTo"
               type="text"
@@ -138,11 +143,12 @@ function AddTask() {
               name="startDate"
               type="date"
               onChange={handleChange}
+              required
             />
           </Form.Group>
           <Form.Group as={Col}>
             <Form.Label>Due Date</Form.Label>
-            <Form.Control name="dueDate" type="date" onChange={handleChange} />
+            <Form.Control name="dueDate" type="date" onChange={handleChange} required />
           </Form.Group>
           <Form.Group as={Col}>
             <Form.Label>Completed On</Form.Label>
@@ -157,26 +163,26 @@ function AddTask() {
           <Form.Group as={Col}>
             <Form.Control
               name="description"
-              type="text"
+              as="textarea"
+              rows={2}
               placeholder="Description"
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group as={Col}>
+          {/* <Form.Group as={Col}>
             <Form.Control
               name="attachments"
               type="file"
               placeholder="Attachments"
               onChange={handleChange}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Row>
         <Button
           className="submit-btn"
           variant="primary"
           type="submit"
-          style={{}}
-          onClick={handleSubmit}
+          // onClick={handleSubmit}
         >
           Submit
         </Button>

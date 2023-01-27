@@ -121,7 +121,7 @@ function Engineer() {
         aria-labelledby="example-custom-modal-styling-title"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Calendar</Modal.Title>
+          <Modal.Title>TimeSheet</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ marginLeft: "0.5rem" }}>
           {<TimeSheet />}

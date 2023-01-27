@@ -7,9 +7,16 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
-import { HOST, GET_COMPANY_NAMES, UPDATE_CLIENT, GET_CITIES } from "../Constants/Constants";
+import {
+  HOST,
+  GET_COMPANY_NAMES,
+  UPDATE_CLIENT,
+  GET_CITIES,
+} from "../Constants/Constants";
+import LoadingSpinner from "../Loader/Loader";
 
 function UpdateCustomer(props) {
+  const { setGreen, closeModal, api, apiCall, setRed } = props
   const companyName = props.row.Company_Name;
   const [isSubmit, setIsSubmit] = useState(false);
   const [company, setcompany] = useState(props.row.Company_ID);
@@ -165,8 +172,9 @@ function UpdateCustomer(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  
+
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
     axios
@@ -208,16 +216,24 @@ function UpdateCustomer(props) {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res);
+        console.log(res.data)
+        setisLoading(false);
         if (res.data.success) {
-          handleShow();
+          closeModal()
+          setGreen(true);
+          apiCall(api+1)
+        } else {
+          setRed(true)
         }
       })
       .catch((err) => {
+        setisLoading(false);
+        setRed(true);
         console.log(err);
       });
   };
-  const [cities, setcities] = useState([])
+  const [isLoading, setisLoading] = useState(false)
+  const [cities, setcities] = useState([]);
   const [companies, setcompanies] = useState([]);
   useEffect(() => {
     const call = async () => {
@@ -231,10 +247,10 @@ function UpdateCustomer(props) {
         .catch((err) => {
           console.log(err);
         });
-        await axios
+      await axios
         .get(HOST + GET_CITIES, {
           headers: {
-            auth: "Rose " + localStorage.getItem("auth")
+            auth: "Rose " + localStorage.getItem("auth"),
           },
         })
         .then((res) => {
@@ -248,29 +264,24 @@ function UpdateCustomer(props) {
     call();
   }, []);
   return (
+    isLoading?<LoadingSpinner/>:
     <div>
-      <Form className="form-main">
+      <Form className="form-main" onSubmit={handleSubmit}>
         <Row className="mb-4">
           <Form.Group as={Col}>
-            <Form.Select
-              onChange={handleChange}
-              name="company"
-            >
+            <Form.Label>Select Company</Form.Label>
+            <Form.Select onChange={handleChange} name="company">
               {companies.map((option) => (
-                <option value={option.ID} selected={option.Name===companyName}>{option.Name}</option>
+                <option
+                  value={option.ID}
+                  selected={option.Name === companyName}
+                >
+                  {option.Name}
+                </option>
               ))}
             </Form.Select>
           </Form.Group>
-          <Form.Group as={Col}>
-            <Button
-              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
-              onClick={(e) => {
-                navigate("/companyform");
-              }}
-            >
-              Add Company
-            </Button>
-          </Form.Group>
+          
         </Row>
         <Row className="mb-4">
           <Form.Group as={Col}>
@@ -374,18 +385,18 @@ function UpdateCustomer(props) {
               name="city"
             >
               <option>Select City</option>
-            {cities.length !== 0 ? (
-              cities.map((options) => (
-                <option value={options.City_ID} key={options.City_ID}>
-                  {options.City}
-                </option>
-              ))
-            ) : (
-              <option value="">None</option>
-            )}
+              {cities.length !== 0 ? (
+                cities.map((options) => (
+                  <option value={options.City_ID} key={options.City_ID}>
+                    {options.City}
+                  </option>
+                ))
+              ) : (
+                <option value="">None</option>
+              )}
             </Form.Select>
           </Form.Group>
-          
+
           <Form.Group as={Col} controlId="formGridZip">
             <Form.Control
               value={zip}
@@ -588,7 +599,6 @@ function UpdateCustomer(props) {
           className="submit-btn"
           variant="primary"
           type="submit"
-          onClick={handleSubmit}
         >
           Submit
         </Button>
@@ -598,8 +608,7 @@ function UpdateCustomer(props) {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>Custmer Updated Successfully</Modal.Body>
-        <Modal.Footer>
-        </Modal.Footer>
+        <Modal.Footer></Modal.Footer>
       </Modal>
     </div>
   );

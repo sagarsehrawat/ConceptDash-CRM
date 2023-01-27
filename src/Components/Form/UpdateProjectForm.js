@@ -15,8 +15,12 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Select from "react-select";
 import Modal from "react-bootstrap/Modal";
+import LoadingSpinner from "../Loader/Loader";
 
 function UpdateProjectForm(props) {
+  
+  const [isLoading, setisLoading] = useState(false)
+  const { setGreen, closeModal, api, apiCall, setRed } = props
   let manager = props.row.Project_Manager_ID
   let department = props.row.dept_ID
   let displayCity = props.row.City_ID
@@ -159,9 +163,9 @@ function UpdateProjectForm(props) {
     setform(newForm);
   };
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
-    console.log(form.dueDate);
     axios
       .post(
         HOST + UPDATE_PROJECT,
@@ -185,16 +189,20 @@ function UpdateProjectForm(props) {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
+        setisLoading(false);
         console.log(res);
         if (res.data.success) {
-          handleShow();
+          closeModal()
+          setGreen(true);
+          apiCall(api+1)
+        } else {
+          setRed(true)
         }
       })
       .catch((err) => {
+        setisLoading(false);
+        setRed(true);
         console.log(err);
-        if (!err.data.success) {
-          handleShow1();
-        }
       });
   };
   let attendees = [];
@@ -231,8 +239,9 @@ function UpdateProjectForm(props) {
       });
     });
   return (
+    isLoading?<LoadingSpinner/>:
     <div>
-      <Form className="form-main">
+      <Form className="form-main" onSubmit={handleSubmit}>
         <Row className="mb-4">
           <Form.Group as={Col}>
             <Form.Label>Project Name</Form.Label>
@@ -416,7 +425,6 @@ function UpdateProjectForm(props) {
           className="submit-btn"
           variant="primary"
           type="submit"
-          onClick={handleSubmit}
         >
           Submit
         </Button>
@@ -426,12 +434,6 @@ function UpdateProjectForm(props) {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>Project Updated Successfully</Modal.Body>
-      </Modal>
-      <Modal show={show1} onHide={handleClose1}>
-        <Modal.Header closeButton>
-          <Modal.Title>Error Occured</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Check Your Input Fields Properly</Modal.Body>
       </Modal>
     </div>
   );

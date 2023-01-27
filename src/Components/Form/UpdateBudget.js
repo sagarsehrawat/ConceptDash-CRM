@@ -12,23 +12,22 @@ import {
   GET_PROJECT_CATEGORIES,
   UPDATE_BUDGET,
 } from "../Constants/Constants";
-import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
 
 function UpdateBudget(props) {
   const [isSubmit, setIsSubmit] = useState(false);
+  const { setGreen, closeModal, api, apiCall, setRed } = props
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [isLoading, setIsLoading] = useState(false);
 
   const [cities, setcities] = useState([]);
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   useEffect(() => {
-    setIsLoading(true);
+    setisLoading(true)
     const call = async () => {
       await axios
         .get(HOST + GET_CITIES, {
@@ -47,7 +46,6 @@ function UpdateBudget(props) {
         })
         .then((res) => {
           setdepts(res.data.res);
-          setIsLoading(false);
         })
         .catch((err) => {
           console.log(err);
@@ -63,6 +61,7 @@ function UpdateBudget(props) {
         .catch((err) => {
           console.log(err);
         });
+        setisLoading(false)
     };
     call();
   }, []);
@@ -123,6 +122,7 @@ function UpdateBudget(props) {
     setform(newForm);
   };
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
     axios
@@ -142,19 +142,26 @@ function UpdateBudget(props) {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res);
+        setisLoading(false);
         if (res.data.success) {
-          handleShow();
+          closeModal()
+          setGreen(true);
+          apiCall(api+1)
+        } else {
+          setRed(true)
         }
       })
       .catch((err) => {
+        setisLoading(false);
+        setRed(true);
         console.log(err);
       });
   };
-  const navigate = useNavigate();
+  const [isLoading, setisLoading] = useState(false)
   return (
+    isLoading?<LoadingSpinner/>:
     <div>
-      <Form className="form-main">
+      <Form className="form-main" onSubmit={handleSubmit}>
         <Row className="mb-4">
           <Form.Group as={Col} controlId="formGridCity">
             <Form.Label>City</Form.Label>
@@ -258,7 +265,7 @@ function UpdateBudget(props) {
           </Form.Group>
         </Row>
 
-        <Button className="submit-btn" variant="primary" onClick={handleSubmit}>
+        <Button className="submit-btn" variant="primary">
           Submit
         </Button>
       </Form>

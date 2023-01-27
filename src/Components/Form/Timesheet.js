@@ -7,15 +7,16 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Modal from "react-bootstrap/Modal";
-import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../Loader/Loader";
 
-function Timesheet() {
+function Timesheet(props) {
   const [isSubmit, setIsSubmit] = useState(false);
   const [projects, setprojects] = useState([]);
   const [show, setShow] = useState(false);
   const [start, setstart] = useState("");
   const [end, setend] = useState("");
-
+  const { setGreen, closeModal, api, apiCall, setRed } = props;
+  
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
@@ -47,7 +48,9 @@ function Timesheet() {
     newForm[name] = value;
     setform(newForm);
   };
+  const [isLoading, setisLoading] = useState(false)
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
     axios
@@ -68,18 +71,20 @@ function Timesheet() {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
+        setisLoading(false);
         if (res.data.success) {
-          handleShow();
+          closeModal();
+          setGreen(true);
+          apiCall(api + 1);
+        } else {
+          setRed(true);
         }
       })
       .catch((err) => {
         console.log(err);
+        setisLoading(false);
+        setRed(true);
       });
-  };
-  const navigate = useNavigate();
-  const callFunc = () => {
-    handleClose();
-    navigate("/engineers");
   };
   var d = new Date();
   var offset = d.getTimezoneOffset();
@@ -99,8 +104,9 @@ function Timesheet() {
     setend(newValue);
   };
   return (
+    isLoading?<LoadingSpinner/>:
     <div>
-      <Form className="form-main">
+      <Form className="form-main" onSubmit={handleSubmit}>
         <Row className="mb-4">
           <Form.Group as={Col}>
             <Form.Label>
@@ -161,7 +167,6 @@ function Timesheet() {
           className="submit-btn"
           variant="primary"
           type="submit"
-          onClick={handleSubmit}
         >
           Submit
         </Button>
@@ -171,11 +176,6 @@ function Timesheet() {
           <Modal.Title>Form Submitted</Modal.Title>
         </Modal.Header>
         <Modal.Body>Added To Timesheet Successfully</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={callFunc}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );

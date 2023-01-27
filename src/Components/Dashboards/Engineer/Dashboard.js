@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
-import Container from "react-bootstrap/Container";
 import { Pie } from "react-chartjs-2";
 import { Card } from "react-bootstrap";
 import Chart from "chart.js/auto";
@@ -17,6 +16,8 @@ import {
   Paper,
 } from "@material-ui/core";
 
+import GreenAlert from "../../Loader/GreenAlert";
+import RedAlert from "../../Loader/RedAlert";
 import {
   HOST,
   GET_TASKS_BY_ID,
@@ -39,25 +40,22 @@ import Modal from "react-bootstrap/Modal";
 import TestDemo from "../../Calendar";
 import TimeSheet from "../../TimeSheet/TimeSheet";
 import AddMyTask from "../../Form/AddMyTask";
-import BudgetUpdate from "../../Update/BudgetUpdate";
-import RFPUpdate from "../../Update/RFPUpdate";
-import ProposalsUpdate from "../../Update/ProposalsUpdate";
-import ProjectUpdate from "../../Update/ProjectUpdate";
+import UpdateTask from "../../Form/UpdateTask";
+
 const Dashboard = () => {
-  const [nav, setnav] = useState(0);
-  const handleDash = (e) => {
-    if (nav == 1) return <BudgetUpdate />;
-    if (nav === 2) return <RFPUpdate />;
-    if (nav === 3) return <ProposalsUpdate />;
-    if (nav === 4) return <ProjectUpdate />;
-  };
+  const [apiCall, setCall] = useState(0);
+  const [green, setgreen] = useState(false);
+  const [red, setred] = useState(false);
+
+  const [showUpdate, setShowUpdate] = useState(false);
+  const handleCloseUpdate = () => setShowUpdate(false);
+  const handleShowUpdate = () => setShowUpdate(true);
 
   const [value, setValue] = React.useState("1");
   const [tasks, settasks] = useState([]);
   const [projectTasks, setProjectTasks] = useState([]);
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [budgetsCount, setbudgetsCount] = useState(0);
   const [RFPCount, setRFPCount] = useState(0);
   const [proposalCount, setproposalCount] = useState(0);
@@ -191,7 +189,7 @@ const Dashboard = () => {
       setIsLoading(false);
     };
     call();
-  }, []);
+  }, [apiCall]);
   const [isSubmit, setIsSubmit] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -239,55 +237,7 @@ const Dashboard = () => {
 
   const handleCloseAddTask = () => setShowAddTask(false);
   const handleShowAddTask = () => setShowAddTask(true);
-  const columns = [
-    {
-      dataField: "Task_ID",
-      text: "Task ID",
-      sort: true,
-    },
-    {
-      dataField: "Title",
-      text: "Title",
-      // filter: textFilter()
-    },
-    {
-      dataField: "Priority",
-      text: "Priority",
-      // filter: textFilter()
-      sort: true,
-    },
-    {
-      dataField: "Status",
-      text: "Status",
-      // filter: textFilter()
-    },
-    {
-      dataField: "percentComplete",
-      text: "% Completed",
-      // filter: textFilter()
-      sort: true,
-    },
-    {
-      dataField: "Assigned_To",
-      text: "Assigned To",
-    },
-    {
-      dataField: "Description",
-      text: "Description",
-    },
-    {
-      dataField: "Start_Date",
-      text: "Start Date",
-    },
-    {
-      dataField: "Due_Date",
-      text: "Due Date",
-    },
-    {
-      dataField: "Completed_Date",
-      text: "Completion Date",
-    },
-  ];
+
   const [value1, setValue1] = useState("1");
   const handleChange1 = (event, newValue) => {
     setValue1(newValue);
@@ -350,281 +300,342 @@ const Dashboard = () => {
       },
     ],
   };
-  return isLoading ? (
-    <LoadingSpinner />
-  ) : (
-    <div className="mainCont">
-      <div className="container" style={{ minWidth: "80% !important", marginTop:'2rem' }}>
-        <div className="row d-flex justify-content-around">
-          <Card style={{ width: "25rem" }}>
-            <h3 style={{ textAlign: "center" }}>Overall Counts</h3>
-            <Pie data={dataCounts} />
-          </Card>
-          <Card style={{ width: "25rem" }}>
-            <h3 style={{ textAlign: "center" }}>RFP Analysis</h3>
-            <Pie data={dataForRFP} />
-          </Card>
-          <Card style={{ width: "25rem" }}>
-            <h3 style={{ textAlign: "center" }}>Bid Price</h3>
-            <Pie data={wonLostProposals} />
-          </Card>
-          <Card style={{ marginTop: "2rem", width: "76rem" }}>
-              <h3 style={{ textAlign: "center" }}>Budgets(Last 5 years)</h3>
-              <Line height={100} data={data} />
-            </Card>
-        </div>
-        <div
-          className="row body-2 d-flex justify-content-around"
-          style={{ marginTop: "5vh" }}
-        >
-          <div
-            className="col-3 card d-flex align-items-center tableCont"
-            style={{
-              borderRadius: "1px",
-              width: "45%",
-              paddingTop: "0.8rem",
-              height: "55vh",
-              overflowY: "auto",
-              "box-shadow":
-                "1px 1px 1px 1px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19)",
-            }}
-          >
-            <div style={{ textAlign: "center", width: "100%" }}>
-              <div style={{ textAlign: "center" }}>
-                <h2
+  const [rowData, setrowData] = useState([]);
+  const handleUpdate = (e) => {
+    setrowData(e);
+    handleShowUpdate();
+  };
+  return (
+    <>
+      {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+      {red === true ? <RedAlert setRed={setred} /> : <></>}
+      <div>
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <div className="mainCont">
+            <div
+              className="container"
+              style={{ minWidth: "80% !important", marginTop: "2rem" }}
+            >
+              <div className="row d-flex justify-content-around">
+                <Card style={{ width: "25rem" }}>
+                  <h3 style={{ textAlign: "center" }}>Overall Counts</h3>
+                  <Pie data={dataCounts} />
+                </Card>
+                <Card style={{ width: "25rem" }}>
+                  <h3 style={{ textAlign: "center" }}>RFP Analysis</h3>
+                  <Pie data={dataForRFP} />
+                </Card>
+                <Card style={{ width: "25rem" }}>
+                  <h3 style={{ textAlign: "center" }}>Bid Price</h3>
+                  <Pie data={wonLostProposals} />
+                </Card>
+                <Card style={{ marginTop: "2rem", width: "76rem" }}>
+                  <h3 style={{ textAlign: "center" }}>Budgets(Last 5 years)</h3>
+                  <Line height={100} data={data} />
+                </Card>
+              </div>
+              <div
+                className="row body-2 d-flex justify-content-around"
+                style={{ marginTop: "5vh" }}
+              >
+                <div
+                  className="col-3 card d-flex align-items-center tableCont"
                   style={{
-                    textDecoration: "underline",
-                    fontWeight: "bold",
-                    display: "inline-block",
+                    borderRadius: "1px",
+                    width: "45%",
+                    paddingTop: "0.8rem",
+                    height: "55vh",
+                    overflowY: "auto",
+                    "box-shadow":
+                      "1px 1px 1px 1px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19)",
                   }}
                 >
-                  My Focus
-                </h2>
-                <Button
-                  onClick={handleShowAddTask}
-                  style={{ display: "inline-block", float: "right" }}
-                >
-                  +
-                </Button>
-              </div>
-
-              {/* <div className="container"> */}
-              
-                <Box sx={{ width: "100%", typography: "body1" }}>
-                  <TabContext value={value1}>
-                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                      <TabList centered onChange={handleChange1} aria-label="">
-                        <Tab label="Employee Focus" value="1" />
-                        <Tab label="Project Focus" value="3" />
-                      </TabList>
-                    </Box>
-                    <TabPanel centered value="1">
-                      <TableContainer
-                        component={Paper}
+                  <div style={{ textAlign: "center", width: "100%" }}>
+                    <div style={{ textAlign: "center" }}>
+                      <h2
                         style={{
-                          "box-shadow":
-                            "1px 1px 1px 1px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19)",
+                          textDecoration: "underline",
+                          fontWeight: "bold",
+                          display: "inline-block",
                         }}
                       >
-                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                          <TableHead>
-                            <TableRow>
-                              <TableCell align="right">Title</TableCell>
-                              <TableCell align="right">Priority</TableCell>
-                              <TableCell align="right">% Complete</TableCell>
-                              <TableCell align="right">Description</TableCell>
-                              <TableCell align="right">Start Date</TableCell>
-                              <TableCell align="right">Due Date</TableCell>
-                              <TableCell align="right">Edit/Update</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {tasks.map((row) => (
-                              <TableRow
-                                key={row.name}
-                                sx={{
-                                  "&:last-child td, &:last-child th": {
-                                    border: 0,
-                                  },
-                                }}
-                              >
-                                <TableCell align="right">{row.Title}</TableCell>
-                                <TableCell align="right">
-                                  {row.Priority}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Percent_Completed}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Description}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Start_Date
-                                    ? row.Start_Date.substring(0, 10)
-                                    : ""}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Due_Date
-                                    ? row.Due_Date.substring(0, 10)
-                                    : ""}
-                                </TableCell>
-                                <TableCell align="right">
-                                  <Button
-                                    className="allBtn"
-                                    onClick={(e) => {
-                                      navigate("/updateTask", { state: row });
-                                    }}
-                                    style={{
-                                      backgroundColor: "#1a73e8",
-                                      borderRadius: "25px",
-                                      "box-shadow":
-                                        "3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+                        My Focus
+                      </h2>
+                      <Button
+                        onClick={handleShowAddTask}
+                        style={{ display: "inline-block", float: "right" }}
+                      >
+                        +
+                      </Button>
+                    </div>
+
+                    {/* <div className="container"> */}
+
+                    <Box sx={{ width: "100%", typography: "body1" }}>
+                      <TabContext value={value1}>
+                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                          <TabList
+                            centered
+                            onChange={handleChange1}
+                            aria-label=""
+                          >
+                            <Tab label="Employee Focus" value="1" />
+                            <Tab label="Project Focus" value="3" />
+                          </TabList>
+                        </Box>
+                        <TabPanel centered value="1">
+                          <TableContainer
+                            component={Paper}
+                            style={{
+                              "box-shadow":
+                                "1px 1px 1px 1px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19)",
+                            }}
+                          >
+                            <Table
+                              sx={{ minWidth: 750 }}
+                              aria-label="simple table"
+                            >
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>Title</TableCell>
+                                  <TableCell>Priority</TableCell>
+                                  <TableCell>% Complete</TableCell>
+                                  <TableCell>Description</TableCell>
+                                  <TableCell>Start Date</TableCell>
+                                  <TableCell>Due Date</TableCell>
+                                  <TableCell>Edit/Update</TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {tasks.map((row) => (
+                                  <TableRow
+                                    key={row.name}
+                                    sx={{
+                                      "&:last-child td, &:last-child th": {
+                                        border: 0,
+                                      },
                                     }}
                                   >
-                                    Edit
-                                  </Button>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    </TabPanel>
-                    <TabPanel centered value="3">
-                      <TableContainer
-                        component={Paper}
-                        style={{
-                          "box-shadow":
-                            "3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-                        }}
-                      >
-                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                          <TableHead>
-                            <TableRow>
-                              <TableCell align="right">Title</TableCell>
-                              <TableCell align="right">
-                                Time Remaining
-                              </TableCell>
-                              <TableCell align="right">Description</TableCell>
-                              <TableCell align="right">
-                                Task Completed
-                              </TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {projectTasks.map((row) => (
-                              <TableRow
-                                key={row.name}
-                                sx={{
-                                  "&:last-child td, &:last-child th": {
-                                    border: 0,
-                                  },
-                                }}
-                              >
-                                <TableCell align="right">{row.Title}</TableCell>
-                                <TableCell align="right">
-                                  {row.Due_Date
-                                    ? dhm(
-                                        new Date(row.Due_Date).getTime() -
-                                          new Date().getTime()
-                                      )
-                                      ? dhm(
-                                          new Date(row.Due_Date).getTime() -
-                                            new Date().getTime()
-                                        )
-                                      : "Missing"
-                                    : ""}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Description}
-                                </TableCell>
-                                {row.Title !== "Review RFP" ? (
+                                    <TableCell>{row.Title}</TableCell>
+                                    <TableCell>{row.Priority}</TableCell>
+                                    <TableCell>
+                                      {row.Percent_Completed}
+                                    </TableCell>
+                                    <TableCell>{row.Description}</TableCell>
+                                    <TableCell>
+                                      {row.Start_Date
+                                        ? row.Start_Date.substring(0, 10)
+                                        : ""}
+                                    </TableCell>
+                                    <TableCell>
+                                      {row.Due_Date
+                                        ? row.Due_Date.substring(0, 10)
+                                        : ""}
+                                    </TableCell>
+                                    <TableCell>
+                                      <svg
+                                        width="40"
+                                        height="40"
+                                        viewBox="30 0 220 220"
+                                      >
+                                        <image
+                                          style={{ cursor: "pointer" }}
+                                          onClick={() => {
+                                            handleUpdate(row);
+                                          }}
+                                          href="data:image/png;base64,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"
+                                        />
+                                      </svg>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </TabPanel>
+                        <TabPanel centered value="3">
+                          <TableContainer
+                            component={Paper}
+                            style={{
+                              "box-shadow":
+                                "3px 4px 8px 1px rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+                            }}
+                          >
+                            <Table
+                              sx={{ minWidth: 650 }}
+                              aria-label="simple table"
+                            >
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell align="right">Title</TableCell>
                                   <TableCell align="right">
-                                    <Button
-                                      name={row.Title}
-                                      value={row.Task_ID}
-                                      onClick={handleSubmit}
-                                    >
-                                      Task Done
-                                    </Button>
+                                    Time Remaining
                                   </TableCell>
-                                ) : (
-                                  ""
-                                )}
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    </TabPanel>
-                  </TabContext>
-                </Box>
-              {/* </div> */}
+                                  <TableCell align="right">
+                                    Description
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    Task Completed
+                                  </TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {projectTasks.map((row) => (
+                                  <TableRow
+                                    key={row.name}
+                                    sx={{
+                                      "&:last-child td, &:last-child th": {
+                                        border: 0,
+                                      },
+                                    }}
+                                  >
+                                    <TableCell align="right">
+                                      {row.Title}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {row.Due_Date
+                                        ? dhm(
+                                            new Date(row.Due_Date).getTime() -
+                                              new Date().getTime()
+                                          )
+                                          ? dhm(
+                                              new Date(row.Due_Date).getTime() -
+                                                new Date().getTime()
+                                            )
+                                          : "Missing"
+                                        : ""}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {row.Description}
+                                    </TableCell>
+                                    {row.Title !== "Review RFP" ? (
+                                      <TableCell align="right">
+                                        <Button
+                                          name={row.Title}
+                                          value={row.Task_ID}
+                                          onClick={handleSubmit}
+                                        >
+                                          Task Done
+                                        </Button>
+                                      </TableCell>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </TabPanel>
+                      </TabContext>
+                    </Box>
+                    {/* </div> */}
+                  </div>
+                </div>
+                <div
+                  className="col-3 card d-flex align-items-center tableCont"
+                  style={{
+                    borderRadius: "1px",
+                    overflowY: "auto",
+                    width: "47%",
+                    "box-shadow":
+                      "1px 1px 1px 1px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19)",
+                  }}
+                >
+                  <div style={{ textAlign: "center" }}>{<TestDemo />}</div>
+                </div>
+              </div>
+              <Box sx={{ width: "100%", typography: "body1" }}>
+                <TabContext centered value={value}>
+                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <TabList
+                      centered
+                      onChange={handleChange}
+                      aria-label="lab API tabs example"
+                    >
+                      <Tab style={{ color: "black" }} label="Forms" value="1" />
+                      <Tab
+                        style={{ color: "black" }}
+                        label="Requests"
+                        value="3"
+                      />
+                    </TabList>
+                  </Box>
+                  <TabPanel centered value="1"></TabPanel>
+                  <TabPanel value="3"></TabPanel>
+                </TabContext>
+              </Box>
             </div>
+
+            {/* TimeSheet Modal */}
+            <Modal
+              show={showTS}
+              onHide={handleCloseTS}
+              backdrop="static"
+              size="lg"
+              dialogClassName="modal-150w"
+              aria-labelledby="example-custom-modal-styling-title"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>TimeSheet</Modal.Title>
+              </Modal.Header>
+              <Modal.Body style={{ marginLeft: "0.5rem" }}>
+                {<TimeSheet />}
+              </Modal.Body>
+            </Modal>
+
+            {/* Add Task Modal */}
+            <Modal
+              show={showAddTask}
+              onHide={handleCloseAddTask}
+              size="lg"
+              backdrop="static"
+              aria-labelledby="example-custom-modal-styling-title"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Add Task</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                {
+                  <AddMyTask
+                    setRed={setred}
+                    setGreen={setgreen}
+                    closeModal={handleCloseAddTask}
+                    api={apiCall}
+                    apiCall={setCall}
+                  />
+                }
+              </Modal.Body>
+            </Modal>
+            <Modal
+              show={showUpdate}
+              onHide={handleCloseUpdate}
+              backdrop="static"
+              size="xl"
+              keyboard={false}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Update Task</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                {
+                  <UpdateTask
+                    row={rowData}
+                    setRed={setred}
+                    setGreen={setgreen}
+                    closeModal={handleCloseUpdate}
+                    api={apiCall}
+                    apiCall={setCall}
+                  />
+                }
+              </Modal.Body>
+            </Modal>
           </div>
-          <div
-            className="col-3 card d-flex align-items-center tableCont"
-            style={{
-              borderRadius: "1px",
-              overflowY: "auto",
-              width: "47%",
-              "box-shadow":
-                "1px 1px 1px 1px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19)",
-            }}
-          >
-            <div style={{ textAlign: "center" }}>{<TestDemo />}</div>
-          </div>
-        </div>
-        <Box sx={{ width: "100%", typography: "body1" }}>
-          <TabContext centered value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList
-                centered
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab style={{ color: "black" }} label="Forms" value="1" />
-                <Tab style={{ color: "black" }} label="Requests" value="3" />
-              </TabList>
-            </Box>
-            <TabPanel centered value="1"></TabPanel>
-            <TabPanel value="3"></TabPanel>
-          </TabContext>
-        </Box>
+        )}
       </div>
-
-      {/* TimeSheet Modal */}
-      <Modal
-        show={showTS}
-        onHide={handleCloseTS}
-        backdrop="static"
-        size="lg"
-        dialogClassName="modal-150w"
-        aria-labelledby="example-custom-modal-styling-title"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Calendar</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ marginLeft: "0.5rem" }}>
-          {<TimeSheet />}
-        </Modal.Body>
-        <Modal.Footer></Modal.Footer>
-      </Modal>
-
-      {/* Add Task Modal */}
-      <Modal
-        show={showAddTask}
-        onHide={handleCloseAddTask}
-        size="lg"
-        backdrop="static"
-        aria-labelledby="example-custom-modal-styling-title"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Add Task</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{<AddMyTask />}</Modal.Body>
-      </Modal>
-    </div>
+    </>
   );
 };
 

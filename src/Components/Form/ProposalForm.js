@@ -19,8 +19,16 @@ import {
 import Modal from "react-bootstrap/Modal";
 import Select from "react-select";
 import AddCity from "./AddCity";
+import LoadingSpinner from "../Loader/Loader";
+import GreenAlert from "../Loader/GreenAlert";
+import RedAlert from "../Loader/RedAlert";
 
-function ProposalForm() {
+function ProposalForm(props) {
+  const [apiCallCity, setCallCity] = useState(0);
+  const [green, setgreen] = useState(false);
+  const [red, setred] = useState(false);
+  const { setGreen, closeModal, api, apiCall, setRed } = props;
+
   const [isSubmit, setIsSubmit] = useState(false);
   const [employees, setemployees] = useState([]);
   const [show, setShow] = useState(false);
@@ -68,6 +76,7 @@ function ProposalForm() {
   const [rfps, setrfps] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   useEffect(() => {
+    setisLoading(true);
     const call = async () => {
       await axios
         .get(HOST + GET_CITIES, {
@@ -134,10 +143,12 @@ function ProposalForm() {
         .catch((err) => {
           console.log(err);
         });
+        setisLoading(false)
     };
     call();
-  }, []);
+  }, [apiCallCity]);
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
     axios
@@ -168,13 +179,19 @@ function ProposalForm() {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
+        setisLoading(false);
         if (res.data.success) {
-          handleShow();
+          closeModal();
+          setGreen(true);
+          apiCall(api + 1);
+        } else {
+          setRed(true);
         }
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);
+        setisLoading(false);
+        setRed(true);
       });
   };
   const [rfpData, setrfpData] = useState([]);
@@ -238,268 +255,31 @@ function ProposalForm() {
   const [showCityForm, setShowCityForm] = useState(false);
   const handleCloseCityForm = () => setShowCityForm(false);
   const handleShowCityForm = () => setShowCityForm(true);
+  const [isLoading, setisLoading] = useState(false)
   return (
-    <div>
-      <Form className="form-main">
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Select onChange={handleRadio}>
-              <option value="yes">Create New Proposal</option>
-              <option value="no">Import From RFPs</option>
-            </Form.Select>
-          </Form.Group>
-        </Row>
-        {!radio ? (
-          <div>
+    <>
+    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
+    {red===true ? <RedAlert setRed={setred}/> : <></>}
+      {isLoading?<LoadingSpinner/>:
+        <div>
+          <Form className="form-main" onSubmit={handleSubmit}>
             <Row className="mb-4">
               <Form.Group as={Col}>
-                <Form.Select onChange={handleChange} name="dept">
-                  <option value="">Select Department</option>
-                  {depts.length > 0
-                    ? depts.map((e) => (
-                        <option value={e.Department_ID}>{e.Department}</option>
-                      ))
-                    : ""}
-                </Form.Select>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Select onChange={handleChange} name="projectCat">
-                  <option value="">Select Project Category</option>
-                  {projectDepts.length > 0
-                    ? projectDepts.map((e) => (
-                        <option value={e.Project_Cat_ID}>
-                          {e.Project_Category}
-                        </option>
-                      ))
-                    : ""}
+                <Form.Select onChange={handleRadio}>
+                  <option value="yes">Create New Proposal</option>
+                  <option value="no">Import From RFPs</option>
                 </Form.Select>
               </Form.Group>
             </Row>
-
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Select name="status" onChange={handleChange}>
-                  <option value="">Select Status</option>
-                  <option value="Lost">Lost</option>
-                  <option value="Won">Won</option>
-                </Form.Select>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Select
-                  name="managerName"
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select Project Manager</option>
-                  {employees.length !== 0 ? (
-                    employees.map((option) => (
-                      <option value={option.Employee_ID}>
-                        {option.Full_Name}
-                      </option>
-                    ))
-                  ) : (
-                    <option value="">None</option>
-                  )}
-                </Form.Select>
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Project Name</Form.Label>
-                <Form.Control
-                  name="projectName"
-                  type="text"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Question Deadline</Form.Label>
-                <Form.Control
-                  name="qDeadline"
-                  onChange={handleChange}
-                  type="date"
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Closing Deadline</Form.Label>
-                <Form.Control
-                  name="cDeadline"
-                  onChange={handleChange}
-                  type="date"
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Result Date</Form.Label>
-                <Form.Control
-                  name="resultDate"
-                  onChange={handleChange}
-                  type="date"
-                />
-              </Form.Group>
-            </Row>
-
-            <Row className="mb-4">
-              <Form.Group as={Col} controlId="formGridCity">
-                <Form.Select onChange={handleChange} name="city">
-                  <option value="">Select City</option>
-                  {cities.length > 0
-                    ? cities.map((e) => (
-                        <option value={e.City_ID}>{e.City}</option>
-                      ))
-                    : ""}
-                </Form.Select>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Button
-                  style={{
-                    width: "100%",
-                    backgroundColor: "grey",
-                    border: "none",
-                  }}
-                  onClick={handleShowCityForm}
-                >
-                  Add City
-                </Button>
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Select
-                  isMulti
-                  onChange={doChange}
-                  options={attendees}
-                  name="team"
-                  placeholder="Team Members"
-                >
-                  Team Members
-                </Select>
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Design Price</Form.Label>
-                <Form.Control
-                  name="dPrice"
-                  type="number"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Provisional Items</Form.Label>
-                <Form.Control
-                  name="provisionalItems"
-                  type="text"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Contract Admin Price</Form.Label>
-                <Form.Control
-                  name="adminPrice"
-                  type="number"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Consultant Price</Form.Label>
-                <Form.Control
-                  name="consultantPrice"
-                  type="number"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Total Bid</Form.Label>
-                <Form.Control
-                  name="totalBid"
-                  type="number"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Select
-                  isMulti
-                  onChange={doChange1}
-                  options={company}
-                  name="planTakers"
-                  placeholder="Plan Takers"
-                ></Select>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Select
-                  isMulti
-                  onChange={doChange1}
-                  options={company}
-                  name="bidders"
-                  placeholder="Bidders"
-                ></Select>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Select onChange={handleChange} name="winningBidder">
-                  <option value="">Select Winning Bidder</option>
-                  {companies.map((option) => (
-                    <option value={option.ID}>{option.Name}</option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Winning Price</Form.Label>
-                <Form.Control
-                  name="winningPrice"
-                  type="number"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Bidder Price</Form.Label>
-                <Form.Control
-                  name="bidderPrice"
-                  type="number"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Row>
-          </div>
-        ) : (
-          <div>
-            <Form.Select
-              style={{ marginBottom: "4vh" }}
-              onChange={handleChange1}
-            >
-              <option value="">Select Project</option>
-              {rfps.length !== 0 ? (
-                rfps.map((options) => (
-                  <option value={options.RFP_ID}>{options.Project_Name}</option>
-                ))
-              ) : (
-                <option value="">None</option>
-              )}
-            </Form.Select>
-            {rfpData.length > 0 ? (
+            {!radio ? (
               <div>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
-                    <Form.Label>Department</Form.Label>
-                    <Form.Select
-                      defaultValue={dept}
-                      onChange={handleChange}
-                      name="dept"
-                    >
-                      <option>Select Department</option>
+                    <Form.Select onChange={handleChange} name="dept" required>
+                      <option value="">Select Department</option>
                       {depts.length > 0
                         ? depts.map((e) => (
-                            <option
-                              value={e.Department_ID}
-                              selected={e.Department_ID === deptid}
-                            >
+                            <option value={e.Department_ID}>
                               {e.Department}
                             </option>
                           ))
@@ -507,19 +287,11 @@ function ProposalForm() {
                     </Form.Select>
                   </Form.Group>
                   <Form.Group as={Col}>
-                    <Form.Label>Project Category</Form.Label>
-                    <Form.Select
-                      defaultValue={catid}
-                      onChange={handleChange}
-                      name="projectCat"
-                    >
-                      <option>Select Project Category</option>
+                    <Form.Select onChange={handleChange} name="projectCat" required>
+                      <option value="">Select Project Category</option>
                       {projectDepts.length > 0
                         ? projectDepts.map((e) => (
-                            <option
-                              value={e.Project_Cat_ID}
-                              selected={e.Project_Cat_ID === catId}
-                            >
+                            <option value={e.Project_Cat_ID}>
                               {e.Project_Category}
                             </option>
                           ))
@@ -530,28 +302,22 @@ function ProposalForm() {
 
                 <Row className="mb-4">
                   <Form.Group as={Col}>
-                    <Form.Label>Project Status</Form.Label>
                     <Form.Select name="status" onChange={handleChange}>
                       <option value="">Select Status</option>
-                      <option value="Go">Go</option>
-                      <option value="NoGo">NoGo</option>
-                      <option value="Review">Review</option>
+                      <option value="Lost">Lost</option>
+                      <option value="Won">Won</option>
                     </Form.Select>
                   </Form.Group>
                   <Form.Group as={Col}>
-                    <Form.Label>Project Manager</Form.Label>
                     <Form.Select
                       name="managerName"
                       onChange={handleChange}
                       required
                     >
-                      <option value="">Select Employee</option>
+                      <option value="">Select Project Manager</option>
                       {employees.length !== 0 ? (
                         employees.map((option) => (
-                          <option
-                            value={option.Employee_ID}
-                            selected={option.Employee_ID === managerId}
-                          >
+                          <option value={option.Employee_ID}>
                             {option.Full_Name}
                           </option>
                         ))
@@ -560,14 +326,15 @@ function ProposalForm() {
                       )}
                     </Form.Select>
                   </Form.Group>
+                </Row>
+                <Row className="mb-4">
                   <Form.Group as={Col}>
                     <Form.Label>Project Name</Form.Label>
                     <Form.Control
-                      value={pName}
                       name="projectName"
                       type="text"
-                      placeholder="Project Name"
                       onChange={handleChange}
+                      required
                     />
                   </Form.Group>
                 </Row>
@@ -600,29 +367,30 @@ function ProposalForm() {
 
                 <Row className="mb-4">
                   <Form.Group as={Col} controlId="formGridCity">
-                    <Form.Label>City</Form.Label>
-                    <Form.Select
-                      defaultValue={city}
-                      onChange={handleChange}
-                      name="city"
-                    >
+                    <Form.Select onChange={handleChange} name="city" required>
                       <option value="">Select City</option>
                       {cities.length > 0
                         ? cities.map((e) => (
-                            <option
-                              value={e.City_ID}
-                              selected={e.City_ID === cityid}
-                            >
-                              {e.City}
-                            </option>
+                            <option value={e.City_ID}>{e.City}</option>
                           ))
                         : ""}
                     </Form.Select>
                   </Form.Group>
+                  <Form.Group as={Col}>
+                    <Button
+                      style={{
+                        width: "100%",
+                        backgroundColor: "grey",
+                        border: "none",
+                      }}
+                      onClick={handleShowCityForm}
+                    >
+                      Add City
+                    </Button>
+                  </Form.Group>
                 </Row>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
-                    <Form.Label>Team</Form.Label>
                     <Select
                       isMulti
                       onChange={doChange}
@@ -633,12 +401,15 @@ function ProposalForm() {
                       Team Members
                     </Select>
                   </Form.Group>
+                </Row>
+                <Row className="mb-4">
                   <Form.Group as={Col}>
                     <Form.Label>Design Price</Form.Label>
                     <Form.Control
                       name="dPrice"
                       type="number"
                       onChange={handleChange}
+                      required
                     />
                   </Form.Group>
                   <Form.Group as={Col}>
@@ -678,30 +449,30 @@ function ProposalForm() {
                 </Row>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
-                    <Form.Label>Plan Takers</Form.Label>
                     <Select
                       isMulti
                       onChange={doChange1}
                       options={company}
                       name="planTakers"
+                      placeholder="Plan Takers"
                     ></Select>
                   </Form.Group>
                   <Form.Group as={Col}>
-                    <Form.Label>Bidders</Form.Label>
                     <Select
                       isMulti
                       onChange={doChange1}
                       options={company}
                       name="bidders"
+                      placeholder="Bidders"
                     ></Select>
                   </Form.Group>
                   <Form.Group as={Col}>
-                    <Form.Label>Bidder Price</Form.Label>
-                    <Form.Control
-                      name="bidderPrice"
-                      type="number"
-                      onChange={handleChange}
-                    />
+                    <Form.Select onChange={handleChange} name="winningBidder">
+                      <option value="">Select Winning Bidder</option>
+                      {companies.map((option) => (
+                        <option value={option.ID}>{option.Name}</option>
+                      ))}
+                    </Form.Select>
                   </Form.Group>
                 </Row>
                 <Row className="mb-4">
@@ -714,50 +485,310 @@ function ProposalForm() {
                     />
                   </Form.Group>
                   <Form.Group as={Col}>
-                    <Form.Label>Winning Bidder</Form.Label>
-                    <Form.Select onChange={handleChange} name="winningBidder">
-                      <option value="">Select Winning Bidder</option>
-                      {companies.map((option) => (
-                        <option value={option.ID}>{option.Name}</option>
-                      ))}
-                    </Form.Select>
+                    <Form.Label>Bidder Price</Form.Label>
+                    <Form.Control
+                      name="bidderPrice"
+                      type="number"
+                      onChange={handleChange}
+                    />
                   </Form.Group>
                 </Row>
               </div>
             ) : (
-              ""
+              <div>
+                <Form.Select
+                  style={{ marginBottom: "4vh" }}
+                  onChange={handleChange1}
+                >
+                  <option value="">Select Project</option>
+                  {rfps.length !== 0 ? (
+                    rfps.map((options) => (
+                      <option value={options.RFP_ID}>
+                        {options.Project_Name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">None</option>
+                  )}
+                </Form.Select>
+                {rfpData.length > 0 ? (
+                  <div>
+                    <Row className="mb-4">
+                      <Form.Group as={Col}>
+                        <Form.Label>Department</Form.Label>
+                        <Form.Select
+                          defaultValue={dept}
+                          onChange={handleChange}
+                          name="dept"
+                        >
+                          <option>Select Department</option>
+                          {depts.length > 0
+                            ? depts.map((e) => (
+                                <option
+                                  value={e.Department_ID}
+                                  selected={e.Department_ID === deptid}
+                                >
+                                  {e.Department}
+                                </option>
+                              ))
+                            : ""}
+                        </Form.Select>
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Project Category</Form.Label>
+                        <Form.Select
+                          defaultValue={catid}
+                          onChange={handleChange}
+                          name="projectCat"
+                        >
+                          <option>Select Project Category</option>
+                          {projectDepts.length > 0
+                            ? projectDepts.map((e) => (
+                                <option
+                                  value={e.Project_Cat_ID}
+                                  selected={e.Project_Cat_ID === catId}
+                                >
+                                  {e.Project_Category}
+                                </option>
+                              ))
+                            : ""}
+                        </Form.Select>
+                      </Form.Group>
+                    </Row>
+
+                    <Row className="mb-4">
+                      <Form.Group as={Col}>
+                        <Form.Label>Project Status</Form.Label>
+                        <Form.Select name="status" onChange={handleChange}>
+                          <option value="">Select Status</option>
+                          <option value="Go">Go</option>
+                          <option value="NoGo">NoGo</option>
+                          <option value="Review">Review</option>
+                        </Form.Select>
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Project Manager</Form.Label>
+                        <Form.Select
+                          name="managerName"
+                          onChange={handleChange}
+                          required
+                        >
+                          <option value="">Select Employee</option>
+                          {employees.length !== 0 ? (
+                            employees.map((option) => (
+                              <option
+                                value={option.Employee_ID}
+                                selected={option.Employee_ID === managerId}
+                              >
+                                {option.Full_Name}
+                              </option>
+                            ))
+                          ) : (
+                            <option value="">None</option>
+                          )}
+                        </Form.Select>
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Project Name</Form.Label>
+                        <Form.Control
+                          value={pName}
+                          name="projectName"
+                          type="text"
+                          placeholder="Project Name"
+                          onChange={handleChange}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className="mb-4">
+                      <Form.Group as={Col}>
+                        <Form.Label>Question Deadline</Form.Label>
+                        <Form.Control
+                          name="qDeadline"
+                          onChange={handleChange}
+                          type="date"
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Closing Deadline</Form.Label>
+                        <Form.Control
+                          name="cDeadline"
+                          onChange={handleChange}
+                          type="date"
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Result Date</Form.Label>
+                        <Form.Control
+                          name="resultDate"
+                          onChange={handleChange}
+                          type="date"
+                        />
+                      </Form.Group>
+                    </Row>
+
+                    <Row className="mb-4">
+                      <Form.Group as={Col} controlId="formGridCity">
+                        <Form.Label>City</Form.Label>
+                        <Form.Select
+                          defaultValue={city}
+                          onChange={handleChange}
+                          name="city"
+                        >
+                          <option value="">Select City</option>
+                          {cities.length > 0
+                            ? cities.map((e) => (
+                                <option
+                                  value={e.City_ID}
+                                  selected={e.City_ID === cityid}
+                                >
+                                  {e.City}
+                                </option>
+                              ))
+                            : ""}
+                        </Form.Select>
+                      </Form.Group>
+                    </Row>
+                    <Row className="mb-4">
+                      <Form.Group as={Col}>
+                        <Form.Label>Team</Form.Label>
+                        <Select
+                          isMulti
+                          onChange={doChange}
+                          options={attendees}
+                          name="team"
+                          placeholder="Team Members"
+                        >
+                          Team Members
+                        </Select>
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Design Price</Form.Label>
+                        <Form.Control
+                          name="dPrice"
+                          type="number"
+                          onChange={handleChange}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Provisional Items</Form.Label>
+                        <Form.Control
+                          name="provisionalItems"
+                          type="text"
+                          onChange={handleChange}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className="mb-4">
+                      <Form.Group as={Col}>
+                        <Form.Label>Contract Admin Price</Form.Label>
+                        <Form.Control
+                          name="adminPrice"
+                          type="number"
+                          onChange={handleChange}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Consultant Price</Form.Label>
+                        <Form.Control
+                          name="consultantPrice"
+                          type="number"
+                          onChange={handleChange}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Total Bid</Form.Label>
+                        <Form.Control
+                          name="totalBid"
+                          type="number"
+                          onChange={handleChange}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className="mb-4">
+                      <Form.Group as={Col}>
+                        <Form.Label>Plan Takers</Form.Label>
+                        <Select
+                          isMulti
+                          onChange={doChange1}
+                          options={company}
+                          name="planTakers"
+                        ></Select>
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Bidders</Form.Label>
+                        <Select
+                          isMulti
+                          onChange={doChange1}
+                          options={company}
+                          name="bidders"
+                        ></Select>
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Bidder Price</Form.Label>
+                        <Form.Control
+                          name="bidderPrice"
+                          type="number"
+                          onChange={handleChange}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className="mb-4">
+                      <Form.Group as={Col}>
+                        <Form.Label>Winning Price</Form.Label>
+                        <Form.Control
+                          name="winningPrice"
+                          type="number"
+                          onChange={handleChange}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Winning Bidder</Form.Label>
+                        <Form.Select
+                          onChange={handleChange}
+                          name="winningBidder"
+                        >
+                          <option value="">Select Winning Bidder</option>
+                          {companies.map((option) => (
+                            <option value={option.ID}>{option.Name}</option>
+                          ))}
+                        </Form.Select>
+                      </Form.Group>
+                    </Row>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
             )}
-          </div>
-        )}
-        <Button
-          className="submit-btn"
-          variant="primary"
-          type="submit"
-          style={{}}
-          onClick={handleSubmit}
-        >
-          Submit
-        </Button>
-      </Form>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Form Submitted</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Proposal Added Successfully</Modal.Body>
-      </Modal>
-      <Modal
-        backdrop="static"
-        size="lg"
-        keyboard={false}
-        show={showCityForm}
-        onHide={handleCloseCityForm}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Add City</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{<AddCity />}</Modal.Body>
-      </Modal>
-    </div>
+            <Button
+              className="submit-btn"
+              variant="primary"
+              type="submit"
+            >
+              Submit
+            </Button>
+          </Form>
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Form Submitted</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Proposal Added Successfully</Modal.Body>
+          </Modal>
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={showCityForm}
+            onHide={handleCloseCityForm}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add City</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{<AddCity setRed={setred} setGreen={setgreen} closeModal={handleCloseCityForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
+          </Modal>
+        </div>
+      }
+    </>
   );
 }
 
