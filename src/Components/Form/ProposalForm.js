@@ -22,6 +22,8 @@ import AddCity from "./AddCity";
 import LoadingSpinner from "../Loader/Loader";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
+import AddDepartment from "./AddDepartment";
+import AddCategory from "./AddCategory";
 
 function ProposalForm(props) {
   const [apiCallCity, setCallCity] = useState(0);
@@ -143,7 +145,7 @@ function ProposalForm(props) {
         .catch((err) => {
           console.log(err);
         });
-        setisLoading(false)
+      setisLoading(false);
     };
     call();
   }, [apiCallCity]);
@@ -255,12 +257,23 @@ function ProposalForm(props) {
   const [showCityForm, setShowCityForm] = useState(false);
   const handleCloseCityForm = () => setShowCityForm(false);
   const handleShowCityForm = () => setShowCityForm(true);
-  const [isLoading, setisLoading] = useState(false)
+
+  const [showDeptForm, setShowDeptForm] = useState(false);
+  const handleCloseDeptForm = () => setShowDeptForm(false);
+  const handleShowDeptForm = () => setShowDeptForm(true);
+
+  const [showCategoryForm, setShowCategoryForm] = useState(false);
+  const handleCloseCategoryForm = () => setShowCategoryForm(false);
+  const handleShowCategoryForm = () => setShowCategoryForm(true);
+
+  const [isLoading, setisLoading] = useState(false);
   return (
     <>
-    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
-    {red===true ? <RedAlert setRed={setred}/> : <></>}
-      {isLoading?<LoadingSpinner/>:
+      {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+      {red === true ? <RedAlert setRed={setred} /> : <></>}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
         <div>
           <Form className="form-main" onSubmit={handleSubmit}>
             <Row className="mb-4">
@@ -287,7 +300,25 @@ function ProposalForm(props) {
                     </Form.Select>
                   </Form.Group>
                   <Form.Group as={Col}>
-                    <Form.Select onChange={handleChange} name="projectCat" required>
+                    <Button
+                      style={{
+                        width: "100%",
+                        backgroundColor: "grey",
+                        border: "none",
+                      }}
+                      onClick={handleShowDeptForm}
+                    >
+                      Add Department
+                    </Button>
+                  </Form.Group>
+                </Row>
+                <Row className="mb-4">
+                  <Form.Group as={Col}>
+                    <Form.Select
+                      onChange={handleChange}
+                      name="projectCat"
+                      required
+                    >
                       <option value="">Select Project Category</option>
                       {projectDepts.length > 0
                         ? projectDepts.map((e) => (
@@ -297,6 +328,18 @@ function ProposalForm(props) {
                           ))
                         : ""}
                     </Form.Select>
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Button
+                      style={{
+                        width: "100%",
+                        backgroundColor: "grey",
+                        border: "none",
+                      }}
+                      onClick={handleShowCategoryForm}
+                    >
+                      Add Project Category
+                    </Button>
                   </Form.Group>
                 </Row>
 
@@ -596,6 +639,7 @@ function ProposalForm(props) {
                           type="text"
                           placeholder="Project Name"
                           onChange={handleChange}
+                          required
                         />
                       </Form.Group>
                     </Row>
@@ -760,11 +804,7 @@ function ProposalForm(props) {
                 )}
               </div>
             )}
-            <Button
-              className="submit-btn"
-              variant="primary"
-              type="submit"
-            >
+            <Button className="submit-btn" variant="primary" type="submit">
               Submit
             </Button>
           </Form>
@@ -784,10 +824,66 @@ function ProposalForm(props) {
             <Modal.Header closeButton>
               <Modal.Title>Add City</Modal.Title>
             </Modal.Header>
-            <Modal.Body>{<AddCity setRed={setred} setGreen={setgreen} closeModal={handleCloseCityForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
+            <Modal.Body>
+              {
+                <AddCity
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseCityForm}
+                  api={apiCallCity}
+                  apiCall={setCallCity}
+                />
+              }
+            </Modal.Body>
+          </Modal>
+
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={showDeptForm}
+            onHide={handleCloseDeptForm}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add Department</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {
+                <AddDepartment
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseDeptForm}
+                  api={apiCallCity}
+                  apiCall={setCallCity}
+                />
+              }
+            </Modal.Body>
+          </Modal>
+
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={showCategoryForm}
+            onHide={handleCloseCategoryForm}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add Project Category</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {
+                <AddCategory
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseCategoryForm}
+                  api={apiCallCity}
+                  apiCall={setCallCity}
+                />
+              }
+            </Modal.Body>
           </Modal>
         </div>
-      }
+      )}
     </>
   );
 }

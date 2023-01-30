@@ -391,9 +391,7 @@ function RFPUpdate() {
                     <th scope="col">Department</th>
                     <th scope="col">Project Category</th>
                     <th scope="col">Action</th>
-                    <th scope="col">Amount</th>
                     <th scope="col">Source</th>
-                    <th scope="col">Bid Date</th>
                     <th scope="col">Start Date</th>
                     <th scope="col">Submission Date</th>
                     <th scope="col">Project Name</th>
@@ -430,11 +428,7 @@ function RFPUpdate() {
                         <td>{row.Department}</td>
                         <td>{row.Project_Category}</td>
                         <td>{row.Action}</td>
-                        <td>{row.Amount}</td>
                         <td>{row.Source}</td>
-                        <td>
-                          {row.Bid_Date ? row.Bid_Date.substring(0, 10) : ""}
-                        </td>
                         <td>
                           {row.Start_Date
                             ? row.Start_Date.substring(0, 10)

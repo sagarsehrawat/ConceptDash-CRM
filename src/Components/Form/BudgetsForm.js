@@ -18,6 +18,7 @@ import LoadingSpinner from "../Loader/Loader";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import AddDepartment from "./AddDepartment";
+import AddCategory from "./AddCategory";
 
 function BudgetsForm(props) {
   const [apiCallCity, setCallCity] = useState(0);
@@ -135,6 +136,10 @@ function BudgetsForm(props) {
   const [showDeptForm, setShowDeptForm] = useState(false);
   const handleCloseDeptForm = () => setShowDeptForm(false);
   const handleShowDeptForm = () => setShowDeptForm(true);
+
+  const [showCategoryForm, setShowCategoryForm] = useState(false);
+  const handleCloseCategoryForm = () => setShowCategoryForm(false);
+  const handleShowCategoryForm = () => setShowCategoryForm(true);
   return (
     <>
     {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
@@ -193,6 +198,14 @@ function BudgetsForm(props) {
                   ))
                 : ""}
             </Form.Select>
+          </Form.Group>
+          <Form.Group as={Col}>
+            <Button
+              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
+              onClick={handleShowCategoryForm}
+            >
+              Add Project Category
+            </Button>
           </Form.Group>
         </Row>
         <Row className="mb-4">
@@ -271,6 +284,16 @@ function BudgetsForm(props) {
           <Modal.Title>Add Department</Modal.Title>
         </Modal.Header>
         <Modal.Body>{<AddDepartment setRed={setred} setGreen={setgreen} closeModal={handleCloseDeptForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
+      </Modal>
+
+      <Modal
+      backdrop="static"
+      size="lg"
+      keyboard={false} show={showCategoryForm} onHide={handleCloseCategoryForm} >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Project Category</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<AddCategory setRed={setred} setGreen={setgreen} closeModal={handleCloseCategoryForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
       </Modal>
     </div>}</>
   );

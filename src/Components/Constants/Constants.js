@@ -65,6 +65,7 @@ export const ADD_SOFTWARE = '/api/add/software'
 export const ADD_TIMESHEET = '/api/add/timesheet'
 export const ADD_CITY = '/api/add/city'
 export const ADD_DEPARTMENT = '/api/add/department'
+export const ADD_CATEGORY = '/api/add/category'
 
 
 //Delete APIs

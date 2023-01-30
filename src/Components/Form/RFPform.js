@@ -19,6 +19,8 @@ import AddCity from "./AddCity";
 import LoadingSpinner from "../Loader/Loader";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
+import AddDepartment from "./AddDepartment";
+import AddCategory from "./AddCategory";
 
 function RFPform(props) {
   const [apiCallCity, setCallCity] = useState(0);
@@ -38,11 +40,11 @@ function RFPform(props) {
     action: "",
     managerName: "",
     projectName: "",
-    bidDate: "",
+    // bidDate: "",
     startDate: "",
     submissionDate: "",
     rfpNumber: "",
-    amount: "",
+    // amount: "",
     city: "",
   });
   const [radio, setradio] = useState(false);
@@ -64,7 +66,7 @@ function RFPform(props) {
   const [projectDepts, setprojectDepts] = useState([]);
   const [budgets, setbudgets] = useState([]);
   useEffect(() => {
-    setisLoading(true)
+    setisLoading(true);
     const call = async () => {
       await axios
         .get(HOST + GET_CITIES, {
@@ -118,7 +120,7 @@ function RFPform(props) {
         .catch((err) => {
           console.log(err);
         });
-        setisLoading(false);
+      setisLoading(false);
     };
     call();
   }, [apiCallCity]);
@@ -134,12 +136,12 @@ function RFPform(props) {
           projectCatId: radio ? pCategoryid : form.projectCat,
           projectManagerId: form.managerName,
           projectName: radio ? pName : form.projectName,
-          bidDate: form.bidDate,
+          // bidDate: form.bidDate,
           startDate: form.startDate,
           submissionDate: form.submissionDate,
           rfpNumber: form.rfpNumber,
           source: form.source,
-          amount: radio ? amount : form.amount,
+          // amount: radio ? amount : form.amount,
           cityId: radio ? cityid : form.city,
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
@@ -168,7 +170,7 @@ function RFPform(props) {
   const [pCategoryid, setpCategoryid] = useState("");
   const [cityid, setcityid] = useState("");
   const [city, setcity] = useState("");
-  const [amount, setamount] = useState("");
+  // const [amount, setamount] = useState("");
   const [source, setsource] = useState("");
   const handleChange1 = async (e) => {
     await axios
@@ -187,7 +189,7 @@ function RFPform(props) {
         setpCategoryid(res.data.res[0].Project_Cat_ID);
         setcity(res.data.res[0].City);
         setcityid(res.data.res[0].City_ID);
-        setamount(res.data.res[0].Budget_Amount);
+        // setamount(res.data.res[0].Budget_Amount);
         setsource(res.data.res[0].Source);
       })
       .catch((err) => {
@@ -197,11 +199,21 @@ function RFPform(props) {
   const [showCityForm, setShowCityForm] = useState(false);
   const handleCloseCityForm = () => setShowCityForm(false);
   const handleShowCityForm = () => setShowCityForm(true);
+
+  const [showDeptForm, setShowDeptForm] = useState(false);
+  const handleCloseDeptForm = () => setShowDeptForm(false);
+  const handleShowDeptForm = () => setShowDeptForm(true);
+
+  const [showCategoryForm, setShowCategoryForm] = useState(false);
+  const handleCloseCategoryForm = () => setShowCategoryForm(false);
+  const handleShowCategoryForm = () => setShowCategoryForm(true);
   return (
     <>
-    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
-    {red===true ? <RedAlert setRed={setred}/> : <></>}
-      {isLoading?<LoadingSpinner/>:
+      {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+      {red === true ? <RedAlert setRed={setred} /> : <></>}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
         <div>
           <Form className="form-main" onSubmit={handleSubmit}>
             <Row className="mb-4">
@@ -214,6 +226,30 @@ function RFPform(props) {
             </Row>
             {!radio ? (
               <div>
+                <Row className="mb-4">
+                  <Form.Group as={Col} controlId="formGridCity">
+                    <Form.Select onChange={handleChange} name="city" required>
+                      <option value="">Select City</option>
+                      {cities
+                        ? cities.map((e) => (
+                            <option value={e.City_ID}>{e.City}</option>
+                          ))
+                        : ""}
+                    </Form.Select>
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Button
+                      style={{
+                        width: "100%",
+                        backgroundColor: "grey",
+                        border: "none",
+                      }}
+                      onClick={handleShowCityForm}
+                    >
+                      Add City
+                    </Button>
+                  </Form.Group>
+                </Row>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
                     <Form.Select onChange={handleChange} name="dept" required>
@@ -228,6 +264,20 @@ function RFPform(props) {
                     </Form.Select>
                   </Form.Group>
                   <Form.Group as={Col}>
+                    <Button
+                      style={{
+                        width: "100%",
+                        backgroundColor: "grey",
+                        border: "none",
+                      }}
+                      onClick={handleShowDeptForm}
+                    >
+                      Add Department
+                    </Button>
+                  </Form.Group>
+                </Row>
+                <Row className="mb-4">
+                  <Form.Group as={Col}>
                     <Form.Select onChange={handleChange} name="dept" required>
                       <option value="">Select Project Category</option>
                       {projectDepts.length > 0
@@ -238,6 +288,18 @@ function RFPform(props) {
                           ))
                         : ""}
                     </Form.Select>
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Button
+                      style={{
+                        width: "100%",
+                        backgroundColor: "grey",
+                        border: "none",
+                      }}
+                      onClick={handleShowCategoryForm}
+                    >
+                      Add Project Category
+                    </Button>
                   </Form.Group>
                 </Row>
 
@@ -274,14 +336,14 @@ function RFPform(props) {
                   </Form.Group>
                 </Row>
                 <Row className="mb-4">
-                  <Form.Group as={Col}>
+                  {/* <Form.Group as={Col}>
                     <Form.Label>Bid Date</Form.Label>
                     <Form.Control
                       name="bidDate"
                       onChange={handleChange}
                       type="date"
                     />
-                  </Form.Group>
+                  </Form.Group> */}
                   <Form.Group as={Col}>
                     <Form.Label>Question Date</Form.Label>
                     <Form.Control
@@ -301,30 +363,6 @@ function RFPform(props) {
                 </Row>
 
                 <Row className="mb-4">
-                  <Form.Group as={Col} controlId="formGridCity">
-                    <Form.Select onChange={handleChange} name="city" required>
-                      <option value="">Select City</option>
-                      {cities
-                        ? cities.map((e) => (
-                            <option value={e.City_ID}>{e.City}</option>
-                          ))
-                        : ""}
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group as={Col}>
-                    <Button
-                      style={{
-                        width: "100%",
-                        backgroundColor: "grey",
-                        border: "none",
-                      }}
-                      onClick={handleShowCityForm}
-                    >
-                      Add City
-                    </Button>
-                  </Form.Group>
-                </Row>
-                <Row className="mb-4">
                   <Form.Group as={Col}>
                     <Form.Label>RFP Number</Form.Label>
                     <Form.Control
@@ -334,7 +372,7 @@ function RFPform(props) {
                       required
                     />
                   </Form.Group>
-                  <Form.Group as={Col}>
+                  {/* <Form.Group as={Col}>
                     <Form.Label>Amount</Form.Label>
                     <Form.Control
                       name="amount"
@@ -342,7 +380,7 @@ function RFPform(props) {
                       onChange={handleChange}
                       required
                     />
-                  </Form.Group>
+                  </Form.Group> */}
                 </Row>
 
                 <Row className="mb-4">
@@ -426,14 +464,14 @@ function RFPform(props) {
                       </Form.Group>
                     </Row>
                     <Row className="mb-4">
-                      <Form.Group as={Col}>
+                      {/* <Form.Group as={Col}>
                         <Form.Label>Bid Date</Form.Label>
                         <Form.Control
                           name="bidDate"
                           onChange={handleChange}
                           type="date"
                         />
-                      </Form.Group>
+                      </Form.Group> */}
                       <Form.Group as={Col}>
                         <Form.Label>Question Date</Form.Label>
                         <Form.Control
@@ -467,14 +505,14 @@ function RFPform(props) {
                           onChange={handleChange}
                         />
                       </Form.Group>
-                      <Form.Group as={Col}>
+                      {/* <Form.Group as={Col}>
                         <Form.Label>Amount</Form.Label>
                         <Form.Control
                           value={amount}
                           name="amount"
                           onChange={handleChange}
                         />
-                      </Form.Group>
+                      </Form.Group> */}
                     </Row>
                     <Row className="mb-4">
                       <Form.Group as={Col}>
@@ -500,11 +538,7 @@ function RFPform(props) {
               </div>
             )}
 
-            <Button
-              className="submit-btn"
-              variant="primary"
-              type="submit"
-            >
+            <Button className="submit-btn" variant="primary" type="submit">
               Submit
             </Button>
           </Form>
@@ -524,10 +558,66 @@ function RFPform(props) {
             <Modal.Header closeButton>
               <Modal.Title>Add City</Modal.Title>
             </Modal.Header>
-            <Modal.Body>{<AddCity setRed={setred} setGreen={setgreen} closeModal={handleCloseCityForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
+            <Modal.Body>
+              {
+                <AddCity
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseCityForm}
+                  api={apiCallCity}
+                  apiCall={setCallCity}
+                />
+              }
+            </Modal.Body>
+          </Modal>
+
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={showDeptForm}
+            onHide={handleCloseDeptForm}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add Department</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {
+                <AddDepartment
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseDeptForm}
+                  api={apiCallCity}
+                  apiCall={setCallCity}
+                />
+              }
+            </Modal.Body>
+          </Modal>
+
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={showCategoryForm}
+            onHide={handleCloseCategoryForm}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add Project Category</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {
+                <AddCategory
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseCategoryForm}
+                  api={apiCallCity}
+                  apiCall={setCallCity}
+                />
+              }
+            </Modal.Body>
           </Modal>
         </div>
-      }
+      )}
     </>
   );
 }
