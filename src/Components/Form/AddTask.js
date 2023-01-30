@@ -17,7 +17,6 @@ function AddTask(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [isSubmit, setIsSubmit] = useState(false);
-  const [employees, setemployees] = useState([]);
   const [form, setform] = useState({
     title: "",
     priority: "",
@@ -34,6 +33,7 @@ function AddTask(props) {
     newForm[name] = value;
     setform(newForm);
   };
+  const [employees, setemployees] = useState([]);
   useEffect(() => {
     const call = async () => {
       await axios

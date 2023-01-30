@@ -17,11 +17,13 @@ import AddCity from "./AddCity";
 import LoadingSpinner from "../Loader/Loader";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
+import AddDepartment from "./AddDepartment";
 
 function BudgetsForm(props) {
   const [apiCallCity, setCallCity] = useState(0);
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
+
   const { setGreen, closeModal, api, apiCall, setRed } = props;
   const [isSubmit, setIsSubmit] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -129,6 +131,10 @@ function BudgetsForm(props) {
   const [showCityForm, setShowCityForm] = useState(false);
   const handleCloseCityForm = () => setShowCityForm(false);
   const handleShowCityForm = () => setShowCityForm(true);
+
+  const [showDeptForm, setShowDeptForm] = useState(false);
+  const handleCloseDeptForm = () => setShowDeptForm(false);
+  const handleShowDeptForm = () => setShowDeptForm(true);
   return (
     <>
     {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
@@ -165,6 +171,14 @@ function BudgetsForm(props) {
                   ))
                 : ""}
             </Form.Select>
+          </Form.Group>
+          <Form.Group as={Col}>
+            <Button
+              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
+              onClick={handleShowDeptForm}
+            >
+              Add Department
+            </Button>
           </Form.Group>
         </Row>
         <Row className="mb-4">
@@ -247,6 +261,16 @@ function BudgetsForm(props) {
           <Modal.Title>Add City</Modal.Title>
         </Modal.Header>
         <Modal.Body>{<AddCity setRed={setred} setGreen={setgreen} closeModal={handleCloseCityForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
+      </Modal>
+      
+      <Modal
+      backdrop="static"
+      size="lg"
+      keyboard={false} show={showDeptForm} onHide={handleCloseDeptForm} >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Department</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{<AddDepartment setRed={setred} setGreen={setgreen} closeModal={handleCloseDeptForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
       </Modal>
     </div>}</>
   );
