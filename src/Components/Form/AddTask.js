@@ -27,6 +27,15 @@ function AddTask(props) {
     dueDate: "",
     completedOn: "",
   });
+  let date = new Date();
+  let month;
+  if(date.getMonth()<9) {
+    month = `0${date.getMonth()+1}`
+  } else {
+    month = date.getMonth()+1;
+  }
+  let entry_date = `${date.getFullYear()}-${month}-${date.getDate()}`
+  console.log(month);
   const handleChange = (e) => {
     const { name, value } = e.target;
     const newForm = form;
@@ -66,9 +75,8 @@ function AddTask(props) {
           completedPercent: form.completed,
           assignedTo: form.assignedTo,
           description: form.description,
-          startDate: form.startDate,
+          startDate: entry_date,
           dueDate: form.dueDate,
-          completedOn: form.completedOn,
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
@@ -100,12 +108,17 @@ function AddTask(props) {
             />
           </Form.Group>
           <Form.Group as={Col}>
-            <Form.Control
+            <Form.Select
               name="priority"
               required
               placeholder="Priority"
               onChange={handleChange}
-            />
+            >
+              <option>Select Priority</option>
+              <option value='1'>Urgent</option>
+              <option value='2'>Moderate</option>
+              <option value='3'>Low</option>
+            </Form.Select>
           </Form.Group>
         </Row>
         <Row className="mb-4">
@@ -137,7 +150,7 @@ function AddTask(props) {
               )}
             </Form.Select>
           </Form.Group>
-          <Form.Group as={Col}>
+          {/* <Form.Group as={Col}>
             <Form.Label>Start Date</Form.Label>
             <Form.Control
               name="startDate"
@@ -145,19 +158,19 @@ function AddTask(props) {
               onChange={handleChange}
               required
             />
-          </Form.Group>
+          </Form.Group> */}
           <Form.Group as={Col}>
             <Form.Label>Due Date</Form.Label>
             <Form.Control name="dueDate" type="date" onChange={handleChange} required />
           </Form.Group>
-          <Form.Group as={Col}>
+          {/* <Form.Group as={Col}>
             <Form.Label>Completed On</Form.Label>
             <Form.Control
               name="completedOn"
               type="date"
               onChange={handleChange}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Row>
         <Row className="mb-4">
           <Form.Group as={Col}>

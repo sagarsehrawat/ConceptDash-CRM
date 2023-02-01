@@ -35,13 +35,8 @@ function UpdateProjectForm(props) {
       ? props.row.Next_Follow_Up.substring(0, 10)
       : ""
   );
-  const [tcDate, settcDate] = useState(
-    props.row.Tentative_Closing
-      ? props.row.Tentative_Closing.substring(0, 10)
-      : ""
-  );
   const [pCategory, setpCategory] = useState(props.row.Project_Cat_ID);
-  const [pStage, setpStage] = useState(props.row.Project_Stage);
+  const [notes, setnotes] = useState(props.row.Notes);
   const [state, setstate] = useState(props.row.Status);
   const [fNotes, setfNotes] = useState(props.row.Follow_Up_Notes);
   const [pManager, setpManager] = useState(props.row.Project_Manager_ID);
@@ -108,9 +103,8 @@ function UpdateProjectForm(props) {
   const [form, setform] = useState({
     projectName: pname,
     dueDate: dDate,
-    tentativeClosing: tcDate,
     nextFollow: nfDate,
-    stage: pStage,
+    notes: notes,
     followNotes: fNotes,
     projectValue: pValue,
     city: city,
@@ -131,17 +125,14 @@ function UpdateProjectForm(props) {
     if (name === "dept") {
       setdept(value);
     }
-    if (name === "stage") {
-      setpStage(value);
+    if (name === "notes") {
+      setnotes(value);
     }
     if (name === "followNotes") {
       setfNotes(value);
     }
     if (name === "nextFollow") {
       setnfDate(value);
-    }
-    if (name === "tentativeClosing") {
-      settcDate(value);
     }
     if (name === "projectValue") {
       setpValue(value);
@@ -172,10 +163,9 @@ function UpdateProjectForm(props) {
         {
           projectName: form.projectName,
           dueDate: form.dueDate,
-          stage: form.stage,
+          notes: form.notes,
           followUpNotes: form.followNotes,
           nextFollowUp: form.nextFollow,
-          tentClosing: form.tentativeClosing,
           value: form.projectValue,
           cityId: form.city,
           province: form.state,
@@ -288,16 +278,6 @@ function UpdateProjectForm(props) {
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Project Stage</Form.Label>
-            <Form.Select defaultValue={pStage} onChange={handleChange} name="stage">
-              <option value="">Select Project Stage</option>
-              <option value="Upcoming">Upcoming</option>
-              <option value="Ongoing">Ongoing</option>
-              <option value="Started">Started</option>
-              <option value="Completed">Completed</option>
-            </Form.Select>
-          </Form.Group>
         </Row>
         <Row className="mb-4">
           <Form.Group as={Col}>
@@ -307,16 +287,6 @@ function UpdateProjectForm(props) {
               type="date"
               value={nfDate}
               placeholder="Next Follow Up"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Tentative Closing Date</Form.Label>
-            <Form.Control
-              name="tentativeClosing"
-              type="date"
-              value={tcDate}
-              placeholder="Tentative Closing*"
               onChange={handleChange}
             />
           </Form.Group>
@@ -411,13 +381,25 @@ function UpdateProjectForm(props) {
         </Row>
         <Row className="mb-4">
           <Form.Group as={Col}>
+            <Form.Label>Notes</Form.Label>
+            <Form.Control
+              name="notes"
+              type="text"
+              as='textarea'
+              value={notes}
+              placeholder="Notes"
+              onChange={handleChange}
+            />
+          </Form.Group>
+        </Row>
+        <Row className="mb-4">
+          <Form.Group as={Col}>
             <Form.Label>Relevent Files</Form.Label>
             <Form.Control
               name="attachments"
               type="file"
               placeholder="Attachments*"
               onChange={handleChange}
-              required
             />
           </Form.Group>
         </Row>

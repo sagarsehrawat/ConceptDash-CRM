@@ -89,10 +89,9 @@ function ProjectForm(props) {
     projectName: "",
     dueDate: "",
     dateCreated: "",
-    projectStage: "",
+    notes: "",
     followNotes: "",
     nextFollow: "",
-    tentativeClosing: "",
     projectValue: "",
     city: "",
     dept: "",
@@ -123,10 +122,9 @@ function ProjectForm(props) {
           projectName: form.projectName,
           dateCreated: currentDate,
           dueDate: form.dueDate,
-          stage: form.projectStage,
+          notes: form.notes,
           followUpNotes: form.followNotes,
           nextFollowUp: form.nextFollow,
-          tentClosing: form.tentativeClosing,
           projectValue: form.projectValue,
           cityId: form.city,
           departmentId: form.dept,
@@ -300,15 +298,6 @@ function ProjectForm(props) {
                   onChange={handleChange}
                 />
               </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Select onChange={handleChange} name="projectStage">
-                  <option value="">Select Project Stage</option>
-                  <option value="Upcoming">Upcoming</option>
-                  <option value="Ongoing">Ongoing</option>
-                  <option value="Started">Started</option>
-                  <option value="Completed">Completed</option>
-                </Form.Select>
-              </Form.Group>
             </Row>
             <Row className="mb-4">
               <Form.Group as={Col}>
@@ -317,15 +306,6 @@ function ProjectForm(props) {
                   name="nextFollow"
                   type="date"
                   placeholder="Next Follow Up"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Tentative Closing Date</Form.Label>
-                <Form.Control
-                  name="tentativeClosing"
-                  type="date"
-                  placeholder="Tentative Closing*"
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -384,11 +364,22 @@ function ProjectForm(props) {
             </Row>
             <Row className="mb-4">
               <Form.Group as={Col}>
+                <Form.Label>Notes</Form.Label>
+                <Form.Control
+                  name="notes"
+                  type="text"
+                  as='textarea'
+                  placeholder="Notes"
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
                 <Form.Label>Relevent Files</Form.Label>
                 <Form.Control
                   name="attachments"
                   type="file"
-                  placeholder="Attachments*"
                   onChange={handleChange}
                 />
               </Form.Group>
