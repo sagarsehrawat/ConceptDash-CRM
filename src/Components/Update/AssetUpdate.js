@@ -2,7 +2,6 @@ import { React, useEffect, useState } from "react";
 import axios from "axios";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
-import { useNavigate } from "react-router-dom";
 import { HOST, GET_ASSETS, GET_SOFTWARES } from "../Constants/Constants";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -10,11 +9,28 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Modal from "react-bootstrap/Modal";
+import AssetForm from '../Form/AssetForm'
+import SoftwareForm from '../Form/SoftwareForm'
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 
 function AssetUpdate() {
-  const navigate = useNavigate();
+  const [apiCall, setCall] = useState(0);
+  const [green, setgreen] = useState(false);
+  const [red, setred] = useState(false);
+
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [showsoft, setShowsoft] = useState(false);
+  const handleClosesoft = () => setShowsoft(false);
+  const handleShowsoft = () => setShowsoft(true);
+
+  const [showUpdate, setShowUpdate] = useState(false);
+  const handleCloseUpdate = () => setShowUpdate(false);
+  const handleShowUpdate = () => setShowUpdate(true);
 
   const [assets, setassets] = useState([]);
   const [software, setsoftware] = useState([]);
@@ -31,6 +47,7 @@ function AssetUpdate() {
         .then((res) => {
           setassets(res.data.res);
           setdataSource(res.data.res);
+          console.log(res.data.res)
         })
         .catch((err) => {
           console.log(err);
@@ -50,7 +67,7 @@ function AssetUpdate() {
         setIsLoading(false);
     };
     call();
-  }, []);
+  }, [apiCall]);
   const [value1, setValue1] = useState("1");
   const handleChange = (event, newValue) => {
     setValue1(newValue);
@@ -87,6 +104,9 @@ function AssetUpdate() {
     }
   };
   return (
+    <>
+    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
+    {red===true ? <RedAlert setRed={setred}/> : <></>}
     <div>
       <Box sx={{ width: "100%", typography: "body1" }}>
         <TabContext value={value1}>
@@ -114,9 +134,7 @@ function AssetUpdate() {
                 />
                 <br />
                 <Button
-                  onClick={(e) => {
-                    navigate("/assetform");
-                  }}
+                  onClick={handleShow}
                   style={{ marginLeft: "45vw", marginBottom: "4vh" }}
                 >
                   Add a New Asset
@@ -125,6 +143,7 @@ function AssetUpdate() {
                   <table className="table">
                     <thead>
                       <tr className="heading">
+                        <th scope="col">Employee</th>
                         <th scope="col">Asset Category</th>
                         <th scope="col">Hardware Details</th>
                         <th scope="col">Purchase Price</th>
@@ -161,6 +180,7 @@ function AssetUpdate() {
                                     Edit
                                   </Button>
                                 </TableCell> */}
+                              <td>{row.Full_Name}</td>
                               <td>{row.Asset_Category}</td>
                               <td>{row.Hardware_Details}</td>
                               <td>{row.Purchase_Price}</td>
@@ -195,12 +215,13 @@ function AssetUpdate() {
                                     Edit
                                   </Button>
                                 </TableCell> */}
+                                <td>{row.Full_Name}</td>
                                 <td>{row.Asset_Category}</td>
                                 <td>{row.Hardware_Details}</td>
                                 <td>{row.Purchase_Price}</td>
-                                <td>{row.Aquired_Date}</td>
-                                <td>{row.Shipped_On}</td>
-                                <td>{row.Retired_Date}</td>
+                                <td>{row.Aquired_Date?row.Aquired_Date.substring(0, 10):''}</td>
+                                <td>{row.Shipped_On?row.Shipped_On.substring(0, 10):''}</td>
+                                <td>{row.Retired_Date?row.Retired_Date.substring(0, 10):''}</td>
                                 <td>{row.Attachments}</td>
                                 <td>{row.Notes}</td>
                               </tr>
@@ -230,9 +251,7 @@ function AssetUpdate() {
                 />
                 <br />
                 <Button
-                  onClick={(e) => {
-                    navigate("/addsoftware");
-                  }}
+                  onClick={handleShowsoft}
                   style={{ marginLeft: "45vw", marginBottom: "4vh" }}
                 >
                   Add a New Software
@@ -244,11 +263,8 @@ function AssetUpdate() {
                         {/* <TableCell align="left">Edit</TableCell> */}
                         <th scope="col">Software</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Company</th>
                         <th scope="col">Version</th>
                         <th scope="col">Manufacturer</th>
-                        <th scope="col">Used By</th>
-                        <th scope="col">Attachments</th>
                         <th scope="col">Notes</th>
                       </tr>
                     </thead>
@@ -280,11 +296,8 @@ function AssetUpdate() {
                                 </TableCell> */}
                                 <td>{row.Software}</td>
                                 <td>{row.Price}</td>
-                                <td>{row.Company}</td>
                                 <td>{row.Version}</td>
                                 <td>{row.Manufacturer}</td>
-                                <td>{row.Used_By}</td>
-                                <td>{row.Attachments}</td>
                                 <td>{row.Notes}</td>
                               </tr>
                             );
@@ -315,11 +328,8 @@ function AssetUpdate() {
                                 </TableCell> */}
                                 <td>{row.Software}</td>
                                 <td>{row.Price}</td>
-                                <td>{row.Company}</td>
                                 <td>{row.Version}</td>
                                 <td>{row.Manufacturer}</td>
-                                <td>{row.Used_By}</td>
-                                <td>{row.Attachments}</td>
                                 <td>{row.Notes}</td>
                               </tr>
                             );
@@ -332,7 +342,79 @@ function AssetUpdate() {
           </TabPanel>
         </TabContext>
       </Box>
-    </div>
+      {/* Add Form Modal */}
+      <Modal
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          size="xl"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Add Asset</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {
+              <AssetForm
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleClose}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
+        </Modal>
+
+        {/* Add Form Modal */}
+      <Modal
+          show={showsoft}
+          onHide={handleClosesoft}
+          backdrop="static"
+          size="xl"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Add Software</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {
+              <SoftwareForm
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleClosesoft}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
+        </Modal>
+
+        {/* Update Form Modal */}
+        {/* <Modal
+          show={showUpdate}
+          onHide={handleCloseUpdate}
+          backdrop="static"
+          size="xl"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Update Budget</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {
+              <UpdateAsset
+                row={rowData}
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleCloseUpdate}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
+        </Modal> */}
+    </div></>
   );
 }
 

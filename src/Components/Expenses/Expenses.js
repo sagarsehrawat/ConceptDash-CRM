@@ -1,8 +1,6 @@
 import {React, useEffect, useState} from 'react'
-import { TableRow, TableHead, TableContainer, TableCell, TableBody, Table, Paper } from '@material-ui/core';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
-import cellEditFactory from 'react-bootstrap-table2-editor';
 import LoadingSpinner from '../Loader/Loader';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
