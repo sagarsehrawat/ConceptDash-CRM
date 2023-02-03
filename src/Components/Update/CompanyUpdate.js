@@ -5,6 +5,7 @@ import {
   GET_PAGES_COMPANIES,
   GET_PAGE_COMPANIES,
   SEARCH_COMPANIES,
+  GET_CITIES,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
@@ -14,6 +15,8 @@ import UpdateCompany from "../Form/UpdateCompany";
 import "./Table.css";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
+import Select from "react-select";
+import Form from "react-bootstrap/Form";
 
 function CompanyUpdate() {
   const [apiCall, setCall] = useState(0);
@@ -33,6 +36,9 @@ function CompanyUpdate() {
   let d = 0;
   const [pages, setpages] = useState(1);
   const [currPage, setcurrPage] = useState(1);
+  const [cities, setcities] = useState([]);
+  const [sort, setsort] = useState("");
+  const [value, setValue] = useState("");
   useEffect(() => {
     setIsLoading(true);
     const call = async () => {
@@ -42,6 +48,9 @@ function CompanyUpdate() {
             auth: "Rose " + localStorage.getItem("auth"),
             limit: 50,
             offset: d,
+            filter: JSON.stringify(returnData),
+            search: value,
+            sort: sort,
           },
         })
         .then((res) => {
@@ -60,6 +69,16 @@ function CompanyUpdate() {
         .catch((err) => {
           console.log(err);
         });
+      await axios
+        .get(HOST + GET_CITIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setcities(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       setIsLoading(false);
     };
     call();
@@ -74,6 +93,9 @@ function CompanyUpdate() {
           auth: "Rose " + localStorage.getItem("auth"),
           limit: 50,
           offset: current * 50,
+          filter: JSON.stringify(returnData),
+          search: value,
+          sort: sort,
         },
       })
       .then((res) => {
@@ -95,6 +117,9 @@ function CompanyUpdate() {
           auth: "Rose " + localStorage.getItem("auth"),
           limit: 50,
           offset: (current - 2) * 50,
+          filter: JSON.stringify(returnData),
+          search: value,
+          sort: sort,
         },
       })
       .then((res) => {
@@ -105,16 +130,17 @@ function CompanyUpdate() {
         console.log(err);
       });
   };
-  const [value, setValue] = useState("");
   const filterData = async () => {
     setIsLoading(true);
     await axios
-      .get(HOST + SEARCH_COMPANIES, {
+      .get(HOST + GET_PAGE_COMPANIES, {
         headers: {
           auth: "Rose " + localStorage.getItem("auth"),
           limit: 50,
           offset: 0,
           search: value,
+          filter: JSON.stringify(returnData),
+          sort: sort,
         },
       })
       .then((res) => {
@@ -133,10 +159,36 @@ function CompanyUpdate() {
   const inputData = (e) => {
     setValue(e.target.value);
   };
+  let filterCities = [];
+  cities.map((e) => {
+    filterCities.push({
+      label: e.City,
+      value: e.City,
+    });
+  });
+  let [DisplayValue, getValue] = useState([]);
+  let doChange = (e) => {
+    getValue(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
+  let returnData = {
+    city: DisplayValue,
+  };
+  let cityvalue = [];
+  returnData["city"] &&
+    returnData["city"].map((e) => {
+      cityvalue.push({
+        label: e,
+        value: e,
+      });
+    });
+
+  const handleSort = (e) => {
+    setsort(e.target.value);
+  };
   return (
     <>
-    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
-    {red===true ? <RedAlert setRed={setred}/> : <></>}
+      {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+      {red === true ? <RedAlert setRed={setred} /> : <></>}
       <div>
         {isLoading ? (
           <LoadingSpinner />
@@ -179,6 +231,48 @@ function CompanyUpdate() {
                 Search
               </Button>
             </div>
+            <br/>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+             
+              <Select
+                placeholder="Select City(s)"
+                defaultValue={cityvalue}
+                onChange={doChange}
+                isMulti
+                options={filterCities}
+              ></Select>
+              &nbsp;&nbsp;
+              
+              {
+              cityvalue.length == 0 ? (
+                <Button
+                  style={{ backgroundColor: "rgba(38,141,141,1)" }}
+                  disabled
+                  onClick={filterData}
+                >
+                  Filter
+                </Button>
+              ) : (
+                <Button
+                  style={{ backgroundColor: "rgba(38,141,141,1)" }}
+                  onClick={filterData}
+                >
+                  Filter
+                </Button>
+              )}
+            </div>
+            <br/>
+            <div style={{ display: "flex", flexDirection: "row", width: '52.5rem' }}>
+              <Form.Select
+                onChange={handleSort}
+              >
+                <option value="Name">Company Name (A-Z)</option>
+                <option value="Name DESC">Company Name (Z-A)</option>
+              </Form.Select>
+              &nbsp;&nbsp;
+              <Button onClick={filterData}>Sort</Button>
+            </div>
+
             <br />
             <div className="conatiner">
               <table className="table">
@@ -282,7 +376,17 @@ function CompanyUpdate() {
           <Modal.Header closeButton>
             <Modal.Title>Add Company</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{<CompanyForm setRed={setred} setGreen={setgreen} closeModal={handleClose} api={apiCall} apiCall={setCall}/>}</Modal.Body>
+          <Modal.Body>
+            {
+              <CompanyForm
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleClose}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
         </Modal>
 
         <Modal
@@ -295,7 +399,18 @@ function CompanyUpdate() {
           <Modal.Header closeButton>
             <Modal.Title>Update Company</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{<UpdateCompany row={rowData} setRed={setred} setGreen={setgreen} closeModal={handleCloseUpdate} api={apiCall} apiCall={setCall}/>}</Modal.Body>
+          <Modal.Body>
+            {
+              <UpdateCompany
+                row={rowData}
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleCloseUpdate}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
         </Modal>
       </div>
     </>

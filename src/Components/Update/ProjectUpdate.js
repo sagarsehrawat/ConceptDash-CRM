@@ -4,11 +4,11 @@ import {
   HOST,
   GET_PAGES_PROJECTS,
   GET_PAGE_PROJECTS,
-  SEARCH_PROJECTS,
-  FILTER_PROJECTS,
   GET_DEPARTMENTS,
   GET_PROJECT_CATEGORIES,
   DELETE_PROJECT,
+  GET_CITIES,
+  GET_EMPLOYEENAMES,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
@@ -19,6 +19,8 @@ import "./Table.css";
 import Select from "react-select";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
+import Form from "react-bootstrap/Form";
+
 
 function ProjectUpdate() {
   const [apiCall, setCall] = useState(0);
@@ -45,6 +47,10 @@ function ProjectUpdate() {
   const [currPage, setcurrPage] = useState(1);
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
+  const [cities, setcities] = useState([]);
+  const [employees, setemployees] = useState([]);
+  const [sort, setsort] = useState("");
+  const [value, setValue] = useState("");
   useEffect(() => {
     setIsLoading(true);
     const call = async () => {
@@ -54,6 +60,9 @@ function ProjectUpdate() {
             auth: "Rose " + localStorage.getItem("auth"),
             limit: 50,
             offset: d,
+            filter: JSON.stringify(returnData),
+            search: value,
+            sort: sort,
           },
         })
         .then((res) => {
@@ -93,6 +102,26 @@ function ProjectUpdate() {
         .catch((err) => {
           console.log(err);
         });
+      await axios
+        .get(HOST + GET_CITIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setcities(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      await axios
+        .get(HOST + GET_EMPLOYEENAMES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setemployees(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       setIsLoading(false);
     };
     call();
@@ -107,6 +136,9 @@ function ProjectUpdate() {
           auth: "Rose " + localStorage.getItem("auth"),
           limit: 50,
           offset: current * 50,
+          filter: JSON.stringify(returnData),
+          search: value,
+          sort: sort,
         },
       })
       .then((res) => {
@@ -127,25 +159,9 @@ function ProjectUpdate() {
           auth: "Rose " + localStorage.getItem("auth"),
           limit: 50,
           offset: (current - 2) * 50,
-        },
-      })
-      .then((res) => {
-        setprojects(res.data.res);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const handleFilter = async () => {
-    setIsLoading(true);
-    await axios
-      .get(HOST + FILTER_PROJECTS, {
-        headers: {
-          auth: "Rose " + localStorage.getItem("auth"),
-          limit: limit,
-          offset: 0,
           filter: JSON.stringify(returnData),
+          search: value,
+          sort: sort,
         },
       })
       .then((res) => {
@@ -157,16 +173,17 @@ function ProjectUpdate() {
       });
   };
 
-  const [value, setValue] = useState("");
   const filterData = async () => {
     setIsLoading(true);
     await axios
-      .get(HOST + SEARCH_PROJECTS, {
+      .get(HOST + GET_PAGE_PROJECTS, {
         headers: {
           auth: "Rose " + localStorage.getItem("auth"),
           limit: 50,
           offset: 0,
+          filter: JSON.stringify(returnData),
           search: value,
+          sort: sort,
         },
       })
       .then((res) => {
@@ -185,6 +202,22 @@ function ProjectUpdate() {
   };
   let filterDepts = [];
   let filterCategories = [];
+  let filterCities = [];
+  let filterEmployees = [];
+  let filterStatus = [
+    {
+      label: "Not Started Yet",
+      value: "Not Started Yet",
+    },
+    {
+      label: "Completed",
+      value: "Completed",
+    },
+    {
+      label: "Ongoing",
+      value: "Ongoing",
+    },
+  ];
   depts.map((e) => {
     filterDepts.push({
       label: e.Department,
@@ -195,6 +228,18 @@ function ProjectUpdate() {
     filterCategories.push({
       label: e.Project_Category,
       value: e.Project_Category,
+    });
+  });
+  cities.map((e) => {
+    filterCities.push({
+      label: e.City,
+      value: e.City,
+    });
+  });
+  employees.map((e) => {
+    filterEmployees.push({
+      label: e.Full_Name,
+      value: e.Full_Name,
     });
   });
   const inputData = (e) => {
@@ -208,9 +253,25 @@ function ProjectUpdate() {
   let doChange1 = (e) => {
     getValue1(Array.isArray(e) ? e.map((x) => x.value) : []);
   };
+  let [DisplayValue2, getValue2] = useState([]);
+  let doChange2 = (e) => {
+    getValue2(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
+  let [DisplayValue3, getValue3] = useState([]);
+  let doChange3 = (e) => {
+    getValue3(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
+  let [DisplayValue4, getValue4] = useState([]);
+  let doChange4 = (e) => {
+    getValue4(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
+
   let returnData = {
     dept: DisplayValue,
     cat: DisplayValue1,
+    city: DisplayValue2,
+    manager: DisplayValue3,
+    status: DisplayValue4,
   };
   let deptvalue = [];
   returnData["dept"] &&
@@ -228,7 +289,31 @@ function ProjectUpdate() {
         value: e,
       });
     });
-    const [projectid, setprojectid] = useState(0);
+  let cityvalue = [];
+  returnData["city"] &&
+    returnData["city"].map((e) => {
+      cityvalue.push({
+        label: e,
+        value: e,
+      });
+    });
+  let employeevalue = [];
+  returnData["manager"] &&
+    returnData["manager"].map((e) => {
+      employeevalue.push({
+        label: e,
+        value: e,
+      });
+    });
+  let statusvalue = [];
+  returnData["status"] &&
+    returnData["status"].map((e) => {
+      statusvalue.push({
+        label: e,
+        value: e,
+      });
+    });
+  const [projectid, setprojectid] = useState(0);
   const handleDelete = (e) => {
     setprojectid(e);
     handleShowDelete();
@@ -253,6 +338,9 @@ function ProjectUpdate() {
       .catch((err) => {
         console.log(err);
       });
+  };
+  const handleSort = (e) => {
+    setsort(e.target.value);
   };
   return (
     <>
@@ -321,24 +409,64 @@ function ProjectUpdate() {
                 options={filterCategories}
               ></Select>
               &nbsp;&nbsp;
-              {deptvalue.length == 0 && catvalue.length == 0 ? (
+              <Select
+                placeholder="City(s)"
+                defaultValue={cityvalue}
+                onChange={doChange2}
+                isMulti
+                options={filterCities}
+              ></Select>
+              &nbsp;&nbsp;
+              <Select
+                placeholder="Project Manager(s)"
+                defaultValue={employeevalue}
+                onChange={doChange3}
+                isMulti
+                options={filterEmployees}
+              ></Select>
+              &nbsp;&nbsp;
+              <Select
+                placeholder="Project Status(s)"
+                defaultValue={statusvalue}
+                onChange={doChange4}
+                isMulti
+                options={filterStatus}
+              ></Select>
+              &nbsp;&nbsp;
+              {deptvalue.length == 0 && catvalue.length == 0 && cityvalue.length == 0 && employeevalue.length == 0 && statusvalue.length == 0 ? (
                 <Button
                   style={{ backgroundColor: "rgba(38,141,141,1)" }}
                   disabled
-                  onClick={handleFilter}
+                  onClick={filterData}
                 >
                   Filter
                 </Button>
               ) : (
                 <Button
                   style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                  onClick={handleFilter}
+                  onClick={filterData}
                 >
                   Filter
                 </Button>
               )}
             </div>
-
+            <br/>
+            <div style={{ display: "flex", flexDirection: "row", width: '52.5rem' }}>
+              <Form.Select
+                onChange={handleSort}
+              >
+                <option value="Project_Name">Project Name (A-Z)</option>
+                <option value="Project_Name DESC">Project Name (Z-A)</option>
+                <option value="Date_Created">Date Created(Oldest First)</option>
+                <option value="Date_Created DESC">Date Created(Newest First)</option>
+                <option value="Project_Due_Date">Due Date(Oldest First)</option>
+                <option value="Project_Due_Date DESC">Due Date(Oldest First)</option>
+                <option value="Project_Value">Project Value(Low-High)</option>
+                <option value="Project_Value DESC">Due Date(Low-High)</option>
+              </Form.Select>
+              &nbsp;&nbsp;
+              <Button onClick={filterData}>Sort</Button>
+            </div>
             <br />
             <div className="container-fluid">
               <table className="table">

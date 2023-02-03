@@ -140,7 +140,6 @@ function ProposalForm(props) {
         })
         .then((res) => {
           setprojectDepts(res.data.res);
-          console.log(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -172,7 +171,7 @@ function ProposalForm(props) {
           subConsultantPrice: form.consultantPrice,
           totalBid: form.totalBid,
           planTakers: DisplayValue1 ? DisplayValue1.toString() : "",
-          bidders: DisplayValue1 ? DisplayValue1.toString() : "",
+          bidders: DisplayValue2 ? DisplayValue2.toString() : "",
           bidderPrice: form.bidderPrice,
           winningPrice: form.winningPrice,
           winningBidderId: form.winningBidder,
@@ -248,11 +247,23 @@ function ProposalForm(props) {
     company.push({
       label: e.Name,
       value: e.Name,
+      id: e.ID
     });
   });
   let [DisplayValue1, getValue1] = useState();
+  let bidders = [];
   let doChange1 = (e) => {
     getValue1(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
+  DisplayValue1 && DisplayValue1.map((option) => {
+    bidders.push({
+      label: option,
+      value: option,
+    });
+  });
+  let [DisplayValue2, getValue2] = useState();
+  let doChange2 = (e) => {
+    getValue2(Array.isArray(e) ? e.map((x) => x.value) : []);
   };
   const [showCityForm, setShowCityForm] = useState(false);
   const handleCloseCityForm = () => setShowCityForm(false);
@@ -503,8 +514,8 @@ function ProposalForm(props) {
                   <Form.Group as={Col}>
                     <Select
                       isMulti
-                      onChange={doChange1}
-                      options={company}
+                      onChange={doChange2}
+                      options={bidders}
                       name="bidders"
                       placeholder="Bidders"
                     ></Select>
@@ -512,9 +523,13 @@ function ProposalForm(props) {
                   <Form.Group as={Col}>
                     <Form.Select onChange={handleChange} name="winningBidder">
                       <option value="">Select Winning Bidder</option>
-                      {companies.map((option) => (
-                        <option value={option.ID}>{option.Name}</option>
-                      ))}
+                      {companies ? (
+                        companies.map((option) => (
+                          <option value={option.ID}>{option.Name}</option>
+                        ))
+                      ) : (
+                        <option>Firstly select Bidders</option>
+                      )}
                     </Form.Select>
                   </Form.Group>
                 </Row>
@@ -762,8 +777,8 @@ function ProposalForm(props) {
                         <Form.Label>Bidders</Form.Label>
                         <Select
                           isMulti
-                          onChange={doChange1}
-                          options={company}
+                          onChange={doChange2}
+                          options={DisplayValue1 ? DisplayValue1 : ""}
                           name="bidders"
                         ></Select>
                       </Form.Group>
@@ -792,9 +807,13 @@ function ProposalForm(props) {
                           name="winningBidder"
                         >
                           <option value="">Select Winning Bidder</option>
-                          {companies.map((option) => (
-                            <option value={option.ID}>{option.Name}</option>
-                          ))}
+                          {companies ? (
+                            companies.map((option) => (
+                              <option value={option.ID}>{option.Name}</option>
+                            ))
+                          ) : (
+                            <option>Firstly Select Bidders</option>
+                          )}
                         </Form.Select>
                       </Form.Group>
                     </Row>

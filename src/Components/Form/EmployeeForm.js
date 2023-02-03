@@ -39,7 +39,6 @@ function EmployeeForm(props) {
         })
         .then((res) => {
           setjobTitles(res.data.res);
-          console.log(res.data);
         })
         .catch((err) => {
           console.log(err);

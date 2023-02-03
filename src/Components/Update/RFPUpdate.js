@@ -2,14 +2,13 @@ import { React, useEffect, useState } from "react";
 import axios from "axios";
 import {
   HOST,
-  SEARCH_RFPS,
   GET_PAGE_RFPS,
   GET_PAGES_RFPS,
   GET_DEPARTMENTS,
   GET_PROJECT_CATEGORIES,
-  FILTER_RFPS,
   GET_CITIES,
   DELETE_RFP,
+  GET_EMPLOYEENAMES,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
@@ -20,6 +19,7 @@ import "./Table.css";
 import Select from "react-select";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
+import Form from "react-bootstrap/Form";
 
 function RFPUpdate() {
   const [apiCall, setCall] = useState(0);
@@ -46,6 +46,9 @@ function RFPUpdate() {
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   const [cities, setcities] = useState([]);
+  const [sort, setsort] = useState("");
+  const [value, setValue] = useState("");
+  const [employees, setemployees] = useState([]);
   useEffect(() => {
     setIsLoading(true);
     const call = async () => {
@@ -66,6 +69,9 @@ function RFPUpdate() {
             auth: "Rose " + localStorage.getItem("auth"),
             limit: limit,
             offset: d,
+            filter: JSON.stringify(returnData),
+            search: value,
+            sort: sort,
           },
         })
         .then((res) => {
@@ -109,6 +115,17 @@ function RFPUpdate() {
         .catch((err) => {
           console.log(err);
         });
+
+      await axios
+        .get(HOST + GET_EMPLOYEENAMES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setemployees(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       setIsLoading(false);
     };
     call();
@@ -123,6 +140,9 @@ function RFPUpdate() {
           auth: "Rose " + localStorage.getItem("auth"),
           limit: limit,
           offset: current * limit,
+          filter: JSON.stringify(returnData),
+          search: value,
+          sort: sort,
         },
       })
       .then((res) => {
@@ -143,25 +163,9 @@ function RFPUpdate() {
           auth: "Rose " + localStorage.getItem("auth"),
           limit: limit,
           offset: (current - 2) * limit,
-        },
-      })
-      .then((res) => {
-        setrfps(res.data.res);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const handleFilter = async () => {
-    setIsLoading(true);
-    await axios
-      .get(HOST + FILTER_RFPS, {
-        headers: {
-          auth: "Rose " + localStorage.getItem("auth"),
-          limit: limit,
-          offset: 0,
           filter: JSON.stringify(returnData),
+          search: value,
+          sort: sort,
         },
       })
       .then((res) => {
@@ -172,16 +176,17 @@ function RFPUpdate() {
         console.log(err);
       });
   };
-  const [value, setValue] = useState("");
   const filterData = async () => {
     setIsLoading(true);
     await axios
-      .get(HOST + SEARCH_RFPS, {
+      .get(HOST + GET_PAGE_RFPS, {
         headers: {
           auth: "Rose " + localStorage.getItem("auth"),
           limit: limit,
           offset: 0,
           search: value,
+          filter: JSON.stringify(returnData),
+          sort: sort,
         },
       })
       .then((res) => {
@@ -200,6 +205,31 @@ function RFPUpdate() {
   let filterDepts = [];
   let filterCategories = [];
   let filterCities = [];
+  let filterEmployees = [];
+  let filterSource = [
+    {
+      label: "ConstructConnect",
+      value: "ConstructConnect",
+    },
+    {
+      label: "Biddingo",
+      value: "Biddingo",
+    },
+    {
+      label: "Merx",
+      value: "Merx",
+    },
+    {
+      label: "Bids & Tenders",
+      value: "Bids & Tenders",
+    },
+  ];
+  employees.map((e) => {
+    filterEmployees.push({
+      label: e.Full_Name,
+      value: e.Full_Name,
+    });
+  });
   depts.map((e) => {
     filterDepts.push({
       label: e.Department,
@@ -233,10 +263,20 @@ function RFPUpdate() {
   let doChange2 = (e) => {
     getValue2(Array.isArray(e) ? e.map((x) => x.value) : []);
   };
+  let [DisplayValue3, getValue3] = useState([]);
+  let doChange3 = (e) => {
+    getValue3(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
+  let [DisplayValue4, getValue4] = useState([]);
+  let doChange4 = (e) => {
+    getValue4(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
   let returnData = {
     dept: DisplayValue,
     cat: DisplayValue1,
     city: DisplayValue2,
+    manager: DisplayValue3,
+    source: DisplayValue4,
   };
   let deptvalue = [];
   returnData["dept"] &&
@@ -262,7 +302,23 @@ function RFPUpdate() {
         value: e,
       });
     });
-    const [rfpid, setrfpid] = useState(0);
+  let employeevalue = [];
+  returnData["manager"] &&
+    returnData["manager"].map((e) => {
+      employeevalue.push({
+        label: e,
+        value: e,
+      });
+    });
+  let sourceValue = [];
+  returnData["source"] &&
+    returnData["source"].map((e) => {
+      sourceValue.push({
+        label: e,
+        value: e,
+      });
+    });
+  const [rfpid, setrfpid] = useState(0);
   const handleDelete = (e) => {
     setrfpid(e);
     handleShowDelete();
@@ -288,10 +344,13 @@ function RFPUpdate() {
         console.log(err);
       });
   };
+  const handleSort = (e) => {
+    setsort(e.target.value);
+  };
   return (
     <>
-    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
-    {red===true ? <RedAlert setRed={setred}/> : <></>}
+      {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+      {red === true ? <RedAlert setRed={setred} /> : <></>}
       <div>
         <div className="container-fluid">
           <h1
@@ -359,25 +418,63 @@ function RFPUpdate() {
               options={filterCities}
             ></Select>
             &nbsp;&nbsp;
+            <Select
+              placeholder="Select Project Manager(s)"
+              defaultValue={employeevalue}
+              onChange={doChange3}
+              isMulti
+              options={filterEmployees}
+            ></Select>
+            &nbsp;&nbsp;
+            <Select
+                placeholder="Source(s)"
+                defaultValue={sourceValue}
+                onChange={doChange4}
+                isMulti
+                options={filterSource}
+              ></Select>
+              &nbsp;&nbsp;
             {deptvalue.length == 0 &&
             catvalue.length == 0 &&
-            cityvalue.length == 0 ? (
+            employeevalue.length == 0 &&
+            cityvalue.length == 0 &&
+            sourceValue.length == 0 ? (
               <Button
                 style={{ backgroundColor: "rgba(38,141,141,1)" }}
                 disabled
-                onClick={handleFilter}
+                onClick={filterData}
               >
                 Filter
               </Button>
             ) : (
               <Button
                 style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                onClick={handleFilter}
+                onClick={filterData}
               >
                 Filter
               </Button>
             )}
           </div>
+          <br />
+          <div
+            style={{ display: "flex", flexDirection: "row", width: "63.5rem" }}
+          >
+            <Form.Select onChange={handleSort}>
+              <option value="Start_Date">Start Date (Newest First)</option>
+              <option value="Start_Date DESC">Start Date (Oldest First)</option>
+              <option value="Submission_Date">
+                Submission Date (Oldest First)
+              </option>
+              <option value="Submission_Date DESC">
+                Submission Date (Newest First)
+              </option>
+              <option value="Project_Name">Project Name (A-Z)</option>
+              <option value="Project_Name DESC">Project Name (Z-A)</option>
+            </Form.Select>
+            &nbsp;&nbsp;
+            <Button onClick={filterData}>Sort</Button>
+          </div>
+
           <br />
           {isLoading ? (
             <LoadingSpinner />
@@ -504,7 +601,17 @@ function RFPUpdate() {
           <Modal.Header closeButton>
             <Modal.Title>Add RFP</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{<RFPform setRed={setred} setGreen={setgreen} closeModal={handleClose} api={apiCall} apiCall={setCall}/>}</Modal.Body>
+          <Modal.Body>
+            {
+              <RFPform
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleClose}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
         </Modal>
 
         <Modal
@@ -517,7 +624,18 @@ function RFPUpdate() {
           <Modal.Header closeButton>
             <Modal.Title>Update RFP</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{<UpdateRFP row={rowData} setRed={setred} setGreen={setgreen} closeModal={handleCloseUpdate} api={apiCall} apiCall={setCall}/>}</Modal.Body>
+          <Modal.Body>
+            {
+              <UpdateRFP
+                row={rowData}
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleCloseUpdate}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
         </Modal>
         <Modal
           show={showDelete}

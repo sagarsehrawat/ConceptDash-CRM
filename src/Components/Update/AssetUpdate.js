@@ -1,13 +1,4 @@
 import { React, useEffect, useState } from "react";
-import {
-  TableRow,
-  TableHead,
-  TableContainer,
-  TableCell,
-  TableBody,
-  Table,
-  Paper,
-} from "@material-ui/core";
 import axios from "axios";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
@@ -19,7 +10,8 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Modal from "react-bootstrap/Modal";
-
+import GreenAlert from "../Loader/GreenAlert";
+import RedAlert from "../Loader/RedAlert";
 
 function AssetUpdate() {
   const navigate = useNavigate();
@@ -39,7 +31,6 @@ function AssetUpdate() {
         .then((res) => {
           setassets(res.data.res);
           setdataSource(res.data.res);
-          setIsLoading(false);
         })
         .catch((err) => {
           console.log(err);
@@ -50,13 +41,13 @@ function AssetUpdate() {
         })
         .then((res) => {
           setsoftware(res.data.res);
-          console.log(res.data.res);
           setdataSourceSoft(res.data.res);
-          setIsLoading(false);
         })
         .catch((err) => {
           console.log(err);
         });
+
+        setIsLoading(false);
     };
     call();
   }, []);
@@ -130,34 +121,33 @@ function AssetUpdate() {
                 >
                   Add a New Asset
                 </Button>
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align="right">Asset ID</TableCell>
-                        <TableCell align="right">Asset Category</TableCell>
-                        <TableCell align="right">Hardware Details</TableCell>
-                        <TableCell align="right">Purchase Price</TableCell>
-                        <TableCell align="right">Acquired On</TableCell>
-                        <TableCell align="right">Shipped On</TableCell>
-                        <TableCell align="right">Retired Date</TableCell>
-                        <TableCell align="right">Attachments</TableCell>
-                        <TableCell align="right">Notes</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
+                <div className="container-fluid">
+                  <table className="table">
+                    <thead>
+                      <tr className="heading">
+                        <th scope="col">Asset Category</th>
+                        <th scope="col">Hardware Details</th>
+                        <th scope="col">Purchase Price</th>
+                        <th scope="col">Acquired On</th>
+                        <th scope="col">Shipped On</th>
+                        <th scope="col">Retired Date</th>
+                        <th scope="col">Attachments</th>
+                        <th scope="col">Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
                       {value.length > 0
                         ? tableFilter.map((row) => {
-                            return (
-                              <TableRow
-                                key={row.name}
-                                sx={{
-                                  "&:last-child td, &:last-child th": {
-                                    border: 0,
-                                  },
-                                }}
-                              >
-                                {/* <TableCell align="right">
+                            return(
+                            <tr
+                              key={row.name}
+                              sx={{
+                                "&:last-child td, &:last-child th": {
+                                  border: 0,
+                                },
+                              }}
+                            >
+                              {/* <TableCell align="right">
                                   <Button
                                     onClick={(e) => {
                                       navigate("/updateProjectForm", {
@@ -171,37 +161,19 @@ function AssetUpdate() {
                                     Edit
                                   </Button>
                                 </TableCell> */}
-                                <TableCell component="th" scope="row">
-                                  {row.Asset_ID}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Asset_Category}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Hardware_Details}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Purchase_Price}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Aquired_Date}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Shipped_On}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Retired_Date}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Attachments}
-                                </TableCell>
-                                <TableCell align="right">{row.Notes}</TableCell>
-                              </TableRow>
-                            );
+                              <td>{row.Asset_Category}</td>
+                              <td>{row.Hardware_Details}</td>
+                              <td>{row.Purchase_Price}</td>
+                              <td>{row.Aquired_Date}</td>
+                              <td>{row.Shipped_On}</td>
+                              <td>{row.Retired_Date}</td>
+                              <td>{row.Attachments}</td>
+                              <td>{row.Notes}</td>
+                            </tr>);
                           })
                         : assets.map((row) => {
                             return (
-                              <TableRow
+                              <tr
                                 key={row.name}
                                 sx={{
                                   "&:last-child td, &:last-child th": {
@@ -223,37 +195,20 @@ function AssetUpdate() {
                                     Edit
                                   </Button>
                                 </TableCell> */}
-                                <TableCell component="th" scope="row">
-                                  {row.Asset_ID}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Asset_Category}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Hardware_Details}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Purchase_Price}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Aquired_Date}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Shipped_On}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Retired_Date}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Attachments}
-                                </TableCell>
-                                <TableCell align="right">{row.Notes}</TableCell>
-                              </TableRow>
+                                <td>{row.Asset_Category}</td>
+                                <td>{row.Hardware_Details}</td>
+                                <td>{row.Purchase_Price}</td>
+                                <td>{row.Aquired_Date}</td>
+                                <td>{row.Shipped_On}</td>
+                                <td>{row.Retired_Date}</td>
+                                <td>{row.Attachments}</td>
+                                <td>{row.Notes}</td>
+                              </tr>
                             );
                           })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </TabPanel>
@@ -282,27 +237,26 @@ function AssetUpdate() {
                 >
                   Add a New Software
                 </Button>
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
+                <div className="container-fluid">
+                  <table className="table">
+                    <thead>
+                      <tr className="heading">
                         {/* <TableCell align="left">Edit</TableCell> */}
-                        <TableCell align="left">Software ID</TableCell>
-                        <TableCell align="right">Software</TableCell>
-                        <TableCell align="right">Price</TableCell>
-                        <TableCell align="right">Company</TableCell>
-                        <TableCell align="right">Version</TableCell>
-                        <TableCell align="right">Manufacturer</TableCell>
-                        <TableCell align="right">Used By</TableCell>
-                        <TableCell align="right">Attachments</TableCell>
-                        <TableCell align="right">Notes</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
+                        <th scope="col">Software</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Company</th>
+                        <th scope="col">Version</th>
+                        <th scope="col">Manufacturer</th>
+                        <th scope="col">Used By</th>
+                        <th scope="col">Attachments</th>
+                        <th scope="col">Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
                       {value.length > 0
                         ? tableFilterSoft.map((row) => {
                             return (
-                              <TableRow
+                              <tr
                                 key={row.name}
                                 sx={{
                                   "&:last-child td, &:last-child th": {
@@ -324,35 +278,20 @@ function AssetUpdate() {
                                     Edit
                                   </Button>
                                 </TableCell> */}
-                                <TableCell component="th" scope="row">
-                                  {row.Software_ID}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Software}
-                                </TableCell>
-                                <TableCell align="right">{row.Price}</TableCell>
-                                <TableCell align="right">
-                                  {row.Company}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Version}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Manufacturer}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Used_By}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Attachments}
-                                </TableCell>
-                                <TableCell align="right">{row.Notes}</TableCell>
-                              </TableRow>
+                                <td>{row.Software}</td>
+                                <td>{row.Price}</td>
+                                <td>{row.Company}</td>
+                                <td>{row.Version}</td>
+                                <td>{row.Manufacturer}</td>
+                                <td>{row.Used_By}</td>
+                                <td>{row.Attachments}</td>
+                                <td>{row.Notes}</td>
+                              </tr>
                             );
                           })
                         : software.map((row) => {
                             return (
-                              <TableRow
+                              <tr
                                 key={row.name}
                                 sx={{
                                   "&:last-child td, &:last-child th": {
@@ -374,35 +313,20 @@ function AssetUpdate() {
                                     Edit
                                   </Button>
                                 </TableCell> */}
-                                <TableCell component="th" scope="row">
-                                  {row.Software_ID}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Software}
-                                </TableCell>
-                                <TableCell align="right">{row.Price}</TableCell>
-                                <TableCell align="right">
-                                  {row.Company}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Version}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Manufacturer}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Used_By}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.Attachments}
-                                </TableCell>
-                                <TableCell align="right">{row.Notes}</TableCell>
-                              </TableRow>
+                                <td>{row.Software}</td>
+                                <td>{row.Price}</td>
+                                <td>{row.Company}</td>
+                                <td>{row.Version}</td>
+                                <td>{row.Manufacturer}</td>
+                                <td>{row.Used_By}</td>
+                                <td>{row.Attachments}</td>
+                                <td>{row.Notes}</td>
+                              </tr>
                             );
                           })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </TabPanel>

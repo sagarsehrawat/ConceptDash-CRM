@@ -4,12 +4,12 @@ import "./Table.css";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
 import {
-  GET_ALL_EMPLOYEES,
   HOST,
   GET_TIMESHEET,
   GET_EMPLOYEENAMES,
-  SIX_MONTH_EMPLOYEES,
   GET_DEPARTMENTS,
+  GET_PAGE_EMPLOYEES,
+  GET_JOB_TITLES,
 } from "../Constants/Constants";
 import Box from "@mui/material/Box";
 import Select from "react-select";
@@ -52,16 +52,23 @@ function EmployeeUpdate() {
   const [departments, setdepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dataSource, setdataSource] = useState([]);
+  const [jobTitles, setjobTitles] = useState([]);
+  const [sort, setsort] = useState([]);
   useEffect(() => {
     setIsLoading(true);
     const call = async () => {
       await axios
-        .get(HOST + GET_ALL_EMPLOYEES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        .get(HOST + GET_PAGE_EMPLOYEES, {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            filter: JSON.stringify(returnData),
+            sort: sort,
+          },
         })
         .then((res) => {
           setemployee(res.data.res);
           setdataSource(res.data.res);
+          console.log(res.data.res)
         })
         .catch((err) => {
           console.log(err);
@@ -72,7 +79,16 @@ function EmployeeUpdate() {
         })
         .then((res) => {
           setdepartments(res.data.res);
-          console.log(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      await axios
+        .get(HOST + GET_JOB_TITLES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setjobTitles(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -84,10 +100,11 @@ function EmployeeUpdate() {
   const handleFilter = async () => {
     setIsLoading(true);
     await axios
-      .get(HOST + SIX_MONTH_EMPLOYEES, {
+      .get(HOST + GET_PAGE_EMPLOYEES, {
         headers: {
           auth: "Rose " + localStorage.getItem("auth"),
           filter: JSON.stringify(returnData),
+          sort: sort,
         },
       })
       .then((res) => {
@@ -197,20 +214,31 @@ function EmployeeUpdate() {
     handleShowUpdate();
   };
   let filterDept = [];
+  let filterTitles = [];
   departments.map((e) => {
     filterDept.push({
       label: e.Department,
       value: e.Department_ID,
     });
   });
+  jobTitles.map((e) => {
+    filterTitles.push({
+      label: e.Title,
+      value: e.Title,
+    });
+  });
   let [DisplayValue, getValue] = useState([]);
   let doChange = (e) => {
     getValue(Array.isArray(e) ? e.map((x) => x.value) : []);
   };
+  let [DisplayValue1, getValue1] = useState([]);
+  let doChange1 = (e) => {
+    getValue1(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
   const [time, settime] = useState("");
   let returnData = {
     dept: DisplayValue,
-    time: time,
+    title: DisplayValue1,
   };
   let deptvalue = [];
   returnData["dept"] &&
@@ -220,13 +248,21 @@ function EmployeeUpdate() {
         value: e,
       });
     });
-  const handleTime = (e) => {
-    settime(e.target.value);
-  };
+    let titleValue = [];
+  returnData["title"] &&
+    returnData["title"].map((e) => {
+      titleValue.push({
+        label: e,
+        value: e,
+      });
+    });
+    const handleSort = (e) => {
+      setsort(e.target.value);
+    };
   return (
     <>
-    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
-    {red===true ? <RedAlert setRed={setred}/> : <></>}
+      {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+      {red === true ? <RedAlert setRed={setred} /> : <></>}
       <div>
         <div className="container-fluid">
           <h1
@@ -258,29 +294,24 @@ function EmployeeUpdate() {
           <br />
           <div style={{ display: "flex", flexDirection: "row" }}>
             <Select
-              placeholder="Select departments"
+              placeholder="Select department(s)"
               defaultValue={deptvalue}
               onChange={doChange}
               isMulti
               options={filterDept}
             >
-              Select Departments
             </Select>
             &nbsp;&nbsp;
-            <Form.Select style={{ width: "15rem" }} onChange={handleTime}>
-              <option value="">Select Joining Date</option>
-              <option value="DATE_SUB(CURDATE(), INTERVAL 12 MONTH)">
-                Last 12 Months
-              </option>
-              <option value="DATE_SUB(CURDATE(), INTERVAL 6 MONTH)">
-                Last 6 Months
-              </option>
-              <option value="DATE_SUB(CURDATE(), INTERVAL 1 MONTH)">
-                Last 1 Months
-              </option>
-            </Form.Select>
+            <Select
+              placeholder="Select Job Title(s)"
+              defaultValue={titleValue}
+              onChange={doChange1}
+              isMulti
+              options={filterTitles}
+            >
+            </Select>
             &nbsp;&nbsp;
-            {deptvalue.length == 0 ? (
+            {deptvalue.length == 0 && titleValue.length == 0 ? (
               <Button
                 style={{ backgroundColor: "rgba(38,141,141,1)" }}
                 disabled
@@ -298,6 +329,17 @@ function EmployeeUpdate() {
             )}
           </div>
           <br />
+          <div style={{ display: "flex", flexDirection: "row", width: '52.5rem' }}>
+              <Form.Select
+                onChange={handleSort}
+              >
+                <option value="Joining_Date">Joining Date(Oldest First)</option>
+                <option value="Joining_Date DESC">Joining Date(Newest First)</option>
+              </Form.Select>
+              &nbsp;&nbsp;
+              <Button onClick={handleFilter}>Sort</Button>
+            </div>
+            <br />
           <Box
             sx={{ width: "100%", typography: "body1" }}
             style={{ margin: "0" }}
@@ -652,10 +694,16 @@ function EmployeeUpdate() {
                               <b>{selectedEvent.title}</b>
                             </p>
                             <p>
-                              Start Time: {selectedEvent.start?selectedEvent.start.toLocaleString():''}
+                              Start Time:{" "}
+                              {selectedEvent.start
+                                ? selectedEvent.start.toLocaleString()
+                                : ""}
                             </p>
                             <p>
-                              End Time: {selectedEvent.end?selectedEvent.end.toLocaleString():''}
+                              End Time:{" "}
+                              {selectedEvent.end
+                                ? selectedEvent.end.toLocaleString()
+                                : ""}
                             </p>
                             <Button onClick={() => setSelectedevent(false)}>
                               Close
@@ -693,7 +741,17 @@ function EmployeeUpdate() {
           <Modal.Header closeButton>
             <Modal.Title>Add Employee</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{<EmployeeForm setRed={setred} setGreen={setgreen} closeModal={handleClose} api={apiCall} apiCall={setCall} />}</Modal.Body>
+          <Modal.Body>
+            {
+              <EmployeeForm
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleClose}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
         </Modal>
 
         <Modal
@@ -706,7 +764,18 @@ function EmployeeUpdate() {
           <Modal.Header closeButton>
             <Modal.Title>Update Employee</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{<UpdateEmployeeForm row={rowData} setRed={setred} setGreen={setgreen} closeModal={handleCloseUpdate} api={apiCall} apiCall={setCall}/>}</Modal.Body>
+          <Modal.Body>
+            {
+              <UpdateEmployeeForm
+                row={rowData}
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleCloseUpdate}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
         </Modal>
       </div>
     </>

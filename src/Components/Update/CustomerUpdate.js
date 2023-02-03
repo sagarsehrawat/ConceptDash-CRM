@@ -5,12 +5,11 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import {
   HOST,
-  GET_ALL_USERS,
-  GET_ALL_SHIPPERS,
-  GET_ALL_SUPPLIERS,
   GET_PAGE_CUSTOMERS,
   GET_PAGES_CUSTOMERSS,
   SEARCH_CUSTOMERS,
+  GET_CITIES,
+  GET_COMPANY_NAMES,
 } from "../Constants/Constants";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -22,6 +21,8 @@ import UpdateCustomer from "../Form/UpdateCustomer";
 import "./Table.css";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
+import Select from "react-select";
+import Form from "react-bootstrap/Form";
 
 function CustomerUpdate(props) {
   const [apiCall, setCall] = useState(0);
@@ -39,9 +40,13 @@ function CustomerUpdate(props) {
   const [customers, setcustomers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   let d = 0;
+  let limit = 50;
   const [pages, setpages] = useState(1);
   const [currPage, setcurrPage] = useState(1);
-  const category = props.category;
+  const [sort, setsort] = useState("");
+  const [value, setValue] = useState("");
+  const [cities, setcities] = useState([]);
+  const [companies, setcompanies] = useState([]);
   useEffect(() => {
     const call = async () => {
       setIsLoading(true);
@@ -50,8 +55,11 @@ function CustomerUpdate(props) {
         .get(HOST + GET_PAGE_CUSTOMERS, {
           headers: {
             auth: "Rose " + localStorage.getItem("auth"),
-            limit: 10,
+            limit: limit,
             offset: d,
+            filter: JSON.stringify(returnData),
+            search: value,
+            sort: sort,
           },
         })
         .then((res) => {
@@ -62,10 +70,35 @@ function CustomerUpdate(props) {
         });
       await axios
         .get(HOST + GET_PAGES_CUSTOMERSS, {
-          headers: { auth: "Rose " + localStorage.getItem("auth"), limit: 10 },
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            limit: limit,
+          },
         })
         .then((res) => {
           setpages(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      await axios
+        .get(HOST + GET_CITIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setcities(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      await axios
+        .get(HOST + GET_COMPANY_NAMES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setcompanies(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -86,8 +119,11 @@ function CustomerUpdate(props) {
       .get(HOST + GET_PAGE_CUSTOMERS, {
         headers: {
           auth: "Rose " + localStorage.getItem("auth"),
-          limit: 10,
-          offset: current * 10,
+          limit: limit,
+          offset: current * limit,
+          filter: JSON.stringify(returnData),
+          search: value,
+          sort: sort,
         },
       })
       .then((res) => {
@@ -106,8 +142,11 @@ function CustomerUpdate(props) {
       .get(HOST + GET_PAGE_CUSTOMERS, {
         headers: {
           auth: "Rose " + localStorage.getItem("auth"),
-          limit: 10,
-          offset: (current - 2) * 10,
+          limit: limit,
+          offset: (current - 2) * limit,
+          filter: JSON.stringify(returnData),
+          search: value,
+          sort: sort,
         },
       })
       .then((res) => {
@@ -118,16 +157,17 @@ function CustomerUpdate(props) {
         console.log(err);
       });
   };
-  const [value, setValue] = useState("");
   const filterData = async () => {
     setIsLoading(true);
     await axios
-      .get(HOST + SEARCH_CUSTOMERS, {
+      .get(HOST + GET_PAGE_CUSTOMERS, {
         headers: {
           auth: "Rose " + localStorage.getItem("auth"),
-          limit: 10,
+          limit: limit,
           offset: 0,
           search: value,
+          filter: JSON.stringify(returnData),
+          sort: sort,
         },
       })
       .then((res) => {
@@ -146,10 +186,55 @@ function CustomerUpdate(props) {
   const inputData = (e) => {
     setValue(e.target.value);
   };
+  let filterCities = [];
+  let filterCompanies = [];
+  cities.map((e) => {
+    filterCities.push({
+      label: e.City,
+      value: e.City,
+    });
+  });
+  companies.map((e) => {
+    filterCompanies.push({
+      label: e.Name,
+      value: e.Name,
+    });
+  });
+  let [DisplayValue, getValue] = useState([]);
+  let doChange = (e) => {
+    getValue(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
+  let [DisplayValue1, getValue1] = useState([]);
+  let doChange1 = (e) => {
+    getValue1(Array.isArray(e) ? e.map((x) => x.value) : []);
+  };
+  let returnData = {
+    city: DisplayValue,
+    company: DisplayValue1,
+  };
+  let cityvalue = [];
+  returnData["city"] &&
+    returnData["city"].map((e) => {
+      cityvalue.push({
+        label: e,
+        value: e,
+      });
+    });
+    let companyvalue = [];
+  returnData["company"] &&
+    returnData["company"].map((e) => {
+      companyvalue.push({
+        label: e,
+        value: e,
+      });
+    });
+  const handleSort = (e) => {
+    setsort(e.target.value);
+  };
   return (
     <>
-    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
-    {red===true ? <RedAlert setRed={setred}/> : <></>}
+      {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+      {red === true ? <RedAlert setRed={setred} /> : <></>}
       <div>
         <div className="container-fluid">
           <h1
@@ -185,6 +270,56 @@ function CustomerUpdate(props) {
               Search
             </Button>
           </div>
+          <br />
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <Select
+              placeholder="Select City(s)"
+              defaultValue={cityvalue}
+              onChange={doChange}
+              isMulti
+              options={filterCities}
+            ></Select>
+            &nbsp;&nbsp;
+            <Select
+              placeholder="Select Company(s)"
+              defaultValue={companyvalue}
+              onChange={doChange1}
+              isMulti
+              options={filterCompanies}
+            ></Select>
+            &nbsp;&nbsp;
+            {cityvalue.length == 0 &&
+            companyvalue.length == 0 ? (
+              <Button
+                style={{ backgroundColor: "rgba(38,141,141,1)" }}
+                disabled
+                onClick={filterData}
+              >
+                Filter
+              </Button>
+            ) : (
+              <Button
+                style={{ backgroundColor: "rgba(38,141,141,1)" }}
+                onClick={filterData}
+              >
+                Filter
+              </Button>
+            )}
+          </div>
+          <br />
+          <div
+            style={{ display: "flex", flexDirection: "row", width: "52.5rem" }}
+          >
+            <Form.Select onChange={handleSort}>
+              <option value="companies.Name">Company Name (A-Z)</option>
+              <option value="companies.Name DESC">Company Name (Z-A)</option>
+              <option value="First_Name">First Name (A-Z)</option>
+              <option value="First_Name DESC">Last Name (Z-A)</option>
+            </Form.Select>
+            &nbsp;&nbsp;
+            <Button onClick={filterData}>Sort</Button>
+          </div>
+
           <br />
           <Box
             sx={{ width: "100%", typography: "body1" }}
@@ -375,7 +510,17 @@ function CustomerUpdate(props) {
           <Modal.Header closeButton>
             <Modal.Title>Add Customer</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{<CustomerForm setRed={setred} setGreen={setgreen} closeModal={handleClose} api={apiCall} apiCall={setCall}/>}</Modal.Body>
+          <Modal.Body>
+            {
+              <CustomerForm
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleClose}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
         </Modal>
 
         <Modal
@@ -388,7 +533,18 @@ function CustomerUpdate(props) {
           <Modal.Header closeButton>
             <Modal.Title>Update Customer</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{<UpdateCustomer row={rowData} setRed={setred} setGreen={setgreen} closeModal={handleCloseUpdate} api={apiCall} apiCall={setCall}/>}</Modal.Body>
+          <Modal.Body>
+            {
+              <UpdateCustomer
+                row={rowData}
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleCloseUpdate}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
         </Modal>
       </div>
     </>
