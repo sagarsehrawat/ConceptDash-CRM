@@ -75,6 +75,7 @@ function BudgetUpdate() {
         })
         .then((res) => {
           setbudgets(res.data.res);
+          console.log(res.data.res)
         })
         .catch((err) => {
           console.log(err);
