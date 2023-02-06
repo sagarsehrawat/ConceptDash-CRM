@@ -327,6 +327,7 @@ function ProposalsUpdate() {
     handleShowDelete();
   };
   const handleDeleteBudget = (e) => {
+    setIsLoading(true);
     e.preventDefault();
     axios
       .post(
@@ -341,6 +342,7 @@ function ProposalsUpdate() {
         if (res.data.success) {
           handleCloseDelete();
           setCall(apiCall + 1);
+
         }
       })
       .catch((err) => {
@@ -471,7 +473,7 @@ function ProposalsUpdate() {
                 width: "63.5rem",
               }}
             >
-              <Form.Select onChange={handleSort}>
+              <Form.Select onChange={handleSort} defaultValue={sort}>
                 <option value="Question_Deadline DESC">
                 Question Deadline (Oldest First)
                 </option>
