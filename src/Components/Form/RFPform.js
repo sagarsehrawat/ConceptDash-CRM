@@ -523,9 +523,9 @@ function RFPform(props) {
                         >
                           <option>Select Source</option>
                           <option value="ConstructConnect">
-                            ConstructConnect
+                            Construct Connect
                           </option>
-                          <option value="Bids & Tenders">Bids & Tenders</option>
+                          <option value="Bids & Tenders">Bids and Tenders</option>
                           <option value="Biddingo">Biddingo</option>
                           <option value="Merx">Merx</option>
                         </Form.Select>
