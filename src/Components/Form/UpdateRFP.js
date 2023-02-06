@@ -78,15 +78,15 @@ function UpdateRFP(props) {
     call();
   }, []);
   const depart = props.row.Department;
+  const projectCategory = props.row.Project_Category;
   const pro_manager = props.row.Manager_Name;
   const citi = props.row.City;
   const [action, setaction] = useState(props.row.Action);
   const [dept, setdept] = useState(props.row.Department_ID);
+  const [projectCat, setprojectCat] = useState(props.row.Project_Cat_ID);
   const [pManager, setpManager] = useState(props.row.Project_Manager_ID);
   const [pName, setpName] = useState(props.row.Project_Name);
-  const [bidDate, setbidDate] = useState(
-    props.row.Bid_Date ? props.row.Bid_Date.substring(0, 10) : ""
-  );
+ 
   const [sDate, setsDate] = useState(
     props.row.Start_Date ? props.row.Start_Date.substring(0, 10) : ""
   );
@@ -95,18 +95,16 @@ function UpdateRFP(props) {
   );
   const [city, setcity] = useState(props.row.City_ID);
   const [rfpnum, setrfpnum] = useState(props.row.RFP_Number);
-  const [amount, setamount] = useState(props.row.Amount);
   const [source, setsource] = useState(props.row.Source);
   const [form, setform] = useState({
     dept: dept,
+    projectCat: projectCat,
     action: action,
     managerName: pManager,
     projectName: pName,
-    bidDate: bidDate,
     startDate: sDate,
     submissionDate: subDate,
     rfpNumber: rfpnum,
-    amount: amount,
     city: city,
     source: source,
   });
@@ -116,14 +114,14 @@ function UpdateRFP(props) {
     if (name === "dept") {
       setdept(value);
     }
+    if (name === "projectCat") {
+      setprojectCat(value);
+    }
     if (name === "action") {
       setaction(value);
     }
     if (name === "managerName") {
       setpManager(value);
-    }
-    if (name === "bidDate") {
-      setbidDate(value);
     }
     if (name === "startDate") {
       setsDate(value);
@@ -139,9 +137,6 @@ function UpdateRFP(props) {
     }
     if (name === "rfpNumber") {
       setrfpnum(value);
-    }
-    if (name === "amount") {
-      setamount(value);
     }
     if (name === "source") {
       setsource(value);
@@ -159,14 +154,13 @@ function UpdateRFP(props) {
         HOST + UPDATE_RFP,
         {
           departmentId: form.dept,
+          projectCatId: form.projectCat,
           action: form.action,
           projectManagerId: form.managerName,
           projectName: form.projectName,
-          bidDate: form.bidDate,
           startDate: form.startDate,
           submissionDate: form.submissionDate,
           rfpNumber: form.rfpNumber,
-          amount: form.amount,
           cityId: form.city,
           source: form.source,
           id: props.row.RFP_ID,
@@ -213,6 +207,19 @@ function UpdateRFP(props) {
               ))}
             </Form.Select>
           </Form.Group>
+          <Form.Group as={Col}>
+            <Form.Label>Project Category</Form.Label>
+                    <Form.Select onChange={handleChange} name="projectCat" required>
+                      <option value="">Select Project Category</option>
+                      {projectDepts.length > 0
+                        ? projectDepts.map((e) => (
+                            <option value={e.Project_Cat_ID} selected={e.Project_Category===projectCategory}>
+                              {e.Project_Category}
+                            </option>
+                          ))
+                        : ""}
+                    </Form.Select>
+                  </Form.Group>
         </Row>
 
         <Row className="mb-4">
@@ -263,15 +270,6 @@ function UpdateRFP(props) {
         </Row>
         <Row className="mb-4">
           <Form.Group as={Col}>
-            <Form.Label>Bid Date</Form.Label>
-            <Form.Control
-              value={bidDate}
-              name="bidDate"
-              onChange={handleChange}
-              type="date"
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
             <Form.Label>Start Date</Form.Label>
             <Form.Control
               value={sDate}
@@ -316,16 +314,7 @@ function UpdateRFP(props) {
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Amount</Form.Label>
-            <Form.Control
-              value={amount}
-              name="amount"
-              type="number"
-              placeholder="Amount"
-              onChange={handleChange}
-            />
-          </Form.Group>
+          
           <Form.Group as={Col}>
             <Form.Label>Source</Form.Label>
             <Form.Control

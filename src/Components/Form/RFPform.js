@@ -278,7 +278,7 @@ function RFPform(props) {
                 </Row>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
-                    <Form.Select onChange={handleChange} name="dept" required>
+                    <Form.Select onChange={handleChange} name="projectCat" required>
                       <option value="">Select Project Category</option>
                       {projectDepts.length > 0
                         ? projectDepts.map((e) => (
