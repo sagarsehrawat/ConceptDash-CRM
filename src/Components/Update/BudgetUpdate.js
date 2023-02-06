@@ -41,7 +41,7 @@ function BudgetUpdate() {
   const [isLoading, setIsLoading] = useState(false);
   let d = 0;
   let limit = 50;
-  const [pages, setpages] = useState(1);
+  const [pages, setpages] = useState(null);
   const [currPage, setcurrPage] = useState(1);
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
@@ -50,6 +50,7 @@ function BudgetUpdate() {
   const [value, setValue] = useState("");
   useEffect(() => {
     setIsLoading(true);
+    setpages(null)
     const call = async () => {
       await axios
         .get(HOST + GET_CITIES, {
@@ -75,21 +76,8 @@ function BudgetUpdate() {
         })
         .then((res) => {
           setbudgets(res.data.res);
+          setpages(res.data.totalPages)
           console.log(res.data.res)
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      await axios
-        .get(HOST + GET_PAGES_BUDGETS, {
-          headers: {
-            auth: "Rose " + localStorage.getItem("auth"),
-            limit: limit,
-          },
-        })
-        .then((res) => {
-          setpages(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -137,6 +125,7 @@ function BudgetUpdate() {
       })
       .then((res) => {
         setbudgets(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -160,6 +149,7 @@ function BudgetUpdate() {
       })
       .then((res) => {
         setbudgets(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -167,6 +157,8 @@ function BudgetUpdate() {
       });
   };
   const filterData = async () => {
+    setpages(null)
+    setcurrPage(1)
     setIsLoading(true);
     await axios
       .get(HOST + GET_PAGE_BUDGETS, {
@@ -181,6 +173,7 @@ function BudgetUpdate() {
       })
       .then((res) => {
         setbudgets(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -343,7 +336,8 @@ function BudgetUpdate() {
     setsort(e.target.value)
   }
   const addComma = (num) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    if(num===null) return ""
+    return `$ ${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
   }
   return (
     <>
@@ -515,7 +509,7 @@ function BudgetUpdate() {
                           <td>{row.Budget_Category}</td>
                           <td>{row.Department}</td>
                           <td>{row.Source}</td>
-                          <td>$ {addComma(row.Budget_Amount)}</td>
+                          <td>{addComma(row.Budget_Amount)}</td>
                           <td>{row.Budget_Year}</td>
                           <td>{row.Project_Name}</td>
                           <td>{row.Project_Category}</td>
@@ -527,7 +521,7 @@ function BudgetUpdate() {
                 </tbody>}
             </table>
           </div>
-          <div
+          {pages!==null ? <div
             className="row justify-content-evenly"
             style={{ marginTop: "1rem", marginBottom: "1rem" }}
           >
@@ -536,6 +530,7 @@ function BudgetUpdate() {
                 <Button
                   style={{ backgroundColor: "rgba(53,187,187,1)" }}
                   disabled={currPage === 1}
+                  onClick={handlePagePre}
                 >
                   &lt;
                 </Button>
@@ -545,23 +540,16 @@ function BudgetUpdate() {
               Page {currPage}/{pages}
             </div>
             <div style={{ textAlign: "center" }} className="col-1">
-              {currPage === pages ? (
+              
                 <Button
                   style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                  disabled
-                >
-                  &gt;
-                </Button>
-              ) : (
-                <Button
-                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  disabled={currPage === pages}
                   onClick={handlePage}
                 >
                   &gt;
                 </Button>
-              )}
             </div>
-          </div>
+          </div> : <></>}
         </div>
 
 
