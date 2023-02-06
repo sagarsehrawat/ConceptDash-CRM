@@ -207,8 +207,8 @@ function BudgetUpdate() {
   ];
   let filterSource = [
     {
-      label: "ConstructConnect",
-      value: "ConstructConnect",
+      label: "Construct Connect",
+      value: "Construct Connect",
     },
     {
       label: "Biddingo",
@@ -219,8 +219,8 @@ function BudgetUpdate() {
       value: "Merx",
     },
     {
-      label: "Bids & Tenders",
-      value: "Bids & Tenders",
+      label: "Bids and Tenders",
+      value: "Bids and Tenders",
     },
   ];
 

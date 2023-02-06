@@ -317,13 +317,13 @@ function UpdateRFP(props) {
           
           <Form.Group as={Col}>
             <Form.Label>Source</Form.Label>
-            <Form.Control
-              value={source}
-              name="source"
-              type="text"
-              placeholder="Source"
-              onChange={handleChange}
-            />
+            <Form.Select value={source} name="source" onChange={handleChange}>
+                  <option>Select Source</option>
+                  <option value="Construct Connect">Construct Connect</option>
+                  <option value="Bids and Tenders">Bids and Tenders</option>
+                  <option value="Biddingo">Biddingo</option>
+                  <option value="Merx">Merx</option>
+                </Form.Select>
           </Form.Group>
         </Row>
 

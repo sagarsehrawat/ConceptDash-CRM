@@ -56,7 +56,7 @@ function BudgetsForm(props) {
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   useEffect(() => {
-    setisLoading(true)
+    setisLoading(true);
     const call = async () => {
       await axios
         .get(HOST + GET_CITIES, {
@@ -90,7 +90,7 @@ function BudgetsForm(props) {
         .catch((err) => {
           console.log(err);
         });
-        setisLoading(false)
+      setisLoading(false);
     };
     call();
   }, [apiCallCity]);
@@ -142,160 +142,219 @@ function BudgetsForm(props) {
   const handleShowCategoryForm = () => setShowCategoryForm(true);
   return (
     <>
-    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
-    {red===true ? <RedAlert setRed={setred}/> : <></>}
-    {isLoading?<LoadingSpinner/>:
-    <div>
-      <Form className="form-main" onSubmit={handleSubmit}>
-        <Row className="mb-4">
-          <Form.Group as={Col} controlId="formGridCity">
-            <Form.Select onChange={handleChange} name="city" required>
-              <option value="">Select City</option>
-              {cities.length > 0
-                ? cities.map((e) => <option value={e.City_ID}>{e.City}</option>)
-                : ""}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Button
-              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
-              onClick={handleShowCityForm}
-            >
-              Add City
-            </Button>
-          </Form.Group>
-        </Row>
+      {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+      {red === true ? <RedAlert setRed={setred} /> : <></>}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <div>
+          <Form className="form-main" onSubmit={handleSubmit}>
+            <Row className="mb-4">
+              <Form.Group as={Col} controlId="formGridCity">
+                <Form.Select onChange={handleChange} name="city" required>
+                  <option value="">Select City</option>
+                  {cities.length > 0
+                    ? cities.map((e) => (
+                        <option value={e.City_ID}>{e.City}</option>
+                      ))
+                    : ""}
+                </Form.Select>
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Button
+                  style={{
+                    width: "100%",
+                    backgroundColor: "grey",
+                    border: "none",
+                  }}
+                  onClick={handleShowCityForm}
+                >
+                  Add City
+                </Button>
+              </Form.Group>
+            </Row>
 
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Select onChange={handleChange} name="dept" required>
-              <option value="">Select Department</option>
-              {depts.length > 0
-                ? depts.map((e) => (
-                    <option value={e.Department_ID}>{e.Department}</option>
-                  ))
-                : ""}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Button
-              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
-              onClick={handleShowDeptForm}
-            >
-              Add Department
-            </Button>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Select onChange={handleChange} name="projectCat" required>
-              <option value="">Select Project Category</option>
-              {projectDepts.length > 0
-                ? projectDepts.map((e) => (
-                    <option value={e.Project_Cat_ID}>
-                      {e.Project_Category}
-                    </option>
-                  ))
-                : ""}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Button
-              style={{ width: "100%", backgroundColor: "grey", border: "none" }}
-              onClick={handleShowCategoryForm}
-            >
-              Add Project Category
-            </Button>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Select onChange={handleChange} name="budgetCategory">
-              <option value="">Select Budget Category</option>
-              <option value="Design">Design</option>
-              <option value="Construction">Construction</option>
-            </Form.Select>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Project Name*</Form.Label>
-            <Form.Control
-              name="projectName"
-              type="text"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Budget Amount*</Form.Label>
-            <Form.Control
-              name="budgetAmount"
-              type="number"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Budget Year</Form.Label>
-            <Form.Control
-              name="budgetYear"
-              value={year}
-              type="text"
-              placeholder="Budget Year"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Source</Form.Label>
-            <Form.Control name="source" type="text" onChange={handleChange} />
-          </Form.Group>
-        </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
+                <Form.Select onChange={handleChange} name="dept" required>
+                  <option value="">Select Department</option>
+                  {depts.length > 0
+                    ? depts.map((e) => (
+                        <option value={e.Department_ID}>{e.Department}</option>
+                      ))
+                    : ""}
+                </Form.Select>
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Button
+                  style={{
+                    width: "100%",
+                    backgroundColor: "grey",
+                    border: "none",
+                  }}
+                  onClick={handleShowDeptForm}
+                >
+                  Add Department
+                </Button>
+              </Form.Group>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
+                <Form.Select onChange={handleChange} name="projectCat" required>
+                  <option value="">Select Project Category</option>
+                  {projectDepts.length > 0
+                    ? projectDepts.map((e) => (
+                        <option value={e.Project_Cat_ID}>
+                          {e.Project_Category}
+                        </option>
+                      ))
+                    : ""}
+                </Form.Select>
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Button
+                  style={{
+                    width: "100%",
+                    backgroundColor: "grey",
+                    border: "none",
+                  }}
+                  onClick={handleShowCategoryForm}
+                >
+                  Add Project Category
+                </Button>
+              </Form.Group>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
+                <Form.Select onChange={handleChange} name="budgetCategory">
+                  <option value="">Select Budget Category</option>
+                  <option value="Design">Design</option>
+                  <option value="Construction">Construction</option>
+                </Form.Select>
+              </Form.Group>
+            </Row>
+            <Row className="mb-4">
+              <Form.Group as={Col}>
+                <Form.Label>Project Name*</Form.Label>
+                <Form.Control
+                  name="projectName"
+                  type="text"
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Label>Budget Amount*</Form.Label>
+                <Form.Control
+                  name="budgetAmount"
+                  type="number"
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Label>Budget Year</Form.Label>
+                <Form.Control
+                  name="budgetYear"
+                  value={year}
+                  type="text"
+                  placeholder="Budget Year"
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Label>Source</Form.Label>
+                <Form.Select name="source" onChange={handleChange}>
+                  <option>Select Source</option>
+                  <option value="Construct Connect">Construct Connect</option>
+                  <option value="Bids and Tenders">Bids and Tenders</option>
+                  <option value="Biddingo">Biddingo</option>
+                  <option value="Merx">Merx</option>
+                </Form.Select>
+              </Form.Group>
+            </Row>
 
-        <Button
-          className="submit-btn"
-          variant="primary"
-          type="submit"
-        >
-          Submit
-        </Button>
-      </Form>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Form Submitted</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Budget Added Successfully</Modal.Body>
-      </Modal>
-      <Modal
-      backdrop="static"
-      size="lg"
-      keyboard={false} show={showCityForm} onHide={handleCloseCityForm} >
-        <Modal.Header closeButton>
-          <Modal.Title>Add City</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{<AddCity setRed={setred} setGreen={setgreen} closeModal={handleCloseCityForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
-      </Modal>
-      
-      <Modal
-      backdrop="static"
-      size="lg"
-      keyboard={false} show={showDeptForm} onHide={handleCloseDeptForm} >
-        <Modal.Header closeButton>
-          <Modal.Title>Add Department</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{<AddDepartment setRed={setred} setGreen={setgreen} closeModal={handleCloseDeptForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
-      </Modal>
+            <Button className="submit-btn" variant="primary" type="submit">
+              Submit
+            </Button>
+          </Form>
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Form Submitted</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Budget Added Successfully</Modal.Body>
+          </Modal>
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={showCityForm}
+            onHide={handleCloseCityForm}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add City</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {
+                <AddCity
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseCityForm}
+                  api={apiCallCity}
+                  apiCall={setCallCity}
+                />
+              }
+            </Modal.Body>
+          </Modal>
 
-      <Modal
-      backdrop="static"
-      size="lg"
-      keyboard={false} show={showCategoryForm} onHide={handleCloseCategoryForm} >
-        <Modal.Header closeButton>
-          <Modal.Title>Add Project Category</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{<AddCategory setRed={setred} setGreen={setgreen} closeModal={handleCloseCategoryForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
-      </Modal>
-    </div>}</>
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={showDeptForm}
+            onHide={handleCloseDeptForm}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add Department</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {
+                <AddDepartment
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseDeptForm}
+                  api={apiCallCity}
+                  apiCall={setCallCity}
+                />
+              }
+            </Modal.Body>
+          </Modal>
+
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={showCategoryForm}
+            onHide={handleCloseCategoryForm}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add Project Category</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {
+                <AddCategory
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseCategoryForm}
+                  api={apiCallCity}
+                  apiCall={setCallCity}
+                />
+              }
+            </Modal.Body>
+          </Modal>
+        </div>
+      )}
+    </>
   );
 }
 

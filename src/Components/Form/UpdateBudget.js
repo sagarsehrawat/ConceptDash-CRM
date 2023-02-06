@@ -17,17 +17,16 @@ import LoadingSpinner from "../Loader/Loader";
 
 function UpdateBudget(props) {
   const [isSubmit, setIsSubmit] = useState(false);
-  const { setGreen, closeModal, api, apiCall, setRed } = props
+  const { setGreen, closeModal, api, apiCall, setRed } = props;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
 
   const [cities, setcities] = useState([]);
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   useEffect(() => {
-    setisLoading(true)
+    setisLoading(true);
     const call = async () => {
       await axios
         .get(HOST + GET_CITIES, {
@@ -61,7 +60,7 @@ function UpdateBudget(props) {
         .catch((err) => {
           console.log(err);
         });
-        setisLoading(false)
+      setisLoading(false);
     };
     call();
   }, []);
@@ -144,11 +143,11 @@ function UpdateBudget(props) {
       .then((res) => {
         setisLoading(false);
         if (res.data.success) {
-          closeModal()
+          closeModal();
           setGreen(true);
-          apiCall(api+1)
+          apiCall(api + 1);
         } else {
-          setRed(true)
+          setRed(true);
         }
       })
       .catch((err) => {
@@ -157,9 +156,10 @@ function UpdateBudget(props) {
         console.log(err);
       });
   };
-  const [isLoading, setisLoading] = useState(false)
-  return (
-    isLoading?<LoadingSpinner/>:
+  const [isLoading, setisLoading] = useState(false);
+  return isLoading ? (
+    <LoadingSpinner />
+  ) : (
     <div>
       <Form className="form-main" onSubmit={handleSubmit}>
         <Row className="mb-4">
@@ -256,12 +256,13 @@ function UpdateBudget(props) {
           </Form.Group>
           <Form.Group as={Col}>
             <Form.Label>Source</Form.Label>
-            <Form.Control
-              value={source}
-              name="source"
-              type="text"
-              onChange={handleChange}
-            />
+            <Form.Select value={source} name="source" onChange={handleChange}>
+              <option>Select Source</option>
+              <option value="Construct Connect">Construct Connect</option>
+              <option value="Bids and Tenders">Bids and Tenders</option>
+              <option value="Biddingo">Biddingo</option>
+              <option value="Merx">Merx</option>
+            </Form.Select>
           </Form.Group>
         </Row>
 
