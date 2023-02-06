@@ -278,7 +278,7 @@ function RFPform(props) {
                 </Row>
                 <Row className="mb-4">
                   <Form.Group as={Col}>
-                    <Form.Select onChange={handleChange} name="dept" required>
+                    <Form.Select onChange={handleChange} name="projectCat" required>
                       <option value="">Select Project Category</option>
                       {projectDepts.length > 0
                         ? projectDepts.map((e) => (
@@ -387,8 +387,8 @@ function RFPform(props) {
                   <Form.Group as={Col}>
                     <Form.Select name="source" onChange={handleChange}>
                       <option>Select Source</option>
-                      <option value="ConstructConnect">ConstructConnect</option>
-                      <option value="Bids & Tenders">Bids & Tenders</option>
+                      <option value="Construct Connect">Construct Connect</option>
+                      <option value="Bids and Tenders">Bids and Tenders</option>
                       <option value="Biddingo">Biddingo</option>
                       <option value="Merx">Merx</option>
                     </Form.Select>
@@ -522,10 +522,10 @@ function RFPform(props) {
                           onChange={handleChange}
                         >
                           <option>Select Source</option>
-                          <option value="ConstructConnect">
+                          <option value="Construct Connect">
                             Construct Connect
                           </option>
-                          <option value="Bids & Tenders">Bids and Tenders</option>
+                          <option value="Bids and Tenders">Bids and Tenders</option>
                           <option value="Biddingo">Biddingo</option>
                           <option value="Merx">Merx</option>
                         </Form.Select>
