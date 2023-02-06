@@ -342,6 +342,9 @@ function BudgetUpdate() {
   const handleSort = (e) => {
     setsort(e.target.value)
   }
+  const addComma = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   return (
     <>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
@@ -443,8 +446,8 @@ function BudgetUpdate() {
             >
               <option value="Project_Name">Project Name (A-Z)</option>
               <option value="Project_Name DESC">Project Name (Z-A)</option>
-              <option value="replace(Budget_Amount,'$', '')">Budget Amount(Low-High)</option>
-              <option value="replace(Budget_Amount,'$', '') DESC">Budget Amount(High-Low)</option>
+              <option value="Budget_Amount">Budget Amount(Low-High)</option>
+              <option value="Budget_Amount DESC">Budget Amount(High-Low)</option>
               <option value="Budget_Year">Budget Year(Low-High)</option>
               <option value="Budget_Year DESC">Budget Year(High-Low)</option>
             </Form.Select>
@@ -512,7 +515,7 @@ function BudgetUpdate() {
                           <td>{row.Budget_Category}</td>
                           <td>{row.Department}</td>
                           <td>{row.Source}</td>
-                          <td>{row.Budget_Amount}</td>
+                          <td>$ {addComma(row.Budget_Amount)}</td>
                           <td>{row.Budget_Year}</td>
                           <td>{row.Project_Name}</td>
                           <td>{row.Project_Category}</td>
