@@ -53,6 +53,7 @@ function ProjectUpdate() {
   const [value, setValue] = useState("");
   useEffect(() => {
     setIsLoading(true);
+    setcurrPage(1)
     const call = async () => {
       await axios
         .get(HOST + GET_PAGE_PROJECTS, {
@@ -67,16 +68,7 @@ function ProjectUpdate() {
         })
         .then((res) => {
           setprojects(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      await axios
-        .get(HOST + GET_PAGES_PROJECTS, {
-          headers: { auth: "Rose " + localStorage.getItem("auth"), limit: 50 },
-        })
-        .then((res) => {
-          setpages(res.data.res);
+          setpages(res.data.totalPages)
         })
         .catch((err) => {
           console.log(err);
@@ -143,6 +135,7 @@ function ProjectUpdate() {
       })
       .then((res) => {
         setprojects(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -166,6 +159,7 @@ function ProjectUpdate() {
       })
       .then((res) => {
         setprojects(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -175,6 +169,7 @@ function ProjectUpdate() {
 
   const filterData = async () => {
     setIsLoading(true);
+    setcurrPage(1)
     await axios
       .get(HOST + GET_PAGE_PROJECTS, {
         headers: {
@@ -188,6 +183,7 @@ function ProjectUpdate() {
       })
       .then((res) => {
         setprojects(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -221,25 +217,25 @@ function ProjectUpdate() {
   depts.map((e) => {
     filterDepts.push({
       label: e.Department,
-      value: e.Department,
+      value: e.Department_ID,
     });
   });
   projectDepts.map((e) => {
     filterCategories.push({
       label: e.Project_Category,
-      value: e.Project_Category,
+      value: e.Project_Cat_ID,
     });
   });
   cities.map((e) => {
     filterCities.push({
       label: e.City,
-      value: e.City,
+      value: e.City_ID,
     });
   });
   employees.map((e) => {
     filterEmployees.push({
       label: e.Full_Name,
-      value: e.Full_Name,
+      value: e.Employee_ID,
     });
   });
   const inputData = (e) => {
@@ -320,6 +316,7 @@ function ProjectUpdate() {
   };
   const handleDeleteBudget = (e) => {
     e.preventDefault();
+    setIsLoading(true)
     axios
       .post(
         HOST + DELETE_PROJECT,
@@ -342,150 +339,149 @@ function ProjectUpdate() {
   const handleSort = (e) => {
     setsort(e.target.value);
   };
+  const addComma = (num) => {
+    if(num===null) return ""
+    return `$ ${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  }
   return (
     <>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
       {red === true ? <RedAlert setRed={setred} /> : <></>}
       <div>
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <div className="container-fluid">
-            <h1
+        <div className="container-fluid">
+          <h1
+            style={{
+              textAlign: "center",
+              marginTop: "3rem",
+              marginBottom: "1rem",
+              fontFamily: "roboto",
+              fontWeight: "bold",
+            }}
+          >
+            Projects
+            <Button
+              onClick={handleShow}
               style={{
-                textAlign: "center",
-                marginTop: "3rem",
-                marginBottom: "1rem",
-                fontFamily: "roboto",
-                fontWeight: "bold",
+                float: "right",
+                backgroundColor: "rgba(38,141,141,1)",
               }}
             >
-              Projects
-              <Button
-                onClick={handleShow}
-                style={{
-                  float: "right",
-                  backgroundColor: "rgba(38,141,141,1)",
-                }}
-              >
-                Add Project +
-              </Button>
-            </h1>
-            <div style={{ float: "right", marginBottom: "1rem" }}>
-              <input
-                style={{ marginRight: ".5rem" }}
-                type="text"
-                value={value}
-                onChange={inputData}
-                placeholder="Search"
-              />
-              <Button
-                style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                size="sm"
-                onClick={filterData}
-              >
-                Search
-              </Button>
-            </div>
-            <br />
-            <div
-              style={{ width: "20rem", display: "inline-block" }}
-              className="container-sm"
-            ></div>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              <Select
-                placeholder="Select departments"
-                defaultValue={deptvalue}
-                onChange={doChange}
-                isMulti
-                options={filterDepts}
-              ></Select>
-              &nbsp;&nbsp;
-              <Select
-                placeholder="Select Categories"
-                defaultValue={catvalue}
-                onChange={doChange1}
-                isMulti
-                options={filterCategories}
-              ></Select>
-              &nbsp;&nbsp;
-              <Select
-                placeholder="City(s)"
-                defaultValue={cityvalue}
-                onChange={doChange2}
-                isMulti
-                options={filterCities}
-              ></Select>
-              &nbsp;&nbsp;
-              <Select
-                placeholder="Project Manager(s)"
-                defaultValue={employeevalue}
-                onChange={doChange3}
-                isMulti
-                options={filterEmployees}
-              ></Select>
-              &nbsp;&nbsp;
-              <Select
-                placeholder="Project Status(s)"
-                defaultValue={statusvalue}
-                onChange={doChange4}
-                isMulti
-                options={filterStatus}
-              ></Select>
-              &nbsp;&nbsp;
-              {deptvalue.length == 0 && catvalue.length == 0 && cityvalue.length == 0 && employeevalue.length == 0 && statusvalue.length == 0 ? (
-                <Button
-                  style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                  disabled
-                  onClick={filterData}
-                >
-                  Filter
-                </Button>
-              ) : (
-                <Button
-                  style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                  onClick={filterData}
-                >
-                  Filter
-                </Button>
-              )}
-            </div>
-            <br/>
-            <div style={{ display: "flex", flexDirection: "row", width: '52.5rem' }}>
-              <Form.Select
-                onChange={handleSort}
-              >
-                <option value="Project_Name">Project Name (A-Z)</option>
-                <option value="Project_Name DESC">Project Name (Z-A)</option>
-                <option value="Date_Created">Date Created(Oldest First)</option>
-                <option value="Date_Created DESC">Date Created(Newest First)</option>
-                <option value="Project_Due_Date">Due Date(Oldest First)</option>
-                <option value="Project_Due_Date DESC">Due Date(Oldest First)</option>
-                <option value="Project_Value">Project Value(Low-High)</option>
-                <option value="Project_Value DESC">Due Date(Low-High)</option>
-              </Form.Select>
-              &nbsp;&nbsp;
-              <Button onClick={filterData}>Sort</Button>
-            </div>
-            <br />
-            <div className="container-fluid">
-              <table className="table">
-                <thead>
-                  <tr className="heading">
-                    <th scope="col">Edit</th>
-                    <th scope="col">Delete</th>
-                    <th scope="col">Project Name</th>
-                    <th scope="col">Due Date</th>
-                    <th scope="col">Next Follow Up</th>
-                    <th scope="col">Department</th>
-                    <th scope="col">Project Category</th>
-                    <th scope="col">Project Value</th>
-                    <th scope="col">Stage</th>
-                    <th scope="col">Project Manager</th>
-                    <th scope="col">Team Members</th>
-                    <th scope="col">City</th>
-                  </tr>
-                </thead>
+              Add Project +
+            </Button>
+          </h1>
+          <div style={{ float: "right", marginBottom: "1rem" }}>
+            <input
+              style={{ marginRight: ".5rem" }}
+              type="text"
+              value={value}
+              onChange={inputData}
+              placeholder="Search"
+            />
+            <Button
+              style={{ backgroundColor: "rgba(38,141,141,1)" }}
+              size="sm"
+              onClick={filterData}
+            >
+              Search
+            </Button>
+          </div>
+          <br />
+          <div
+            style={{ width: "20rem", display: "inline-block" }}
+            className="container-sm"
+          ></div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <Select
+              placeholder="Select departments"
+              defaultValue={deptvalue}
+              onChange={doChange}
+              isMulti
+              options={filterDepts}
+            ></Select>
+            &nbsp;&nbsp;
+            <Select
+              placeholder="Select Categories"
+              defaultValue={catvalue}
+              onChange={doChange1}
+              isMulti
+              options={filterCategories}
+            ></Select>
+            &nbsp;&nbsp;
+            <Select
+              placeholder="City(s)"
+              defaultValue={cityvalue}
+              onChange={doChange2}
+              isMulti
+              options={filterCities}
+            ></Select>
+            &nbsp;&nbsp;
+            <Select
+              placeholder="Project Manager(s)"
+              defaultValue={employeevalue}
+              onChange={doChange3}
+              isMulti
+              options={filterEmployees}
+            ></Select>
+            &nbsp;&nbsp;
+            <Select
+              placeholder="Project Status(s)"
+              defaultValue={statusvalue}
+              onChange={doChange4}
+              isMulti
+              options={filterStatus}
+            ></Select>
+            &nbsp;&nbsp;
+            <Button
+              style={{ backgroundColor: "rgba(38,141,141,1)" }}
+              onClick={filterData}
+            >
+              Filter
+            </Button>
+          </div>
+          <br />
+          <div style={{ display: "flex", flexDirection: "row", width: '52.5rem' }}>
+            <Form.Select
+              onChange={handleSort}
+              defaultValue={sort}
+            >
+              <option value="Project_Id DESC">Latest to Oldest</option>
+              <option value="Project_Id">Oldest to Latest</option>
+              <option value="Project_Name">Project Name (A-Z)</option>
+              <option value="Project_Name DESC">Project Name (Z-A)</option>
+              <option value="Date_Created">Date Created(Oldest First)</option>
+              <option value="Date_Created DESC">Date Created(Newest First)</option>
+              <option value="Project_Due_Date">Due Date(Oldest First)</option>
+              <option value="Project_Due_Date DESC">Due Date(Oldest First)</option>
+              <option value="Project_Value">Project Value(Low-High)</option>
+              <option value="Project_Value DESC">Due Date(Low-High)</option>
+            </Form.Select>
+            &nbsp;&nbsp;
+            <Button onClick={filterData}>Sort</Button>
+          </div>
+          <br />
+          <div className="container-fluid">
+            <table className="table">
+              <thead>
+                <tr className="heading">
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                  <th scope="col">Project Name</th>
+                  <th scope="col">Due Date</th>
+                  <th scope="col">Next Follow Up</th>
+                  <th scope="col">Department</th>
+                  <th scope="col">Project Category</th>
+                  <th scope="col">Project Value</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Project Manager</th>
+                  <th scope="col">Team Members</th>
+                  <th scope="col">City</th>
+                </tr>
+              </thead>
+              {isLoading
+                ? <div style={{ "display": "table-caption" }}>
+                  <LoadingSpinner />
+                </div>
+                :
                 <tbody class="table-group-divider">
                   {projects.map((row) => {
                     return (
@@ -525,8 +521,8 @@ function ProjectUpdate() {
                         </td>
                         <td>{row.dept}</td>
                         <td>{row.Project_Category}</td>
-                        <td>${row.Project_Value}</td>
-                        <td>{row.Project_Stage}</td>
+                        <td>{addComma(row.Project_Value)}</td>
+                        <td>{row.Status}</td>
                         <td>{row.Manager_Name}</td>
                         <td>{row.Team_Members}</td>
                         <td>{row.City}</td>
@@ -534,52 +530,36 @@ function ProjectUpdate() {
                     );
                   })}
                 </tbody>
-              </table>
+              }
+            </table>
+          </div>
+          <div
+            className="row justify-content-evenly"
+            style={{ marginTop: "1rem", marginBottom: "1rem" }}
+          >
+            <div style={{ textAlign: "center" }} className="col-1">
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  disabled={currPage===1}
+                  onClick={handlePagePre}
+                >
+                  &lt;
+                </Button>
             </div>
-            <div
-              className="row justify-content-evenly"
-              style={{ marginTop: "1rem", marginBottom: "1rem" }}
-            >
-              <div style={{ textAlign: "center" }} className="col-1">
-                {currPage === 1 ? (
-                  <Button
-                    style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                    disabled
-                  >
-                    &lt;
-                  </Button>
-                ) : (
-                  <Button
-                    style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                    onClick={handlePagePre}
-                  >
-                    &lt;
-                  </Button>
-                )}
-              </div>
-              <div style={{ textAlign: "center" }} className="col-1">
-                Page {currPage}/{pages}
-              </div>
-              <div style={{ textAlign: "center" }} className="col-1">
-                {currPage === pages ? (
-                  <Button
-                    style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                    disabled
-                  >
-                    &gt;
-                  </Button>
-                ) : (
-                  <Button
-                    style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                    onClick={handlePage}
-                  >
-                    &gt;
-                  </Button>
-                )}
-              </div>
+            <div style={{ textAlign: "center" }} className="col-1">
+              Page {currPage}/{pages}
+            </div>
+            <div style={{ textAlign: "center" }} className="col-1">
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  disabled={currPage===pages}
+                  onClick={handlePage}
+                >
+                  &gt;
+                </Button>
             </div>
           </div>
-        )}
+        </div>
 
         {/* Add Form Modal */}
         <Modal

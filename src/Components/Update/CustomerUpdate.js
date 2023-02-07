@@ -43,14 +43,14 @@ function CustomerUpdate(props) {
   let limit = 50;
   const [pages, setpages] = useState(1);
   const [currPage, setcurrPage] = useState(1);
-  const [sort, setsort] = useState("");
+  const [sort, setsort] = useState("ID DESC");
   const [value, setValue] = useState("");
   const [cities, setcities] = useState([]);
   const [companies, setcompanies] = useState([]);
   useEffect(() => {
     const call = async () => {
       setIsLoading(true);
-
+      setcurrPage(1)
       await axios
         .get(HOST + GET_PAGE_CUSTOMERS, {
           headers: {
@@ -64,19 +64,7 @@ function CustomerUpdate(props) {
         })
         .then((res) => {
           setcustomers(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      await axios
-        .get(HOST + GET_PAGES_CUSTOMERSS, {
-          headers: {
-            auth: "Rose " + localStorage.getItem("auth"),
-            limit: limit,
-          },
-        })
-        .then((res) => {
-          setpages(res.data.res);
+          setpages(res.data.totalPages)
         })
         .catch((err) => {
           console.log(err);
@@ -128,6 +116,7 @@ function CustomerUpdate(props) {
       })
       .then((res) => {
         setcustomers(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -151,6 +140,7 @@ function CustomerUpdate(props) {
       })
       .then((res) => {
         setcustomers(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -159,6 +149,7 @@ function CustomerUpdate(props) {
   };
   const filterData = async () => {
     setIsLoading(true);
+    setcurrPage(1)
     await axios
       .get(HOST + GET_PAGE_CUSTOMERS, {
         headers: {
@@ -172,6 +163,7 @@ function CustomerUpdate(props) {
       })
       .then((res) => {
         setcustomers(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -191,13 +183,13 @@ function CustomerUpdate(props) {
   cities.map((e) => {
     filterCities.push({
       label: e.City,
-      value: e.City,
+      value: e.City_ID,
     });
   });
   companies.map((e) => {
     filterCompanies.push({
       label: e.Name,
-      value: e.Name,
+      value: e.ID,
     });
   });
   let [DisplayValue, getValue] = useState([]);
@@ -220,7 +212,7 @@ function CustomerUpdate(props) {
         value: e,
       });
     });
-    let companyvalue = [];
+  let companyvalue = [];
   returnData["company"] &&
     returnData["company"].map((e) => {
       companyvalue.push({
@@ -288,29 +280,20 @@ function CustomerUpdate(props) {
               options={filterCompanies}
             ></Select>
             &nbsp;&nbsp;
-            {cityvalue.length == 0 &&
-            companyvalue.length == 0 ? (
-              <Button
-                style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                disabled
-                onClick={filterData}
-              >
-                Filter
-              </Button>
-            ) : (
-              <Button
-                style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                onClick={filterData}
-              >
-                Filter
-              </Button>
-            )}
+            <Button
+              style={{ backgroundColor: "rgba(38,141,141,1)" }}
+              onClick={filterData}
+            >
+              Filter
+            </Button>
           </div>
           <br />
           <div
             style={{ display: "flex", flexDirection: "row", width: "52.5rem" }}
           >
-            <Form.Select onChange={handleSort}>
+            <Form.Select onChange={handleSort} defaultValue={sort}>
+              <option value="ID DESC">Latest to Oldest</option>
+              <option value="ID">Oldest to Latest</option>
               <option value="companies.Name">Company Name (A-Z)</option>
               <option value="companies.Name DESC">Company Name (Z-A)</option>
               <option value="First_Name">First Name (A-Z)</option>

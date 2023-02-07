@@ -344,6 +344,10 @@ function ProposalsUpdate() {
   const handleSort = (e) => {
     setsort(e.target.value);
   };
+  const addComma = (num) => {
+    if(num===null) return ""
+    return `$ ${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  }
   return (
     <>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
@@ -565,15 +569,15 @@ function ProposalsUpdate() {
                         <td>{row.Status}</td>
                         <td>{row.Manager_Name}</td>
                         <td>{row.Team}</td>
-                        <td>{row.Design_Price}</td>
-                        <td>{row.Provisional_Items}</td>
-                        <td>{row.Contract_Admin_Price}</td>
-                        <td>{row.Sub_Consultant_Price}</td>
-                        <td>{row.Total_Bid}</td>
+                        <td>{addComma(row.Design_Price)}</td>
+                        <td>{addComma(row.Provisional_Items)}</td>
+                        <td>{addComma(row.Contract_Admin_Price)}</td>
+                        <td>{addComma(row.Sub_Consultant_Price)}</td>
+                        <td>{addComma(row.Total_Bid)}</td>
                         <td>{row.Plan_Takers}</td>
                         <td>{row.Bidders}</td>
-                        <td>{row.Bidder_Price}</td>
-                        <td>{row.Winning_Price}</td>
+                        <td>{addComma(row.Bidder_Price)}</td>
+                        <td>{addComma(row.Winning_Price)}</td>
                         <td>{row.Name}</td>
                       </tr>
                     );
