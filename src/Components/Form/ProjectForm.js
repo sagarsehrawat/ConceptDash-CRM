@@ -136,6 +136,7 @@ function ProjectForm(props) {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
+        console.log(res)
         setisLoading(false);
         if (res.data.success) {
           closeModal();

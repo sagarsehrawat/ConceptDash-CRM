@@ -94,28 +94,27 @@ function UpdateProposal(props) {
       });
     });
   const [form, setform] = useState({
-    dept: dept,
-    projectCat: dept,
-    status: status,
-    managerName: manager,
-    projectName: pName,
-    qDeadline: qDeadline,
-    cDeadline: cDeadline,
-    resultDate: rDate,
-    city: city,
-    team: team,
-    dPrice: dPrice,
-    provisionalItems: provisionalItems,
-    adminPrice: adminPrice,
-    consultantPrice: consultantPrice,
-    totalBid: totalBid,
-    planTakers: planTakers,
-    bidders: bidders,
-    bidderPrice: bidderPrice,
-    winningPrice: winningPrice,
-    winningBidder: winningBidder,
+    dept: dept??"",
+    projectCat: cat??"",
+    status: status??"",
+    managerName: manager??"",
+    projectName: pName??"",
+    qDeadline: qDeadline??"",
+    cDeadline: cDeadline??"",
+    resultDate: rDate??"",
+    city: city??"",
+    team: team??"",
+    dPrice: dPrice??"",
+    provisionalItems: provisionalItems??"",
+    adminPrice: adminPrice??"",
+    consultantPrice: consultantPrice??"",
+    totalBid: totalBid??"",
+    planTakers: planTakers??"",
+    bidders: bidders??"",
+    bidderPrice: bidderPrice??"",
+    winningPrice: winningPrice??"",
+    winningBidder: winningBidder??"",
   });
-  //   console.log(props.row);
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "dept") {
@@ -333,11 +332,10 @@ function UpdateProposal(props) {
               <Form.Group as={Col}>
                 <Form.Label>Department</Form.Label>
                 <Form.Select
-                  defaultValue={props.row.Department}
                   onChange={handleChange}
                   name="dept"
                 >
-                  <option value="">Select Department</option>
+                  <option>Select Department</option>
                   {depts.length > 0
                     ? depts.map((e) => (
                         <option
@@ -353,11 +351,10 @@ function UpdateProposal(props) {
               <Form.Group as={Col}>
                 <Form.Label>Project Category</Form.Label>
                 <Form.Select
-                  defaultValue={props.row.Project_Category}
                   onChange={handleChange}
                   name="projectCat"
                 >
-                  <option value="">Select Project Category</option>
+                  <option>Select Project Category</option>
                   {projectDepts.length > 0
                     ? projectDepts.map((e) => (
                         <option
@@ -451,7 +448,6 @@ function UpdateProposal(props) {
               <Form.Group as={Col} controlId="formGridCity">
                 <Form.Label>City</Form.Label>
                 <Form.Select
-                  defaultValue={city}
                   onChange={handleChange}
                   name="city"
                 >

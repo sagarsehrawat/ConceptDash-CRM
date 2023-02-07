@@ -20,6 +20,7 @@ function CompanyForm(props) {
 
   const [cities, setcities] = useState([]);
   useEffect(() => {
+    setisLoading(true);
     const call = async () => {
       await axios
         .get(HOST + GET_CITIES, {
@@ -29,11 +30,11 @@ function CompanyForm(props) {
         })
         .then((res) => {
           setcities(res.data.res);
-          console.log(res.data.res);
         })
         .catch((err) => {
           console.log(err);
         });
+      setisLoading(false);
     };
     call();
   }, [apiCallCity]);
@@ -103,8 +104,8 @@ function CompanyForm(props) {
   const handleShowCityForm = () => setShowCityForm(true);
   return (
     <>
-    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
-    {red===true ? <RedAlert setRed={setred}/> : <></>}
+      {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+      {red === true ? <RedAlert setRed={setred} /> : <></>}
       {isLoading ? (
         <LoadingSpinner />
       ) : (
@@ -209,7 +210,6 @@ function CompanyForm(props) {
               <Form.Group as={Col}>
                 <Form.Control
                   name="webpage"
-                  type="url"
                   placeholder="Web Page"
                   onChange={handleChange}
                 />
@@ -233,11 +233,7 @@ function CompanyForm(props) {
                 />
               </Form.Group>
             </Row>
-            <Button
-              className="submit-btn"
-              variant="primary"
-              type="submit"
-            >
+            <Button className="submit-btn" variant="primary" type="submit">
               Submit
             </Button>
           </Form>
@@ -257,7 +253,17 @@ function CompanyForm(props) {
             <Modal.Header closeButton>
               <Modal.Title>Add City</Modal.Title>
             </Modal.Header>
-            <Modal.Body>{<AddCity setRed={setred} setGreen={setgreen} closeModal={handleCloseCityForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
+            <Modal.Body>
+              {
+                <AddCity
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseCityForm}
+                  api={apiCallCity}
+                  apiCall={setCallCity}
+                />
+              }
+            </Modal.Body>
           </Modal>
         </div>
       )}

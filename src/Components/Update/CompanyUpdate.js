@@ -2,10 +2,9 @@ import { React, useEffect, useState } from "react";
 import axios from "axios";
 import {
   HOST,
-  GET_PAGES_COMPANIES,
   GET_PAGE_COMPANIES,
-  SEARCH_COMPANIES,
   GET_CITIES,
+  DELETE_COMPANY,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
@@ -27,6 +26,10 @@ function CompanyUpdate() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [showDelete, setShowDelete] = useState(false);
+  const handleCloseDelete = () => setShowDelete(false);
+  const handleShowDelete = () => setShowDelete(true);
+
   const [showUpdate, setShowUpdate] = useState(false);
   const handleCloseUpdate = () => setShowUpdate(false);
   const handleShowUpdate = () => setShowUpdate(true);
@@ -37,10 +40,11 @@ function CompanyUpdate() {
   const [pages, setpages] = useState(1);
   const [currPage, setcurrPage] = useState(1);
   const [cities, setcities] = useState([]);
-  const [sort, setsort] = useState("");
+  const [sort, setsort] = useState("ID DESC");
   const [value, setValue] = useState("");
   useEffect(() => {
     setIsLoading(true);
+    setcurrPage(1)
     const call = async () => {
       await axios
         .get(HOST + GET_PAGE_COMPANIES, {
@@ -55,16 +59,7 @@ function CompanyUpdate() {
         })
         .then((res) => {
           setcompanies(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      await axios
-        .get(HOST + GET_PAGES_COMPANIES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth"), limit: 50 },
-        })
-        .then((res) => {
-          setpages(res.data.res);
+          setpages(res.data.totalPages)
         })
         .catch((err) => {
           console.log(err);
@@ -100,6 +95,7 @@ function CompanyUpdate() {
       })
       .then((res) => {
         setcompanies(res.data.res);
+        setpages(res.data.totalPages)
         // setdataSource(res.data.res);
         setIsLoading(false);
       })
@@ -124,6 +120,7 @@ function CompanyUpdate() {
       })
       .then((res) => {
         setcompanies(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -132,6 +129,7 @@ function CompanyUpdate() {
   };
   const filterData = async () => {
     setIsLoading(true);
+    setcurrPage(1)
     await axios
       .get(HOST + GET_PAGE_COMPANIES, {
         headers: {
@@ -145,6 +143,7 @@ function CompanyUpdate() {
       })
       .then((res) => {
         setcompanies(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -163,7 +162,7 @@ function CompanyUpdate() {
   cities.map((e) => {
     filterCities.push({
       label: e.City,
-      value: e.City,
+      value: e.City_ID,
     });
   });
   let [DisplayValue, getValue] = useState([]);
@@ -182,6 +181,34 @@ function CompanyUpdate() {
       });
     });
 
+    const [companyid, setcompanyid] = useState(0);
+    const handleDelete = (e) => {
+      setcompanyid(e);
+      handleShowDelete();
+    };
+    const handleDeleteCompany = (e) => {
+      setIsLoading(true);
+      e.preventDefault();
+      setIsLoading(true)
+      axios
+        .post(
+          HOST + DELETE_COMPANY,
+          {
+            id: companyid,
+          },
+          { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+        )
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.success) {
+            handleCloseDelete();
+            setCall(apiCall + 1);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
   const handleSort = (e) => {
     setsort(e.target.value);
   };
@@ -190,104 +217,98 @@ function CompanyUpdate() {
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
       {red === true ? <RedAlert setRed={setred} /> : <></>}
       <div>
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <div className="container-fluid">
-            <h1
+        <div className="container-fluid">
+          <h1
+            style={{
+              // margin: "auto",
+              textAlign: "center",
+              marginTop: "3rem",
+              marginBottom: "1rem",
+              fontFamily: "roboto",
+              fontWeight: "bold",
+            }}
+          >
+            Companies
+            <Button
+              onClick={handleShow}
               style={{
-                // margin: "auto",
-                textAlign: "center",
-                marginTop: "3rem",
-                marginBottom: "1rem",
-                fontFamily: "roboto",
-                fontWeight: "bold",
+                float: "right",
+                backgroundColor: "rgba(38,141,141,1)",
               }}
             >
-              Companies
-              <Button
-                onClick={handleShow}
-                style={{
-                  float: "right",
-                  backgroundColor: "rgba(38,141,141,1)",
-                }}
-              >
-                Add Company +
-              </Button>
-            </h1>
-            <div style={{ float: "right", marginBottom: "1rem" }}>
-              <input
-                style={{ marginRight: ".5rem" }}
-                type="text"
-                value={value}
-                onChange={inputData}
-                placeholder="Search"
-              />
-              <Button
-                style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                size="sm"
-                onClick={filterData}
-              >
-                Search
-              </Button>
-            </div>
-            <br/>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-             
-              <Select
-                placeholder="Select City(s)"
-                defaultValue={cityvalue}
-                onChange={doChange}
-                isMulti
-                options={filterCities}
-              ></Select>
-              &nbsp;&nbsp;
-              
-              {
-              cityvalue.length == 0 ? (
-                <Button
-                  style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                  disabled
-                  onClick={filterData}
-                >
-                  Filter
-                </Button>
-              ) : (
-                <Button
-                  style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                  onClick={filterData}
-                >
-                  Filter
-                </Button>
-              )}
-            </div>
-            <br/>
-            <div style={{ display: "flex", flexDirection: "row", width: '52.5rem' }}>
-              <Form.Select
-                onChange={handleSort}
-              >
-                <option value="Name">Company Name (A-Z)</option>
-                <option value="Name DESC">Company Name (Z-A)</option>
-              </Form.Select>
-              &nbsp;&nbsp;
-              <Button onClick={filterData}>Sort</Button>
-            </div>
+              Add Company +
+            </Button>
+          </h1>
+          <div style={{ float: "right", marginBottom: "1rem" }}>
+            <input
+              style={{ marginRight: ".5rem" }}
+              type="text"
+              value={value}
+              onChange={inputData}
+              placeholder="Search"
+            />
+            <Button
+              style={{ backgroundColor: "rgba(38,141,141,1)" }}
+              size="sm"
+              onClick={filterData}
+            >
+              Search
+            </Button>
+          </div>
+          <br />
+          <div style={{ display: "flex", flexDirection: "row" }}>
 
-            <br />
-            <div className="conatiner">
-              <table className="table">
-                <thead>
-                  <tr className="heading">
-                    <th>Edit</th>
-                    <th scope="col">Company Name</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">City</th>
-                    <th scope="col">Business Phone</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Web Page</th>
-                  </tr>
-                </thead>
+            <Select
+              placeholder="Select City(s)"
+              defaultValue={cityvalue}
+              onChange={doChange}
+              isMulti
+              options={filterCities}
+            ></Select>
+            &nbsp;&nbsp;
+            <Button
+              style={{ backgroundColor: "rgba(38,141,141,1)" }}
+              onClick={filterData}
+            >
+              Filter
+            </Button>
+          </div>
+          <br />
+          <div style={{ display: "flex", flexDirection: "row", width: '52.5rem' }}>
+            <Form.Select
+              onChange={handleSort}
+              defaultValue={sort}
+            >
+              <option value="ID DESC">Latest to Oldest</option>
+              <option value="ID">Oldest to Latest</option>
+              <option value="Name">Company Name (A-Z)</option>
+              <option value="Name DESC">Company Name (Z-A)</option>
+            </Form.Select>
+            &nbsp;&nbsp;
+            <Button onClick={filterData}>Sort</Button>
+          </div>
+
+          <br />
+          <div className="conatiner">
+            <table className="table">
+              <thead>
+                <tr className="heading">
+                  <th>Edit</th>
+                  <th>Delete</th>
+                  <th scope="col">Company Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Address</th>
+                  <th scope="col">City</th>
+                  <th scope="col">Business Phone</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Web Page</th>
+                </tr>
+              </thead>
+              {isLoading
+                ? <div style={{ "display": "table-caption" }}>
+                  <LoadingSpinner />
+                </div>
+                :
                 <tbody class="table-group-divider">
                   {companies.map((row) => {
                     return (
@@ -308,6 +329,21 @@ function CompanyUpdate() {
                             />
                           </svg>
                         </td>
+                        <td>
+                            <svg
+                              width="40"
+                              height="40"
+                              viewBox="80 80 250 250"
+                            >
+                              <image
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  handleDelete(row.ID);
+                                }}
+                                href="https://media.istockphoto.com/id/1298957635/vector/garbage-bin-line-vector-icon-editable-stroke-pixel-perfect-for-mobile-and-web.jpg?b=1&s=170667a&w=0&k=20&c=J4vFTp1_QJKLMiBHkMllw4-byUFxaKG9gJvbcwJusyI="
+                              />
+                            </svg>
+                          </td>
                         <td>{row.Name}</td>
                         <td>{row.Category}</td>
                         <td>{row.Address}</td>
@@ -319,52 +355,52 @@ function CompanyUpdate() {
                     );
                   })}
                 </tbody>
-              </table>
+              }
+            </table>
+          </div>
+          <div
+            className="row justify-content-evenly"
+            style={{ marginTop: "1rem", marginBottom: "1rem" }}
+          >
+            <div style={{ textAlign: "center" }} className="col-1">
+              {currPage === 1 ? (
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  disabled
+                >
+                  &lt;
+                </Button>
+              ) : (
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  onClick={handlePagePre}
+                >
+                  &lt;
+                </Button>
+              )}
             </div>
-            <div
-              className="row justify-content-evenly"
-              style={{ marginTop: "1rem", marginBottom: "1rem" }}
-            >
-              <div style={{ textAlign: "center" }} className="col-1">
-                {currPage === 1 ? (
-                  <Button
-                    style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                    disabled
-                  >
-                    &lt;
-                  </Button>
-                ) : (
-                  <Button
-                    style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                    onClick={handlePagePre}
-                  >
-                    &lt;
-                  </Button>
-                )}
-              </div>
-              <div style={{ textAlign: "center" }} className="col-1">
-                Page {currPage}/{pages}
-              </div>
-              <div style={{ textAlign: "center" }} className="col-1">
-                {currPage === pages ? (
-                  <Button
-                    style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                    disabled
-                  >
-                    &gt;
-                  </Button>
-                ) : (
-                  <Button
-                    style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                    onClick={handlePage}
-                  >
-                    &gt;
-                  </Button>
-                )}
-              </div>
+            <div style={{ textAlign: "center" }} className="col-1">
+              Page {currPage}/{pages}
+            </div>
+            <div style={{ textAlign: "center" }} className="col-1">
+              {currPage === pages ? (
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  disabled
+                >
+                  &gt;
+                </Button>
+              ) : (
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  onClick={handlePage}
+                >
+                  &gt;
+                </Button>
+              )}
             </div>
           </div>
-        )}
+        </div>
         {/* Add Form Modal */}
         <Modal
           show={show}
@@ -410,6 +446,36 @@ function CompanyUpdate() {
                 apiCall={setCall}
               />
             }
+          </Modal.Body>
+        </Modal>
+
+        {/* Delete Confirmation Modal */}
+        <Modal
+          show={showDelete}
+          onHide={handleCloseDelete}
+          backdrop="static"
+          size="sm"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Deletion</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="container">
+              <p style={{ textAlign: "center" }}>
+                <b>Delete the selected Company!!</b>
+              </p>
+              <div style={{ display: "inline-block" }}>
+                <Button variant="danger" onClick={handleCloseDelete}>
+                  Cancel
+                </Button>
+              </div>
+              <div style={{ display: "inline-block", float: "right" }}>
+                <Button variant="success" onClick={handleDeleteCompany}>
+                  Proceed
+                </Button>
+              </div>
+            </div>
           </Modal.Body>
         </Modal>
       </div>

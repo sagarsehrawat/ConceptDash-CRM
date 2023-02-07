@@ -547,7 +547,7 @@ const Dashboard = () => {
                   <div style={{ textAlign: "center" }}>{<TestDemo />}</div>
                 </div>
               </div>
-              <Box sx={{ width: "100%", typography: "body1" }}>
+              {/* <Box sx={{ width: "100%", typography: "body1" }}>
                 <TabContext centered value={value}>
                   <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                     <TabList
@@ -566,7 +566,9 @@ const Dashboard = () => {
                   <TabPanel centered value="1"></TabPanel>
                   <TabPanel value="3"></TabPanel>
                 </TabContext>
-              </Box>
+              </Box> */}
+              <br/>
+              <br/>
             </div>
 
             {/* TimeSheet Modal */}

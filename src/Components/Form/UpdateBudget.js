@@ -17,17 +17,16 @@ import LoadingSpinner from "../Loader/Loader";
 
 function UpdateBudget(props) {
   const [isSubmit, setIsSubmit] = useState(false);
-  const { setGreen, closeModal, api, apiCall, setRed } = props
+  const { setGreen, closeModal, api, apiCall, setRed } = props;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
 
   const [cities, setcities] = useState([]);
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   useEffect(() => {
-    setisLoading(true)
+    setisLoading(true);
     const call = async () => {
       await axios
         .get(HOST + GET_CITIES, {
@@ -61,7 +60,7 @@ function UpdateBudget(props) {
         .catch((err) => {
           console.log(err);
         });
-        setisLoading(false)
+      setisLoading(false);
     };
     call();
   }, []);
@@ -81,15 +80,16 @@ function UpdateBudget(props) {
   const [bYear, setbYear] = useState(props.row.Budget_Year);
   const [pName, setpName] = useState(props.row.Project_Name);
   const [bAmount, setbAmount] = useState(props.row.Budget_Amount);
+
   const [form, setform] = useState({
-    city: props.row.City_ID,
-    dept: props.row.Department_ID,
-    projectCat: props.row.Project_Cat_ID,
-    budgetCategory: budgetCategory,
+    city: props.row.City_ID ?? "",
+    dept: props.row.Department_ID ?? "",
+    projectCat: props.row.Project_Cat_ID ?? "",
+    budgetCategory: budgetCategory ?? "",
     projectName: pName,
-    budgetAmount: bAmount,
-    budgetYear: bYear,
-    source: props.row.Source,
+    budgetAmount: bAmount ?? "",
+    budgetYear: bYear ?? "",
+    source: props.row.Source ?? "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -122,6 +122,7 @@ function UpdateBudget(props) {
     setform(newForm);
   };
   const handleSubmit = (e) => {
+    console.log(1)
     setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
@@ -142,13 +143,14 @@ function UpdateBudget(props) {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
+        console.log(res)
         setisLoading(false);
         if (res.data.success) {
-          closeModal()
+          closeModal();
           setGreen(true);
-          apiCall(api+1)
+          apiCall(api + 1);
         } else {
-          setRed(true)
+          setRed(true);
         }
       })
       .catch((err) => {
@@ -157,15 +159,17 @@ function UpdateBudget(props) {
         console.log(err);
       });
   };
-  const [isLoading, setisLoading] = useState(false)
-  return (
-    isLoading?<LoadingSpinner/>:
+  const [isLoading, setisLoading] = useState(false);
+  return isLoading ? (
+    <LoadingSpinner />
+  ) : (
     <div>
       <Form className="form-main" onSubmit={handleSubmit}>
         <Row className="mb-4">
           <Form.Group as={Col} controlId="formGridCity">
             <Form.Label>City</Form.Label>
             <Form.Select onChange={handleChange} name="city">
+            <option value="">Select City</option>
               {cities.length > 0
                 ? cities.map((e) => (
                     <option value={e.City_ID} selected={e.City === citi}>
@@ -181,11 +185,12 @@ function UpdateBudget(props) {
           <Form.Group as={Col}>
             <Form.Label>Department</Form.Label>
             <Form.Select onChange={handleChange} name="dept">
+            <option value="">Select Department</option>
               {depts.length > 0
                 ? depts.map((e) => (
                     <option
                       value={e.Department_ID}
-                      selected={e.Department === depart}
+                      selected={e.Department===depart}
                     >
                       {e.Department}
                     </option>
@@ -198,6 +203,7 @@ function UpdateBudget(props) {
           <Form.Group as={Col}>
             <Form.Label>Project Category</Form.Label>
             <Form.Select onChange={handleChange} name="projectCat">
+            <option value="">Select Project Category</option>
               {projectDepts.length > 0
                 ? projectDepts.map((e) => (
                     <option
@@ -219,8 +225,9 @@ function UpdateBudget(props) {
               onChange={handleChange}
               name="budgetCategory"
             >
-              <option value="Design Product">Design Product</option>
-              <option value="Product Project">Product Project</option>
+              <option value="">Select Budget Category</option>
+              <option value="Design">Design</option>
+              <option value="Product">Construction</option>
             </Form.Select>
           </Form.Group>
         </Row>
@@ -256,16 +263,17 @@ function UpdateBudget(props) {
           </Form.Group>
           <Form.Group as={Col}>
             <Form.Label>Source</Form.Label>
-            <Form.Control
-              value={source}
-              name="source"
-              type="text"
-              onChange={handleChange}
-            />
+            <Form.Select value={source} name="source" onChange={handleChange}>
+              <option>Select Source</option>
+              <option value="Construct Connect">Construct Connect</option>
+              <option value="Bids and Tenders">Bids and Tenders</option>
+              <option value="Biddingo">Biddingo</option>
+              <option value="Merx">Merx</option>
+            </Form.Select>
           </Form.Group>
         </Row>
 
-        <Button className="submit-btn" variant="primary">
+        <Button className="submit-btn" variant="primary" type="submit">
           Submit
         </Button>
       </Form>

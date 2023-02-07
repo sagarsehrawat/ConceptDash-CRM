@@ -17,7 +17,7 @@ import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
 
 function UpdateRFP(props) {
-  const { setGreen, closeModal, api, apiCall, setRed } = props
+  const { setGreen, closeModal, api, apiCall, setRed } = props;
   const [isSubmit, setIsSubmit] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -73,20 +73,20 @@ function UpdateRFP(props) {
         .catch((err) => {
           console.log(err);
         });
-        setisLoading(false)
+      setisLoading(false);
     };
     call();
   }, []);
   const depart = props.row.Department;
+  const projectCategory = props.row.Project_Category;
   const pro_manager = props.row.Manager_Name;
   const citi = props.row.City;
   const [action, setaction] = useState(props.row.Action);
   const [dept, setdept] = useState(props.row.Department_ID);
+  const [projectCat, setprojectCat] = useState(props.row.Project_Cat_ID);
   const [pManager, setpManager] = useState(props.row.Project_Manager_ID);
   const [pName, setpName] = useState(props.row.Project_Name);
-  const [bidDate, setbidDate] = useState(
-    props.row.Bid_Date ? props.row.Bid_Date.substring(0, 10) : ""
-  );
+
   const [sDate, setsDate] = useState(
     props.row.Start_Date ? props.row.Start_Date.substring(0, 10) : ""
   );
@@ -95,20 +95,18 @@ function UpdateRFP(props) {
   );
   const [city, setcity] = useState(props.row.City_ID);
   const [rfpnum, setrfpnum] = useState(props.row.RFP_Number);
-  const [amount, setamount] = useState(props.row.Amount);
   const [source, setsource] = useState(props.row.Source);
   const [form, setform] = useState({
-    dept: dept,
-    action: action,
-    managerName: pManager,
-    projectName: pName,
-    bidDate: bidDate,
-    startDate: sDate,
-    submissionDate: subDate,
-    rfpNumber: rfpnum,
-    amount: amount,
-    city: city,
-    source: source,
+    dept: dept??"",
+    projectCat: projectCat??"",
+    action: action??"",
+    managerName: pManager??"",
+    projectName: pName??"",
+    startDate: sDate??"",
+    submissionDate: subDate??"",
+    rfpNumber: rfpnum??"",
+    city: city??"",
+    source: source??"",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -116,14 +114,14 @@ function UpdateRFP(props) {
     if (name === "dept") {
       setdept(value);
     }
+    if (name === "projectCat") {
+      setprojectCat(value);
+    }
     if (name === "action") {
       setaction(value);
     }
     if (name === "managerName") {
       setpManager(value);
-    }
-    if (name === "bidDate") {
-      setbidDate(value);
     }
     if (name === "startDate") {
       setsDate(value);
@@ -139,9 +137,6 @@ function UpdateRFP(props) {
     }
     if (name === "rfpNumber") {
       setrfpnum(value);
-    }
-    if (name === "amount") {
-      setamount(value);
     }
     if (name === "source") {
       setsource(value);
@@ -159,14 +154,13 @@ function UpdateRFP(props) {
         HOST + UPDATE_RFP,
         {
           departmentId: form.dept,
+          projectCatId: form.projectCat,
           action: form.action,
           projectManagerId: form.managerName,
           projectName: form.projectName,
-          bidDate: form.bidDate,
           startDate: form.startDate,
           submissionDate: form.submissionDate,
           rfpNumber: form.rfpNumber,
-          amount: form.amount,
           cityId: form.city,
           source: form.source,
           id: props.row.RFP_ID,
@@ -177,11 +171,11 @@ function UpdateRFP(props) {
       .then((res) => {
         setisLoading(false);
         if (res.data.success) {
-          closeModal()
+          closeModal();
           setGreen(true);
-          apiCall(api+1)
+          apiCall(api + 1);
         } else {
-          setRed(true)
+          setRed(true);
         }
       })
       .catch((err) => {
@@ -190,11 +184,12 @@ function UpdateRFP(props) {
         console.log(err);
       });
   };
-  const [isLoading, setisLoading] = useState(false)
-  return (
-    isLoading?<LoadingSpinner/>:
+  const [isLoading, setisLoading] = useState(false);
+  return isLoading ? (
+    <LoadingSpinner />
+  ) : (
     <div>
-      <Form className="form-main">
+      <Form className="form-main" onSubmit={handleSubmit}>
         <Row className="mb-4">
           <Form.Group as={Col}>
             <Form.Label>Department</Form.Label>
@@ -203,6 +198,7 @@ function UpdateRFP(props) {
               onChange={handleChange}
               name="dept"
             >
+              <option>Select Department</option>
               {depts.map((e) => (
                 <option
                   value={e.Department_ID}
@@ -211,6 +207,22 @@ function UpdateRFP(props) {
                   {e.Department}
                 </option>
               ))}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group as={Col}>
+            <Form.Label>Project Category</Form.Label>
+            <Form.Select onChange={handleChange} name="projectCat" required>
+              <option value="">Select Project Category</option>
+              {projectDepts.length > 0
+                ? projectDepts.map((e) => (
+                    <option
+                      value={e.Project_Cat_ID}
+                      selected={e.Project_Category === projectCategory}
+                    >
+                      {e.Project_Category}
+                    </option>
+                  ))
+                : ""}
             </Form.Select>
           </Form.Group>
         </Row>
@@ -236,6 +248,7 @@ function UpdateRFP(props) {
               onChange={handleChange}
               required
             >
+              <option>Select project Manager</option>
               {employees.length !== 0 ? (
                 employees.map((option) => (
                   <option
@@ -263,15 +276,6 @@ function UpdateRFP(props) {
         </Row>
         <Row className="mb-4">
           <Form.Group as={Col}>
-            <Form.Label>Bid Date</Form.Label>
-            <Form.Control
-              value={bidDate}
-              name="bidDate"
-              onChange={handleChange}
-              type="date"
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
             <Form.Label>Start Date</Form.Label>
             <Form.Control
               value={sDate}
@@ -295,6 +299,7 @@ function UpdateRFP(props) {
           <Form.Group as={Col} controlId="formGridCity">
             <Form.Label>City</Form.Label>
             <Form.Select onChange={handleChange} name="city">
+              <option>Select City</option>
               {cities.length > 0
                 ? cities.map((e) => (
                     <option value={e.City_ID} selected={e.City === citi}>
@@ -316,25 +321,16 @@ function UpdateRFP(props) {
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Amount</Form.Label>
-            <Form.Control
-              value={amount}
-              name="amount"
-              type="number"
-              placeholder="Amount"
-              onChange={handleChange}
-            />
-          </Form.Group>
+
           <Form.Group as={Col}>
             <Form.Label>Source</Form.Label>
-            <Form.Control
-              value={source}
-              name="source"
-              type="text"
-              placeholder="Source"
-              onChange={handleChange}
-            />
+            <Form.Select value={source} name="source" onChange={handleChange}>
+              <option>Select Source</option>
+              <option value="Construct Connect">Construct Connect</option>
+              <option value="Bids and Tenders">Bids and Tenders</option>
+              <option value="Biddingo">Biddingo</option>
+              <option value="Merx">Merx</option>
+            </Form.Select>
           </Form.Group>
         </Row>
 
@@ -342,8 +338,6 @@ function UpdateRFP(props) {
           className="submit-btn"
           variant="primary"
           type="submit"
-          style={{}}
-          onClick={handleSubmit}
         >
           Submit
         </Button>
