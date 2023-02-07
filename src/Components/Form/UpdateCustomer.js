@@ -27,7 +27,6 @@ function UpdateCustomer(props) {
   const [bphone, setbphone] = useState(props.row.Business_Phone);
   const [address, setaddress] = useState(props.row.Address);
   const [city, setcity] = useState(props.row.City);
-  const [zip, setzip] = useState(props.row.ZIP);
   const [epersonal, setepersonal] = useState(props.row.Email_Personal);
   const [mobile, setmobile] = useState(props.row.Mobile_Phone);
   const [attachments, setattachments] = useState(props.row.Attachments);
@@ -64,7 +63,6 @@ function UpdateCustomer(props) {
     mobile: mobile,
     address: address,
     city: city,
-    zip: zip,
     attachments: attachments,
     notes: notes,
     birthday: birthday,
@@ -115,9 +113,6 @@ function UpdateCustomer(props) {
     }
     if (name === "city") {
       setcity(value);
-    }
-    if (name === "zip") {
-      setzip(value);
     }
     if (name === "notes") {
       setnotes(value);
@@ -194,7 +189,6 @@ function UpdateCustomer(props) {
           address: form.address,
           cityId: form.city,
           province: form.state,
-          zip: form.zip,
           country: form.country,
           notes: form.notes,
           attachment: form.attachments,
@@ -255,7 +249,6 @@ function UpdateCustomer(props) {
         })
         .then((res) => {
           setcities(res.data.res);
-          console.log(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -397,16 +390,7 @@ function UpdateCustomer(props) {
             </Form.Select>
           </Form.Group>
 
-          <Form.Group as={Col} controlId="formGridZip">
-            <Form.Control
-              value={zip}
-              onChange={handleChange}
-              name="zip"
-              type="text"
-              pattern="[0-9]{6}"
-              placeholder="Pin Code"
-            />
-          </Form.Group>
+          
         </Row>
         <Row className="mb-4">
           <Form.Group as={Col} controlId="exampleForm.ControlTextarea1">

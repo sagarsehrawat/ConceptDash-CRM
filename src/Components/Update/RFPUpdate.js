@@ -318,6 +318,7 @@ function RFPUpdate() {
     handleShowDelete();
   };
   const handleDeleteBudget = (e) => {
+    setIsLoading(true)
     e.preventDefault();
     axios
       .post(

@@ -22,6 +22,7 @@ function CustomerForm(props) {
   const [apiCallCity, setCallCity] = useState(0);
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
+  const [isLoading, setisLoading] = useState(false)
   const { setGreen, closeModal, api, apiCall, setRed } = props;
   const [isSubmit, setIsSubmit] = useState(false);
   const [form, setform] = useState({
@@ -62,6 +63,7 @@ function CustomerForm(props) {
   const [cities, setcities] = useState([]);
   const [companies, setcompanies] = useState([]);
   useEffect(() => {
+    setisLoading(true);
     const call = async () => {
       await axios
         .get(HOST + GET_COMPANY_NAMES, {
@@ -69,7 +71,6 @@ function CustomerForm(props) {
         })
         .then((res) => {
           setcompanies(res.data.res);
-          console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -86,11 +87,13 @@ function CustomerForm(props) {
         .catch((err) => {
           console.log(err);
         });
+        setisLoading(false);
     };
     call();
   }, [apiCallCity]);
   // const handleChange1=()=>{ {handleChange1}; reformatDate();}
   const handleSubmit = (e) => {
+    setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
     axios
@@ -128,13 +131,20 @@ function CustomerForm(props) {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res);
+        console.log(res)
+        setisLoading(false);
         if (res.data.success) {
-          handleShow();
+          closeModal();
+          setGreen(true);
+          apiCall(api + 1);
+        } else {
+          setRed(true);
         }
       })
       .catch((err) => {
         console.log(err);
+        setisLoading(false);
+        setRed(true);
       });
   };
   const [show, setShow] = useState(false);
@@ -149,6 +159,7 @@ function CustomerForm(props) {
   const handleCloseCityForm = () => setShowCityForm(false);
   const handleShowCityForm = () => setShowCityForm(true);
   return (
+    isLoading?<LoadingSpinner/>:
     <>
     {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
     {red===true ? <RedAlert setRed={setred}/> : <></>}
@@ -308,22 +319,13 @@ function CustomerForm(props) {
               </Button>
             </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridZip">
-              <Form.Control
-                onChange={handleChange}
-                name="zip"
-                type="text"
-                pattern="[0-9]{6}"
-                placeholder="Pin Code"
-              />
-            </Form.Group>
+            
           </Row>
           <Row className="mb-4">
             <Form.Group as={Col}>
               <Form.Control
                 onChange={handleChange}
                 name="webpage"
-                type="url"
                 placeholder="Web-Page"
               />
             </Form.Group>
@@ -514,7 +516,7 @@ function CustomerForm(props) {
           <Modal.Header closeButton>
             <Modal.Title>Add Company</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{<CompanyForm />}</Modal.Body>
+          <Modal.Body>{<CompanyForm setRed={setred} setGreen={setgreen} closeModal={handleCloseCompanyForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
         </Modal>
         <Modal
           backdrop="static"

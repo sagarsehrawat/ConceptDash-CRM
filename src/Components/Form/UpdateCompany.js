@@ -40,7 +40,7 @@ function UpdateCompany(props) {
   const [cname, setcname] = useState(props.row.Name);
   const [category, setcategory] = useState(props.row.Category);
   const [address, setaddress] = useState(props.row.Address);
-  const [city, setcity] = useState(props.row.City);
+  const [city, setcity] = useState(props.row.City_ID);
   const [bphone, setbphone] = useState(props.row.Business_Phone);
   const [email, setemail] = useState(props.row.Email);
   const [wpage, setwpage] = useState(props.row.Web_Page);

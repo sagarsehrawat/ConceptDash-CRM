@@ -2,10 +2,9 @@ import { React, useEffect, useState } from "react";
 import axios from "axios";
 import {
   HOST,
-  GET_PAGES_COMPANIES,
   GET_PAGE_COMPANIES,
-  SEARCH_COMPANIES,
   GET_CITIES,
+  DELETE_COMPANY,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
@@ -26,6 +25,10 @@ function CompanyUpdate() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showDelete, setShowDelete] = useState(false);
+  const handleCloseDelete = () => setShowDelete(false);
+  const handleShowDelete = () => setShowDelete(true);
 
   const [showUpdate, setShowUpdate] = useState(false);
   const handleCloseUpdate = () => setShowUpdate(false);
@@ -178,6 +181,34 @@ function CompanyUpdate() {
       });
     });
 
+    const [companyid, setcompanyid] = useState(0);
+    const handleDelete = (e) => {
+      setcompanyid(e);
+      handleShowDelete();
+    };
+    const handleDeleteCompany = (e) => {
+      setIsLoading(true);
+      e.preventDefault();
+      setIsLoading(true)
+      axios
+        .post(
+          HOST + DELETE_COMPANY,
+          {
+            id: companyid,
+          },
+          { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+        )
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.success) {
+            handleCloseDelete();
+            setCall(apiCall + 1);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
   const handleSort = (e) => {
     setsort(e.target.value);
   };
@@ -263,6 +294,7 @@ function CompanyUpdate() {
               <thead>
                 <tr className="heading">
                   <th>Edit</th>
+                  <th>Delete</th>
                   <th scope="col">Company Name</th>
                   <th scope="col">Category</th>
                   <th scope="col">Address</th>
@@ -297,6 +329,21 @@ function CompanyUpdate() {
                             />
                           </svg>
                         </td>
+                        <td>
+                            <svg
+                              width="40"
+                              height="40"
+                              viewBox="80 80 250 250"
+                            >
+                              <image
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  handleDelete(row.ID);
+                                }}
+                                href="https://media.istockphoto.com/id/1298957635/vector/garbage-bin-line-vector-icon-editable-stroke-pixel-perfect-for-mobile-and-web.jpg?b=1&s=170667a&w=0&k=20&c=J4vFTp1_QJKLMiBHkMllw4-byUFxaKG9gJvbcwJusyI="
+                              />
+                            </svg>
+                          </td>
                         <td>{row.Name}</td>
                         <td>{row.Category}</td>
                         <td>{row.Address}</td>
@@ -399,6 +446,36 @@ function CompanyUpdate() {
                 apiCall={setCall}
               />
             }
+          </Modal.Body>
+        </Modal>
+
+        {/* Delete Confirmation Modal */}
+        <Modal
+          show={showDelete}
+          onHide={handleCloseDelete}
+          backdrop="static"
+          size="sm"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Deletion</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="container">
+              <p style={{ textAlign: "center" }}>
+                <b>Delete the selected Company!!</b>
+              </p>
+              <div style={{ display: "inline-block" }}>
+                <Button variant="danger" onClick={handleCloseDelete}>
+                  Cancel
+                </Button>
+              </div>
+              <div style={{ display: "inline-block", float: "right" }}>
+                <Button variant="success" onClick={handleDeleteCompany}>
+                  Proceed
+                </Button>
+              </div>
+            </div>
           </Modal.Body>
         </Modal>
       </div>

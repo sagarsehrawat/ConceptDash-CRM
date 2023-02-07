@@ -10,6 +10,7 @@ import {
   SEARCH_CUSTOMERS,
   GET_CITIES,
   GET_COMPANY_NAMES,
+  DELETE_CONTACT,
 } from "../Constants/Constants";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -50,7 +51,7 @@ function CustomerUpdate(props) {
   useEffect(() => {
     const call = async () => {
       setIsLoading(true);
-      setcurrPage(1)
+      setcurrPage(1);
       await axios
         .get(HOST + GET_PAGE_CUSTOMERS, {
           headers: {
@@ -64,7 +65,7 @@ function CustomerUpdate(props) {
         })
         .then((res) => {
           setcustomers(res.data.res);
-          setpages(res.data.totalPages)
+          setpages(res.data.totalPages);
         })
         .catch((err) => {
           console.log(err);
@@ -116,7 +117,7 @@ function CustomerUpdate(props) {
       })
       .then((res) => {
         setcustomers(res.data.res);
-        setpages(res.data.totalPages)
+        setpages(res.data.totalPages);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -140,7 +141,7 @@ function CustomerUpdate(props) {
       })
       .then((res) => {
         setcustomers(res.data.res);
-        setpages(res.data.totalPages)
+        setpages(res.data.totalPages);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -149,7 +150,7 @@ function CustomerUpdate(props) {
   };
   const filterData = async () => {
     setIsLoading(true);
-    setcurrPage(1)
+    setcurrPage(1);
     await axios
       .get(HOST + GET_PAGE_CUSTOMERS, {
         headers: {
@@ -163,7 +164,7 @@ function CustomerUpdate(props) {
       })
       .then((res) => {
         setcustomers(res.data.res);
-        setpages(res.data.totalPages)
+        setpages(res.data.totalPages);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -222,6 +223,38 @@ function CustomerUpdate(props) {
     });
   const handleSort = (e) => {
     setsort(e.target.value);
+  };
+  const [showDelete, setShowDelete] = useState(false);
+  const handleCloseDelete = () => setShowDelete(false);
+  const handleShowDelete = () => setShowDelete(true);
+  const [customerid, setcustomerid] = useState(0);
+  const handleDelete = (e) => {
+    console.log(e)
+    setcustomerid(e);
+    handleShowDelete();
+  };
+  const handleDeleteCustomer = (e) => {
+    setIsLoading(true);
+    e.preventDefault();
+    setIsLoading(true);
+    axios
+      .post(
+        HOST + DELETE_CONTACT,
+        {
+          id: customerid,
+        },
+        { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.success) {
+          handleCloseDelete();
+          setCall(apiCall + 1);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <>
@@ -324,6 +357,7 @@ function CustomerUpdate(props) {
                       <thead>
                         <tr className="heading">
                           <td>Edit</td>
+                          <th scope="col">Delete</th>
                           <td scope="col">Company</td>
                           <td scope="col">Salutation</td>
                           <td scope="col">First Name</td>
@@ -334,9 +368,7 @@ function CustomerUpdate(props) {
                           <td scope="col">Mobile</td>
                           <td scope="col">Address</td>
                           <td scope="col">City</td>
-                          <td scope="col">ZIP</td>
                           <td scope="col">Notes</td>
-                          <td scope="col">Attachments</td>
                         </tr>
                       </thead>
                       <tbody class="table-group-divider">
@@ -358,7 +390,21 @@ function CustomerUpdate(props) {
                                   />
                                 </svg>
                               </td>
-
+                              <td>
+                                <svg
+                                  width="40"
+                                  height="40"
+                                  viewBox="80 80 250 250"
+                                >
+                                  <image
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => {
+                                      handleDelete(row.ID);
+                                    }}
+                                    href="https://media.istockphoto.com/id/1298957635/vector/garbage-bin-line-vector-icon-editable-stroke-pixel-perfect-for-mobile-and-web.jpg?b=1&s=170667a&w=0&k=20&c=J4vFTp1_QJKLMiBHkMllw4-byUFxaKG9gJvbcwJusyI="
+                                  />
+                                </svg>
+                              </td>
                               <td>{row.Company_Name}</td>
                               <td>{row.Salutation}</td>
                               <td>{row.First_Name}</td>
@@ -369,9 +415,7 @@ function CustomerUpdate(props) {
                               <td>{row.Mobile_Phone_Personal}</td>
                               <td>{row.Address}</td>
                               <td>{row.City}</td>
-                              <td>{row.ZIP}</td>
                               <td>{row.Notes}</td>
-                              <td>{row.Attachments}</td>
                             </tr>
                           );
                         })}
@@ -527,6 +571,35 @@ function CustomerUpdate(props) {
                 apiCall={setCall}
               />
             }
+          </Modal.Body>
+        </Modal>
+
+        <Modal
+          show={showDelete}
+          onHide={handleCloseDelete}
+          backdrop="static"
+          size="sm"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Deletion</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="container">
+              <p style={{ textAlign: "center" }}>
+                <b>Delete the selected Contact!!</b>
+              </p>
+              <div style={{ display: "inline-block" }}>
+                <Button variant="danger" onClick={handleCloseDelete}>
+                  Cancel
+                </Button>
+              </div>
+              <div style={{ display: "inline-block", float: "right" }}>
+                <Button variant="success" onClick={handleDeleteCustomer}>
+                  Proceed
+                </Button>
+              </div>
+            </div>
           </Modal.Body>
         </Modal>
       </div>
