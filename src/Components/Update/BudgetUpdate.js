@@ -46,7 +46,7 @@ function BudgetUpdate() {
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   const [cities, setcities] = useState([]);
-  const [sort, setsort] = useState("");
+  const [sort, setsort] = useState("Budget_ID DESC");
   const [value, setValue] = useState("");
   useEffect(() => {
     setIsLoading(true);
@@ -220,19 +220,19 @@ function BudgetUpdate() {
   depts.map((e) => {
     filterDepts.push({
       label: e.Department,
-      value: e.Department,
+      value: e.Department_ID,
     });
   });
   projectDepts.map((e) => {
     filterCategories.push({
       label: e.Project_Category,
-      value: e.Project_Category,
+      value: e.Project_Cat_ID,
     });
   });
   cities.map((e) => {
     filterCities.push({
       label: e.City,
-      value: e.City,
+      value: e.City_ID,
     });
   });
   const inputData = (e) => {
@@ -438,6 +438,8 @@ function BudgetUpdate() {
               onChange={handleSort}
               defaultValue={sort}
             >
+              <option value="Budget_ID DESC">Latest to Oldest</option>
+              <option value="Budget_ID">Oldest to Latest</option>
               <option value="Project_Name">Project Name (A-Z)</option>
               <option value="Project_Name DESC">Project Name (Z-A)</option>
               <option value="Budget_Amount">Budget Amount(Low-High)</option>

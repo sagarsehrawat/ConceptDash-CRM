@@ -50,7 +50,7 @@ function ProposalsUpdate() {
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   const [cities, setcities] = useState([]);
-  const [sort, setsort] = useState("");
+  const [sort, setsort] = useState("Proposal_ID DESC");
   const [value, setValue] = useState("");
   const [employees, setemployees] = useState([]);
   useEffect(() => {
@@ -80,19 +80,7 @@ function ProposalsUpdate() {
         })
         .then((res) => {
           setproposals(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      await axios
-        .get(HOST + GET_PAGES_PROPOSALS, {
-          headers: {
-            auth: "Rose " + localStorage.getItem("auth"),
-            limit: limit,
-          },
-        })
-        .then((res) => {
-          setpages(res.data.res);
+          setpages(res.data.totalPages)
         })
         .catch((err) => {
           console.log(err);
@@ -151,6 +139,7 @@ function ProposalsUpdate() {
       })
       .then((res) => {
         setproposals(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -174,6 +163,7 @@ function ProposalsUpdate() {
       })
       .then((res) => {
         setproposals(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -182,6 +172,7 @@ function ProposalsUpdate() {
   };
   const filterData = async () => {
     setIsLoading(true);
+    setcurrPage(1)
     await axios
       .get(HOST + GET_PAGE_PROPOSALS, {
         headers: {
@@ -195,6 +186,7 @@ function ProposalsUpdate() {
       })
       .then((res) => {
         setproposals(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -211,8 +203,8 @@ function ProposalsUpdate() {
   let filterEmployees = [];
   let filterSource = [
     {
-      label: "ConstructConnect",
-      value: "ConstructConnect",
+      label: "Construct Connect",
+      value: "Construct Connect",
     },
     {
       label: "Biddingo",
@@ -223,32 +215,32 @@ function ProposalsUpdate() {
       value: "Merx",
     },
     {
-      label: "Bids & Tenders",
-      value: "Bids & Tenders",
+      label: "Bids and Tenders",
+      value: "Bids and Tenders",
     },
   ];
   employees.map((e) => {
     filterEmployees.push({
       label: e.Full_Name,
-      value: e.Full_Name,
+      value: e.Employee_ID,
     });
   });
   depts.map((e) => {
     filterDepts.push({
       label: e.Department,
-      value: e.Department,
+      value: e.Department_ID,
     });
   });
   projectDepts.map((e) => {
     filterCategories.push({
       label: e.Project_Category,
-      value: e.Project_Category,
+      value: e.Project_Cat_ID,
     });
   });
   cities.map((e) => {
     filterCities.push({
       label: e.City,
-      value: e.City,
+      value: e.City_ID,
     });
   });
   const inputData = (e) => {
@@ -357,189 +349,174 @@ function ProposalsUpdate() {
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
       {red === true ? <RedAlert setRed={setred} /> : <></>}
       <div>
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <div className="container-fluid">
-            <h1
+        <div className="container-fluid">
+          <h1
+            style={{
+              textAlign: "center",
+              marginTop: "3rem",
+              marginBottom: "1rem",
+              fontFamily: "roboto",
+              fontWeight: "bold",
+            }}
+          >
+            Proposals
+            <Button
+              onClick={handleShow}
               style={{
-                textAlign: "center",
-                marginTop: "3rem",
-                marginBottom: "1rem",
-                fontFamily: "roboto",
-                fontWeight: "bold",
+                float: "right",
+                backgroundColor: "rgba(38,141,141,1)",
               }}
             >
-              Proposals
-              <Button
-                onClick={handleShow}
-                style={{
-                  float: "right",
-                  backgroundColor: "rgba(38,141,141,1)",
-                }}
-              >
-                Add Proposal +
-              </Button>
-            </h1>
-            <div style={{ float: "right", marginBottom: "1rem" }}>
-              <input
-                style={{ marginRight: ".5rem" }}
-                type="text"
-                value={value}
-                onChange={inputData}
-                placeholder="Search"
-              />
+              Add Proposal +
+            </Button>
+          </h1>
+          <div style={{ float: "right", marginBottom: "1rem" }}>
+            <input
+              style={{ marginRight: ".5rem" }}
+              type="text"
+              value={value}
+              onChange={inputData}
+              placeholder="Search"
+            />
+            <Button
+              style={{ backgroundColor: "rgba(38,141,141,1)" }}
+              size="sm"
+              onClick={filterData}
+            >
+              Search
+            </Button>
+          </div>
+          <br />
+          <div
+            style={{ width: "20rem", display: "inline-block" }}
+            className="container-sm"
+          ></div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <Select
+              placeholder="Select departments"
+              defaultValue={deptvalue}
+              onChange={doChange}
+              isMulti
+              options={filterDepts}
+            >
+              Select Departments
+            </Select>
+            &nbsp;&nbsp;
+            <Select
+              placeholder="Select Categories"
+              defaultValue={catvalue}
+              onChange={doChange1}
+              isMulti
+              options={filterCategories}
+            ></Select>
+            &nbsp;&nbsp;
+            <Select
+              placeholder="Select City(s)"
+              defaultValue={cityvalue}
+              onChange={doChange2}
+              isMulti
+              options={filterCities}
+            ></Select>
+            &nbsp;&nbsp;
+            <Select
+              placeholder="Select Project Manager(s)"
+              defaultValue={employeevalue}
+              onChange={doChange3}
+              isMulti
+              options={filterEmployees}
+            ></Select>
+            &nbsp;&nbsp;
               <Button
                 style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                size="sm"
                 onClick={filterData}
               >
-                Search
+                Filter
               </Button>
-            </div>
-            <br />
-            <div
-              style={{ width: "20rem", display: "inline-block" }}
-              className="container-sm"
-            ></div>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              <Select
-                placeholder="Select departments"
-                defaultValue={deptvalue}
-                onChange={doChange}
-                isMulti
-                options={filterDepts}
-              >
-                Select Departments
-              </Select>
-              &nbsp;&nbsp;
-              <Select
-                placeholder="Select Categories"
-                defaultValue={catvalue}
-                onChange={doChange1}
-                isMulti
-                options={filterCategories}
-              ></Select>
-              &nbsp;&nbsp;
-              <Select
-                placeholder="Select City(s)"
-                defaultValue={cityvalue}
-                onChange={doChange2}
-                isMulti
-                options={filterCities}
-              ></Select>
-              &nbsp;&nbsp;
-              <Select
-                placeholder="Select Project Manager(s)"
-                defaultValue={employeevalue}
-                onChange={doChange3}
-                isMulti
-                options={filterEmployees}
-              ></Select>
-              &nbsp;&nbsp;
-              {/* <Select
-                placeholder="Source(s)"
-                defaultValue={sourceValue}
-                onChange={doChange4}
-                isMulti
-                options={filterSource}
-              ></Select>
-              &nbsp;&nbsp; */}
-              {deptvalue.length == 0 &&
-              catvalue.length == 0 &&
-              cityvalue.length == 0 &&
-              cityvalue.length == 0 ? (
-                <Button
-                  style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                  disabled
-                  onClick={filterData}
-                >
-                  Filter
-                </Button>
-              ) : (
-                <Button
-                  style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                  onClick={filterData}
-                >
-                  Filter
-                </Button>
-              )}
-            </div>
-            <br />
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                width: "63.5rem",
-              }}
-            >
-              <Form.Select onChange={handleSort} defaultValue={sort}>
-                <option value="Question_Deadline DESC">
+          </div>
+          <br />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              width: "63.5rem",
+            }}
+          >
+            <Form.Select onChange={handleSort} defaultValue={sort}>
+            <option value="Proposal_ID DESC">
+                Latest to Oldest
+              </option>
+              <option value="Proposal_ID">Oldest to Latest</option>
+              <option value="Question_Deadline DESC">
                 Question Deadline (Oldest First)
-                </option>
-                <option value="Question_Deadline">Question Deadline (Newest First)</option>
-                <option value="Closing_Deadline DESC">
+              </option>
+              <option value="Question_Deadline">Question Deadline (Newest First)</option>
+              <option value="Closing_Deadline DESC">
                 Closing Deadline (Newest First)
-                </option>
-                <option value="Closing_Deadline">
+              </option>
+              <option value="Closing_Deadline">
                 Closing Deadline (Oldest First)
-                </option>
-                <option value="Result_Date DESC">
+              </option>
+              <option value="Result_Date DESC">
                 Result Date (Newest First)
-                </option>
-                <option value="Result_Date">
+              </option>
+              <option value="Result_Date">
                 Result Date (Oldest First)
-                </option>
-                <option value="Project_Name">Project Name (A-Z)</option>
-                <option value="Project_Name DESC">Project Name (Z-A)</option>
-                <option value="Design_Price">Design Price (Low-High)</option>
-                <option value="Design_Price DESC">Design Price (High-Low)</option>
-                <option value="Provisional_Items">Provisional Items (Low-High)</option>
-                <option value="Provisional_Items DESC">Provisional Items (High-Low)</option>
-                <option value="Contract_Admin_Price">Contract Admin Price (Low-High)</option>
-                <option value="Contract_Admin_Price DESC">Contract Admin Price (High-Low)</option>
-                <option value="Sub_Consultant_Price">Sub Consultant Price (Low-High)</option>
-                <option value="Sub_Consultant_Price DESC">Sub Consultant Price (High-Low)</option>
-                <option value="Total_Bid">Total Bid (Low-High)</option>
-                <option value="Total_Bid DESC">Total Bid (High-Low)</option>
-                <option value="Bidder_Price">Bidder Price (Low-High)</option>
-                <option value="Bidder_Price DESC">Bidder Price (High-Low)</option>
-                <option value="Winning_Price">Winning Price (Low-High)</option>
-                <option value="Winning_Price DESC">Winning Price (High-Low)</option>
-              </Form.Select>
-              &nbsp;&nbsp;
-              <Button onClick={filterData}>Sort</Button>
-            </div>
+              </option>
+              <option value="Project_Name">Project Name (A-Z)</option>
+              <option value="Project_Name DESC">Project Name (Z-A)</option>
+              <option value="Design_Price">Design Price (Low-High)</option>
+              <option value="Design_Price DESC">Design Price (High-Low)</option>
+              <option value="Provisional_Items">Provisional Items (Low-High)</option>
+              <option value="Provisional_Items DESC">Provisional Items (High-Low)</option>
+              <option value="Contract_Admin_Price">Contract Admin Price (Low-High)</option>
+              <option value="Contract_Admin_Price DESC">Contract Admin Price (High-Low)</option>
+              <option value="Sub_Consultant_Price">Sub Consultant Price (Low-High)</option>
+              <option value="Sub_Consultant_Price DESC">Sub Consultant Price (High-Low)</option>
+              <option value="Total_Bid">Total Bid (Low-High)</option>
+              <option value="Total_Bid DESC">Total Bid (High-Low)</option>
+              <option value="Bidder_Price">Bidder Price (Low-High)</option>
+              <option value="Bidder_Price DESC">Bidder Price (High-Low)</option>
+              <option value="Winning_Price">Winning Price (Low-High)</option>
+              <option value="Winning_Price DESC">Winning Price (High-Low)</option>
+            </Form.Select>
+            &nbsp;&nbsp;
+            <Button onClick={filterData}>Sort</Button>
+          </div>
 
-            <br />
-            <div>
-              <table className="table">
-                <thead>
-                  <tr className="heading">
-                    <th scope="col">Edit</th>
-                    <th scope="col">Delete</th>
-                    <th scope="col">Department</th>
-                    <th scope="col">Project Category</th>
-                    <th scope="col">Project Name</th>
-                    <th scope="col">City</th>
-                    <th scope="col">Question Deadline</th>
-                    <th scope="col">Closing Deadline</th>
-                    <th scope="col">Result Date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Project Manager</th>
-                    <th scope="col">Team</th>
-                    <th scope="col">Design Price</th>
-                    <th scope="col">Provisional Items</th>
-                    <th scope="col">Contract Admin Price</th>
-                    <th scope="col">Sub Consultant Price</th>
-                    <th scope="col">Total Bid</th>
-                    <th scope="col">Plan Takers</th>
-                    <th scope="col">Bidders</th>
-                    <th scope="col">Bidder Price</th>
-                    <th scope="col">Winning Price</th>
-                    <th scope="col">Winning Bidder</th>
-                  </tr>
-                </thead>
+          <br />
+          <div className="container-fluid">
+            <table className="table">
+              <thead>
+                <tr className="heading">
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                  <th scope="col">Department</th>
+                  <th scope="col">Project Category</th>
+                  <th scope="col">Project Name</th>
+                  <th scope="col">City</th>
+                  <th scope="col">Question Deadline</th>
+                  <th scope="col">Closing Deadline</th>
+                  <th scope="col">Result Date</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Project Manager</th>
+                  <th scope="col">Team</th>
+                  <th scope="col">Design Price</th>
+                  <th scope="col">Provisional Items</th>
+                  <th scope="col">Contract Admin Price</th>
+                  <th scope="col">Sub Consultant Price</th>
+                  <th scope="col">Total Bid</th>
+                  <th scope="col">Plan Takers</th>
+                  <th scope="col">Bidders</th>
+                  <th scope="col">Bidder Price</th>
+                  <th scope="col">Winning Price</th>
+                  <th scope="col">Winning Bidder</th>
+                </tr>
+              </thead>
+              {isLoading
+                ? <div style={{ "display": "table-caption" }}>
+                  <LoadingSpinner />
+                </div>
+                :
                 <tbody class="table-group-divider">
                   {proposals.map((row) => {
                     return (
@@ -602,52 +579,52 @@ function ProposalsUpdate() {
                     );
                   })}
                 </tbody>
-              </table>
+              }
+            </table>
+          </div>
+          <div
+            className="row justify-content-evenly"
+            style={{ marginTop: "1rem", marginBottom: "1rem" }}
+          >
+            <div style={{ textAlign: "center" }} className="col-1">
+              {currPage === 1 ? (
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  disabled
+                >
+                  &lt;
+                </Button>
+              ) : (
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  onClick={handlePagePre}
+                >
+                  &lt;
+                </Button>
+              )}
             </div>
-            <div
-              className="row justify-content-evenly"
-              style={{ marginTop: "1rem", marginBottom: "1rem" }}
-            >
-              <div style={{ textAlign: "center" }} className="col-1">
-                {currPage === 1 ? (
-                  <Button
-                    style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                    disabled
-                  >
-                    &lt;
-                  </Button>
-                ) : (
-                  <Button
-                    style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                    onClick={handlePagePre}
-                  >
-                    &lt;
-                  </Button>
-                )}
-              </div>
-              <div style={{ textAlign: "center" }} className="col-1">
-                Page {currPage}/{pages}
-              </div>
-              <div style={{ textAlign: "center" }} className="col-1">
-                {currPage === pages ? (
-                  <Button
-                    style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                    disabled
-                  >
-                    &gt;
-                  </Button>
-                ) : (
-                  <Button
-                    style={{ backgroundColor: "rgba(53,187,187,1)" }}
-                    onClick={handlePage}
-                  >
-                    &gt;
-                  </Button>
-                )}
-              </div>
+            <div style={{ textAlign: "center" }} className="col-1">
+              Page {currPage}/{pages}
+            </div>
+            <div style={{ textAlign: "center" }} className="col-1">
+              {currPage === pages ? (
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  disabled
+                >
+                  &gt;
+                </Button>
+              ) : (
+                <Button
+                  style={{ backgroundColor: "rgba(53,187,187,1)" }}
+                  onClick={handlePage}
+                >
+                  &gt;
+                </Button>
+              )}
             </div>
           </div>
-        )}
+        </div>
         {/* Add Form Modal */}
         <Modal
           show={show}

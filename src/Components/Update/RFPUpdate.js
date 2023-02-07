@@ -46,11 +46,12 @@ function RFPUpdate() {
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   const [cities, setcities] = useState([]);
-  const [sort, setsort] = useState("");
+  const [sort, setsort] = useState("RFP_ID DESC");
   const [value, setValue] = useState("");
   const [employees, setemployees] = useState([]);
   useEffect(() => {
     setIsLoading(true);
+    setcurrPage(1)
     const call = async () => {
       await axios
         .get(HOST + GET_CITIES, {
@@ -76,19 +77,7 @@ function RFPUpdate() {
         })
         .then((res) => {
           setrfps(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      await axios
-        .get(HOST + GET_PAGES_RFPS, {
-          headers: {
-            auth: "Rose " + localStorage.getItem("auth"),
-            limit: limit,
-          },
-        })
-        .then((res) => {
-          setpages(res.data.res);
+          setpages(res.data.totalPages)
         })
         .catch((err) => {
           console.log(err);
@@ -147,6 +136,7 @@ function RFPUpdate() {
       })
       .then((res) => {
         setrfps(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -170,6 +160,7 @@ function RFPUpdate() {
       })
       .then((res) => {
         setrfps(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -178,6 +169,7 @@ function RFPUpdate() {
   };
   const filterData = async () => {
     setIsLoading(true);
+    setcurrPage(1)
     await axios
       .get(HOST + GET_PAGE_RFPS, {
         headers: {
@@ -190,7 +182,9 @@ function RFPUpdate() {
         },
       })
       .then((res) => {
+        console.log(res.data)
         setrfps(res.data.res);
+        setpages(res.data.totalPages)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -227,25 +221,25 @@ function RFPUpdate() {
   employees.map((e) => {
     filterEmployees.push({
       label: e.Full_Name,
-      value: e.Full_Name,
+      value: e.Employee_ID,
     });
   });
   depts.map((e) => {
     filterDepts.push({
       label: e.Department,
-      value: e.Department,
+      value: e.Department_ID,
     });
   });
   projectDepts.map((e) => {
     filterCategories.push({
       label: e.Project_Category,
-      value: e.Project_Category,
+      value: e.Project_Cat_ID,
     });
   });
   cities.map((e) => {
     filterCities.push({
       label: e.City,
-      value: e.City,
+      value: e.City_ID,
     });
   });
   const inputData = (e) => {
@@ -427,39 +421,27 @@ function RFPUpdate() {
             ></Select>
             &nbsp;&nbsp;
             <Select
-                placeholder="Source(s)"
-                defaultValue={sourceValue}
-                onChange={doChange4}
-                isMulti
-                options={filterSource}
-              ></Select>
-              &nbsp;&nbsp;
-            {deptvalue.length == 0 &&
-            catvalue.length == 0 &&
-            employeevalue.length == 0 &&
-            cityvalue.length == 0 &&
-            sourceValue.length == 0 ? (
-              <Button
-                style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                disabled
-                onClick={filterData}
-              >
-                Filter
-              </Button>
-            ) : (
-              <Button
-                style={{ backgroundColor: "rgba(38,141,141,1)" }}
-                onClick={filterData}
-              >
-                Filter
-              </Button>
-            )}
+              placeholder="Source(s)"
+              defaultValue={sourceValue}
+              onChange={doChange4}
+              isMulti
+              options={filterSource}
+            ></Select>
+            &nbsp;&nbsp;
+            <Button
+              style={{ backgroundColor: "rgba(38,141,141,1)" }}
+              onClick={filterData}
+            >
+              Filter
+            </Button>
           </div>
           <br />
           <div
             style={{ display: "flex", flexDirection: "row", width: "63.5rem" }}
           >
-            <Form.Select onChange={handleSort}>
+            <Form.Select onChange={handleSort} defaultValue={sort}>
+              <option value="RFP_ID DESC">Latest to Oldest</option>
+              <option value="RFP_ID">Oldest to Latest</option>
               <option value="Start_Date">Start Date (Newest First)</option>
               <option value="Start_Date DESC">Start Date (Oldest First)</option>
               <option value="Submission_Date">
@@ -476,26 +458,28 @@ function RFPUpdate() {
           </div>
 
           <br />
-          {isLoading ? (
-            <LoadingSpinner />
-          ) : (
-            <div className="container-fluid">
-              <table className="table">
-                <thead>
-                  <tr className="heading">
-                    <th scope="col">Edit</th>
-                    <th scope="col">Delete</th>
-                    <th scope="col">Department</th>
-                    <th scope="col">Project Category</th>
-                    <th scope="col">Action</th>
-                    <th scope="col">Source</th>
-                    <th scope="col">Start Date</th>
-                    <th scope="col">Submission Date</th>
-                    <th scope="col">Project Name</th>
-                    <th scope="col">Project Manager</th>
-                    <th scope="col">City</th>
-                  </tr>
-                </thead>
+          <div className="container-fluid">
+            <table className="table">
+              <thead>
+                <tr className="heading">
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                  <th scope="col">Department</th>
+                  <th scope="col">Project Category</th>
+                  <th scope="col">Action</th>
+                  <th scope="col">Source</th>
+                  <th scope="col">Start Date</th>
+                  <th scope="col">Submission Date</th>
+                  <th scope="col">Project Name</th>
+                  <th scope="col">Project Manager</th>
+                  <th scope="col">City</th>
+                </tr>
+              </thead>
+              {isLoading
+                ? <div style={{ "display": "table-caption" }}>
+                  <LoadingSpinner />
+                </div>
+                :
                 <tbody class="table-group-divider">
                   {rfps.map((row) => {
                     return (
@@ -543,9 +527,9 @@ function RFPUpdate() {
                     );
                   })}
                 </tbody>
-              </table>
-            </div>
-          )}
+              }
+            </table>
+          </div>
           <div
             className="row justify-content-evenly"
             style={{ marginTop: "1rem", marginBottom: "1rem" }}
