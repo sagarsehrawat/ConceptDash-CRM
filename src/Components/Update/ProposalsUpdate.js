@@ -488,7 +488,7 @@ function ProposalsUpdate() {
           </div>
 
           <br />
-          <div className="container-fluid">
+          <div className="" style={{"overflowX" : "scroll"}}>
             <table className="table">
               <thead>
                 <tr className="heading">
