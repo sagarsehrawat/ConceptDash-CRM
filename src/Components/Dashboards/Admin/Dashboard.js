@@ -62,7 +62,7 @@ const Dashboard = () => {
                 setnav(0);
               }}
             >
-              CRM
+              <b>TASKFORCE</b>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
