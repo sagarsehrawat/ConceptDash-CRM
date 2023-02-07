@@ -26,12 +26,11 @@ function UpdateCustomer(props) {
   const [ework, setework] = useState(props.row.Email_Work);
   const [bphone, setbphone] = useState(props.row.Business_Phone);
   const [address, setaddress] = useState(props.row.Address);
-  const [city, setcity] = useState(props.row.City);
+  const [city, setcity] = useState(props.row.City_ID);
   const [epersonal, setepersonal] = useState(props.row.Email_Personal);
   const [mobile, setmobile] = useState(props.row.Mobile_Phone);
   const [attachments, setattachments] = useState(props.row.Attachments);
   const [notes, setnotes] = useState(props.row.Notes);
-
   const [birthday, setbirthday] = useState(
     props.row.Birthday ? props.row.Birthday.substring(0, 10) : ""
   );
@@ -52,32 +51,32 @@ function UpdateCustomer(props) {
   const [jtitle, setjtitle] = useState(props.row.Job_Title);
 
   const [form, setform] = useState({
-    company: company,
-    salutation: sal,
-    firstname: fname,
-    lastname: lname,
-    emailWork: ework,
-    emailPersonal: epersonal,
-    jobTitle: jtitle,
-    business: bphone,
-    mobile: mobile,
-    address: address,
-    city: city,
-    attachments: attachments,
-    notes: notes,
-    birthday: birthday,
-    anniversary: anniv,
-    sports: sport,
-    activity: act,
-    beverage: bev,
-    alcohol: alco,
-    travelDest: tdest,
-    spouseName: sname,
-    children: child,
-    tvShow: tv,
-    movie: movie,
-    actor: actor,
-    dislikes: dislike,
+    company: company??"",
+    salutation: sal??"",
+    firstname: fname??"",
+    lastname: lname??"",
+    emailWork: ework??"",
+    emailPersonal: epersonal??"",
+    jobTitle: jtitle??"",
+    business: bphone??"",
+    mobile: mobile??"",
+    address: address??"",
+    city: city??"",
+    attachments: attachments??"",
+    notes: notes??"",
+    birthday: birthday??"",
+    anniversary: anniv??"",
+    sports: sport??"",
+    activity: act??"",
+    beverage: bev??"",
+    alcohol: alco??"",
+    travelDest: tdest??"",
+    spouseName: sname??"",
+    children: child??"",
+    tvShow: tv??"",
+    movie: movie??"",
+    actor: actor??"",
+    dislikes: dislike??"",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -230,6 +229,7 @@ function UpdateCustomer(props) {
   const [cities, setcities] = useState([]);
   const [companies, setcompanies] = useState([]);
   useEffect(() => {
+    setisLoading(true)
     const call = async () => {
       await axios
         .get(HOST + GET_COMPANY_NAMES, {
@@ -253,6 +253,7 @@ function UpdateCustomer(props) {
         .catch((err) => {
           console.log(err);
         });
+        setisLoading(false)
     };
     call();
   }, []);
@@ -264,6 +265,7 @@ function UpdateCustomer(props) {
           <Form.Group as={Col}>
             <Form.Label>Select Company</Form.Label>
             <Form.Select onChange={handleChange} name="company">
+              <option>Select Company</option>
               {companies.map((option) => (
                 <option
                   value={option.ID}
@@ -380,7 +382,7 @@ function UpdateCustomer(props) {
               <option>Select City</option>
               {cities.length !== 0 ? (
                 cities.map((options) => (
-                  <option value={options.City_ID} key={options.City_ID}>
+                  <option selected={options.City_ID === city} value={options.City_ID} key={options.City_ID}>
                     {options.City}
                   </option>
                 ))

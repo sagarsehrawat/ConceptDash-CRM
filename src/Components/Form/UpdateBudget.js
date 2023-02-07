@@ -121,6 +121,7 @@ function UpdateBudget(props) {
     setform(newForm);
   };
   const handleSubmit = (e) => {
+    console.log(1)
     setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
@@ -141,6 +142,7 @@ function UpdateBudget(props) {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
+        console.log(res)
         setisLoading(false);
         if (res.data.success) {
           closeModal();
@@ -266,7 +268,7 @@ function UpdateBudget(props) {
           </Form.Group>
         </Row>
 
-        <Button className="submit-btn" variant="primary">
+        <Button className="submit-btn" variant="primary" type="submit">
           Submit
         </Button>
       </Form>

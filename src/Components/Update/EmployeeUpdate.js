@@ -68,7 +68,6 @@ function EmployeeUpdate() {
         .then((res) => {
           setemployee(res.data.res);
           setdataSource(res.data.res);
-          console.log(res.data.res)
         })
         .catch((err) => {
           console.log(err);

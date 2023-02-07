@@ -251,7 +251,6 @@ function UpdateCompany(props) {
           className="submit-btn"
           variant="primary"
           type="submit"
-          style={{}}
           onClick={handleSubmit}
         >
           Submit

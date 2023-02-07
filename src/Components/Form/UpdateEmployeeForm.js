@@ -13,7 +13,6 @@ import {
   GET_CITIES,
   GET_DEPARTMENTS,
 } from "../Constants/Constants";
-import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import JobTitle from "./JobTitle";
 import LoadingSpinner from "../Loader/Loader";
@@ -82,6 +81,7 @@ function UpdateEmployeeForm(props) {
 
   const [employees, setemployees] = useState([]);
   useEffect(() => {
+    setisLoading(true)
     const call = async () => {
       await axios
         .get(HOST + GET_JOB_TITLES, {
@@ -125,50 +125,51 @@ function UpdateEmployeeForm(props) {
         .catch((err) => {
           console.log(err);
         });
+        setisLoading(false)
     };
     call();
   }, []);
   const [form, setform] = useState({
-    salutation: sal,
-    firstname: fname,
-    lastname: lname,
-    department: deptment,
-    jobtitle: jTitle,
-    directManager: directManager,
-    emailWork: ework,
-    emailPersonal: epersonal,
-    joiningDate: jDate,
-    business: bphone,
-    mobile: mobile,
-    address: address,
-    city: city,
-    zip: zip,
-    expertise: exp,
-    webpage: wpage,
-    resume: res,
-    attachments: attachments,
-    notes: notes,
-    birthday: birthday,
-    anniversary: anniv,
-    sports: sport,
-    activity: act,
-    beverage: bev,
-    alcohol: alco,
-    travelDest: tdest,
-    spouseName: sname,
-    children: child,
-    tvShow: tv,
-    movie: movie,
-    actor: actor,
-    dislikes: dislike,
-    proficiency: prof,
-    interests: int,
-    cocurricular: cocurr,
-    trainings: train,
-    strengths: str,
-    weakness: weak,
-    activeIndex: sai,
-    username: uname,
+    salutation: sal??"",
+    firstname: fname??"",
+    lastname: lname??"",
+    department: deptment??"",
+    jobtitle: jTitle??"",
+    directManager: directManager??"",
+    emailWork: ework??"",
+    emailPersonal: epersonal??"",
+    joiningDate: jDate??"",
+    business: bphone??"",
+    mobile: mobile??"",
+    address: address??"",
+    city: city??"",
+    zip: zip??"",
+    expertise: exp??"",
+    webpage: wpage??"",
+    resume: res??"",
+    attachments: attachments??"",
+    notes: notes??"",
+    birthday: birthday??"",
+    anniversary: anniv??"",
+    sports: sport??"",
+    activity: act??"",
+    beverage: bev??"",
+    alcohol: alco??"",
+    travelDest: tdest??"",
+    spouseName: sname??"",
+    children: child??"",
+    tvShow: tv??"",
+    movie: movie??"",
+    actor: actor??"",
+    dislikes: dislike??"",
+    proficiency: prof??"",
+    interests: int??"",
+    cocurricular: cocurr??"",
+    trainings: train??"",
+    strengths: str??"",
+    weakness: weak??"",
+    activeIndex: sai??"",
+    username: uname??"",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
