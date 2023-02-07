@@ -82,13 +82,13 @@ function UpdateBudget(props) {
   const [bAmount, setbAmount] = useState(props.row.Budget_Amount);
   const [form, setform] = useState({
     city: props.row.City_ID,
-    dept: props.row.Department_ID,
-    projectCat: props.row.Project_Cat_ID,
-    budgetCategory: budgetCategory,
+    dept: props.row.Department_ID ?? "",
+    projectCat: props.row.Project_Cat_ID ?? "",
+    budgetCategory: budgetCategory ?? "",
     projectName: pName,
-    budgetAmount: bAmount,
-    budgetYear: bYear,
-    source: props.row.Source,
+    budgetAmount: bAmount ?? "",
+    budgetYear: bYear ?? "",
+    source: props.row.Source ?? "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -166,6 +166,7 @@ function UpdateBudget(props) {
           <Form.Group as={Col} controlId="formGridCity">
             <Form.Label>City</Form.Label>
             <Form.Select onChange={handleChange} name="city">
+            <option value="">Select City</option>
               {cities.length > 0
                 ? cities.map((e) => (
                     <option value={e.City_ID} selected={e.City === citi}>
@@ -181,11 +182,12 @@ function UpdateBudget(props) {
           <Form.Group as={Col}>
             <Form.Label>Department</Form.Label>
             <Form.Select onChange={handleChange} name="dept">
+            <option value="">Select Department</option>
               {depts.length > 0
                 ? depts.map((e) => (
                     <option
                       value={e.Department_ID}
-                      selected={e.Department === depart}
+                      selected={e.Department===depart}
                     >
                       {e.Department}
                     </option>
@@ -198,6 +200,7 @@ function UpdateBudget(props) {
           <Form.Group as={Col}>
             <Form.Label>Project Category</Form.Label>
             <Form.Select onChange={handleChange} name="projectCat">
+            <option value="">Select Project Category</option>
               {projectDepts.length > 0
                 ? projectDepts.map((e) => (
                     <option
@@ -219,8 +222,9 @@ function UpdateBudget(props) {
               onChange={handleChange}
               name="budgetCategory"
             >
-              <option value="Design Product">Design Product</option>
-              <option value="Product Project">Product Project</option>
+              <option value="">Select Budget Category</option>
+              <option value="Design">Design</option>
+              <option value="Product">Construction</option>
             </Form.Select>
           </Form.Group>
         </Row>
@@ -266,7 +270,7 @@ function UpdateBudget(props) {
           </Form.Group>
         </Row>
 
-        <Button className="submit-btn" variant="primary">
+        <Button className="submit-btn" variant="primary" type="submit">
           Submit
         </Button>
       </Form>
