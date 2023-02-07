@@ -80,8 +80,9 @@ function UpdateBudget(props) {
   const [bYear, setbYear] = useState(props.row.Budget_Year);
   const [pName, setpName] = useState(props.row.Project_Name);
   const [bAmount, setbAmount] = useState(props.row.Budget_Amount);
+
   const [form, setform] = useState({
-    city: props.row.City_ID,
+    city: props.row.City_ID ?? "",
     dept: props.row.Department_ID ?? "",
     projectCat: props.row.Project_Cat_ID ?? "",
     budgetCategory: budgetCategory ?? "",
