@@ -11,13 +11,16 @@ import LoadingSpinner from "../Loader/Loader";
 
 function Timesheet(props) {
   const [isSubmit, setIsSubmit] = useState(false);
+  const [yourProjects, setyourProjects] = useState([])
+  const [ongoingProjects, setongoingProjects] = useState([])
   const [projects, setprojects] = useState([]);
   const [show, setShow] = useState(false);
   const [start, setstart] = useState("");
   const [end, setend] = useState("");
+  const [target, settarget] = useState("1")
   const { setGreen, closeModal, api, apiCall, setRed } = props;
 
-  let yourProjects = [], ongoingProjects = [], allProjects = [];
+  
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
@@ -28,20 +31,23 @@ function Timesheet(props) {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
+          let your = [], ongoing = [], allProjects = [];
           for (let i = 0; i < res.data.res.length; i++) {
             const data = res.data.res[i]
 
-            if (false) {
-              ongoingProjects.push(data.Project_Name)
+            if (data.Status === "Ongoing") {
+              ongoing.push(data.Project_Name)
             }
-            
-            if ((data.Project_Manager_ID===localStorage.getItem('employeeId') || data.Team_Members.includes(localStorage.getItem('employeeName'))) && data.Status === "Ongoing") {
-              yourProjects.push(data.Project_Name)
+
+            if ((data.Project_Manager_ID === localStorage.getItem('employeeId') || data.Team_Members.includes(localStorage.getItem('employeeName'))) && data.Status === "Ongoing") {
+              your.push(data.Project_Name)
             }
-            
+
             allProjects.push(data.Project_Name)
           }
-          setprojects(yourProjects);
+          setyourProjects(your)
+          setongoingProjects(ongoing)
+          setprojects(allProjects);
           setisLoading(false)
         })
         .catch((err) => {
@@ -120,22 +126,27 @@ function Timesheet(props) {
     setend(newValue);
   };
   const changeProjectList = (e) => {
-    console.log(yourProjects);
-    console.log(ongoingProjects)
-    console.log(allProjects)
-    
-    switch (e.target.id) {
-      case "1":
-        setprojects(yourProjects)
-        break;
-      case "2":
-        setprojects(ongoingProjects)
-        break;
-      case "3":
-        setprojects(allProjects)
-        break;
-      default:
-        break;
+    settarget(e.target.id.toString())
+  }
+  const evaluateOptions = () => {
+    if(target==="1"){
+      return yourProjects.map((option) => (
+        <option value={option}>
+          {option}
+        </option>
+      ))
+    }else if(target==="2"){
+      return ongoingProjects.map((option) => (
+        <option value={option}>
+          {option}
+        </option>
+      ))
+    }else{
+      return projects.map((option) => (
+        <option value={option}>
+          {option}
+        </option>
+      ))
     }
   }
   return (
@@ -146,7 +157,7 @@ function Timesheet(props) {
             <Form.Group onChange={changeProjectList}>
               <Form.Check inline type="radio" defaultChecked name="group1" id="1" label="Your Projects" />
               <Form.Check inline type="radio" name="group1" id="2" label="Ongoing Projects" />
-              <Form.Check inline type="radio" name="group1" id="3" label="All Projects"/>
+              <Form.Check inline type="radio" name="group1" id="3" label="All Projects" />
             </Form.Group>
           </Row>
           <Row className="mb-4">
@@ -161,13 +172,7 @@ function Timesheet(props) {
                 <option value="General RFP">General RFP</option>
                 <option value="General Proposal">General Proposal</option>
                 <option value="General Training">General Training</option>
-                {
-                  projects && projects.map((option) => (
-                    <option value={option}>
-                      {option}
-                    </option>
-                  ))
-                }
+                {evaluateOptions()}
               </Form.Select>
             </Form.Group>
           </Row>

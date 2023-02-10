@@ -115,6 +115,7 @@ const Dashboard = () => {
         .get(HOST + BUDGET_AMOUNT, {
           headers: {
             auth: "Rose " + localStorage.getItem("auth"),
+            chart: "Budget Amount"
           },
         })
         .then((res) => {
@@ -409,7 +410,7 @@ const Dashboard = () => {
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {tasks.map((row) => (
+                                {tasks && tasks.map((row) => (
                                   <TableRow
                                     key={row.name}
                                     sx={{
