@@ -42,7 +42,8 @@ export const GET_EMPLOYEE_BY_ID= '/api/get/list/employeeById'
 export const GET_CHART_MEET = '/api/get/chart/meet'
 export const GET_WORK_HOURS = '/api/get/chart/work'
 export const GET_PROJECT_STATUS = '/api/get/project/status'
-
+export const GET_ALL_PRIVILEGES = '/api/get/privileges'
+export const GET_EMPLOYEE_PRIVILEGES = '/api/get/privilegesById'
 
 
 
