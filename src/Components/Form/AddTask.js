@@ -17,10 +17,10 @@ function AddTask(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [isSubmit, setIsSubmit] = useState(false);
-  const [form, setform] = useState({
+  const [due, setdue] = useState("")
+    const [form, setform] = useState({
     title: "",
     priority: "",
-    completed: "",
     assignedTo: "",
     description: "",
     startDate: "",
@@ -35,15 +35,17 @@ function AddTask(props) {
     month = date.getMonth()+1;
   }
   let entry_date = `${date.getFullYear()}-${month}-${date.getDate()}`
-  console.log(month);
+  let due_date = due?due.substring(0, 10):'';
   const handleChange = (e) => {
     const { name, value } = e.target;
     const newForm = form;
     newForm[name] = value;
     setform(newForm);
   };
+
   const [employees, setemployees] = useState([]);
   useEffect(() => {
+    setisLoading(true)
     const call = async () => {
       await axios
         .get(HOST + GET_EMPLOYEENAMES, {
@@ -55,14 +57,15 @@ function AddTask(props) {
         .catch((err) => {
           console.log(err);
         });
+        setisLoading(false)
     };
     call();
   }, []);
+  console.log(due_date?(new Date(due_date).toISOString()):'')
   const handleSubmit = (e) => {
     setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
-    console.log("submitted");
     axios
       .post(
         HOST + ADD_TASK,
@@ -72,15 +75,20 @@ function AddTask(props) {
           },
           title: form.title,
           priority: form.priority,
-          completedPercent: form.completed,
           assignedTo: form.assignedTo,
           description: form.description,
-          startDate: entry_date,
-          dueDate: form.dueDate,
+          startDate: new Date(entry_date).toISOString(),
+          startTime: `${new Date().getHours()}:${new Date().getMinutes()}:00`,
+          dueDate: new Date(due_date).toISOString(),
+          dueTime: `${new Date(due).getHours()}:${new Date(
+            due
+          ).getMinutes()}:00`,
+          assignedBy: localStorage.getItem('employeeId')
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
+        console.log(res)
         setisLoading(false)
         if (res.data.success) {
           closeModal();
@@ -94,6 +102,19 @@ function AddTask(props) {
         setRed(true);
       });
   };
+  var d = new Date();
+  var offset = d.getTimezoneOffset();
+  var hours = Math.floor(Math.abs(offset) / 60);
+  var minutes = Math.abs(offset) % 60;
+  if (minutes === 0) {
+    minutes = "00";
+  }
+  var sign = offset > 0 ? "-" : "+";
+  let offset1 = `${sign}0${hours}:${minutes}`;
+  const handleChange2 = (e) => {
+    let newValue = e.target.value + ":00" + offset1;
+    setdue(newValue);
+  };
   return (
     isLoading?<LoadingSpinner/>:
     <div>
@@ -102,7 +123,7 @@ function AddTask(props) {
           <Form.Group as={Col}>
             <Form.Control
               name="title"
-              placeholder="Title*"
+              placeholder="Title"
               onChange={handleChange}
               required
             />
@@ -115,13 +136,14 @@ function AddTask(props) {
               onChange={handleChange}
             >
               <option>Select Priority</option>
+              <option value='0'>Super urgent</option>
               <option value='1'>Urgent</option>
               <option value='2'>Moderate</option>
               <option value='3'>Low</option>
             </Form.Select>
           </Form.Group>
         </Row>
-        <Row className="mb-4">
+        {/* <Row className="mb-4">
           <Form.Group as={Col}>
             <Form.Control
               name="completed"
@@ -130,7 +152,7 @@ function AddTask(props) {
               onChange={handleChange}
             />
           </Form.Group>
-        </Row>
+        </Row> */}
         <Row className="mb-4">
           <Form.Group as={Col}>
             <Form.Label>Assigned To</Form.Label>
@@ -161,7 +183,7 @@ function AddTask(props) {
           </Form.Group> */}
           <Form.Group as={Col}>
             <Form.Label>Due Date</Form.Label>
-            <Form.Control name="dueDate" type="date" onChange={handleChange} required />
+            <Form.Control name="dueDate" type="datetime-local" onChange={handleChange2} required />
           </Form.Group>
           {/* <Form.Group as={Col}>
             <Form.Label>Completed On</Form.Label>

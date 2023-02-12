@@ -11,22 +11,44 @@ import LoadingSpinner from "../Loader/Loader";
 
 function Timesheet(props) {
   const [isSubmit, setIsSubmit] = useState(false);
+  const [yourProjects, setyourProjects] = useState([])
+  const [ongoingProjects, setongoingProjects] = useState([])
   const [projects, setprojects] = useState([]);
   const [show, setShow] = useState(false);
   const [start, setstart] = useState("");
   const [end, setend] = useState("");
+  const [target, settarget] = useState("1")
   const { setGreen, closeModal, api, apiCall, setRed } = props;
+
   
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
+    setisLoading(true)
     const call = async () => {
       await axios
         .get(HOST + GET_PROJECT_NAMES, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
-          setprojects(res.data.res);
+          let your = [], ongoing = [], allProjects = [];
+          for (let i = 0; i < res.data.res.length; i++) {
+            const data = res.data.res[i]
+
+            if (data.Status === "Ongoing") {
+              ongoing.push(data.Project_Name)
+            }
+
+            if ((data.Project_Manager_ID === localStorage.getItem('employeeId') || data.Team_Members.includes(localStorage.getItem('employeeName'))) && data.Status === "Ongoing") {
+              your.push(data.Project_Name)
+            }
+
+            allProjects.push(data.Project_Name)
+          }
+          setyourProjects(your)
+          setongoingProjects(ongoing)
+          setprojects(allProjects);
+          setisLoading(false)
         })
         .catch((err) => {
           console.log(err);
@@ -103,81 +125,109 @@ function Timesheet(props) {
     let newValue = e.target.value + ":00" + offset1;
     setend(newValue);
   };
+  const changeProjectList = (e) => {
+    settarget(e.target.id.toString())
+  }
+  const evaluateOptions = () => {
+    if(target==="1"){
+      return yourProjects.map((option) => (
+        <option value={option}>
+          {option}
+        </option>
+      ))
+    }else if(target==="2"){
+      return ongoingProjects.map((option) => (
+        <option value={option}>
+          {option}
+        </option>
+      ))
+    }else{
+      return projects.map((option) => (
+        <option value={option}>
+          {option}
+        </option>
+      ))
+    }
+  }
   return (
-    isLoading?<LoadingSpinner/>:
-    <div>
-      <Form className="form-main" onSubmit={handleSubmit}>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>
-              <b>Project</b>
-            </Form.Label>
-            <Form.Select onChange={handleChange} name="project" required>
-              <option value="">Select a Project*</option>
-              {projects.length !== 0 ? (
-                projects.map((option) => (
-                  <option value={option.Project_Name}>
-                    {option.Project_Name}
-                  </option>
-                ))
-              ) : (
-                <option value="">None</option>
-              )}
-            </Form.Select>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>
-              <b>Start Time</b>
-            </Form.Label>
-            <Form.Control
-              name="start"
-              type="datetime-local"
-              onChange={handleChange1}
-              required
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>
-              <b>End Time</b>
-            </Form.Label>
-            <Form.Control
-              name="end"
-              type="datetime-local"
-              onChange={handleChange2}
-              required
-            />
-          </Form.Group>
-        </Row>
+    isLoading ? <LoadingSpinner /> :
+      <div>
+        <Form className="form-main" onSubmit={handleSubmit}>
+          <Row className="mb-4">
+            <Form.Group onChange={changeProjectList}>
+              <Form.Check inline type="radio" defaultChecked name="group1" id="1" label="Your Projects" />
+              <Form.Check inline type="radio" name="group1" id="2" label="Ongoing Projects" />
+              <Form.Check inline type="radio" name="group1" id="3" label="All Projects" />
+            </Form.Group>
+          </Row>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Label>
+                <b>Project</b>
+              </Form.Label>
+              <Form.Select onChange={handleChange} name="project" required>
+                <option value="">Select a Project*</option>
+                <option value="General">General</option>
+                <option value="Data Collection">Data Collection</option>
+                <option value="General RFP">General RFP</option>
+                <option value="General Proposal">General Proposal</option>
+                <option value="General Training">General Training</option>
+                {evaluateOptions()}
+              </Form.Select>
+            </Form.Group>
+          </Row>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Label>
+                <b>Start Time</b>
+              </Form.Label>
+              <Form.Control
+                name="start"
+                type="datetime-local"
+                onChange={handleChange1}
+                required
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Label>
+                <b>End Time</b>
+              </Form.Label>
+              <Form.Control
+                name="end"
+                type="datetime-local"
+                onChange={handleChange2}
+                required
+              />
+            </Form.Group>
+          </Row>
 
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              name="comments"
-              type="text"
-              placeholder="Comments"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-        <Button
-          className="submit-btn"
-          variant="primary"
-          type="submit"
-        >
-          Submit
-        </Button>
-      </Form>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Form Submitted</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Added To Timesheet Successfully</Modal.Body>
-      </Modal>
-    </div>
+          <Row className="mb-4">
+            <Form.Group as={Col}>
+              <Form.Control
+                name="comments"
+                type="text"
+                placeholder="Comments"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Row>
+          <Button
+            className="submit-btn"
+            variant="primary"
+            type="submit"
+          >
+            Submit
+          </Button>
+        </Form>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Form Submitted</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Added To Timesheet Successfully</Modal.Body>
+        </Modal>
+      </div>
   );
 }
 
