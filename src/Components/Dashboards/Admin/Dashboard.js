@@ -7,6 +7,7 @@ import AdminDash from "../../AdminDash/AdminDash";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import Modal from "react-bootstrap/Modal";
 import "./Mode.css";
 import TimeSheetTable from "../../Expenses/Expenses";
@@ -19,6 +20,9 @@ import BudgetUpdate from "../../Update/BudgetUpdate";
 import RFPUpdate from "../../Update/RFPUpdate";
 import ProposalsUpdate from "../../Update/ProposalsUpdate";
 import CustomerUpdate from "../../Update/CustomerUpdate";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGear } from '@fortawesome/free-solid-svg-icons'
+import Privileges from "../../Update/Privileges";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [nav, setnav] = useState(0);
@@ -36,6 +40,7 @@ const Dashboard = () => {
     if (nav === 9) return <AssetUpdate />;
     if (nav === 10) return <TimeSheetTable />;
     if (nav === 11) return <Todo />;
+    if (nav === 12) return <Privileges />
   };
   const [show, setShow] = useState(false);
 
@@ -48,31 +53,32 @@ const Dashboard = () => {
         <Navbar
           bg="dark"
           expand="xl"
+          fixed="top"
           style={{
             backgroundImage:
               "linear-gradient(to left,rgba(75,192,192,0.2) ,rgba(75,192,192,1)",
             color: "white",
           }}
         >
-          <Container style={{ marginLeft: "2vw" }}>
-            <Navbar.Brand
-              style={{ fontSize: "2rem", cursor:'pointer' }}
-              onClick={(e) => {
-                e.preventDefault();
-                setnav(0);
-              }}
-            >
-              <b>TASKFORCE</b>
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
+
+          <Navbar.Brand
+            style={{ fontSize: "2rem", cursor: 'pointer', marginLeft: "2vw", marginRight: "2vw" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setnav(0);
+            }}
+          >
+            <b>TASKFORCE</b>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(1);
                 }}
-                style={{ fontSize: "1rem",marginLeft: "1.1vw" }}
+                style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Budgets
               </Nav.Link>
@@ -81,7 +87,7 @@ const Dashboard = () => {
                   e.preventDefault();
                   setnav(2);
                 }}
-                style={{ fontSize: "1rem",marginLeft: "1.1vw" }}
+                style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 RFPs
               </Nav.Link>
@@ -90,45 +96,47 @@ const Dashboard = () => {
                   e.preventDefault();
                   setnav(3);
                 }}
-                style={{ fontSize: "1rem",marginLeft: "1.1vw" }}
+                style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Proposals
               </Nav.Link>
               <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
-                  setnav(4);
+                  setnav(6);
                 }}
-                style={{ fontSize: "1rem",marginLeft: "1.1vw" }}
+                style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
-                Customers
+                Projects
               </Nav.Link>
+
               <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(5);
                 }}
-                style={{ fontSize: "1rem",marginLeft: "1.1vw" }}
+                style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Employees
               </Nav.Link>
-              <Nav.Link
-                onClick={(e) => {
-                  e.preventDefault();
-                  setnav(6);
-                }}
-                style={{ fontSize: "1rem",marginLeft: "1.1vw" }}
-              >
-                Projects
-              </Nav.Link>
+
               <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(7);
                 }}
-                style={{ fontSize: "1rem",marginLeft: "1.1vw" }}
+                style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Companies
+              </Nav.Link>
+              <Nav.Link
+                onClick={(e) => {
+                  e.preventDefault();
+                  setnav(4);
+                }}
+                style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
+              >
+                Contacts
               </Nav.Link>
               {/* <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(8);}} style={{'marginLeft':'1.1vw'}} >Marketing</Nav.Link> */}
               <Nav.Link
@@ -136,7 +144,7 @@ const Dashboard = () => {
                   e.preventDefault();
                   setnav(9);
                 }}
-                style={{ fontSize: "1rem",marginLeft: "1.1vw" }}
+                style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Assets
               </Nav.Link>
@@ -145,7 +153,7 @@ const Dashboard = () => {
                   e.preventDefault();
                   setnav(10);
                 }}
-                style={{ fontSize: "1rem",marginLeft: "1.1vw" }}
+                style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Expenses
               </Nav.Link>
@@ -158,22 +166,34 @@ const Dashboard = () => {
               >
                 Todo
               </Nav.Link> */}
+            </Nav>
 
-              <Nav.Link
-                onClick={() => {
+
+            <Nav style={{marginRight: "2vw"}}>
+              <NavDropdown title={<FontAwesomeIcon icon={faGear} />} id="collasible-nav-dropdown" align="end">
+                <NavDropdown.Item onClick={(e) => {
+                  e.preventDefault();
+                  setnav(11);
+                }}>Your Profile</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={(e) => {
+                  e.preventDefault();
+                  setnav(12);
+                }}>Privileges</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={() => {
                   navigate("/");
                   localStorage.clear();
-                }}
-                style={{ fontSize: "1rem", marginLeft: "1vw" }}
-              >
-                Log Out
-              </Nav.Link>
+                }}>
+                  Log Out
+                </NavDropdown.Item>
+              </NavDropdown>
             </Nav>
-            </Navbar.Collapse>
-          </Container>
+          </Navbar.Collapse>
+
         </Navbar>
 
-        <main class="s-layout__content1">{handleDash()}</main>
+        <main class="s-layout__content1" style={{ "paddingTop": "7vh" }}>{handleDash()}</main>
       </div>
       <Modal
         show={show}

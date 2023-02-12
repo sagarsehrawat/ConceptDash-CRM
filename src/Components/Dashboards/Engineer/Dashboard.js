@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
-import { useNavigate } from "react-router-dom";
 import { Pie } from "react-chartjs-2";
 import { Card } from "react-bootstrap";
 import Chart from "chart.js/auto";
@@ -28,6 +27,7 @@ import {
   RFP_ANALYSIS,
   PROPOSAL_STATUS_COUNTS,
   BUDGET_AMOUNT,
+  UPDATE_TASK,
 } from "../../Constants/Constants";
 import axios from "axios";
 import Box from "@mui/material/Box";
@@ -50,6 +50,10 @@ const Dashboard = () => {
   const [showUpdate, setShowUpdate] = useState(false);
   const handleCloseUpdate = () => setShowUpdate(false);
   const handleShowUpdate = () => setShowUpdate(true);
+
+  const [showtask, setShowtask] = useState(false);
+  const handleClosetask = () => setShowtask(false);
+  const handleShowtask = () => setShowtask(true);
 
   const [value, setValue] = React.useState("1");
   const [tasks, settasks] = useState([]);
@@ -115,7 +119,7 @@ const Dashboard = () => {
         .get(HOST + BUDGET_AMOUNT, {
           headers: {
             auth: "Rose " + localStorage.getItem("auth"),
-            chart: "Budget Amount"
+            chart: "Budget Amount",
           },
         })
         .then((res) => {
@@ -306,6 +310,74 @@ const Dashboard = () => {
     setrowData(e);
     handleShowUpdate();
   };
+  const [showDelete, setShowDelete] = useState(false);
+  const handleCloseDelete = () => setShowDelete(false);
+  const handleShowDelete = () => setShowDelete(true);
+
+  const [taskid, settaskid] = useState(0);
+  const handleDelete = () => {
+    settaskid(taskData.Task_ID);
+    handleShowDelete();
+  };
+
+  const f1 = (e) => {
+    if(!e.Start_Date || !e.Due_Date || !e.Start_Time || !e.Due_Time) return "";
+    const date1 = new Date(e.Due_Date);
+    const time1 = e.Due_Time;
+    const date2 = new Date();
+    const hours = date2.getHours();
+    const minutes = date2.getMinutes();
+    const seconds = date2.getSeconds();
+    const time2 = `${hours}:${minutes}:${seconds}`
+
+    const dateTime1 = new Date(date1.toDateString() + " " + time1);
+    const dateTime2 = new Date(date2.toDateString() + " " + time2);
+    const isoDateTime1 = dateTime1.toISOString();
+    const isoDateTime2 = dateTime2.toISOString();
+    const dDate = new Date(isoDateTime1)
+    const sDate = new Date(isoDateTime2)
+    const differece = dDate-sDate;
+    if(differece<0) {
+      return "Missing";
+    }
+    return (differece/(1000*60*60)).toFixed(2);
+    // return "Hello";
+  };
+  const [taskData, settaskData] = useState([])
+  const handleClickTask = (e) =>{
+    settaskData(e);
+    handleShowtask();
+  }
+
+  const handleDeleteTask = (e) => {
+    setIsLoading(true);
+    e.preventDefault();
+    setIsSubmit(true);
+    axios
+      .post(
+        HOST + UPDATE_TASK,
+        {
+          id: taskid,
+        },
+        { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+      )
+      .then((res) => {
+        setIsLoading(false);
+        if (res.data.success) {
+          handleCloseDelete()
+          setgreen(true);
+          handleClosetask()
+          setCall(apiCall+1)
+        } else {
+          setred(true)
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setred(true);
+        console.log(err);
+      });
+  };
   return (
     <>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
@@ -364,12 +436,12 @@ const Dashboard = () => {
                       >
                         My Focus
                       </h2>
-                      <Button
+                      {/* <Button
                         onClick={handleShowAddTask}
                         style={{ display: "inline-block", float: "right" }}
                       >
                         +
-                      </Button>
+                      </Button> */}
                     </div>
 
                     {/* <div className="container"> */}
@@ -402,56 +474,39 @@ const Dashboard = () => {
                                 <TableRow>
                                   <TableCell>Title</TableCell>
                                   <TableCell>Priority</TableCell>
-                                  <TableCell>% Complete</TableCell>
-                                  <TableCell>Description</TableCell>
-                                  <TableCell>Start Date</TableCell>
-                                  <TableCell>Due Date</TableCell>
-                                  <TableCell>Edit/Update</TableCell>
+                                  <TableCell>Time Remaining</TableCell>
+                                  <TableCell>More Info.</TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {tasks && tasks.map((row) => (
-                                  <TableRow
-                                    key={row.name}
-                                    sx={{
-                                      "&:last-child td, &:last-child th": {
-                                        border: 0,
-                                      },
-                                    }}
-                                  >
-                                    <TableCell>{row.Title}</TableCell>
-                                    <TableCell>{row.Priority}</TableCell>
-                                    <TableCell>
-                                      {row.Percent_Completed}
-                                    </TableCell>
-                                    <TableCell>{row.Description}</TableCell>
-                                    <TableCell>
-                                      {row.Start_Date
-                                        ? row.Start_Date.substring(0, 10)
-                                        : ""}
-                                    </TableCell>
-                                    <TableCell>
-                                      {row.Due_Date
-                                        ? row.Due_Date.substring(0, 10)
-                                        : ""}
-                                    </TableCell>
-                                    <TableCell>
-                                      <svg
-                                        width="40"
-                                        height="40"
-                                        viewBox="30 0 220 220"
-                                      >
-                                        <image
-                                          style={{ cursor: "pointer" }}
-                                          onClick={() => {
-                                            handleUpdate(row);
-                                          }}
-                                          href="data:image/png;base64,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"
-                                        />
-                                      </svg>
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
+                                {tasks &&
+                                  tasks.map((row) => (
+                                    <TableRow
+                                      key={row.name}
+                                      sx={{
+                                        "&:last-child td, &:last-child th": {
+                                          border: 0,
+                                        },
+                                      }}
+                                    >
+                                      <TableCell>{row.Title}</TableCell>
+                                      <TableCell>
+                                        {row.Priority === 0
+                                          ? "Super Urgent"
+                                          : row.Priority === 1
+                                          ? "Urgent"
+                                          : row.Priority === 2
+                                          ? "Moderate"
+                                          : "Low"}
+                                      </TableCell>
+                                      <TableCell>
+                                        {f1(row)==="Missing"?<p style={{color: 'red'}}>Missing</p>:(f1(row)===""?"No Deadline":f1(row)+'Hrs')}
+                                      </TableCell>
+                                      <TableCell>
+                                        <Button onClick={()=>handleClickTask(row)}>Info</Button>
+                                      </TableCell>
+                                    </TableRow>
+                                  ))}
                               </TableBody>
                             </Table>
                           </TableContainer>
@@ -568,8 +623,8 @@ const Dashboard = () => {
                   <TabPanel value="3"></TabPanel>
                 </TabContext>
               </Box> */}
-              <br/>
-              <br/>
+              <br />
+              <br />
             </div>
 
             {/* TimeSheet Modal */}
@@ -635,6 +690,62 @@ const Dashboard = () => {
                 }
               </Modal.Body>
             </Modal>
+
+            <Modal
+              show={showtask}
+              onHide={handleClosetask}
+              backdrop="static"
+              size="lg"
+              keyboard={false}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Task Details</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="container" style={{textAlign:'center'}}>
+                  <p><b>  Title</b>  :  {taskData.Title}</p>
+                  <p><b>  Priority</b>  :  {taskData.Priority === 0
+                                          ? "Super Urgent"
+                                          : taskData.Priority === 1
+                                          ? "Urgent"
+                                          : taskData.Priority === 2
+                                          ? "Moderate"
+                                          : "Low"}</p>
+                  <p><b>  Time Remaining</b>  : {f1(taskData)==="Missing"?<span style={{color: 'red'}}>Missing</span>:(f1(taskData)===""?"No Deadline":f1(taskData)+'Hrs')}</p>
+                  <p><b>  Description</b>  :  {taskData.Description}</p>
+                  <Button onClick={handleDelete} variant="success">Task Completed</Button>
+                </div>
+              
+              </Modal.Body>
+            </Modal>
+            <Modal
+          show={showDelete}
+          onHide={handleCloseDelete}
+          backdrop="static"
+          size="lg"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Deletion</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="container">
+              <p style={{ textAlign: "center" }}>
+                <b>Are you sure you have completed the task!!</b>
+              </p>
+              <div style={{ display: "inline-block" }}>
+                <Button variant="danger" onClick={handleCloseDelete}>
+                  No
+                </Button>
+              </div>
+              <div style={{ display: "inline-block", float: "right" }}>
+                <Button variant="success" onClick={handleDeleteTask}>
+                  Yes
+                </Button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
           </div>
         )}
       </div>

@@ -23,13 +23,25 @@ import {
   BUDGET_AMOUNT,
   GET_WORK_HOURS,
   GET_PROJECT_STATUS,
+  GET_TASKS_BY_ID,
+  UPDATE_TASK,
 } from "../Constants/Constants";
 import AddTask from "../Form/AddTask";
 import LoadingSpinner from "../Loader/Loader";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
+import {
+  TableRow,
+  TableHead,
+  TableContainer,
+  TableCell,
+  TableBody,
+  Table,
+  Paper,
+} from "@material-ui/core";
 
 function AdminDash() {
+  const [apiCall, setCall] = useState(0);
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
 
@@ -80,10 +92,25 @@ function AdminDash() {
   const [budget5, setbudget5] = useState(0);
 
   const [status, setstatus] = useState([]);
+  const [tasks, settasks] = useState([]);
+  const [idtask, setidtask] = useState(localStorage.getItem("employeeId"));
 
   useEffect(() => {
     setIsLoading(true);
     const call = async () => {
+      await axios
+        .get(HOST + GET_TASKS_BY_ID, {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            id: localStorage.getItem("employeeId"),
+          },
+        })
+        .then((res) => {
+          settasks(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       await axios
         .get(HOST + PROPOSAL_STATUS_COUNTS, {
           headers: {
@@ -163,11 +190,29 @@ function AdminDash() {
       setIsLoading(false);
     };
     call();
-  }, []);
+  }, [apiCall]);
   const [meetHours, setmeetHours] = useState([]);
   const [workHours, setworkHours] = useState(0);
   const [selected, setselected] = useState(false);
+  const handleChange2 = async (e) => {
+    setIsLoading(true);
+    await axios
+      .get(HOST + GET_TASKS_BY_ID, {
+        headers: {
+          auth: "Rose " + localStorage.getItem("auth"),
+          id: e.target.value,
+        },
+      })
+      .then((res) => {
+        settasks(res.data.res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setIsLoading(false);
+  };
   const handleChange1 = async (e) => {
+    setIsLoading(true);
     setselected(true);
     await axios
       .get(HOST + GET_CHART_MEET, {
@@ -195,6 +240,8 @@ function AdminDash() {
       .catch((err) => {
         console.log(err);
       });
+
+    setIsLoading(false);
   };
 
   const dataCounts = {
@@ -338,13 +385,84 @@ function AdminDash() {
         console.log(err);
       });
   };
-
+  const [showtask, setShowtask] = useState(false);
+  const handleClosetask = () => setShowtask(false);
+  const handleShowtask = () => setShowtask(true);
+  const [isSubmit, setIsSubmit] = useState(false);
   const budgetCategoryChart = (data) => {
     return (
       <>
         <div>Hello</div>
       </>
     );
+  };
+  const [showDelete, setShowDelete] = useState(false);
+  const handleCloseDelete = () => setShowDelete(false);
+  const handleShowDelete = () => setShowDelete(true);
+
+  const [taskid, settaskid] = useState(0);
+  const handleDelete = () => {
+    settaskid(taskData.Task_ID);
+    handleShowDelete();
+  };
+
+  const f1 = (e) => {
+    if (!e.Start_Date || !e.Due_Date || !e.Start_Time || !e.Due_Time) return "";
+    const date1 = new Date(e.Due_Date);
+    const time1 = e.Due_Time;
+    const date2 = new Date();
+    const hours = date2.getHours();
+    const minutes = date2.getMinutes();
+    const seconds = date2.getSeconds();
+    const time2 = `${hours}:${minutes}:${seconds}`;
+
+    const dateTime1 = new Date(date1.toDateString() + " " + time1);
+    const dateTime2 = new Date(date2.toDateString() + " " + time2);
+    const isoDateTime1 = dateTime1.toISOString();
+    const isoDateTime2 = dateTime2.toISOString();
+    const dDate = new Date(isoDateTime1);
+    const sDate = new Date(isoDateTime2);
+    const differece = dDate - sDate;
+    if (differece < 0) {
+      return "Missing";
+    }
+    return (differece / (1000 * 60 * 60)).toFixed(2);
+    // return "Hello";
+  };
+  const [taskData, settaskData] = useState([]);
+  const handleClickTask = (e) => {
+    settaskData(e);
+    handleShowtask();
+  };
+
+  const handleDeleteTask = (e) => {
+    setIsLoading(true);
+    e.preventDefault();
+    setIsSubmit(true);
+    axios
+      .post(
+        HOST + UPDATE_TASK,
+        {
+          id: taskid,
+        },
+        { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+      )
+      .then((res) => {
+        setIsLoading(false);
+        if (res.data.success) {
+          handleCloseDelete();
+          setgreen(true);
+          handleClosetask();
+          setCall(apiCall + 1);
+        } else {
+          setred(true);
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setred(true);
+        console.log(err);
+      });
   };
   return (
     <>
@@ -549,12 +667,98 @@ function AdminDash() {
                   ""
                 )}
               </div>
-              <div className="container" style={{ textAlign: "center" }}>
+              <div
+                className="container"
+                style={{ textAlign: "center", marginTop: "3rem" }}
+              >
+                <h2>Tasks Section</h2>
+                <Form>
+                  <Form.Group>
+                    <Form.Select
+                      style={{ marginBottom: "1rem" }}
+                      onChange={handleChange2}
+                    >
+                      <option>Select Employee</option>
+                      {employees.length !== 0 ? (
+                        employees.map((options) => (
+                          <option value={options.Employee_ID}>
+                            {options.Full_Name}
+                          </option>
+                        ))
+                      ) : (
+                        <option value="">None</option>
+                      )}
+                    </Form.Select>
+                  </Form.Group>
+                </Form>
+                <TableContainer
+                  component={Paper}
+                  style={{
+                    "box-shadow":
+                      "1px 1px 1px 1px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19)",
+                  }}
+                >
+                  <Table sx={{ minWidth: 750 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Title</TableCell>
+                        <TableCell>Priority</TableCell>
+                        <TableCell>Time Remaining</TableCell>
+                        <TableCell>More Info.</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {tasks &&
+                        tasks.map((row) => (
+                          <TableRow
+                            key={row.name}
+                            sx={{
+                              "&:last-child td, &:last-child th": {
+                                border: 0,
+                              },
+                            }}
+                          >
+                            <TableCell>{row.Title}</TableCell>
+                            <TableCell>
+                              {row.Priority === 0
+                                ? "Super Urgent"
+                                : row.Priority === 1
+                                ? "Urgent"
+                                : row.Priority === 2
+                                ? "Moderate"
+                                : "Low"}
+                            </TableCell>
+                            <TableCell>
+                              {f1(row) === "Missing" ? (
+                                <p style={{ color: "red" }}>Missing</p>
+                              ) : f1(row) === "" ? (
+                                "No Deadline"
+                              ) : (
+                                f1(row) + "Hrs"
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <Button
+                                style={{
+                                  backgroundColor: "rgba(38,141,141,1)",
+                                }}
+                                onClick={() => handleClickTask(row)}
+                              >
+                                Info
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </div>
+              {/* <div className="container" style={{ textAlign: "center" }}>
                 <Button onClick={dropdown1}>+</Button>
               </div>
               {charts.map((e) => {
                 return e.chart;
-              })}
+              })} */}
               {/* <div
                 className="row d-flex justify-content-around"
                 style={{ marginTop: "2rem" }}
@@ -669,6 +873,78 @@ function AdminDash() {
                 ""
               )}
               <Button onClick={showGraph}>Get</Button>
+            </Modal.Body>
+          </Modal>
+          <Modal
+            show={showtask}
+            onHide={handleClosetask}
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Task Details</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="container" style={{ textAlign: "center" }}>
+                <p>
+                  <b> Title</b> : {taskData.Title}
+                </p>
+                <p>
+                  <b> Priority</b> :{" "}
+                  {taskData.Priority === 0
+                    ? "Super Urgent"
+                    : taskData.Priority === 1
+                    ? "Urgent"
+                    : taskData.Priority === 2
+                    ? "Moderate"
+                    : "Low"}
+                </p>
+                <p>
+                  <b> Time Remaining</b> :{" "}
+                  {f1(taskData) === "Missing" ? (
+                    <span style={{ color: "red" }}>Missing</span>
+                  ) : f1(taskData) === "" ? (
+                    "No Deadline"
+                  ) : (
+                    f1(taskData) + "Hrs"
+                  )}
+                </p>
+                <p>
+                  <b> Description</b> : {taskData.Description}
+                </p>
+                <Button onClick={handleDelete} variant="success">
+                  Task Completed
+                </Button>
+              </div>
+            </Modal.Body>
+          </Modal>
+          <Modal
+            show={showDelete}
+            onHide={handleCloseDelete}
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Confirm Deletion</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="container">
+                <p style={{ textAlign: "center" }}>
+                  <b>Are you sure you have completed the task!!</b>
+                </p>
+                <div style={{ display: "inline-block" }}>
+                  <Button variant="danger" onClick={handleCloseDelete}>
+                    No
+                  </Button>
+                </div>
+                <div style={{ display: "inline-block", float: "right" }}>
+                  <Button variant="success" onClick={handleDeleteTask}>
+                    Yes
+                  </Button>
+                </div>
+              </div>
             </Modal.Body>
           </Modal>
         </div>
