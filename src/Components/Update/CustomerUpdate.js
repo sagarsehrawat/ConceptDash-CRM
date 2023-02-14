@@ -364,6 +364,7 @@ function CustomerUpdate(props) {
                           <td scope="col">Last Name</td>
                           <td scope="col">Email Personal</td>
                           <td scope="col">Email Work</td>
+                          <td scope="col">Job Title</td>
                           <td scope="col">Business Phone</td>
                           <td scope="col">Mobile</td>
                           <td scope="col">Address</td>
@@ -411,6 +412,7 @@ function CustomerUpdate(props) {
                               <td>{row.Last_Name}</td>
                               <td>{row.Email_Personal}</td>
                               <td>{row.Email_Work}</td>
+                              <td>{row.Job_Title}</td>
                               <td>{row.Business_Phone}</td>
                               <td>{row.Mobile_Phone_Personal}</td>
                               <td>{row.Address}</td>
