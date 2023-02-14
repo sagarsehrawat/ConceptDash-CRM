@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { React, useEffect, useState } from 'react'
-import { Form } from 'react-bootstrap'
-import { GET_ALL_EMPLOYEES, GET_ALL_PRIVILEGES, GET_EMPLOYEENAMES, HOST } from '../Constants/Constants'
+import { Button, Card, Form } from 'react-bootstrap'
+import { GET_ALL_EMPLOYEES, GET_ALL_PRIVILEGES, GET_EMPLOYEENAMES, GET_EMPLOYEE_PRIVILEGES, HOST, UPDATE_PRIVILEGE } from '../Constants/Constants'
 import LoadingSpinner from '../Loader/Loader'
 
 const Privileges = () => {
@@ -16,6 +16,10 @@ const Privileges = () => {
 
     const [employees, setemployee] = useState([])
     const [isLoading, setisLoading] = useState(true)
+    const [isDisabled, setisDisabled] = useState(true)
+    const [id, setid] = useState(null)
+    let add = [], del = [];
+    let arr = []
 
     useEffect(() => {
         setisLoading(true)
@@ -30,7 +34,6 @@ const Privileges = () => {
             await axios.get(HOST + GET_ALL_PRIVILEGES, {
                 headers: { auth: "Rose " + localStorage.getItem("auth") },
             }).then((res) => {
-                console.log(res)
                 let generals = [], budgets = [], rfps = [], proposals = [], contacts = [], employees = [], projects = [], companies = []
                 res.data.res.forEach(e => {
                     let obj = { id: e.Privilege_ID, name: e.Privilege, isChecked: false }
@@ -69,9 +72,9 @@ const Privileges = () => {
                     setemployees(employees)
                     setcompany(companies)
                     setproject(projects)
+                    setisLoading(false)
                 })
-            })
-                .catch((err) => {
+            }).catch((err) => {
                     console.log(err);
                 });
         }
@@ -79,18 +82,142 @@ const Privileges = () => {
         call()
     }, [])
 
-    const handleChange = () => {
+    const selectEmployee = async (e) => {
+        if(e.target.value==="") return
+        setisLoading(true)
+        setid(e.target.value)
+        add = []
+        del = []
+        await axios.get(HOST + GET_EMPLOYEE_PRIVILEGES, {
+            headers: { auth: "Rose " + localStorage.getItem("auth"), employeeid: e.target.value },
+        }).then((res) => {
+            console.log(res.data)
+            arr = res.data.res.map(e => {
+                return e.Privilege_ID;
+            })
+            setgeneral(prev => {
+                return prev.map(obj => {
+                    if (arr.includes(obj.id)) {
+                        return { ...obj, isChecked: true }
+                    } else {
+                        return { ...obj, isChecked: false }
+                    }
+                })
+            })
+            setbudgets(prev => {
+                return prev.map(obj => {
+                    if (arr.includes(obj.id)) {
+                        return { ...obj, isChecked: true }
+                    } else {
+                        return { ...obj, isChecked: false }
+                    }
+                })
+            })
+            setrfp(prev => {
+                return prev.map(obj => {
+                    if (arr.includes(obj.id)) {
+                        return { ...obj, isChecked: true }
+                    } else {
+                        return { ...obj, isChecked: false }
+                    }
+                })
+            })
+            setproposal(prev => {
+                return prev.map(obj => {
+                    if (arr.includes(obj.id)) {
+                        return { ...obj, isChecked: true }
+                    } else {
+                        return { ...obj, isChecked: false }
+                    }
+                })
+            })
+            setcontacts(prev => {
+                return prev.map(obj => {
+                    if (arr.includes(obj.id)) {
+                        return { ...obj, isChecked: true }
+                    } else {
+                        return { ...obj, isChecked: false }
+                    }
+                })
+            })
+            setemployees(prev => {
+                return prev.map(obj => {
+                    if (arr.includes(obj.id)) {
+                        return { ...obj, isChecked: true }
+                    } else {
+                        return { ...obj, isChecked: false }
+                    }
+                })
+            })
+            setproject(prev => {
+                return prev.map(obj => {
+                    if (arr.includes(obj.id)) {
+                        return { ...obj, isChecked: true }
+                    } else {
+                        return { ...obj, isChecked: false }
+                    }
+                })
+            })
+            setcompany(prev => {
+                return prev.map(obj => {
+                    if (arr.includes(obj.id)) {
+                        return { ...obj, isChecked: true }
+                    } else {
+                        return { ...obj, isChecked: false }
+                    }
+                })
+            })
+            setisDisabled(false)
+            setisLoading(false)
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
 
+    const handleChange = (e) => {
+        if (e.target.checked) {
+            if (arr.includes(e.target.id)) {
+                del = del.filter(ele => ele !== e.target.id)
+            } else {
+                add.push(e.target.id)
+            }
+        } else {
+            if (add.includes(e.target.id)) {
+                add = add.filter(ele => ele !== e.target.id)
+            } else {
+                del.push(e.target.id)
+            }
+        }
+        console.log(add)
+        console.log(del)
+    }
+
+    const handleSubmit = (e) => {
+        axios.post(HOST + UPDATE_PRIVILEGE,
+            {
+                add: add,
+                delete: del,
+                employeeId: id
+            },
+            {
+                headers: { auth: "Rose " + localStorage.getItem("auth"), employeeId: e.target.value },
+            }).then((res) => {
+                add = []
+                del = []
+            }).catch((err) => {
+                console.log(err);
+            });
     }
 
     return (
         <>
-            <div>
+            <div className='container'>
                 <h1 style={{ textAlign: "center" }}>Select Employee</h1>
                 <Form.Select
                     style={{ marginBottom: "4vh" }}
-                    onChange={handleChange}
+                    onChange={selectEmployee}
                 >
+                    <option value="">Select Employee</option>
                     {employees.length !== 0 ? (
                         employees.map((options) => (
                             <option
@@ -105,10 +232,131 @@ const Privileges = () => {
                     )}
                 </Form.Select>
                 {isLoading ?
-                <LoadingSpinner />
-                : (<div>
-                    
-                </div>)
+                    <LoadingSpinner />
+                    : (<div>
+                        <Form>
+                            <p style={{ marginBottom: "0" }}>General Privileges</p>
+                            <Card className='' style={{ padding: "1rem", marginBottom: "2rem" }}>
+                                <div className='row justify-content-between align-content-start flex-wrap' style={{ marginLeft: "1.5rem" }}>
+                                    {general.map(e => {
+                                        return <Form.Check
+                                            inline
+                                            label={e.name}
+                                            name="general"
+                                            type="checkbox"
+                                            id={e.id}
+                                            className='col-3'
+                                            defaultChecked={e.isChecked}
+                                            onChange={handleChange}
+                                        />
+                                    })}
+                                </div>
+                            </Card>
+
+                            <p style={{ marginBottom: "0" }}>Project Privileges</p>
+                            <Card className='' style={{ padding: "1rem", marginBottom: "2rem" }}>
+                                <div className='row justify-content-between align-content-start flex-wrap' style={{ marginLeft: "1.5rem" }}>
+                                    {budget.map(e => {
+                                        return <Form.Check
+                                            inline
+                                            label={e.name}
+                                            name="budget"
+                                            type="checkbox"
+                                            id={e.id}
+                                            className='col-3'
+                                            defaultChecked={e.isChecked}
+                                            onChange={handleChange}
+                                        />
+                                    })}
+                                    {rfp.map(e => {
+                                        return <Form.Check
+                                            inline
+                                            label={e.name}
+                                            name="rfp"
+                                            type="checkbox"
+                                            id={e.id}
+                                            className='col-3'
+                                            defaultChecked={e.isChecked}
+                                            onChange={handleChange}
+                                        />
+                                    })}
+                                    {proposal.map(e => {
+                                        return <Form.Check
+                                            inline
+                                            label={e.name}
+                                            name="proposal"
+                                            type="checkbox"
+                                            id={e.id}
+                                            className='col-3'
+                                            defaultChecked={e.isChecked}
+                                            onChange={handleChange}
+                                        />
+                                    })}
+                                    {project.map(e => {
+                                        return <Form.Check
+                                            inline
+                                            label={e.name}
+                                            name="project"
+                                            type="checkbox"
+                                            id={e.id}
+                                            className='col-3'
+                                            defaultChecked={e.isChecked}
+                                            onChange={handleChange}
+                                        />
+                                    })}
+                                </div>
+                            </Card>
+
+                            <p style={{ marginBottom: "0" }}>Company&Contact Privileges</p>
+                            <Card className='' style={{ padding: "1rem", marginBottom: "2rem" }}>
+                                <div className='row justify-content-between align-content-start flex-wrap' style={{ marginLeft: "1.5rem" }}>
+                                    {contact.map(e => {
+                                        return <Form.Check
+                                            inline
+                                            label={e.name}
+                                            name="contact"
+                                            type="checkbox"
+                                            id={e.id}
+                                            className='col-3'
+                                            defaultChecked={e.isChecked}
+                                            onChange={handleChange}
+                                        />
+                                    })}
+                                    {company.map(e => {
+                                        return <Form.Check
+                                            inline
+                                            label={e.name}
+                                            name="company"
+                                            type="checkbox"
+                                            id={e.id}
+                                            className='col-3'
+                                            defaultChecked={e.isChecked}
+                                            onChange={handleChange}
+                                        />
+                                    })}
+                                </div>
+                            </Card>
+
+                            <p style={{ marginBottom: "0" }}>Employee Privileges</p>
+                            <Card className='' style={{ padding: "1rem", marginBottom: "2rem" }}>
+                                <div className='row justify-content-between align-content-start flex-wrap' style={{ marginLeft: "1.5rem" }}>
+                                    {employee.map(e => {
+                                        return <Form.Check
+                                            inline
+                                            label={e.name}
+                                            name="employee"
+                                            type="checkbox"
+                                            id={e.id}
+                                            className='col-3'
+                                            defaultChecked={e.isChecked}
+                                            onChange={handleChange}
+                                        />
+                                    })}
+                                </div>
+                            </Card>
+                            <Button onClick={handleSubmit} disabled={isDisabled}>Submit</Button>
+                        </Form>
+                    </div>)
                 }
             </div>
         </>

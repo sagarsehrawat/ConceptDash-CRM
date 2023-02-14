@@ -193,7 +193,7 @@ const Dashboard = () => {
 
         </Navbar>
 
-        <main class="s-layout__content1" style={{ "paddingTop": "7vh" }}>{handleDash()}</main>
+        <main class="s-layout__content1" style={{ "paddingTop": "8vh" }}>{handleDash()}</main>
       </div>
       <Modal
         show={show}
