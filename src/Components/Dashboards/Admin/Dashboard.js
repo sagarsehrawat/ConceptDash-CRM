@@ -169,7 +169,7 @@ const Dashboard = () => {
             </Nav>
 
 
-            <Nav style={{marginRight: "2vw"}}>
+            {/* <Nav style={{marginRight: "2vw"}}>
               <NavDropdown title={<FontAwesomeIcon icon={faGear} />} id="collasible-nav-dropdown" align="end">
                 <NavDropdown.Item onClick={(e) => {
                   e.preventDefault();
@@ -188,7 +188,7 @@ const Dashboard = () => {
                   Log Out
                 </NavDropdown.Item>
               </NavDropdown>
-            </Nav>
+            </Nav> */}
           </Navbar.Collapse>
 
         </Navbar>
