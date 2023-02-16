@@ -7,6 +7,7 @@ import {
   GET_CITIES,
   HOST,
   DELETE_TRANSACTION,
+  GET_CUSTOMERNAMES,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
@@ -16,6 +17,7 @@ import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import Select from "react-select";
 import Form from "react-bootstrap/Form";
+import AddExpense from "../Form/AddExpense";
 
 const ExpenseUpdate = () => {
   const [apiCall, setCall] = useState(0);
@@ -83,7 +85,6 @@ const ExpenseUpdate = () => {
         })
         .then((res) => {
           setcategories(res.data.res);
-          console.log(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -98,6 +99,7 @@ const ExpenseUpdate = () => {
         .catch((err) => {
           console.log(err);
         });
+        
       setisLoading(false);
     };
     call();
@@ -483,15 +485,15 @@ const ExpenseUpdate = () => {
             <Modal.Title>Add Transaction</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {/* {
-              <BudgetsForm
+            {
+              <AddExpense
                 setRed={setred}
                 setGreen={setgreen}
                 closeModal={handleClose}
                 api={apiCall}
                 apiCall={setCall}
               />
-            } */}
+            }
           </Modal.Body>
         </Modal>
 

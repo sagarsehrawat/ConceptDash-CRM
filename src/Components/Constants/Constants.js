@@ -17,6 +17,7 @@ export const GET_ALL_SALES = '/api/getAllSales'
 export const GET_ALL_EMPLOYEES = '/api/get/employees'
 export const GET_TIMESHEET = '/api/get/timesheet'
 export const GET_EMPLOYEENAMES = '/api/get/employeeNames'
+export const GET_CUSTOMERNAMES = '/api/get/customerNames'
 export const GET_ASSETS = '/api/get/assets'
 export const GET_SOFTWARES = '/api/get/softwares'
 export const GET_BUDGETS = '/api/get/budgets'
@@ -69,6 +70,7 @@ export const ADD_TIMESHEET = '/api/add/timesheet'
 export const ADD_CITY = '/api/add/city'
 export const ADD_DEPARTMENT = '/api/add/department'
 export const ADD_CATEGORY = '/api/add/category'
+export const ADD_EXPENSE_TRANSACTION = '/api/add/expenseTransaction'
 
 
 //Delete APIs
