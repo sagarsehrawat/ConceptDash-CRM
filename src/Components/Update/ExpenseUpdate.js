@@ -41,7 +41,7 @@ const ExpenseUpdate = () => {
   let limit = 50;
   const [pages, setpages] = useState(null);
   const [currPage, setcurrPage] = useState(1);
-  const [sort, setsort] = useState("Budget_ID DESC");
+  const [sort, setsort] = useState("Expense_ID DESC");
   const [value, setValue] = useState("");
   const [expenseTransactions, setexpenseTransactions] = useState([]);
   const [categories, setcategories] = useState([]);
