@@ -96,6 +96,7 @@ export const UPDATE_TASK = '/api/update/task'
 export const UPDATE_PROJECT_TASK_5 = '/api/update/projectTask5'
 export const UPDATE_PROJECT_TASK_4 = '/api/update/projectTask4'
 export const UPDATE_PRIVILEGE = '/api/update/privileges'
+export const UPDATE_EXPENSE_TRANSACTION = '/api/update/expenseTransaction'
 
 //counts
 export const COUNTS = '/api/get/counts'

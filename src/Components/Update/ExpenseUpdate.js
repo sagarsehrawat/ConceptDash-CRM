@@ -18,6 +18,7 @@ import RedAlert from "../Loader/RedAlert";
 import Select from "react-select";
 import Form from "react-bootstrap/Form";
 import AddExpense from "../Form/AddExpense";
+import UpdateExpense from "../Form/UpdateExpense";
 
 const ExpenseUpdate = () => {
   const [apiCall, setCall] = useState(0);
@@ -509,8 +510,8 @@ const ExpenseUpdate = () => {
             <Modal.Title>Update Budget</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {/* {
-              <UpdateBudget
+            {
+              <UpdateExpense
                 row={rowData}
                 setRed={setred}
                 setGreen={setgreen}
@@ -518,7 +519,7 @@ const ExpenseUpdate = () => {
                 api={apiCall}
                 apiCall={setCall}
               />
-            } */}
+            }
           </Modal.Body>
         </Modal>
 
