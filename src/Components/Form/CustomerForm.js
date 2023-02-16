@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./Form.css";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
@@ -19,8 +19,10 @@ import LoadingSpinner from "../Loader/Loader";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import { Typeahead } from 'react-bootstrap-typeahead';
+import AuthContext from '../../Context/AuthContext'
 
 function CustomerForm(props) {
+  const { privileges, setPrivileges } = useContext(AuthContext)
   const [apiCallCity, setCallCity] = useState(0);
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
@@ -336,6 +338,7 @@ function CustomerForm(props) {
                     border: "none",
                   }}
                   onClick={handleShowCityForm}
+                  disabled={!privileges.includes("Add City")}
                 >
                   Add City
                 </Button>

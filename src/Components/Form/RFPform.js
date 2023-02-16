@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./Form.css";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
@@ -21,8 +21,11 @@ import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
+import AuthContext from '../../Context/AuthContext'
 
 function RFPform(props) {
+  
+  const { privileges, setPrivileges } = useContext(AuthContext)
   const [apiCallCity, setCallCity] = useState(0);
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
@@ -245,6 +248,7 @@ function RFPform(props) {
                         border: "none",
                       }}
                       onClick={handleShowCityForm}
+                      disabled={!privileges.includes("Add City")}
                     >
                       Add City
                     </Button>
@@ -271,6 +275,7 @@ function RFPform(props) {
                         border: "none",
                       }}
                       onClick={handleShowDeptForm}
+                      disabled={!privileges.includes("Add Department")}
                     >
                       Add Department
                     </Button>
@@ -297,6 +302,7 @@ function RFPform(props) {
                         border: "none",
                       }}
                       onClick={handleShowCategoryForm}
+                      disabled={!privileges.includes("Add Project Category")}
                     >
                       Add Project Category
                     </Button>

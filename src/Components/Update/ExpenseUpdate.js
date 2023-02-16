@@ -1,5 +1,5 @@
 import axios from "axios";
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useContext } from "react";
 import {
   GET_EMPLOYEENAMES,
   GET_EXPENSE_CATEGORIES,
@@ -19,8 +19,10 @@ import Select from "react-select";
 import Form from "react-bootstrap/Form";
 import AddExpense from "../Form/AddExpense";
 import UpdateExpense from "../Form/UpdateExpense";
+import AuthContext from '../../Context/AuthContext'
 
 const ExpenseUpdate = () => {
+  const { privileges, setPrivileges } = useContext(AuthContext)
   const [apiCall, setCall] = useState(0);
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
@@ -303,6 +305,7 @@ const ExpenseUpdate = () => {
                 float: "right",
                 backgroundColor: "rgba(38,141,141,1)",
               }}
+              disabled={!privileges.includes("Add Expenses")}
             >
               Add Transaction +
             </Button>

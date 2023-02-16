@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import Cards from "../../Cards/Cards";
@@ -24,9 +24,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons'
 import Privileges from "../../Update/Privileges";
 import ExpenseUpdate from "../../Update/ExpenseUpdate";
+import AuthContext from '../../../Context/AuthContext'
 const Dashboard = () => {
   const navigate = useNavigate();
   const [nav, setnav] = useState(0);
+  
+  const { privileges, setPrivileges } = useContext(AuthContext)
 
   const handleDash = (e) => {
     if (nav === 0) return <AdminDash />;
@@ -74,7 +77,7 @@ const Dashboard = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link
+              {privileges.includes('View Budget')?<Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(1);
@@ -82,8 +85,8 @@ const Dashboard = () => {
                 style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Budgets
-              </Nav.Link>
-              <Nav.Link
+              </Nav.Link>:<></>}
+              {privileges.includes("View RFP") ? <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(2);
@@ -91,8 +94,8 @@ const Dashboard = () => {
                 style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 RFPs
-              </Nav.Link>
-              <Nav.Link
+              </Nav.Link> : <></>}
+              {privileges.includes("View Proposal") ?<Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(3);
@@ -100,8 +103,8 @@ const Dashboard = () => {
                 style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Proposals
-              </Nav.Link>
-              <Nav.Link
+              </Nav.Link> : <></>}
+              {privileges.includes("View Project") ? <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(6);
@@ -109,9 +112,9 @@ const Dashboard = () => {
                 style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Projects
-              </Nav.Link>
+              </Nav.Link> : <></>}
 
-              <Nav.Link
+              {privileges.includes("View Employee") ? <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(5);
@@ -119,9 +122,9 @@ const Dashboard = () => {
                 style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Employees
-              </Nav.Link>
+              </Nav.Link> : <></>}
 
-              <Nav.Link
+              {privileges.includes("View Companies") ? <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(7);
@@ -129,8 +132,8 @@ const Dashboard = () => {
                 style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Companies
-              </Nav.Link>
-              <Nav.Link
+              </Nav.Link> : <></>}
+              {privileges.includes("View Contacts") ? <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(4);
@@ -138,9 +141,8 @@ const Dashboard = () => {
                 style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Contacts
-              </Nav.Link>
-              {/* <Nav.Link onClick={(e)=> {e.preventDefault(); setnav(8);}} style={{'marginLeft':'1.1vw'}} >Marketing</Nav.Link> */}
-              <Nav.Link
+              </Nav.Link>:<></>}
+              {privileges.includes("View Assets") ? <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(9);
@@ -148,8 +150,8 @@ const Dashboard = () => {
                 style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Assets
-              </Nav.Link>
-              <Nav.Link
+              </Nav.Link> : <></>}
+              {privileges.includes("View Expenses") ? <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
                   setnav(10);
@@ -157,16 +159,7 @@ const Dashboard = () => {
                 style={{ fontSize: "1rem", marginLeft: "1.1vw" }}
               >
                 Expenses
-              </Nav.Link>
-              {/* <Nav.Link
-                onClick={(e) => {
-                  e.preventDefault();
-                  setnav(11);
-                }}
-                style={{ fontSize: "1rem",marginLeft: "1.1vw" }}
-              >
-                Todo
-              </Nav.Link> */}
+              </Nav.Link> : <></>}
             </Nav>
 
 

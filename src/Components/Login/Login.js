@@ -56,6 +56,7 @@ const Login = () => {
           headers: { auth: "Rose " + localStorage.getItem("auth"), employeeid: localStorage.getItem('employeeId') },
         })
         .then((res) => {
+          console.log(res.data.res)
           let arr = []
           res.data.res.map(e => {
             arr.push(e.Privilege)
