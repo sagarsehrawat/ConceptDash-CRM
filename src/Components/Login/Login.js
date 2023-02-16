@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import AuthenticationContext from '../../Context/AuthContext';
 import './Login.css'
 import axios from 'axios';
 import { GET_EMPLOYEE_PRIVILEGES, HOST, LOGIN } from '../Constants/Constants';
@@ -26,8 +25,6 @@ const Login = () => {
           break;
       }
     }
-
-
   }, [])
 
 
@@ -38,7 +35,7 @@ const Login = () => {
     e.preventDefault()
    handleSubmit(e);
   }
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     await axios.post(HOST + LOGIN, { 'username': username, 'password': password }).then((res) => {
@@ -63,6 +60,7 @@ const Login = () => {
           res.data.res.map(e => {
             arr.push(e.Privilege)
           })
+          localStorage.setItem('privileges', JSON.stringify(arr))
           setPrivileges(arr);
 
           switch (localStorage.getItem("department")) {
