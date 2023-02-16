@@ -276,6 +276,10 @@ const ExpenseUpdate = () => {
   const handleSort = (e) => {
     setsort(e.target.value)
   }
+  const addComma = (num) => {
+    if(num===null) return ""
+    return `$ ${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  }
   return( 
     <>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
@@ -376,6 +380,7 @@ const ExpenseUpdate = () => {
               <thead>
                 <tr className="heading">
                   <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
                   <th scope="col">Client</th>
                   <th scope="col">Date</th>
                   <th scope="col">Expense Category</th>
@@ -429,8 +434,8 @@ const ExpenseUpdate = () => {
                           <td>{row.Client_Name}</td>
                           <td>{row.Date}</td>
                           <td>{row.Description}</td>
-                          <td>{row.Amount}</td>
-                          <td>{row.Tax}</td>
+                          <td>{addComma(row.Amount)}</td>
+                          <td>{addComma(row.Tax)}</td>
                           <td>{row.Remarks}</td>
                           <td>{row.Employee_Name}</td>
                           <td>{row.City}</td>
