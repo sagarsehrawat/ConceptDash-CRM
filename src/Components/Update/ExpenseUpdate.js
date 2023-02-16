@@ -433,7 +433,7 @@ const ExpenseUpdate = () => {
                             </svg>
                           </td>
                           <td>{row.Client_Name}</td>
-                          <td>{row.Date}</td>
+                          <td>{row.Date?row.Date.substring(0, 10):""}</td>
                           <td>{row.Description}</td>
                           <td>{addComma(row.Amount)}</td>
                           <td>{addComma(row.Tax)}</td>

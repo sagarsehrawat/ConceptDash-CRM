@@ -20,7 +20,7 @@ import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 
 function UpdateExpense(props) {
-
+console.log(props.row)
   const cityShow = props.row.City;
   const categoryShow = props.row.Description;
   const employeeShow = props.row.Employee_Name;
@@ -28,7 +28,7 @@ function UpdateExpense(props) {
   const [city, setcity] = useState(props.row.City_ID)
   const [category, setcategory] = useState(props.row.Expense_Cat_ID)
   const [employee, setemployee] = useState(props.row.Employee_ID)
-  const [customer, setcustomer] = useState(props.row.ID)
+  const [customer, setcustomer] = useState(props.row.Client_ID)
   const [amount, setamount] = useState(props.row.Amount)
   const [tax, settax] = useState(props.row.Tax)
   const [remarks, setremarks] = useState(props.row.Remarks)
