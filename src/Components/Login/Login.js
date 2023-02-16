@@ -4,9 +4,11 @@ import AuthenticationContext from '../../Context/AuthContext';
 import './Login.css'
 import axios from 'axios';
 import { HOST, LOGIN } from '../Constants/Constants';
+import AuthContext from "crm-web/src/Context/AuthContext.js"
 
 const Login = () => {
   const navigate = useNavigate()
+  const { privileges, setPrivileges } = useContext(AuthContext)
   useEffect(() => {
     const department = localStorage.getItem('department')
     if(department) {
