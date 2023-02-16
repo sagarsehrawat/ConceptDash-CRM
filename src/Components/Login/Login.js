@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import AuthenticationContext from '../../Context/AuthContext';
 import './Login.css'
 import axios from 'axios';
-import { HOST, LOGIN } from '../Constants/Constants';
-import AuthContext from "crm-web/src/Context/AuthContext.js"
+import { GET_EMPLOYEE_PRIVILEGES, HOST, LOGIN } from '../Constants/Constants';
+import AuthContext from "../../Context/AuthContext"
 
 const Login = () => {
   const navigate = useNavigate()
@@ -36,7 +36,23 @@ const Login = () => {
   const [username, setusername] = useState('')
   const [password, setpassword] = useState('')
   
-  
+  const onLogin = (e) =>{
+    e.preventDefault()
+    handleSubmit(e);
+    Call();
+  }
+  const Call = async () =>{
+    await axios
+        .get(HOST + GET_EMPLOYEE_PRIVILEGES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth"), employeeid: localStorage.getItem('employeeId') },
+        })
+        .then((res) => {
+          setPrivileges(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     await axios.post(HOST + LOGIN,{'username':username,'password':password}).then((res) => {
@@ -84,7 +100,7 @@ const Login = () => {
               <input type="password" className="form-control shadow-none input-home" id="password" placeholder='Password' style={{ marginBottom : "4rem"}} onChange={(e)=>{setpassword(e.target.value)}}/>
             </div>
             <div className='d-flex flex-row justify-content-center my-1'>
-              <button type="submit" className="btn btn-home" onClick={handleSubmit}>Login</button>
+              <button type="submit" className="btn btn-home" onClick={onLogin}>Login</button>
             </div>
 
           </form>
