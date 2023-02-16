@@ -23,6 +23,7 @@ import CustomerUpdate from "../../Update/CustomerUpdate";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons'
 import Privileges from "../../Update/Privileges";
+import ExpenseUpdate from "../../Update/ExpenseUpdate";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [nav, setnav] = useState(0);
@@ -38,7 +39,7 @@ const Dashboard = () => {
     if (nav === 7) return <CompanyUpdate />;
     if (nav === 8) return <Cards />;
     if (nav === 9) return <AssetUpdate />;
-    if (nav === 10) return <TimeSheetTable />;
+    if (nav === 10) return <ExpenseUpdate />;
     if (nav === 11) return <Todo />;
     if (nav === 12) return <Privileges />
   };

@@ -3,7 +3,6 @@ import axios from "axios";
 import {
   HOST,
   GET_PAGE_BUDGETS,
-  GET_PAGES_BUDGETS,
   GET_DEPARTMENTS,
   GET_PROJECT_CATEGORIES,
   GET_CITIES,
@@ -77,7 +76,6 @@ function BudgetUpdate() {
         .then((res) => {
           setbudgets(res.data.res);
           setpages(res.data.totalPages)
-          console.log(res.data.res)
         })
         .catch((err) => {
           console.log(err);
