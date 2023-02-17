@@ -259,7 +259,7 @@ const CityBudget = () => {
                             fontWeight: "bold",
                         }}
                     >
-                        Budgets
+                        {city.City} Budget
                         <Button
 
                             style={{
@@ -328,14 +328,11 @@ const CityBudget = () => {
                 <tr className="heading">
                   <th scope="col">Edit</th>
                   <th scope="col">Delete</th>
-                  <th scope="col">Budget Category</th>
-                  <th scope="col">Department</th>
-                  <th scope="col">Source</th>
-                  <th scope="col">Budget Amount</th>
-                  <th scope="col">Budget Year</th>
+                  <th scope="col">Budget Type</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Sub-Category</th>
                   <th scope="col">Project Name</th>
-                  <th scope="col">Project Category</th>
-                  <th scope="col">City</th>
+                  <th scope="col">Budget Amount</th>
                 </tr>
               </thead>
               {isLoading

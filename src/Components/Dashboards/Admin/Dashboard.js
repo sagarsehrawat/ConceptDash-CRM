@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   const handleDash = (e) => {
     if (nav === 0) return <AdminDash />;
-    if (nav === 1) return <CityBudget />;
+    if (nav === 1) return <BudgetUpdate />;
     if (nav === 2) return <RFPUpdate />;
     if (nav === 3) return <ProposalsUpdate />;
     if (nav === 4) return <CustomerUpdate category={"Customers"} />;
