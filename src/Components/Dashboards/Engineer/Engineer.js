@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Dashboard from "./Dashboard";
 import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
@@ -10,10 +10,13 @@ import BudgetUpdate from "../../Update/BudgetUpdate";
 import ProposalsUpdate from "../../Update/ProposalsUpdate";
 import ProjectUpdate from "../../Update/ProjectUpdate";
 import RFPUpdate from "../../Update/RFPUpdate";
+import AuthContext from '../../../Context/AuthContext'
 
 function Engineer() {
   const navigate = useNavigate();
   const [nav, setnav] = useState(1);
+  
+  const { privileges, setPrivileges } = useContext(AuthContext)
 
   const [showTS, setShowTS] = useState(false);
   const handleCloseTS = () => setShowTS(false);
@@ -53,7 +56,7 @@ function Engineer() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
-                <Nav.Link
+                {privileges.includes('View Budget')?<Nav.Link
                   style={{ fontSize: "1rem", marginLeft: "2vw" }}
                   onClick={(e) => {
                     e.preventDefault();
@@ -61,8 +64,8 @@ function Engineer() {
                   }}
                 >
                   <b>Budgets</b>
-                </Nav.Link>
-                <Nav.Link
+                </Nav.Link>:<></>}
+                {privileges.includes('View RFP')?<Nav.Link
                   style={{ fontSize: "1rem", marginLeft: "2vw" }}
                   onClick={(e) => {
                     e.preventDefault();
@@ -70,8 +73,8 @@ function Engineer() {
                   }}
                 >
                   <b>RFPs</b>
-                </Nav.Link>
-                <Nav.Link
+                </Nav.Link>:<></>}
+                {privileges.includes('View Proposal')?<Nav.Link
                   style={{ fontSize: "1rem", marginLeft: "2vw" }}
                   onClick={(e) => {
                     e.preventDefault();
@@ -79,8 +82,8 @@ function Engineer() {
                   }}
                 >
                   <b>Proposals</b>
-                </Nav.Link>
-                <Nav.Link
+                </Nav.Link>:<></>}
+                {privileges.includes('View Project')?<Nav.Link
                   style={{ fontSize: "1rem", marginLeft: "2vw" }}
                   onClick={(e) => {
                     e.preventDefault();
@@ -88,7 +91,7 @@ function Engineer() {
                   }}
                 >
                   <b>All Projects</b>
-                </Nav.Link>
+                </Nav.Link>:<></>}
                 <Nav.Link
                   style={{ fontSize: "1rem", marginLeft: "2vw" }}
                   onClick={handleShowTS}

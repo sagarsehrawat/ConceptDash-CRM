@@ -122,7 +122,6 @@ function UpdateBudget(props) {
     setform(newForm);
   };
   const handleSubmit = (e) => {
-    console.log(1)
     setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);

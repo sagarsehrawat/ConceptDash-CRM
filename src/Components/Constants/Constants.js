@@ -17,6 +17,7 @@ export const GET_ALL_SALES = '/api/getAllSales'
 export const GET_ALL_EMPLOYEES = '/api/get/employees'
 export const GET_TIMESHEET = '/api/get/timesheet'
 export const GET_EMPLOYEENAMES = '/api/get/employeeNames'
+export const GET_CUSTOMERNAMES = '/api/get/customerNames'
 export const GET_ASSETS = '/api/get/assets'
 export const GET_SOFTWARES = '/api/get/softwares'
 export const GET_BUDGETS = '/api/get/budgets'
@@ -44,6 +45,9 @@ export const GET_WORK_HOURS = '/api/get/chart/work'
 export const GET_PROJECT_STATUS = '/api/get/project/status'
 export const GET_ALL_PRIVILEGES = '/api/get/privileges'
 export const GET_EMPLOYEE_PRIVILEGES = '/api/get/privilegesById'
+export const GET_CUSTOMER_JOBTITLES = '/api/get/list/jobTitles'
+export const GET_EXPENSE_CATEGORIES = '/api/get/list/expenseCategories'
+export const GET_BUDGET_CITIES = '/api/get/list/budgetCities'
 
 
 
@@ -67,6 +71,7 @@ export const ADD_TIMESHEET = '/api/add/timesheet'
 export const ADD_CITY = '/api/add/city'
 export const ADD_DEPARTMENT = '/api/add/department'
 export const ADD_CATEGORY = '/api/add/category'
+export const ADD_EXPENSE_TRANSACTION = '/api/add/expenseTransaction'
 
 
 //Delete APIs
@@ -76,6 +81,7 @@ export const DELETE_RFP = '/api/delete/rfp/id'
 export const DELETE_PROJECT = '/api/delete/project/id'
 export const DELETE_CONTACT = '/api/delete/customer/id'
 export const DELETE_COMPANY = '/api/delete/company/id'
+export const DELETE_TRANSACTION = '/api/delete/expenseTransaction/id'
 
 
 
@@ -90,6 +96,8 @@ export const UPDATE_RFP = '/api/update/rfp'
 export const UPDATE_TASK = '/api/update/task'
 export const UPDATE_PROJECT_TASK_5 = '/api/update/projectTask5'
 export const UPDATE_PROJECT_TASK_4 = '/api/update/projectTask4'
+export const UPDATE_PRIVILEGE = '/api/update/privileges'
+export const UPDATE_EXPENSE_TRANSACTION = '/api/update/expenseTransaction'
 
 //counts
 export const COUNTS = '/api/get/counts'
@@ -114,13 +122,4 @@ export const GET_PAGE_PROPOSALS = '/api/get/page/proposals'
 export const GET_PAGES_PROPOSALS = '/api/get/pages/proposals'
 export const GET_PAGE_CUSTOMERS = '/api/get/customer'
 export const GET_PAGES_CUSTOMERSS = '/api/get/pages/customers'
-export const SEARCH_COMPANIES = '/api/search/companies'
-export const SEARCH_BUDGETS = '/api/search/budgets'
-export const SEARCH_RFPS = '/api/search/rfps'
-export const SEARCH_PROPOSALS = '/api/search/proposals'
-export const SEARCH_PROJECTS = '/api/search/projects'
-export const SEARCH_CUSTOMERS = '/api/search/customers'
-export const FILTER_BUDGETS = '/api/filter/budgets'
-export const FILTER_RFPS = '/api/filter/rfps'
-export const FILTER_PROPOSALS = '/api/filter/proposals'
-export const FILTER_PROJECTS = '/api/filter/projects'
+export const GET_EXPENSE_TRANSACTIONS = '/api/get/page/expenseTransactions'

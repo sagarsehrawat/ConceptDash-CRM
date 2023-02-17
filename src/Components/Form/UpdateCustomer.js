@@ -12,8 +12,10 @@ import {
   GET_COMPANY_NAMES,
   UPDATE_CLIENT,
   GET_CITIES,
+  GET_CUSTOMER_JOBTITLES,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
+import { Typeahead } from "react-bootstrap-typeahead";
 
 function UpdateCustomer(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props
@@ -49,6 +51,7 @@ function UpdateCustomer(props) {
   const [actor, setactor] = useState(props.row.Actor);
   const [dislike, setdislike] = useState(props.row.Dislikes);
   const [jtitle, setjtitle] = useState(props.row.Job_Title);
+  const [jobTitles, setjobTitles] = useState([])
 
   const [form, setform] = useState({
     company: company??"",
@@ -162,6 +165,12 @@ function UpdateCustomer(props) {
     newForm[name] = value;
     setform(newForm);
   };
+  const handleChange1 = (e) => {
+    setjtitle(e[0])
+    const newForm = form;
+    newForm["jobtitle"] = e[0];
+    setform(newForm);
+  };
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -231,6 +240,20 @@ function UpdateCustomer(props) {
   useEffect(() => {
     setisLoading(true)
     const call = async () => {
+      await axios
+        .get(HOST + GET_CUSTOMER_JOBTITLES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          let arr = []
+          res.data.res.forEach(e => {
+            arr.push(e.Job_Title)
+          })
+          setjobTitles(arr);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       await axios
         .get(HOST + GET_COMPANY_NAMES, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
@@ -335,13 +358,15 @@ function UpdateCustomer(props) {
           </Form.Group>
         </Row>
         <Form.Group className="mb-4" as={Col}>
-          <Form.Control
-            value={jtitle}
-            onChange={handleChange}
-            name="jobTitle"
-            type="text"
-            placeholder="Job Title"
-          />
+          
+        <Typeahead
+               id="jobTitle"
+               labelKey="jobTitle"
+                options={jobTitles}
+                onChange={handleChange1}
+                placeholder="Job Title"
+                defaultInputValue={jtitle}
+              />
         </Form.Group>
         <Row className="mb-4">
           <Form.Group as={Col}>
