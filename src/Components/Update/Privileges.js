@@ -21,13 +21,14 @@ const Privileges = () => {
     const [isLoading2, setisLoading2] = useState(true)
     const [isDisabled, setisDisabled] = useState(true)
     const [green, setgreen] = useState(false);
-  const [red, setred] = useState(false);
+    const [red, setred] = useState(false);
     const [id, setid] = useState(null)
     let add = [], del = [];
     let arr = []
 
     useEffect(() => {
         setisLoading(true)
+        setisLoading2(true)
         const call = async () => {
             await axios.get(HOST + GET_EMPLOYEENAMES, {
                 headers: { auth: "Rose " + localStorage.getItem("auth") },
@@ -78,19 +79,21 @@ const Privileges = () => {
                     setcompany(companies)
                     setproject(projects)
                     setisLoading(false)
+                    setisLoading2(false)
                     setisDisabled(false)
                 })
             }).catch((err) => {
-                    console.log(err);
-                });
+                console.log(err);
+            });
         }
 
         call()
     }, [])
 
     const selectEmployee = async (e) => {
-        if(e.target.value==="") return
+        if (e.target.value === "") return
         setisLoading(true)
+        setisLoading2(true)
         setisDisabled(true)
         setid(e.target.value)
         add = []
@@ -176,6 +179,7 @@ const Privileges = () => {
             })
             setisDisabled(false)
             setisLoading(false)
+            setisLoading2(false)
         }).catch((err) => {
             console.log(err);
         });
@@ -195,8 +199,6 @@ const Privileges = () => {
                 del.push(e.target.id)
             }
         }
-        console.log(add)
-        console.log(del)
     }
 
     const handleSubmit = (e) => {
@@ -211,11 +213,11 @@ const Privileges = () => {
             {
                 headers: { auth: "Rose " + localStorage.getItem("auth"), employeeId: e.target.value },
             }).then((res) => {
-                if(res.data.success) setgreen(true)
+                if (res.data.success) setgreen(true)
                 add = []
                 del = []
                 setisDisabled(false)
-        setisLoading2(false)
+                setisLoading2(false)
             }).catch((err) => {
                 console.log(err);
             });
@@ -223,8 +225,8 @@ const Privileges = () => {
 
     return (
         <>
-        {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
-      {red === true ? <RedAlert setRed={setred} /> : <></>}
+            {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+            {red === true ? <RedAlert setRed={setred} /> : <></>}
             <div className='container'>
                 <h1 style={{ textAlign: "center" }}>Select Employee</h1>
                 <Form.Select
@@ -368,7 +370,7 @@ const Privileges = () => {
                                     })}
                                 </div>
                             </Card>
-                            <Button onClick={handleSubmit} disabled={isDisabled}>{isLoading2 ? <LoadingSpinner /> : "Submit"}</Button>
+                            <Button onClick={handleSubmit} disabled={isDisabled}>{"Submit"}</Button>
                         </Form>
                     </div>)
                 }

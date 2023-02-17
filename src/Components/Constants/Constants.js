@@ -47,6 +47,7 @@ export const GET_ALL_PRIVILEGES = '/api/get/privileges'
 export const GET_EMPLOYEE_PRIVILEGES = '/api/get/privilegesById'
 export const GET_CUSTOMER_JOBTITLES = '/api/get/list/jobTitles'
 export const GET_EXPENSE_CATEGORIES = '/api/get/list/expenseCategories'
+export const GET_BUDGET_CITIES = '/api/get/list/budgetCities'
 
 
 
