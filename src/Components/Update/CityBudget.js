@@ -12,9 +12,13 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import LoadingSpinner from "../Loader/Loader";
 import Button from 'react-bootstrap/esm/Button';
 import Select from "react-select";
+import Modal from "react-bootstrap/Modal";
+import UpdateBudget from '../Form/UpdateBudget';
+import BudgetsForm from '../Form/BudgetsForm';
 
 const CityBudget = (props) => {
-    const [city, setCity] = useState({ City_ID: 250, City: "Milton" })
+    const { setnav } = props
+    const [city, setCity] = useState(props.city)
     const [year, setYear] = useState(new Date().getFullYear().toString())
     const [cities, setCities] = useState([])
     const [budgets, setBudgets] = useState([])
@@ -454,6 +458,84 @@ const CityBudget = (props) => {
                     </div>
                 </div>
             </div>
+            {/* Add Form Modal */}
+        <Modal
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          size="xl"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Add a Budget</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {
+              <BudgetsForm
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleClose}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
+        </Modal>
+
+        {/* Update Form Modal */}
+        <Modal
+          show={showUpdate}
+          onHide={handleCloseUpdate}
+          backdrop="static"
+          size="xl"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Update Budget</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {
+              <UpdateBudget
+                row={rowData}
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleCloseUpdate}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
+        </Modal>
+
+        {/* Delete Confirmation Modal */}
+        <Modal
+          show={showDelete}
+          onHide={handleCloseDelete}
+          backdrop="static"
+          size="sm"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Deletion</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="container">
+              <p style={{ textAlign: "center" }}>
+                <b>Delete the selected Budget!!</b>
+              </p>
+              <div style={{ display: "inline-block" }}>
+                <Button variant="danger" onClick={handleCloseDelete}>
+                  Cancel
+                </Button>
+              </div>
+              <div style={{ display: "inline-block", float: "right" }}>
+                <Button variant="success" onClick={handleDeleteBudget}>
+                  Proceed
+                </Button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
         </>
     )
 }
