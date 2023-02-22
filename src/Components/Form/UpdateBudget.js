@@ -226,7 +226,7 @@ function UpdateBudget(props) {
             >
               <option value="">Select Budget Category</option>
               <option value="Design">Design</option>
-              <option value="Product">Construction</option>
+              <option value="Construction">Construction</option>
             </Form.Select>
           </Form.Group>
         </Row>

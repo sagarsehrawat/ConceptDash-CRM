@@ -48,7 +48,8 @@ export const GET_EMPLOYEE_PRIVILEGES = '/api/get/privilegesById'
 export const GET_CUSTOMER_JOBTITLES = '/api/get/list/jobTitles'
 export const GET_EXPENSE_CATEGORIES = '/api/get/list/expenseCategories'
 export const GET_BUDGET_CITIES = '/api/get/list/budgetCities'
-
+export const GET_CITY_BUDGETS = '/api/get/cityBudgets'
+export const GET_BUDGET_CITY = '/api/get/budgetCities'
 
 
 

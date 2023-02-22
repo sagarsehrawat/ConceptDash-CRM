@@ -391,15 +391,21 @@ function RFPUpdate() {
             className="container-sm"
           ></div>
           <div style={{ display: "flex", flexDirection: "row" }}>
+          <Select
+              placeholder="Select City(s)"
+              defaultValue={cityvalue}
+              onChange={doChange2}
+              isMulti
+              options={filterCities}
+            ></Select>
+            &nbsp;&nbsp;
             <Select
               placeholder="Select departments"
               defaultValue={deptvalue}
               onChange={doChange}
               isMulti
               options={filterDepts}
-            >
-              Select Departments
-            </Select>
+            ></Select>
             &nbsp;&nbsp;
             <Select
               placeholder="Select Categories"
@@ -407,14 +413,6 @@ function RFPUpdate() {
               onChange={doChange1}
               isMulti
               options={filterCategories}
-            ></Select>
-            &nbsp;&nbsp;
-            <Select
-              placeholder="Select City(s)"
-              defaultValue={cityvalue}
-              onChange={doChange2}
-              isMulti
-              options={filterCities}
             ></Select>
             &nbsp;&nbsp;
             <Select
@@ -467,7 +465,7 @@ function RFPUpdate() {
             <table className="table">
               <thead>
                 <tr className="heading">
-                  {privileges.includes('Edit RFP')?<th scope="col">Edit</th>:<></>}
+                  {privileges.includes('Update RFP')?<th scope="col">Edit</th>:<></>}
                   {privileges.includes('Delete RFP')?<th scope="col">Delete</th>:<></>}
                   <th scope="col">Department</th>
                   <th scope="col">Project Category</th>
@@ -489,7 +487,7 @@ function RFPUpdate() {
                   {rfps.map((row) => {
                     return (
                       <tr>
-                        {privileges.includes('Edit RFP')?<td>
+                        {privileges.includes('Update RFP')?<td>
                           <svg width="40" height="40" viewBox="30 0 220 220">
                             <image
                               style={{ cursor: "pointer" }}
