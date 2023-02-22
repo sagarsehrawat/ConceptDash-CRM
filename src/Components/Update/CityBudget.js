@@ -415,7 +415,10 @@ const CityBudget = (props) => {
                 setYear(e.target.value);
               }}
               options={years}
-            ></Select>
+              ></Select>
+              {/* &nbsp;&nbsp;
+            <Form.Check label='Design' inline type="checkbox"/>
+            <Form.Check label='Construction' inline type="checkbox"/> */}
             &nbsp;&nbsp;
             <Button
               style={{ backgroundColor: "rgba(38,141,141,1)" }}
@@ -554,6 +557,8 @@ const CityBudget = (props) => {
         <Modal.Body>
           {
             <BudgetsForm
+            cityid={city.City_ID}
+            city = {city.City}
               setRed={setred}
               setGreen={setgreen}
               closeModal={handleClose}

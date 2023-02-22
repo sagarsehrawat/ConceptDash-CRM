@@ -34,7 +34,7 @@ function BudgetsForm(props) {
   let yr = new Date().getFullYear();
   const [year, setyear] = useState(yr);
   const [form, setform] = useState({
-    city: "",
+    city: props.cityid,
     dept: "",
     projectCat: "",
     budgetCategory: "",
@@ -155,7 +155,7 @@ function BudgetsForm(props) {
                   <option value="">Select City</option>
                   {cities.length > 0
                     ? cities.map((e) => (
-                        <option value={e.City_ID}>{e.City}</option>
+                        <option selected={e.City===props.city} value={e.City_ID}>{e.City}</option>
                       ))
                     : ""}
                 </Form.Select>
