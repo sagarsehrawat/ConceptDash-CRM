@@ -89,6 +89,7 @@ export const DELETE_TRANSACTION = '/api/delete/expenseTransaction/id'
 
 // update apis
 export const UPDATE_BUDGET = '/api/update/budget'
+export const UPDATE_BUDGET_CITY = '/api/update/budgetCity'
 export const UPDATE_COMPANY = '/api/update/company'
 export const UPDATE_CLIENT = '/api/update/client'
 export const UPDATE_EMPLOYEE = '/api/update/employee'

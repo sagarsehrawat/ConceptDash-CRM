@@ -412,7 +412,7 @@ const CityBudget = (props) => {
               placeholder="Year"
               defaultValue={year}
               onChange={(e) => {
-                setYear(e.target.value);
+                setYear(e.value);
               }}
               options={years}
               ></Select>
@@ -428,6 +428,7 @@ const CityBudget = (props) => {
             </Button>
           </div>
           <br />
+          
           <div className="container-fluid">
             <table className="table">
               <thead>

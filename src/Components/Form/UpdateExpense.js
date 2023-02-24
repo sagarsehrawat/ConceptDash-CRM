@@ -176,7 +176,8 @@ console.log(props.row)
               <Form.Group as={Col}>
                 <Form.Label>Client</Form.Label>
                 <Form.Select onChange={handleChange} name="clientId" required>
-                  <option value="">Select Client</option>
+                <option value="">Select Client*</option>
+                  <option value="0">General</option>
                   {customers.length > 0
                     ? customers.map((e) => (
                         <option selected={e.Full_Name === customerShow} value={e.ID}>{e.Full_Name}</option>
@@ -255,12 +256,6 @@ console.log(props.row)
               <Form.Group as={Col}>
                 <Form.Label>Amount</Form.Label>
                 <Form.Control value={amount} name="amount" onChange={handleChange} required />
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Tax</Form.Label>
-                <Form.Control value={tax} name="tax" onChange={handleChange} required />
               </Form.Group>
             </Row>
 

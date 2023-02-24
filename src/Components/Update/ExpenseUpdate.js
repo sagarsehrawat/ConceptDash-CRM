@@ -357,7 +357,7 @@ const ExpenseUpdate = () => {
               defaultValue={employeeValue}
               onChange={doChange}
               isMulti
-              options={filterCategories}
+              options={filterEmployee}
             ></Select>
             &nbsp;&nbsp;
             <Select
@@ -404,7 +404,6 @@ const ExpenseUpdate = () => {
                   <th scope="col">Date</th>
                   <th scope="col">Expense Category</th>
                   <th scope="col">Amount</th>
-                  <th scope="col">Tax</th>
                   <th scope="col">Remarks</th>
                   <th scope="col">Employee</th>
                   <th scope="col">City</th>
@@ -454,7 +453,6 @@ const ExpenseUpdate = () => {
                           <td>{row.Date?row.Date.substring(0, 10):""}</td>
                           <td>{row.Description}</td>
                           <td>{addComma(row.Amount)}</td>
-                          <td>{addComma(row.Tax)}</td>
                           <td>{row.Remarks}</td>
                           <td>{row.Employee_Name}</td>
                           <td>{row.City}</td>
