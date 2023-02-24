@@ -305,10 +305,10 @@ function ProposalForm(props) {
                       <option value="">Select Department</option>
                       {depts.length > 0
                         ? depts.map((e) => (
-                            <option value={e.Department_ID}>
-                              {e.Department}
-                            </option>
-                          ))
+                          <option value={e.Department_ID}>
+                            {e.Department}
+                          </option>
+                        ))
                         : ""}
                     </Form.Select>
                   </Form.Group>
@@ -336,10 +336,10 @@ function ProposalForm(props) {
                       <option value="">Select Project Category</option>
                       {projectDepts.length > 0
                         ? projectDepts.map((e) => (
-                            <option value={e.Project_Cat_ID}>
-                              {e.Project_Category}
-                            </option>
-                          ))
+                          <option value={e.Project_Cat_ID}>
+                            {e.Project_Category}
+                          </option>
+                        ))
                         : ""}
                     </Form.Select>
                   </Form.Group>
@@ -359,13 +359,13 @@ function ProposalForm(props) {
                 </Row>
 
                 <Row className="mb-4">
-                  <Form.Group as={Col}>
+                  {/* <Form.Group as={Col}>
                     <Form.Select name="status" onChange={handleChange}>
                       <option value="">Select Status</option>
                       <option value="Lost">Lost</option>
                       <option value="Won">Won</option>
                     </Form.Select>
-                  </Form.Group>
+                  </Form.Group> */}
                   <Form.Group as={Col}>
                     <Form.Select
                       name="managerName"
@@ -429,8 +429,8 @@ function ProposalForm(props) {
                       <option value="">Select City</option>
                       {cities.length > 0
                         ? cities.map((e) => (
-                            <option value={e.City_ID}>{e.City}</option>
-                          ))
+                          <option value={e.City_ID}>{e.City}</option>
+                        ))
                         : ""}
                     </Form.Select>
                   </Form.Group>
@@ -461,7 +461,7 @@ function ProposalForm(props) {
                     </Select>
                   </Form.Group>
                 </Row>
-                <Row className="mb-4">
+                {/* <Row className="mb-4">
                   <Form.Group as={Col}>
                     <Form.Label>Design Price</Form.Label>
                     <Form.Control
@@ -555,7 +555,7 @@ function ProposalForm(props) {
                       onChange={handleChange}
                     />
                   </Form.Group>
-                </Row>
+                </Row> */}
               </div>
             ) : (
               <div>
@@ -587,13 +587,13 @@ function ProposalForm(props) {
                           <option>Select Department</option>
                           {depts.length > 0
                             ? depts.map((e) => (
-                                <option
-                                  value={e.Department_ID}
-                                  selected={e.Department_ID === deptid}
-                                >
-                                  {e.Department}
-                                </option>
-                              ))
+                              <option
+                                value={e.Department_ID}
+                                selected={e.Department_ID === deptid}
+                              >
+                                {e.Department}
+                              </option>
+                            ))
                             : ""}
                         </Form.Select>
                       </Form.Group>
@@ -607,20 +607,20 @@ function ProposalForm(props) {
                           <option>Select Project Category</option>
                           {projectDepts.length > 0
                             ? projectDepts.map((e) => (
-                                <option
-                                  value={e.Project_Cat_ID}
-                                  selected={e.Project_Cat_ID === catId}
-                                >
-                                  {e.Project_Category}
-                                </option>
-                              ))
+                              <option
+                                value={e.Project_Cat_ID}
+                                selected={e.Project_Cat_ID === catId}
+                              >
+                                {e.Project_Category}
+                              </option>
+                            ))
                             : ""}
                         </Form.Select>
                       </Form.Group>
                     </Row>
 
                     <Row className="mb-4">
-                      <Form.Group as={Col}>
+                      {/* <Form.Group as={Col}>
                         <Form.Label>Project Status</Form.Label>
                         <Form.Select name="status" onChange={handleChange}>
                           <option value="">Select Status</option>
@@ -628,7 +628,7 @@ function ProposalForm(props) {
                           <option value="NoGo">NoGo</option>
                           <option value="Review">Review</option>
                         </Form.Select>
-                      </Form.Group>
+                      </Form.Group> */}
                       <Form.Group as={Col}>
                         <Form.Label>Project Manager</Form.Label>
                         <Form.Select
@@ -701,13 +701,13 @@ function ProposalForm(props) {
                           <option value="">Select City</option>
                           {cities.length > 0
                             ? cities.map((e) => (
-                                <option
-                                  value={e.City_ID}
-                                  selected={e.City_ID === cityid}
-                                >
-                                  {e.City}
-                                </option>
-                              ))
+                              <option
+                                value={e.City_ID}
+                                selected={e.City_ID === cityid}
+                              >
+                                {e.City}
+                              </option>
+                            ))
                             : ""}
                         </Form.Select>
                       </Form.Group>
@@ -725,7 +725,7 @@ function ProposalForm(props) {
                           Team Members
                         </Select>
                       </Form.Group>
-                      <Form.Group as={Col}>
+                      {/* <Form.Group as={Col}>
                         <Form.Label>Design Price</Form.Label>
                         <Form.Control
                           name="dPrice"
@@ -820,7 +820,7 @@ function ProposalForm(props) {
                             <option>Firstly Select Bidders</option>
                           )}
                         </Form.Select>
-                      </Form.Group>
+                      </Form.Group> */}
                     </Row>
                   </div>
                 ) : (

@@ -32,7 +32,7 @@ function UpdateProposal(props) {
 
   const [dept, setdept] = useState(props.row.Department_ID);
   const [cat, setcat] = useState(props.row.Project_Cat_ID);
-  const [status, setstatus] = useState(props.row.Status);
+  const [status, setstatus] = useState(props.row.Status ?? "");
   const [manager, setmanager] = useState(props.row.Project_Manager_ID);
   const [pName, setpName] = useState(props.row.Project_Name);
   const [qDeadline, setqDeadline] = useState(
@@ -94,26 +94,26 @@ function UpdateProposal(props) {
       });
     });
   const [form, setform] = useState({
-    dept: dept??"",
-    projectCat: cat??"",
-    status: status??"",
-    managerName: manager??"",
-    projectName: pName??"",
-    qDeadline: qDeadline??"",
-    cDeadline: cDeadline??"",
-    resultDate: rDate??"",
-    city: city??"",
-    team: team??"",
-    dPrice: dPrice??"",
-    provisionalItems: provisionalItems??"",
-    adminPrice: adminPrice??"",
-    consultantPrice: consultantPrice??"",
-    totalBid: totalBid??"",
-    planTakers: planTakers??"",
-    bidders: bidders??"",
-    bidderPrice: bidderPrice??"",
-    winningPrice: winningPrice??"",
-    winningBidder: winningBidder??"",
+    dept: dept ?? "",
+    projectCat: cat ?? "",
+    status: status ?? "",
+    managerName: manager ?? "",
+    projectName: pName ?? "",
+    qDeadline: qDeadline ?? "",
+    cDeadline: cDeadline ?? "",
+    resultDate: rDate ?? "",
+    city: city ?? "",
+    team: team ?? "",
+    dPrice: dPrice ?? "",
+    provisionalItems: provisionalItems ?? "",
+    adminPrice: adminPrice ?? "",
+    consultantPrice: consultantPrice ?? "",
+    totalBid: totalBid ?? "",
+    planTakers: planTakers ?? "",
+    bidders: bidders ?? "",
+    bidderPrice: bidderPrice ?? "",
+    winningPrice: winningPrice ?? "",
+    winningBidder: winningBidder ?? "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -244,7 +244,7 @@ function UpdateProposal(props) {
         .catch((err) => {
           console.log(err);
         });
-        setisLoading(false)
+      setisLoading(false)
     };
     call();
   }, []);
@@ -338,13 +338,13 @@ function UpdateProposal(props) {
                   <option>Select Department</option>
                   {depts.length > 0
                     ? depts.map((e) => (
-                        <option
-                          value={e.Department_ID}
-                          selected={e.Department === depart}
-                        >
-                          {e.Department}
-                        </option>
-                      ))
+                      <option
+                        value={e.Department_ID}
+                        selected={e.Department === depart}
+                      >
+                        {e.Department}
+                      </option>
+                    ))
                     : ""}
                 </Form.Select>
               </Form.Group>
@@ -357,13 +357,13 @@ function UpdateProposal(props) {
                   <option>Select Project Category</option>
                   {projectDepts.length > 0
                     ? projectDepts.map((e) => (
-                        <option
-                          value={e.Project_Cat_ID}
-                          selected={e.Project_Category === proCat}
-                        >
-                          {e.Project_Category}
-                        </option>
-                      ))
+                      <option
+                        value={e.Project_Cat_ID}
+                        selected={e.Project_Category === proCat}
+                      >
+                        {e.Project_Category}
+                      </option>
+                    ))
                     : ""}
                 </Form.Select>
               </Form.Group>
@@ -454,10 +454,10 @@ function UpdateProposal(props) {
                   <option value="">Select City</option>
                   {cities.length > 0
                     ? cities.map((e) => (
-                        <option value={e.City_ID} selected={e.City === citi}>
-                          {e.City}
-                        </option>
-                      ))
+                      <option value={e.City_ID} selected={e.City === citi}>
+                        {e.City}
+                      </option>
+                    ))
                     : ""}
                 </Form.Select>
               </Form.Group>
@@ -477,118 +477,122 @@ function UpdateProposal(props) {
                 </Select>
               </Form.Group>
             </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Design Price</Form.Label>
-                <Form.Control
-                  value={dPrice}
-                  name="dPrice"
-                  type="number"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Provisional Items</Form.Label>
-                <Form.Control
-                  value={provisionalItems}
-                  name="provisionalItems"
-                  type="text"
-                  placeholder="Provisional Items"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Admin Price</Form.Label>
-                <Form.Control
-                  value={adminPrice}
-                  name="adminPrice"
-                  type="number"
-                  placeholder="Contract Admin Price"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Consultant Price</Form.Label>
-                <Form.Control
-                  value={consultantPrice}
-                  name="consultantPrice"
-                  type="number"
-                  placeholder="Consultant Price"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Total Bid</Form.Label>
-                <Form.Control
-                  value={totalBid}
-                  name="totalBid"
-                  type="number"
-                  placeholder="Total Bid"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Plan Takers</Form.Label>
-                <Select
-                  isMulti
-                  defaultValue={planTakersComapnies}
-                  onChange={doChange1}
-                  options={company}
-                  name="planTakers"
-                  placeholder="Plan Takers"
-                ></Select>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Bidders</Form.Label>
-                <Select
-                  isMulti
-                  defaultValue={bidderComapnies}
-                  onChange={doChange1}
-                  options={company}
-                  name="bidders"
-                  placeholder="Bidders"
-                ></Select>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Bidder Price</Form.Label>
-                <Form.Control
-                  value={bidderPrice}
-                  name="bidderPrice"
-                  type="number"
-                  placeholder="Bidder Price"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Winning Price</Form.Label>
-                <Form.Control
-                  value={winningPrice}
-                  name="winningPrice"
-                  type="number"
-                  placeholder="Winning Price"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Winning Bider</Form.Label>
-                <Form.Select
-                  value={winningBidder}
-                  onChange={handleChange}
-                  name="winningBidder"
-                >
-                  <option value="">Select Winning Bidder</option>
-                  {companies.map((option) => (
-                    <option value={option.ID}>{option.Name}</option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Row>
+            {status === "Won"
+              ? <>
+                <Row className="mb-4">
+                  <Form.Group as={Col}>
+                    <Form.Label>Design Price</Form.Label>
+                    <Form.Control
+                      value={dPrice}
+                      name="dPrice"
+                      type="number"
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Form.Label>Provisional Items</Form.Label>
+                    <Form.Control
+                      value={provisionalItems}
+                      name="provisionalItems"
+                      type="text"
+                      placeholder="Provisional Items"
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                </Row>
+                <Row className="mb-4">
+                  <Form.Group as={Col}>
+                    <Form.Label>Admin Price</Form.Label>
+                    <Form.Control
+                      value={adminPrice}
+                      name="adminPrice"
+                      type="number"
+                      placeholder="Contract Admin Price"
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Form.Label>Consultant Price</Form.Label>
+                    <Form.Control
+                      value={consultantPrice}
+                      name="consultantPrice"
+                      type="number"
+                      placeholder="Consultant Price"
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Form.Label>Total Bid</Form.Label>
+                    <Form.Control
+                      value={totalBid}
+                      name="totalBid"
+                      type="number"
+                      placeholder="Total Bid"
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                </Row>
+                <Row className="mb-4">
+                  <Form.Group as={Col}>
+                    <Form.Label>Plan Takers</Form.Label>
+                    <Select
+                      isMulti
+                      defaultValue={planTakersComapnies}
+                      onChange={doChange1}
+                      options={company}
+                      name="planTakers"
+                      placeholder="Plan Takers"
+                    ></Select>
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Form.Label>Bidders</Form.Label>
+                    <Select
+                      isMulti
+                      defaultValue={bidderComapnies}
+                      onChange={doChange1}
+                      options={company}
+                      name="bidders"
+                      placeholder="Bidders"
+                    ></Select>
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Form.Label>Bidder Price</Form.Label>
+                    <Form.Control
+                      value={bidderPrice}
+                      name="bidderPrice"
+                      type="number"
+                      placeholder="Bidder Price"
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                </Row>
+                <Row className="mb-4">
+                  <Form.Group as={Col}>
+                    <Form.Label>Winning Price</Form.Label>
+                    <Form.Control
+                      value={winningPrice}
+                      name="winningPrice"
+                      type="number"
+                      placeholder="Winning Price"
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Form.Label>Winning Bider</Form.Label>
+                    <Form.Select
+                      value={winningBidder}
+                      onChange={handleChange}
+                      name="winningBidder"
+                    >
+                      <option value="">Select Winning Bidder</option>
+                      {companies.map((option) => (
+                        <option value={option.ID}>{option.Name}</option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Row>
+              </>
+              : <></>}
             <Button
               className="submit-btn"
               variant="primary"
