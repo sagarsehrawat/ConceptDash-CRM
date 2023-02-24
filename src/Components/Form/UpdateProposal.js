@@ -477,7 +477,7 @@ function UpdateProposal(props) {
                 </Select>
               </Form.Group>
             </Row>
-            {status === "Won"
+            {status === "Lost"
               ? <>
                 <Row className="mb-4">
                   <Form.Group as={Col}>

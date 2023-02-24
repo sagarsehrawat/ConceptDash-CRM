@@ -73,6 +73,7 @@ export const ADD_CITY = '/api/add/city'
 export const ADD_DEPARTMENT = '/api/add/department'
 export const ADD_CATEGORY = '/api/add/category'
 export const ADD_EXPENSE_TRANSACTION = '/api/add/expenseTransaction'
+export const ADD_EXPENSE_CATEGORY = '/api/add/expenseCategory'
 
 
 //Delete APIs

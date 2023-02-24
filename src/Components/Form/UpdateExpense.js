@@ -174,6 +174,7 @@ console.log(props.row)
           <Form className="form-main" onSubmit={handleSubmit}>
             <Row className="mb-4">
               <Form.Group as={Col}>
+                <Form.Label>Client</Form.Label>
                 <Form.Select onChange={handleChange} name="clientId" required>
                 <option value="">Select Client*</option>
                   <option value="0">General</option>
@@ -188,6 +189,7 @@ console.log(props.row)
 
             <Row className="mb-4">
               <Form.Group as={Col}>
+                <Form.Label>City</Form.Label>
                 <Form.Select onChange={handleChange} name="cityId" required>
                   <option value="">Select City</option>
                   {cities.length > 0
@@ -212,6 +214,7 @@ console.log(props.row)
             </Row>
             <Row className="mb-4">
               <Form.Group as={Col}>
+                <Form.Label>Employee</Form.Label>
                 <Form.Select onChange={handleChange} name="employeeId" required>
                   <option value="">Select Employee</option>
                   {employees.length > 0
@@ -224,6 +227,7 @@ console.log(props.row)
             </Row>
             <Row className="mb-4">
               <Form.Group as={Col}>
+                <Form.Label>Expense Category</Form.Label>
                 <Form.Select
                   onChange={handleChange}
                   name="expenseCatId"

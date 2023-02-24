@@ -7,7 +7,6 @@ import {
   GET_CITIES,
   HOST,
   DELETE_TRANSACTION,
-  GET_CUSTOMERNAMES,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
@@ -20,6 +19,7 @@ import Form from "react-bootstrap/Form";
 import AddExpense from "../Form/AddExpense";
 import UpdateExpense from "../Form/UpdateExpense";
 import AuthContext from '../../Context/AuthContext'
+import AddExpenseCategory from "../Form/AddExpenseCategory";
 
 const ExpenseUpdate = () => {
   const { privileges, setPrivileges } = useContext(AuthContext)
@@ -38,6 +38,10 @@ const ExpenseUpdate = () => {
   const [showDelete, setShowDelete] = useState(false);
   const handleCloseDelete = () => setShowDelete(false);
   const handleShowDelete = () => setShowDelete(true);
+
+  const [showCat, setShowCat] = useState(false);
+  const handleCloseCat = () => setShowCat(false);
+  const handleShowCat = () => setShowCat(true);
 
   const [budgets, setbudgets] = useState([]);
   let d = 0;
@@ -280,8 +284,8 @@ const ExpenseUpdate = () => {
     setsort(e.target.value)
   }
   const addComma = (num) => {
-    if(num===null) return ""
-    return `$ ${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+    if(num===null) return "";
+    return `$ ${num?num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","):''}`;
   }
   return( 
     <>
@@ -299,6 +303,17 @@ const ExpenseUpdate = () => {
             }}
           >
             Expense Transactions
+            <Button
+              onClick={handleShowCat}
+              style={{
+                float: "left",
+                backgroundColor: "rgba(38,141,141,1)",
+              }}
+              disabled={!privileges.includes("Add Expenses")}
+            >
+              Add Expense Category +
+            </Button>
+            
             <Button
               onClick={handleShow}
               style={{
@@ -504,6 +519,29 @@ const ExpenseUpdate = () => {
           </Modal.Body>
         </Modal>
 
+        <Modal
+          show={showCat}
+          onHide={handleCloseCat}
+          backdrop="static"
+          size="xl"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Add Transaction</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {
+              <AddExpenseCategory
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleCloseCat}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
+        </Modal>
+
         {/* Update Form Modal */}
         <Modal
           show={showUpdate}
@@ -513,7 +551,7 @@ const ExpenseUpdate = () => {
           keyboard={false}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Update Budget</Modal.Title>
+            <Modal.Title>Update Transaction</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {
