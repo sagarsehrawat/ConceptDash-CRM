@@ -364,7 +364,7 @@ function EmployeeUpdate() {
                     <table className="table">
                       <thead>
                         <tr className="heading">
-                        {privileges.includes('Edit Employee')?<th scope="col">Edit</th>:<></>}
+                        {privileges.includes('Update Employee')?<th scope="col">Edit</th>:<></>}
                           <th scope="col">First Name</th>
                           <th scope="col">Last Name</th>
                           <th scope="col">Department</th>
@@ -385,7 +385,7 @@ function EmployeeUpdate() {
                           ? tableFilter.map((row) => {
                               return (
                                 <tr>
-                                  {privileges.includes('Edit Employee')?<td>
+                                  {privileges.includes('Update Employee')?<td>
                                     <svg
                                       width="40"
                                       height="40"

@@ -393,6 +393,14 @@ function ProjectUpdate() {
             className="container-sm"
           ></div>
           <div style={{ display: "flex", flexDirection: "row" }}>
+          <Select
+              placeholder="City(s)"
+              defaultValue={cityvalue}
+              onChange={doChange2}
+              isMulti
+              options={filterCities}
+            ></Select>
+            &nbsp;&nbsp;
             <Select
               placeholder="Select departments"
               defaultValue={deptvalue}
@@ -409,14 +417,7 @@ function ProjectUpdate() {
               options={filterCategories}
             ></Select>
             &nbsp;&nbsp;
-            <Select
-              placeholder="City(s)"
-              defaultValue={cityvalue}
-              onChange={doChange2}
-              isMulti
-              options={filterCities}
-            ></Select>
-            &nbsp;&nbsp;
+            
             <Select
               placeholder="Project Manager(s)"
               defaultValue={employeevalue}
@@ -465,7 +466,7 @@ function ProjectUpdate() {
             <table className="table">
               <thead>
                 <tr className="heading">
-                {privileges.includes('Edit Project')?<th scope="col">Edit</th>:<></>}
+                {privileges.includes('Update Project')?<th scope="col">Edit</th>:<></>}
                   {privileges.includes('Delete Project')?<th scope="col">Delete</th>:<></>}
                   <th scope="col">Project Name</th>
                   <th scope="col">Due Date</th>
@@ -488,7 +489,7 @@ function ProjectUpdate() {
                   {projects.map((row) => {
                     return (
                       <tr>
-                        {privileges.includes('Edit Project')?<td>
+                        {privileges.includes('Update Project')?<td>
                           <svg width="40" height="40" viewBox="30 0 220 220">
                             <image
                               style={{ cursor: "pointer" }}

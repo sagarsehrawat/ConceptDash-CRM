@@ -36,7 +36,7 @@ function AddExpense(props) {
     amount: "",
     tax: "",
     remarks: "",
-    employeeId: "",
+    employeeId: localStorage.getItem("employeeId"),
     cityId: "",
   });
   const handleChange = (e) => {
@@ -147,7 +147,8 @@ function AddExpense(props) {
             <Row className="mb-4">
               <Form.Group as={Col}>
                 <Form.Select onChange={handleChange} name="clientId" required>
-                  <option value="">Select Client</option>
+                  <option value="">Select Client*</option>
+                  <option value="0">General</option>
                   {customers.length > 0
                     ? customers.map((e) => (
                         <option value={e.ID}>{e.Full_Name}</option>
@@ -184,24 +185,12 @@ function AddExpense(props) {
             </Row>
             <Row className="mb-4">
               <Form.Group as={Col}>
-                <Form.Select onChange={handleChange} name="employeeId" required>
-                  <option value="">Select Employee</option>
-                  {employees.length > 0
-                    ? employees.map((e) => (
-                        <option value={e.Employee_ID}>{e.Full_Name}</option>
-                      ))
-                    : ""}
-                </Form.Select>
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
                 <Form.Select
                   onChange={handleChange}
                   name="expenseCatId"
                   required
                 >
-                  <option value="">Select Expense Category</option>
+                  <option value="">Select Expense Category*</option>
                   {categories.length > 0
                     ? categories.map((e) => (
                         <option value={e.ExpCat_ID}>{e.Description}</option>
@@ -223,12 +212,6 @@ function AddExpense(props) {
               <Form.Group as={Col}>
                 <Form.Label>Amount</Form.Label>
                 <Form.Control name="amount" onChange={handleChange} required />
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Tax</Form.Label>
-                <Form.Control name="tax" onChange={handleChange} required />
               </Form.Group>
             </Row>
 
