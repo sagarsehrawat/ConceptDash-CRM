@@ -5,6 +5,7 @@ import {
   DELETE_BUDGET,
   GET_BUDGET_CITIES,
   GET_CITY_BUDGETS,
+  GET_CITY_BUDGETS_DATA,
   GET_DEPARTMENTS,
   GET_PROJECT_CATEGORIES,
   HOST,
@@ -16,10 +17,14 @@ import Select from "react-select";
 import Modal from "react-bootstrap/Modal";
 import UpdateBudget from "../Form/UpdateBudget";
 import BudgetsForm from "../Form/BudgetsForm";
+import UpdateCityBudget from "../Form/UpdateCityBudget";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowAltCircleLeft, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 const CityBudget = (props) => {
   const { setnav } = props;
   const [city, setCity] = useState(props.city);
+  const [cityData, setcityData] = useState();
   const [year, setYear] = useState(new Date().getFullYear().toString());
   const [cities, setCities] = useState([]);
   const [budgets, setBudgets] = useState([]);
@@ -43,13 +48,17 @@ const CityBudget = (props) => {
   const handleCloseDelete = () => setShowDelete(false);
   const handleShowDelete = () => setShowDelete(true);
 
+  const [showCityUpdate, setShowCityUpdate] = useState(false);
+  const handleCloseCityUpdate = () => setShowCityUpdate(false);
+  const handleShowCityUpdate = () => setShowCityUpdate(true);
+
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   const [value, setValue] = useState("");
   const [tableFilter, settableFilter] = useState([]);
   const [dataSource, setdataSource] = useState([]);
   const searchData = (e) => {
-    if (e.target.value != "") {
+    if (e.target.value !== "") {
       setValue(e.target.value);
       const filterTable = dataSource.filter((o) =>
         Object.keys(o).some((k) =>
@@ -120,6 +129,20 @@ const CityBudget = (props) => {
           setBudgets(res.data.res);
           setdataSource(res.data.res);
           settotalAmount(res.data.totalAmount);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      axios
+        .get(HOST + GET_CITY_BUDGETS_DATA, {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            id: city.City_ID
+          },
+        })
+        .then((res) => {
+          setcityData(res.data.res[0])
           setIsLoading(false);
         })
         .catch((err) => {
@@ -305,6 +328,11 @@ const CityBudget = (props) => {
     if (num === null) return "";
     return `$ ${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
   };
+  const shortenLink = (url) => {
+    if (url.length < 50) return url
+
+    return url.substring(0, 50) + "..."
+  }
 
   return (
     <>
@@ -360,7 +388,9 @@ const CityBudget = (props) => {
               fontWeight: "bold",
             }}
           >
+            <FontAwesomeIcon icon={faArrowAltCircleLeft} style={{ float: "left", marginBottom: "1rem", width: "1.5rem", cursor: "pointer" }} onClick={(e) => setnav(1)}/>
             {city.City} Budget
+            {/* <FontAwesomeIcon icon={faEdit} style={{ marginLeft: "10px", width: "1.5rem", cursor: "pointer" }} onClick={(e) => handleShowCityUpdate()}/> */}
             <Button
               onClick={handleShow}
               style={{
@@ -379,6 +409,32 @@ const CityBudget = (props) => {
               onChange={searchData}
               placeholder="Search"
             />
+          </div>
+          <div className="row">
+            <div className="col-12">
+              <p style={{ display: "inline-block", marginRight: "10px", fontSize: "17px", fontWeight: "bold" }}>City Website - </p>
+              <a href={cityData ? cityData.Website : ""} style={{ display: "inline-block", marginRight: "10px" }} target="_blank" rel="noreferrer">{cityData ? shortenLink(cityData.Website) : ""}</a>
+            </div>
+            <div className="col-6">
+              <p style={{ display: "inline-block", marginRight: "10px", fontSize: "17px", fontWeight: "bold" }}>Website 2022 - </p>
+              <a href={cityData ? cityData.Website : ""} style={{ display: "inline-block", marginRight: "10px" }} target="_blank" rel="noreferrer">{cityData ? shortenLink(cityData.Website_22) : ""}</a>
+            </div>
+            <div className="col-6">
+              <p style={{ display: "inline-block", marginRight: "10px", fontSize: "17px", fontWeight: "bold" }}>2022 Budget - </p>
+              <p style={{ display: "inline-block", marginRight: "10px" }}>{cityData ? cityData.Year_22 : ""}</p>
+            </div>
+            <div className="col-6">
+              <p style={{ display: "inline-block", marginRight: "10px", fontSize: "17px", fontWeight: "bold" }}>Website 2023 - </p>
+              <a href={cityData ? cityData.Website : ""} style={{ display: "inline-block", marginRight: "10px" }} target="_blank" rel="noreferrer">{cityData ? shortenLink(cityData.Website_23) : ""}</a>
+            </div>
+            <div className="col-6">
+              <p style={{ display: "inline-block", marginRight: "10px", fontSize: "17px", fontWeight: "bold" }}>2023 Budget - </p>
+              <p style={{ display: "inline-block", marginRight: "10px" }}>{cityData ? cityData.Year_23 : ""}</p>
+            </div>
+            <div className="col-12">
+              <p style={{ display: "inline-block", marginRight: "10px", fontSize: "17px", fontWeight: "bold" }}>Remarks - </p>
+              <p style={{ display: "inline-block", marginRight: "10px" }}>{cityData ? cityData.Remarks : ""}</p>
+            </div>
           </div>
           <br />
           <div style={{ display: "flex", flexDirection: "row" }}>
@@ -410,13 +466,13 @@ const CityBudget = (props) => {
             &nbsp;&nbsp;
             <Select
               placeholder="Year"
-              defaultValue={year}
+              defaultValue={{ value: year, label: year }}
               onChange={(e) => {
                 setYear(e.value);
               }}
               options={years}
-              ></Select>
-              {/* &nbsp;&nbsp;
+            ></Select>
+            {/* &nbsp;&nbsp;
             <Form.Check label='Design' inline type="checkbox"/>
             <Form.Check label='Construction' inline type="checkbox"/> */}
             &nbsp;&nbsp;
@@ -428,7 +484,7 @@ const CityBudget = (props) => {
             </Button>
           </div>
           <br />
-          
+
           <div className="container-fluid">
             <table className="table">
               <thead>
@@ -450,48 +506,48 @@ const CityBudget = (props) => {
                 <tbody class="table-group-divider">
                   {value.length > 0
                     ? tableFilter.map((row) => {
-                        return (
-                          <tr>
-                            <td>
-                              <svg
-                                width="40"
-                                height="40"
-                                viewBox="30 0 220 220"
-                              >
-                                <image
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => {
-                                    handleUpdate(row);
-                                  }}
-                                  href="data:image/png;base64,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"
-                                />
-                              </svg>
-                            </td>
-                            <td>
-                              <svg
-                                width="40"
-                                height="40"
-                                viewBox="80 80 250 250"
-                              >
-                                <image
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => {
-                                    handleDelete(row.Budget_ID);
-                                  }}
-                                  href="https://media.istockphoto.com/id/1298957635/vector/garbage-bin-line-vector-icon-editable-stroke-pixel-perfect-for-mobile-and-web.jpg?b=1&s=170667a&w=0&k=20&c=J4vFTp1_QJKLMiBHkMllw4-byUFxaKG9gJvbcwJusyI="
-                                />
-                              </svg>
-                            </td>
-                            <td>{row.Budget_Category}</td>
-                            <td>{row.Department}</td>
-                            <td>{row.Project_Category}</td>
-                            <td>{row.Project_Name}</td>
-                            <td>{addComma(row.Budget_Amount)}</td>
-                          </tr>
-                        );
-                      })
+                      return (
+                        <tr>
+                          <td>
+                            <svg
+                              width="40"
+                              height="40"
+                              viewBox="30 0 220 220"
+                            >
+                              <image
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  handleUpdate(row);
+                                }}
+                                href="data:image/png;base64,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"
+                              />
+                            </svg>
+                          </td>
+                          <td>
+                            <svg
+                              width="40"
+                              height="40"
+                              viewBox="80 80 250 250"
+                            >
+                              <image
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  handleDelete(row.Budget_ID);
+                                }}
+                                href="https://media.istockphoto.com/id/1298957635/vector/garbage-bin-line-vector-icon-editable-stroke-pixel-perfect-for-mobile-and-web.jpg?b=1&s=170667a&w=0&k=20&c=J4vFTp1_QJKLMiBHkMllw4-byUFxaKG9gJvbcwJusyI="
+                              />
+                            </svg>
+                          </td>
+                          <td>{row.Budget_Category}</td>
+                          <td>{row.Department}</td>
+                          <td>{row.Project_Category}</td>
+                          <td>{row.Project_Name}</td>
+                          <td>{addComma(row.Budget_Amount)}</td>
+                        </tr>
+                      );
+                    })
                     : budgets
-                    ? budgets.map((row) => {
+                      ? budgets.map((row) => {
                         return (
                           <tr>
                             <td>
@@ -532,7 +588,7 @@ const CityBudget = (props) => {
                           </tr>
                         );
                       })
-                    : "NO DATA FOUND"}
+                      : "NO DATA FOUND"}
                 </tbody>
               )}
             </table>
@@ -544,6 +600,31 @@ const CityBudget = (props) => {
           </div>
         </div>
       </div>
+
+      <Modal
+          show={showCityUpdate}
+          onHide={handleCloseCityUpdate}
+          backdrop="static"
+          size="xl"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Update Budget City</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {
+              <UpdateCityBudget
+                row={cityData}
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleCloseCityUpdate}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+          </Modal.Body>
+        </Modal>
+
       {/* Add Form Modal */}
       <Modal
         show={show}
@@ -558,8 +639,8 @@ const CityBudget = (props) => {
         <Modal.Body>
           {
             <BudgetsForm
-            cityid={city.City_ID}
-            city = {city.City}
+              cityid={city.City_ID}
+              city={city.City}
               setRed={setred}
               setGreen={setgreen}
               closeModal={handleClose}
@@ -584,7 +665,7 @@ const CityBudget = (props) => {
         <Modal.Body>
           {
             <UpdateBudget
-              row={rowData}
+              row={cityData}
               setRed={setred}
               setGreen={setgreen}
               closeModal={handleCloseUpdate}

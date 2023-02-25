@@ -25,8 +25,8 @@ function Engineer() {
   const handleShowTS = () => setShowTS(true);
 
   const handleDash = (e) => {
-    if (nav === 1) return <Dashboard />;
-    if (nav === 2) return <BudgetCities setnav={setnav} setcity={setcity}/>;
+    if (nav === 0) return <Dashboard />;
+    if (nav === 1) return <BudgetCities setnav={setnav} setcity={setcity}/>;
     else if (nav === 3) return <RFPUpdate />;
     else if (nav === 4) return <ProposalsUpdate />;
     else if (nav === 5) return <ProjectUpdate />;
@@ -49,7 +49,7 @@ function Engineer() {
             <Navbar.Brand
               onClick={(e) => {
                 e.preventDefault();
-                setnav(1);
+                setnav(0);
               }}
               style={{ fontSize: "2rem" }}
               href="#home"
@@ -63,7 +63,7 @@ function Engineer() {
                   style={{ fontSize: "1rem", marginLeft: "2vw" }}
                   onClick={(e) => {
                     e.preventDefault();
-                    setnav(2);
+                    setnav(1);
                   }}
                 >
                   <b>Budgets</b>
