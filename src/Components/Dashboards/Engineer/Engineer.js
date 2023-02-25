@@ -6,15 +6,17 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Modal from "react-bootstrap/Modal";
 import TimeSheet from "../../TimeSheet/TimeSheet";
-import BudgetUpdate from "../../Update/BudgetUpdate";
 import ProposalsUpdate from "../../Update/ProposalsUpdate";
 import ProjectUpdate from "../../Update/ProjectUpdate";
 import RFPUpdate from "../../Update/RFPUpdate";
+import BudgetCities from "../../Update/BudgetCities";
 import AuthContext from '../../../Context/AuthContext'
+import CityBudget from "../../Update/CityBudget";
 
 function Engineer() {
   const navigate = useNavigate();
   const [nav, setnav] = useState(1);
+  const [city, setcity] = useState({});
   
   const { privileges, setPrivileges } = useContext(AuthContext)
 
@@ -24,10 +26,11 @@ function Engineer() {
 
   const handleDash = (e) => {
     if (nav === 1) return <Dashboard />;
-    if (nav === 2) return <BudgetUpdate />;
+    if (nav === 2) return <BudgetCities setnav={setnav} setcity={setcity}/>;
     else if (nav === 3) return <RFPUpdate />;
     else if (nav === 4) return <ProposalsUpdate />;
     else if (nav === 5) return <ProjectUpdate />;
+    else if (nav === 13) return <CityBudget setnav={setnav} city={city}/>;
   };
 
   return (
