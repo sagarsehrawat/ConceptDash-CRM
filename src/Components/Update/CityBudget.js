@@ -329,6 +329,7 @@ const CityBudget = (props) => {
     return `$ ${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
   };
   const shortenLink = (url) => {
+    if(!url) return "";
     if (url.length < 50) return url
 
     return url.substring(0, 50) + "..."
