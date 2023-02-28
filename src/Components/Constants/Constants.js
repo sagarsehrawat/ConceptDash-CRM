@@ -115,9 +115,8 @@ export const LOGIN = '/api/login'
 
 // Pagination and search and filtering
 export const GET_PAGE_BUDGETS = '/api/get/page/budgets'
-export const GET_PAGE_PROJECTS = '/api/get/page/projects'
+export const GET_PAGE_PROJECTS = '/api/v2/get/page/projects'
 export const GET_PAGES_BUDGETS = '/api/get/pages/budgets'
-export const GET_PAGES_PROJECTS = '/api/get/pages/projects'
 export const GET_PAGE_COMPANIES = '/api/get/page/companies'
 export const GET_PAGES_COMPANIES = '/api/get/pages/companies'
 export const GET_PAGE_RFPS = '/api/get/page/rfps'
@@ -127,3 +126,6 @@ export const GET_PAGES_PROPOSALS = '/api/get/pages/proposals'
 export const GET_PAGE_CUSTOMERS = '/api/get/customer'
 export const GET_PAGES_CUSTOMERSS = '/api/get/pages/customers'
 export const GET_EXPENSE_TRANSACTIONS = '/api/get/page/expenseTransactions'
+
+//Google APIs
+export const GET_GOOGLE_DRIVE_URL = '/google-api/get/fileLink'
