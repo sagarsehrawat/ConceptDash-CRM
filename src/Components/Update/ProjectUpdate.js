@@ -20,6 +20,7 @@ import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import Form from "react-bootstrap/Form";
 import AuthContext from '../../Context/AuthContext'
+import AddProject from "../Form/AddProject";
 
 
 function ProjectUpdate() {
@@ -577,7 +578,7 @@ function ProjectUpdate() {
           </Modal.Header>
           <Modal.Body>
             {
-              <ProjectForm
+              <AddProject
                 setRed={setred}
                 setGreen={setgreen}
                 closeModal={handleClose}

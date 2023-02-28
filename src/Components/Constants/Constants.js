@@ -53,6 +53,9 @@ export const GET_CITY_BUDGETS_DATA = '/api/get/city/id'
 export const GET_BUDGET_CITY = '/api/get/budgetCities'
 
 
+export const DOWNLOAD_BUDGET_DESIGN = '/api/get/file/budgets'
+
+
 
 // add apis
 export const ADD_NEW_USER = '/api/addNewUser'
@@ -66,6 +69,7 @@ export const ADD_EMPLOYEE = '/api/add/employee'
 export const ADD_JOB_TITLE = '/api/add/jobTitle'
 export const ADD_ORDER = '/api/add/order'
 export const ADD_PROJECT = '/api/add/project'
+export const ADD_NEW_PROJECT = '/api/add/newproject'
 export const ADD_PROPOSAL = '/api/add/proposal'
 export const ADD_RFP = '/api/add/rfp'
 export const ADD_SOFTWARE = '/api/add/software'
