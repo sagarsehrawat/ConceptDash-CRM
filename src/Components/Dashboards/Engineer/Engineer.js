@@ -12,11 +12,13 @@ import RFPUpdate from "../../Update/RFPUpdate";
 import BudgetCities from "../../Update/BudgetCities";
 import AuthContext from '../../../Context/AuthContext'
 import CityBudget from "../../Update/CityBudget";
+import ProjectDetail from "../../Update/ProjectDetail";
 
 function Engineer() {
   const navigate = useNavigate();
   const [nav, setnav] = useState(1);
   const [city, setcity] = useState({});
+  const [project, setproject] = useState({});
   
   const { privileges, setPrivileges } = useContext(AuthContext)
 
@@ -29,8 +31,9 @@ function Engineer() {
     if (nav === 1) return <BudgetCities setnav={setnav} setcity={setcity}/>;
     else if (nav === 3) return <RFPUpdate />;
     else if (nav === 4) return <ProposalsUpdate />;
-    else if (nav === 5) return <ProjectUpdate />;
+    else if (nav === 5) return <ProjectUpdate setnav={setnav} setproject={setproject} />;
     else if (nav === 13) return <CityBudget setnav={setnav} city={city}/>;
+    else if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
   };
 
   return (

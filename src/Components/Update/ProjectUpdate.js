@@ -25,7 +25,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { Rings } from 'react-loader-spinner'
 
-function ProjectUpdate() {
+function ProjectUpdate(props) {
+  const { setnav } = props
   const { privileges, setPrivileges } = useContext(AuthContext)
   const [apiCall, setCall] = useState(0);
   const [green, setgreen] = useState(false);
@@ -547,8 +548,8 @@ function ProjectUpdate() {
                           color="#000000"
                           radius="8"
                           visible={isLoading2}
-                        /> : <FontAwesomeIcon icon={faFolder} onClick={(e) => openDriveLink(e, row.Project_Files)} />}</td>
-                        <td><FontAwesomeIcon icon={faArrowRight} /></td>
+                        /> : <FontAwesomeIcon style={{cursor : "pointer"}} icon={faFolder} onClick={(e) => openDriveLink(e, row.Project_Files)} />}</td>
+                        <td><FontAwesomeIcon style={{cursor : "pointer"}} icon={faArrowRight} onClick={(e) => setnav(14)}/></td>
                       </tr>
                     );
                   }) : <></>}
