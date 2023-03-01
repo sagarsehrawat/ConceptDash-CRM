@@ -27,10 +27,12 @@ import ExpenseUpdate from "../../Update/ExpenseUpdate";
 import AuthContext from '../../../Context/AuthContext'
 import CityBudget from "../../Update/CityBudget";
 import BudgetCities from "../../Update/BudgetCities";
+import ProjectDetail from "../../Update/ProjectDetail";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [nav, setnav] = useState(0);
   const [city, setcity] = useState({});
+  const [project, setproject] = useState({});
   
   const { privileges, setPrivileges } = useContext(AuthContext)
 
@@ -41,7 +43,7 @@ const Dashboard = () => {
     if (nav === 3) return <ProposalsUpdate />;
     if (nav === 4) return <CustomerUpdate category={"Customers"} />;
     if (nav === 5) return <EmployeeUpdate />;
-    if (nav === 6) return <ProjectUpdate />;
+    if (nav === 6) return <ProjectUpdate setnav={setnav} setproject={setproject}/>;
     if (nav === 7) return <CompanyUpdate />;
     if (nav === 8) return <Cards />;
     if (nav === 9) return <AssetUpdate />;
@@ -49,6 +51,7 @@ const Dashboard = () => {
     if (nav === 11) return <Todo />;
     if (nav === 12) return <Privileges />
     if (nav === 13) return <CityBudget setnav={setnav} city={city} />
+    if(nav===14) return <ProjectDetail setnav={setnav} project={project} />
   };
   const [show, setShow] = useState(false);
 
@@ -167,13 +170,10 @@ const Dashboard = () => {
             </Nav>
 
 
-            <Nav style={{marginRight: "2vw"}}>
+             <Nav style={{marginRight: "2vw"}}>
               <NavDropdown title={<FontAwesomeIcon icon={faGear} />} id="collasible-nav-dropdown" align="end">
-                <NavDropdown.Item onClick={(e) => {
-                  e.preventDefault();
-                  setnav(11);
-                }}>Your Profile</NavDropdown.Item>
-                <NavDropdown.Divider />
+                
+                
                 <NavDropdown.Item onClick={(e) => {
                   e.preventDefault();
                   setnav(12);

@@ -5,7 +5,7 @@ import LoadingSpinner from "../Loader/Loader";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import BudgetsForm from "../Form/BudgetsForm";
-import UpdateBudget from "../Form/UpdateBudget";
+import BudgetUpdate from "./BudgetUpdate";
 import "./Table.css";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
@@ -15,7 +15,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import UpdateCityBudget from "../Form/UpdateCityBudget";
 
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+
 const BudgetCities = (props) => {
+  const [value1, setValue1] = useState("1");
+  const handleChange = (event, newValue) => {
+    setValue1(newValue);
+  };
   const { setnav, setcity } = props;
   const [apiCall, setCall] = useState(0);
   const [green, setgreen] = useState(false);
@@ -142,7 +152,20 @@ const BudgetCities = (props) => {
       {red === true ? <RedAlert setRed={setred} /> : <></>}
       <div>
         <div className="container-fluid">
-          <h1
+          <br/>
+          <Box
+            sx={{ width: "100%", typography: "body1" }}
+            style={{ margin: "0" }}
+          >
+            <TabContext value={value1}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList centered onChange={handleChange} aria-label="">
+                  <Tab label="Cities" value="1" />
+                  <Tab label="Budgets" value="2" />
+                </TabList>
+              </Box>
+              <TabPanel value="1" style={{ margin: "0" }}>
+              <h1
             style={{
               textAlign: "center",
               marginTop: "3rem",
@@ -320,6 +343,12 @@ const BudgetCities = (props) => {
               )}
             </table>
           </div>
+          </TabPanel>
+          <TabPanel value="2" style={{ margin: "0" }}>
+            {<BudgetUpdate />}
+          </TabPanel>
+          </TabContext>
+          </Box>
         </div>
       </div>
       <Modal
