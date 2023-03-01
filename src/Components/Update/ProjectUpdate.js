@@ -493,6 +493,7 @@ function ProjectUpdate(props) {
                   <th scope="col">Department</th>
                   <th scope="col">Category</th>
                   <th scope="col">Stage</th>
+                  <th scope="col">Stage Submission Date</th>
                   <th scope="col">Name</th>
                   <th scope="col">Manager</th>
                   <th scope="col">Team</th>
@@ -533,11 +534,16 @@ function ProjectUpdate(props) {
                             />
                           </svg>
                         </td> : <></>}
-                        <td>{row.Date_Created}</td>
+                        <td>{row.Date_Created
+                            ? row.Date_Created.substring(0, 10)
+                            : ""}</td>
                         <td>{row.City}</td>
                         <td>{row.Department}</td>
                         <td>{row.Project_Category}</td>
                         <td>{row.Project_Stage}</td>
+                        <td>{row.Stage_Submission_Date
+                            ? row.Stage_Submission_Date.substring(0, 10)
+                            : ""}</td>
                         <td>{row.Project_Name}</td>
                         <td>{row.Manager_Name}</td>
                         <td>{row.Team}</td>

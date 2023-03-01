@@ -1,5 +1,5 @@
-export const HOST = 'https://crm-api.conceptdash.ca'
-// export const HOST = 'http://localhost:8080'
+// export const HOST = 'https://crm-api.conceptdash.ca'
+export const HOST = 'http://localhost:8080'
 
 // get apis
 export const GET_ALL_USERS = '/api/get/customers'
@@ -51,7 +51,12 @@ export const GET_BUDGET_CITIES = '/api/get/list/budgetCities'
 export const GET_CITY_BUDGETS = '/api/get/cityBudgets'
 export const GET_CITY_BUDGETS_DATA = '/api/get/city/id'
 export const GET_BUDGET_CITY = '/api/get/budgetCities'
-
+export const GET_PROJECT_ORDERS = '/api/get/project/orders'
+export const GET_PROJECT_INVOICES = '/api/get/project/invoices'
+export const GET_PROJECT_PAYMENTS = '/api/get/project/payments'
+export const GET_PROJECT_SUBMISSIONS = '/api/get/project/submissions'
+export const GET_PROJECT_EXPENSES = '/api/get/project/expenses'
+export const GET_PROJECT_EXTRAS = '/api/get/project/extras'
 
 export const DOWNLOAD_BUDGET_DESIGN = '/api/get/file/budgets'
 
