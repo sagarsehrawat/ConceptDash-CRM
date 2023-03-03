@@ -25,6 +25,7 @@ import AddProject from "../Form/AddProject";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { Rings } from 'react-loader-spinner'
+import ProjectPaymentForm from "../Form/ProjectPaymentForm";
 
 function ProjectUpdate(props) {
   const { setnav, setproject } = props

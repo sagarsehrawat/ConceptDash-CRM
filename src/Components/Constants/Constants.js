@@ -37,6 +37,7 @@ export const GET_JOB_TITLES= '/api/get/jobTitles'
 export const GET_DISTRIBUTORS= '/api/get/distributors'
 export const GET_CONTRACTORS= '/api/get/contractors'
 export const GET_PROJECT_NAMES= '/api/get/projectNames'
+export const GET_ALL_PROJECT_NAMES= '/api/get/projectNamesv2'
 export const GET_TASKS_BY_ID= '/api/get/tasksById'
 export const GET_PROJECT_TASKS_BY_ID= '/api/get/projectTasks/id'
 export const GET_EMPLOYEE_BY_ID= '/api/get/list/employeeById'
@@ -51,6 +52,8 @@ export const GET_BUDGET_CITIES = '/api/get/list/budgetCities'
 export const GET_CITY_BUDGETS = '/api/get/cityBudgets'
 export const GET_CITY_BUDGETS_DATA = '/api/get/city/id'
 export const GET_BUDGET_CITY = '/api/get/budgetCities'
+export const GET_DESIGN_STAGES = '/api/get/list/designStages'
+export const GET_MANAGERS = '/api/get/list/managers'
 
 
 export const DOWNLOAD_BUDGET_DESIGN = '/api/get/file/budgets'
@@ -79,6 +82,11 @@ export const ADD_DEPARTMENT = '/api/add/department'
 export const ADD_CATEGORY = '/api/add/category'
 export const ADD_EXPENSE_TRANSACTION = '/api/add/expenseTransaction'
 export const ADD_EXPENSE_CATEGORY = '/api/add/expenseCategory'
+export const ADD_PROJECT_PAYMENT = '/api/add/projectPayment'
+export const ADD_PROJECT_INVOICE = '/api/add/projectInvoice'
+export const ADD_PROJECT_ORDER = '/api/add/projectOrder'
+export const ADD_PROJECT_SUBMISSION = '/api/add/projectSubmission'
+export const ADD_PROJECT_EXPENSE = '/api/add/projectExpense'
 
 
 //Delete APIs
