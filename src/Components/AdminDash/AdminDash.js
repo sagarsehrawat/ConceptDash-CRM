@@ -20,11 +20,11 @@ import {
   COUNTS,
   RFP_ANALYSIS,
   PROPOSAL_STATUS_COUNTS,
-  BUDGET_AMOUNT,
   GET_WORK_HOURS,
   GET_PROJECT_STATUS,
   GET_TASKS_BY_ID,
   UPDATE_TASK,
+  BUDGET_CHART,
 } from "../Constants/Constants";
 import AddTask from "../Form/AddTask";
 import LoadingSpinner from "../Loader/Loader";
@@ -307,7 +307,7 @@ function AdminDash() {
       },
     ],
   };
-  const budgetApi = HOST + BUDGET_AMOUNT;
+  const budgetApi = HOST + BUDGET_CHART;
   const [charts, setCharts] = useState([]);
 
   const [budgets, setbudgets] = useState(false);

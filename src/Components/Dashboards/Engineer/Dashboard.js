@@ -26,8 +26,8 @@ import {
   COUNTS,
   RFP_ANALYSIS,
   PROPOSAL_STATUS_COUNTS,
-  BUDGET_AMOUNT,
   UPDATE_TASK,
+  BUDGET_CHART,
 } from "../../Constants/Constants";
 import axios from "axios";
 import Box from "@mui/material/Box";
@@ -116,7 +116,7 @@ const Dashboard = () => {
           console.log(err);
         });
       await axios
-        .get(HOST + BUDGET_AMOUNT, {
+        .get(HOST + BUDGET_CHART, {
           headers: {
             auth: "Rose " + localStorage.getItem("auth"),
             chart: "Budget Amount",
