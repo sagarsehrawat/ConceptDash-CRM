@@ -48,7 +48,8 @@ const mystyles = {
         height: "56px",
         left: "0px",
         top: "0px",
-        background: "#FBFBFB !important"
+        backgroundColor: "#FAFBFB",
+        zIndex: "-1"
     },
     plusIcon: {
         height: "32px",
@@ -75,7 +76,6 @@ const mystyles = {
     },
     sidebar: {
         boxSizing: "border-box",
-        position: "absolute",
         width: "228px",
         height: "100vh",
         left: "0px",
@@ -278,7 +278,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </Sidebar>
-                <div style={{marginLeft: '250px', width: "100%"}}>
+                <div style={{marginLeft: '250px', width: "100%", backgroundColor: "#F8FAFB"}}>
                     {handleDash()}
                 </div>
             </div>
