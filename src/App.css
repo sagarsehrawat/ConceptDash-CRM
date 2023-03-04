@@ -170,3 +170,8 @@ em {
      top: 1.3em;
   }
 }
+
+
+.dropdown-toggle::after {
+  display: none;
+}

@@ -21,11 +21,11 @@ import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
-import AuthContext from '../../Context/AuthContext'
+import AuthContext from "../../Context/AuthContext";
 
 function AddProject(props) {
-    const { privileges, setPrivileges } = useContext(AuthContext)
-    const [apiCallCity, setCallCity] = useState(0);
+  const { privileges, setPrivileges } = useContext(AuthContext);
+  const [apiCallCity, setCallCity] = useState(0);
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
 
@@ -143,7 +143,7 @@ function AddProject(props) {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res)
+        console.log(res);
         setisLoading(false);
         if (res.data.success) {
           closeModal();
@@ -219,7 +219,11 @@ function AddProject(props) {
             </Row> */}
             <Row className="mb-4">
               <Form.Group as={Col}>
-                <Form.Select onChange={handleChange} name="departmentId" required>
+                <Form.Select
+                  onChange={handleChange}
+                  name="departmentId"
+                  required
+                >
                   <option value="">Select Department</option>
                   {depts.length > 0
                     ? depts.map((e) => (
@@ -304,7 +308,7 @@ function AddProject(props) {
                 />
               </Form.Group>
             </Row>
-            
+
             <Row className="mb-4">
               <Form.Group as={Col}>
                 <Form.Control
@@ -329,11 +333,7 @@ function AddProject(props) {
                 </Select>
               </Form.Group>
               <Form.Group as={Col}>
-                <Form.Select
-                  name="assignedTo"
-                  onChange={handleChange}
-                  required
-                >
+                <Form.Select name="assignedTo" onChange={handleChange} required>
                   <option value="">Select Project Manager</option>
                   {employees.length !== 0 ? (
                     employees.map((option) => (
@@ -372,7 +372,7 @@ function AddProject(props) {
               Submit
             </Button>
           </Form>
-          
+
           <Modal
             backdrop="static"
             size="lg"
