@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Dropdown, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import AuthenticationContext from "../../Context/AuthContext";
 import { Sidebar, Menu, MenuItem, useProSidebar } from "react-pro-sidebar";
@@ -61,6 +61,7 @@ const mystyles = {
     top: "0px",
     backgroundColor: "#FAFBFB",
     zIndex: "-1",
+    borderBottom: "1px solid #EBE9F1"
   },
   plusIcon: {
     height: "32px",
@@ -130,7 +131,7 @@ const mystyles = {
     width: "24px",
     height: "24px",
     marginLeft: "20px",
-    color: "#FBFBFB",
+    background: "#FBFBFB",
     borderRadius: "100%",
     textAlign: "center",
   },
@@ -311,19 +312,19 @@ const mystyles = {
     fontSize: "13px",
     fontFamily: "Roboto",
   },
-//   task1Heading: {
-//     position: "absolute",
-//     width: "211px",
-//     height: "20px",
-//     left: "24px",
-//     top: "53px",
-//     fontFamily: "'Roboto'",
-//     fontStyle: "normal",
-//     fontWeight: 400,
-//     fontSize: "13px",
-//     lineHeight: "20px",
-//     color: "#0A0A0A",
-//   },
+  //   task1Heading: {
+  //     position: "absolute",
+  //     width: "211px",
+  //     height: "20px",
+  //     left: "24px",
+  //     top: "53px",
+  //     fontFamily: "'Roboto'",
+  //     fontStyle: "normal",
+  //     fontWeight: 400,
+  //     fontSize: "13px",
+  //     lineHeight: "20px",
+  //     color: "#0A0A0A",
+  //   },
   rect2: {
     position: "absolute",
     width: "3px",
@@ -381,7 +382,7 @@ const Dashboard = () => {
   const [title1, settitle1] = useState([]);
   const [title2, settitle2] = useState([]);
   const [title3, settitle3] = useState([]);
-  
+
   const [dDate1, setdDate1] = useState([])
   const [dDate2, setdDate2] = useState([])
   const [dDate3, setdDate3] = useState([])
@@ -400,22 +401,22 @@ const Dashboard = () => {
           },
         })
         .then((res) => {
-            settitle1(res.data.res[0].Title)
-            settitle2(res.data.res[1].Title)
-            settitle3(res.data.res[2].Title)
-            const date1 = res.data.res[0].Due_Date;
-            const date2 = res.data.res[1].Due_Date;
-            const date3 = res.data.res[2].Due_Date;
-            const utcDate1 = new Date(date1);
-            const utcDate2 = new Date(date2);
-            const utcDate3 = new Date(date3);
-            const options = { month: "long" };
-            setmonth1(utcDate1.toLocaleString("en-US", options))
-            setmonth2(utcDate2.toLocaleString("en-US", options))
-            setmonth3(utcDate3.toLocaleString("en-US", options))
-            setdDate1(utcDate1.getUTCDate());
-            setdDate2(utcDate2.getUTCDate());
-            setdDate3(utcDate3.getUTCDate());
+          settitle1(res.data.res[0].Title)
+          settitle2(res.data.res[1].Title)
+          settitle3(res.data.res[2].Title)
+          const date1 = res.data.res[0].Due_Date;
+          const date2 = res.data.res[1].Due_Date;
+          const date3 = res.data.res[2].Due_Date;
+          const utcDate1 = new Date(date1);
+          const utcDate2 = new Date(date2);
+          const utcDate3 = new Date(date3);
+          const options = { month: "long" };
+          setmonth1(utcDate1.toLocaleString("en-US", options))
+          setmonth2(utcDate2.toLocaleString("en-US", options))
+          setmonth3(utcDate3.toLocaleString("en-US", options))
+          setdDate1(utcDate1.getUTCDate());
+          setdDate2(utcDate2.getUTCDate());
+          setdDate3(utcDate3.getUTCDate());
         })
         .catch((err) => {
           console.log(err);
@@ -424,7 +425,7 @@ const Dashboard = () => {
     };
     call();
   }, []);
-  
+
 
   const handleDash = (e) => {
     if (nav === 0) return <Home />;
@@ -454,13 +455,32 @@ const Dashboard = () => {
           className="d-flex justify-content-end"
           style={mystyles.topNavbar}
         >
-          <Nav.Link className="p-3">
+          <Dropdown>
+            <Dropdown.Toggle id="dropdown-basic" style={{backgroundColor: "white", border : "none"}}>
             <FontAwesomeIcon
-              icon={faCirclePlus}
-              color={primaryColour}
-              style={mystyles.plusIcon}
-            />
-          </Nav.Link>
+            icon={faCirclePlus}
+            color={primaryColour}
+            style={mystyles.plusIcon}
+          />
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">Privileges</Dropdown.Item>
+              <Dropdown.Item href="#/action-1">Privileges</Dropdown.Item>
+              <Dropdown.Item href="#/action-1">Privileges</Dropdown.Item>
+              v
+              <Dropdown.Item href="#/action-1">Privileges</Dropdown.Item>
+              <Dropdown.Item href="#/action-1">Privileges</Dropdown.Item>
+              <Dropdown.Item href="#/action-1">Privileges</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          {/* <NavDropdown title={<FontAwesomeIcon
+            icon={faCirclePlus}
+            color={primaryColour}
+            style={mystyles.plusIcon}
+          />} id="basic-nav-dropdown"
+            className="p-2">
+          </NavDropdown> */}
           <NavDropdown
             title={
               <FontAwesomeIcon icon={faGear} style={mystyles.settingsIcon} />
@@ -922,42 +942,42 @@ const Dashboard = () => {
             <LoadingSpinner />
           ) : (
             <>
-            <div>
-              <span style={mystyles.rect1}></span>
-              <div style={mystyles.task1}>
-                {/* <span style={mystyles.task1Heading}> */}
-                {title1}
-                {/* </span> */}
-
-                <div>
-                  <img src={Time} alt="Time Icon" />
-                  <span> {`${month1[0]}${month1[1]}${month1[2]}`} </span><span>{dDate1}</span>
-                </div>
-              </div></div>
               <div>
-              <span style={mystyles.rect2}></span>
-              <div style={mystyles.task2}>
-                {/* <span style={mystyles.task1Heading}> */}
-                {title2}
-                {/* </span> */}
+                <span style={mystyles.rect1}></span>
+                <div style={mystyles.task1}>
+                  {/* <span style={mystyles.task1Heading}> */}
+                  {title1}
+                  {/* </span> */}
 
-                <div>
-                  <img src={Time} alt="Time Icon" />
-                  <span> {`${month2[0]}${month2[1]}${month2[2]}`} </span><span>{dDate2}</span>
-                </div>
-              </div></div>
+                  <div>
+                    <img src={Time} alt="Time Icon" />
+                    <span> {`${month1[0]}${month1[1]}${month1[2]}`} </span><span>{dDate1}</span>
+                  </div>
+                </div></div>
               <div>
-              <span style={mystyles.rect3}></span>
-              <div style={mystyles.task3}>
-                {/* <span style={mystyles.task1Heading}> */}
-                {title3}
-                {/* </span> */}
+                <span style={mystyles.rect2}></span>
+                <div style={mystyles.task2}>
+                  {/* <span style={mystyles.task1Heading}> */}
+                  {title2}
+                  {/* </span> */}
 
-                <div>
-                  <img src={Time} alt="Time Icon" />
-                  <span> {`${month3[0]}${month3[1]}${month3[2]}`} </span><span>{dDate3}</span>
-                </div>
-              </div></div>
+                  <div>
+                    <img src={Time} alt="Time Icon" />
+                    <span> {`${month2[0]}${month2[1]}${month2[2]}`} </span><span>{dDate2}</span>
+                  </div>
+                </div></div>
+              <div>
+                <span style={mystyles.rect3}></span>
+                <div style={mystyles.task3}>
+                  {/* <span style={mystyles.task1Heading}> */}
+                  {title3}
+                  {/* </span> */}
+
+                  <div>
+                    <img src={Time} alt="Time Icon" />
+                    <span> {`${month3[0]}${month3[1]}${month3[2]}`} </span><span>{dDate3}</span>
+                  </div>
+                </div></div>
             </>
           )}
           <p style={mystyles.tasksBottom}>View All</p>
