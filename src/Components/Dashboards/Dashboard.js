@@ -60,11 +60,24 @@ const mystyles = {
     left: "0px",
     top: "0px",
     backgroundColor: "#FAFBFB",
-    zIndex: "-1",
-    borderBottom: "1px solid #EBE9F1"
+    borderBottom: "1px solid #EBE9F1",
+    zIndex: "1000"
   },
   plusIcon: {
     height: "32px",
+  },
+  plusDropdownItem: {
+    fontFamily: "'Roboto'",
+    fontStyle: "normal",
+    fontWeight: 400,
+    fontSize: "14px",
+    color: "#0A0A0A",
+    marginLeft: "0px",
+    paddingLeft: "0px"
+  },
+  plusDropdownItemIcon: {
+    marginLeft: "10px",
+    marginRight: "12px",
   },
   settingsIcon: {
     height: "20px",
@@ -99,6 +112,7 @@ const mystyles = {
     flexDirection: "column",
     alignItems: "flex-start",
     position: "fixed",
+    zIndex: "1"
   },
   branding: {
     width: "101px",
@@ -373,6 +387,7 @@ const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();
   const navigate = useNavigate();
   const [nav, setnav] = useState(0);
+  const [plusDropdown, setplusDropdown] = useState(null);
   const [city, setcity] = useState({});
   const [project, setproject] = useState({});
 
@@ -455,32 +470,62 @@ const Dashboard = () => {
           className="d-flex justify-content-end"
           style={mystyles.topNavbar}
         >
-          <Dropdown>
-            <Dropdown.Toggle id="dropdown-basic" style={{backgroundColor: "white", border : "none"}}>
-            <FontAwesomeIcon
-            icon={faCirclePlus}
-            color={primaryColour}
-            style={mystyles.plusIcon}
-          />
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Privileges</Dropdown.Item>
-              <Dropdown.Item href="#/action-1">Privileges</Dropdown.Item>
-              <Dropdown.Item href="#/action-1">Privileges</Dropdown.Item>
-              v
-              <Dropdown.Item href="#/action-1">Privileges</Dropdown.Item>
-              <Dropdown.Item href="#/action-1">Privileges</Dropdown.Item>
-              <Dropdown.Item href="#/action-1">Privileges</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-          {/* <NavDropdown title={<FontAwesomeIcon
+          <NavDropdown title={<FontAwesomeIcon
             icon={faCirclePlus}
             color={primaryColour}
             style={mystyles.plusIcon}
           />} id="basic-nav-dropdown"
-            className="p-2">
-          </NavDropdown> */}
+            className="p-2 plus-dropdown"
+            align="end">
+            <NavDropdown.Item style={{...mystyles.plusDropdownItem, backgroundColor: plusDropdown===0 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF"}} onMouseEnter={() => setplusDropdown(0)} onMouseLeave={() => setplusDropdown(null)}>
+            <img
+                  src={plusDropdown===0 ? tasksInactive : tasksActive}
+                  alt="Dashboard Icon"
+                  style={mystyles.plusDropdownItemIcon}
+                />
+              Assign New Task
+            </NavDropdown.Item>
+            <NavDropdown.Item style={{...mystyles.plusDropdownItem, backgroundColor: plusDropdown===1 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF"}} onMouseEnter={() => setplusDropdown(1)} onMouseLeave={() => setplusDropdown(null)}>
+            <img
+                  src={plusDropdown===1 ? rfpInactive : rfpActive}
+                  alt="Dashboard Icon"
+                  style={mystyles.plusDropdownItemIcon}
+                />
+              Add New RFP
+            </NavDropdown.Item>
+            <NavDropdown.Item style={{...mystyles.plusDropdownItem, backgroundColor: plusDropdown===2 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF"}}  onMouseEnter={() => setplusDropdown(2)} onMouseLeave={() => setplusDropdown(null)}>
+            <img
+                  src={plusDropdown===2 ? proposalsInactive : proposalsActive}
+                  alt="Dashboard Icon"
+                  style={mystyles.plusDropdownItemIcon}
+                />
+              Add New Proposal
+            </NavDropdown.Item>
+            <NavDropdown.Item style={{...mystyles.plusDropdownItem, backgroundColor: plusDropdown===3 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF"}} onMouseEnter={() => setplusDropdown(3)} onMouseLeave={() => setplusDropdown(null)}>
+            <img
+                  src={plusDropdown===3 ? projectsInactive : projectsActive}
+                  alt="Dashboard Icon"
+                  style={mystyles.plusDropdownItemIcon}
+                />
+              Add New Project
+            </NavDropdown.Item>
+            <NavDropdown.Item style={{...mystyles.plusDropdownItem, backgroundColor: plusDropdown===4 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF"}} onMouseEnter={() => setplusDropdown(4)} onMouseLeave={() => setplusDropdown(null)}>
+            <img
+                  src={plusDropdown===4 ? employeeInactive : employeeActive}
+                  alt="Dashboard Icon"
+                  style={mystyles.plusDropdownItemIcon}
+                />
+              Add New Employee
+            </NavDropdown.Item>
+            <NavDropdown.Item style={{...mystyles.plusDropdownItem, backgroundColor: plusDropdown===5 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF"}} onMouseEnter={(e) => setplusDropdown(5)} onMouseLeave={(e) => setplusDropdown(null)}>
+            <img
+                  src={plusDropdown===5 ? contactsInactive : contactsActive}
+                  alt="Dashboard Icon"
+                  style={mystyles.plusDropdownItemIcon}
+                />
+              Add New Contact
+            </NavDropdown.Item>
+          </NavDropdown>
           <NavDropdown
             title={
               <FontAwesomeIcon icon={faGear} style={mystyles.settingsIcon} />

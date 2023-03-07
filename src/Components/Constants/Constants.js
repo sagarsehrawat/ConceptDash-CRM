@@ -126,6 +126,7 @@ export const COUNTS = '/api/get/counts'
 export const RFP_ANALYSIS = '/api/get/chart/rfp'
 export const PROPOSAL_STATUS_COUNTS = '/api/get/status/proposal'
 export const BUDGET_CHART = '/api/get/chart/budget'
+export const PROJECT_CHART = '/api/get/chart/project'
 export const BUDGET_CHART_DEPARTMENT = '/api/get/chart/budget/department'
 
 // login

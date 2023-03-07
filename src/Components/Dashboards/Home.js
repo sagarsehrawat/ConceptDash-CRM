@@ -1,11 +1,13 @@
 import { faCloudArrowDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Dropdown, Form } from 'react-bootstrap'
 import { primaryColour } from '../Constants/styles'
 import pinnedActive from '../../Images/Pin icon_Active.svg'
 import pinnedInactive from '../../Images/Pin icon.svg'
 import BudgetCharts from './BudgetCharts'
+import axios from 'axios'
+import { HOST, PROJECT_CHART } from '../Constants/Constants'
 
 const styles = {
     contentArea: {
@@ -118,10 +120,10 @@ const styles = {
 const Home = () => {
     const [chartComponent, setchartComponent] = useState('0')
     const [year, setyear] = useState('0')
-    const [apiCall, setapiCall] = useState(0)
+    const [projects, setprojects] = useState([0, 0, 0, 0])
 
     const handleChartsComponent = () => {
-        if (chartComponent === '0') return (<BudgetCharts year={year} apiCall={apiCall} />)
+        if (chartComponent === '0') return (<BudgetCharts year={year}/>)
         if (chartComponent === '1') return rfpCharts()
         if (chartComponent === '2') return proposalCharts()
         if (chartComponent === '3') return projectCharts()
@@ -148,6 +150,32 @@ const Home = () => {
         )
     }
 
+    useEffect(() => {
+      const call = async () => {
+        await axios.get(HOST + PROJECT_CHART, {
+            headers: {
+                auth: "Rose " + localStorage.getItem("auth"),
+                chart: "Status",
+            },
+        }).then((res) => {
+            const arr = res.data.res;
+            let p = projects
+            arr.map(e => {
+                if(e.Status===null) p[1] = e.Count;
+                if(e.Status==='Ongoing') p[0] = e.Count;
+                if(e.Status==='Not Started Yet') p[3] = e.Count;
+                if(e.Status==='Completed') p[2] = e.Count;
+            })
+            setprojects(p)
+        }).catch((err) => {
+            console.error("Error fetching chart data: ", err);
+        })
+      }
+
+      call()
+    }, [])
+    
+
     return (
         <>
             <div>
@@ -157,19 +185,19 @@ const Home = () => {
                         <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "20px", marginRight: "20px", marginBottom: "20px" }}>
                             <div style={styles.projectOverviewContainers}>
                                 <p style={styles.projectOverviewSubheading}>Ongoing Projects</p>
-                                <p style={styles.projectOverviewNumber}>120</p>
+                                <p style={styles.projectOverviewNumber}>{projects[0]}</p>
                             </div>
                             <div style={styles.projectOverviewContainers}>
                                 <p style={styles.projectOverviewSubheading}>New Projects</p>
-                                <p style={styles.projectOverviewNumber}>120</p>
+                                <p style={styles.projectOverviewNumber}>{projects[1]}</p>
                             </div>
                             <div style={styles.projectOverviewContainers}>
                                 <p style={styles.projectOverviewSubheading}>Completed Projects</p>
-                                <p style={styles.projectOverviewNumber}>120</p>
+                                <p style={styles.projectOverviewNumber}>{projects[2]}</p>
                             </div>
                             <div style={styles.projectOverviewContainers}>
                                 <p style={styles.projectOverviewSubheading}>Total Projects</p>
-                                <p style={styles.projectOverviewNumber}>120</p>
+                                <p style={styles.projectOverviewNumber}>{projects[0] + projects[1] + projects[2] + projects[3]}</p>
                             </div>
                         </div>
                         <div style={styles.projectOverviewLine}></div>
