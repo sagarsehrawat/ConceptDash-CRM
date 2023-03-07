@@ -61,7 +61,6 @@ const mystyles = {
     top: "0px",
     backgroundColor: "#FAFBFB",
     borderBottom: "1px solid #EBE9F1",
-    zIndex: "1000"
   },
   plusIcon: {
     height: "32px",
