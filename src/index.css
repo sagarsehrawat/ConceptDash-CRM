@@ -4,4 +4,5 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-y: auto !important;
   overflow-x: hidden;
+  font-family: 'Roboto';
 }

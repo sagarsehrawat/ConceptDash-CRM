@@ -8,6 +8,7 @@ import pinnedInactive from '../../Images/Pin icon.svg'
 import BudgetCharts from './BudgetCharts'
 import axios from 'axios'
 import { HOST, PROJECT_CHART } from '../Constants/Constants'
+import RFPCharts from './RFPCharts'
 
 const styles = {
     contentArea: {
@@ -110,30 +111,32 @@ const styles = {
         border: "1px solid #EBE9F1",
         borderRadius: "5px"
     },
+    headerDropdown3: {
+        padding: "8px 12px",
+        gap: "12px",
+        width: "157px",
+        height: "40px",
+        border: "1px solid #EBE9F1",
+        borderRadius: "5px"
+    },
     chartsContainer: {
         marginLeft: "20px",
         marginRight: "20px",
-        marginTop: "24px"
+        marginTop: "20px"
     }
 }
 
 const Home = () => {
     const [chartComponent, setchartComponent] = useState('0')
     const [year, setyear] = useState('0')
+    const [month, setmonth] = useState(new Date().getMonth().toString())
     const [projects, setprojects] = useState([0, 0, 0, 0])
 
     const handleChartsComponent = () => {
-        if (chartComponent === '0') return (<BudgetCharts year={year}/>)
-        if (chartComponent === '1') return rfpCharts()
+        if (chartComponent === '0') return (<BudgetCharts year={year} />)
+        if (chartComponent === '1') return (<RFPCharts month={month} />)
         if (chartComponent === '2') return proposalCharts()
         if (chartComponent === '3') return projectCharts()
-    }
-
-    const rfpCharts = () => {
-        return (
-            <>
-            </>
-        )
     }
 
     const proposalCharts = () => {
@@ -151,30 +154,30 @@ const Home = () => {
     }
 
     useEffect(() => {
-      const call = async () => {
-        await axios.get(HOST + PROJECT_CHART, {
-            headers: {
-                auth: "Rose " + localStorage.getItem("auth"),
-                chart: "Status",
-            },
-        }).then((res) => {
-            const arr = res.data.res;
-            let p = projects
-            arr.map(e => {
-                if(e.Status===null) p[1] = e.Count;
-                if(e.Status==='Ongoing') p[0] = e.Count;
-                if(e.Status==='Not Started Yet') p[3] = e.Count;
-                if(e.Status==='Completed') p[2] = e.Count;
+        const call = async () => {
+            await axios.get(HOST + PROJECT_CHART, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    chart: "Status",
+                },
+            }).then((res) => {
+                const arr = res.data.res;
+                let p = projects
+                arr.map(e => {
+                    if (e.Status === null) p[1] = e.Count;
+                    if (e.Status === 'Ongoing') p[0] = e.Count;
+                    if (e.Status === 'Not Started Yet') p[3] = e.Count;
+                    if (e.Status === 'Completed') p[2] = e.Count;
+                })
+                setprojects(p)
+            }).catch((err) => {
+                console.error("Error fetching chart data: ", err);
             })
-            setprojects(p)
-        }).catch((err) => {
-            console.error("Error fetching chart data: ", err);
-        })
-      }
+        }
 
-      call()
+        call()
     }, [])
-    
+
 
     return (
         <>
@@ -204,21 +207,36 @@ const Home = () => {
                     </div>
                     <div style={styles.header} className='d-flex flex-row justify-content-between'>
                         <Form.Select style={styles.headerDropdown} onChange={(e) => setchartComponent(e.target.value)}>
-                            <option value="0" style={{fontFamily: "'Roboto'"}}>Budgets</option>
-                            <option value="1" style={{fontFamily: "'Roboto'"}}>RFPs</option>
-                            <option value="2" style={{fontFamily: "'Roboto'"}}>Proposals</option>
-                            <option value="3" style={{fontFamily: "'Roboto'"}}>Projects</option>
+                            <option value="0" style={{ fontFamily: "'Roboto'" }}>Budgets</option>
+                            <option value="1" style={{ fontFamily: "'Roboto'" }}>RFPs</option>
+                            <option value="2" style={{ fontFamily: "'Roboto'" }}>Proposals</option>
+                            <option value="3" style={{ fontFamily: "'Roboto'" }}>Projects</option>
                         </Form.Select>
                         <div className='d-flex flex-row'>
                             <Button style={styles.exportButton}>
                                 <FontAwesomeIcon icon={faCloudArrowDown} style={styles.exportButtonIcon} color={primaryColour} />
                                 <p style={styles.exportButtonText}>Export</p>
                             </Button>
-                            <Form.Select style={styles.headerDropdown2} onChange={(e) => { e.preventDefault(); setyear(e.target.value); }}>
-                                <option value="0">This Year: 1 Jan {new Date().getFullYear()} - Presnet</option>
-                                <option value="1">Last 2 Years: 1 Jan {new Date().getFullYear() - 1} - Presnet</option>
-                                <option value="2">Last 3 Years: 1 Jan {new Date().getFullYear() - 2} - Present</option>
-                            </Form.Select>
+                            {chartComponent === '1' ?
+                                <Form.Select style={styles.headerDropdown3} onChange={(e) => { e.preventDefault(); setmonth(e.target.value); }} value={month}>
+                                    <option value="0">January</option>
+                                    <option value="1">February</option>
+                                    <option value="2">March</option>
+                                    <option value="3">April</option>
+                                    <option value="4">May</option>
+                                    <option value="5">June</option>
+                                    <option value="6">July</option>
+                                    <option value="7">August</option>
+                                    <option value="8">Sepetember</option>
+                                    <option value="9">October</option>
+                                    <option value="10">November</option>
+                                    <option value="11">December</option>
+                                </Form.Select>
+                                : <Form.Select style={styles.headerDropdown2} onChange={(e) => { e.preventDefault(); setyear(e.target.value); }}>
+                                    <option value="0">This Year: 1 Jan {new Date().getFullYear()} - Presnet</option>
+                                    <option value="1">Last 2 Years: 1 Jan {new Date().getFullYear() - 1} - Presnet</option>
+                                    <option value="2">Last 3 Years: 1 Jan {new Date().getFullYear() - 2} - Present</option>
+                                </Form.Select>}
                         </div>
                     </div>
                     <div style={styles.chartsContainer} className='row justify-content-between'>

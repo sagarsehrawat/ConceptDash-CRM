@@ -111,7 +111,10 @@ const budgetChartStyles = {
         width: "892px",
         paddingLeft: "16px",
         paddingRight: "16px",
-        marginLeft: "-12px"
+        marginLeft: "-12px",
+        height: "224px",
+        overflowY: "scroll",
+        background: "#FFFFFF",
     },
     th: {
         width: "892px",
@@ -159,6 +162,7 @@ const budgetChartStyles = {
         textAlign: 'center',
         marginBottom: '0px',
         marginTop: '0px',
+        borderBottom: "0px"
     },
     percentContainer1: {
         alignItems: "center",
@@ -575,8 +579,9 @@ const BudgetCharts = (props) => {
                             <th style={budgetChartStyles.tableHeaders} scope="col">Average Increase/Decrease</th>
                         </tr>
                     </thead>
-                    <tbody class="" style={budgetChartStyles.tableBody}>
-                        {isLoading[2] ? <LoadingSpinner /> : <>
+
+                    {isLoading[2] ? <LoadingSpinner /> : <>
+                        <tbody style={budgetChartStyles.tableBody}>
                             {Object.keys(projectCategoryBudgetChartData).map(e => {
                                 const y = new Date().getFullYear()
                                 return (
@@ -586,16 +591,17 @@ const BudgetCharts = (props) => {
                                         {parseInt(year) >= 1 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 1])}</td> : <></>}
                                         <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y])}</td>
                                         <td style={budgetChartStyles.tableCell} className='d-flex justify-content-center'>
-                                            {projectCategoryBudgetChartData[e]['percent']>=0 ? 
-                                            <div style={budgetChartStyles.percentContainer1}>{projectCategoryBudgetChartData[e]['percent']} %</div>
-                                            : <div style={budgetChartStyles.percentContainer2}>{-projectCategoryBudgetChartData[e]['percent']} %</div>
-                                        }
-                                            </td>
+                                            {projectCategoryBudgetChartData[e]['percent'] >= 0 ?
+                                                <div style={budgetChartStyles.percentContainer1}>{projectCategoryBudgetChartData[e]['percent']} %</div>
+                                                : <div style={budgetChartStyles.percentContainer2}>{-projectCategoryBudgetChartData[e]['percent']} %</div>
+                                            }
+                                        </td>
                                     </tr>
                                 )
                             })}
-                        </>}
-                    </tbody>
+                        </tbody>
+                    </>}
+
                 </table>
             </div>
         </>
