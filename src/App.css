@@ -1,24 +1,23 @@
-body{
+body {
   background-color: rgb(216, 216, 216);
 }
 
 /* Primary Styles */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-nav{
+nav {
   z-index: 1;
 }
 
-em {
-  font-style: normal;
-}
 
-.s-layout  a {
+.s-layout a {
   text-decoration: none;
   color: inherit;
-} 
+}
 
 /* Layout */
 .s-layout {
@@ -44,7 +43,7 @@ em {
   background: #212529;
 }
 
-.s-sidebar__trigger > i {
+.s-sidebar__trigger>i {
   display: inline-block;
   margin: 1.5em 0 0 1.5em;
 }
@@ -63,8 +62,8 @@ em {
 
 .s-sidebar__nav:hover,
 .s-sidebar__nav:focus,
-.s-sidebar__trigger:focus + .s-sidebar__nav,
-.s-sidebar__trigger:hover + .s-sidebar__nav {
+.s-sidebar__trigger:focus+.s-sidebar__nav,
+.s-sidebar__trigger:hover+.s-sidebar__nav {
   left: 0;
 }
 
@@ -105,7 +104,7 @@ em {
   background: #212529;
 }
 
-.s-sidebar__nav-link > i {
+.s-sidebar__nav-link>i {
   position: absolute;
   top: 0;
   left: 0;
@@ -114,7 +113,7 @@ em {
   height: 4em;
 }
 
-.s-sidebar__nav-link > i::before {
+.s-sidebar__nav-link>i::before {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -122,27 +121,27 @@ em {
 }
 
 @media screen and (max-width : 898px) {
- .s-layout__content {
+  .s-layout__content {
     margin-top: 5em;
- }
+  }
 }
 
 /* Mobile First */
 @media (min-width: 42em) {
   .s-layout__content {
-     margin-left: 4em;
+    margin-left: 4em;
   }
-  
+
   /* Sidebar */
   .s-sidebar__trigger {
-     width: 4em;
+    width: 4em;
   }
-  
+
   .s-sidebar__nav {
-     width: 4em;
-     left: 0;
+    width: 4em;
+    left: 0;
   }
-  
+
   /* .s-sidebar__nav:hover,
   .s-sidebar__nav:focus,
   .s-sidebar__trigger:hover + .s-sidebar__nav,
@@ -153,25 +152,36 @@ em {
 
 @media (min-width: 42em) {
   .s-layout__content {
-     /* margin-left: 15em; */
-     
+    /* margin-left: 15em; */
+
   }
-  
+
   /* Sidebar */
   .s-sidebar__trigger {
-     display: none
+    display: none
   }
-  
+
   .s-sidebar__nav {
-     width: 15em;
+    width: 15em;
   }
-  
+
   .s-sidebar__nav ul {
-     top: 1.3em;
+    top: 1.3em;
   }
 }
 
 
 .dropdown-toggle::after {
   display: none;
+}
+
+.plus-dropdown>.dropdown-menu.show {
+  width: 224px;
+  background: #FFFFFF;
+  height: 208px;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }

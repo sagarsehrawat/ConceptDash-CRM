@@ -4,8 +4,10 @@ import pinnedInactive from '../../Images/Pin icon.svg'
 import { Bar, Pie } from 'react-chartjs-2'
 import axios from 'axios'
 import LoadingSpinner from '../Loader/Loader'
-import { BUDGET_CHART, HOST } from '../Constants/Constants'
+import { BUDGET_CHART, BUDGET_CHART_DEPARTMENT, HOST } from '../Constants/Constants'
 import { primaryColour } from '../Constants/styles'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowUpRightDots } from '@fortawesome/free-solid-svg-icons'
 
 const budgetChartStyles = {
     container: {
@@ -96,13 +98,25 @@ const budgetChartStyles = {
     },
     largeContainerHeader: {
         width: "892px",
-        height: "96px",
+        height: "48px",
         background: "#FFFFFF",
         boxShadow: "0px -4px 25px rgba(0, 0, 0, 0.08)",
         borderRadius: "12px 12px 0px 0px",
         marginLeft: "-12px"
     },
     largeContainerSubHeader: {
+
+    },
+    table: {
+        width: "892px",
+        paddingLeft: "16px",
+        paddingRight: "16px",
+        marginLeft: "-12px",
+        height: "224px",
+        overflowY: "scroll",
+        background: "#FFFFFF",
+    },
+    th: {
         width: "892px",
         height: "40px",
         background: "#F5F5F5",
@@ -112,26 +126,23 @@ const budgetChartStyles = {
         paddingLeft: '16px',
         paddingRight: '16px'
     },
-    table: {
+    tableHeaders: {
+        fontFamily: "'Roboto'",
+        fontStyle: "normal",
+        fontWeight: 500,
+        fontSize: "12px",
+        color: "#071C33",
+        textAlign: 'center',
+        marginBottom: '0px',
+        marginTop: '0px',
+    },
+    tableBody: {
         width: "892px",
         height: "224px",
         overflowY: "scroll",
         background: "#FFFFFF",
         boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
         borderRadius: "0px 0px 12px 12px",
-        marginLeft: "-12px",
-    },
-    tableHeaders: {
-        fontFamily: "'Roboto'",
-        fontStyle: "normal",
-        fontWeight: 400,
-        height: '16px',
-        fontSize: "12px",
-        color: primaryColour,
-        textAlign: 'center',
-        marginBottom: '0px',
-        marginTop: '0px',
-        display: 'inline-block'
     },
     tableRow: {
         width: "860px",
@@ -147,13 +158,40 @@ const budgetChartStyles = {
         fontStyle: "normal",
         fontWeight: 400,
         fontSize: "12px",
-        lineHeight: "16px",
         color: "#0A0A0A",
         textAlign: 'center',
         marginBottom: '0px',
         marginTop: '0px',
-        display: 'inline-block'
-    }
+        borderBottom: "0px"
+    },
+    percentContainer1: {
+        alignItems: "center",
+        padding: "2px 12px",
+        gap: "8px",
+        width: "84.24px",
+        height: "20px",
+        background: "#F0F8F2",
+        borderRadius: "60px",
+        fontFamily: "'Roboto'",
+        fontStyle: "normal",
+        fontWeight: 400,
+        fontSize: "12px",
+        color: "#34A853"
+    },
+    percentContainer2: {
+        alignItems: "center",
+        padding: "2px 12px",
+        gap: "8px",
+        width: "84.24px",
+        height: "20px",
+        background: "#FFE1E8",
+        borderRadius: "60px",
+        fontFamily: "'Roboto'",
+        fontStyle: "normal",
+        fontWeight: 400,
+        fontSize: "12px",
+        color: "#FE3766"
+    },
 }
 
 const budgetCategoryOptions = {
@@ -397,6 +435,22 @@ const BudgetCharts = (props) => {
                 console.error("Error fetching chart data: ", err);
             })
 
+            await axios.get(HOST + BUDGET_CHART_DEPARTMENT, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                },
+            }).then((res) => {
+                const arr = res.data.res;
+                let obj = projectCategoryBudgetChartData
+                arr.map(e => {
+                    obj[e.Department] = {}
+                    obj[e.Department]['percent'] = e.Percent
+                })
+                setprojectCategoryBudgetChartData(obj)
+            }).catch((err) => {
+                console.error("Error fetching chart data: ", err);
+            })
+
             await axios.get(HOST + BUDGET_CHART, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
@@ -405,7 +459,7 @@ const BudgetCharts = (props) => {
                 },
             }).then((res) => {
                 const arr = res.data.res;
-                let obj = {}
+                let obj = projectCategoryBudgetChartData
                 for (let i = 0; i < arr.length;) {
                     if (arr[i].Department in obj) {
                         obj[arr[i].Department][arr[i].Budget_Year] = arr[i].Total_Amount
@@ -424,10 +478,9 @@ const BudgetCharts = (props) => {
     }, [year])
 
     const addComma = (num) => {
-        console.log(num)
         if (num === null || num === "" || num === undefined) return "";
         return `$ ${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-      };
+    };
 
     return (
         <>
@@ -510,57 +563,46 @@ const BudgetCharts = (props) => {
             </div>
             <div style={budgetChartStyles.largeContainer}>
                 <div style={budgetChartStyles.largeContainerHeader}>
-                    <div className='d-flex flex-row justify-content-between' style={{marginLeft: "16px", marginRight: "16px"}}>
+                    <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "16px", marginRight: "16px" }}>
                         <p style={budgetChartStyles.largeContainerHeading}>Project Category Budget Overview</p>
                         <img src={pinnedActive} alt="Dashboard Icon" style={budgetChartStyles.pinnedIcon} />
                     </div>
-                    <div className='d-flex flex-row justify-content-between align-items-center' style={budgetChartStyles.largeContainerSubHeader}>
-                        <p style={budgetChartStyles.tableHeaders}>Department</p>
-                        {parseInt(year) >= 2 ? <p style={budgetChartStyles.tableHeaders}>{new Date().getFullYear()-2} Budget $</p> : <></>}
-                        {parseInt(year) >= 1 ? <p style={budgetChartStyles.tableHeaders}>{new Date().getFullYear()-1} Budget $</p> : <></>}
-                        {parseInt(year) >= 0 ? <p style={budgetChartStyles.tableHeaders}>{new Date().getFullYear()} Budget $</p> : <></>}
-                        <p style={budgetChartStyles.tableHeaders}>Gross Budget Change</p>
-                        <p style={budgetChartStyles.tableHeaders}>Forcasted Budget Change</p>
-                    </div>
+
                 </div>
-                <div className='' style={budgetChartStyles.table}>
+                <table className='table' style={budgetChartStyles.table}>
+                    <thead style={budgetChartStyles.th}>
+                        <tr className="" style={budgetChartStyles.largeContainerSubHeader}>
+                            <th style={budgetChartStyles.tableHeaders} scope="col">Department</th>
+                            {parseInt(year) >= 2 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear() - 2} Budget $</th> : <></>}
+                            {parseInt(year) >= 1 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear() - 1} Budget $</th> : <></>}
+                            {parseInt(year) >= 0 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear()} Budget $</th> : <></>}
+                            <th style={budgetChartStyles.tableHeaders} scope="col">Average Increase/Decrease</th>
+                        </tr>
+                    </thead>
+
                     {isLoading[2] ? <LoadingSpinner /> : <>
-                        {Object.keys(projectCategoryBudgetChartData).map(e => {
-                            const y = new Date().getFullYear()
-                            if(year==='0'){
+                        <tbody style={budgetChartStyles.tableBody}>
+                            {Object.keys(projectCategoryBudgetChartData).map(e => {
+                                const y = new Date().getFullYear()
                                 return (
-                                    <div style={budgetChartStyles.tableRow} className='d-flex flex-row justify-content-between align-items-center'>
-                                        <p style={budgetChartStyles.tableCell}>{e}</p>
-                                        <p style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y])}</p>
-                                        <p style={budgetChartStyles.tableCell}></p>
-                                        <p v></p>
-                                    </div>
+                                    <tr style={budgetChartStyles.tableRow} className='' key={e}>
+                                        <td style={budgetChartStyles.tableCell}>{e}</td>
+                                        {parseInt(year) >= 2 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 2])}</td> : <></>}
+                                        {parseInt(year) >= 1 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 1])}</td> : <></>}
+                                        <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y])}</td>
+                                        <td style={budgetChartStyles.tableCell} className='d-flex justify-content-center'>
+                                            {projectCategoryBudgetChartData[e]['percent'] >= 0 ?
+                                                <div style={budgetChartStyles.percentContainer1}>{projectCategoryBudgetChartData[e]['percent']} %</div>
+                                                : <div style={budgetChartStyles.percentContainer2}>{-projectCategoryBudgetChartData[e]['percent']} %</div>
+                                            }
+                                        </td>
+                                    </tr>
                                 )
-                            }else if(year === '1'){
-                                return (
-                                    <div style={budgetChartStyles.tableRow} className='d-flex flex-row justify-content-between align-items-center'>
-                                        <p style={budgetChartStyles.tableCell}>{e}</p>
-                                        <p style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y-1])}</p>
-                                        <p style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y])}</p>
-                                        <p style={budgetChartStyles.tableCell}></p>
-                                        <p style={budgetChartStyles.tableCell}></p>
-                                    </div>
-                                )
-                            }else if(year === '2'){
-                                return (
-                                    <div style={budgetChartStyles.tableRow} className='d-flex flex-row justify-content-between align-items-center'>
-                                        <p style={budgetChartStyles.tableCell}>{e}</p>
-                                        <p style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y-2])}</p>
-                                        <p style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y-1])}</p>
-                                        <p style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y])}</p>
-                                        <p style={budgetChartStyles.tableCell}></p>
-                                        <p style={budgetChartStyles.tableCell}></p>
-                                    </div>
-                                )
-                            }
-                        })}
+                            })}
+                        </tbody>
                     </>}
-                </div>
+
+                </table>
             </div>
         </>
     )
