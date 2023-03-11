@@ -53,6 +53,7 @@ import CustomerUpdate from "../Update/CustomerUpdate";
 import Home from "./Home";
 import { HOST, GET_ADMIN_TASKS } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
+import RFP from "../v2/RFP";
 
 const mystyles = {
   topNavbar: {
@@ -61,6 +62,7 @@ const mystyles = {
     top: "0px",
     backgroundColor: "#FAFBFB",
     borderBottom: "1px solid #EBE9F1",
+    width: "1440px"
   },
   plusIcon: {
     height: "32px",
@@ -101,7 +103,7 @@ const mystyles = {
   sidebar: {
     boxSizing: "border-box",
     width: "228px",
-    height: "100vh",
+    height: "900px",
     left: "0px",
     top: "0px",
     background: "#FBFBFB",
@@ -446,7 +448,7 @@ const Dashboard = () => {
     if (nav === 1) return <></>;
     if (nav === 2) return <></>;
     if (nav === 3) return <BudgetCities />;
-    if (nav === 4) return <RFPUpdate />;
+    if (nav === 4) return <RFP />
     if (nav === 5) return <ProposalsUpdate />;
     if (nav === 6) return <ProjectUpdate />;
     if (nav === 7) return <EmployeeUpdate />;
@@ -966,13 +968,13 @@ const Dashboard = () => {
         <div
           style={{
             marginLeft: "250px",
-            width: "100%",
             backgroundColor: "#F8FAFB",
+            height: "844px"
           }}
         >
           {handleDash()}
         </div>
-        <div style={mystyles.deadlines}>
+{/*         <div style={mystyles.deadlines}>
           <img src={deadlineImage} alt="Deadline Icon" />
           <p style={mystyles.deadlineHeading}>Deadlines Approaching!</p>
         </div>
@@ -989,10 +991,7 @@ const Dashboard = () => {
               <div>
                 <span style={mystyles.rect1}></span>
                 <div style={mystyles.task1}>
-                  {/* <span style={mystyles.task1Heading}> */}
                   {title1}
-                  {/* </span> */}
-
                   <div>
                     <img src={Time} alt="Time Icon" />
                     <span> {`${month1[0]}${month1[1]}${month1[2]}`} </span><span>{dDate1}</span>
@@ -1001,9 +1000,7 @@ const Dashboard = () => {
               <div>
                 <span style={mystyles.rect2}></span>
                 <div style={mystyles.task2}>
-                  {/* <span style={mystyles.task1Heading}> */}
                   {title2}
-                  {/* </span> */}
 
                   <div>
                     <img src={Time} alt="Time Icon" />
@@ -1013,9 +1010,7 @@ const Dashboard = () => {
               <div>
                 <span style={mystyles.rect3}></span>
                 <div style={mystyles.task3}>
-                  {/* <span style={mystyles.task1Heading}> */}
                   {title3}
-                  {/* </span> */}
 
                   <div>
                     <img src={Time} alt="Time Icon" />
@@ -1026,7 +1021,7 @@ const Dashboard = () => {
           )}
           <p style={mystyles.tasksBottom}>View All</p>
         </div>
-        <div style={mystyles.calendar}></div>
+        <div style={mystyles.calendar}></div> */}
       </div>
     </>
   );

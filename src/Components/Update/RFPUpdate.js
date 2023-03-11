@@ -23,7 +23,6 @@ import Form from "react-bootstrap/Form";
 import AuthContext from '../../Context/AuthContext'
 
 function RFPUpdate() {
-  
   const { privileges, setPrivileges } = useContext(AuthContext)
   const [apiCall, setCall] = useState(0);
   const [green, setgreen] = useState(false);

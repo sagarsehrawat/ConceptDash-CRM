@@ -6,3 +6,46 @@ body {
   overflow-x: hidden;
   font-family: 'Roboto';
 }
+
+table {
+  table-layout: fixed;
+}
+
+th {
+  padding: 0px;
+  margin: 0px;
+}
+
+.modal-content {
+  border: none;
+}
+
+.filter-dialog {
+  margin: 0px !important;
+  max-width: none;
+}
+
+.filter-backdrop {
+  opacity: 0 !important;
+}
+
+input#city-search::placeholder {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #70757A;
+  opacity: 0.7;
+}
+
+.form-check-input:checked {
+  border-color: #6519E1;
+  color: #6519E1;
+}
+
+.form-check-input:checked::before {
+  background-color: #6519E1;
+  border-color: #6519E1;
+  color: #6519E1;
+}
