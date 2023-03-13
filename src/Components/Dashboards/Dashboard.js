@@ -62,7 +62,8 @@ const mystyles = {
     top: "0px",
     backgroundColor: "#FAFBFB",
     borderBottom: "1px solid #EBE9F1",
-    width: "1440px"
+    width: "1440px",
+    marginBottom: "0px"
   },
   plusIcon: {
     height: "32px",
@@ -74,7 +75,9 @@ const mystyles = {
     fontSize: "14px",
     color: "#0A0A0A",
     marginLeft: "0px",
-    paddingLeft: "0px"
+    paddingLeft: "0px",
+    width: "224px",
+    height: "32px"
   },
   plusDropdownItemIcon: {
     marginLeft: "10px",
@@ -113,13 +116,11 @@ const mystyles = {
     flexDirection: "column",
     alignItems: "flex-start",
     position: "fixed",
-    zIndex: "2"
   },
   branding: {
     collapsed: {
-      width: "101px",
       height: "26px",
-      marginLeft: "30px",
+      width: "68px",
       marginTop: "15px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
@@ -127,9 +128,9 @@ const mystyles = {
       fontSize: "18px",
       lineHeight: "26px",
       color: "#000000",
+      textAlign: "center"
     },
     nonCollapsed: {
-      width: "101px",
       height: "26px",
       marginLeft: "68px",
       marginTop: "15px",
@@ -141,29 +142,81 @@ const mystyles = {
       color: "#000000",
     },
   },
+  sidebarIconContainer: {
+    nonCollapsed: {
+      boxSizing: "border-box",
+      position: "absolute",
+      width: "24px",
+      height: "24px",
+      left: "216px",
+      top: "16px",
+      background: "#DBDBF4",
+      border: "1px solid #EBE9F1",
+      borderRadius: "12px",
+      zIndex: "1000"
+    },
+    collapsed: {
+      boxSizing: "border-box",
+      position: "absolute",
+      width: "24px",
+      height: "24px",
+      left: "56px",
+      top: "16px",
+      background: "#DBDBF4",
+      border: "1px solid #EBE9F1",
+      borderRadius: "12px",
+      zIndex: "1000"
+    }
+  },
   sidebarMenu: {
-    padding: "8px 20px",
+    padding: "8px 12px",
     gap: "10px",
   },
   sidebarMenuItemActive: {
-    width: "204px",
-    height: "40px",
-    background: "#6519E1",
-    boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
-    borderRadius: "5px",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    cursor: "pointer",
+    nonCollapsed: {
+      width: "204px",
+      height: "40px",
+      background: "#6519E1",
+      boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
+      borderRadius: "5px",
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      cursor: "pointer",
+    },
+    collapsed: {
+      padding: "8px 20px",
+      gap: "10px",
+      width: "66px",
+      height: "40px",
+      background: "#6519E1",
+      boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
+      borderRadius: "8px 0px 0px 8px",
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      cursor: "pointer",
+      marginLeft: "2px"
+    }
   },
   sidebarMenuItemIconActive: {
-    width: "24px",
-    minWidth: "24px",
-    height: "24px",
-    marginLeft: "20px",
-    background: "#FBFBFB",
-    borderRadius: "100%",
-    textAlign: "center",
+    nonCollapsed: {
+      width: "24px",
+      minWidth: "24px",
+      height: "24px",
+      marginLeft: "20px",
+      background: "#FBFBFB",
+      borderRadius: "100%",
+      textAlign: "center",
+    },
+    collapsed: {
+      width: "24px",
+      minWidth: "24px",
+      height: "24px",
+      background: "#FBFBFB",
+      borderRadius: "100%",
+      textAlign: "center",
+    }
   },
   sidebarMenuItemTextActive: {
     height: "20px",
@@ -184,13 +237,24 @@ const mystyles = {
     cursor: "pointer",
   },
   sidebarMenuItemIcon: {
-    width: "24px",
-    height: "24px",
-    marginLeft: "20px",
-    background: "#FBFBFB",
-    borderRadius: "100%",
-    textAlign: "center",
-    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
+    nonCollapsed: {
+      width: "24px",
+      height: "24px",
+      marginLeft: "20px",
+      background: "#FBFBFB",
+      borderRadius: "100%",
+      textAlign: "center",
+      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
+    },
+    collapsed: {
+      width: "24px",
+      height: "24px",
+      background: "#FBFBFB",
+      borderRadius: "100%",
+      textAlign: "center",
+      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
+      marginLeft: "22px"
+    }
   },
   sidebarMenuItemText: {
     height: "20px",
@@ -202,7 +266,7 @@ const mystyles = {
     marginLeft: "12px",
     color: "#0A0A0A",
   },
-  
+
 };
 
 const Dashboard = () => {
@@ -300,7 +364,7 @@ const Dashboard = () => {
           />} id="basic-nav-dropdown"
             className="p-2 plus-dropdown"
             align="end">
-            <NavDropdown.Item style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 0 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(0)} onMouseLeave={() => setplusDropdown(null)}>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 0 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(0)} onMouseLeave={() => setplusDropdown(null)}>
               <img
                 src={plusDropdown === 0 ? tasksInactive : tasksActive}
                 alt="Dashboard Icon"
@@ -308,7 +372,7 @@ const Dashboard = () => {
               />
               Assign New Task
             </NavDropdown.Item>
-            <NavDropdown.Item style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 1 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(1)} onMouseLeave={() => setplusDropdown(null)}>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 1 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(1)} onMouseLeave={() => setplusDropdown(null)}>
               <img
                 src={plusDropdown === 1 ? rfpInactive : rfpActive}
                 alt="Dashboard Icon"
@@ -316,7 +380,7 @@ const Dashboard = () => {
               />
               Add New RFP
             </NavDropdown.Item>
-            <NavDropdown.Item style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 2 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(2)} onMouseLeave={() => setplusDropdown(null)}>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 2 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(2)} onMouseLeave={() => setplusDropdown(null)}>
               <img
                 src={plusDropdown === 2 ? proposalsInactive : proposalsActive}
                 alt="Dashboard Icon"
@@ -324,7 +388,7 @@ const Dashboard = () => {
               />
               Add New Proposal
             </NavDropdown.Item>
-            <NavDropdown.Item style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 3 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(3)} onMouseLeave={() => setplusDropdown(null)}>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 3 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(3)} onMouseLeave={() => setplusDropdown(null)}>
               <img
                 src={plusDropdown === 3 ? projectsInactive : projectsActive}
                 alt="Dashboard Icon"
@@ -332,7 +396,7 @@ const Dashboard = () => {
               />
               Add New Project
             </NavDropdown.Item>
-            <NavDropdown.Item style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 4 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(4)} onMouseLeave={() => setplusDropdown(null)}>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 4 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(4)} onMouseLeave={() => setplusDropdown(null)}>
               <img
                 src={plusDropdown === 4 ? employeeInactive : employeeActive}
                 alt="Dashboard Icon"
@@ -340,7 +404,7 @@ const Dashboard = () => {
               />
               Add New Employee
             </NavDropdown.Item>
-            <NavDropdown.Item style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 5 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={(e) => setplusDropdown(5)} onMouseLeave={(e) => setplusDropdown(null)}>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 5 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={(e) => setplusDropdown(5)} onMouseLeave={(e) => setplusDropdown(null)}>
               <img
                 src={plusDropdown === 5 ? contactsInactive : contactsActive}
                 alt="Dashboard Icon"
@@ -392,24 +456,18 @@ const Dashboard = () => {
         </Navbar>
       </div>
       <div style={{ display: "flex", height: "100%", overflowY: "none" }}>
-        <Sidebar className="d-flex flex-column" rootStyles={mystyles.sidebar}>
+        <Sidebar className="d-flex flex-column" rootStyles={mystyles.sidebar} width="228px" collapsedWidth="68px">
           {isCollapsed
             ? <>
               <p style={mystyles.branding.collapsed}>TF</p>
-              <div style={{...mystyles.sidebarIconContainer, left: "67px"}} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
+              <div style={mystyles.sidebarIconContainer.collapsed} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
                 <FontAwesomeIcon icon={faChevronRight} color={primaryColour} />
               </div>
-            </>
-            : <>
-              <p style={mystyles.branding.nonCollapsed}>TASKFORCE</p>
-              <div style={mystyles.sidebarIconContainer} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
-                <FontAwesomeIcon icon={faChevronRight} color={primaryColour} />
-              </div>
-              <div style={mystyles.sidebarMenu}>
+              <div style={{marginTop: "8px"}}>
                 <div
                   style={
                     nav === 0
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.collapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(0)}
@@ -417,8 +475,290 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 0
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                    className='d-flex justify-content-center align-items-center'
+                  >
+                    <img
+                      src={nav === 0 ? dashboardActive : dashboardInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={
+                    nav === 1
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(1)}
+                >
+                  <div
+                    style={
+                      nav === 1
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 1 ? pinnedActive : pinnedInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={
+                    nav === 2
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(2)}
+                >
+                  <div
+                    style={
+                      nav === 2
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 2 ? tasksActive : tasksInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={
+                    nav === 3
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(3)}
+                >
+                  <div
+                    style={
+                      nav === 3
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 3 ? budgetsActive : budgetsInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={
+                    nav === 4
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(4)}
+                >
+                  <div
+                    style={
+                      nav === 4
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 4 ? rfpActive : rfpInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={
+                    nav === 5
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(5)}
+                >
+                  <div
+                    style={
+                      nav === 5
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 5 ? proposalsActive : proposalsInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={
+                    nav === 6
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(6)}
+                >
+                  <div
+                    style={
+                      nav === 6
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 6 ? projectsActive : projectsInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={
+                    nav === 7
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(7)}
+                >
+                  <div
+                    style={
+                      nav === 7
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 7 ? employeeActive : employeeInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={
+                    nav === 8
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(8)}
+                >
+                  <div
+                    style={
+                      nav === 8
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 8 ? calendarActive : calendarInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={
+                    nav === 9
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(9)}
+                >
+                  <div
+                    style={
+                      nav === 9
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 9 ? expenseActive : expenseInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={
+                    nav === 10
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(10)}
+                >
+                  <div
+                    style={
+                      nav === 10
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 10 ? companiesActive : companiesInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={
+                    nav === 11
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(11)}
+                >
+                  <div
+                    style={
+                      nav === 11
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 11 ? contactsActive : contactsInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+                <div
+                  style={
+                    nav === 12
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(12)}
+                >
+                  <div
+                    style={
+                      nav === 12
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 12 ? celebrationActive : celebrationInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
+              </div>
+            </>
+            : <>
+              <p style={mystyles.branding.nonCollapsed}>TASKFORCE</p>
+              <div style={mystyles.sidebarIconContainer.nonCollapsed} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
+                <FontAwesomeIcon icon={faChevronRight} color={primaryColour} />
+              </div>
+              <div style={mystyles.sidebarMenu}>
+                <div
+                  style={
+                    nav === 0
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(0)}
+                >
+                  <div
+                    style={
+                      nav === 0
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                     className='d-flex justify-content-center align-items-center'
                   >
@@ -441,7 +781,7 @@ const Dashboard = () => {
                 <div
                   style={
                     nav === 1
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(1)}
@@ -449,8 +789,8 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 1
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
@@ -471,7 +811,7 @@ const Dashboard = () => {
                 <div
                   style={
                     nav === 2
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(2)}
@@ -479,8 +819,8 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 2
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
@@ -501,7 +841,7 @@ const Dashboard = () => {
                 <div
                   style={
                     nav === 3
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(3)}
@@ -509,8 +849,8 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 3
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
@@ -531,7 +871,7 @@ const Dashboard = () => {
                 <div
                   style={
                     nav === 4
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(4)}
@@ -539,8 +879,8 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 4
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
@@ -561,7 +901,7 @@ const Dashboard = () => {
                 <div
                   style={
                     nav === 5
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(5)}
@@ -569,8 +909,8 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 5
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
@@ -591,7 +931,7 @@ const Dashboard = () => {
                 <div
                   style={
                     nav === 6
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(6)}
@@ -599,8 +939,8 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 6
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
@@ -621,7 +961,7 @@ const Dashboard = () => {
                 <div
                   style={
                     nav === 7
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(7)}
@@ -629,8 +969,8 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 7
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
@@ -651,7 +991,7 @@ const Dashboard = () => {
                 <div
                   style={
                     nav === 8
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(8)}
@@ -659,8 +999,8 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 8
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
@@ -681,7 +1021,7 @@ const Dashboard = () => {
                 <div
                   style={
                     nav === 9
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(9)}
@@ -689,8 +1029,8 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 9
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
@@ -711,7 +1051,7 @@ const Dashboard = () => {
                 <div
                   style={
                     nav === 10
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(10)}
@@ -719,8 +1059,8 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 10
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
@@ -741,7 +1081,7 @@ const Dashboard = () => {
                 <div
                   style={
                     nav === 11
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(11)}
@@ -749,8 +1089,8 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 11
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
@@ -771,7 +1111,7 @@ const Dashboard = () => {
                 <div
                   style={
                     nav === 12
-                      ? mystyles.sidebarMenuItemActive
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
                   onClick={(e) => setnav(12)}
@@ -779,8 +1119,8 @@ const Dashboard = () => {
                   <div
                     style={
                       nav === 12
-                        ? mystyles.sidebarMenuItemIconActive
-                        : mystyles.sidebarMenuItemIcon
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
@@ -803,61 +1143,14 @@ const Dashboard = () => {
         </Sidebar>
         <div
           style={{
-            marginLeft: isCollapsed ? "80px" : "250px",
+            marginLeft: isCollapsed ? "68px" : "228px",
             backgroundColor: "#F8FAFB",
-            height: "844px"
+            height: "844px",
+            width: isCollapsed ? "1372px" : "1212px"
           }}
         >
           {handleDash()}
         </div>
-{/*         <div style={mystyles.deadlines}>
-          <img src={deadlineImage} alt="Deadline Icon" />
-          <p style={mystyles.deadlineHeading}>Deadlines Approaching!</p>
-        </div>
-        <div style={mystyles.celebrations}>
-          <p style={mystyles.celebrationHeading}>Celebration</p>
-          <p style={mystyles.celebrationBottom}>View All</p>
-        </div>
-        <div style={mystyles.tasks}>
-          <p style={mystyles.tasksHeading}>Tasks Assigned</p>
-          {isLoadingTasks ? (
-            <LoadingSpinner />
-          ) : (
-            <>
-              <div>
-                <span style={mystyles.rect1}></span>
-                <div style={mystyles.task1}>
-                  {title1}
-                  <div>
-                    <img src={Time} alt="Time Icon" />
-                    <span> {`${month1[0]}${month1[1]}${month1[2]}`} </span><span>{dDate1}</span>
-                  </div>
-                </div></div>
-              <div>
-                <span style={mystyles.rect2}></span>
-                <div style={mystyles.task2}>
-                  {title2}
-
-                  <div>
-                    <img src={Time} alt="Time Icon" />
-                    <span> {`${month2[0]}${month2[1]}${month2[2]}`} </span><span>{dDate2}</span>
-                  </div>
-                </div></div>
-              <div>
-                <span style={mystyles.rect3}></span>
-                <div style={mystyles.task3}>
-                  {title3}
-
-                  <div>
-                    <img src={Time} alt="Time Icon" />
-                    <span> {`${month3[0]}${month3[1]}${month3[2]}`} </span><span>{dDate3}</span>
-                  </div>
-                </div></div>
-            </>
-          )}
-          <p style={mystyles.tasksBottom}>View All</p>
-        </div>
-        <div style={mystyles.calendar}></div> */}
       </div>
     </>
   );

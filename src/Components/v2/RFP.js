@@ -101,13 +101,12 @@ const styles = {
         marginLeft: "8px"
     },
     headerLine: {
-        width: "1135px",
         height: "0px",
         left: "32px",
         top: "164px",
         border: "1px solid #EBE9F1",
         marginLeft: "32px",
-        marginRight: "24px",
+        marginRight: "32px",
         marginBottom: "20px"
     },
     heading2: {
@@ -165,10 +164,6 @@ const styles = {
         marginLeft: "8px",
         textAlign: "left",
         verticalAlign: "middle",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        WebkitLineClamp: "2",
-        WebkitBoxOrient: "vertical"
     },
     pageContainer: {
         width: "32px",
@@ -738,12 +733,12 @@ const RFP = () => {
                 </Modal>
                 <Button style={styles.filterButton}><FontAwesomeIcon icon={faArrowsUpDown} color="#000000" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Sort</p></Button>
             </div>
-            <div style={{ overflowX: "scroll", width: "1200px", borderBottom: "1px solid #EBE9F1", }}>
+            <div style={{ overflowX: "scroll", borderBottom: "1px solid #EBE9F1", }}>
                 <TableScrollbar height="448px">
-                    <table style={styles.table} className='table rfp-table'>
+                    <table style={styles.table} className='rfp-table'>
                         <thead style={styles.tableHeader}>
                             <tr>
-                                <th scope="col" style={{ ...styles.tableHeading, width: "300px", borderRight: "1px solid #EBE9F1", borderBottom: "1px solid #EBE9F1", }}>RFP Name</th>
+                                <th scope="col" style={{ ...styles.tableHeading, width: "300px", borderRight: "1px solid #EBE9F1", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>RFP Name</th>
                                 <th scope="col" style={{ ...styles.tableHeading, width: "200px" }}>City</th>
                                 <th scope="col" style={{ ...styles.tableHeading, width: "200px" }}>Source</th>
                                 <th scope="col" style={{ ...styles.tableHeading, width: "180px" }}>Start Date</th>
@@ -756,7 +751,7 @@ const RFP = () => {
                         </thead>
                         <tbody style={styles.tableBody}>
                             {isLoading ? <div style={{ height: "408px", width: "1757px", background: "white" }}><LoadingSpinner /></div> : rfps && rfps.map(e => (
-                                <tr style={{ ...styles.tableRow, backgroundColor: selectedRfps.includes(e.RFP_ID) ? "rgba(101, 25, 225, 0.1)" : "white" }}>
+                                <tr style={{ ...styles.tableRow, backgroundColor: selectedRfps.includes(e.RFP_ID) ? "rgba(101, 25, 225, 0.1)" : "white" }} className='fixed-col'>
                                     <td className='fixed-col' style={{ ...styles.tableCell, fontWeight: "500", minWidth: "", borderRight: "1px solid #EBE9F1", backgroundColor: "white" }}>
                                         <div className='d-flex flex-row align-items-center'>
                                             <Form.Check

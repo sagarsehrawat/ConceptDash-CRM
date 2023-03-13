@@ -84,6 +84,7 @@ const budgetChartStyles = {
         border: "1px solid #EBE9F1",
         borderRadius: "12px",
         marginTop: "24px",
+        padding: "0px"
     },
     largeContainerHeading: {
         width: "276px",
@@ -102,7 +103,6 @@ const budgetChartStyles = {
         background: "#FFFFFF",
         boxShadow: "0px -4px 25px rgba(0, 0, 0, 0.08)",
         borderRadius: "12px 12px 0px 0px",
-        marginLeft: "-12px"
     },
     largeContainerSubHeader: {
 
@@ -111,7 +111,6 @@ const budgetChartStyles = {
         width: "892px",
         paddingLeft: "16px",
         paddingRight: "16px",
-        marginLeft: "-12px",
         height: "224px",
         overflowY: "scroll",
         background: "#FFFFFF",
@@ -569,40 +568,43 @@ const BudgetCharts = (props) => {
                     </div>
 
                 </div>
-                <table className='table' style={budgetChartStyles.table}>
-                    <thead style={budgetChartStyles.th}>
-                        <tr className="" style={budgetChartStyles.largeContainerSubHeader}>
-                            <th style={budgetChartStyles.tableHeaders} scope="col">Department</th>
-                            {parseInt(year) >= 2 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear() - 2} Budget $</th> : <></>}
-                            {parseInt(year) >= 1 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear() - 1} Budget $</th> : <></>}
-                            {parseInt(year) >= 0 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear()} Budget $</th> : <></>}
-                            <th style={budgetChartStyles.tableHeaders} scope="col">Average Increase/Decrease</th>
-                        </tr>
-                    </thead>
+                <div style={{width: "900px"}}>
+                    <table className='table' style={budgetChartStyles.table}>
+                        <thead style={budgetChartStyles.th}>
+                            <tr className="" style={budgetChartStyles.largeContainerSubHeader}>
+                                <th style={budgetChartStyles.tableHeaders} scope="col">Department</th>
+                                {parseInt(year) >= 2 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear() - 2} Budget $</th> : <></>}
+                                {parseInt(year) >= 1 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear() - 1} Budget $</th> : <></>}
+                                {parseInt(year) >= 0 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear()} Budget $</th> : <></>}
+                                <th style={budgetChartStyles.tableHeaders} scope="col">Average Increase/Decrease</th>
+                            </tr>
+                        </thead>
 
-                    {isLoading[2] ? <LoadingSpinner /> : <>
-                        <tbody style={budgetChartStyles.tableBody}>
-                            {Object.keys(projectCategoryBudgetChartData).map(e => {
-                                const y = new Date().getFullYear()
-                                return (
-                                    <tr style={budgetChartStyles.tableRow} className='' key={e}>
-                                        <td style={budgetChartStyles.tableCell}>{e}</td>
-                                        {parseInt(year) >= 2 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 2])}</td> : <></>}
-                                        {parseInt(year) >= 1 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 1])}</td> : <></>}
-                                        <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y])}</td>
-                                        <td style={budgetChartStyles.tableCell} className='d-flex justify-content-center'>
-                                            {projectCategoryBudgetChartData[e]['percent'] >= 0 ?
-                                                <div style={budgetChartStyles.percentContainer1}>{projectCategoryBudgetChartData[e]['percent']} %</div>
-                                                : <div style={budgetChartStyles.percentContainer2}>{-projectCategoryBudgetChartData[e]['percent']} %</div>
-                                            }
-                                        </td>
-                                    </tr>
-                                )
-                            })}
-                        </tbody>
-                    </>}
+                        {isLoading[2] ? <LoadingSpinner /> : <>
+                            <tbody style={budgetChartStyles.tableBody}>
+                                {Object.keys(projectCategoryBudgetChartData).map(e => {
+                                    const y = new Date().getFullYear()
+                                    return (
+                                        <tr style={budgetChartStyles.tableRow} className='' key={e}>
+                                            <td style={budgetChartStyles.tableCell}>{e}</td>
+                                            {parseInt(year) >= 2 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 2])}</td> : <></>}
+                                            {parseInt(year) >= 1 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 1])}</td> : <></>}
+                                            <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y])}</td>
+                                            <td style={budgetChartStyles.tableCell} className='d-flex justify-content-center'>
+                                                {projectCategoryBudgetChartData[e]['percent'] >= 0 ?
+                                                    <div style={budgetChartStyles.percentContainer1}>{projectCategoryBudgetChartData[e]['percent']} %</div>
+                                                    : <div style={budgetChartStyles.percentContainer2}>{-projectCategoryBudgetChartData[e]['percent']} %</div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </>}
 
-                </table>
+                    </table>
+                </div>
+
             </div>
         </>
     )

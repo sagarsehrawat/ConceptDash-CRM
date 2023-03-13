@@ -12,19 +12,19 @@ table {
   table-layout: fixed;
 }
 
-.rfp-table > th {
+th {
   padding: 0px;
   margin: 0px;
 }
 
-.rfp-table > th:first-child{
+.fixed-header{
   position: sticky;
   left: 0;
   z-index: 1;
   background-color: #F7F7F9;
 }
 
-.rfp-table > td:first-child {
+.fixed-col{
   position: sticky;
   left: 0;
   z-index: 1;
@@ -73,4 +73,10 @@ input#city-search::placeholder {
 
 .css-dip3t8 {
   background-color: transparent !important;
+  z-index: 0 !important;
+  position: unset !important;
+}
+
+.nav-dropdown > a:hover{
+  text-decoration: none;
 }
