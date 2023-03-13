@@ -18,6 +18,18 @@ import {
 import LoadingSpinner from "./Loader/Loader";
 import GreenAlert from "./Loader/GreenAlert";
 import RedAlert from "./Loader/RedAlert";
+import {
+  ScheduleComponent,
+  Day,
+  Week,
+  WorkWeek,
+  Month,
+  Agenda,
+  Inject,
+  ViewsDirective,
+  ViewDirective,
+} from "@syncfusion/ej2-react-schedule";
+import { Internationalization, extend } from "@syncfusion/ej2-base";
 
 const TestDemo = () => {
   const [employees, setemployees] = useState([]);
@@ -97,7 +109,6 @@ const TestDemo = () => {
       }
     );
   };
-
   const initClient = () => {
     setisLoading(true);
     if (!localStorage.getItem("access_token")) {
@@ -125,9 +136,9 @@ const TestDemo = () => {
         .then((data) => {
           if (data?.items) {
             setEvents(formatEvents(data.items));
+            setisLoading(false);
           }
         });
-        setisLoading(false);
     }
   };
   const [form, setform] = useState({
@@ -268,11 +279,14 @@ const TestDemo = () => {
     handleSubmit(e);
   };
   const formatEvents = (list) => {
+    console.log(list);
     return list.map((item) => ({
-      title: item.summary,
-      start: item.start.dateTime || item.start.date,
-      end: item.end.dateTime || item.end.date,
-      url: item.hangoutLink ? item.hangoutLink : item.iCalUID,
+      Id: item.id,
+      Subject: item.summary,
+      StartTime: new Date(item.start.dateTime) || new Date(item.start.date),
+      EndTime: new Date(item.end.dateTime) || new Date(item.end.date),
+      meetingLink: item.hangoutLink,
+      isAllDay: false,
     }));
   };
   const [show, setShow] = useState(false);
@@ -296,15 +310,53 @@ const TestDemo = () => {
     let newValue = e.target.value + ":00" + offset1;
     setend(newValue);
   };
+  console.log(events);
+  const handleEventClick = (e) => {
+    const googleMeetLink = e.event.meetingLink;
+    window.open(googleMeetLink, "_blank");
+  };
+  const data = [
+    {
+      Id: 1,
+      Subject: "Meeting - 1",
+      StartTime: new Date("2023-03-14T19:30:00+05:30"),
+      EndTime: new Date("2023-03-14T20:30:00+05:30"),
+      IsAllDay: false,
+    },
+  ];
+  const instance = new Internationalization();
+  function getTimeString(value) {
+    return instance.formatDate(value, { skeleton: "hm" });
+  }
+  function eventTemplate(props) {
+    return (
+      <div className="template-wrap">
+        <div className="subject">{props.Subject}</div>
+        <div className="time">
+          Time: {getTimeString(props.StartTime)} -{" "}
+          {getTimeString(props.EndTime)}
+        </div>
+      </div>
+    );
+  }
   return (
     <>
-    {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
-    {red===true ? <RedAlert setRed={setred}/> : <></>}
+      {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+      {red === true ? <RedAlert setRed={setred} /> : <></>}
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div>
-          <Button
+        <div
+          style={{
+            width: "1212px",
+            height: "844px",
+            left: "228px",
+            top: "56px",
+            overflowY: "scroll",
+            background: "#FFFFFF",
+          }}
+        >
+           <Button
             onClick={handleShow}
             style={{
               marginTop: "1vh",
@@ -315,7 +367,7 @@ const TestDemo = () => {
           >
             Create Event
           </Button>
-          <div
+          {/*<div
             style={{
               width: "31vw",
               height: "50vh",
@@ -355,7 +407,26 @@ const TestDemo = () => {
                 }
               }}
             />
-          </div>
+          </div> */}
+          <ScheduleComponent
+            allowEditing={false}
+            allowDeleting={false}
+            eventSettings={{ dataSource: events }}
+            agendaDaysCount={7}
+            eventClick={handleEventClick}
+          >
+            <ViewsDirective>
+              <ViewDirective option="Week" />
+              <ViewDirective option="Day" />
+              <ViewDirective option="Month" />
+              <ViewDirective
+                option="Agenda"
+                eventTemplate={eventTemplate.bind(this)}
+                allowVirtualScrolling={false}
+              />
+            </ViewsDirective>
+            <Inject services={[Day, Week, Month, Agenda]} />
+          </ScheduleComponent>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>Add Event</Modal.Title>
