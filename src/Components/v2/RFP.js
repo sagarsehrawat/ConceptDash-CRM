@@ -4,7 +4,7 @@ import TableScrollbar from 'react-table-scrollbar';
 import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST } from '../Constants/Constants';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowsUpDown, faArrowUp, faChevronLeft, faChevronRight, faDownload, faEdit, faFilter, faMagnifyingGlass, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowsUpDown, faArrowUp, faChevronLeft, faChevronRight, faCross, faDownload, faEdit, faFilter, faMagnifyingGlass, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Button, Form, Modal } from 'react-bootstrap';
 import GreenAlert from '../Loader/GreenAlert';
 import RedAlert from '../Loader/RedAlert';
@@ -118,41 +118,42 @@ const styles = {
         lineHeight: "28px",
         color: "#0A0A0A",
         marginLeft: "32px",
-        marginBottom: "8px"
+        marginBottom: "8px",
     },
     table: {
-        border: "1px solid #EBE9F1",
         width: "100%",
-        overflowX: "auto"
+        overflowX: "auto",
     },
     tableHeader: {
         height: "44px",
         background: "#F7F7F9",
         textAlign: "center",
+        borderBottom: "0px"
     },
     tableHeading: {
         fontFamily: "'Roboto'",
         fontStyle: "normal",
         fontWeight: 600,
         fontSize: "14px",
-        lineHeight: "20px",
         color: "#70757A",
-        border: "1px solid #EBE9F1",
+        textAlign: "left",
+        borderBottom: "1px solid #EBE9F1",
+        borderTop: "1px solid #EBE9F1",
+        verticalAlign: "middle",
+        paddingLeft: "31px"
     },
     tableBody: {
         background: "#FFFFFF",
-        borderBottom: "1px solid #EBE9F1",
+
     },
     tableRow: {
         width: "100%",
-        height: "64px",
         background: "#FFFFFF",
-        borderBottom: "1px solid #EBE9F1",
         verticalAlign: "top"
     },
     tableCell: {
-        height: "64px",
-        border: "1px solid #EBE9F1",
+        height: "58px",
+        borderBottom: "1px solid #EBE9F1",
         padding: "12px 32px",
         gap: "10px",
         fontFamily: "'Roboto'",
@@ -162,11 +163,12 @@ const styles = {
         lineHeight: "20px",
         color: "#0A0A0A",
         marginLeft: "8px",
-        textAlign: "center",
+        textAlign: "left",
         verticalAlign: "middle",
         overflow: "hidden",
         textOverflow: "ellipsis",
-        whiteSpace: "nowrap"
+        WebkitLineClamp: "2",
+        WebkitBoxOrient: "vertical"
     },
     pageContainer: {
         width: "32px",
@@ -309,6 +311,21 @@ const styles = {
         textAlign: "right",
         color: "#7367F0"
     },
+    filterButton3: {
+        padding: "4px 12px",
+        gap: "10px",
+        width: "56px",
+        height: "28px",
+        background: "#6519E1",
+        border: "1px solid #6519E1",
+        boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
+        borderRadius: "6px",
+        fontFamily: "'Roboto'",
+        fontStyle: "normal",
+        fontWeight: 400,
+        fontSize: "14px",
+        lineHeight: "20px"
+    },
     citySearchInputContainer: {
         display: "flex",
         flexDirection: "row",
@@ -322,7 +339,7 @@ const styles = {
         background: "#F3F3F4",
         borderRadius: "6px",
         border: "none",
-        marginBottom: "8px"
+        marginBottom: "8px",
     },
     floatingContainer: {
         boxSizing: "border-box",
@@ -651,9 +668,12 @@ const RFP = () => {
                     animation={false}
                 >
                     <div>
-                        <div className='d-flex flex-row justify-content-between' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px" }}>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A" }}>Filters</p>
-                            <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1" }} disabled={filter.cat.length === 0 && filter.dept.length === 0 && filter.source.length === 0 && filter.city.length === 0 && filter.manager.length === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [], source: [] })}>Clear All</Button>
+                        <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
+                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
+                            <div className='d-flex align-items-center'>
+                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filter.cat.length === 0 && filter.dept.length === 0 && filter.source.length === 0 && filter.city.length === 0 && filter.manager.length === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [], source: [] })}>Clear All</Button>
+                                <FontAwesomeIcon icon={faX} style={{ height: "9px" }} color="#6519E1" onClick={closeFilterModal} />
+                            </div>
                         </div>
                         <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "20px", marginRight: "20px" }}>
                             <div style={styles.filterSubcontainer}>
@@ -661,6 +681,7 @@ const RFP = () => {
                                 <input
                                     style={styles.citySearchInputContainer}
                                     type="text"
+                                    className='searchInput'
                                     value={searchCity}
                                     onChange={(e) => setsearchCity(e.target.value)}
                                     placeholder="Search"
@@ -711,18 +732,18 @@ const RFP = () => {
                         </div>
                         <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
                             <Button style={styles.filterButton2} >Go to Advanced Filters</Button>
-                            <Button style={styles.filterButton2} onClick={(e) => { setCall(apiCall + 1); closeFilterModal(); }}>Filter</Button>
+                            <Button style={styles.filterButton3} onClick={(e) => { setCall(apiCall + 1); closeFilterModal(); }}>Filter</Button>
                         </div>
                     </div>
                 </Modal>
                 <Button style={styles.filterButton}><FontAwesomeIcon icon={faArrowsUpDown} color="#000000" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Sort</p></Button>
             </div>
-            <div style={{ overflowX: "scroll", width: "1200px" }}>
+            <div style={{ overflowX: "scroll", width: "1200px", borderBottom: "1px solid #EBE9F1", }}>
                 <TableScrollbar height="448px">
-                    <table style={styles.table} className=' table'>
+                    <table style={styles.table} className='table rfp-table'>
                         <thead style={styles.tableHeader}>
                             <tr>
-                                <th scope="col" className=' table-fixed' style={{ ...styles.tableHeading, width: "300px" }}>RFP Name</th>
+                                <th scope="col" style={{ ...styles.tableHeading, width: "300px", borderRight: "1px solid #EBE9F1", borderBottom: "1px solid #EBE9F1", }}>RFP Name</th>
                                 <th scope="col" style={{ ...styles.tableHeading, width: "200px" }}>City</th>
                                 <th scope="col" style={{ ...styles.tableHeading, width: "200px" }}>Source</th>
                                 <th scope="col" style={{ ...styles.tableHeading, width: "180px" }}>Start Date</th>
@@ -735,13 +756,17 @@ const RFP = () => {
                         </thead>
                         <tbody style={styles.tableBody}>
                             {isLoading ? <div style={{ height: "408px", width: "1757px", background: "white" }}><LoadingSpinner /></div> : rfps && rfps.map(e => (
-                                <tr style={{...styles.tableRow, backgroundColor: selectedRfps.includes(e.RFP_ID) ? "rgba(101, 25, 225, 0.1)" : "white"}}>
-                                    <td style={{ ...styles.tableCell, fontWeight: "500", minWidth: "" }}><Form.Check
-                                        inline
-                                        type="checkbox"
-                                        checked={selectedRfps.includes(e.RFP_ID)}
-                                        onClick={(eve) => { if (eve.target.checked) { setselectedRfps(prev => [...prev, e.RFP_ID]) } else { setselectedRfps(prev => prev.filter(ele => ele !== e.RFP_ID)) } }}
-                                    />{e.Project_Name}</td>
+                                <tr style={{ ...styles.tableRow, backgroundColor: selectedRfps.includes(e.RFP_ID) ? "rgba(101, 25, 225, 0.1)" : "white" }}>
+                                    <td className='fixed-col' style={{ ...styles.tableCell, fontWeight: "500", minWidth: "", borderRight: "1px solid #EBE9F1", backgroundColor: "white" }}>
+                                        <div className='d-flex flex-row align-items-center'>
+                                            <Form.Check
+                                                inline
+                                                type="checkbox"
+                                                checked={selectedRfps.includes(e.RFP_ID)}
+                                                onClick={(eve) => { if (eve.target.checked) { setselectedRfps(prev => [...prev, e.RFP_ID]) } else { setselectedRfps(prev => prev.filter(ele => ele !== e.RFP_ID)) } }}
+                                            /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
+                                        </div>
+                                    </td>
                                     <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.City}</td>
                                     <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Source}</td>
                                     <td style={{ ...styles.tableCell, minWidth: "180px" }}>{formatDate(e.Start_Date)}</td>

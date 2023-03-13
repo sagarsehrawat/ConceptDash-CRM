@@ -5,15 +5,36 @@ body {
   overflow-y: auto !important;
   overflow-x: hidden;
   font-family: 'Roboto';
+  background-color: rgb(248, 250, 251);
 }
 
 table {
   table-layout: fixed;
 }
 
-th {
+.rfp-table > th {
   padding: 0px;
   margin: 0px;
+}
+
+.rfp-table > th:first-child{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: #F7F7F9;
+}
+
+.rfp-table > td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: white;
+  border-right: "1px solid #EBE9F1"
+}
+
+.rfp-table > table {
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .modal-content {
@@ -48,4 +69,8 @@ input#city-search::placeholder {
   background-color: #6519E1;
   border-color: #6519E1;
   color: #6519E1;
+}
+
+.css-dip3t8 {
+  background-color: transparent !important;
 }
