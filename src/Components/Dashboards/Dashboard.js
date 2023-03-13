@@ -39,8 +39,6 @@ import proposalsActive from "../../Images/Proposals_Active.svg";
 import proposalsInactive from "../../Images/Proposals.svg";
 import rfpActive from "../../Images/RFP_Active.svg";
 import rfpInactive from "../../Images/RFP.svg";
-import deadlineImage from "../../Images/Vector.png";
-import Time from "../../Images/Time.png";
 import AdminDash from "../AdminDash/AdminDash";
 import BudgetCities from "../Update/BudgetCities";
 import RFPUpdate from "../Update/RFPUpdate";
@@ -54,6 +52,7 @@ import Home from "./Home";
 import { HOST, GET_ADMIN_TASKS } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import RFP from "../v2/RFP";
+import TestDemo from "../Calendar";
 
 const mystyles = {
   topNavbar: {
@@ -187,201 +186,7 @@ const mystyles = {
     marginLeft: "12px",
     color: "#0A0A0A",
   },
-  deadlines: {
-    boxSizing: "border-box",
-    position: "absolute",
-    width: "250px",
-    height: "93px",
-    left: "1170px",
-    top: "76px",
-    background: "#E84C3D",
-    border: "1px solid #E84C3D",
-    boxShadow: "0px 5px 4px rgba(232, 76, 61, 0.25)",
-    borderRadius: "12px",
-  },
-  celebrations: {
-    position: "absolute",
-    width: "250px",
-    height: "126px",
-    left: "1170px",
-    top: "185px",
-    background:
-      "linear-gradient(102.69deg, #EFE2F7 1.6%, rgba(216, 236, 244, 0.807866) 39.1%, rgba(239, 226, 247, 0) 96.08%)",
-    filter: "drop-shadow(0px 4px 25px rgba(0, 0, 0, 0.08))",
-    borderRadius: "12px",
-  },
-  tasks: {
-    boxSizing: "border-box",
-    position: "absolute",
-    width: "250px",
-    height: "262px",
-    left: "1170px",
-    top: "327px",
-    background: "#FFFFFF",
-    border: "1px solid #EBE9F1",
-    borderRadius: "12px",
-  },
-  calendar: {
-    boxSizing: "border-box",
-    position: "absolute",
-    width: "250px",
-    height: "279px",
-    left: "1170px",
-    top: "605px",
-    background: "#FFFFFF",
-    border: "1px solid #EBE9F1",
-    borderRadius: "12px",
-  },
-  celebrationHeading: {
-    position: "absolute",
-    width: "102px",
-    height: "28px",
-    left: "16px",
-    top: "12px",
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 500,
-    fontSize: "18px",
-    lineHeight: "28px",
-    color: "#0A0A0A",
-  },
-  tasksHeading: {
-    position: "absolute",
-    width: "127px",
-    height: "28px",
-    left: "16px",
-    top: "16px",
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 500,
-    fontSize: "18px",
-    lineHeight: "28px",
-    color: "#0A0A0A",
-  },
-  deadlineImage: {
-    position: "absolute",
-    left: "91.67%",
-    right: "-75%",
-    top: "91.67%",
-    bottom: "-75%",
-    background: "#FBFBFB",
-    transform: "rotate(-180deg)",
-  },
-  deadlineHeading: {
-    position: "absolute",
-    width: "149px",
-    height: "20px",
-    left: "40px",
-    top: "10px",
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 500,
-    fontSize: "15px",
-    lineHeight: "20px",
-    color: "#FBFBFB",
-  },
-  tasksBottom: {
-    position: "absolute",
-    width: "90px",
-    height: "14px",
-    left: "97px",
-    top: "236px",
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 400,
-    fontSize: "14px",
-    lineHeight: "100%",
-    color: "#6519E1",
-  },
-  celebrationBottom: {
-    position: "absolute",
-    width: "52px",
-    height: "14px",
-    left: "105px",
-    top: "100px",
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 400,
-    fontSize: "14px",
-    lineHeight: "100%",
-    color: "#6519E1",
-  },
-  rect1: {
-    position: "absolute",
-    width: "3px",
-    height: "46px",
-    left: "16px",
-    top: "48px",
-    background: "#C12F23",
-    borderRadius: "40px",
-  },
-  task1: {
-    position: "absolute",
-    width: "225px",
-    height: "44px",
-    left: "19px",
-    top: "49px",
-    background: "#FFF6F5",
-    borderRadius: "0px 8px 8px 0px",
-    paddingLeft: "10px",
-    fontSize: "13px",
-    fontFamily: "Roboto",
-  },
-  //   task1Heading: {
-  //     position: "absolute",
-  //     width: "211px",
-  //     height: "20px",
-  //     left: "24px",
-  //     top: "53px",
-  //     fontFamily: "'Roboto'",
-  //     fontStyle: "normal",
-  //     fontWeight: 400,
-  //     fontSize: "13px",
-  //     lineHeight: "20px",
-  //     color: "#0A0A0A",
-  //   },
-  rect2: {
-    position: "absolute",
-    width: "3px",
-    height: "46px",
-    left: "16px",
-    top: "106px",
-    background: "#EBAF38",
-    borderRadius: "40px",
-  },
-  task2: {
-    position: "absolute",
-    width: "225px",
-    height: "44px",
-    left: "19px",
-    top: "107px",
-    background: "#FFF8EA",
-    borderRadius: "0px 8px 8px 0px",
-    paddingLeft: "10px",
-    fontSize: "13px",
-    fontFamily: "Roboto",
-  },
-  rect3: {
-    position: "absolute",
-    width: "3px",
-    height: "46px",
-    left: "16px",
-    top: "164px",
-    background: "#3DB9EA",
-    borderRadius: "40px",
-  },
-  task3: {
-    position: "absolute",
-    width: "225px",
-    height: "44px",
-    left: "19px",
-    top: "165px",
-    background: "#ECFAFF",
-    borderRadius: "0px 8px 8px 0px",
-    paddingLeft: "10px",
-    fontSize: "13px",
-    fontFamily: "Roboto",
-  },
+  
 };
 
 const Dashboard = () => {
@@ -452,7 +257,7 @@ const Dashboard = () => {
     if (nav === 5) return <ProposalsUpdate />;
     if (nav === 6) return <ProjectUpdate />;
     if (nav === 7) return <EmployeeUpdate />;
-    if (nav === 8) return <></>;
+    if (nav === 8) return <TestDemo />;
     if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <CustomerUpdate />;
@@ -830,7 +635,7 @@ const Dashboard = () => {
               >
                 <img
                   src={nav === 8 ? calendarActive : calendarInactive}
-                  alt="Dashboard Icon"
+                  alt="Calendar Icon"
                 />
               </div>
               <p
@@ -967,61 +772,20 @@ const Dashboard = () => {
         </Sidebar>
         <div
           style={{
-            marginLeft: "250px",
+            marginLeft: "248px",
             backgroundColor: "#F8FAFB",
             height: "844px"
           }}
         >
           {handleDash()}
         </div>
-{/*         <div style={mystyles.deadlines}>
-          <img src={deadlineImage} alt="Deadline Icon" />
-          <p style={mystyles.deadlineHeading}>Deadlines Approaching!</p>
-        </div>
-        <div style={mystyles.celebrations}>
-          <p style={mystyles.celebrationHeading}>Celebration</p>
-          <p style={mystyles.celebrationBottom}>View All</p>
-        </div>
-        <div style={mystyles.tasks}>
-          <p style={mystyles.tasksHeading}>Tasks Assigned</p>
-          {isLoadingTasks ? (
-            <LoadingSpinner />
-          ) : (
-            <>
-              <div>
-                <span style={mystyles.rect1}></span>
-                <div style={mystyles.task1}>
-                  {title1}
-                  <div>
-                    <img src={Time} alt="Time Icon" />
-                    <span> {`${month1[0]}${month1[1]}${month1[2]}`} </span><span>{dDate1}</span>
-                  </div>
-                </div></div>
-              <div>
-                <span style={mystyles.rect2}></span>
-                <div style={mystyles.task2}>
-                  {title2}
-
-                  <div>
-                    <img src={Time} alt="Time Icon" />
-                    <span> {`${month2[0]}${month2[1]}${month2[2]}`} </span><span>{dDate2}</span>
-                  </div>
-                </div></div>
-              <div>
-                <span style={mystyles.rect3}></span>
-                <div style={mystyles.task3}>
-                  {title3}
-
-                  <div>
-                    <img src={Time} alt="Time Icon" />
-                    <span> {`${month3[0]}${month3[1]}${month3[2]}`} </span><span>{dDate3}</span>
-                  </div>
-                </div></div>
-            </>
-          )}
-          <p style={mystyles.tasksBottom}>View All</p>
-        </div>
-        <div style={mystyles.calendar}></div> */}
+        {/* <div style={{
+          marginLeft: '116'
+        }}
+        >
+ 
+        </div> */}
+        
       </div>
     </>
   );

@@ -600,7 +600,8 @@ const Dashboard = () => {
                       "1px 1px 1px 1px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19)",
                   }}
                 >
-                  <div style={{ textAlign: "center" }}>{<TestDemo />}</div>
+                  
+              <div >{<TestDemo />}</div>
                 </div>
               </div>
               {/* <Box sx={{ width: "100%", typography: "body1" }}>
