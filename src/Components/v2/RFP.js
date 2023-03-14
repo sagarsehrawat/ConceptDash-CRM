@@ -293,14 +293,23 @@ const RFP = (props) => {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            padding: "8px 140px 8px 12px",
+            padding: "8px 8px 8px 12px",
             gap: "4px",
-            width: "224px",
+            width: "194px",
             height: "36px",
             background: "#FFFFFF",
             border: "1px solid #EBE9F1",
-            borderRadius: "6px",
-            marginRight: "12px"
+            borderRadius: "6px 0px 0px 6px",
+        },
+        searchButton: {
+            width: "30px",
+            height: "36px",
+            background: "#6519E1",
+            borderRadius: "0px 6px 6px 0px",
+            marginRight: "12px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
         },
         filterButton: {
             display: "flex",
@@ -635,7 +644,6 @@ const RFP = (props) => {
                 [key]: [...prevFilter[key], value]
             }));
         }
-        console.log(filter)
     }
 
     const handleDeleteBudget = async (e) => {
@@ -671,6 +679,10 @@ const RFP = (props) => {
         if (date === "" || date === null || date === undefined) return "";
         const formattedDate = moment(date)
         return formattedDate.format('D MMM, YYYY')
+    }
+
+    const filterSize = () => {
+        return filter.city.length + filter.cat.length + filter.dept.length + filter.manager.length + filter.source.length;
     }
 
     return (
@@ -713,7 +725,8 @@ const RFP = (props) => {
                     onChange={(e) => setValue(e.target.value)}
                     placeholder="Search"
                 />
-                <Button style={styles.filterButton} onClick={openFilterModal}><FontAwesomeIcon icon={faFilter} color="#70757A" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters</p><FontAwesomeIcon icon={faChevronDown} color="#70757A" /></Button>
+                <Button style={styles.searchButton} onClick={(e) => setCall(apiCall+1)}><FontAwesomeIcon icon={faMagnifyingGlass} color="white" /></Button>
+                <Button style={{...styles.filterButton, backgroundColor: filterSize()>0 ? "#DBDBF4" : "white"}} onClick={openFilterModal}><FontAwesomeIcon icon={faFilter} color="#70757A" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize()>0 ? `/ ${filterSize()}` : ""}</p>{filterSize()>0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}</Button>
                 <Modal
                     show={filterModal}
                     onHide={closeFilterModal}
