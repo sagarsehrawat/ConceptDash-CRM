@@ -6,6 +6,7 @@ import {
   faUser,
   faCircleUser,
   faChevronRight,
+  faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
@@ -55,219 +56,7 @@ import LoadingSpinner from "../Loader/Loader";
 import RFP from "../v2/RFP";
 import TestDemo from "../Calendar";
 
-const mystyles = {
-  topNavbar: {
-    height: "56px",
-    left: "0px",
-    top: "0px",
-    backgroundColor: "#FAFBFB",
-    borderBottom: "1px solid #EBE9F1",
-    width: "1440px",
-    marginBottom: "0px"
-  },
-  plusIcon: {
-    height: "32px",
-  },
-  plusDropdownItem: {
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 400,
-    fontSize: "14px",
-    color: "#0A0A0A",
-    marginLeft: "0px",
-    paddingLeft: "0px",
-    width: "224px",
-    height: "32px"
-  },
-  plusDropdownItemIcon: {
-    marginLeft: "10px",
-    marginRight: "12px",
-  },
-  settingsIcon: {
-    height: "20px",
-  },
-  accountLabel: {
-    width: "154px",
-    height: "32px",
-    background: "#F3F5F9",
-    borderRadius: "60px",
-  },
-  accLabel: {
-    width: "41px",
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 400,
-    fontSize: "14px",
-    color: "#0A0A0A",
-    opacity: 0.7,
-    margin: "0px",
-    marginLeft: "8px",
-  },
-  sidebar: {
-    boxSizing: "border-box",
-    width: "228px",
-    height: "900px",
-    left: "0px",
-    top: "0px",
-    background: "#FBFBFB",
-    borderRight: "1px solid #EBE9F1",
-    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    position: "fixed",
-  },
-  branding: {
-    collapsed: {
-      height: "26px",
-      width: "68px",
-      marginTop: "15px",
-      fontFamily: "'Roboto'",
-      fontStyle: "normal",
-      fontWeight: 800,
-      fontSize: "18px",
-      lineHeight: "26px",
-      color: "#000000",
-      textAlign: "center"
-    },
-    nonCollapsed: {
-      height: "26px",
-      marginLeft: "68px",
-      marginTop: "15px",
-      fontFamily: "'Roboto'",
-      fontStyle: "normal",
-      fontWeight: 800,
-      fontSize: "18px",
-      lineHeight: "26px",
-      color: "#000000",
-    },
-  },
-  sidebarIconContainer: {
-    nonCollapsed: {
-      boxSizing: "border-box",
-      position: "absolute",
-      width: "24px",
-      height: "24px",
-      left: "216px",
-      top: "16px",
-      background: "#DBDBF4",
-      border: "1px solid #EBE9F1",
-      borderRadius: "12px",
-      zIndex: "1000"
-    },
-    collapsed: {
-      boxSizing: "border-box",
-      position: "absolute",
-      width: "24px",
-      height: "24px",
-      left: "56px",
-      top: "16px",
-      background: "#DBDBF4",
-      border: "1px solid #EBE9F1",
-      borderRadius: "12px",
-      zIndex: "1000"
-    }
-  },
-  sidebarMenu: {
-    padding: "8px 12px",
-    gap: "10px",
-  },
-  sidebarMenuItemActive: {
-    nonCollapsed: {
-      width: "204px",
-      height: "40px",
-      background: "#6519E1",
-      boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
-      borderRadius: "5px",
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      cursor: "pointer",
-    },
-    collapsed: {
-      padding: "8px 20px",
-      gap: "10px",
-      width: "66px",
-      height: "40px",
-      background: "#6519E1",
-      boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
-      borderRadius: "8px 0px 0px 8px",
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      cursor: "pointer",
-      marginLeft: "2px"
-    }
-  },
-  sidebarMenuItemIconActive: {
-    nonCollapsed: {
-      width: "24px",
-      minWidth: "24px",
-      height: "24px",
-      marginLeft: "20px",
-      background: "#FBFBFB",
-      borderRadius: "100%",
-      textAlign: "center",
-    },
-    collapsed: {
-      width: "24px",
-      minWidth: "24px",
-      height: "24px",
-      background: "#FBFBFB",
-      borderRadius: "100%",
-      textAlign: "center",
-    }
-  },
-  sidebarMenuItemTextActive: {
-    height: "20px",
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 400,
-    fontSize: "14px",
-    margin: "0px",
-    marginLeft: "12px",
-    color: "#FBFBFB",
-  },
-  sidebarMenuItem: {
-    width: "204px",
-    height: "40px",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    cursor: "pointer",
-  },
-  sidebarMenuItemIcon: {
-    nonCollapsed: {
-      width: "24px",
-      height: "24px",
-      marginLeft: "20px",
-      background: "#FBFBFB",
-      borderRadius: "100%",
-      textAlign: "center",
-      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
-    },
-    collapsed: {
-      width: "24px",
-      height: "24px",
-      background: "#FBFBFB",
-      borderRadius: "100%",
-      textAlign: "center",
-      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
-      marginLeft: "22px"
-    }
-  },
-  sidebarMenuItemText: {
-    height: "20px",
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 400,
-    fontSize: "14px",
-    margin: "0px",
-    marginLeft: "12px",
-    color: "#0A0A0A",
-  },
 
-};
 
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();
@@ -279,6 +68,225 @@ const Dashboard = () => {
   const [isCollapsed, setisCollapsed] = useState(false);
 
   const { privileges, setPrivileges } = useContext(AuthenticationContext);
+
+  const mystyles = {
+    topNavbar: {
+      height: "56px",
+      left: "0px",
+      top: "0px",
+      backgroundColor: "#FAFBFB",
+      borderBottom: "1px solid #EBE9F1",
+      width: "100vw",
+      marginBottom: "0px"
+    },
+    plusIcon: {
+      height: "32px",
+    },
+    plusDropdownItem: {
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      color: "#0A0A0A",
+      marginLeft: "0px",
+      paddingLeft: "0px",
+      width: "224px",
+      height: "32px"
+    },
+    plusDropdownItemIcon: {
+      marginLeft: "10px",
+      marginRight: "12px",
+    },
+    settingsIcon: {
+      height: "20px",
+    },
+    accountLabel: {
+      width: "154px",
+      height: "32px",
+      background: "#F3F5F9",
+      borderRadius: "60px",
+    },
+    accLabel: {
+      width: "41px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      color: "#0A0A0A",
+      opacity: 0.7,
+      margin: "0px",
+      marginLeft: "8px",
+    },
+    sidebar: {
+      boxSizing: "border-box",
+      width: "228px",
+      height: "100vh",
+      left: "0px",
+      top: "0px",
+      background: "#FBFBFB",
+      borderRight: "1px solid #EBE9F1",
+      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
+      position: "fixed",
+    },
+    branding: {
+      collapsed: {
+        height: "26px",
+        width: "68px",
+        marginTop: "15px",
+        fontFamily: "'Roboto'",
+        fontStyle: "normal",
+        fontWeight: 800,
+        fontSize: "18px",
+        lineHeight: "26px",
+        color: "#000000",
+        textAlign: "center"
+      },
+      nonCollapsed: {
+        height: "26px",
+        marginLeft: "68px",
+        marginTop: "15px",
+        fontFamily: "'Roboto'",
+        fontStyle: "normal",
+        fontWeight: 800,
+        fontSize: "18px",
+        lineHeight: "26px",
+        color: "#000000",
+      },
+    },
+    sidebarIconContainer: {
+      nonCollapsed: {
+        boxSizing: "border-box",
+        position: "absolute",
+        width: "24px",
+        height: "24px",
+        left: "216px",
+        top: "16px",
+        background: "#DBDBF4",
+        border: "1px solid #EBE9F1",
+        borderRadius: "12px",
+        zIndex: "1000",
+        cursor: "pointer",
+        display: nav===0 ? "none" : "",
+        visibility: nav===0 ? "hidden" : "visible"
+      },
+      collapsed: {
+        boxSizing: "border-box",
+        position: "absolute",
+        width: "24px",
+        height: "24px",
+        left: "56px",
+        top: "16px",
+        background: "#DBDBF4",
+        border: "1px solid #EBE9F1",
+        borderRadius: "12px",
+        zIndex: "1000",
+        cursor: "pointer",
+        display: nav===0 ? "none" : "",
+        visibility: nav===0 ? "hidden" : "visible"
+      }
+    },
+    sidebarMenu: {
+      padding: "8px 12px",
+      gap: "10px",
+    },
+    sidebarMenuItemActive: {
+      nonCollapsed: {
+        width: "204px",
+        height: "40px",
+        background: "#6519E1",
+        boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
+        borderRadius: "5px",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        cursor: "pointer",
+      },
+      collapsed: {
+        padding: "8px 20px",
+        gap: "10px",
+        width: "66px",
+        height: "40px",
+        background: "#6519E1",
+        boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
+        borderRadius: "8px 0px 0px 8px",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        cursor: "pointer",
+        marginLeft: "2px"
+      }
+    },
+    sidebarMenuItemIconActive: {
+      nonCollapsed: {
+        width: "24px",
+        minWidth: "24px",
+        height: "24px",
+        marginLeft: "20px",
+        background: "#FBFBFB",
+        borderRadius: "100%",
+        textAlign: "center",
+      },
+      collapsed: {
+        width: "24px",
+        minWidth: "24px",
+        height: "24px",
+        background: "#FBFBFB",
+        borderRadius: "100%",
+        textAlign: "center",
+      }
+    },
+    sidebarMenuItemTextActive: {
+      height: "20px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      margin: "0px",
+      marginLeft: "12px",
+      color: "#FBFBFB",
+    },
+    sidebarMenuItem: {
+      width: "204px",
+      height: "40px",
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      cursor: "pointer",
+    },
+    sidebarMenuItemIcon: {
+      nonCollapsed: {
+        width: "24px",
+        height: "24px",
+        marginLeft: "20px",
+        background: "#FBFBFB",
+        borderRadius: "100%",
+        textAlign: "center",
+        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
+      },
+      collapsed: {
+        width: "24px",
+        height: "24px",
+        background: "#FBFBFB",
+        borderRadius: "100%",
+        textAlign: "center",
+        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
+        marginLeft: "22px"
+      }
+    },
+    sidebarMenuItemText: {
+      height: "20px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      margin: "0px",
+      marginLeft: "12px",
+      color: "#0A0A0A",
+    },
+  };
 
   const [isLoadingTasks, setisLoadingTasks] = useState(false);
   const [title1, settitle1] = useState([]);
@@ -330,11 +338,12 @@ const Dashboard = () => {
 
 
   const handleDash = (e) => {
-    if (nav === 0) return <Home />;
+    if (nav === 0){
+       return <Home isCollapsed={isCollapsed}/>;}
     if (nav === 1) return <></>;
     if (nav === 2) return <></>;
     if (nav === 3) return <BudgetCities />;
-    if (nav === 4) return <RFP />
+    if (nav === 4) return <RFP isCollapsed={isCollapsed}/>
     if (nav === 5) return <ProposalsUpdate />;
     if (nav === 6) return <ProjectUpdate />;
     if (nav === 7) return <EmployeeUpdate />;
@@ -463,14 +472,14 @@ const Dashboard = () => {
               <div style={mystyles.sidebarIconContainer.collapsed} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
                 <FontAwesomeIcon icon={faChevronRight} color={primaryColour} />
               </div>
-              <div style={{marginTop: "8px"}}>
+              <div style={{marginTop: "18px"}}>
                 <div
                   style={
                     nav === 0
                       ? mystyles.sidebarMenuItemActive.collapsed
                       : mystyles.sidebarMenuItem
                   }
-                  onClick={(e) => setnav(0)}
+                  onClick={(e) => {setnav(0); if(isCollapsed){setisCollapsed(false); collapseSidebar()}}}
                 >
                   <div
                     style={
@@ -743,7 +752,7 @@ const Dashboard = () => {
             : <>
               <p style={mystyles.branding.nonCollapsed}>TASKFORCE</p>
               <div style={mystyles.sidebarIconContainer.nonCollapsed} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
-                <FontAwesomeIcon icon={faChevronRight} color={primaryColour} />
+                <FontAwesomeIcon icon={faChevronLeft} color={primaryColour} />
               </div>
               <div style={mystyles.sidebarMenu}>
                 <div
@@ -752,7 +761,7 @@ const Dashboard = () => {
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
-                  onClick={(e) => setnav(0)}
+                  onClick={(e) => {setnav(0); if(isCollapsed){setisCollapsed(false); collapseSidebar()}}}
                 >
                   <div
                     style={
@@ -1145,8 +1154,8 @@ const Dashboard = () => {
           style={{
             marginLeft: isCollapsed ? "68px" : "228px",
             backgroundColor: "#F8FAFB",
-            height: "844px",
-            width: isCollapsed ? "1372px" : "1212px"
+            height: "93.777777777778vh",
+            width: isCollapsed ? "96.278vw" : "88.167vw"
           }}
         >
           {handleDash()}

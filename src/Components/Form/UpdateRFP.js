@@ -18,6 +18,7 @@ import LoadingSpinner from "../Loader/Loader";
 
 function UpdateRFP(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props;
+  console.log(props)
   const [isSubmit, setIsSubmit] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
