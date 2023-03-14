@@ -5,6 +5,7 @@ body {
   overflow-y: auto !important;
   overflow-x: hidden;
   font-family: 'Roboto';
+  background-color: rgb(248, 250, 251);
 }
 
 table {
@@ -16,8 +17,39 @@ th {
   margin: 0px;
 }
 
+.fixed-header{
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background-color: #F7F7F9;
+}
+
+.fixed-header2{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: #F7F7F9;
+}
+
+.fixed-col{
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: white;
+  border-right: "1px solid #EBE9F1"
+}
+
+.rfp-table  {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
 .modal-content {
   border: none;
+}
+
+.filter-dialog >.modal-content {
+  width: 786px !important;
 }
 
 .filter-dialog {
@@ -29,7 +61,25 @@ th {
   opacity: 0 !important;
 }
 
-input#city-search::placeholder {
+.fade.modal.show{
+  opacity: unset;
+}
+
+body > div.fade.modal.show > div{
+  margin-top: 120px;
+}
+
+.modal-backdrop.fade{
+  opacity: 0.3;
+  width: 100%;
+}
+
+.filter-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* input#city-search::placeholder {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
@@ -37,7 +87,7 @@ input#city-search::placeholder {
   line-height: 16px;
   color: #70757A;
   opacity: 0.7;
-}
+} */
 
 .form-check-input:checked {
   border-color: #6519E1;
@@ -48,4 +98,37 @@ input#city-search::placeholder {
   background-color: #6519E1;
   border-color: #6519E1;
   color: #6519E1;
+}
+
+.form-check-input:checked {
+  background-color: #6519E1;
+  border-color: #6519E1;
+}
+
+.e-radio:checked + label::before{
+  border-color: #6519E1 !important;
+}
+
+.e-radio:checked + label::after{
+  background-color: #6519E1 !important;
+  border-color: #6519E1 !important;
+  color: #6519E1 !important;
+}
+
+.sort-radio>label>span {
+  font-family: 'Roboto' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  color: #0A0A0A !important;
+}
+
+.css-dip3t8 {
+  background-color: transparent !important;
+  z-index: 0 !important;
+  position: unset !important;
+}
+
+.nav-dropdown > a:hover{
+  text-decoration: none;
 }
