@@ -5,6 +5,61 @@ import axios from 'axios';
 import { GET_EMPLOYEE_PRIVILEGES, HOST, LOGIN } from '../Constants/Constants';
 import AuthContext from "../../Context/AuthContext"
 
+const styles = {
+  leftPart: {
+    position: "absolute",
+    width: "720px",
+    height: "900px",
+    left: "0px",
+    top: "0px",
+    background: "#F3F5F9",
+    boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)"
+  },
+  rightPart: {
+    position: "absolute",
+    width: "720px",
+    height: "900px",
+    left: "720px",
+    top: "0px",
+    background: "#F8FAFB"
+  },
+  leftUpper: {
+    position: "absolute",
+    width: "624px",
+    height: "624px",
+    left: "-363px",
+    top: "-310px",
+    background: "#E0D8EC",
+    transform: "rotate(-45deg)"
+  },
+  welcomeHeading: {
+    position: "absolute",
+    width: "166px",
+    height: "36px",
+    left: "200px",
+    top: "310px",
+    fontFamily: "'Roboto'",
+    fontStyle: "normal",
+    fontWeight: 600,
+    fontSize: "24px",
+    lineHeight: "36px",
+    color: "#0A0A0A"
+  },
+  welcomeText: {
+    position: "absolute",
+    width: "320px",
+    height: "40px",
+    left: "200px",
+    top: "350px",
+    fontFamily: "'Roboto'",
+    fontStyle: "normal",
+    fontWeight: 400,
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: "#A3A3A3"
+  }
+}
+
 const Login = () => {
   const navigate = useNavigate()
   const { privileges, setPrivileges } = useContext(AuthContext)
@@ -90,7 +145,7 @@ const Login = () => {
   }
   return (
     <>
-      <div className='home container d-flex justify-content-center align-items-center'>
+      {/* <div className='home container d-flex justify-content-center align-items-center'>
         <div className='main-body '>
           <div className='heading d-flex flex-row mb-5'>
             <h2 align="center" style={{ color: "white" }}>Login using Your Credentials</h2>
@@ -108,6 +163,13 @@ const Login = () => {
 
           </form>
         </div>
+      </div> */}
+      <div style={styles.leftPart}>
+        <div style={styles.leftUpper}></div>
+      </div>
+      <div style={styles.rightPart}>
+        <div style={styles.welcomeHeading}>Welcome Back!</div>
+        <div style={styles.welcomeText}>Welcome back to taskforce! Enter your credentials to login</div>
       </div>
     </>
   )
