@@ -369,9 +369,7 @@ const Home = (props) => {
   };
   const SCOPES =
     "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar";
-  const handleClientLoad = () => {
-    window.gapi.load("client:auth2", initClient);
-  };
+
   const [events, setEvents] = useState(null);
   useEffect(() => {
     const script = document.createElement("script");
@@ -381,13 +379,22 @@ const Home = (props) => {
 
     document.body.appendChild(script);
 
-    script.addEventListener("load", () => {
-      if (window.gapi) handleClientLoad();
-    });
+    const handleScriptLoad = () => {
+      if (window.gapi) {
+        window.gapi.load("client:auth2", initClient);
+        script.removeEventListener("load", handleScriptLoad);
+      }
+    };
+
+    script.addEventListener("load", handleScriptLoad);
+
+    return () => {
+      script.removeEventListener("load", handleScriptLoad);
+    };
   }, []);
-  const openSignInPopup = () => {
+  const openSignInPopup = async () => {
     localStorage.removeItem("access_token");
-    window.gapi.auth2.authorize(
+    await window.gapi.auth2.authorize(
       {
         client_id:
           "52169325708-ujav1fof3lgebds8reurj0e74ua0tsgo.apps.googleusercontent.com",
@@ -405,11 +412,11 @@ const Home = (props) => {
     );
   };
   const [isLoadingCal, setisLoadingCal] = useState(false);
-  const initClient = () => {
+  const initClient = async () => {
     setisLoadingCal(true);
     if (!localStorage.getItem("access_token")) {
-      openSignInPopup();
-    } else if (localStorage.getItem("access_token")) {
+      await openSignInPopup();
+    } else {
       // Get events if access token is found without sign in popup
       fetch(
         `https://www.googleapis.com/calendar/v3/calendars/primary/events?key=AIzaSyCD_8FIN6MsCjNbFY7GxOWxwDm7kmn-tX4&orderBy=startTime&singleEvents=true`,
@@ -424,8 +431,6 @@ const Home = (props) => {
           if (res.status !== 401) {
             return res.json();
           } else {
-            localStorage.removeItem("access_token");
-
             openSignInPopup();
           }
         })
@@ -452,6 +457,7 @@ const Home = (props) => {
         if (events.length > 0) {
           setEvents(formatEvents(events));
         }
+        setisLoadingCal(false)
       });
   };
   const formatEvents = (list) => {
