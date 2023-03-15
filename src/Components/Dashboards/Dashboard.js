@@ -55,6 +55,7 @@ import { HOST, GET_ADMIN_TASKS } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import RFP from "../v2/RFP";
 import TestDemo from "../Calendar";
+import Proposal from "../v2/Proposal";
 
 
 
@@ -344,7 +345,7 @@ const Dashboard = () => {
     if (nav === 2) return <></>;
     if (nav === 3) return <BudgetCities />;
     if (nav === 4) return <RFP isCollapsed={isCollapsed}/>
-    if (nav === 5) return <ProposalsUpdate />;
+    if (nav === 5) return <Proposal isCollapsed={isCollapsed} />
     if (nav === 6) return <ProjectUpdate />;
     if (nav === 7) return <EmployeeUpdate />;
     if (nav === 8) return <TestDemo />;
