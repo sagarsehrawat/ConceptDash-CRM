@@ -542,7 +542,7 @@ const RFP = (props) => {
                     let obj = rfpCount
                     obj.Total = res.data.res[0].Total
                     obj.Month = res.data.res[0].Month
-                    obj.Percent = res.data.res[0].Percent
+                    obj.Percent = res.data.res[0].Percent ?? 0
                     setrfpCount(obj)
                     setIsLoading2(prev => [false, ...prev.slice(1, 5)])
                 })
@@ -1033,7 +1033,6 @@ const RFP = (props) => {
                 <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
                     <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color="#6519E1" onClick={(e) => setselectedRfps([])} />
                 </div>
-
             </div>
 
             {/* Add Form Modal */}
