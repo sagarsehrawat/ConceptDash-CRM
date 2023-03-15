@@ -20,6 +20,7 @@
     "@mui/lab": "^5.0.0-alpha.96",
     "@mui/material": "^5.10.2",
     "@react-icons/all-files": "^4.1.0",
+    "@syncfusion/ej2-react-buttons": "^20.4.53",
     "@syncfusion/ej2-react-schedule": "^20.4.53",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",

@@ -483,7 +483,7 @@ const BudgetCharts = (props) => {
 
     return (
         <>
-            <div style={budgetChartStyles.container} className='d-flex flex-column'>
+            <div style={{...budgetChartStyles.container, marginLeft: "-19px"}} className='d-flex flex-column'>
                 <div className='d-flex flex-row justify-content-between' style={budgetChartStyles.headingContainer}>
                     <p style={budgetChartStyles.heading}>Budget Category</p>
                     <img src={pinnedActive} alt="Dashboard Icon" style={budgetChartStyles.pinnedIcon} />
