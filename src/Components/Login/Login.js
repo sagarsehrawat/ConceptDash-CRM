@@ -1,9 +1,19 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import './Login.css'
-import axios from 'axios';
-import { GET_EMPLOYEE_PRIVILEGES, HOST, LOGIN } from '../Constants/Constants';
-import AuthContext from "../../Context/AuthContext"
+import React, { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Login.css";
+import axios from "axios";
+import { GET_EMPLOYEE_PRIVILEGES, HOST, LOGIN } from "../Constants/Constants";
+import AuthContext from "../../Context/AuthContext";
+import {
+  MDBContainer,
+  MDBInput,
+  MDBCheckbox,
+  MDBBtn,
+  MDBIcon,
+} from "mdb-react-ui-kit";
+import { Button } from "react-bootstrap";
+// import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+// import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const styles = {
   leftPart: {
@@ -13,7 +23,7 @@ const styles = {
     left: "0px",
     top: "0px",
     background: "#F3F5F9",
-    boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)"
+    boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
   },
   rightPart: {
     position: "absolute",
@@ -21,7 +31,7 @@ const styles = {
     height: "900px",
     left: "720px",
     top: "0px",
-    background: "#F8FAFB"
+    background: "#F8FAFB",
   },
   leftUpper: {
     position: "absolute",
@@ -30,7 +40,7 @@ const styles = {
     left: "-363px",
     top: "-310px",
     background: "#E0D8EC",
-    transform: "rotate(-45deg)"
+    transform: "rotate(-45deg)",
   },
   welcomeHeading: {
     position: "absolute",
@@ -43,7 +53,7 @@ const styles = {
     fontWeight: 600,
     fontSize: "24px",
     lineHeight: "36px",
-    color: "#0A0A0A"
+    color: "#0A0A0A",
   },
   welcomeText: {
     position: "absolute",
@@ -56,93 +66,127 @@ const styles = {
     fontWeight: 400,
     fontSize: "14px",
     lineHeight: "20px",
-    color: "#A3A3A3"
+    color: "#A3A3A3",
+  },
+  button: {
+    boxSizing: "border-box",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "12px 64px",
+    gap: "10px",
+    position: "absolute",
+    width: "320px",
+    height: "44px",
+    left: "200px",
+    top: "558px",
+    background: "#6519E1",
+    border: "1px solid #6519E1",
+    boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
+    borderRadius: "8px"
+  },
+  loginText: {
+    marginTop: '8px',
+    width: "35px",
+    height: "20px",
+    fontFamily: "'Roboto'",
+    fontStyle: "normal",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: "#FBFBFB",
+    flex: "none",
+    order: 0,
+    flexGrow: 0,
+    cursor: 'pointer'
   }
-}
+};
 
 const Login = () => {
-  const navigate = useNavigate()
-  const { privileges, setPrivileges } = useContext(AuthContext)
+  const navigate = useNavigate();
+  const { privileges, setPrivileges } = useContext(AuthContext);
   useEffect(() => {
-    const department = localStorage.getItem('department')
+    const department = localStorage.getItem("department");
     if (department) {
       switch (department) {
-        case 'Admin':
-          navigate('/admin')
+        case "Admin":
+          navigate("/admin");
           break;
-        case 'Engineer':
-          navigate('/engineers')
+        case "Engineer":
+          navigate("/engineers");
           break;
-        case 'Manager':
-          navigate('/manager')
+        case "Manager":
+          navigate("/manager");
           break;
         default:
           break;
       }
     }
-  }, [])
+  }, []);
 
-
-  const [username, setusername] = useState('')
-  const [password, setpassword] = useState('')
+  const [username, setusername] = useState("");
+  const [password, setpassword] = useState("");
 
   const onLogin = async (e) => {
-    e.preventDefault()
-   handleSubmit(e);
-  }
+    e.preventDefault();
+    handleSubmit(e);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post(HOST + LOGIN, { 'username': username, 'password': password }).then((res) => {
-      if (res.data.error === "Email or Password is Incorrect") {
-        alert('Incorrect Username or Password');
-      } else {
-        if (!res.data.success)
-          alert('Something Went Wrong...')
-      }
-      localStorage.setItem('auth', res.data.auth)
-      localStorage.setItem('department', res.data.user.department)
-      localStorage.setItem('emailWork', res.data.user.emailWork)
-      localStorage.setItem('employeeId', res.data.user.employeeId)
-      localStorage.setItem('employeeName', res.data.user.employeeName)
+    await axios
+      .post(HOST + LOGIN, { username: username, password: password })
+      .then((res) => {
+        if (res.data.error === "Email or Password is Incorrect") {
+          alert("Incorrect Username or Password");
+        } else {
+          if (!res.data.success) alert("Something Went Wrong...");
+        }
+        localStorage.setItem("auth", res.data.auth);
+        localStorage.setItem("department", res.data.user.department);
+        localStorage.setItem("emailWork", res.data.user.emailWork);
+        localStorage.setItem("employeeId", res.data.user.employeeId);
+        localStorage.setItem("employeeName", res.data.user.employeeName);
 
-      axios
-        .get(HOST + GET_EMPLOYEE_PRIVILEGES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth"), employeeid: localStorage.getItem('employeeId') },
-        })
-        .then((res) => {
-          console.log(res.data.res)
-          let arr = []
-          res.data.res.map(e => {
-            arr.push(e.Privilege)
+        axios
+          .get(HOST + GET_EMPLOYEE_PRIVILEGES, {
+            headers: {
+              auth: "Rose " + localStorage.getItem("auth"),
+              employeeid: localStorage.getItem("employeeId"),
+            },
           })
-          localStorage.setItem('privileges', JSON.stringify(arr))
-          setPrivileges(arr);
+          .then((res) => {
+            console.log(res.data.res);
+            let arr = [];
+            res.data.res.map((e) => {
+              arr.push(e.Privilege);
+            });
+            localStorage.setItem("privileges", JSON.stringify(arr));
+            setPrivileges(arr);
 
-          switch (localStorage.getItem("department")) {
-            case 'Admin':
-              navigate('/admin')
-              break;
-            case 'Engineer':
-              navigate('/engineers')
-              break;
-            case 'Manager':
-              navigate('/manager')
-              break;
-            default:
-              break;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      
-    }
-    ).catch((err) => {
-      console.log(err)
-    })
-  }
+            switch (localStorage.getItem("department")) {
+              case "Admin":
+                navigate("/admin");
+                break;
+              case "Engineer":
+                navigate("/engineers");
+                break;
+              case "Manager":
+                navigate("/manager");
+                break;
+              default:
+                break;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       {/* <div className='home container d-flex justify-content-center align-items-center'>
@@ -169,10 +213,38 @@ const Login = () => {
       </div>
       <div style={styles.rightPart}>
         <div style={styles.welcomeHeading}>Welcome Back!</div>
-        <div style={styles.welcomeText}>Welcome back to taskforce! Enter your credentials to login</div>
+        <div style={styles.welcomeText}>
+          Welcome back to taskforce! Enter your credentials to login
+        </div>
+        <MDBContainer style={{marginTop:'414px', width:'340px'}} >
+          <MDBInput
+          style={{height:'44px', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A'}}
+            wrapperClass="mb-4"
+            // label="Username"
+            placeholder="Username"
+            id="form1"
+            type="text"
+            onChange={(e) => { setusername(e.target.value) }}
+          />
+          <MDBInput
+          style={{height:'44px', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A'}}
+          wrapperClass="mb-4"
+            placeholder="Password"
+            // label='Password'
+            id="form2"
+            type="password"
+            onChange={(e) => { setpassword(e.target.value) }}
+          />
+        </MDBContainer>
+        {/* <div style={styles.button}> */}
+          {/* <div onClick={onLogin} style={styles.loginText}>Login</div> */}
+          <Button onClick={onLogin} style={styles.button}>
+            <p style={styles.loginText}>Login</p>
+          </Button>
+        {/* </div> */}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
