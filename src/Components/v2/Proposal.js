@@ -1,31 +1,27 @@
-import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react'
+import { faArrowDown, faArrowsUpDown, faArrowUp, faCheck, faChevronDown, faFilter, faMagnifyingGlass, faPlus, faX } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { RadioButtonComponent } from '@syncfusion/ej2-react-buttons'
+import axios from 'axios'
+import moment from 'moment'
+import React, { useState, useContext, useEffect } from 'react'
+import { Button, Form, Modal } from 'react-bootstrap'
+import AuthenticationContext from '../../Context/AuthContext'
+import { DELETE_PROPOSAL, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGES_PROPOSALS, GET_PAGE_PROPOSALS, GET_PROJECT_CATEGORIES, HOST } from '../Constants/Constants'
+import GreenAlert from '../Loader/GreenAlert'
+import LoadingSpinner from '../Loader/Loader'
+import RedAlert from '../Loader/RedAlert'
 import TableScrollbar from 'react-table-scrollbar';
-import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST } from '../Constants/Constants';
-import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowsUpDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faCross, faDownload, faEdit, faFilter, faMagnifyingGlass, faPlus, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { Button, Form, Modal } from 'react-bootstrap';
-import GreenAlert from '../Loader/GreenAlert';
-import RedAlert from '../Loader/RedAlert';
-import LoadingSpinner from '../Loader/Loader';
-import RFPform from '../Form/RFPform';
-import AuthenticationContext from '../../Context/AuthContext';
-import UpdateRFP from '../Form/UpdateRFP';
-import { RadioButtonComponent } from '@syncfusion/ej2-react-buttons';
 
-
-
-const RFP = (props) => {
+const Proposal = (props) => {
     const { isCollapsed } = props
     const { privileges, setPrivileges } = useContext(AuthenticationContext)
     const [apiCall, setCall] = useState(0);
     const [green, setgreen] = useState(false);
     const [red, setred] = useState(false);
 
-    const [rfps, setrfps] = useState([]);
-    const [selectedRfps, setselectedRfps] = useState([]);
-    const [rfpCount, setrfpCount] = useState({ Total: 0, Month: 0, Percent: 0 });
+    const [proposals, setproposals] = useState([])
+    const [selectedProposals, setselectedProposals] = useState([])
+    const [proposalCount, setproposalCount] = useState({ Total: 0, Month: 0, Percent: 0, Won: 0, Lost: 0 })
     const [cities, setcities] = useState([]);
     const [depts, setdepts] = useState([]);
     const [projectCats, setprojectCats] = useState([]);
@@ -37,10 +33,10 @@ const RFP = (props) => {
     let limit = 50;
     const [pages, setpages] = useState(1);
     const [currPage, setcurrPage] = useState(1);
-    const [sort, setsort] = useState("RFP_ID DESC");
+    const [sort, setsort] = useState("Proposal_ID DESC");
     const [value, setValue] = useState("");
     const [searchCity, setsearchCity] = useState("");
-    const [filter, setfilter] = useState({ dept: [], cat: [], city: [], manager: [], source: [] });
+    const [filter, setfilter] = useState({ dept: [], cat: [], city: [], manager: [] });
     const [filter2, setfilter2] = useState('Basic')
     const [advancedFilter, setadvancedFilter] = useState([['', 'IS', '']])
 
@@ -175,121 +171,6 @@ const RFP = (props) => {
             marginLeft: "32px",
             marginBottom: "8px",
         },
-        table: {
-            width: "100%",
-            overflowX: "hidden",
-        },
-        tableHeader: {
-            height: "44px",
-            background: "#F7F7F9",
-            textAlign: "center",
-            borderBottom: "0px"
-        },
-        tableHeading: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 600,
-            fontSize: "14px",
-            color: "#70757A",
-            textAlign: "left",
-            borderBottom: "1px solid #EBE9F1",
-            borderTop: "1px solid #EBE9F1",
-            verticalAlign: "middle",
-            paddingLeft: "31px"
-        },
-        tableBody: {
-            background: "#FFFFFF",
-
-        },
-        tableRow: {
-            width: "100%",
-            background: "#FFFFFF",
-            verticalAlign: "top"
-        },
-        tableCell: {
-            height: "58px",
-            borderBottom: "1px solid #EBE9F1",
-            padding: "12px 32px",
-            gap: "10px",
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "14px",
-            lineHeight: "20px",
-            color: "#0A0A0A",
-            marginLeft: "8px",
-            textAlign: "left",
-            verticalAlign: "middle",
-        },
-        dateContainer: {
-            boxSizing: "border-box",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            padding: "2px 12px",
-            gap: "10px",
-            width: "110px",
-            height: "24px",
-            background: "#FFFFFF",
-            border: "0.5px solid #FE3766",
-            borderRadius: "24px"
-        },
-        date: {
-            height: "20px",
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "14px",
-            lineHeight: "20px",
-            color: "#FE3766"
-        },
-        pageContainer: {
-            width: "32px",
-            height: "32px",
-            left: "1009px",
-            top: "792px",
-            border: "1px solid #EBE9F1",
-            borderRadius: "4px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginLeft: "8px",
-            backgroundColor: "white"
-        },
-        curPageContainer: {
-            width: "32px",
-            height: "32px",
-            left: "1009px",
-            top: "792px",
-            border: "1px solid #6519E1",
-            borderRadius: "4px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginLeft: "8px",
-            backgroundColor: "white"
-        },
-        curPage: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "14px",
-            lineHeight: "20px",
-            textAlign: "center",
-            color: "#6519E1",
-            margin: "0px"
-        },
-        page: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "14px",
-            lineHeight: "20px",
-            textAlign: "center",
-            color: "#70757A",
-            margin: "0px"
-        },
         searchInputContainer: {
             boxSizing: "border-box",
             display: "flex",
@@ -347,7 +228,7 @@ const RFP = (props) => {
         },
         filterModal: {
             position: "absolute",
-            width: "786px",
+            width: "640px",
             height: "fit-content",
             left: isCollapsed ? "336px" : "496px",
             top: "324px",
@@ -451,105 +332,11 @@ const RFP = (props) => {
             boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
             borderRadius: "6px"
         },
-        floatingContainer: {
-            boxSizing: "border-box",
-            position: "absolute",
-            width: "522px",
-            height: "76px",
-            left: isCollapsed ? "34.236vw" : "45.347vw",
-            top: "636px",
-            background: "#FFFFFF",
-            border: "1px solid #6519E1",
-            boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
-            borderRadius: "6px",
-            zIndex: "1000"
-        },
-        floatinContainerText: {
-            width: "14px",
-            height: "36px",
-            marginLeft: "32px",
-            marginTop: "26px",
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 500,
-            fontSize: "24px",
-            lineHeight: "36px",
-            color: "#6519E1",
-            display: "inline-block"
-        },
-        floatingContainerText2: {
-            width: "128px",
-            height: "24px",
-            left: "58px",
-            top: "32px",
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 500,
-            fontSize: "16px",
-            lineHeight: "24px",
-            color: "#0A0A0A",
-            display: "inline-block",
-            marginLeft: "12px"
-        },
-        floatingContainerLine: {
-            width: "46px",
-            height: "0px",
-            border: "1px solid #EBE9F1",
-            transform: "rotate(90deg)",
-            display: "inline-block",
-            marginBottom: "12px"
-        },
-        floatingContainerIconText: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "14px",
-            lineHeight: "20px",
-            color: "#0A0A0A"
-        },
-        whereText: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 500,
-            fontSize: "12px",
-            lineHeight: "16px",
-            color: "#0A0A0A"
-        },
-        filterInput1: {
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            padding: "4px 0px 4px 4px",
-            gap: "10px",
-            width: "144px",
-            height: "24px",
-            background: "#F7F7F9",
-            borderRadius: "6px"
-        }
     }
 
     useEffect(() => {
         setIsLoading2([true, true, true, true, true])
         const call = async () => {
-            await axios
-                .get(HOST + GET_RFP_COUNT, {
-                    headers: {
-                        auth: "Rose " + localStorage.getItem("auth"),
-                    },
-                })
-                .then((res) => {
-                    let obj = rfpCount
-                    obj.Total = res.data.res[0].Total
-                    obj.Month = res.data.res[0].Month
-                    obj.Percent = res.data.res[0].Percent
-                    setrfpCount(obj)
-                    setIsLoading2(prev => [false, ...prev.slice(1, 5)])
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-
             await axios
                 .get(HOST + GET_CITIES, {
                     headers: { auth: "Rose " + localStorage.getItem("auth") },
@@ -606,7 +393,7 @@ const RFP = (props) => {
         setcurrPage(1)
         const call = async () => {
             await axios
-                .get(HOST + GET_PAGE_RFPS, {
+                .get(HOST + GET_PAGE_PROPOSALS, {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
                         limit: limit,
@@ -617,7 +404,7 @@ const RFP = (props) => {
                     },
                 })
                 .then((res) => {
-                    setrfps(res.data.res);
+                    setproposals(res.data.res);
                     setpages(res.data.totalPages)
                     setIsLoading(false);
                 })
@@ -632,7 +419,7 @@ const RFP = (props) => {
         setIsLoading(true);
         setcurrPage(page);
         await axios
-            .get(HOST + GET_PAGE_RFPS, {
+            .get(HOST + GET_PAGES_PROPOSALS, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
                     limit: limit,
@@ -643,7 +430,7 @@ const RFP = (props) => {
                 },
             })
             .then((res) => {
-                setrfps(res.data.res);
+                setproposals(res.data.res);
                 setpages(res.data.totalPages)
                 setIsLoading(false);
             })
@@ -666,14 +453,14 @@ const RFP = (props) => {
         }
     }
 
-    const handleDeleteBudget = async (e) => {
+    const handleDeleteProposal = async (e) => {
         setIsLoading(true)
         e.preventDefault();
         await axios
             .post(
-                HOST + DELETE_RFP,
+                HOST + DELETE_PROPOSAL,
                 {
-                    ids: JSON.stringify(selectedRfps),
+                    ids: JSON.stringify(selectedProposals),
                 },
                 { headers: { auth: "Rose " + localStorage.getItem("auth") } }
             )
@@ -687,9 +474,10 @@ const RFP = (props) => {
                 console.log(err);
             });
     };
+
     const [rowData, setrowData] = useState([]);
     const handleUpdate = (e) => {
-        const foundObject = rfps.find(obj => obj.RFP_ID === selectedRfps[0]);
+        const foundObject = proposals.find(obj => obj.RFP_ID === selectedProposals[0]);
         setrowData(foundObject);
         handleShowUpdate();
     };
@@ -701,40 +489,7 @@ const RFP = (props) => {
     }
 
     const filterSize = () => {
-        return filter.city.length + filter.cat.length + filter.dept.length + filter.manager.length + filter.source.length;
-    }
-
-    const filterInput1 =
-        <Form.Select style={styles.filterInput1}>
-            <option>Column</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-        </Form.Select >
-
-
-    const filterInput2 = (idx) => {
-        if (advancedFilter[idx][0] === '') {
-            return (
-                <Form.Select style={styles.filterInput1}>
-                    <option>Condition</option>
-                    <option>Choose Column First</option>
-                </Form.Select >
-            )
-        }
-
-        return (
-            <Form.Select style={styles.filterInput1}>
-                <option>Column</option>
-                <option value="1">is</option>
-                <option value="IS">is not</option>
-                <option value="3">Three</option>
-            </Form.Select >
-        )
-    }
-
-    const filterInput3 = (idx) => {
-
+        return filter.city.length + filter.cat.length + filter.dept.length + filter.manager.length;
     }
 
     return (
@@ -742,33 +497,54 @@ const RFP = (props) => {
             {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
             {red === true ? <RedAlert setRed={setred} /> : <></>}
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
-                <p style={styles.heading}>RFPs (Request For Proposals)</p>
-                <button style={styles.addButton} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button>
+                <p style={styles.heading}>Proposals</p>
+                <button style={styles.addButton} onClick={handleShow}><p style={styles.addButtonText} >+ Add New proposal</p></button>
             </div>
             <div className='d-flex flex-row' style={{ marginLeft: "32px", marginBottom: "20px" }}>
                 <div style={styles.topContainer}>
                     <p style={styles.topContainerHeading}>New RFPs</p>
                     <div className=''>
-                        <p style={styles.topContainerSubheading}>{rfpCount.Month}</p>
-                        {rfpCount.Percent >= 0
+                        <p style={styles.topContainerSubheading}>{proposalCount.Month}</p>
+                        {proposalCount.Percent >= 0
                             ? <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
                                 <FontAwesomeIcon icon={faArrowUp} color="#34A853" />
-                                <p style={styles.percent}>{rfpCount.Percent}% increase</p>
+                                <p style={styles.percent}>{proposalCount.Percent}% increase</p>
                             </div>
                             : <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
                                 <FontAwesomeIcon icon={faArrowDown} color="#FE3766" />
-                                <p style={{ ...styles.percent, color: "#FE3766" }}>{rfpCount.Percent}% decrease</p>
+                                <p style={{ ...styles.percent, color: "#FE3766" }}>{proposalCount.Percent}% decrease</p>
                             </div>
                         }
                     </div>
                 </div>
                 <div style={styles.topContainer}>
                     <p style={styles.topContainerHeading}>Total RFPs</p>
-                    <p style={styles.topContainerSubheading}>{rfpCount.Total}</p>
+                    <p style={styles.topContainerSubheading}>{proposalCount.Total}</p>
+                </div>
+                <div style={{ ...styles.topContainer, width: "335px", padding: "12px 8px" }} className='d-flex flex-row'>
+                    <div className='d-flex flex-row justify-content-center align-items-center' style={{ gap: "12px" }}>
+                        <div style={{ width: "28px", height: "28px", background: "#E4FEF1", borderRadius: "4px" }} className='d-flex justify-content-center align-items-center'>
+                            <FontAwesomeIcon icon={faCheck} color="#559776" />
+                        </div>
+                        <div className='d-flex flex-column'>
+                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", marginBottom: "4px" }}>Proposals Won</p>
+                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "18px", lineHeight: "28px", color: "#0A0A0A", marginBottom: "0px" }}>{proposalCount.Won}</p>
+                        </div>
+                    </div>
+                    <div style={{ width: "0px", height: "48px", border: "1px solid #EBE9F1", marginLeft: "20px", marginRight: "20px" }}></div>
+                    <div className='d-flex flex-row justify-content-center align-items-center' style={{ gap: "12px" }}>
+                        <div style={{ width: "28px", height: "28px", background: "#FFF1F1", borderRadius: "4px" }} className='d-flex justify-content-center align-items-center'>
+                            <FontAwesomeIcon icon={faX} color="#D93838" />
+                        </div>
+                        <div className='d-flex flex-column'>
+                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", marginBottom: "4px" }}>Proposals Lost</p>
+                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "18px", lineHeight: "28px", color: "#0A0A0A", marginBottom: "0px" }}>{proposalCount.Lost}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div style={styles.headerLine}></div>
-            <p style={styles.heading2}>RFPs</p>
+            <p style={styles.heading2}>Proposals</p>
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
                 <input
                     style={styles.searchInputContainer}
@@ -787,11 +563,11 @@ const RFP = (props) => {
                     backdropClassName="filter-backdrop"
                     animation={false}
                 >
-                    {filter2 === 'Basic' ? <div style={{ width: "786px", height: "356px", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px" }}>
+                    {filter2 === 'Basic' ? <div style={{ width: "640px", height: "356px", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px" }}>
                         <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
                             <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
                             <div className='d-flex align-items-center'>
-                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [], source: [] })}>Clear All</Button>
+                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [] })}>Clear All</Button>
                                 <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeFilterModal} />
                             </div>
                         </div>
@@ -817,13 +593,6 @@ const RFP = (props) => {
                                     }
 
                                 })}
-                            </div>
-                            <div style={styles.filterSubcontainer} className='filter-container'>
-                                <p style={styles.filterSubheading}>Source {filter.source.length === 0 ? "" : `/${filter.source.length}`}</p>
-                                <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Construct Connect') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Construct Connect')}><p style={styles.filterBodyText}>Construct Connect</p></div>
-                                <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Bids & Tenders') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Bids & Tenders')}><p style={styles.filterBodyText}>Bids & Tenders</p></div>
-                                <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Biddingo') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Biddingo')}><p style={styles.filterBodyText}>Biddingo</p></div>
-                                <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Merx') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Merx')}><p style={styles.filterBodyText}>Merx</p></div>
                             </div>
                             <div style={styles.filterSubcontainer} className='filter-container'>
                                 <p style={styles.filterSubheading}>Department {filter.dept.length === 0 ? "" : `/${filter.dept.length}`}</p>
@@ -865,7 +634,6 @@ const RFP = (props) => {
                             </div>
                             <div className='d-flex flex-row justify-content-between'>
                                 <p style={styles.whereText}>WHERE</p>
-                                {filterInput1}
                             </div>
                             <div className='d-flex flex-row justify-content-start'>
                                 <FontAwesomeIcon icon={faPlus} color="#6519E1" />
@@ -954,6 +722,7 @@ const RFP = (props) => {
                     </div>
                 </Modal>
             </div>
+
             <div style={{ borderBottom: "1px solid #EBE9F1" }}>
                 <TableScrollbar height="492px">
                     <table style={styles.table} className='rfp-table'>
@@ -971,16 +740,16 @@ const RFP = (props) => {
                             </tr>
                         </thead>
                         <tbody style={styles.tableBody}>
-                            {isLoading ? <div style={{ height: "408px", width: "1757px", background: "white" }}><LoadingSpinner /></div> : rfps && rfps.map(e => (
-                                <tr style={{ ...styles.tableRow, backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
-                                    <td className='fixed-col' style={{ ...styles.tableCell, fontWeight: "500", minWidth: "", borderRight: "1px solid #EBE9F1", backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }}>
+                            {isLoading ? <div style={{ height: "408px", width: "1757px", background: "white" }}><LoadingSpinner /></div> : proposals && proposals.map(e => (
+                                <tr style={{ ...styles.tableRow, backgroundColor: selectedProposals.includes(e.RFP_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
+                                    <td className='fixed-col' style={{ ...styles.tableCell, fontWeight: "500", minWidth: "", borderRight: "1px solid #EBE9F1", backgroundColor: selectedProposals.includes(e.RFP_ID) ? "#F5F3FE" : "white" }}>
                                         <div className='d-flex flex-row align-items-center'>
                                             <Form.Check
                                                 inline
                                                 type="checkbox"
-                                                checked={selectedRfps.includes(e.RFP_ID)}
+                                                checked={selectedProposals.includes(e.RFP_ID)}
                                                 readOnly={true}
-                                                onClick={(eve) => { if (eve.target.checked) { setselectedRfps(prev => [...prev, e.RFP_ID]) } else { setselectedRfps(prev => prev.filter(ele => ele !== e.RFP_ID)) } }}
+                                                onClick={(eve) => { if (eve.target.checked) { setselectedProposals(prev => [...prev, e.RFP_ID]) } else { setselectedProposals(prev => prev.filter(ele => ele !== e.RFP_ID)) } }}
                                             /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
                                         </div>
                                     </td>
@@ -1004,121 +773,8 @@ const RFP = (props) => {
                     </table>
                 </TableScrollbar>
             </div>
-
-            <div className='d-flex flex-row justify-content-end' style={{ marginTop: "20px", marginRight: "24px" }}>
-                <Button style={styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(currPage - 1)}><FontAwesomeIcon icon={faChevronLeft} color="#70757A" /></Button>
-                <Button style={currPage === 1 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(1)}><p style={currPage === 1 ? styles.curPage : styles.page}>1</p></Button>
-                {pages >= 2 ? <Button style={currPage === 2 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 2} onClick={(e) => handlePage(2)}><p style={currPage === 2 ? styles.curPage : styles.page}>2</p></Button> : <></>}
-                {pages >= 3 ? <Button style={currPage === 3 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 3} onClick={(e) => handlePage(3)}><p style={currPage === 3 ? styles.curPage : styles.page}>3</p></Button> : <></>}
-                {pages >= 4 ? <Button style={currPage === 4 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 4} onClick={(e) => handlePage(4)}><p style={currPage === 4 ? styles.curPage : styles.page}>4</p></Button> : <></>}
-                {pages >= 5 ? <Button style={currPage === 5 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 5} onClick={(e) => handlePage(5)}><p style={currPage === 5 ? styles.curPage : styles.page}>5</p></Button> : <></>}
-                {pages >= 7 ? <p style={{ marginLeft: "8px" }}>.....</p> : <></>}
-                {pages >= 6 ? <Button style={currPage === pages ? styles.curPageContainer : styles.pageContainer}><p style={currPage === pages ? styles.curPage : styles.page}>{pages}</p></Button> : <></>}
-                <Button style={styles.pageContainer} disabled={currPage === pages} onClick={(e) => handlePage(currPage + 1)}><FontAwesomeIcon icon={faChevronRight} color="#70757A" /></Button>
-            </div>
-
-            <div style={{ ...styles.floatingContainer, display: selectedRfps.length === 0 ? "none" : "", visibility: selectedRfps.length === 0 ? "hidden" : "visible" }}>
-                <p style={styles.floatinContainerText}>{selectedRfps.length}</p>
-                <p style={styles.floatingContainerText2}>Items Selected</p>
-                <div style={{ ...styles.floatingContainerLine, marginLeft: "-23px" }}></div>
-                {privileges.includes("Delete RFP") ? <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }} onClick={(e) => handleShowDelete()}>
-                    <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
-                    <p style={styles.floatingContainerIconText}>Delete</p>
-                </div> : <></>}
-                {privileges.includes('Update RFP') ? <Button style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }} disabled={selectedRfps.length !== 1} onClick={handleUpdate}>
-                    <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
-                    <p style={styles.floatingContainerIconText}>Edit</p>
-                </Button> : <></>}
-                <div style={{ ...styles.floatingContainerLine, marginLeft: "10px" }}></div>
-                <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
-                    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color="#6519E1" onClick={(e) => setselectedRfps([])} />
-                </div>
-
-            </div>
-
-            {/* Add Form Modal */}
-            <Modal
-                show={show}
-                onHide={handleClose}
-                backdrop="static"
-                centered
-                size="xl"
-                keyboard={false}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Add RFP</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {
-                        <RFPform
-                            setRed={setred}
-                            setGreen={setgreen}
-                            closeModal={handleClose}
-                            api={apiCall}
-                            apiCall={setCall}
-                        />
-                    }
-                </Modal.Body>
-            </Modal>
-
-            {/* Delete Modal */}
-            <Modal
-                show={showDelete}
-                onHide={handleCloseDelete}
-                backdrop="static"
-                size="sm"
-                keyboard={false}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Confirm Deletion</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p style={{ textAlign: "center" }}>
-                        <b>Delete the selected RFP!!</b>
-                    </p>
-                    <div className="d-flex flex-row justify-content-between">
-
-                        <div style={{ display: "inline-block" }}>
-                            <Button variant="danger" onClick={handleCloseDelete}>
-                                Cancel
-                            </Button>
-                        </div>
-                        <div style={{ display: "inline-block", float: "right" }}>
-                            <Button variant="success" onClick={handleDeleteBudget}>
-                                Proceed
-                            </Button>
-                        </div>
-                    </div>
-                </Modal.Body>
-            </Modal>
-
-            {/* Update Modal */}
-            <Modal
-                show={showUpdate}
-                onHide={handleCloseUpdate}
-                backdrop="static"
-                centered
-                size="xl"
-                keyboard={false}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Update RFP</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {
-                        <UpdateRFP
-                            row={rowData}
-                            setRed={setred}
-                            setGreen={setgreen}
-                            closeModal={handleCloseUpdate}
-                            api={apiCall}
-                            apiCall={setCall}
-                        />
-                    }
-                </Modal.Body>
-            </Modal>
         </>
     )
 }
 
-export default RFP
+export default Proposal
