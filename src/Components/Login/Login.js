@@ -18,8 +18,8 @@ import { Button } from "react-bootstrap";
 const styles = {
   leftPart: {
     position: "absolute",
-    width: "720px",
-    height: "900px",
+    width: "50vw",
+    height: "100vh",
     left: "0px",
     top: "0px",
     background: "#F3F5F9",
@@ -27,27 +27,27 @@ const styles = {
   },
   rightPart: {
     position: "absolute",
-    width: "720px",
-    height: "900px",
-    left: "720px",
+    width: "50vw",
+    height: "100vh",
+    left: "50vw",
     top: "0px",
     background: "#F8FAFB",
   },
   leftUpper: {
     position: "absolute",
-    width: "624px",
-    height: "624px",
-    left: "-363px",
-    top: "-310px",
+    width: "40vw",
+    height: "40vw",
+    left: "-25vw",
+    top: "-34.7vh",
     background: "#E0D8EC",
     transform: "rotate(-45deg)",
   },
   welcomeHeading: {
     position: "absolute",
-    width: "166px",
-    height: "36px",
-    left: "200px",
-    top: "310px",
+    width: "20vw",
+    height: "3vh",
+    left: "14vw",
+    top: "37vh",
     fontFamily: "'Roboto'",
     fontStyle: "normal",
     fontWeight: 600,
@@ -57,10 +57,10 @@ const styles = {
   },
   welcomeText: {
     position: "absolute",
-    width: "320px",
-    height: "40px",
-    left: "200px",
-    top: "350px",
+    width: "22vw",
+    height: "5vh",
+    left: "14vw",
+    top: "42vh",
     fontFamily: "'Roboto'",
     fontStyle: "normal",
     fontWeight: 400,
@@ -77,10 +77,10 @@ const styles = {
     padding: "12px 64px",
     gap: "10px",
     position: "absolute",
-    width: "320px",
-    height: "44px",
-    left: "200px",
-    top: "558px",
+    width: "22vw",
+    height: "5vh",
+    left: "14vw",
+    top: "65vh",
     background: "#6519E1",
     border: "1px solid #6519E1",
     boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
@@ -216,9 +216,9 @@ const Login = () => {
         <div style={styles.welcomeText}>
           Welcome back to taskforce! Enter your credentials to login
         </div>
-        <MDBContainer style={{marginTop:'414px', width:'340px'}} >
+        <MDBContainer style={{textAlign: 'center',marginTop:'49vh', width: '24vw'}} >
           <MDBInput
-          style={{height:'44px', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A'}}
+          style={{height:'5vh', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A'}}
             wrapperClass="mb-4"
             // label="Username"
             placeholder="Username"
@@ -227,7 +227,7 @@ const Login = () => {
             onChange={(e) => { setusername(e.target.value) }}
           />
           <MDBInput
-          style={{height:'44px', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A'}}
+          style={{height:'5vh', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A'}}
           wrapperClass="mb-4"
             placeholder="Password"
             // label='Password'
