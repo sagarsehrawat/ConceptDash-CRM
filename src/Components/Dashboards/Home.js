@@ -461,7 +461,6 @@ const Home = (props) => {
       });
   };
   const formatEvents = (list) => {
-    console.log(list);
     return list.map((item) => ({
       Id: item.id,
       Subject: item.summary,

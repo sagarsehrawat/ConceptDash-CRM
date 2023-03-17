@@ -1,10 +1,10 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import TableScrollbar from 'react-table-scrollbar';
 import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST } from '../Constants/Constants';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowsUpDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faCross, faDownload, faEdit, faFilter, faMagnifyingGlass, faPlus, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowsUpDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faCross, faDownload, faEdit, faFilter, faMagnifyingGlass, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Button, Form, Modal } from 'react-bootstrap';
 import GreenAlert from '../Loader/GreenAlert';
 import RedAlert from '../Loader/RedAlert';
@@ -55,9 +55,11 @@ const RFP = (props) => {
     const openFilterModal = () => setfilterModal(true);
 
     //Sort Modal
-    const [sortModal, setsortModal] = useState(false);
-    const closeSortModal = () => setsortModal(false);
-    const openSortModal = () => setsortModal(true);
+    const [sortModal, setsortModal] = useState(null);
+    const handleCloseSort = () => setsortModal(null);
+    const handleShowSort = (idx) => setsortModal(idx);
+    const tableRef = useRef(null);
+    const [scrolled, setscrolled] = useState(0)
 
     //Delete Modal
     const [showDelete, setShowDelete] = useState(false);
@@ -195,7 +197,7 @@ const RFP = (props) => {
             borderBottom: "1px solid #EBE9F1",
             borderTop: "1px solid #EBE9F1",
             verticalAlign: "middle",
-            paddingLeft: "31px"
+            paddingLeft: "22px",
         },
         tableBody: {
             background: "#FFFFFF",
@@ -329,22 +331,6 @@ const RFP = (props) => {
             borderRadius: "6px",
             marginRight: "12px"
         },
-        sortButton: {
-            boxSizing: "border-box",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "8px 12px",
-            gap: "8px",
-            width: "96px",
-            height: "36px",
-            left: "395px",
-            top: "220px",
-            background: "#FFFFFF",
-            border: "1px solid #EBE9F1",
-            borderRadius: "6px"
-        },
         filterModal: {
             position: "absolute",
             width: "786px",
@@ -441,16 +427,6 @@ const RFP = (props) => {
             border: "none",
             marginBottom: "8px",
         },
-        sortModal: {
-            position: "absolute",
-            width: "296px",
-            height: "319px",
-            left: isCollapsed ? "463px" : "622px",
-            top: "324px",
-            background: "#FFFFFF",
-            boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
-            borderRadius: "6px"
-        },
         floatingContainer: {
             boxSizing: "border-box",
             position: "absolute",
@@ -526,7 +502,33 @@ const RFP = (props) => {
             height: "24px",
             background: "#F7F7F9",
             borderRadius: "6px"
-        }
+        },
+        sortModal: {
+            position: "absolute",
+            width: "163px",
+            height: "81px",
+            top: "388px",
+            background: "#FFFFFF",
+            boxShadow: "0px 12px 20px rgba(0, 0, 0, 0.12)",
+            borderRadius: "6px",
+        },
+        sortContainer: {
+            width: "163px",
+            height: "81px",
+            background: "#FFFFFF",
+            boxShadow: "0px 12px 20px rgba(0, 0, 0, 0.12)",
+            borderRadius: "6px",
+            padding: "15px"
+        },
+        sortText: {
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 400,
+            fontSize: "12px",
+            lineHeight: "16px",
+            color: "#0A0A0A",
+            margin: "0px"
+        },
     }
 
     useEffect(() => {
@@ -542,7 +544,7 @@ const RFP = (props) => {
                     let obj = rfpCount
                     obj.Total = res.data.res[0].Total
                     obj.Month = res.data.res[0].Month
-                    obj.Percent = res.data.res[0].Percent
+                    obj.Percent = res.data.res[0].Percent ?? 0
                     setrfpCount(obj)
                     setIsLoading2(prev => [false, ...prev.slice(1, 5)])
                 })
@@ -680,7 +682,11 @@ const RFP = (props) => {
             .then((res) => {
                 if (res.data.success) {
                     handleCloseDelete();
+                    selectedRfps([])
+                    setgreen(true)
                     setCall(apiCall + 1);
+                } else {
+                    setred(true)
                 }
             })
             .catch((err) => {
@@ -702,6 +708,43 @@ const RFP = (props) => {
 
     const filterSize = () => {
         return filter.city.length + filter.cat.length + filter.dept.length + filter.manager.length + filter.source.length;
+    }
+
+    useEffect(() => {
+        const table = tableRef.current;
+        table.addEventListener('scroll', handleTableScroll);
+        return () => {
+            table.removeEventListener('scroll', handleTableScroll);
+        };
+    }, []);
+
+
+    const handleTableScroll = () => {
+        setscrolled(tableRef.current.scrollLeft)
+    }
+
+    const sortModalLeft = (idx) => {
+        if(isCollapsed){
+            if(idx===0) return `${100}px`
+            if(idx===1) return `${398 - scrolled}px`
+            if(idx===2) return `${549 - scrolled}px`
+            if(idx===3) return `${739 - scrolled}px`
+            if(idx===4) return `${919 - scrolled}px`
+            if(idx===5) return `${1098 - scrolled}px`
+            if(idx===6) return `${1348 - scrolled}px`
+            if(idx===7) return `${1548 - scrolled}px`
+            if(idx===8) return `${1654 - scrolled}px`
+        }else{
+            if(idx===0) return `${260}px`
+            if(idx===1) return `${558 - scrolled}px`
+            if(idx===2) return `${709 - scrolled}px`
+            if(idx===3) return `${899 - scrolled}px`
+            if(idx===4) return `${1079 - scrolled}px`
+            if(idx===5) return `${1258 - scrolled}px`
+            if(idx===6) return `${1508 - scrolled}px`
+            if(idx===7) return `${1708 - scrolled}px`
+            if(idx===8) return `${1814 - scrolled}px`
+        }
     }
 
     const filterInput1 =
@@ -745,6 +788,8 @@ const RFP = (props) => {
                 <p style={styles.heading}>RFPs (Request For Proposals)</p>
                 <button style={styles.addButton} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button>
             </div>
+
+            {/* Header Cards */}
             <div className='d-flex flex-row' style={{ marginLeft: "32px", marginBottom: "20px" }}>
                 <div style={styles.topContainer}>
                     <p style={styles.topContainerHeading}>New RFPs</p>
@@ -769,6 +814,8 @@ const RFP = (props) => {
             </div>
             <div style={styles.headerLine}></div>
             <p style={styles.heading2}>RFPs</p>
+
+            {/* Filter and Other Buttons */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
                 <input
                     style={styles.searchInputContainer}
@@ -876,135 +923,266 @@ const RFP = (props) => {
                             </div>
                         </div>}
                 </Modal>
-                <Button style={styles.sortButton} onClick={openSortModal}><FontAwesomeIcon icon={faArrowsUpDown} color="#000000" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Sort</p></Button>
-                <Modal
-                    show={sortModal}
-                    onHide={closeSortModal}
-                    style={styles.sortModal}
-                    dialogClassName="filter-dialog"
-                    backdropClassName="filter-backdrop"
-                    animation={false}
-                >
-                    <div style={{ width: "296px", height: "319px", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px" }}>
-                        <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Sort By</p>
-                            <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeSortModal} />
-                        </div>
-                        <div className='d-flex flex-column' style={{ marginLeft: "20px", gap: "8px" }}>
-                            <RadioButtonComponent
-                                label="Latest To Oldest"
-                                checked={sort === "RFP_ID DESC"}
-                                cssClass="sort-radio"
-                                name="Sort"
-                                value={`RFP_ID DESC`}
-                                onChange={(e) => setsort(e.target.value)} />
-                            <RadioButtonComponent
-                                label="Oldest To Lastest"
-                                checked={sort === "RFP_ID"}
-                                cssClass="sort-radio"
-                                name="Sort"
-                                value={`RFP_ID`}
-                                onChange={(e) => setsort(e.target.value)} />
-                            <RadioButtonComponent
-                                label="Start Date - Latest First"
-                                checked={sort === "Start_Date"}
-                                cssClass="sort-radio"
-                                name="Sort"
-                                value={`Start_Date`}
-                                onChange={(e) => setsort(e.target.value)} />
-                            <RadioButtonComponent
-                                label="Start Date - Oldest First"
-                                checked={sort === "Start_Date DESC"}
-                                cssClass="sort-radio"
-                                name="Sort"
-                                value={`Start_Date DESC`}
-                                onChange={(e) => setsort(e.target.value)} />
-                            <RadioButtonComponent
-                                label="Submission Date - Latest First"
-                                checked={sort === "Submission_Date"}
-                                cssClass="sort-radio"
-                                name="Sort"
-                                value={`Submission_Date`}
-                                onChange={(e) => setsort(e.target.value)} />
-                            <RadioButtonComponent
-                                label="Submission Date - Oldest First"
-                                checked={sort === "Submission_Date DESC"}
-                                cssClass="sort-radio"
-                                name="Sort"
-                                value={`Submission_Date DESC`}
-                                onChange={(e) => setsort(e.target.value)} />
-                            <RadioButtonComponent
-                                label="Project Name - A-Z"
-                                checked={sort === "Project_Name"}
-                                cssClass="sort-radio"
-                                name="Sort"
-                                value={`Project_Name`}
-                                onChange={(e) => setsort(e.target.value)} />
-                            <RadioButtonComponent
-                                label="Project Name - Z-A"
-                                checked={sort === "Project_Name DESC"}
-                                cssClass="sort-radio"
-                                name="Sort"
-                                value={`Project_Name DESC`}
-                                onChange={(e) => setsort(e.target.value)} />
-                        </div>
-                        <div className='d-flex justify-content-end' style={{ marginRight: "20px", marginTop: "10px" }}>
-                            <Button style={styles.filterButton3} onClick={(e) => { setCall(apiCall + 1); closeSortModal(); }}>Sort</Button>
-                        </div>
-                    </div>
-                </Modal>
-            </div>
-            <div style={{ borderBottom: "1px solid #EBE9F1" }}>
-                <TableScrollbar height="492px">
-                    <table style={styles.table} className='rfp-table'>
-                        <thead style={styles.tableHeader}>
-                            <tr>
-                                <th scope="col" style={{ ...styles.tableHeading, width: "300px", borderRight: "1px solid #EBE9F1", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>RFP Name</th>
-                                <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>City</th>
-                                <th scope="col" style={{ ...styles.tableHeading, width: "190px" }} className='fixed-header2'>Source</th>
-                                <th scope="col" style={{ ...styles.tableHeading, width: "180px" }} className='fixed-header2'>Start Date</th>
-                                <th scope="col" style={{ ...styles.tableHeading, width: "180px" }} className='fixed-header2'>Submission Date</th>
-                                <th scope="col" style={{ ...styles.tableHeading, width: "250px" }} className='fixed-header2'>Department</th>
-                                <th scope="col" style={{ ...styles.tableHeading, width: "200px" }} className='fixed-header2'>Project Category</th>
-                                <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>Project Manager</th>
-                                <th scope="col" style={{ ...styles.tableHeading, width: "100px" }} className='fixed-header2'>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody style={styles.tableBody}>
-                            {isLoading ? <div style={{ height: "408px", width: "1757px", background: "white" }}><LoadingSpinner /></div> : rfps && rfps.map(e => (
-                                <tr style={{ ...styles.tableRow, backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
-                                    <td className='fixed-col' style={{ ...styles.tableCell, fontWeight: "500", minWidth: "", borderRight: "1px solid #EBE9F1", backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }}>
-                                        <div className='d-flex flex-row align-items-center'>
-                                            <Form.Check
-                                                inline
-                                                type="checkbox"
-                                                checked={selectedRfps.includes(e.RFP_ID)}
-                                                readOnly={true}
-                                                onClick={(eve) => { if (eve.target.checked) { setselectedRfps(prev => [...prev, e.RFP_ID]) } else { setselectedRfps(prev => prev.filter(ele => ele !== e.RFP_ID)) } }}
-                                            /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
-                                        </div>
-                                    </td>
-                                    <td style={{ ...styles.tableCell, minWidth: "150px" }}>{e.City}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "190px" }}>{e.Source}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "180px" }}>{formatDate(e.Start_Date)}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "180px" }}>
-                                        {formatDate(e.Submission_Date) === ""
-                                            ? <></>
-                                            : <div style={styles.dateContainer}>
-                                                <p style={styles.date}>{formatDate(e.Submission_Date)}</p>
-                                            </div>}
-                                    </td>
-                                    <td style={{ ...styles.tableCell, minWidth: "250px" }}>{e.Department}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Project_Category}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "150px" }}>{e.Manager_Name}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "100px" }}>{e.Action}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </TableScrollbar>
             </div>
 
+            {/* Table */}
+            <div style={{ borderBottom: "1px solid #EBE9F1", height: "492px", overflow: "auto", position: "relative" }} ref={tableRef}>
+                <table style={styles.table} className='rfp-table'>
+                    <thead style={styles.tableHeader}>
+                        <tr>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "300px", borderRight: "1px solid #EBE9F1", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(0)}>
+                                    RFP Name&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 0}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(0) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Name"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Name DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(1)}>
+                                    City&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 1}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(1) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("City"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("City DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "190px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(2)}>
+                                    Source&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 2}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(2) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Source"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Source DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "180px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(3)}>
+                                    Start Date&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 3}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(3) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Start_Date"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Start_Date DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "180px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(4)}>
+                                    Submission Date&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 4}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(4) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Submission_Date"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Submission_Date DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "250px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(5)}>
+                                    Department&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 5}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(5) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Department"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Department DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "200px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(6)}>
+                                    Project Category&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 6}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(6) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Category"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Category DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "200px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(7)}>
+                                    Project Manager&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 7}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(7) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Manager_Name"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Manager_Name DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(8)}>
+                                    Action&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 8}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(8) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Action"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Action DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody style={styles.tableBody}>
+                        {isLoading ? <div style={{ height: "408px", width: "1757px", background: "white" }}><LoadingSpinner /></div> : rfps && rfps.map(e => (
+                            <tr style={{ ...styles.tableRow, backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
+                                <td className='fixed-col' style={{ ...styles.tableCell, fontWeight: "500", minWidth: "", borderRight: "1px solid #EBE9F1", backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }}>
+                                    <div className='d-flex flex-row align-items-center'>
+                                        <Form.Check
+                                            inline
+                                            type="checkbox"
+                                            checked={selectedRfps.includes(e.RFP_ID)}
+                                            readOnly={true}
+                                            onClick={(eve) => { if (eve.target.checked) { setselectedRfps(prev => [...prev, e.RFP_ID]) } else { setselectedRfps(prev => prev.filter(ele => ele !== e.RFP_ID)) } }}
+                                        /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
+                                    </div>
+                                </td>
+                                <td style={{ ...styles.tableCell, minWidth: "150px" }}>{e.City}</td>
+                                <td style={{ ...styles.tableCell, minWidth: "190px" }}>{e.Source}</td>
+                                <td style={{ ...styles.tableCell, minWidth: "180px" }}>{formatDate(e.Start_Date)}</td>
+                                <td style={{ ...styles.tableCell, minWidth: "180px" }}>
+                                    {formatDate(e.Submission_Date) === ""
+                                        ? <></>
+                                        : <div style={styles.dateContainer}>
+                                            <p style={styles.date}>{formatDate(e.Submission_Date)}</p>
+                                        </div>}
+                                </td>
+                                <td style={{ ...styles.tableCell, minWidth: "250px" }}>{e.Department}</td>
+                                <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Project_Category}</td>
+                                <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Manager_Name}</td>
+                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>{e.Action}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Buttons */}
             <div className='d-flex flex-row justify-content-end' style={{ marginTop: "20px", marginRight: "24px" }}>
                 <Button style={styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(currPage - 1)}><FontAwesomeIcon icon={faChevronLeft} color="#70757A" /></Button>
                 <Button style={currPage === 1 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(1)}><p style={currPage === 1 ? styles.curPage : styles.page}>1</p></Button>
@@ -1013,7 +1191,7 @@ const RFP = (props) => {
                 {pages >= 4 ? <Button style={currPage === 4 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 4} onClick={(e) => handlePage(4)}><p style={currPage === 4 ? styles.curPage : styles.page}>4</p></Button> : <></>}
                 {pages >= 5 ? <Button style={currPage === 5 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 5} onClick={(e) => handlePage(5)}><p style={currPage === 5 ? styles.curPage : styles.page}>5</p></Button> : <></>}
                 {pages >= 7 ? <p style={{ marginLeft: "8px" }}>.....</p> : <></>}
-                {pages >= 6 ? <Button style={currPage === pages ? styles.curPageContainer : styles.pageContainer}><p style={currPage === pages ? styles.curPage : styles.page}>{pages}</p></Button> : <></>}
+                {pages >= 6 ? <Button style={currPage === pages ? styles.curPageContainer : styles.pageContainer} disabled={currPage === pages} onClick={(e) => handlePage(pages)}><p style={currPage === pages ? styles.curPage : styles.page}>{pages}</p></Button> : <></>}
                 <Button style={styles.pageContainer} disabled={currPage === pages} onClick={(e) => handlePage(currPage + 1)}><FontAwesomeIcon icon={faChevronRight} color="#70757A" /></Button>
             </div>
 
@@ -1033,7 +1211,6 @@ const RFP = (props) => {
                 <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
                     <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color="#6519E1" onClick={(e) => setselectedRfps([])} />
                 </div>
-
             </div>
 
             {/* Add Form Modal */}

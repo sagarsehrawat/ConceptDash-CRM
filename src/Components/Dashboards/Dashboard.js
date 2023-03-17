@@ -56,6 +56,7 @@ import LoadingSpinner from "../Loader/Loader";
 import RFP from "../v2/RFP";
 import TestDemo from "../Calendar";
 import Proposal from "../v2/Proposal";
+import Employee from "../v2/Employee";
 
 
 
@@ -124,7 +125,7 @@ const Dashboard = () => {
       height: "100vh",
       left: "0px",
       top: "0px",
-      background: "#FBFBFB",
+      background: isCollapsed ? "#F5F4F9" : "#FBFBFB",
       borderRight: "1px solid #EBE9F1",
       boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
       display: "flex",
@@ -347,7 +348,7 @@ const Dashboard = () => {
     if (nav === 4) return <RFP isCollapsed={isCollapsed}/>
     if (nav === 5) return <Proposal isCollapsed={isCollapsed} />
     if (nav === 6) return <ProjectUpdate />;
-    if (nav === 7) return <EmployeeUpdate />;
+    if (nav === 7) return <Employee isCollapsed={isCollapsed}/>;
     if (nav === 8) return <TestDemo />;
     if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
