@@ -20,14 +20,16 @@ th {
 .fixed-header{
   position: sticky;
   left: 0;
-  z-index: 2;
+  top: 0;
+  z-index: 3;
   background-color: #F7F7F9;
 }
 
 .fixed-header2{
   position: sticky;
   left: 0;
-  z-index: 1;
+  top: 0;
+  z-index: 2;
   background-color: #F7F7F9;
 }
 
@@ -131,4 +133,9 @@ body > div.fade.modal.show > div{
 
 .nav-dropdown > a:hover{
   text-decoration: none;
+}
+
+.hover:hover{
+background: rgba(112, 117, 122, 0.2);
+border-radius: 4px;
 }
