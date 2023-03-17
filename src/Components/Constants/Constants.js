@@ -64,6 +64,8 @@ export const GET_PROJECT_SUBMISSIONS = '/api/get/project/submissions'
 export const GET_PROJECT_EXPENSES = '/api/get/project/expenses'
 export const GET_PROJECT_EXTRAS = '/api/get/project/extras'
 
+export const GET_EMPLOYEE_COUNT = '/api/get/employee/count'
+
 export const DOWNLOAD_BUDGET_DESIGN = '/api/get/file/budgets'
 
 
