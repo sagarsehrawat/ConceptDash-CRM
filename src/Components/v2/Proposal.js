@@ -6,11 +6,13 @@ import moment from 'moment'
 import React, { useState, useContext, useEffect } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import AuthenticationContext from '../../Context/AuthContext'
-import { DELETE_PROPOSAL, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGES_PROPOSALS, GET_PAGE_PROPOSALS, GET_PROJECT_CATEGORIES, GET_PROPOSAL_COUNT, HOST } from '../Constants/Constants'
+import { DELETE_PROPOSAL, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGES_PROPOSALS, GET_PAGE_PROPOSALS, GET_PROJECT_CATEGORIES, GET_PROPOSAL_COUNT, HOST, UPDATE_STATUS_PROPOSAL } from '../Constants/Constants'
 import GreenAlert from '../Loader/GreenAlert'
 import LoadingSpinner from '../Loader/Loader'
 import RedAlert from '../Loader/RedAlert'
 import TableScrollbar from 'react-table-scrollbar';
+import ProposalForm from '../Form/ProposalForm'
+import UpdateProposal from '../Form/UpdateProposal'
 
 const Proposal = (props) => {
     const { isCollapsed } = props
@@ -20,6 +22,7 @@ const Proposal = (props) => {
     const [red, setred] = useState(false);
 
     const [proposals, setproposals] = useState([])
+    const [proposalDetails, setproposalDetails] = useState([])
     const [selectedProposals, setselectedProposals] = useState([])
     const [proposalCount, setproposalCount] = useState({ Total: 0, Month: 0, Percent: 0, Won: 0, Lost: 0 })
     const [cities, setcities] = useState([]);
@@ -28,7 +31,7 @@ const Proposal = (props) => {
     const [employees, setemployees] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [isLoading2, setIsLoading2] = useState([true, true, true, true, true]);
+    const [isLoading2, setIsLoading2] = useState([true, true, true, true, true, false]);
 
     let limit = 50;
     const [pages, setpages] = useState(1);
@@ -38,6 +41,7 @@ const Proposal = (props) => {
     const [searchCity, setsearchCity] = useState("");
     const [filter, setfilter] = useState({ dept: [], cat: [], city: [], manager: [] });
     const [filter2, setfilter2] = useState('Basic')
+    const [status, setstatus] = useState(null)
     const [advancedFilter, setadvancedFilter] = useState([['', 'IS', '']])
 
     //Add Form Modal
@@ -50,10 +54,10 @@ const Proposal = (props) => {
     const closeFilterModal = () => setfilterModal(false);
     const openFilterModal = () => setfilterModal(true);
 
-    //Sort Modal
-    const [sortModal, setsortModal] = useState(false);
-    const closeSortModal = () => setsortModal(false);
-    const openSortModal = () => setsortModal(true);
+    //Status Modal
+    const [statusModal, setstatusModal] = useState(false);
+    const closeStatusModal = () => { setstatusModal(false); setstatus(null); }
+    const openStatusModal = () => setstatusModal(true);
 
     //Delete Modal
     const [showDelete, setShowDelete] = useState(false);
@@ -91,7 +95,7 @@ const Proposal = (props) => {
             alignItems: "center",
             padding: "8px 16px",
             gap: "8px",
-            width: "157px",
+            width: "177px",
             height: "40px",
             background: "#6519E1",
             border: "1px solid #6519E1",
@@ -99,7 +103,6 @@ const Proposal = (props) => {
             borderRadius: "5px",
         },
         addButtonText: {
-            width: "125px",
             height: "24px",
             fontFamily: "'Roboto'",
             fontStyle: "normal",
@@ -231,6 +234,16 @@ const Proposal = (props) => {
             width: "640px",
             height: "fit-content",
             left: isCollapsed ? "336px" : "496px",
+            top: "324px",
+            background: "#FFFFFF",
+            boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+            borderRadius: "6px"
+        },
+        statusModal: {
+            position: "absolute",
+            width: "296px",
+            height: "fit-content",
+            left: isCollapsed ? "463px" : "623px",
             top: "324px",
             background: "#FFFFFF",
             boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
@@ -404,6 +417,22 @@ const Proposal = (props) => {
             fontSize: "14px",
             lineHeight: "20px",
         },
+        tableRow2Heading: {
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 600,
+            fontSize: "14px",
+            lineHeight: "20px",
+            color: "#70757A"
+        },
+        tableRow2Subheading: {
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 500,
+            fontSize: "14px",
+            lineHeight: "20px",
+            color: "#0A0A0A"
+        },
         pageContainer: {
             width: "32px",
             height: "32px",
@@ -450,10 +479,66 @@ const Proposal = (props) => {
             color: "#70757A",
             margin: "0px"
         },
+        floatingContainer: {
+            boxSizing: "border-box",
+            position: "absolute",
+            width: "522px",
+            height: "76px",
+            left: isCollapsed ? "34.236vw" : "45.347vw",
+            top: "636px",
+            background: "#FFFFFF",
+            border: "1px solid #6519E1",
+            boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+            borderRadius: "6px",
+            zIndex: "1000"
+        },
+        floatinContainerText: {
+            width: "14px",
+            height: "36px",
+            marginLeft: "32px",
+            marginTop: "26px",
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 500,
+            fontSize: "24px",
+            lineHeight: "36px",
+            color: "#6519E1",
+            display: "inline-block"
+        },
+        floatingContainerText2: {
+            width: "128px",
+            height: "24px",
+            left: "58px",
+            top: "32px",
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 500,
+            fontSize: "16px",
+            lineHeight: "24px",
+            color: "#0A0A0A",
+            display: "inline-block",
+            marginLeft: "12px"
+        },
+        floatingContainerLine: {
+            width: "46px",
+            height: "0px",
+            border: "1px solid #EBE9F1",
+            transform: "rotate(90deg)",
+            display: "inline-block",
+            marginBottom: "12px"
+        },
+        floatingContainerIconText: {
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 400,
+            fontSize: "14px",
+            lineHeight: "20px",
+            color: "#0A0A0A"
+        },
     }
 
     useEffect(() => {
-        setIsLoading2([true, true, true, true, true])
+        setIsLoading2([true, true, true, true, true, false])
         const call = async () => {
             await axios
                 .get(HOST + GET_PROPOSAL_COUNT, {
@@ -469,8 +554,7 @@ const Proposal = (props) => {
                     obj.Won = res.data.res[0].Won
                     obj.Lost = res.data.res[0].Lost
                     setproposalCount(obj)
-                    console.log(obj)
-                    setIsLoading2(prev => [false, ...prev.slice(1, 5)])
+                    setIsLoading2(prev => [false, ...prev.slice(1, 6)])
                 })
                 .catch((err) => {
                     console.log(err);
@@ -482,7 +566,7 @@ const Proposal = (props) => {
                 })
                 .then((res) => {
                     setcities(res.data.res);
-                    setIsLoading2(prev => [prev[0], false, ...prev.slice(2, 5)])
+                    setIsLoading2(prev => [prev[0], false, ...prev.slice(2, 6)])
                 })
                 .catch((err) => {
                     console.log(err);
@@ -494,7 +578,7 @@ const Proposal = (props) => {
                 })
                 .then((res) => {
                     setdepts(res.data.res);
-                    setIsLoading2(prev => [...prev.slice(0, 2), false, ...prev.slice(3, 5)])
+                    setIsLoading2(prev => [...prev.slice(0, 2), false, ...prev.slice(3, 6)])
                 })
                 .catch((err) => {
                     console.log(err);
@@ -506,7 +590,7 @@ const Proposal = (props) => {
                 })
                 .then((res) => {
                     setprojectCats(res.data.res);
-                    setIsLoading2(prev => [...prev.slice(0, 3), false, ...prev.slice(4, 5)])
+                    setIsLoading2(prev => [...prev.slice(0, 3), false, ...prev.slice(4, 6)])
                 })
                 .catch((err) => {
                     console.log(err);
@@ -518,7 +602,7 @@ const Proposal = (props) => {
                 })
                 .then((res) => {
                     setemployees(res.data.res);
-                    setIsLoading2(prev => [...prev.slice(0, 4), false])
+                    setIsLoading2(prev => [...prev.slice(0, 4), false, ...prev.slice(5, 6)])
                 })
                 .catch((err) => {
                     console.log(err);
@@ -543,6 +627,7 @@ const Proposal = (props) => {
                     },
                 })
                 .then((res) => {
+                    console.log(res.data.res)
                     setproposals(res.data.res);
                     setpages(res.data.totalPages)
                     setIsLoading(false);
@@ -558,7 +643,7 @@ const Proposal = (props) => {
         setIsLoading(true);
         setcurrPage(page);
         await axios
-            .get(HOST + GET_PAGES_PROPOSALS, {
+            .get(HOST + GET_PAGE_PROPOSALS, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
                     limit: limit,
@@ -606,10 +691,15 @@ const Proposal = (props) => {
             .then((res) => {
                 if (res.data.success) {
                     handleCloseDelete();
+                    setselectedProposals([])
+                    setgreen(true)
                     setCall(apiCall + 1);
+                } else {
+                    setred(true)
                 }
             })
             .catch((err) => {
+                setIsLoading(false)
                 console.log(err);
             });
     };
@@ -620,6 +710,46 @@ const Proposal = (props) => {
         setrowData(foundObject);
         handleShowUpdate();
     };
+
+    const handleStatusUpdate = async (e) => {
+        e.preventDefault();
+
+        await axios
+            .post(
+                HOST + UPDATE_STATUS_PROPOSAL,
+                {
+                    ids: JSON.stringify(selectedProposals),
+                    status: status
+                },
+                { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+            )
+            .then((res) => {
+                if (res.data.success) {
+                    for (let i = 0; i < proposals.length; i++) {
+                        if (selectedProposals.includes(proposals[i].Proposal_ID)) {
+                            const st1 = proposals[i].Status
+                            proposals[i].Status = (status === '' ? null : status)
+                            if (st1 !== proposals[i].Status) {
+                                if (st1 === null) {
+                                    if (proposals[i].Status !== null) proposalCount[proposals[i].Status]++;
+                                } else {
+                                    proposalCount[st1]--;
+                                    if (proposals[i].Status !== null) proposalCount[proposals[i].Status]++;
+                                }
+                            }
+                        }
+                    }
+                    closeStatusModal()
+                    setselectedProposals([])
+                    setgreen(true)
+                } else {
+                    setred(true)
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
     const formatDate = (date) => {
         if (date === "" || date === null || date === undefined) return "";
@@ -639,20 +769,20 @@ const Proposal = (props) => {
     const statusComponent = (status) => {
         if (status === null) {
             return (
-                <div style={{...styles.statusContainer, border: "1px solid #FD9568"}} className='d-flex justify-content-center'>
-                    <p style={{...styles.status, color: "#FD9568"}}>Pending</p>
+                <div style={{ ...styles.statusContainer, border: "1px solid #FD9568" }} className='d-flex justify-content-center'>
+                    <p style={{ ...styles.status, color: "#FD9568" }}>Pending</p>
                 </div>
             )
-        }else if(status === "Lost"){
+        } else if (status === "Lost") {
             return (
-                <div style={{...styles.statusContainer, border: "1px solid #FE3766"}} className='d-flex justify-content-center'>
-                    <p style={{...styles.status, color: "#FE3766"}}>Lost</p>
+                <div style={{ ...styles.statusContainer, border: "1px solid #FE3766" }} className='d-flex justify-content-center'>
+                    <p style={{ ...styles.status, color: "#FE3766" }}>Lost</p>
                 </div>
             )
-        }else if(status === "Won"){
+        } else if (status === "Won") {
             return (
-                <div style={{...styles.statusContainer, border: "1px solid #34A853"}} className='d-flex justify-content-center'>
-                    <p style={{...styles.status, color: "#34A853"}}>Won</p>
+                <div style={{ ...styles.statusContainer, border: "1px solid #34A853" }} className='d-flex justify-content-center'>
+                    <p style={{ ...styles.status, color: "#34A853" }}>Won</p>
                 </div>
             )
         }
@@ -666,9 +796,10 @@ const Proposal = (props) => {
                 <p style={styles.heading}>Proposals</p>
                 <button style={styles.addButton} onClick={handleShow}><p style={styles.addButtonText} >+ Add New proposal</p></button>
             </div>
+            {/* Header Cards */}
             <div className='d-flex flex-row' style={{ marginLeft: "32px", marginBottom: "20px" }}>
                 <div style={styles.topContainer}>
-                    <p style={styles.topContainerHeading}>New RFPs</p>
+                    <p style={styles.topContainerHeading}>New Proposals</p>
                     <div className=''>
                         <p style={styles.topContainerSubheading}>{proposalCount.Month}</p>
                         {proposalCount.Percent >= 0
@@ -684,7 +815,7 @@ const Proposal = (props) => {
                     </div>
                 </div>
                 <div style={styles.topContainer}>
-                    <p style={styles.topContainerHeading}>Total RFPs</p>
+                    <p style={styles.topContainerHeading}>Total Proposals</p>
                     <p style={styles.topContainerSubheading}>{proposalCount.Total}</p>
                 </div>
                 <div style={{ ...styles.topContainer, width: "335px", padding: "12px 8px" }} className='d-flex flex-row'>
@@ -711,6 +842,7 @@ const Proposal = (props) => {
             </div>
             <div style={styles.headerLine}></div>
             <p style={styles.heading2}>Proposals</p>
+            {/* Filters and Other Dropdowns */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
                 <input
                     style={styles.searchInputContainer}
@@ -752,7 +884,7 @@ const Proposal = (props) => {
                                 {isLoading2[1] ? <LoadingSpinner /> : cities.map(e => {
                                     if (e.City.toLowerCase().startsWith(searchCity.toLowerCase())) {
                                         return (
-                                            <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.city.includes(e.City_ID) ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('city', e.City_ID)}><p style={styles.filterBodyText}>{e.City}</p></div>
+                                            <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.city.includes(e.City_ID) ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('city', e.City_ID)} id={e.City_ID}><p style={styles.filterBodyText}>{e.City}</p></div>
                                         )
                                     } else {
                                         return <></>
@@ -810,14 +942,57 @@ const Proposal = (props) => {
                             </div>
                         </div>}
                 </Modal>
+                <Button style={{ ...styles.filterButton, width: "136px", display: selectedProposals.length > 0 ? "flex" : "none", visibility: selectedProposals.length > 0 ? "visible" : "hidden" }} onClick={openStatusModal}><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Update Status</p><FontAwesomeIcon icon={faChevronDown} color="#70757A" /></Button>
+                <Modal
+                    show={statusModal}
+                    onHide={closeStatusModal}
+                    style={styles.statusModal}
+                    dialogClassName="filter-dialog"
+                    backdropClassName="filter-backdrop"
+                    animation={false}
+                >
+                    <div style={{ width: "296px", height: "fit-content", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px" }}>
+                        <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
+                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Sort By</p>
+                            <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeStatusModal} />
+                        </div>
+                        <div className='d-flex flex-column' style={{ marginLeft: "20px", gap: "8px" }}>
+                            <RadioButtonComponent
+                                label="Lost"
+                                cssClass="sort-radio"
+                                checked={status === 'Lost'}
+                                name="Status"
+                                value={`Lost`}
+                                onChange={(e) => setstatus(e.target.value)} />
+                            <RadioButtonComponent
+                                label="Pending"
+                                checked={status === ""}
+                                cssClass="sort-radio"
+                                name="Status"
+                                value={``}
+                                onChange={(e) => setstatus(e.target.value)} />
+                            <RadioButtonComponent
+                                label="Won"
+                                checked={status === "Won"}
+                                cssClass="sort-radio"
+                                name="Status"
+                                value={`Won`}
+                                onChange={(e) => setstatus(e.target.value)} />
+                        </div>
+                        <div className='d-flex justify-content-end' style={{ marginRight: "20px", marginTop: "10px", marginBottom: "20px" }}>
+                            <Button style={{ ...styles.filterButton3, width: "unset" }} onClick={handleStatusUpdate}>Update</Button>
+                        </div>
+                    </div>
+                </Modal>
             </div>
 
+            {/* Table */}
             <div style={{ borderBottom: "1px solid #EBE9F1" }}>
                 <TableScrollbar height="492px">
                     <table style={styles.table} className='rfp-table'>
                         <thead style={styles.tableHeader}>
                             <tr>
-                                <th scope="col" style={{ ...styles.tableHeading, width: "300px", borderRight: "1px solid #EBE9F1", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>Proposal Name</th>
+                                <th scope="col" style={{ ...styles.tableHeading, width: "320px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>Proposal Name</th>
                                 <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>City</th>
                                 <th scope="col" style={{ ...styles.tableHeading, width: "100px" }} className='fixed-header2'>Status</th>
                                 <th scope="col" style={{ ...styles.tableHeading, width: "185px" }} className='fixed-header2'>Department</th>
@@ -829,9 +1004,11 @@ const Proposal = (props) => {
                         </thead>
                         <tbody style={styles.tableBody}>
                             {isLoading ? <div style={{ height: "408px", width: "1757px", background: "white" }}><LoadingSpinner /></div> : proposals && proposals.map(e => (
+                                <>
                                 <tr style={{ ...styles.tableRow, backgroundColor: selectedProposals.includes(e.RFP_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
-                                    <td className='fixed-col' style={{ ...styles.tableCell, fontWeight: "500", minWidth: "", borderRight: "1px solid #EBE9F1", backgroundColor: selectedProposals.includes(e.RFP_ID) ? "#F5F3FE" : "white" }}>
-                                        <div className='d-flex flex-row align-items-center'>
+                                    <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", minWidth: "320px", backgroundColor: selectedProposals.includes(e.RFP_ID) ? "#F5F3FE" : "white", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
+                                        <div className='d-flex flex-row align-items-center' style={{gap: "12px"}}>
+                                            {proposalDetails.includes(e.Proposal_ID) ? <FontAwesomeIcon icon={faChevronDown} onClick={(eve) => setproposalDetails(prev => prev.filter(ele => ele !== e.Proposal_ID))} style={{cursor: "pointer"}}/> : <FontAwesomeIcon icon={faChevronRight} onClick={(eve) => setproposalDetails(prev => [...prev, e.Proposal_ID])} style={{cursor: "pointer"}}/>}
                                             <Form.Check
                                                 inline
                                                 type="checkbox"
@@ -841,26 +1018,54 @@ const Proposal = (props) => {
                                             /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
                                         </div>
                                     </td>
-                                    <td style={{ ...styles.tableCell, minWidth: "120px" }}>{e.City}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "100px" }}>{statusComponent(e.Status)}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "185px" }}>{e.Department}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "130px" }}>{e.Manager_Name}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "150px" }}>
+                                    <td style={{ ...styles.tableCell, minWidth: "120px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.City}</td>
+                                    <td style={{ ...styles.tableCell, minWidth: "100px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td>
+                                    <td style={{ ...styles.tableCell, minWidth: "185px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Department}</td>
+                                    <td style={{ ...styles.tableCell, minWidth: "130px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
+                                    <td style={{ ...styles.tableCell, minWidth: "150px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
                                         {formatDate(e.Closing_Deadline) === ""
                                             ? <></>
                                             : <div style={styles.dateContainer}>
                                                 <p style={styles.date}>{formatDate(e.Closing_Deadline)}</p>
                                             </div>}
                                     </td>
-                                    <td style={{ ...styles.tableCell, minWidth: "100px" }}>{addComma(e.Bidder_Price)}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "150px" }}>{addComma(e.Winning_Price)}</td>
+                                    <td style={{ ...styles.tableCell, minWidth: "100px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Bidder_Price)}</td>
+                                    <td style={{ ...styles.tableCell, minWidth: "150px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Winning_Price)}</td>
                                 </tr>
+                                <tr id={e.Proposal_ID} style={{...styles.tableRow, display: proposalDetails.includes(e.Proposal_ID) ? "table-row" : "none", visibility: proposalDetails.includes(e.Proposal_ID) ? "visible" : "hidden"}}>
+                                    <td colSpan={8} style={{borderBottom: "1px solid #EBE9F1"}}>
+                                        <div className='d-flex flex-row justify-content-between align-items-start' style={{marginLeft: "64px", marginRight: "32px", marginBottom: "12px", width: isCollapsed ? "88.333vw" : "77.222vw", padding: "12px 24px",gap: "62px", height: "95px",background: "#F7F7F9",borderRadius: "12px", marginTop: "12px"}}>
+                                            <div className='d-flex flex-column '>
+                                                <p style={styles.tableRow2Heading}>Design Price ($)</p>
+                                                <p style={styles.tableRow2Subheading}>{addComma(e.Design_Price)}</p>
+                                            </div>
+                                            <div className='d-flex flex-column '>
+                                                <p style={styles.tableRow2Heading}>Contract Admin Price ($)</p>
+                                                <p style={styles.tableRow2Subheading}>{addComma(e.Contract_Admin_Price)}</p>
+                                            </div>
+                                            <div className='d-flex flex-column '>
+                                                <p style={styles.tableRow2Heading}>Provisional Item Price ($)</p>
+                                                <p style={styles.tableRow2Subheading}>{addComma(e.Provisional_Items)}</p>
+                                            </div>
+                                            <div className='d-flex flex-column '>
+                                                <p style={styles.tableRow2Heading}>Sub Consultant Price ($)</p>
+                                                <p style={styles.tableRow2Subheading}>{addComma(e.Sub_Consultant_Price)}</p>
+                                            </div>
+                                            <div className='d-flex flex-column '>
+                                                <p style={styles.tableRow2Heading}>Winning Bidders</p>
+                                                <p style={styles.tableRow2Subheading}>{e.Winning_Bidder ?? "-"}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </>
                             ))}
                         </tbody>
                     </table>
                 </TableScrollbar>
             </div>
 
+            {/* Page Buttons */}
             <div className='d-flex flex-row justify-content-end' style={{ marginTop: "20px", marginRight: "24px" }}>
                 <Button style={styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(currPage - 1)}><FontAwesomeIcon icon={faChevronLeft} color="#70757A" /></Button>
                 <Button style={currPage === 1 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(1)}><p style={currPage === 1 ? styles.curPage : styles.page}>1</p></Button>
@@ -873,6 +1078,7 @@ const Proposal = (props) => {
                 <Button style={styles.pageContainer} disabled={currPage === pages} onClick={(e) => handlePage(currPage + 1)}><FontAwesomeIcon icon={faChevronRight} color="#70757A" /></Button>
             </div>
 
+            {/* Floating COntainer */}
             <div style={{ ...styles.floatingContainer, display: selectedProposals.length === 0 ? "none" : "", visibility: selectedProposals.length === 0 ? "hidden" : "visible" }}>
                 <p style={styles.floatinContainerText}>{selectedProposals.length}</p>
                 <p style={styles.floatingContainerText2}>Items Selected</p>
@@ -890,6 +1096,89 @@ const Proposal = (props) => {
                     <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color="#6519E1" onClick={(e) => setselectedProposals([])} />
                 </div>
             </div>
+
+            {/* Modals */}
+            {/* Add Form Modal */}
+            <Modal
+                show={show}
+                onHide={handleClose}
+                backdrop="static"
+                centered
+                size="xl"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Add Proposal</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {
+                        <ProposalForm
+                            setRed={setred}
+                            setGreen={setgreen}
+                            closeModal={handleClose}
+                            api={apiCall}
+                            apiCall={setCall}
+                        />
+                    }
+                </Modal.Body>
+            </Modal>
+
+            {/* Update Modal */}
+            <Modal
+                show={showUpdate}
+                onHide={handleCloseUpdate}
+                backdrop="static"
+                centered
+                size="xl"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Proposal</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {
+                        <UpdateProposal
+                            row={rowData}
+                            setRed={setred}
+                            setGreen={setgreen}
+                            closeModal={handleCloseUpdate}
+                            api={apiCall}
+                            apiCall={setCall}
+                        />
+                    }
+                </Modal.Body>
+            </Modal>
+
+            {/* Delete Modal */}
+            <Modal
+                show={showDelete}
+                onHide={handleCloseDelete}
+                backdrop="static"
+                size="sm"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Deletion</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p style={{ textAlign: "center" }}>
+                        <b>Delete the selected RFP!!</b>
+                    </p>
+                    <div className="d-flex flex-row justify-content-between">
+
+                        <div style={{ display: "inline-block" }}>
+                            <Button variant="danger" onClick={handleCloseDelete}>
+                                Cancel
+                            </Button>
+                        </div>
+                        <div style={{ display: "inline-block", float: "right" }}>
+                            <Button variant="success" onClick={handleDeleteProposal}>
+                                Proceed
+                            </Button>
+                        </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
         </>
     )
 }

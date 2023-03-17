@@ -125,7 +125,7 @@ const Dashboard = () => {
       height: "100vh",
       left: "0px",
       top: "0px",
-      background: "#FBFBFB",
+      background: isCollapsed ? "#F5F4F9" : "#FBFBFB",
       borderRight: "1px solid #EBE9F1",
       boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
       display: "flex",
