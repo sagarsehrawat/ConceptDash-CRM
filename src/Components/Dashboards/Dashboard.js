@@ -8,7 +8,7 @@ import {
   faChevronRight,
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Dropdown, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -291,6 +291,7 @@ const Dashboard = () => {
   };
 
   const [isLoadingTasks, setisLoadingTasks] = useState(false);
+  const windowSize = useRef([window.innerWidth, window.innerHeight]);
   const [title1, settitle1] = useState([]);
   const [title2, settitle2] = useState([]);
   const [title3, settitle3] = useState([]);
@@ -302,6 +303,20 @@ const Dashboard = () => {
   const [month1, setmonth1] = useState([])
   const [month2, setmonth2] = useState([])
   const [month3, setmonth3] = useState([])
+
+  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    function handleResize() {
+      setViewportWidth(window.innerWidth);
+    }
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     setisLoadingTasks(true);
     const call = async () => {
@@ -1157,7 +1172,7 @@ const Dashboard = () => {
             marginLeft: isCollapsed ? "68px" : "228px",
             backgroundColor: "#F8FAFB",
             height: "93.777777777778vh",
-            width: isCollapsed ? "96.278vw" : "88.167vw"
+            width: isCollapsed ? `${viewportWidth-68}px` : `${viewportWidth-228}px`
           }}
         >
           {handleDash()}

@@ -738,7 +738,7 @@ const Proposal = (props) => {
 
     const [rowData, setrowData] = useState([]);
     const handleUpdate = (e) => {
-        const foundObject = proposals.find(obj => obj.RFP_ID === selectedProposals[0]);
+        const foundObject = proposals.find(obj => obj.Proposal_ID === selectedProposals[0]);
         setrowData(foundObject);
         handleShowUpdate();
     };
@@ -1253,10 +1253,10 @@ const Proposal = (props) => {
                         </tr>
                     </thead>
                     <tbody style={styles.tableBody}>
-                        {isLoading ? <div style={{ height: "408px", width: "1757px", background: "white" }}><LoadingSpinner /></div> : proposals && proposals.map(e => (
+                        {isLoading ? <div style={{ height: "408px", width: "100%", background: "white" }}><LoadingSpinner /></div> : proposals && proposals.map(e => (
                             <>
-                                <tr style={{ ...styles.tableRow, backgroundColor: selectedProposals.includes(e.RFP_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
-                                    <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", minWidth: "280px", backgroundColor: selectedProposals.includes(e.RFP_ID) ? "#F5F3FE" : "white", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
+                                <tr style={{ ...styles.tableRow, backgroundColor: selectedProposals.includes(e.Proposal_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.Proposal_ID}>
+                                    <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", minWidth: "280px", backgroundColor: selectedProposals.includes(e.Proposal_ID) ? "#F5F3FE" : "white", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
                                         <div className='d-flex flex-row align-items-center' style={{ gap: "12px" }}>
                                             {proposalDetails.includes(e.Proposal_ID) ? <FontAwesomeIcon icon={faChevronDown} onClick={(eve) => setproposalDetails(prev => prev.filter(ele => ele !== e.Proposal_ID))} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faChevronRight} onClick={(eve) => setproposalDetails(prev => [...prev, e.Proposal_ID])} style={{ cursor: "pointer" }} />}
                                             <Form.Check
