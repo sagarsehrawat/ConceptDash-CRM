@@ -191,7 +191,7 @@ function Employee(props) {
       // color: "#6519E1"
     },
     cards: {
-      width: "18vw",
+      // width: "18vw",
       height: "264px",
       left: "32px",
       top: "200px",
@@ -299,9 +299,10 @@ function Employee(props) {
       alignItems: "center",
       // padding: "7px 95px",
       gap: "10px",
-      width: "264px",
+      width: "auto",
       height: "32px",
-      marginLeft: "-7px",
+      // marginLeft: "-7px",
+      // marginLRight: "-7px",
       marginTop: "22px",
       background: "#F7F7F9",
       borderRadius: "0px 0px 12px 12px",
@@ -396,7 +397,7 @@ function Employee(props) {
       flexDirection: "row",
       alignItems: "flex-start",
       // padding: "32px 20px 20px",
-      gap: "10px",
+      gap: "6px",
       width: "184.73px",
       height: "178px",
       background: "#EBE9F1",
@@ -417,14 +418,14 @@ function Employee(props) {
       flexGrow: 0,
     },
     modalName: {
-      // width: "99px",
+      width: "auto",
       textAlign: "center",
-      height: "20px",
+      height: "30px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 600,
       fontSize: "14px",
-      lineHeight: "20px",
+      lineHeight: "15px",
       color: "#0A0A0A",
       flex: "none",
       order: 0,
@@ -452,7 +453,7 @@ function Employee(props) {
       fontWeight: 400,
       fontSize: "12px",
       lineHeight: "16px",
-      textAlign: "center",
+      textAlign: "left",
       color: "#70757A",
       flex: "none",
       order: 1,
@@ -962,12 +963,12 @@ function Employee(props) {
         <span>{employeeCount}</span> Employee
       </div>
       {grid ? (
-        <div class="container text-center">
+        <div class="text-center" style={{marginLeft:'32px', marginRight: '32px'}}>
           <div
             class="
           row
-          justify-content-evenly
-          row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-5
+          justify-content-between
+          row-cols-12
         "
           >
             {isLoadingEmp ? (
@@ -980,7 +981,7 @@ function Employee(props) {
                       <>
                         <div
                           style={styles.cards}
-                          class="col"
+                          class="col-3 p-0"
                           onClick={() => cardClick(e)}
                         >
                           <div style={styles.deptHeading}>{e.Department}</div>
@@ -1022,6 +1023,7 @@ function Employee(props) {
                               ...modalcss.cssModal,
                               padding: "0",
                               height: "110vh",
+                              width: '50vw'
                             }}
                           >
                             <div
@@ -1632,7 +1634,7 @@ function Employee(props) {
                       <>
                         <div
                           style={styles.cards}
-                          class="col"
+                          class="col-3 p-0"
                           onClick={() => cardClick(e)}
                         >
                           <div style={styles.deptHeading}>{e.Department}</div>
@@ -1674,6 +1676,7 @@ function Employee(props) {
                               ...modalcss.cssModal,
                               padding: "0",
                               height: "110vh",
+                              width: '50vw'
                             }}
                           >
                             <div
@@ -2315,7 +2318,7 @@ function Employee(props) {
                             <Form.Check
                               inline
                               type="checkbox"
-                              checked={selectedEmployees.includes(e.Proposal_ID)}
+                              checked={selectedEmployees.includes(e.Employee_ID)}
                               readOnly={true}
                               onClick={(eve) => { if (eve.target.checked) { setselectedEmployees(prev => [...prev, e.Proposal_ID]) } else { setselectedEmployees(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
                             />
@@ -2351,7 +2354,7 @@ function Employee(props) {
                           <Form.Check
                             inline
                             type="checkbox"
-                            checked={selectedEmployees.includes(e.Proposal_ID)}
+                            checked={selectedEmployees.includes(e.Employee_ID)}
                             readOnly={true}
                             onClick={(eve) => { if (eve.target.checked) { setselectedEmployees(prev => [...prev, e.Proposal_ID]) } else { setselectedEmployees(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
                           />
