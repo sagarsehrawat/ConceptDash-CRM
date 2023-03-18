@@ -723,7 +723,6 @@ function Employee(props) {
     },
     tableBody: {
       background: "#FFFFFF",
-
     },
     tableRow: {
       width: "100%",
@@ -740,11 +739,19 @@ function Employee(props) {
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "20px",
-      color: "#0A0A0A",
+      textAlign: "center",
+      color: "#70757A",
       marginLeft: "8px",
       textAlign: "left",
       verticalAlign: "middle",
     },
+    departmentContainer: {
+      display: "inline",
+      padding: "2px 8px",
+      height: "24px",
+      background: "#F7F7F9",
+      borderRadius: "12px",
+    }
   };
   const modalcss = empModal
     ? {
@@ -835,6 +842,13 @@ function Employee(props) {
   // let element = document.querySelector('')
   // empModal ? element.style.background = '#0A0A0A' : element.style.background = '#F8FAFB'
   // empModal ? element.style.opacity = 0.25 : element.style.opacity = 1
+  const formatLocation = (state, country) => {
+    if ((!state && !country) || (state.trim() === "" || country.trim() === "")) return ""
+    if (!state) return country;
+    if (!country) return state;
+
+    return state.trim() + ", " + country.trim();
+  }
   return (
     <div
       className="big"
@@ -2271,41 +2285,66 @@ function Employee(props) {
         </div>
       ) :
 
-        <div style={{ borderBottom: "1px solid #EBE9F1", width: isCollapsed ? "" : "1148px", margin: "24px 32px", borderRadius: "12px", height: "462px", overflow: "auto", position: "relative"  }}>
-          <table style={styles.table} className='rfp-table'>
-            <thead style={styles.tableHeader}>
-              <tr style={{borderRadius: "12px 12px 0px 0px"}}>
-                <th scope="col" style={{ ...styles.tableHeading, width: "140px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>Employee Name</th>
-                <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>Department</th>
-                <th scope="col" style={{ ...styles.tableHeading, width: "140px" }} className='fixed-header2'>Company E-mail</th>
-                <th scope="col" style={{ ...styles.tableHeading, width: "100px" }} className='fixed-header2'>Contact Number</th>
-                <th scope="col" style={{ ...styles.tableHeading, width: "140px" }} className='fixed-header2'>Location</th>
-              </tr>
-            </thead>
-            <tbody style={styles.tableBody}>
-              {isLoadingEmp ? <div style={{ height: "408px", width: isCollapsed ? "" : "1148px", background: "white" }}><LoadingSpinner /></div> : employee && employee.map(e => (
-                <>
-                  <tr style={{ ...styles.tableRow, backgroundColor: selectedEmployees.includes(e.Employee_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
-                    <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", minWidth: "140px", backgroundColor: selectedEmployees.includes(e.Employee_ID) ? "#F5F3FE" : "white" }}>
-                      <div className='d-flex flex-row align-items-center' style={{ gap: "12px" }}>
-                        <Form.Check
-                          inline
-                          type="checkbox"
-                          checked={selectedEmployees.includes(e.Proposal_ID)}
-                          readOnly={true}
-                          onClick={(eve) => { if (eve.target.checked) { setselectedEmployees(prev => [...prev, e.Proposal_ID]) } else { setselectedEmployees(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
-                        /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{[e.First_Name, e.Last_Name].join(" ")}</p>
-                      </div>
-                    </td>
-                    <td style={{ ...styles.tableCell, minWidth: "120px" }}>{e.Dept}</td>
-                    <td style={{ ...styles.tableCell, minWidth: "140px" }}><img src={emailIcon}/>&nbsp;{e.Email_Work}</td>
-                    <td style={{ ...styles.tableCell, minWidth: "140px" }}>{e.Business_Phone}</td>
-                    <td style={{ ...styles.tableCell, minWidth: "140px" }}>{[e.State, e.Country].join(", ")}</td>
-                  </tr>
-                </>
-              ))}
-            </tbody>
-          </table>
+        <div style={{ padding: "24px 32px" }}>
+          <div style={{ borderBottom: "1px solid #EBE9F1", width: "100%", borderRadius: "12px", height: "462px", overflow: "auto", position: "relative" }}>
+            <table style={styles.table} className='rfp-table'>
+              <thead style={styles.tableHeader}>
+                <tr style={{ borderRadius: "12px" }}>
+                  <th scope="col" style={{ ...styles.tableHeading, width: "140px", borderBottom: "1px solid #EBE9F1", borderRadius: "12px 0px 0px 0px" }} className='fixed-header'>Employee Name</th>
+                  <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>Department</th>
+                  <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>Company E-mail</th>
+                  <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>Contact Number</th>
+                  <th scope="col" style={{ ...styles.tableHeading, width: "140px", borderRadius: "0px 12px 0px 0px" }} className='fixed-header2'>Location</th>
+                </tr>
+              </thead>
+
+              {isLoadingEmp
+                ? <tr style={{ height: "417px", width: "100%", background: "white" }}>
+                  <td colSpan={5}>
+                    <LoadingSpinner />
+                  </td>
+                </tr>
+                :
+                <tbody style={styles.tableBody}>
+                  {employee && employee.map(e => (
+                    <>
+                      <tr style={{ ...styles.tableRow, backgroundColor: selectedEmployees.includes(e.Employee_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
+                        <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedEmployees.includes(e.Employee_ID) ? "#F5F3FE" : "white" }}>
+                          <div className='d-flex flex-row align-items-center' style={{ gap: "20px" }}>
+                            <Form.Check
+                              inline
+                              type="checkbox"
+                              checked={selectedEmployees.includes(e.Proposal_ID)}
+                              readOnly={true}
+                              onClick={(eve) => { if (eve.target.checked) { setselectedEmployees(prev => [...prev, e.Proposal_ID]) } else { setselectedEmployees(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
+                            />
+                            <div className="d-flex flex-row justify-content-center align-items-center" style={{ gap: "8px" }}>
+                              <img src={ellipse} style={{ width: "42px", height: "42px" }} alt="Employee" />
+                              <div className="d-flex flex-column">
+                                <p style={{ margin: "0px", fontWeight: "500", color: "#0A0A0A" }}>{[e.First_Name, e.Last_Name].join(" ")}</p>
+                                <p style={{ margin: "0px" }}>{e.Title}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td style={{ ...styles.tableCell, }}>
+                          <div className="d-flex flex-row justify-content-start">
+                            <div style={styles.departmentContainer}>
+                              <p style={{ color: "#A65DC0", display: "inline" }}>{e.Dept}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td style={{ ...styles.tableCell, }}>{e.Email_Work ? <><img src={emailIcon} alt="Email Icon" />&nbsp;{e.Email_Work}</> : <>-</>}</td>
+                        <td style={{ ...styles.tableCell, }}>{e.Business_Phone ? <><img src={phoneIcon} alt="Phone Icon" />&nbsp;{e.Business_Phone}</> : <>-</>}</td>
+                        <td style={{ ...styles.tableCell, }}>{formatLocation(e.State, e.Country) !== "" ? <><img src={locationIcon} alt="Location Icon" />&nbsp;{formatLocation(e.State, e.Country)}</> : <>-</>}</td>
+                      </tr>
+                    </>
+                  ))}
+                </tbody>
+              }
+
+            </table>
+          </div>
         </div>
       }
     </div>
