@@ -2305,8 +2305,9 @@ function Employee(props) {
                   </td>
                 </tr>
                 :
+                value.length > 0 ?
                 <tbody style={styles.tableBody}>
-                  {employee && employee.map(e => (
+                  {tableFilter && tableFilter.map(e => (
                     <>
                       <tr style={{ ...styles.tableRow, backgroundColor: selectedEmployees.includes(e.Employee_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
                         <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedEmployees.includes(e.Employee_ID) ? "#F5F3FE" : "white" }}>
@@ -2340,7 +2341,43 @@ function Employee(props) {
                       </tr>
                     </>
                   ))}
-                </tbody>
+                </tbody> :
+                <tbody style={styles.tableBody}>
+                {employee && employee.map(e => (
+                  <>
+                    <tr style={{ ...styles.tableRow, backgroundColor: selectedEmployees.includes(e.Employee_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
+                      <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedEmployees.includes(e.Employee_ID) ? "#F5F3FE" : "white" }}>
+                        <div className='d-flex flex-row align-items-center' style={{ gap: "20px" }}>
+                          <Form.Check
+                            inline
+                            type="checkbox"
+                            checked={selectedEmployees.includes(e.Proposal_ID)}
+                            readOnly={true}
+                            onClick={(eve) => { if (eve.target.checked) { setselectedEmployees(prev => [...prev, e.Proposal_ID]) } else { setselectedEmployees(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
+                          />
+                          <div className="d-flex flex-row justify-content-center align-items-center" style={{ gap: "8px" }}>
+                            <img src={ellipse} style={{ width: "42px", height: "42px" }} alt="Employee" />
+                            <div className="d-flex flex-column">
+                              <p style={{ margin: "0px", fontWeight: "500", color: "#0A0A0A" }}>{[e.First_Name, e.Last_Name].join(" ")}</p>
+                              <p style={{ margin: "0px" }}>{e.Title}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td style={{ ...styles.tableCell, }}>
+                        <div className="d-flex flex-row justify-content-start">
+                          <div style={styles.departmentContainer}>
+                            <p style={{ color: "#A65DC0", display: "inline" }}>{e.Dept}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td style={{ ...styles.tableCell, }}>{e.Email_Work ? <><img src={emailIcon} alt="Email Icon" />&nbsp;{e.Email_Work}</> : <>-</>}</td>
+                      <td style={{ ...styles.tableCell, }}>{e.Business_Phone ? <><img src={phoneIcon} alt="Phone Icon" />&nbsp;{e.Business_Phone}</> : <>-</>}</td>
+                      <td style={{ ...styles.tableCell, }}>{formatLocation(e.State, e.Country) !== "" ? <><img src={locationIcon} alt="Location Icon" />&nbsp;{formatLocation(e.State, e.Country)}</> : <>-</>}</td>
+                    </tr>
+                  </>
+                ))}
+              </tbody>
               }
 
             </table>
