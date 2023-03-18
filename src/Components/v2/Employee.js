@@ -191,7 +191,7 @@ function Employee(props) {
       // color: "#6519E1"
     },
     cards: {
-      // width: "18vw",
+      width: "23%",
       height: "264px",
       left: "32px",
       top: "200px",
@@ -982,6 +982,7 @@ function Employee(props) {
                         <div
                           style={styles.cards}
                           class="col-3 p-0"
+                          
                           onClick={() => cardClick(e)}
                         >
                           <div style={styles.deptHeading}>{e.Department}</div>
