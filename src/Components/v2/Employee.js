@@ -697,14 +697,62 @@ function Employee(props) {
       textAlign: "left",
       textAlign: "left",
     },
+    table: {
+      width: "100%",
+      overflowX: "hidden",
+      borderRadius: "12px"
+    },
+    tableHeader: {
+      height: "44px",
+      background: "#F7F7F9",
+      textAlign: "center",
+      borderBottom: "0px",
+      borderRadius: "12px"
+    },
+    tableHeading: {
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 600,
+      fontSize: "14px",
+      color: "#70757A",
+      textAlign: "left",
+      borderBottom: "1px solid #EBE9F1",
+      borderTop: "1px solid #EBE9F1",
+      verticalAlign: "middle",
+      paddingLeft: "30px",
+    },
+    tableBody: {
+      background: "#FFFFFF",
+
+    },
+    tableRow: {
+      width: "100%",
+      background: "#FFFFFF",
+      verticalAlign: "top"
+    },
+    tableCell: {
+      height: "58px",
+      borderBottom: "1px solid #EBE9F1",
+      padding: "12px 32px",
+      gap: "10px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      lineHeight: "20px",
+      color: "#0A0A0A",
+      marginLeft: "8px",
+      textAlign: "left",
+      verticalAlign: "middle",
+    },
   };
   const modalcss = empModal
     ? {
-        cssModal: {
-          background: "#ffffff",
-          opacity: 1,
-        },
-      }
+      cssModal: {
+        background: "#ffffff",
+        opacity: 1,
+      },
+    }
     : "";
   const [employeeCount, setemployeeCount] = useState(0);
   const [value, setValue] = useState("");
@@ -725,6 +773,7 @@ function Employee(props) {
   };
   const [dataSource, setdataSource] = useState([]);
   const [employee, setemployee] = useState([]);
+  const [selectedEmployees, setselectedEmployees] = useState([]);
   const [sort, setsort] = useState([]);
   const [isLoadingEmp, setisLoadingEmp] = useState(false);
   let returnData = {
@@ -825,7 +874,7 @@ function Employee(props) {
             ...styles.filterButton,
             // backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white",
           }}
-          //   onClick={openFilterModal}
+        //   onClick={openFilterModal}
         >
           <p
             style={{
@@ -851,7 +900,7 @@ function Employee(props) {
             ...styles.positionButton,
             // backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white",
           }}
-          //   onClick={openFilterModal}
+        //   onClick={openFilterModal}
         >
           <p
             style={{
@@ -913,1316 +962,1352 @@ function Employee(props) {
               <>
                 {value.length > 0
                   ? tableFilter.map((e) => {
-                      return (
-                        <>
-                          <div
-                            style={styles.cards}
-                            class="col"
-                            onClick={() => cardClick(e)}
-                          >
-                            <div style={styles.deptHeading}>{e.Department}</div>
-                            <img src={ellipse} style={styles.image} />
-                            <div style={styles.name}>
-                              {e.First_Name} {e.Last_Name}
-                            </div>
-                            <div style={{ marginTop: "8px", height: "14px" }}>
-                              <img src={emailIcon} style={styles.emailIcon} />
-                              <span style={styles.email}>{e.Email_Work}</span>
-                            </div>
-                            <div style={{ height: "14px", marginTop: "4px" }}>
-                              <img src={phoneIcon} style={styles.phoneIcon} />
-                              <span style={styles.phone}>{e.Mobile_Phone}</span>
-                            </div>
-                            <div style={{ height: "14px", marginTop: "4px" }}>
-                              <img
-                                src={locationIcon}
-                                style={styles.locationIcon}
-                              />
-                              <span style={styles.location}>
-                                {e.Address ? e.Address.substring(0, 40) : ""}
-                              </span>
-                            </div>
-                            <div style={styles.title}>
-                              <div style={styles.titleText}>{e.Title}</div>
-                            </div>
+                    return (
+                      <>
+                        <div
+                          style={styles.cards}
+                          class="col"
+                          onClick={() => cardClick(e)}
+                        >
+                          <div style={styles.deptHeading}>{e.Department}</div>
+                          <img src={ellipse} style={styles.image} />
+                          <div style={styles.name}>
+                            {e.First_Name} {e.Last_Name}
                           </div>
-                          <Modal
-                            show={empModal}
-                            onHide={closeempModal}
-                            style={styles.empModal}
-                            dialogClassName="filter-dialog"
-                            backdropClassName="filter-backdrop"
-                            animation={false}
+                          <div style={{ marginTop: "8px", height: "14px" }}>
+                            <img src={emailIcon} style={styles.emailIcon} />
+                            <span style={styles.email}>{e.Email_Work}</span>
+                          </div>
+                          <div style={{ height: "14px", marginTop: "4px" }}>
+                            <img src={phoneIcon} style={styles.phoneIcon} />
+                            <span style={styles.phone}>{e.Mobile_Phone}</span>
+                          </div>
+                          <div style={{ height: "14px", marginTop: "4px" }}>
+                            <img
+                              src={locationIcon}
+                              style={styles.locationIcon}
+                            />
+                            <span style={styles.location}>
+                              {e.Address ? e.Address.substring(0, 40) : ""}
+                            </span>
+                          </div>
+                          <div style={styles.title}>
+                            <div style={styles.titleText}>{e.Title}</div>
+                          </div>
+                        </div>
+                        <Modal
+                          show={empModal}
+                          onHide={closeempModal}
+                          style={styles.empModal}
+                          dialogClassName="filter-dialog"
+                          backdropClassName="filter-backdrop"
+                          animation={false}
+                        >
+                          <Modal.Body
+                            style={{
+                              ...modalcss.cssModal,
+                              padding: "0",
+                              height: "110vh",
+                            }}
                           >
-                            <Modal.Body
+                            <div
                               style={{
-                                ...modalcss.cssModal,
-                                padding: "0",
-                                height: "110vh",
+                                display: "flex",
+                                flexDirection: "row",
                               }}
                             >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "row",
-                                }}
-                              >
-                                <div style={styles.topLeft}>
+                              <div style={styles.topLeft}>
+                                <img
+                                  onClick={closeempModal}
+                                  style={styles.cross}
+                                  src={cross}
+                                />
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    textAlign: "center",
+                                    width: "122px",
+                                  }}
+                                >
                                   <img
-                                    onClick={closeempModal}
-                                    style={styles.cross}
-                                    src={cross}
+                                    style={styles.modalImage}
+                                    src={ellipse}
                                   />
+                                  <div style={styles.modalName}>
+                                    {modalData.First_Name}{" "}
+                                    {modalData.Last_Name}
+                                  </div>
+                                  <div style={styles.modalJobTitle}>
+                                    {modalData.Title}
+                                  </div>
+                                  <div style={styles.modalEmail}>
+                                    {modalData.Email_Work}
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                style={{ width: "500px" }}
+                                class="text-center"
+                              >
+                                <div
+                                  style={styles.modalPart1}
+                                // class="row justify-content-evenly"
+                                >
                                   <div
                                     style={{
                                       display: "flex",
                                       flexDirection: "column",
-                                      textAlign: "center",
-                                      width: "122px",
+                                      width: "140px",
+                                      marginLeft: "21px",
                                     }}
                                   >
-                                    <img
-                                      style={styles.modalImage}
-                                      src={ellipse}
-                                    />
-                                    <div style={styles.modalName}>
-                                      {modalData.First_Name}{" "}
-                                      {modalData.Last_Name}
+                                    <div style={styles.modalPart1Head}>
+                                      Gender
                                     </div>
-                                    <div style={styles.modalJobTitle}>
-                                      {modalData.Title}
+                                    <div style={styles.modalPart1Tail}>
+                                      Male
                                     </div>
-                                    <div style={styles.modalEmail}>
-                                      {modalData.Email_Work}
+                                  </div>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      width: "140px",
+                                    }}
+                                  >
+                                    <div style={styles.modalPart1Head}>
+                                      Birthday
+                                    </div>
+                                    <div style={styles.modalPart1Tail}>
+                                      {formatDate(modalData.Birthday)}
+                                    </div>
+                                  </div>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      width: "140px",
+                                    }}
+                                  >
+                                    <div style={styles.modalPart1Head}>
+                                      Personal E-Mail
+                                    </div>
+                                    <div style={styles.modalPart1Tail}>
+                                      {modalData.Email_Personal}
                                     </div>
                                   </div>
                                 </div>
                                 <div
-                                  style={{ width: "500px" }}
-                                  class="text-center"
+                                  style={styles.modalPart2}
+                                // class="row justify-content-evenly"
                                 >
                                   <div
-                                    style={styles.modalPart1}
-                                    // class="row justify-content-evenly"
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      width: "140px",
+                                      marginLeft: "21px",
+                                    }}
                                   >
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "140px",
-                                        marginLeft: "21px",
-                                      }}
-                                    >
-                                      <div style={styles.modalPart1Head}>
-                                        Gender
-                                      </div>
-                                      <div style={styles.modalPart1Tail}>
-                                        Male
-                                      </div>
+                                    <div style={styles.modalPart1Head}>
+                                      Mobile Number
                                     </div>
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "140px",
-                                      }}
-                                    >
-                                      <div style={styles.modalPart1Head}>
-                                        Birthday
-                                      </div>
-                                      <div style={styles.modalPart1Tail}>
-                                        {formatDate(modalData.Birthday)}
-                                      </div>
-                                    </div>
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "140px",
-                                      }}
-                                    >
-                                      <div style={styles.modalPart1Head}>
-                                        Personal E-Mail
-                                      </div>
-                                      <div style={styles.modalPart1Tail}>
-                                        {modalData.Email_Personal}
-                                      </div>
+                                    <div style={styles.modalPart1Tail}>
+                                      {modalData.Mobile_Phone}
                                     </div>
                                   </div>
                                   <div
-                                    style={styles.modalPart2}
-                                    // class="row justify-content-evenly"
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      width: "140px",
+                                    }}
                                   >
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "140px",
-                                        marginLeft: "21px",
-                                      }}
-                                    >
-                                      <div style={styles.modalPart1Head}>
-                                        Mobile Number
-                                      </div>
-                                      <div style={styles.modalPart1Tail}>
-                                        {modalData.Mobile_Phone}
-                                      </div>
+                                    <div style={styles.modalPart1Head}>
+                                      Country
+                                    </div>
+                                    <div style={styles.modalPart1Tail}>
+                                      {modalData.Country}
+                                    </div>
+                                  </div>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      width: "140px",
+                                    }}
+                                  >
+                                    <div style={styles.modalPart1Head}>
+                                      Address
                                     </div>
                                     <div
                                       style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "140px",
+                                        ...styles.modalPart1Tail,
+                                        height: "34px",
+                                        width: "230px",
                                       }}
                                     >
-                                      <div style={styles.modalPart1Head}>
-                                        Country
-                                      </div>
-                                      <div style={styles.modalPart1Tail}>
-                                        {modalData.Country}
-                                      </div>
-                                    </div>
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "140px",
-                                      }}
-                                    >
-                                      <div style={styles.modalPart1Head}>
-                                        Address
-                                      </div>
-                                      <div
-                                        style={{
-                                          ...styles.modalPart1Tail,
-                                          height: "34px",
-                                          width: "230px",
-                                        }}
-                                      >
-                                        {modalData.Address}
-                                      </div>
+                                      {modalData.Address}
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              <div style={{ marginTop: "24px" }}>
-                                <Box
-                                  sx={{
-                                    width: "100%",
-                                    typography: "body1",
-                                    float: "left",
-                                  }}
-                                  style={{ margin: "0" }}
-                                >
-                                  <TabContext value={value1}>
-                                    <Box sx={{}}>
-                                      <TabList
-                                        centered
-                                        onChange={handleChange}
-                                        aria-label=""
-                                        TabIndicatorProps={{
-                                          style: {
-                                            backgroundColor: "#6519E1",
-                                          },
+                            </div>
+                            <div style={{ marginTop: "24px" }}>
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                  typography: "body1",
+                                  float: "left",
+                                }}
+                                style={{ margin: "0" }}
+                              >
+                                <TabContext value={value1}>
+                                  <Box sx={{}}>
+                                    <TabList
+                                      centered
+                                      onChange={handleChange}
+                                      aria-label=""
+                                      TabIndicatorProps={{
+                                        style: {
+                                          backgroundColor: "#6519E1",
+                                        },
+                                      }}
+                                      sx={{
+                                        marginRight: "400px",
+                                        marginLeft: "20px",
+                                      }}
+                                    >
+                                      <Tab
+                                        style={{
+                                          color:
+                                            value1 == 1
+                                              ? "#6519E1"
+                                              : "#70757A",
                                         }}
-                                        sx={{
-                                          marginRight: "400px",
-                                          marginLeft: "20px",
+                                        sx={{ fontSize: 10 }}
+                                        label="Professional Details"
+                                        value="1"
+                                      />
+                                      <Tab
+                                        style={{
+                                          color:
+                                            value1 == 2
+                                              ? "#6519E1"
+                                              : "#70757A",
                                         }}
-                                      >
-                                        <Tab
-                                          style={{
-                                            color:
-                                              value1 == 1
-                                                ? "#6519E1"
-                                                : "#70757A",
-                                          }}
-                                          sx={{ fontSize: 10 }}
-                                          label="Professional Details"
-                                          value="1"
-                                        />
-                                        <Tab
-                                          style={{
-                                            color:
-                                              value1 == 2
-                                                ? "#6519E1"
-                                                : "#70757A",
-                                          }}
-                                          sx={{ fontSize: 10 }}
-                                          label="Personal Details"
-                                          value="2"
-                                        />
-                                        <Tab
-                                          style={{
-                                            color:
-                                              value1 == 3
-                                                ? "#6519E1"
-                                                : "#70757A",
-                                          }}
-                                          sx={{ fontSize: 10 }}
-                                          label="Task List"
-                                          value="3"
-                                        />
-                                      </TabList>
-                                    </Box>
-                                    <TabPanel value="1">
-                                      <div>
-                                        <div style={{ display: "flex" }}>
-                                          <div
-                                            style={styles.bottomPart1Heading}
-                                          >
-                                            Professional Details
-                                          </div>
-                                          <img
-                                            style={styles.editIcon}
-                                            src={editIcon}
-                                          />
-                                        </div>
+                                        sx={{ fontSize: 10 }}
+                                        label="Personal Details"
+                                        value="2"
+                                      />
+                                      <Tab
+                                        style={{
+                                          color:
+                                            value1 == 3
+                                              ? "#6519E1"
+                                              : "#70757A",
+                                        }}
+                                        sx={{ fontSize: 10 }}
+                                        label="Task List"
+                                        value="3"
+                                      />
+                                    </TabList>
+                                  </Box>
+                                  <TabPanel value="1">
+                                    <div>
+                                      <div style={{ display: "flex" }}>
                                         <div
-                                          style={{ width: "693px" }}
-                                          class="text-center"
+                                          style={styles.bottomPart1Heading}
+                                        >
+                                          Professional Details
+                                        </div>
+                                        <img
+                                          style={styles.editIcon}
+                                          src={editIcon}
+                                        />
+                                      </div>
+                                      <div
+                                        style={{ width: "693px" }}
+                                        class="text-center"
+                                      >
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            marginTop: "10px",
+                                          }}
                                         >
                                           <div
                                             style={{
                                               display: "flex",
-                                              flexDirection: "row",
-                                              marginTop: "10px",
+                                              flexDirection: "column",
+                                              width: "350px",
                                             }}
                                           >
-                                            <div
-                                              style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                width: "350px",
-                                              }}
-                                            >
-                                              <div style={styles.bottompart11}>
-                                                Onboarding
-                                              </div>
-                                              <div style={styles.bottompart12}>
-                                                {formatDate(
-                                                  modalData.Joining_Date
-                                                )}
-                                              </div>
+                                            <div style={styles.bottompart11}>
+                                              Onboarding
                                             </div>
-                                            <div
-                                              style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                width: "350px",
-                                              }}
-                                            >
-                                              <div style={styles.bottompart11}>
-                                                Experience(Y)
-                                              </div>
-                                              <div style={styles.bottompart12}>
-                                                -
-                                              </div>
+                                            <div style={styles.bottompart12}>
+                                              {formatDate(
+                                                modalData.Joining_Date
+                                              )}
                                             </div>
                                           </div>
                                           <div
                                             style={{
                                               display: "flex",
-                                              flexDirection: "row",
-                                              marginTop: "10px",
+                                              flexDirection: "column",
+                                              width: "350px",
                                             }}
                                           >
-                                            <div
-                                              style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                width: "350px",
-                                              }}
-                                            >
-                                              <div style={styles.bottompart11}>
-                                                Highest Educational
-                                                Qualification
-                                              </div>
-                                              <div style={styles.bottompart12}>
-                                                -
-                                              </div>
+                                            <div style={styles.bottompart11}>
+                                              Experience(Y)
                                             </div>
-                                            <div
-                                              style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                width: "350px",
-                                              }}
-                                            >
-                                              <div style={styles.bottompart11}>
-                                                Office
-                                              </div>
-                                              <div style={styles.bottompart12}>
-                                                Work From Home
-                                              </div>
+                                            <div style={styles.bottompart12}>
+                                              -
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            marginTop: "10px",
+                                          }}
+                                        >
+                                          <div
+                                            style={{
+                                              display: "flex",
+                                              flexDirection: "column",
+                                              width: "350px",
+                                            }}
+                                          >
+                                            <div style={styles.bottompart11}>
+                                              Highest Educational
+                                              Qualification
+                                            </div>
+                                            <div style={styles.bottompart12}>
+                                              -
                                             </div>
                                           </div>
                                           <div
                                             style={{
                                               display: "flex",
-                                              flexDirection: "row",
-                                              marginTop: "10px",
+                                              flexDirection: "column",
+                                              width: "350px",
                                             }}
                                           >
+                                            <div style={styles.bottompart11}>
+                                              Office
+                                            </div>
+                                            <div style={styles.bottompart12}>
+                                              Work From Home
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            marginTop: "10px",
+                                          }}
+                                        >
+                                          <div
+                                            style={{
+                                              display: "flex",
+                                              flexDirection: "column",
+                                              width: "640px",
+                                            }}
+                                          >
+                                            <div style={styles.bottompart11}>
+                                              Skill Set
+                                            </div>
+                                            <div
+                                              className="row justify-content-start"
+                                              style={styles.bottompart12}
+                                            >
+                                              {modalData.Interests
+                                                ? modalData.Interests.split(
+                                                  "\n"
+                                                ).map((option) => {
+                                                  return (
+                                                    <div
+                                                      style={styles.skills}
+                                                    >
+                                                      {option}
+                                                    </div>
+                                                  );
+                                                })
+                                                : "-"}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </TabPanel>
+                                  <TabPanel value="2">
+                                    <div>
+                                      <div style={{ display: "flex" }}>
+                                        <div
+                                          style={styles.bottomPart2Heading}
+                                        >
+                                          Personal Details
+                                        </div>
+                                        <img
+                                          style={styles.editIcon}
+                                          src={editIcon}
+                                        />
+                                      </div>
+                                      <div
+                                        style={{ width: "693px" }}
+                                        class="text-center"
+                                      >
+                                        <div
+                                          className="row justify-content-evenly"
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            marginTop: "49px",
+                                            width: "693px",
+                                          }}
+                                        >
+                                          <div style={styles.personalDets1}>
+                                            <img src={bdayIcon} />
                                             <div
                                               style={{
                                                 display: "flex",
                                                 flexDirection: "column",
-                                                width: "640px",
                                               }}
                                             >
-                                              <div style={styles.bottompart11}>
-                                                Skill Set
+                                              <div
+                                                style={
+                                                  styles.personalDetBirthday
+                                                }
+                                              >
+                                                Birthday
                                               </div>
                                               <div
-                                                className="row justify-content-start"
-                                                style={styles.bottompart12}
+                                                style={
+                                                  styles.personalDetBirthdate
+                                                }
                                               >
-                                                {modalData.Interests
-                                                  ? modalData.Interests.split(
-                                                      "\n"
-                                                    ).map((option) => {
-                                                      return (
-                                                        <div
-                                                          style={styles.skills}
-                                                        >
-                                                          {option}
-                                                        </div>
-                                                      );
-                                                    })
+                                                {modalData.Birthday
+                                                  ? formatDate(
+                                                    modalData.Birthday
+                                                  )
+                                                  : "-"}
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div style={styles.personalDets1}>
+                                            <img src={drinksIcon} />
+                                            <div
+                                              style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                              }}
+                                            >
+                                              <div
+                                                style={
+                                                  styles.personalDetAlcohol
+                                                }
+                                              >
+                                                Alcochol
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetAlcohol1
+                                                }
+                                              >
+                                                {modalData.Alcohol
+                                                  ? modalData.Alcohol
+                                                  : "-"}
+                                              </div>
+                                              <div
+                                                style={styles.personalDetBev}
+                                              >
+                                                Beverage
+                                              </div>
+                                              <div
+                                                style={styles.personalDetBev1}
+                                              >
+                                                {modalData.Beverage
+                                                  ? modalData.Beverage
+                                                  : "-"}
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          className="row justify-content-evenly"
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            marginTop: "49px",
+                                            width: "693px",
+                                          }}
+                                        >
+                                          <div style={styles.personalDets1}>
+                                            <img src={travelIcon} />
+                                            <div
+                                              style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                              }}
+                                            >
+                                              <div
+                                                style={
+                                                  styles.personalDetBirthday
+                                                }
+                                              >
+                                                Travel Destination
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetBirthdate
+                                                }
+                                              >
+                                                {modalData.Travel_Destination
+                                                  ? modalData.Travel_Destination
+                                                  : "-"}
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div style={styles.personalDets1}>
+                                            <img src={familyIcon} />
+                                            <div
+                                              style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                              }}
+                                            >
+                                              <div
+                                                style={
+                                                  styles.personalDetAlcohol
+                                                }
+                                              >
+                                                Spouse
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetAlcohol1
+                                                }
+                                              >
+                                                {modalData.Spouse
+                                                  ? modalData.Spouse
+                                                  : "-"}
+                                              </div>
+                                              <div
+                                                style={styles.personalDetBev}
+                                              >
+                                                Children
+                                              </div>
+                                              <div
+                                                style={styles.personalDetBev1}
+                                              >
+                                                {modalData.Children
+                                                  ? modalData.Children
+                                                  : "-"}
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          className="row justify-content-start"
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            marginTop: "49px",
+                                            width: "693px",
+                                            marginLeft: "42px",
+                                          }}
+                                        >
+                                          <div style={styles.entSection}>
+                                            <img src={entertainmentIcon} />
+                                            <div
+                                              style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                              }}
+                                            >
+                                              <div
+                                                style={
+                                                  styles.personalDetAlcohol
+                                                }
+                                              >
+                                                Hobbies
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetAlcohol1
+                                                }
+                                              >
+                                                {modalData.Spouse
+                                                  ? modalData.Spouse
+                                                  : "-"}
+                                              </div>
+                                              <div
+                                                style={styles.personalDetBev}
+                                              >
+                                                Sports
+                                              </div>
+                                              <div
+                                                style={styles.personalDetBev1}
+                                              >
+                                                {modalData.Children
+                                                  ? modalData.Children
+                                                  : "-"}
+                                              </div>
+                                            </div>
+                                            <div
+                                              style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                              }}
+                                            >
+                                              <div
+                                                style={
+                                                  styles.personalDetMovies
+                                                }
+                                              >
+                                                Movies
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetMovies1
+                                                }
+                                              >
+                                                {modalData.Children
+                                                  ? modalData.Children
+                                                  : "-"}
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetActor
+                                                }
+                                              >
+                                                Actor
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetBevActor1
+                                                }
+                                              >
+                                                {modalData.Children
+                                                  ? modalData.Children
                                                   : "-"}
                                               </div>
                                             </div>
                                           </div>
                                         </div>
                                       </div>
-                                    </TabPanel>
-                                    <TabPanel value="2">
-                                      <div>
-                                        <div style={{ display: "flex" }}>
-                                          <div
-                                            style={styles.bottomPart2Heading}
-                                          >
-                                            Personal Details
-                                          </div>
-                                          <img
-                                            style={styles.editIcon}
-                                            src={editIcon}
-                                          />
-                                        </div>
-                                        <div
-                                          style={{ width: "693px" }}
-                                          class="text-center"
-                                        >
-                                          <div
-                                            className="row justify-content-evenly"
-                                            style={{
-                                              display: "flex",
-                                              flexDirection: "row",
-                                              marginTop: "49px",
-                                              width: "693px",
-                                            }}
-                                          >
-                                            <div style={styles.personalDets1}>
-                                              <img src={bdayIcon} />
-                                              <div
-                                                style={{
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                }}
-                                              >
-                                                <div
-                                                  style={
-                                                    styles.personalDetBirthday
-                                                  }
-                                                >
-                                                  Birthday
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetBirthdate
-                                                  }
-                                                >
-                                                  {modalData.Birthday
-                                                    ? formatDate(
-                                                        modalData.Birthday
-                                                      )
-                                                    : "-"}
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div style={styles.personalDets1}>
-                                              <img src={drinksIcon} />
-                                              <div
-                                                style={{
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                }}
-                                              >
-                                                <div
-                                                  style={
-                                                    styles.personalDetAlcohol
-                                                  }
-                                                >
-                                                  Alcochol
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetAlcohol1
-                                                  }
-                                                >
-                                                  {modalData.Alcohol
-                                                    ? modalData.Alcohol
-                                                    : "-"}
-                                                </div>
-                                                <div
-                                                  style={styles.personalDetBev}
-                                                >
-                                                  Beverage
-                                                </div>
-                                                <div
-                                                  style={styles.personalDetBev1}
-                                                >
-                                                  {modalData.Beverage
-                                                    ? modalData.Beverage
-                                                    : "-"}
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          <div
-                                            className="row justify-content-evenly"
-                                            style={{
-                                              display: "flex",
-                                              flexDirection: "row",
-                                              marginTop: "49px",
-                                              width: "693px",
-                                            }}
-                                          >
-                                            <div style={styles.personalDets1}>
-                                              <img src={travelIcon} />
-                                              <div
-                                                style={{
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                }}
-                                              >
-                                                <div
-                                                  style={
-                                                    styles.personalDetBirthday
-                                                  }
-                                                >
-                                                  Travel Destination
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetBirthdate
-                                                  }
-                                                >
-                                                  {modalData.Travel_Destination
-                                                    ? modalData.Travel_Destination
-                                                    : "-"}
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div style={styles.personalDets1}>
-                                              <img src={familyIcon} />
-                                              <div
-                                                style={{
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                }}
-                                              >
-                                                <div
-                                                  style={
-                                                    styles.personalDetAlcohol
-                                                  }
-                                                >
-                                                  Spouse
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetAlcohol1
-                                                  }
-                                                >
-                                                  {modalData.Spouse
-                                                    ? modalData.Spouse
-                                                    : "-"}
-                                                </div>
-                                                <div
-                                                  style={styles.personalDetBev}
-                                                >
-                                                  Children
-                                                </div>
-                                                <div
-                                                  style={styles.personalDetBev1}
-                                                >
-                                                  {modalData.Children
-                                                    ? modalData.Children
-                                                    : "-"}
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          <div
-                                            className="row justify-content-start"
-                                            style={{
-                                              display: "flex",
-                                              flexDirection: "row",
-                                              marginTop: "49px",
-                                              width: "693px",
-                                              marginLeft: "42px",
-                                            }}
-                                          >
-                                            <div style={styles.entSection}>
-                                              <img src={entertainmentIcon} />
-                                              <div
-                                                style={{
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                }}
-                                              >
-                                                <div
-                                                  style={
-                                                    styles.personalDetAlcohol
-                                                  }
-                                                >
-                                                  Hobbies
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetAlcohol1
-                                                  }
-                                                >
-                                                  {modalData.Spouse
-                                                    ? modalData.Spouse
-                                                    : "-"}
-                                                </div>
-                                                <div
-                                                  style={styles.personalDetBev}
-                                                >
-                                                  Sports
-                                                </div>
-                                                <div
-                                                  style={styles.personalDetBev1}
-                                                >
-                                                  {modalData.Children
-                                                    ? modalData.Children
-                                                    : "-"}
-                                                </div>
-                                              </div>
-                                              <div
-                                                style={{
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                }}
-                                              >
-                                                <div
-                                                  style={
-                                                    styles.personalDetMovies
-                                                  }
-                                                >
-                                                  Movies
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetMovies1
-                                                  }
-                                                >
-                                                  {modalData.Children
-                                                    ? modalData.Children
-                                                    : "-"}
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetActor
-                                                  }
-                                                >
-                                                  Actor
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetBevActor1
-                                                  }
-                                                >
-                                                  {modalData.Children
-                                                    ? modalData.Children
-                                                    : "-"}
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </TabPanel>
-                                    <TabPanel value="3">2351235</TabPanel>
-                                  </TabContext>
-                                </Box>
-                              </div>
-                            </Modal.Body>
-                          </Modal>
-                        </>
-                      );
-                    })
+                                    </div>
+                                  </TabPanel>
+                                  <TabPanel value="3">2351235</TabPanel>
+                                </TabContext>
+                              </Box>
+                            </div>
+                          </Modal.Body>
+                        </Modal>
+                      </>
+                    );
+                  })
                   : employee.map((e) => {
-                      return (
-                        <>
-                          <div
-                            style={styles.cards}
-                            class="col"
-                            onClick={() => cardClick(e)}
-                          >
-                            <div style={styles.deptHeading}>{e.Department}</div>
-                            <img src={ellipse} style={styles.image} />
-                            <div style={styles.name}>
-                              {e.First_Name} {e.Last_Name}
-                            </div>
-                            <div style={{ marginTop: "8px", height: "14px" }}>
-                              <img src={emailIcon} style={styles.emailIcon} />
-                              <span style={styles.email}>{e.Email_Work}</span>
-                            </div>
-                            <div style={{ height: "14px", marginTop: "4px" }}>
-                              <img src={phoneIcon} style={styles.phoneIcon} />
-                              <span style={styles.phone}>{e.Mobile_Phone}</span>
-                            </div>
-                            <div style={{ height: "14px", marginTop: "4px" }}>
-                              <img
-                                src={locationIcon}
-                                style={styles.locationIcon}
-                              />
-                              <span style={styles.location}>
-                                {e.Address ? e.Address.substring(0, 40) : ""}
-                              </span>
-                            </div>
-                            <div style={styles.title}>
-                              <div style={styles.titleText}>{e.Title}</div>
-                            </div>
+                    return (
+                      <>
+                        <div
+                          style={styles.cards}
+                          class="col"
+                          onClick={() => cardClick(e)}
+                        >
+                          <div style={styles.deptHeading}>{e.Department}</div>
+                          <img src={ellipse} style={styles.image} />
+                          <div style={styles.name}>
+                            {e.First_Name} {e.Last_Name}
                           </div>
-                          <Modal
-                            show={empModal}
-                            onHide={closeempModal}
-                            style={styles.empModal}
-                            dialogClassName="filter-dialog"
-                            backdropClassName="filter-backdrop"
-                            animation={false}
+                          <div style={{ marginTop: "8px", height: "14px" }}>
+                            <img src={emailIcon} style={styles.emailIcon} />
+                            <span style={styles.email}>{e.Email_Work}</span>
+                          </div>
+                          <div style={{ height: "14px", marginTop: "4px" }}>
+                            <img src={phoneIcon} style={styles.phoneIcon} />
+                            <span style={styles.phone}>{e.Mobile_Phone}</span>
+                          </div>
+                          <div style={{ height: "14px", marginTop: "4px" }}>
+                            <img
+                              src={locationIcon}
+                              style={styles.locationIcon}
+                            />
+                            <span style={styles.location}>
+                              {e.Address ? e.Address.substring(0, 40) : ""}
+                            </span>
+                          </div>
+                          <div style={styles.title}>
+                            <div style={styles.titleText}>{e.Title}</div>
+                          </div>
+                        </div>
+                        <Modal
+                          show={empModal}
+                          onHide={closeempModal}
+                          style={styles.empModal}
+                          dialogClassName="filter-dialog"
+                          backdropClassName="filter-backdrop"
+                          animation={false}
+                        >
+                          <Modal.Body
+                            style={{
+                              ...modalcss.cssModal,
+                              padding: "0",
+                              height: "110vh",
+                            }}
                           >
-                            <Modal.Body
+                            <div
                               style={{
-                                ...modalcss.cssModal,
-                                padding: "0",
-                                height: "110vh",
+                                display: "flex",
+                                flexDirection: "row",
                               }}
                             >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "row",
-                                }}
-                              >
-                                <div style={styles.topLeft}>
+                              <div style={styles.topLeft}>
+                                <img
+                                  onClick={closeempModal}
+                                  style={styles.cross}
+                                  src={cross}
+                                />
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    textAlign: "center",
+                                    width: "122px",
+                                  }}
+                                >
                                   <img
-                                    onClick={closeempModal}
-                                    style={styles.cross}
-                                    src={cross}
+                                    style={styles.modalImage}
+                                    src={ellipse}
                                   />
+                                  <div style={styles.modalName}>
+                                    {modalData.First_Name}{" "}
+                                    {modalData.Last_Name}
+                                  </div>
+                                  <div style={styles.modalJobTitle}>
+                                    {modalData.Title}
+                                  </div>
+                                  <div style={styles.modalEmail}>
+                                    {modalData.Email_Work}
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                style={{ width: "500px" }}
+                                class="text-center"
+                              >
+                                <div
+                                  style={styles.modalPart1}
+                                // class="row justify-content-evenly"
+                                >
                                   <div
                                     style={{
                                       display: "flex",
                                       flexDirection: "column",
-                                      textAlign: "center",
-                                      width: "122px",
+                                      width: "140px",
+                                      marginLeft: "21px",
                                     }}
                                   >
-                                    <img
-                                      style={styles.modalImage}
-                                      src={ellipse}
-                                    />
-                                    <div style={styles.modalName}>
-                                      {modalData.First_Name}{" "}
-                                      {modalData.Last_Name}
+                                    <div style={styles.modalPart1Head}>
+                                      Gender
                                     </div>
-                                    <div style={styles.modalJobTitle}>
-                                      {modalData.Title}
+                                    <div style={styles.modalPart1Tail}>
+                                      Male
                                     </div>
-                                    <div style={styles.modalEmail}>
-                                      {modalData.Email_Work}
+                                  </div>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      width: "140px",
+                                    }}
+                                  >
+                                    <div style={styles.modalPart1Head}>
+                                      Birthday
+                                    </div>
+                                    <div style={styles.modalPart1Tail}>
+                                      {formatDate(modalData.Birthday)}
+                                    </div>
+                                  </div>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      width: "140px",
+                                    }}
+                                  >
+                                    <div style={styles.modalPart1Head}>
+                                      Personal E-Mail
+                                    </div>
+                                    <div style={styles.modalPart1Tail}>
+                                      {modalData.Email_Personal}
                                     </div>
                                   </div>
                                 </div>
                                 <div
-                                  style={{ width: "500px" }}
-                                  class="text-center"
+                                  style={styles.modalPart2}
+                                // class="row justify-content-evenly"
                                 >
                                   <div
-                                    style={styles.modalPart1}
-                                    // class="row justify-content-evenly"
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      width: "140px",
+                                      marginLeft: "21px",
+                                    }}
                                   >
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "140px",
-                                        marginLeft: "21px",
-                                      }}
-                                    >
-                                      <div style={styles.modalPart1Head}>
-                                        Gender
-                                      </div>
-                                      <div style={styles.modalPart1Tail}>
-                                        Male
-                                      </div>
+                                    <div style={styles.modalPart1Head}>
+                                      Mobile Number
                                     </div>
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "140px",
-                                      }}
-                                    >
-                                      <div style={styles.modalPart1Head}>
-                                        Birthday
-                                      </div>
-                                      <div style={styles.modalPart1Tail}>
-                                        {formatDate(modalData.Birthday)}
-                                      </div>
-                                    </div>
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "140px",
-                                      }}
-                                    >
-                                      <div style={styles.modalPart1Head}>
-                                        Personal E-Mail
-                                      </div>
-                                      <div style={styles.modalPart1Tail}>
-                                        {modalData.Email_Personal}
-                                      </div>
+                                    <div style={styles.modalPart1Tail}>
+                                      {modalData.Mobile_Phone}
                                     </div>
                                   </div>
                                   <div
-                                    style={styles.modalPart2}
-                                    // class="row justify-content-evenly"
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      width: "140px",
+                                    }}
                                   >
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "140px",
-                                        marginLeft: "21px",
-                                      }}
-                                    >
-                                      <div style={styles.modalPart1Head}>
-                                        Mobile Number
-                                      </div>
-                                      <div style={styles.modalPart1Tail}>
-                                        {modalData.Mobile_Phone}
-                                      </div>
+                                    <div style={styles.modalPart1Head}>
+                                      Country
+                                    </div>
+                                    <div style={styles.modalPart1Tail}>
+                                      {modalData.Country}
+                                    </div>
+                                  </div>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      width: "140px",
+                                    }}
+                                  >
+                                    <div style={styles.modalPart1Head}>
+                                      Address
                                     </div>
                                     <div
                                       style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "140px",
+                                        ...styles.modalPart1Tail,
+                                        height: "34px",
+                                        width: "230px",
                                       }}
                                     >
-                                      <div style={styles.modalPart1Head}>
-                                        Country
-                                      </div>
-                                      <div style={styles.modalPart1Tail}>
-                                        {modalData.Country}
-                                      </div>
-                                    </div>
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        width: "140px",
-                                      }}
-                                    >
-                                      <div style={styles.modalPart1Head}>
-                                        Address
-                                      </div>
-                                      <div
-                                        style={{
-                                          ...styles.modalPart1Tail,
-                                          height: "34px",
-                                          width: "230px",
-                                        }}
-                                      >
-                                        {modalData.Address}
-                                      </div>
+                                      {modalData.Address}
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              <div style={{ marginTop: "24px" }}>
-                                <Box
-                                  sx={{
-                                    width: "100%",
-                                    typography: "body1",
-                                    float: "left",
-                                  }}
-                                  style={{ margin: "0" }}
-                                >
-                                  <TabContext value={value1}>
-                                    <Box sx={{}}>
-                                      <TabList
-                                        centered
-                                        onChange={handleChange}
-                                        aria-label=""
-                                        TabIndicatorProps={{
-                                          style: {
-                                            backgroundColor: "#6519E1",
-                                          },
+                            </div>
+                            <div style={{ marginTop: "24px" }}>
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                  typography: "body1",
+                                  float: "left",
+                                }}
+                                style={{ margin: "0" }}
+                              >
+                                <TabContext value={value1}>
+                                  <Box sx={{}}>
+                                    <TabList
+                                      centered
+                                      onChange={handleChange}
+                                      aria-label=""
+                                      TabIndicatorProps={{
+                                        style: {
+                                          backgroundColor: "#6519E1",
+                                        },
+                                      }}
+                                      sx={{
+                                        marginRight: "400px",
+                                        marginLeft: "20px",
+                                      }}
+                                    >
+                                      <Tab
+                                        style={{
+                                          color:
+                                            value1 == 1
+                                              ? "#6519E1"
+                                              : "#70757A",
                                         }}
-                                        sx={{
-                                          marginRight: "400px",
-                                          marginLeft: "20px",
+                                        sx={{ fontSize: 10 }}
+                                        label="Professional Details"
+                                        value="1"
+                                      />
+                                      <Tab
+                                        style={{
+                                          color:
+                                            value1 == 2
+                                              ? "#6519E1"
+                                              : "#70757A",
                                         }}
-                                      >
-                                        <Tab
-                                          style={{
-                                            color:
-                                              value1 == 1
-                                                ? "#6519E1"
-                                                : "#70757A",
-                                          }}
-                                          sx={{ fontSize: 10 }}
-                                          label="Professional Details"
-                                          value="1"
-                                        />
-                                        <Tab
-                                          style={{
-                                            color:
-                                              value1 == 2
-                                                ? "#6519E1"
-                                                : "#70757A",
-                                          }}
-                                          sx={{ fontSize: 10 }}
-                                          label="Personal Details"
-                                          value="2"
-                                        />
-                                        <Tab
-                                          style={{
-                                            color:
-                                              value1 == 3
-                                                ? "#6519E1"
-                                                : "#70757A",
-                                          }}
-                                          sx={{ fontSize: 10 }}
-                                          label="Task List"
-                                          value="3"
-                                        />
-                                      </TabList>
-                                    </Box>
-                                    <TabPanel value="1">
-                                      <div>
-                                        <div style={{ display: "flex" }}>
-                                          <div
-                                            style={styles.bottomPart1Heading}
-                                          >
-                                            Professional Details
-                                          </div>
-                                          <img
-                                            style={styles.editIcon}
-                                            src={editIcon}
-                                          />
-                                        </div>
+                                        sx={{ fontSize: 10 }}
+                                        label="Personal Details"
+                                        value="2"
+                                      />
+                                      <Tab
+                                        style={{
+                                          color:
+                                            value1 == 3
+                                              ? "#6519E1"
+                                              : "#70757A",
+                                        }}
+                                        sx={{ fontSize: 10 }}
+                                        label="Task List"
+                                        value="3"
+                                      />
+                                    </TabList>
+                                  </Box>
+                                  <TabPanel value="1">
+                                    <div>
+                                      <div style={{ display: "flex" }}>
                                         <div
-                                          style={{ width: "693px" }}
-                                          class="text-center"
+                                          style={styles.bottomPart1Heading}
+                                        >
+                                          Professional Details
+                                        </div>
+                                        <img
+                                          style={styles.editIcon}
+                                          src={editIcon}
+                                        />
+                                      </div>
+                                      <div
+                                        style={{ width: "693px" }}
+                                        class="text-center"
+                                      >
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            marginTop: "10px",
+                                          }}
                                         >
                                           <div
                                             style={{
                                               display: "flex",
-                                              flexDirection: "row",
-                                              marginTop: "10px",
+                                              flexDirection: "column",
+                                              width: "350px",
                                             }}
                                           >
-                                            <div
-                                              style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                width: "350px",
-                                              }}
-                                            >
-                                              <div style={styles.bottompart11}>
-                                                Onboarding
-                                              </div>
-                                              <div style={styles.bottompart12}>
-                                                {formatDate(
-                                                  modalData.Joining_Date
-                                                )}
-                                              </div>
+                                            <div style={styles.bottompart11}>
+                                              Onboarding
                                             </div>
-                                            <div
-                                              style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                width: "350px",
-                                              }}
-                                            >
-                                              <div style={styles.bottompart11}>
-                                                Experience(Y)
-                                              </div>
-                                              <div style={styles.bottompart12}>
-                                                -
-                                              </div>
+                                            <div style={styles.bottompart12}>
+                                              {formatDate(
+                                                modalData.Joining_Date
+                                              )}
                                             </div>
                                           </div>
                                           <div
                                             style={{
                                               display: "flex",
-                                              flexDirection: "row",
-                                              marginTop: "10px",
+                                              flexDirection: "column",
+                                              width: "350px",
                                             }}
                                           >
-                                            <div
-                                              style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                width: "350px",
-                                              }}
-                                            >
-                                              <div style={styles.bottompart11}>
-                                                Highest Educational
-                                                Qualification
-                                              </div>
-                                              <div style={styles.bottompart12}>
-                                                -
-                                              </div>
+                                            <div style={styles.bottompart11}>
+                                              Experience(Y)
                                             </div>
-                                            <div
-                                              style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                width: "350px",
-                                              }}
-                                            >
-                                              <div style={styles.bottompart11}>
-                                                Office
-                                              </div>
-                                              <div style={styles.bottompart12}>
-                                                Work From Home
-                                              </div>
+                                            <div style={styles.bottompart12}>
+                                              -
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            marginTop: "10px",
+                                          }}
+                                        >
+                                          <div
+                                            style={{
+                                              display: "flex",
+                                              flexDirection: "column",
+                                              width: "350px",
+                                            }}
+                                          >
+                                            <div style={styles.bottompart11}>
+                                              Highest Educational
+                                              Qualification
+                                            </div>
+                                            <div style={styles.bottompart12}>
+                                              -
                                             </div>
                                           </div>
                                           <div
                                             style={{
                                               display: "flex",
-                                              flexDirection: "row",
-                                              marginTop: "10px",
+                                              flexDirection: "column",
+                                              width: "350px",
                                             }}
                                           >
+                                            <div style={styles.bottompart11}>
+                                              Office
+                                            </div>
+                                            <div style={styles.bottompart12}>
+                                              Work From Home
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            marginTop: "10px",
+                                          }}
+                                        >
+                                          <div
+                                            style={{
+                                              display: "flex",
+                                              flexDirection: "column",
+                                              width: "640px",
+                                            }}
+                                          >
+                                            <div style={styles.bottompart11}>
+                                              Skill Set
+                                            </div>
+                                            <div
+                                              className="row justify-content-start"
+                                              style={styles.bottompart12}
+                                            >
+                                              {modalData.Interests
+                                                ? modalData.Interests.split(
+                                                  "\n"
+                                                ).map((option) => {
+                                                  return (
+                                                    <div
+                                                      style={styles.skills}
+                                                    >
+                                                      {option}
+                                                    </div>
+                                                  );
+                                                })
+                                                : "-"}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </TabPanel>
+                                  <TabPanel value="2">
+                                    <div>
+                                      <div style={{ display: "flex" }}>
+                                        <div
+                                          style={styles.bottomPart2Heading}
+                                        >
+                                          Personal Details
+                                        </div>
+                                        <img
+                                          style={styles.editIcon}
+                                          src={editIcon}
+                                        />
+                                      </div>
+                                      <div
+                                        style={{ width: "693px" }}
+                                        class="text-center"
+                                      >
+                                        <div
+                                          className="row justify-content-evenly"
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            marginTop: "49px",
+                                            width: "693px",
+                                          }}
+                                        >
+                                          <div style={styles.personalDets1}>
+                                            <img src={bdayIcon} />
                                             <div
                                               style={{
                                                 display: "flex",
                                                 flexDirection: "column",
-                                                width: "640px",
                                               }}
                                             >
-                                              <div style={styles.bottompart11}>
-                                                Skill Set
+                                              <div
+                                                style={
+                                                  styles.personalDetBirthday
+                                                }
+                                              >
+                                                Birthday
                                               </div>
                                               <div
-                                                className="row justify-content-start"
-                                                style={styles.bottompart12}
+                                                style={
+                                                  styles.personalDetBirthdate
+                                                }
                                               >
-                                                {modalData.Interests
-                                                  ? modalData.Interests.split(
-                                                      "\n"
-                                                    ).map((option) => {
-                                                      return (
-                                                        <div
-                                                          style={styles.skills}
-                                                        >
-                                                          {option}
-                                                        </div>
-                                                      );
-                                                    })
+                                                {modalData.Birthday
+                                                  ? formatDate(
+                                                    modalData.Birthday
+                                                  )
+                                                  : "-"}
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div style={styles.personalDets1}>
+                                            <img src={drinksIcon} />
+                                            <div
+                                              style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                              }}
+                                            >
+                                              <div
+                                                style={
+                                                  styles.personalDetAlcohol
+                                                }
+                                              >
+                                                Alcochol
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetAlcohol1
+                                                }
+                                              >
+                                                {modalData.Alcohol
+                                                  ? modalData.Alcohol
+                                                  : "-"}
+                                              </div>
+                                              <div
+                                                style={styles.personalDetBev}
+                                              >
+                                                Beverage
+                                              </div>
+                                              <div
+                                                style={styles.personalDetBev1}
+                                              >
+                                                {modalData.Beverage
+                                                  ? modalData.Beverage
+                                                  : "-"}
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          className="row justify-content-evenly"
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            marginTop: "49px",
+                                            width: "693px",
+                                          }}
+                                        >
+                                          <div style={styles.personalDets1}>
+                                            <img src={travelIcon} />
+                                            <div
+                                              style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                              }}
+                                            >
+                                              <div
+                                                style={
+                                                  styles.personalDetBirthday
+                                                }
+                                              >
+                                                Travel Destination
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetBirthdate
+                                                }
+                                              >
+                                                {modalData.Travel_Destination
+                                                  ? modalData.Travel_Destination
+                                                  : "-"}
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div style={styles.personalDets1}>
+                                            <img src={familyIcon} />
+                                            <div
+                                              style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                              }}
+                                            >
+                                              <div
+                                                style={
+                                                  styles.personalDetAlcohol
+                                                }
+                                              >
+                                                Spouse
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetAlcohol1
+                                                }
+                                              >
+                                                {modalData.Spouse
+                                                  ? modalData.Spouse
+                                                  : "-"}
+                                              </div>
+                                              <div
+                                                style={styles.personalDetBev}
+                                              >
+                                                Children
+                                              </div>
+                                              <div
+                                                style={styles.personalDetBev1}
+                                              >
+                                                {modalData.Children
+                                                  ? modalData.Children
+                                                  : "-"}
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          className="row justify-content-start"
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            marginTop: "49px",
+                                            width: "693px",
+                                            marginLeft: "42px",
+                                          }}
+                                        >
+                                          <div style={styles.entSection}>
+                                            <img src={entertainmentIcon} />
+                                            <div
+                                              style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                              }}
+                                            >
+                                              <div
+                                                style={
+                                                  styles.personalDetAlcohol
+                                                }
+                                              >
+                                                Hobbies
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetAlcohol1
+                                                }
+                                              >
+                                                {modalData.Spouse
+                                                  ? modalData.Spouse
+                                                  : "-"}
+                                              </div>
+                                              <div
+                                                style={styles.personalDetBev}
+                                              >
+                                                Sports
+                                              </div>
+                                              <div
+                                                style={styles.personalDetBev1}
+                                              >
+                                                {modalData.Children
+                                                  ? modalData.Children
+                                                  : "-"}
+                                              </div>
+                                            </div>
+                                            <div
+                                              style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                              }}
+                                            >
+                                              <div
+                                                style={
+                                                  styles.personalDetMovies
+                                                }
+                                              >
+                                                Movies
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetMovies1
+                                                }
+                                              >
+                                                {modalData.Children
+                                                  ? modalData.Children
+                                                  : "-"}
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetActor
+                                                }
+                                              >
+                                                Actor
+                                              </div>
+                                              <div
+                                                style={
+                                                  styles.personalDetBevActor1
+                                                }
+                                              >
+                                                {modalData.Children
+                                                  ? modalData.Children
                                                   : "-"}
                                               </div>
                                             </div>
                                           </div>
                                         </div>
                                       </div>
-                                    </TabPanel>
-                                    <TabPanel value="2">
-                                      <div>
-                                        <div style={{ display: "flex" }}>
-                                          <div
-                                            style={styles.bottomPart2Heading}
-                                          >
-                                            Personal Details
-                                          </div>
-                                          <img
-                                            style={styles.editIcon}
-                                            src={editIcon}
-                                          />
-                                        </div>
-                                        <div
-                                          style={{ width: "693px" }}
-                                          class="text-center"
-                                        >
-                                          <div
-                                            className="row justify-content-evenly"
-                                            style={{
-                                              display: "flex",
-                                              flexDirection: "row",
-                                              marginTop: "49px",
-                                              width: "693px",
-                                            }}
-                                          >
-                                            <div style={styles.personalDets1}>
-                                              <img src={bdayIcon} />
-                                              <div
-                                                style={{
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                }}
-                                              >
-                                                <div
-                                                  style={
-                                                    styles.personalDetBirthday
-                                                  }
-                                                >
-                                                  Birthday
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetBirthdate
-                                                  }
-                                                >
-                                                  {modalData.Birthday
-                                                    ? formatDate(
-                                                        modalData.Birthday
-                                                      )
-                                                    : "-"}
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div style={styles.personalDets1}>
-                                              <img src={drinksIcon} />
-                                              <div
-                                                style={{
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                }}
-                                              >
-                                                <div
-                                                  style={
-                                                    styles.personalDetAlcohol
-                                                  }
-                                                >
-                                                  Alcochol
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetAlcohol1
-                                                  }
-                                                >
-                                                  {modalData.Alcohol
-                                                    ? modalData.Alcohol
-                                                    : "-"}
-                                                </div>
-                                                <div
-                                                  style={styles.personalDetBev}
-                                                >
-                                                  Beverage
-                                                </div>
-                                                <div
-                                                  style={styles.personalDetBev1}
-                                                >
-                                                  {modalData.Beverage
-                                                    ? modalData.Beverage
-                                                    : "-"}
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          <div
-                                            className="row justify-content-evenly"
-                                            style={{
-                                              display: "flex",
-                                              flexDirection: "row",
-                                              marginTop: "49px",
-                                              width: "693px",
-                                            }}
-                                          >
-                                            <div style={styles.personalDets1}>
-                                              <img src={travelIcon} />
-                                              <div
-                                                style={{
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                }}
-                                              >
-                                                <div
-                                                  style={
-                                                    styles.personalDetBirthday
-                                                  }
-                                                >
-                                                  Travel Destination
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetBirthdate
-                                                  }
-                                                >
-                                                  {modalData.Travel_Destination
-                                                    ? modalData.Travel_Destination
-                                                    : "-"}
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div style={styles.personalDets1}>
-                                              <img src={familyIcon} />
-                                              <div
-                                                style={{
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                }}
-                                              >
-                                                <div
-                                                  style={
-                                                    styles.personalDetAlcohol
-                                                  }
-                                                >
-                                                  Spouse
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetAlcohol1
-                                                  }
-                                                >
-                                                  {modalData.Spouse
-                                                    ? modalData.Spouse
-                                                    : "-"}
-                                                </div>
-                                                <div
-                                                  style={styles.personalDetBev}
-                                                >
-                                                  Children
-                                                </div>
-                                                <div
-                                                  style={styles.personalDetBev1}
-                                                >
-                                                  {modalData.Children
-                                                    ? modalData.Children
-                                                    : "-"}
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          <div
-                                            className="row justify-content-start"
-                                            style={{
-                                              display: "flex",
-                                              flexDirection: "row",
-                                              marginTop: "49px",
-                                              width: "693px",
-                                              marginLeft: "42px",
-                                            }}
-                                          >
-                                            <div style={styles.entSection}>
-                                              <img src={entertainmentIcon} />
-                                              <div
-                                                style={{
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                }}
-                                              >
-                                                <div
-                                                  style={
-                                                    styles.personalDetAlcohol
-                                                  }
-                                                >
-                                                  Hobbies
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetAlcohol1
-                                                  }
-                                                >
-                                                  {modalData.Spouse
-                                                    ? modalData.Spouse
-                                                    : "-"}
-                                                </div>
-                                                <div
-                                                  style={styles.personalDetBev}
-                                                >
-                                                  Sports
-                                                </div>
-                                                <div
-                                                  style={styles.personalDetBev1}
-                                                >
-                                                  {modalData.Children
-                                                    ? modalData.Children
-                                                    : "-"}
-                                                </div>
-                                              </div>
-                                              <div
-                                                style={{
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                }}
-                                              >
-                                                <div
-                                                  style={
-                                                    styles.personalDetMovies
-                                                  }
-                                                >
-                                                  Movies
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetMovies1
-                                                  }
-                                                >
-                                                  {modalData.Children
-                                                    ? modalData.Children
-                                                    : "-"}
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetActor
-                                                  }
-                                                >
-                                                  Actor
-                                                </div>
-                                                <div
-                                                  style={
-                                                    styles.personalDetBevActor1
-                                                  }
-                                                >
-                                                  {modalData.Children
-                                                    ? modalData.Children
-                                                    : "-"}
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </TabPanel>
-                                    <TabPanel value="3">2351235</TabPanel>
-                                  </TabContext>
-                                </Box>
-                              </div>
-                            </Modal.Body>
-                          </Modal>
-                        </>
-                      );
-                    })}
+                                    </div>
+                                  </TabPanel>
+                                  <TabPanel value="3">2351235</TabPanel>
+                                </TabContext>
+                              </Box>
+                            </div>
+                          </Modal.Body>
+                        </Modal>
+                      </>
+                    );
+                  })}
               </>
             )}
           </div>
         </div>
-      ) : (
-        "table"
-      )}
+      ) :
+
+        <div style={{ borderBottom: "1px solid #EBE9F1", width: isCollapsed ? "" : "1148px", margin: "24px 32px", borderRadius: "12px", height: "462px", overflow: "auto", position: "relative"  }}>
+          <table style={styles.table} className='rfp-table'>
+            <thead style={styles.tableHeader}>
+              <tr style={{borderRadius: "12px 12px 0px 0px"}}>
+                <th scope="col" style={{ ...styles.tableHeading, width: "140px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>Employee Name</th>
+                <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>Department</th>
+                <th scope="col" style={{ ...styles.tableHeading, width: "140px" }} className='fixed-header2'>Company E-mail</th>
+                <th scope="col" style={{ ...styles.tableHeading, width: "100px" }} className='fixed-header2'>Contact Number</th>
+                <th scope="col" style={{ ...styles.tableHeading, width: "140px" }} className='fixed-header2'>Location</th>
+              </tr>
+            </thead>
+            <tbody style={styles.tableBody}>
+              {isLoadingEmp ? <div style={{ height: "408px", width: isCollapsed ? "" : "1148px", background: "white" }}><LoadingSpinner /></div> : employee && employee.map(e => (
+                <>
+                  <tr style={{ ...styles.tableRow, backgroundColor: selectedEmployees.includes(e.Employee_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
+                    <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", minWidth: "140px", backgroundColor: selectedEmployees.includes(e.Employee_ID) ? "#F5F3FE" : "white" }}>
+                      <div className='d-flex flex-row align-items-center' style={{ gap: "12px" }}>
+                        <Form.Check
+                          inline
+                          type="checkbox"
+                          checked={selectedEmployees.includes(e.Proposal_ID)}
+                          readOnly={true}
+                          onClick={(eve) => { if (eve.target.checked) { setselectedEmployees(prev => [...prev, e.Proposal_ID]) } else { setselectedEmployees(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
+                        /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{[e.First_Name, e.Last_Name].join(" ")}</p>
+                      </div>
+                    </td>
+                    <td style={{ ...styles.tableCell, minWidth: "120px" }}>{e.Dept}</td>
+                    <td style={{ ...styles.tableCell, minWidth: "140px" }}><img src={emailIcon}/>&nbsp;{e.Email_Work}</td>
+                    <td style={{ ...styles.tableCell, minWidth: "140px" }}>{e.Business_Phone}</td>
+                    <td style={{ ...styles.tableCell, minWidth: "140px" }}>{[e.State, e.Country].join(", ")}</td>
+                  </tr>
+                </>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      }
     </div>
   );
 }
