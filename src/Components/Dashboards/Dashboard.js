@@ -57,7 +57,8 @@ import RFP from "../v2/RFP";
 import TestDemo from "../Calendar";
 import Proposal from "../v2/Proposal";
 import Employee from "../v2/Employee";
-
+import settingsIcon from '../../Images/Settings icon.svg'
+import notificationIcon from '../../Images/Notification icon.svg'
 
 
 const Dashboard = () => {
@@ -79,7 +80,8 @@ const Dashboard = () => {
       backgroundColor: "#FAFBFB",
       borderBottom: "1px solid #EBE9F1",
       width: "100vw",
-      marginBottom: "0px"
+      marginBottom: "0px",
+      gap: "20px"
     },
     plusIcon: {
       height: "32px",
@@ -388,7 +390,7 @@ const Dashboard = () => {
             color={primaryColour}
             style={mystyles.plusIcon}
           />} id="basic-nav-dropdown"
-            className="p-2 plus-dropdown"
+            className="plus-dropdown"
             align="end">
             <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 0 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(0)} onMouseLeave={() => setplusDropdown(null)}>
               <img
@@ -441,10 +443,9 @@ const Dashboard = () => {
           </NavDropdown>
           <NavDropdown
             title={
-              <FontAwesomeIcon icon={faGear} style={mystyles.settingsIcon} />
+              <img src={settingsIcon} alt="Settings Icon" />
             }
             id="collasible-nav-dropdown"
-            className="p-2"
             align="end"
           >
             <NavDropdown.Item
@@ -465,10 +466,10 @@ const Dashboard = () => {
               Log Out
             </NavDropdown.Item>
           </NavDropdown>
-          <Nav.Link className="p-3">
-            <FontAwesomeIcon icon={faBell} style={mystyles.settingsIcon} />
+          <Nav.Link className="">
+          <img src={notificationIcon} alt="Notification Icon" />
           </Nav.Link>
-          <Nav.Link className="p-3">
+          <Nav.Link className="">
             <div
               style={mystyles.accountLabel}
               className="d-flex flex-row align-items-center"

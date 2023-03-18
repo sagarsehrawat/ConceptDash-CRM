@@ -139,3 +139,7 @@ body > div.fade.modal.show > div{
 background: rgba(112, 117, 122, 0.2);
 border-radius: 4px;
 }
+
+.form-select {
+  font-size: 16px;
+}

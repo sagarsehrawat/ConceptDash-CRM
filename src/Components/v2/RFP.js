@@ -13,6 +13,7 @@ import RFPform from '../Form/RFPform';
 import AuthenticationContext from '../../Context/AuthContext';
 import UpdateRFP from '../Form/UpdateRFP';
 import { RadioButtonComponent } from '@syncfusion/ej2-react-buttons';
+import filterIcon from '../../Images/Filter.svg'
 
 
 
@@ -308,7 +309,7 @@ const RFP = (props) => {
         searchButton: {
             width: "30px",
             height: "36px",
-            background: "#6519E1",
+            background: "#D9D9D9",
             borderRadius: "0px 6px 6px 0px",
             marginRight: "12px",
             display: "flex",
@@ -824,8 +825,8 @@ const RFP = (props) => {
                     onChange={(e) => setValue(e.target.value)}
                     placeholder="Search"
                 />
-                <Button style={styles.searchButton} onClick={(e) => setCall(apiCall + 1)}><FontAwesomeIcon icon={faMagnifyingGlass} color="white" /></Button>
-                <Button style={{ ...styles.filterButton, backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }} onClick={openFilterModal}><FontAwesomeIcon icon={faFilter} color="#70757A" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>{filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}</Button>
+                <Button style={styles.searchButton} onClick={(e) => setCall(apiCall + 1)}><FontAwesomeIcon icon={faMagnifyingGlass} color="#000000" /></Button>
+                <Button style={{ ...styles.filterButton, backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }} onClick={openFilterModal}><img src={filterIcon} alt="Filter Icon" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>{filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}</Button>
                 <Modal
                     show={filterModal}
                     onHide={closeFilterModal}
