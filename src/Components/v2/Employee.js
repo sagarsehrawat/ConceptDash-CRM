@@ -2314,9 +2314,9 @@ function Employee(props) {
                             <Form.Check
                               inline
                               type="checkbox"
-                              checked={selectedEmployees.includes(e.Proposal_ID)}
+                              checked={selectedEmployees.includes(e.Employee_ID)}
                               readOnly={true}
-                              onClick={(eve) => { if (eve.target.checked) { setselectedEmployees(prev => [...prev, e.Proposal_ID]) } else { setselectedEmployees(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
+                              onClick={(eve) => { if (eve.target.checked) { setselectedEmployees(prev => [...prev, e.Employee_ID]) } else { setselectedEmployees(prev => prev.filter(ele => ele !== e.Employee_ID)) } }}
                             />
                             <div className="d-flex flex-row justify-content-center align-items-center" style={{ gap: "8px" }}>
                               <img src={ellipse} style={{ width: "42px", height: "42px" }} alt="Employee" />

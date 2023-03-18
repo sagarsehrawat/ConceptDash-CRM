@@ -54,7 +54,7 @@ import Home from "./Home";
 import { HOST, GET_ADMIN_TASKS } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import RFP from "../v2/RFP";
-import TestDemo from "../Calendar";
+import TestDemo from "../v2/Calendar.js";
 import Proposal from "../v2/Proposal";
 import Employee from "../v2/Employee";
 import settingsIcon from '../../Images/Settings icon.svg'

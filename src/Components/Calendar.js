@@ -328,6 +328,7 @@ const TestDemo = () => {
   function getTimeString(value) {
     return instance.formatDate(value, { skeleton: "hm" });
   }
+  
   function eventTemplate(props) {
     return (
       <div className="template-wrap">
