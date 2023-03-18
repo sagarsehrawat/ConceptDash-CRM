@@ -202,9 +202,9 @@ function Employee(props) {
       cursor: "pointer",
     },
     deptHeading: {
-      width: "85px",
+      width: "auto",
       height: "16px",
-      marginLeft: "85px",
+      // marginLeft: "85px",
       marginTop: "12px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
@@ -220,7 +220,6 @@ function Employee(props) {
       marginTop: "12px",
     },
     name: {
-      textAlign: "center",
       width: "100%",
       height: "20px",
       // marginLeft: "70px",
