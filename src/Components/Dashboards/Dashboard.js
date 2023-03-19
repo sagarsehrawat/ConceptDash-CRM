@@ -59,6 +59,7 @@ import Proposal from "../v2/Proposal";
 import Employee from "../v2/Employee";
 import settingsIcon from '../../Images/Settings icon.svg'
 import notificationIcon from '../../Images/Notification icon.svg'
+import Customers from "../v2/Customers";
 
 
 const Dashboard = () => {
@@ -369,7 +370,7 @@ const Dashboard = () => {
     if (nav === 8) return <TestDemo />;
     if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
-    if (nav === 11) return <CustomerUpdate />;
+    if (nav === 11) return <Customers isCollapsed={isCollapsed}/>;
     if (nav === 12) return <></>;
   };
 

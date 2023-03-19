@@ -138,7 +138,7 @@ function Employee(props) {
     searchButton: {
       width: "30px",
       height: "36px",
-      background: "#D9D9D9",
+      background: "#ffffff",
       borderRadius: "0px 6px 6px 0px",
       marginRight: "12px",
       display: "flex",
@@ -881,7 +881,7 @@ function Employee(props) {
           placeholder="Search"
         />
         <Button style={styles.searchButton}>
-          <FontAwesomeIcon icon={faMagnifyingGlass} color="white" />
+          <FontAwesomeIcon icon={faMagnifyingGlass} color="black" />
         </Button>
         <Button
           style={{
