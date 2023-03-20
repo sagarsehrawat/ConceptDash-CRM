@@ -5,6 +5,7 @@ import {
   DELETE_RFP,
   GET_CITIES,
   GET_COMPANY_NAMES,
+  GET_CUSTOMERS_COUNT,
   GET_DEPARTMENTS,
   GET_EMPLOYEENAMES,
   GET_EMPLOYEE_COUNT,
@@ -60,6 +61,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import InfiniteScroll from "react-infinite-scroll-component"
 
 function Customers(props) {
   const { isCollapsed } = props;
@@ -411,6 +413,9 @@ function Customers(props) {
   const [value, setValue] = useState("");
   const [cities, setcities] = useState([]);
   const [companies, setcompanies] = useState([]);
+  const [totalResults, settotalResults] = useState(0);
+  const [length, setlength] = useState(0);
+  console.log(length)
   useEffect(() => {
     const call = async () => {
       setIsLoading(true);
@@ -429,7 +434,7 @@ function Customers(props) {
         .then((res) => {
           setcustomers(res.data.res);
           setpages(res.data.totalPages);
-          console.log(res.data.res);
+          setlength(length+res.data.res.length)
         })
         .catch((err) => {
           console.log(err);
@@ -441,6 +446,17 @@ function Customers(props) {
         })
         .then((res) => {
           setcities(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+        await axios
+        .get(HOST + GET_CUSTOMERS_COUNT, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          settotalResults(res.data.res[0].Total);
         })
         .catch((err) => {
           console.log(err);
@@ -491,7 +507,29 @@ function Customers(props) {
     city: [],
     company: [],
   };
-
+  const fetchMoreData = async() =>{
+    let current = currPage;
+    setcurrPage(current + 1);
+    await axios
+      .get(HOST + GET_PAGE_CUSTOMERS, {
+        headers: {
+          auth: "Rose " + localStorage.getItem("auth"),
+          limit: limit,
+          offset: current * limit,
+          filter: JSON.stringify(returnData),
+          search: value,
+          sort: sort,
+        },
+      })
+      .then((res) => {
+        setcustomers(customers.concat(res.data.res));
+        setlength(length+res.data.res.length)
+        setpages(res.data.totalPages);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   const handleSort = (e) => {
     setsort(e.target.value);
   };
@@ -599,9 +637,16 @@ function Customers(props) {
         </div>
       </div>
       <div style={styles.secondHeading}>
-        <span>10</span> Customers
+        <span>{totalResults}</span> Customers
       </div>
+      {isLoading? <LoadingSpinner/>:<></>}
       {grid ? (
+        <InfiniteScroll
+        dataLength={length}
+        next={fetchMoreData}
+        hasMore={length!==totalResults}
+        loader={<div style={{textAlign: 'center', fontWeight: 'bold'}}>Loading...</div>}
+        >
         <div
           class="row justify-content-between row-cols-12 gx-1.25"
           style={{
@@ -610,9 +655,7 @@ function Customers(props) {
             marginTop: "16px",
           }}
         >
-          {isLoading ? (
-            <LoadingSpinner />
-          ) : (
+          {
             customers.map((e) => {
               return (
                 <div
@@ -653,9 +696,9 @@ function Customers(props) {
                 </div>
               );
             })
-          )}
+          }
         </div>
-      ) : (
+      </InfiniteScroll>) : (
         <div></div>
       )}
     </>
