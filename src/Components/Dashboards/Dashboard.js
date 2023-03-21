@@ -8,7 +8,7 @@ import {
   faChevronRight,
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Dropdown, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -54,10 +54,12 @@ import Home from "./Home";
 import { HOST, GET_ADMIN_TASKS } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import RFP from "../v2/RFP";
-import TestDemo from "../Calendar";
+import TestDemo from "../v2/Calendar.js";
 import Proposal from "../v2/Proposal";
 import Employee from "../v2/Employee";
-
+import settingsIcon from '../../Images/Settings icon.svg'
+import notificationIcon from '../../Images/Notification icon.svg'
+import Customers from "../v2/Customers";
 
 
 const Dashboard = () => {
@@ -79,7 +81,8 @@ const Dashboard = () => {
       backgroundColor: "#FAFBFB",
       borderBottom: "1px solid #EBE9F1",
       width: "100vw",
-      marginBottom: "0px"
+      marginBottom: "0px",
+      gap: "20px"
     },
     plusIcon: {
       height: "32px",
@@ -291,6 +294,7 @@ const Dashboard = () => {
   };
 
   const [isLoadingTasks, setisLoadingTasks] = useState(false);
+  const windowSize = useRef([window.innerWidth, window.innerHeight]);
   const [title1, settitle1] = useState([]);
   const [title2, settitle2] = useState([]);
   const [title3, settitle3] = useState([]);
@@ -302,6 +306,20 @@ const Dashboard = () => {
   const [month1, setmonth1] = useState([])
   const [month2, setmonth2] = useState([])
   const [month3, setmonth3] = useState([])
+
+  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    function handleResize() {
+      setViewportWidth(window.innerWidth);
+    }
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     setisLoadingTasks(true);
     const call = async () => {
@@ -352,7 +370,7 @@ const Dashboard = () => {
     if (nav === 8) return <TestDemo />;
     if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
-    if (nav === 11) return <CustomerUpdate />;
+    if (nav === 11) return <Customers isCollapsed={isCollapsed}/>;
     if (nav === 12) return <></>;
   };
 
@@ -373,7 +391,7 @@ const Dashboard = () => {
             color={primaryColour}
             style={mystyles.plusIcon}
           />} id="basic-nav-dropdown"
-            className="p-2 plus-dropdown"
+            className="plus-dropdown"
             align="end">
             <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 0 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(0)} onMouseLeave={() => setplusDropdown(null)}>
               <img
@@ -426,10 +444,9 @@ const Dashboard = () => {
           </NavDropdown>
           <NavDropdown
             title={
-              <FontAwesomeIcon icon={faGear} style={mystyles.settingsIcon} />
+              <img src={settingsIcon} alt="Settings Icon" />
             }
             id="collasible-nav-dropdown"
-            className="p-2"
             align="end"
           >
             <NavDropdown.Item
@@ -450,10 +467,10 @@ const Dashboard = () => {
               Log Out
             </NavDropdown.Item>
           </NavDropdown>
-          <Nav.Link className="p-3">
-            <FontAwesomeIcon icon={faBell} style={mystyles.settingsIcon} />
+          <Nav.Link className="">
+          <img src={notificationIcon} alt="Notification Icon" />
           </Nav.Link>
-          <Nav.Link className="p-3">
+          <Nav.Link className="">
             <div
               style={mystyles.accountLabel}
               className="d-flex flex-row align-items-center"
@@ -1157,7 +1174,7 @@ const Dashboard = () => {
             marginLeft: isCollapsed ? "68px" : "228px",
             backgroundColor: "#F8FAFB",
             height: "93.777777777778vh",
-            width: isCollapsed ? "96.278vw" : "88.167vw"
+            width: isCollapsed ? `${viewportWidth-68}px` : `${viewportWidth-228}px`
           }}
         >
           {handleDash()}

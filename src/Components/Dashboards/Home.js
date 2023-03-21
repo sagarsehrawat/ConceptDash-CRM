@@ -5,6 +5,7 @@ import { Button, Dropdown, Form } from "react-bootstrap";
 import { primaryColour } from "../Constants/styles";
 import pinnedActive from "../../Images/Pin icon_Active.svg";
 import pinnedInactive from "../../Images/Pin icon.svg";
+import cross from "../../Images/cross.svg";
 import BudgetCharts from "./BudgetCharts";
 import axios from "axios";
 import { HOST, PROJECT_CHART, GET_ADMIN_TASKS } from "../Constants/Constants";
@@ -25,8 +26,6 @@ import {
 } from "@syncfusion/ej2-react-schedule";
 import { Internationalization, extend } from "@syncfusion/ej2-base";
 import { gapi } from "gapi-script";
-
-
 
 const Home = (props) => {
   const { isCollapsed } = props;
@@ -146,22 +145,20 @@ const Home = (props) => {
     },
     deadlines: {
       boxSizing: "border-box",
-      position: "absolute",
-      width: "260px",
+      width: "18.056vw",
       height: "93px",
       left: "1180px",
-      top: "76px",
+      marginTop: "20px",
       background: "#E84C3D",
       border: "1px solid #E84C3D",
       boxShadow: "0px 5px 4px rgba(232, 76, 61, 0.25)",
       borderRadius: "12px",
     },
     celebrations: {
-      position: "absolute",
-      width: "260px",
-      height: "126px",
+      width: "18.056vw",
+      height: "96px",
       left: "1180px",
-      top: "185px",
+      marginTop: "16px",
       background:
         "linear-gradient(102.69deg, #EFE2F7 1.6%, rgba(216, 236, 244, 0.807866) 39.1%, rgba(239, 226, 247, 0) 96.08%)",
       filter: "drop-shadow(0px 4px 25px rgba(0, 0, 0, 0.08))",
@@ -169,32 +166,29 @@ const Home = (props) => {
     },
     tasks: {
       boxSizing: "border-box",
-      position: "absolute",
-      width: "260px",
-      height: "262px",
+      width: "18.056vw",
+      height: "252px",
       left: "1180px",
-      top: "327px",
+      marginTop: "16px",
       background: "#FFFFFF",
       border: "1px solid #EBE9F1",
       borderRadius: "12px",
     },
     calendar: {
       boxSizing: "border-box",
-      position: "absolute",
-      width: "260px",
-      height: "360px",
+      width: "18.056vw",
+      height: "321px",
       left: "1180px",
-      top: "605px",
+      marginTop: "16px",
       background: "#FFFFFF",
       border: "1px solid #EBE9F1",
       borderRadius: "12px",
     },
     celebrationHeading: {
-      position: "absolute",
       width: "102px",
       height: "28px",
-      left: "16px",
-      top: "12px",
+      marginLeft: "16px",
+      marginTop: "12px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 500,
@@ -203,11 +197,10 @@ const Home = (props) => {
       color: "#0A0A0A",
     },
     tasksHeading: {
-      position: "absolute",
       width: "127px",
       height: "28px",
-      left: "16px",
-      top: "16px",
+      marginLeft: "16px",
+      marginTop: "16px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 500,
@@ -216,24 +209,19 @@ const Home = (props) => {
       color: "#0A0A0A",
     },
     deadlineImage: {
-      position: "absolute",
-      left: "91.67%",
-      right: "-75%",
-      top: "91.67%",
-      bottom: "-75%",
-      background: "#FBFBFB",
+      marginLeft: "17.67px",
+      marginTop: "17.67px",
       transform: "rotate(-180deg)",
     },
     deadlineHeading: {
-      position: "absolute",
       width: "149px",
       height: "20px",
-      left: "40px",
-      top: "10px",
+      marginLeft: "5.67px",
+      marginTop: "16px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 500,
-      fontSize: "15px",
+      fontSize: "14px",
       lineHeight: "20px",
       color: "#FBFBFB",
     },
@@ -241,44 +229,48 @@ const Home = (props) => {
       width: "159px",
       height: "28px",
       marginLeft: "20px",
-      marginTop: "10px",
+      marginTop: "5px",
+      marginBottom: "1px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 500,
       fontSize: "18px",
       lineHeight: "28px",
-      color: "#0A0A0A"
+      color: "#0A0A0A",
     },
     calendarBottom: {
       width: "90px",
       height: "14px",
       marginLeft: "85px",
       marginTop: "6px",
-      marginBottom: '10px',
+      marginBottom: "10px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "100%",
       color: "#6519E1",
-      cursor: 'pointer'
+      cursor: "pointer",
     },
     tasksBottom: {
-      position: "absolute",
       width: "90px",
       height: "14px",
-      left: "97px",
-      top: "236px",
+      marginLeft: "105px",
+      marginBottom: "12px",
+      marginTop: "10px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "100%",
       color: "#6519E1",
-      cursor: 'pointer'
+      cursor: "pointer",
+    },
+    celebrationsCross: {
+      marginLeft: '113.6px',
+      marginTop: '12.6px',
     },
     celebrationBottom: {
-      position: "absolute",
       width: "52px",
       height: "14px",
       left: "105px",
@@ -291,7 +283,6 @@ const Home = (props) => {
       color: "#6519E1",
     },
     rect1: {
-      position: "absolute",
       width: "3px",
       height: "46px",
       left: "16px",
@@ -300,7 +291,6 @@ const Home = (props) => {
       borderRadius: "40px",
     },
     task1: {
-      position: "absolute",
       width: "225px",
       height: "44px",
       left: "19px",
@@ -325,7 +315,6 @@ const Home = (props) => {
     //     color: "#0A0A0A",
     //   },
     rect2: {
-      position: "absolute",
       width: "3px",
       height: "46px",
       left: "16px",
@@ -334,7 +323,6 @@ const Home = (props) => {
       borderRadius: "40px",
     },
     task2: {
-      position: "absolute",
       width: "225px",
       height: "44px",
       left: "19px",
@@ -346,7 +334,6 @@ const Home = (props) => {
       fontFamily: "Roboto",
     },
     rect3: {
-      position: "absolute",
       width: "3px",
       height: "46px",
       left: "16px",
@@ -355,7 +342,6 @@ const Home = (props) => {
       borderRadius: "40px",
     },
     task3: {
-      position: "absolute",
       width: "225px",
       height: "44px",
       left: "19px",
@@ -457,7 +443,7 @@ const Home = (props) => {
         if (events.length > 0) {
           setEvents(formatEvents(events));
         }
-        setisLoadingCal(false)
+        setisLoadingCal(false);
       });
   };
   const formatEvents = (list) => {
@@ -583,7 +569,7 @@ const Home = (props) => {
 
   return (
     <>
-      <div>
+      <div style={{ display: "flex", flexDirection: "row" }}>
         <div style={styles.contentArea}>
           <div style={styles.projectOverviewBox}>
             <p style={styles.projectOverviewHeading}>Projects Overview</p>
@@ -679,10 +665,10 @@ const Home = (props) => {
                   }}
                 >
                   <option value="0">
-                    This Year: 1 Jan {new Date().getFullYear()} - Presnet
+                    This Year: 1 Jan {new Date().getFullYear()} - Present
                   </option>
                   <option value="1">
-                    Last 2 Years: 1 Jan {new Date().getFullYear() - 1} - Presnet
+                    Last 2 Years: 1 Jan {new Date().getFullYear() - 1} - Present
                   </option>
                   <option value="2">
                     Last 3 Years: 1 Jan {new Date().getFullYear() - 2} - Present
@@ -698,83 +684,95 @@ const Home = (props) => {
             {handleChartsComponent()}
           </div>
         </div>
-        <div style={styles.deadlines}>
-          <img src={deadlineImage} alt="Deadline Icon" />
-          <p style={styles.deadlineHeading}>Deadlines Approaching!</p>
-        </div>
-        <div style={styles.celebrations}>
-          <p style={styles.celebrationHeading}>Celebration</p>
-          <p style={styles.celebrationBottom}>View All</p>
-        </div>
-        <div style={styles.tasks}>
-          <p style={styles.tasksHeading}>Tasks Assigned</p>
-          {isLoadingTasks ? (
-            <LoadingSpinner />
-          ) : (
-            <>
-              <div>
-                <span style={styles.rect1}></span>
-                <div style={styles.task1}>
-                  {title1}
-                  <div>
-                    <img src={Time} alt="Time Icon" />
-                    <span> {`${month1[0]}${month1[1]}${month1[2]}`} </span>
-                    <span>{dDate1}</span>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={styles.deadlines}>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <img
+                style={styles.deadlineImage}
+                src={deadlineImage}
+                alt="Deadline Icon"
+              />
+              <div style={styles.deadlineHeading}>Deadlines Approaching!</div>
+            </div>
+          </div>
+          <div style={styles.celebrations}>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <div style={styles.celebrationHeading}>Celebrations</div>
+              <img src={cross} style={styles.celebrationsCross} />
+            </div>
+          </div>
+          <div style={styles.tasks}>
+            <div style={styles.tasksHeading}>Tasks Assigned</div>
+            {isLoadingTasks ? (
+              <LoadingSpinner />
+            ) : (
+              <>
+                <div style={{display: 'flex', flexDirection: 'row', marginTop: '5px', marginLeft: '16px'}}>
+                  <div style={styles.rect1}></div>
+                  <div style={styles.task1}>
+                    {title1}
+                    <div>
+                      <img src={Time} alt="Time Icon" />
+                      <span> {`${month1[0]}${month1[1]}${month1[2]}`} </span>
+                      <span>{dDate1}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <span style={styles.rect2}></span>
-                <div style={styles.task2}>
-                  {title2}
+                <div style={{display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px'}}>
+                  <span style={styles.rect2}></span>
+                  <div style={styles.task2}>
+                    {title2}
 
-                  <div>
-                    <img src={Time} alt="Time Icon" />
-                    <span> {`${month2[0]}${month2[1]}${month2[2]}`} </span>
-                    <span>{dDate2}</span>
+                    <div>
+                      <img src={Time} alt="Time Icon" />
+                      <span> {`${month2[0]}${month2[1]}${month2[2]}`} </span>
+                      <span>{dDate2}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <span style={styles.rect3}></span>
-                <div style={styles.task3}>
-                  {title3}
+                <div style={{display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px'}}>
+                  <span style={styles.rect3}></span>
+                  <div style={styles.task3}>
+                    {title3}
 
-                  <div>
-                    <img src={Time} alt="Time Icon" />
-                    <span> {`${month3[0]}${month3[1]}${month3[2]}`} </span>
-                    <span>{dDate3}</span>
+                    <div>
+                      <img src={Time} alt="Time Icon" />
+                      <span> {`${month3[0]}${month3[1]}${month3[2]}`} </span>
+                      <span>{dDate3}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </>
-          )}
-          <p style={styles.tasksBottom}>View All</p>
-        </div>
-        <div style={styles.calendar}>
-          <p style={styles.calendarHeading}>Calendar Upcoming</p>
-          {isLoadingCal ? (
-            <LoadingSpinner />
-          ) : (
-            <ScheduleComponent
-              allowEditing={false}
-              allowDeleting={false}
-              height="280px"
-              eventSettings={{ dataSource: events }}
-              agendaDaysCount={3}
-              eventClick={handleEventClick}
-            >
-              <ViewsDirective>
-                <ViewDirective
-                  option="Agenda"
-                  eventTemplate={eventTemplate.bind(this)}
-                  allowVirtualScrolling={false}
-                />
-              </ViewsDirective>
-              <Inject services={[Agenda]} />
-            </ScheduleComponent>
-          )}
-          <div style={styles.calendarBottom} >View Calendar</div>
+              </>
+            )}
+            <div style={styles.tasksBottom}>View All</div>
+          </div>
+          <div style={styles.calendar}>
+            <p style={styles.calendarHeading}>Calendar Upcoming</p>
+            {isLoadingCal ? (
+              <LoadingSpinner />
+            ) : (
+              <ScheduleComponent
+                allowEditing={false}
+                allowDeleting={false}
+                height="252px"
+                eventSettings={{ dataSource: events }}
+                agendaDaysCount={3}
+                eventClick={handleEventClick}
+                showHeaderBar={false}
+                style={{border: 'none'}}
+              >
+                <ViewsDirective>
+                  <ViewDirective
+                    option="Agenda"
+                    eventTemplate={eventTemplate.bind(this)}
+                    allowVirtualScrolling={false}
+                  />
+                </ViewsDirective>
+                <Inject services={[Agenda]} />
+              </ScheduleComponent>
+            )}
+            <div style={styles.calendarBottom}>View Calendar</div>
+          </div>
         </div>
       </div>
     </>

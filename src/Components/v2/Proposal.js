@@ -13,6 +13,7 @@ import RedAlert from '../Loader/RedAlert'
 import TableScrollbar from 'react-table-scrollbar';
 import ProposalForm from '../Form/ProposalForm'
 import UpdateProposal from '../Form/UpdateProposal'
+import filterIcon from '../../Images/Filter.svg'
 
 const Proposal = (props) => {
     const { isCollapsed } = props
@@ -197,7 +198,7 @@ const Proposal = (props) => {
         searchButton: {
             width: "30px",
             height: "36px",
-            background: "#6519E1",
+            background: "#D9D9D9",
             borderRadius: "0px 6px 6px 0px",
             marginRight: "12px",
             display: "flex",
@@ -738,7 +739,7 @@ const Proposal = (props) => {
 
     const [rowData, setrowData] = useState([]);
     const handleUpdate = (e) => {
-        const foundObject = proposals.find(obj => obj.RFP_ID === selectedProposals[0]);
+        const foundObject = proposals.find(obj => obj.Proposal_ID === selectedProposals[0]);
         setrowData(foundObject);
         handleShowUpdate();
     };
@@ -918,8 +919,8 @@ const Proposal = (props) => {
                     onChange={(e) => setValue(e.target.value)}
                     placeholder="Search"
                 />
-                <Button style={styles.searchButton} onClick={(e) => setCall(apiCall + 1)}><FontAwesomeIcon icon={faMagnifyingGlass} color="white" /></Button>
-                <Button style={{ ...styles.filterButton, backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }} onClick={openFilterModal}><FontAwesomeIcon icon={faFilter} color="#70757A" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>{filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}</Button>
+                <Button style={styles.searchButton} onClick={(e) => setCall(apiCall + 1)}><FontAwesomeIcon icon={faMagnifyingGlass} color="#000000" /></Button>
+                <Button style={{ ...styles.filterButton, backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }} onClick={openFilterModal}><img src={filterIcon} alt="Filter Icon" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>{filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}</Button>
                 <Modal
                     show={filterModal}
                     onHide={closeFilterModal}
@@ -1058,7 +1059,7 @@ const Proposal = (props) => {
                 <table style={styles.table} className='rfp-table'>
                     <thead style={styles.tableHeader}>
                         <tr>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "280px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "260px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(0)}>
                                     Proposal Name&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
@@ -1154,7 +1155,7 @@ const Proposal = (props) => {
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "180px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(4)}>
                                     Project Manager&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
@@ -1178,7 +1179,7 @@ const Proposal = (props) => {
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "180px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(5)}>
                                     Closing Deadline&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
@@ -1253,63 +1254,69 @@ const Proposal = (props) => {
                         </tr>
                     </thead>
                     <tbody style={styles.tableBody}>
-                        {isLoading ? <div style={{ height: "408px", width: "1757px", background: "white" }}><LoadingSpinner /></div> : proposals && proposals.map(e => (
-                            <>
-                                <tr style={{ ...styles.tableRow, backgroundColor: selectedProposals.includes(e.RFP_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
-                                    <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", minWidth: "280px", backgroundColor: selectedProposals.includes(e.RFP_ID) ? "#F5F3FE" : "white", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
-                                        <div className='d-flex flex-row align-items-center' style={{ gap: "12px" }}>
-                                            {proposalDetails.includes(e.Proposal_ID) ? <FontAwesomeIcon icon={faChevronDown} onClick={(eve) => setproposalDetails(prev => prev.filter(ele => ele !== e.Proposal_ID))} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faChevronRight} onClick={(eve) => setproposalDetails(prev => [...prev, e.Proposal_ID])} style={{ cursor: "pointer" }} />}
-                                            <Form.Check
-                                                inline
-                                                type="checkbox"
-                                                checked={selectedProposals.includes(e.Proposal_ID)}
-                                                readOnly={true}
-                                                onClick={(eve) => { if (eve.target.checked) { setselectedProposals(prev => [...prev, e.Proposal_ID]) } else { setselectedProposals(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
-                                            /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
-                                        </div>
-                                    </td>
-                                    <td style={{ ...styles.tableCell, minWidth: "90px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.City}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "100px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "140px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Department}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "180px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "180px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
-                                        {formatDate(e.Closing_Deadline) === ""
-                                            ? <></>
-                                            : <div style={styles.dateContainer}>
-                                                <p style={styles.date}>{formatDate(e.Closing_Deadline)}</p>
-                                            </div>}
-                                    </td>
-                                    <td style={{ ...styles.tableCell, minWidth: "120px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Bidder_Price)}</td>
-                                    <td style={{ ...styles.tableCell, minWidth: "180px", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Winning_Price)}</td>
-                                </tr>
-                                <tr id={e.Proposal_ID} style={{ ...styles.tableRow, display: proposalDetails.includes(e.Proposal_ID) ? "table-row" : "none", visibility: proposalDetails.includes(e.Proposal_ID) ? "visible" : "hidden" }}>
-                                    <td colSpan={8} style={{ borderBottom: "1px solid #EBE9F1" }}>
-                                        <div className='d-flex flex-row justify-content-between align-items-start' style={{ marginLeft: "64px", marginRight: "32px", marginBottom: "12px", width: isCollapsed ? "88.333vw" : "77.222vw", padding: "12px 24px", gap: "62px", height: "95px", background: "#F7F7F9", borderRadius: "12px", marginTop: "12px" }}>
-                                            <div className='d-flex flex-column '>
-                                                <p style={styles.tableRow2Heading}>Design Price ($)</p>
-                                                <p style={styles.tableRow2Subheading}>{addComma(e.Design_Price)}</p>
+                        {isLoading
+                            ? <tr style={{ height: "408px", width: "100%", background: "white" }}>
+                                <td colSpan={8}>
+                                    <LoadingSpinner />
+                                </td>
+                            </tr>
+                            : proposals && proposals.map(e => (
+                                <>
+                                    <tr style={{ ...styles.tableRow, backgroundColor: selectedProposals.includes(e.Proposal_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.Proposal_ID}>
+                                        <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedProposals.includes(e.Proposal_ID) ? "#F5F3FE" : "white", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
+                                            <div className='d-flex flex-row align-items-center' style={{ gap: "12px" }}>
+                                                {proposalDetails.includes(e.Proposal_ID) ? <FontAwesomeIcon icon={faChevronDown} onClick={(eve) => setproposalDetails(prev => prev.filter(ele => ele !== e.Proposal_ID))} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faChevronRight} onClick={(eve) => setproposalDetails(prev => [...prev, e.Proposal_ID])} style={{ cursor: "pointer" }} />}
+                                                <Form.Check
+                                                    inline
+                                                    type="checkbox"
+                                                    checked={selectedProposals.includes(e.Proposal_ID)}
+                                                    readOnly={true}
+                                                    onClick={(eve) => { if (eve.target.checked) { setselectedProposals(prev => [...prev, e.Proposal_ID]) } else { setselectedProposals(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
+                                                /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
                                             </div>
-                                            <div className='d-flex flex-column '>
-                                                <p style={styles.tableRow2Heading}>Contract Admin Price ($)</p>
-                                                <p style={styles.tableRow2Subheading}>{addComma(e.Contract_Admin_Price)}</p>
+                                        </td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.City}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Department}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
+                                            {formatDate(e.Closing_Deadline) === ""
+                                                ? <></>
+                                                : <div style={styles.dateContainer}>
+                                                    <p style={styles.date}>{formatDate(e.Closing_Deadline)}</p>
+                                                </div>}
+                                        </td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Bidder_Price)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Winning_Price)}</td>
+                                    </tr>
+                                    <tr id={e.Proposal_ID} style={{ ...styles.tableRow, display: proposalDetails.includes(e.Proposal_ID) ? "table-row" : "none", visibility: proposalDetails.includes(e.Proposal_ID) ? "visible" : "hidden" }}>
+                                        <td colSpan={8} style={{ borderBottom: "1px solid #EBE9F1" }}>
+                                            <div className='d-flex flex-row justify-content-between align-items-start' style={{ marginLeft: "64px", marginRight: "32px", marginBottom: "12px", width: isCollapsed ? "88.333vw" : "77.222vw", padding: "12px 24px", gap: "62px", height: "95px", background: "#F7F7F9", borderRadius: "12px", marginTop: "12px" }}>
+                                                <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Design Price ($)</p>
+                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Design_Price)}</p>
+                                                </div>
+                                                <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Contract Admin Price ($)</p>
+                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Contract_Admin_Price)}</p>
+                                                </div>
+                                                <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Provisional Item Price ($)</p>
+                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Provisional_Items)}</p>
+                                                </div>
+                                                <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Sub Consultant Price ($)</p>
+                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Sub_Consultant_Price)}</p>
+                                                </div>
+                                                <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Winning Bidders</p>
+                                                    <p style={styles.tableRow2Subheading}>{e.Winning_Bidder ?? "-"}</p>
+                                                </div>
                                             </div>
-                                            <div className='d-flex flex-column '>
-                                                <p style={styles.tableRow2Heading}>Provisional Item Price ($)</p>
-                                                <p style={styles.tableRow2Subheading}>{addComma(e.Provisional_Items)}</p>
-                                            </div>
-                                            <div className='d-flex flex-column '>
-                                                <p style={styles.tableRow2Heading}>Sub Consultant Price ($)</p>
-                                                <p style={styles.tableRow2Subheading}>{addComma(e.Sub_Consultant_Price)}</p>
-                                            </div>
-                                            <div className='d-flex flex-column '>
-                                                <p style={styles.tableRow2Heading}>Winning Bidders</p>
-                                                <p style={styles.tableRow2Subheading}>{e.Winning_Bidder ?? "-"}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </>
-                        ))}
+                                        </td>
+                                    </tr>
+                                </>
+                            ))}
                     </tbody>
                 </table>
             </div>
