@@ -8,6 +8,10 @@ body {
   background-color: rgb(248, 250, 251);
 }
 
+p{
+  margin: 0;
+}
+
 table {
   table-layout: fixed;
 }
@@ -59,6 +63,16 @@ th {
   max-width: none;
 }
 
+.event-dialog {
+  margin: 0px !important;
+  max-width: none;
+}
+
+.event-dialog>.modal-content {
+  width: 587px !important;
+  height: fit-content !important;
+}
+
 .filter-backdrop {
   opacity: 0 !important;
 }
@@ -80,16 +94,6 @@ body>div.fade.modal.show>div {
   width: 0;
   height: 0;
 }
-
-/* input#city-search::placeholder {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
-  color: #70757A;
-  opacity: 0.7;
-} */
 
 .form-check-input:checked {
   border-color: #6519E1;
@@ -144,10 +148,22 @@ body>div.fade.modal.show>div {
   font-size: 16px;
 }
 
+/* Calendar CSS */
+
 .e-appointment {
   background: #DBDBF4 !important;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12);
   border-radius: 6px !important;
+}
+
+.e-appointment-details {
+  height: 100%;
+}
+
+.e-appointment-details>div {
+  height: 100%;
+  display: flex;
+  justify-content: start;
 }
 
 .e-header-day {
@@ -179,7 +195,7 @@ body>div.fade.modal.show>div {
   text-align: center;
 }
 
-.e-current-day > .e-header-date{
+.e-current-day>.e-header-date {
   background: #6519E1;
   color: #FBFBFB;
 }
@@ -206,7 +222,38 @@ body>div.fade.modal.show>div {
   visibility: hidden;
 }
 
-.e-schedule-toolbar-container{
+.e-schedule-toolbar-container {
   z-index: -1;
   position: absolute;
+}
+
+.e-current-time {
+  display: none;
+  visibility: hidden;
+}
+
+.e-current-timeline {
+  border: 1px solid #6519E1 !important;
+}
+
+/* Form CSS */
+input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.form-select:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.add-title-placeholder::placeholder {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
+  color: #70757A;
+  width: 73px;
+  height: 28px;
 }
