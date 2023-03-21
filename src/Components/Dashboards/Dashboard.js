@@ -174,8 +174,6 @@ const Dashboard = () => {
         borderRadius: "12px",
         zIndex: "1000",
         cursor: "pointer",
-        display: nav===0 ? "none" : "",
-        visibility: nav===0 ? "hidden" : "visible"
       },
       collapsed: {
         boxSizing: "border-box",
@@ -189,8 +187,6 @@ const Dashboard = () => {
         borderRadius: "12px",
         zIndex: "1000",
         cursor: "pointer",
-        display: nav===0 ? "none" : "",
-        visibility: nav===0 ? "hidden" : "visible"
       }
     },
     sidebarMenu: {
@@ -359,7 +355,7 @@ const Dashboard = () => {
 
   const handleDash = (e) => {
     if (nav === 0){
-       return <Home isCollapsed={isCollapsed}/>;}
+       return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth}/>;}
     if (nav === 1) return <></>;
     if (nav === 2) return <></>;
     if (nav === 3) return <BudgetCities />;
@@ -1173,7 +1169,7 @@ const Dashboard = () => {
           style={{
             marginLeft: isCollapsed ? "68px" : "228px",
             backgroundColor: "#F8FAFB",
-            height: "93.777777777778vh",
+            height: `${window.innerHeight-56}px`,
             width: isCollapsed ? `${viewportWidth-68}px` : `${viewportWidth-228}px`
           }}
         >

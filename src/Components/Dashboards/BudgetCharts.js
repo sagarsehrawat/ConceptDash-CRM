@@ -11,8 +11,9 @@ import { faArrowUpRightDots } from '@fortawesome/free-solid-svg-icons'
 
 const budgetChartStyles = {
     container: {
+        width: "48%",
+        margin: "0px 10px",
         boxSizing: "border-box",
-        width: "436px",
         height: "266px",
         background: "#FFFFFF",
         border: "1px solid #EBE9F1",
@@ -78,7 +79,7 @@ const budgetChartStyles = {
         marginLeft: "4px"
     },
     largeContainer: {
-        width: "892px",
+        width: "100%",
         height: "266px",
         background: "#FFFFFF",
         border: "1px solid #EBE9F1",
@@ -98,7 +99,7 @@ const budgetChartStyles = {
         color: "#0A0A0A"
     },
     largeContainerHeader: {
-        width: "892px",
+        width: "100%",
         height: "48px",
         background: "#FFFFFF",
         boxShadow: "0px -4px 25px rgba(0, 0, 0, 0.08)",
@@ -108,7 +109,7 @@ const budgetChartStyles = {
 
     },
     table: {
-        width: "892px",
+        width: "100%",
         paddingLeft: "16px",
         paddingRight: "16px",
         height: "224px",
@@ -483,128 +484,131 @@ const BudgetCharts = (props) => {
 
     return (
         <>
-            <div style={{...budgetChartStyles.container, marginLeft: "-19px"}} className='d-flex flex-column'>
-                <div className='d-flex flex-row justify-content-between' style={budgetChartStyles.headingContainer}>
-                    <p style={budgetChartStyles.heading}>Budget Category</p>
-                    <img src={pinnedActive} alt="Dashboard Icon" style={budgetChartStyles.pinnedIcon} />
-                </div>
-                <div style={budgetChartStyles.chartContainer}>
-                    {isLoading[0] ? <LoadingSpinner /> : <Bar options={budgetCategoryOptions} data={budgetCategoryChartData} />}
-                </div>
-            </div>
-            <div style={budgetChartStyles.container}>
-                <div className='d-flex flex-row justify-content-between' style={budgetChartStyles.headingContainer}>
-                    <p style={budgetChartStyles.heading}>Budget Source</p>
-                    <img src={pinnedActive} alt="Dashboard Icon" style={budgetChartStyles.pinnedIcon} />
-                </div>
-                <div style={budgetChartStyles.chartContainer} >
-                    {isLoading[1] ? <LoadingSpinner /> :
-                        <div className='d-flex flex-row justify-content-around'>
-                            {parseInt(year) >= 2 ? <div style={budgetChartStyles.triplePieChart}>
-                                <Pie data={budgetSourceChartData.data1} options={{
-                                    ...budgetSourceOptions, plugins: {
-                                        title: {
-                                            display: true,
-                                            text: new Date().getFullYear() - 2,
-                                            position: 'bottom'
-                                        }, legend: {
-                                            display: false,
-                                        },
-                                    }
-                                }} />
-                            </div> : <></>}
-                            {parseInt(year) >= 1 ? <div style={year === '1' ? budgetChartStyles.doublePieChart : budgetChartStyles.triplePieChart}>
-                                <Pie data={budgetSourceChartData.data2} options={{
-                                    ...budgetSourceOptions, plugins: {
-                                        title: {
-                                            display: true,
-                                            text: new Date().getFullYear() - 1,
-                                            position: 'bottom'
-                                        }, legend: {
-                                            display: false,
-                                        },
-                                    }
-                                }} />
-                            </div> : <></>}
-                            {parseInt(year) >= 0 ? <div style={year === '0' ? budgetChartStyles.singlePieChart : (year === '1' ? budgetChartStyles.doublePieChart : budgetChartStyles.triplePieChart)}>
-                                <Pie data={budgetSourceChartData.data3} options={{
-                                    ...budgetSourceOptions, plugins: {
-                                        title: {
-                                            display: true,
-                                            text: new Date().getFullYear(),
-                                            position: 'bottom'
-                                        }, legend: {
-                                            display: false,
-                                        },
-                                    }
-                                }} />
-                            </div> : <></>}
-                        </div>}
-                    {isLoading[1] ? <></> : <div className='d-flex flex-row justify-content-around' style={{ marginTop: "12px " }}>
-                        <div style={budgetChartStyles.legend}>
-                            <div style={{ ...budgetChartStyles.legendColour, backgroundColor: "rgba(155, 122, 208, 0.65)" }}></div>
-                            <p style={budgetChartStyles.legendText}>Construct Connect</p>
-                        </div>
-                        <div style={budgetChartStyles.legend}>
-                            <div style={{ ...budgetChartStyles.legendColour, backgroundColor: "rgba(224, 216, 236, 1)" }}></div>
-                            <p style={budgetChartStyles.legendText}>Merx</p>
-                        </div>
-                        <div style={budgetChartStyles.legend}>
-                            <div style={{ ...budgetChartStyles.legendColour, backgroundColor: "rgba(179, 142, 238, 1)" }}></div>
-                            <p style={budgetChartStyles.legendText}>Biddingo</p>
-                        </div>
-                        <div style={budgetChartStyles.legend}>
-                            <div style={{ ...budgetChartStyles.legendColour, backgroundColor: "rgba(145, 134, 164, 0.81)" }}></div>
-                            <p style={budgetChartStyles.legendText}>Bids & Tenders</p>
-                        </div>
-                    </div>}
-                </div>
-            </div>
-            <div style={budgetChartStyles.largeContainer}>
-                <div style={budgetChartStyles.largeContainerHeader}>
-                    <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "16px", marginRight: "16px" }}>
-                        <p style={budgetChartStyles.largeContainerHeading}>Project Category Budget Overview</p>
+            <div className='d-flex flex-row justify-content-between'>
+                <div style={{ ...budgetChartStyles.container, marginLeft: "0px" }} className='col'>
+                    <div className='d-flex flex-row justify-content-between' style={budgetChartStyles.headingContainer}>
+                        <p style={budgetChartStyles.heading}>Budget Category</p>
                         <img src={pinnedActive} alt="Dashboard Icon" style={budgetChartStyles.pinnedIcon} />
                     </div>
-
+                    <div style={budgetChartStyles.chartContainer}>
+                        {isLoading[0] ? <LoadingSpinner /> : <Bar options={budgetCategoryOptions} data={budgetCategoryChartData} />}
+                    </div>
                 </div>
-                <div style={{width: "900px"}}>
-                    <table className='table' style={budgetChartStyles.table}>
-                        <thead style={budgetChartStyles.th}>
-                            <tr className="" style={budgetChartStyles.largeContainerSubHeader}>
-                                <th style={budgetChartStyles.tableHeaders} scope="col">Department</th>
-                                {parseInt(year) >= 2 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear() - 2} Budget $</th> : <></>}
-                                {parseInt(year) >= 1 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear() - 1} Budget $</th> : <></>}
-                                {parseInt(year) >= 0 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear()} Budget $</th> : <></>}
-                                <th style={budgetChartStyles.tableHeaders} scope="col">Average Increase/Decrease</th>
-                            </tr>
-                        </thead>
-
-                        {isLoading[2] ? <LoadingSpinner /> : <>
-                            <tbody style={budgetChartStyles.tableBody}>
-                                {Object.keys(projectCategoryBudgetChartData).map(e => {
-                                    const y = new Date().getFullYear()
-                                    return (
-                                        <tr style={budgetChartStyles.tableRow} className='' key={e}>
-                                            <td style={budgetChartStyles.tableCell}>{e}</td>
-                                            {parseInt(year) >= 2 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 2])}</td> : <></>}
-                                            {parseInt(year) >= 1 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 1])}</td> : <></>}
-                                            <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y])}</td>
-                                            <td style={budgetChartStyles.tableCell} className='d-flex justify-content-center'>
-                                                {projectCategoryBudgetChartData[e]['percent'] >= 0 ?
-                                                    <div style={budgetChartStyles.percentContainer1}>{projectCategoryBudgetChartData[e]['percent']} %</div>
-                                                    : <div style={budgetChartStyles.percentContainer2}>{-projectCategoryBudgetChartData[e]['percent']} %</div>
-                                                }
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </>}
-
-                    </table>
+                <div style={{...budgetChartStyles.container, marginRight: "0px"}} className='col'>
+                    <div className='d-flex flex-row justify-content-between' style={budgetChartStyles.headingContainer}>
+                        <p style={budgetChartStyles.heading}>Budget Source</p>
+                        <img src={pinnedActive} alt="Dashboard Icon" style={budgetChartStyles.pinnedIcon} />
+                    </div>
+                    <div style={budgetChartStyles.chartContainer} >
+                        {isLoading[1] ? <LoadingSpinner /> :
+                            <div className='d-flex flex-row justify-content-around'>
+                                {parseInt(year) >= 2 ? <div style={budgetChartStyles.triplePieChart}>
+                                    <Pie data={budgetSourceChartData.data1} options={{
+                                        ...budgetSourceOptions, plugins: {
+                                            title: {
+                                                display: true,
+                                                text: new Date().getFullYear() - 2,
+                                                position: 'bottom'
+                                            }, legend: {
+                                                display: false,
+                                            },
+                                        }
+                                    }} />
+                                </div> : <></>}
+                                {parseInt(year) >= 1 ? <div style={year === '1' ? budgetChartStyles.doublePieChart : budgetChartStyles.triplePieChart}>
+                                    <Pie data={budgetSourceChartData.data2} options={{
+                                        ...budgetSourceOptions, plugins: {
+                                            title: {
+                                                display: true,
+                                                text: new Date().getFullYear() - 1,
+                                                position: 'bottom'
+                                            }, legend: {
+                                                display: false,
+                                            },
+                                        }
+                                    }} />
+                                </div> : <></>}
+                                {parseInt(year) >= 0 ? <div style={year === '0' ? budgetChartStyles.singlePieChart : (year === '1' ? budgetChartStyles.doublePieChart : budgetChartStyles.triplePieChart)}>
+                                    <Pie data={budgetSourceChartData.data3} options={{
+                                        ...budgetSourceOptions, plugins: {
+                                            title: {
+                                                display: true,
+                                                text: new Date().getFullYear(),
+                                                position: 'bottom'
+                                            }, legend: {
+                                                display: false,
+                                            },
+                                        }
+                                    }} />
+                                </div> : <></>}
+                            </div>}
+                        {isLoading[1] ? <></> : <div className='d-flex flex-row justify-content-around' style={{ marginTop: "12px " }}>
+                            <div style={budgetChartStyles.legend}>
+                                <div style={{ ...budgetChartStyles.legendColour, backgroundColor: "rgba(155, 122, 208, 0.65)" }}></div>
+                                <p style={budgetChartStyles.legendText}>Construct Connect</p>
+                            </div>
+                            <div style={budgetChartStyles.legend}>
+                                <div style={{ ...budgetChartStyles.legendColour, backgroundColor: "rgba(224, 216, 236, 1)" }}></div>
+                                <p style={budgetChartStyles.legendText}>Merx</p>
+                            </div>
+                            <div style={budgetChartStyles.legend}>
+                                <div style={{ ...budgetChartStyles.legendColour, backgroundColor: "rgba(179, 142, 238, 1)" }}></div>
+                                <p style={budgetChartStyles.legendText}>Biddingo</p>
+                            </div>
+                            <div style={budgetChartStyles.legend}>
+                                <div style={{ ...budgetChartStyles.legendColour, backgroundColor: "rgba(145, 134, 164, 0.81)" }}></div>
+                                <p style={budgetChartStyles.legendText}>Bids & Tenders</p>
+                            </div>
+                        </div>}
+                    </div>
                 </div>
+            </div>
+            <div className='d-flex flex-row justify-content-between'>
+                <div style={budgetChartStyles.largeContainer} className='col'>
+                    <div style={budgetChartStyles.largeContainerHeader}>
+                        <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "16px", marginRight: "16px" }}>
+                            <p style={budgetChartStyles.largeContainerHeading}>Project Category Budget Overview</p>
+                            <img src={pinnedActive} alt="Dashboard Icon" style={budgetChartStyles.pinnedIcon} />
+                        </div>
 
+                    </div>
+                    <div style={{ width: "100%" }}>
+                        <table className='table' style={budgetChartStyles.table}>
+                            <thead style={budgetChartStyles.th}>
+                                <tr className="" style={budgetChartStyles.largeContainerSubHeader}>
+                                    <th style={budgetChartStyles.tableHeaders} scope="col">Department</th>
+                                    {parseInt(year) >= 2 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear() - 2} Budget $</th> : <></>}
+                                    {parseInt(year) >= 1 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear() - 1} Budget $</th> : <></>}
+                                    {parseInt(year) >= 0 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear()} Budget $</th> : <></>}
+                                    <th style={budgetChartStyles.tableHeaders} scope="col">Average Increase/Decrease</th>
+                                </tr>
+                            </thead>
+
+                            {isLoading[2] ? <LoadingSpinner /> : <>
+                                <tbody style={budgetChartStyles.tableBody}>
+                                    {Object.keys(projectCategoryBudgetChartData).map(e => {
+                                        const y = new Date().getFullYear()
+                                        return (
+                                            <tr style={budgetChartStyles.tableRow} className='' key={e}>
+                                                <td style={budgetChartStyles.tableCell}>{e}</td>
+                                                {parseInt(year) >= 2 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 2])}</td> : <></>}
+                                                {parseInt(year) >= 1 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 1])}</td> : <></>}
+                                                <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y])}</td>
+                                                <td style={budgetChartStyles.tableCell} className='d-flex justify-content-center'>
+                                                    {projectCategoryBudgetChartData[e]['percent'] >= 0 ?
+                                                        <div style={budgetChartStyles.percentContainer1}>{projectCategoryBudgetChartData[e]['percent']} %</div>
+                                                        : <div style={budgetChartStyles.percentContainer2}>{-projectCategoryBudgetChartData[e]['percent']} %</div>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </>}
+
+                        </table>
+                    </div>
+                </div>
             </div>
         </>
     )
