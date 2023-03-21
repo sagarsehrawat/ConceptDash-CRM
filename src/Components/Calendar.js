@@ -304,6 +304,7 @@ const TestDemo = () => {
   let offset1 = `${sign}0${hours}:${minutes}`;
   const handleChange1 = (e) => {
     let newValue = e.target.value + ":00" + offset1;
+    console.log(newValue)
     setstart(newValue);
   };
   const handleChange2 = (e) => {

@@ -22,7 +22,9 @@ const Calendar = () => {
     const [red, setred] = useState(false);
     const [green, setgreen] = useState(false);
     const [view, setview] = useState('Day');
+    const [modalStyles, setmodalStyles] = useState({left: 0, top: 0});
     const [employees, setemployees] = useState([]);
+    const [date, setdate] = useState(moment());
     const [times, settimes] = useState(['12:00 AM', '12:15 AM', '12:30 AM', '12:45 AM', '01:00 AM', '01:15 AM', '01:30 AM', '01:45 AM', '02:00 AM', '02:15 AM', '02:30 AM', '02:45 AM', '03:00 AM', '03:15 AM', '03:30 AM', '03:45 AM', '04:00 AM', '04:15 AM', '04:30 AM', '04:45 AM', '05:00 AM', '05:15 AM', '05:30 AM', '05:45 AM', '06:00 AM', '06:15 AM', '06:30 AM', '06:45 AM', '07:00 AM', '07:15 AM', '07:30 AM', '07:45 AM', '08:00 AM', '08:15 AM', '08:30 AM', '08:45 AM', '09:00 AM', '09:15 AM', '09:30 AM', '09:45 AM', '10:00 AM', '10:15 AM', '10:30 AM', '10:45 AM', '11:00 AM', '11:15 AM', '11:30 AM', '11:45 AM', '12:00 PM', '12:15 PM', '12:30 PM', '12:45 PM', '01:00 PM', '01:15 PM', '01:30 PM', '01:45 PM', '02:00 PM', '02:15 PM', '02:30 PM', '02:45 PM', '03:00 PM', '03:15 PM', '03:30 PM', '03:45 PM', '04:00 PM', '04:15 PM', '04:30 PM', '04:45 PM', '05:00 PM', '05:15 PM', '05:30 PM', '05:45 PM', '06:00 PM', '06:15 PM', '06:30 PM', '06:45 PM', '07:00 PM', '07:15 PM', '07:30 PM', '07:45 PM', '08:00 PM', '08:15 PM', '08:30 PM', '08:45 PM', '09:00 PM', '09:15 PM', '09:30 PM', '09:45 PM', '10:00 PM', '10:15 PM', '10:30 PM', '10:45 PM', '11:00 PM', '11:15 PM', '11:30 PM', '11:45 PM'])
     const [form, setform] = useState({
         title: "",
@@ -32,11 +34,10 @@ const Calendar = () => {
         endTime: "",
         timeZone: "",
         description: "",
+        date: moment()
     })
     const scheduleRef = useRef(null);
     const calendarID = "primary";
-    const date = new Date();
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     //Add Event Modal
     const [show, setShow] = useState(false);
@@ -122,8 +123,8 @@ const Calendar = () => {
             position: "absolute",
             width: "587px",
             height: "fit-content",
-            left: "280px",
-            top: "134px",
+            left: modalStyles.left,
+            top: modalStyles.top,
             background: "#FFFFFF",
             boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
             borderRadius: "6px",
@@ -238,7 +239,8 @@ const Calendar = () => {
                     headers: { auth: "Rose " + localStorage.getItem("auth") },
                 })
                 .then((res) => {
-                    setemployees(res.data.res.map(e => { return { label: e.Full_Name, value: e.Email_Work } }));
+                    const arr = res.data.res.filter((e) => e.Employee_ID !== parseInt(localStorage.getItem("employeeId")))
+                    setemployees(arr.map(e => { return { label: e.Full_Name, value: e.Email_Work } }));
                 })
                 .catch((err) => {
                     console.log(err);
@@ -375,6 +377,88 @@ const Calendar = () => {
         }
     }
 
+    const makeid = (length) => {
+        var result = "";
+        var characters =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        var d = new Date();
+        var offset = d.getTimezoneOffset();
+        var hours = Math.floor(Math.abs(offset) / 60);
+        var minutes = Math.abs(offset) % 60;
+        if (minutes === 0) {
+            minutes = "00";
+        }
+        var sign = offset > 0 ? "-" : "+";
+        let offset1 = `${sign}0${hours}:${minutes}`;
+        const id = makeid(20)
+        console.log(moment(form.startTime).format('YYYY-MM-DD'))
+        gapi.load('client', () => {
+            gapi.client
+                .request({
+                    path: `https://www.googleapis.com/calendar/v3/calendars/${calendarID}/events?conferenceDataVersion=1`,
+                    method: "POST",
+                    body: {
+                        conferenceDataVersion: 1,
+                        summary: `${form.title}`,
+                        description: form.description,
+                        start: {
+                            dateTime: `${moment(form.date).format('YYYY-MM-DD')}T${moment(form.startTime, 'hh:mm A').format('HH:mm')}:00${offset1}`,
+                        },
+                        end: {
+                            dateTime: `${moment(form.date).format('YYYY-MM-DD')}T${moment(form.endTime, 'hh:mm A').format('HH:mm')}:00${offset1}`,
+                        },
+                        attendees: form.employees.map((email) => ({
+                            email: email.trim(),
+                        })),
+                        conferenceData: {
+                            createRequest: {
+                                conferenceSolutionKey: {
+                                    type: "hangoutsMeet",
+                                },
+                                requestId: id,
+                            },
+                        },
+                        reminders: {
+                            useDefault: true,
+                        },
+                    },
+                    headers: {
+                        "Content-type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                    },
+                })
+                .then(
+                    (response) => {
+                        setgreen(true)
+                        handleClose()
+                        scheduleRef.current.addEvent({
+                            Id: response.result.id,
+                            Subject: response.result.summary,
+                            StartTime: new Date(response.result.start.dateTime) || new Date(response.result.start.date),
+                            EndTime: new Date(response.result.end.dateTime) || new Date(response.result.end.date),
+                            meetingLink: response.result.hangoutLink,
+                            isAllDay: false,
+                        })
+                        return [true, response];
+                    },
+                    function (err) {
+                        setred(true)
+                        console.log(err);
+                        return [false, err];
+                    }
+                );
+        })
+    }
+
     const handleChange = (e) => {
         if (Array.isArray(e)) {
             setform(prev => {
@@ -393,6 +477,17 @@ const Calendar = () => {
         }
     }
 
+    const handleEventClick = (e) => {
+        const googleMeetLink = e.event.meetingLink;
+        window.open(googleMeetLink, "_blank");
+    };
+
+    const handleMouseDown = (e) => {
+        const left = Math.min(e.clientX, window.innerWidth - 667);
+        const top = Math.min(e.clientY, window.innerHeight - 460);
+        setmodalStyles({left: left, top: top})
+    }
+
     return (
         <>
             {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
@@ -404,14 +499,17 @@ const Calendar = () => {
                     <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "18px", lineHeight: "28px", color: "#0A0A0A", margin: "0px", marginRight: "28px", marginLeft: "20px" }}>Calendar</p>
                     <button style={styles.todayButton} onClick={(e) => {
                         document.querySelector(".e-schedule-toolbar-container > div > div > div.e-toolbar-right > div.e-today > button").click()
+                        setdate(moment())
                     }}>Today</button>
                     <FontAwesomeIcon icon={faChevronLeft} color={primaryColour} style={{ marginRight: "24px", cursor: "pointer" }} onClick={(e) => {
                         document.querySelector(".e-schedule-toolbar-container > div > div > div > div.e-prev > button").click()
+                        view==='Day' ? setdate(date.clone().subtract(1, 'day')) : setdate(date.clone().subtract(1, 'week'))
                     }} />
                     <FontAwesomeIcon icon={faChevronRight} color={primaryColour} style={{ marginRight: "12px", cursor: "pointer" }} onClick={(e) => {
                         document.querySelector(".e-schedule-toolbar-container > div > div > div > div.e-next > button").click()
+                        view==='Day' ? setdate(date.clone().add(1, 'day')) : setdate(date.clone().add(1, 'week'))
                     }} />
-                    <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", margin: "0px" }}>{moment().format('MMMM D, YYYY')}</p>
+                    <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", margin: "0px" }}>{view==='Day' ? date.format('MMMM D, YYYY') : date.clone().startOf('week').format('MMMM D') + "-" + date.clone().endOf('week').format('D, YYYY')}</p>
                 </div>
 
                 {/* Day Dropdown */}
@@ -419,10 +517,8 @@ const Calendar = () => {
                     style={styles.headerDropdown}
                     onChange={(e) => setview(e.target.value)}
                 >
-                    <option value="Day" style={{ fontFamily: "'Roboto'" }}>Day&nbsp;<FontAwesomeIcon icon={faChevronDown} /></option>
-                    <option value="Week" style={{ fontFamily: "'Roboto'" }}>Week&nbsp;<FontAwesomeIcon icon={faChevronDown} /></option>
-                    <option value="Month" style={{ fontFamily: "'Roboto'" }}>Month&nbsp;<FontAwesomeIcon icon={faChevronDown} /></option>
-                    <option value="Agenda" style={{ fontFamily: "'Roboto'" }}>Agenda&nbsp;<FontAwesomeIcon icon={faChevronDown} /></option>
+                    <option value="Day" style={{ fontFamily: "'Roboto'" }}>Day</option>
+                    <option value="Week" style={{ fontFamily: "'Roboto'" }}>Week</option>
                 </Form.Select>
             </div>
 
@@ -434,7 +530,7 @@ const Calendar = () => {
 
                 {/* Left Continaer */}
                 <div className='d-flex flex-column gap-5' style={styles.leftContianer}>
-                    <button style={styles.newEventButton} onClick={handleShow}>Create New Event</button>
+                    <button style={styles.newEventButton} onClick={e => {setmodalStyles({left: "800px", top: "300px"}); handleShow()}}>Create New Event</button>
                 </div>
 
                 {/* Right Container */}
@@ -472,18 +568,19 @@ const Calendar = () => {
                                     </tbody>
                                 </table> : <></>}
                             </div>
-                            <div style={{ width: "95%" }}>
+                            <div style={{ width: "95%" }} onMouseDown={handleMouseDown}>
                                 <ScheduleComponent
                                     ref={scheduleRef}
                                     cssClass="no-border"
+                                    eventClick={handleEventClick}
                                     allowEditing={false}
                                     allowDeleting={false}
                                     eventSettings={{ dataSource: events, template: appointmentTemplate }}
                                     agendaDaysCount={7}
                                     currentView={view}
+                                    selectedDate={date}
                                     onViewChange={(e) => { setview(e.currentView) }}
                                     cellClick={(e) => {
-                                        console.log(e)
                                         setform({
                                             title: "",
                                             project: "",
@@ -578,7 +675,7 @@ const Calendar = () => {
                             styles={styles.peopleSelector} />
                     </div>
                     <div className='d-flex justify-content-end' style={{ marginTop: "60px" }}>
-                        <button style={styles.saveButton}>Save</button>
+                        <button style={styles.saveButton} onClick={handleSubmit}>Save</button>
                     </div>
                 </div>
             </Modal>
