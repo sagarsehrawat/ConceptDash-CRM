@@ -80,7 +80,7 @@ const budgetChartStyles = {
     },
     largeContainer: {
         width: "100%",
-        height: "266px",
+        height: "320px",
         background: "#FFFFFF",
         border: "1px solid #EBE9F1",
         borderRadius: "12px",
@@ -100,7 +100,7 @@ const budgetChartStyles = {
     },
     largeContainerHeader: {
         width: "100%",
-        height: "48px",
+        height: "56px",
         background: "#FFFFFF",
         boxShadow: "0px -4px 25px rgba(0, 0, 0, 0.08)",
         borderRadius: "12px 12px 0px 0px",
@@ -112,8 +112,7 @@ const budgetChartStyles = {
         width: "100%",
         paddingLeft: "16px",
         paddingRight: "16px",
-        height: "224px",
-        overflowY: "scroll",
+        height: "320px",
         background: "#FFFFFF",
     },
     th: {
@@ -491,7 +490,7 @@ const BudgetCharts = (props) => {
                         <img src={pinnedActive} alt="Dashboard Icon" style={budgetChartStyles.pinnedIcon} />
                     </div>
                     <div style={budgetChartStyles.chartContainer}>
-                        {isLoading[0] ? <LoadingSpinner /> : <Bar options={budgetCategoryOptions} data={budgetCategoryChartData} />}
+                        {isLoading[0] ? <LoadingSpinner /> : <Bar options={budgetCategoryOptions} data={budgetCategoryChartData} height="100px"/>}
                     </div>
                 </div>
                 <div style={{...budgetChartStyles.container, marginRight: "0px"}} className='col'>
@@ -572,15 +571,15 @@ const BudgetCharts = (props) => {
                         </div>
 
                     </div>
-                    <div style={{ width: "100%" }}>
-                        <table className='table' style={budgetChartStyles.table}>
+                    <div style={{ width: "100%", height: "264px", overflowY: "scroll" }}>
+                        <table className='' style={budgetChartStyles.table}>
                             <thead style={budgetChartStyles.th}>
                                 <tr className="" style={budgetChartStyles.largeContainerSubHeader}>
-                                    <th style={budgetChartStyles.tableHeaders} scope="col">Department</th>
-                                    {parseInt(year) >= 2 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear() - 2} Budget $</th> : <></>}
-                                    {parseInt(year) >= 1 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear() - 1} Budget $</th> : <></>}
-                                    {parseInt(year) >= 0 ? <th style={budgetChartStyles.tableHeaders} scope="col">{new Date().getFullYear()} Budget $</th> : <></>}
-                                    <th style={budgetChartStyles.tableHeaders} scope="col">Average Increase/Decrease</th>
+                                    <th style={budgetChartStyles.tableHeaders} scope="col" className='fixed-header'>Department</th>
+                                    {parseInt(year) >= 2 ? <th style={budgetChartStyles.tableHeaders} scope="col" className='fixed-header'>{new Date().getFullYear() - 2} Budget $</th> : <></>}
+                                    {parseInt(year) >= 1 ? <th style={budgetChartStyles.tableHeaders} scope="col" className='fixed-header'>{new Date().getFullYear() - 1} Budget $</th> : <></>}
+                                    {parseInt(year) >= 0 ? <th style={budgetChartStyles.tableHeaders} scope="col" className='fixed-header'>{new Date().getFullYear()} Budget $</th> : <></>}
+                                    <th style={budgetChartStyles.tableHeaders} scope="col" className='fixed-header'>Average Increase/Decrease</th>
                                 </tr>
                             </thead>
 

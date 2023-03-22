@@ -534,7 +534,7 @@ const Calendar = () => {
                 </div>
 
                 {/* Right Container */}
-                {false
+                {isLoading
                     ? <div style={{ height: "100%", width: "100%" }}><LoadingSpinner /></div>
                     : <>
                         <div style={styles.calendarContainer} className='d-flex flex-row'>

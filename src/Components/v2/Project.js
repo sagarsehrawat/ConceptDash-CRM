@@ -1,31 +1,27 @@
-import { faArrowDown, faArrowsUpDown, faArrowUp, faCheck, faChevronDown, faChevronLeft, faChevronRight, faEdit, faFilter, faMagnifyingGlass, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faArrowUp, faChevronDown, faChevronRight, faMagnifyingGlass, faPlug, faPlus, faSort, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { RadioButtonComponent } from '@syncfusion/ej2-react-buttons'
-import axios from 'axios'
-import moment from 'moment'
-import React, { useState, useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import AuthenticationContext from '../../Context/AuthContext'
-import { DELETE_PROPOSAL, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGES_PROPOSALS, GET_PAGE_PROPOSALS, GET_PROJECT_CATEGORIES, GET_PROPOSAL_COUNT, HOST, UPDATE_STATUS_PROPOSAL } from '../Constants/Constants'
 import GreenAlert from '../Loader/GreenAlert'
 import LoadingSpinner from '../Loader/Loader'
 import RedAlert from '../Loader/RedAlert'
-import TableScrollbar from 'react-table-scrollbar';
-import ProposalForm from '../Form/ProposalForm'
-import UpdateProposal from '../Form/UpdateProposal'
 import filterIcon from '../../Images/Filter.svg'
+import axios from 'axios'
+import { DELETE_PROJECT, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_PROJECTS, GET_PROJECT_CATEGORIES, HOST } from '../Constants/Constants'
+import moment from 'moment'
 
-const Proposal = (props) => {
+const Project = (props) => {
     const { isCollapsed } = props
     const { privileges, setPrivileges } = useContext(AuthenticationContext)
     const [apiCall, setCall] = useState(0);
     const [green, setgreen] = useState(false);
     const [red, setred] = useState(false);
 
-    const [proposals, setproposals] = useState([])
-    const [proposalDetails, setproposalDetails] = useState([])
-    const [selectedProposals, setselectedProposals] = useState([])
-    const [proposalCount, setproposalCount] = useState({ Total: 0, Month: 0, Percent: 0, Won: 0, Lost: 0 })
+    const [projects, setprojects] = useState([])
+    const [projectDetails, setprojectDetails] = useState([])
+    const [selectedProjects, setselectedProjects] = useState([])
+    const [projectCount, setprojectCount] = useState({ Total: 0, Month: 0, Percent: 0, Ongoing: 0, Completed: 0 })
     const [cities, setcities] = useState([]);
     const [depts, setdepts] = useState([]);
     const [projectCats, setprojectCats] = useState([]);
@@ -574,25 +570,25 @@ const Proposal = (props) => {
     useEffect(() => {
         setIsLoading2([true, true, true, true, true, false])
         const call = async () => {
-            await axios
-                .get(HOST + GET_PROPOSAL_COUNT, {
-                    headers: {
-                        auth: "Rose " + localStorage.getItem("auth"),
-                    },
-                })
-                .then((res) => {
-                    let obj = proposalCount
-                    obj.Total = res.data.res[0].Total
-                    obj.Month = res.data.res[0].Month
-                    obj.Percent = res.data.res[0].Percent ?? 0
-                    obj.Won = res.data.res[0].Won
-                    obj.Lost = res.data.res[0].Lost
-                    setproposalCount(obj)
-                    setIsLoading2(prev => [false, ...prev.slice(1, 6)])
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            // await axios
+            //     .get(HOST + GET_PROPOSAL_COUNT, {
+            //         headers: {
+            //             auth: "Rose " + localStorage.getItem("auth"),
+            //         },
+            //     })
+            //     .then((res) => {
+            //         let obj = proposalCount
+            //         obj.Total = res.data.res[0].Total
+            //         obj.Month = res.data.res[0].Month
+            //         obj.Percent = res.data.res[0].Percent ?? 0
+            //         obj.Won = res.data.res[0].Won
+            //         obj.Lost = res.data.res[0].Lost
+            //         setproposalCount(obj)
+            //         setIsLoading2(prev => [false, ...prev.slice(1, 6)])
+            //     })
+            //     .catch((err) => {
+            //         console.log(err);
+            //     });
 
             await axios
                 .get(HOST + GET_CITIES, {
@@ -650,7 +646,7 @@ const Proposal = (props) => {
         setcurrPage(1)
         const call = async () => {
             await axios
-                .get(HOST + GET_PAGE_PROPOSALS, {
+                .get(HOST + GET_PAGE_PROJECTS, {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
                         limit: limit,
@@ -661,7 +657,7 @@ const Proposal = (props) => {
                     },
                 })
                 .then((res) => {
-                    setproposals(res.data.res);
+                    setprojects(res.data.res);
                     setpages(res.data.totalPages)
                     setIsLoading(false);
                 })
@@ -676,7 +672,7 @@ const Proposal = (props) => {
         setIsLoading(true);
         setcurrPage(page);
         await axios
-            .get(HOST + GET_PAGE_PROPOSALS, {
+            .get(HOST + GET_PAGE_PROJECTS, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
                     limit: limit,
@@ -687,7 +683,7 @@ const Proposal = (props) => {
                 },
             })
             .then((res) => {
-                setproposals(res.data.res);
+                setprojects(res.data.res);
                 setpages(res.data.totalPages)
                 setIsLoading(false);
             })
@@ -710,21 +706,21 @@ const Proposal = (props) => {
         }
     }
 
-    const handleDeleteProposal = async (e) => {
+    const handleDeleteProject = async (e) => {
         setIsLoading(true)
         e.preventDefault();
         await axios
             .post(
-                HOST + DELETE_PROPOSAL,
+                HOST + DELETE_PROJECT,
                 {
-                    ids: JSON.stringify(selectedProposals),
+                    ids: JSON.stringify(selectedProjects),
                 },
                 { headers: { auth: "Rose " + localStorage.getItem("auth") } }
             )
             .then((res) => {
                 if (res.data.success) {
                     handleCloseDelete();
-                    setselectedProposals([])
+                    setselectedProjects([])
                     setgreen(true)
                     setCall(apiCall + 1);
                 } else {
@@ -739,56 +735,10 @@ const Proposal = (props) => {
 
     const [rowData, setrowData] = useState([]);
     const handleUpdate = (e) => {
-        const foundObject = proposals.find(obj => obj.Proposal_ID === selectedProposals[0]);
+        const foundObject = projects.find(obj => obj.Proposal_ID === selectedProjects[0]);
         setrowData(foundObject);
         handleShowUpdate();
     };
-
-    const handleStatusUpdate = async (e) => {
-        e.preventDefault();
-
-        await axios
-            .post(
-                HOST + UPDATE_STATUS_PROPOSAL,
-                {
-                    ids: JSON.stringify(selectedProposals),
-                    status: status
-                },
-                { headers: { auth: "Rose " + localStorage.getItem("auth") } }
-            )
-            .then((res) => {
-                if (res.data.success) {
-                    for (let i = 0; i < proposals.length; i++) {
-                        if (selectedProposals.includes(proposals[i].Proposal_ID)) {
-                            const st1 = proposals[i].Status
-                            proposals[i].Status = (status === '' ? null : status)
-                            if (st1 !== proposals[i].Status) {
-                                if (st1 === null) {
-                                    if (proposals[i].Status !== null) proposalCount[proposals[i].Status]++;
-                                } else {
-                                    proposalCount[st1]--;
-                                    if (proposals[i].Status !== null) proposalCount[proposals[i].Status]++;
-                                }
-                            }
-                        }
-                    }
-                    closeStatusModal()
-                    setselectedProposals([])
-                    setgreen(true)
-                } else {
-                    setred(true)
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-
-    const formatDate = (date) => {
-        if (date === "" || date === null || date === undefined) return "";
-        const formattedDate = moment(date)
-        return formattedDate.format('D MMM, YYYY')
-    }
 
     const filterSize = () => {
         return filter.city.length + filter.cat.length + filter.dept.length + filter.manager.length;
@@ -807,6 +757,11 @@ const Proposal = (props) => {
         };
     }, []);
 
+    const formatDate = (date) => {
+        if (date === "" || date === null || date === undefined) return "";
+        const formattedDate = moment(date)
+        return formattedDate.format('D MMM, YYYY')
+    }
 
     const handleTableScroll = () => {
         setscrolled(tableRef.current.scrollLeft)
@@ -861,57 +816,44 @@ const Proposal = (props) => {
             {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
             {red === true ? <RedAlert setRed={setred} /> : <></>}
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
-                <p style={styles.heading}>Proposals</p>
-                <button style={styles.addButton} onClick={handleShow}><p style={styles.addButtonText} >+ Add New proposal</p></button>
+                <p style={styles.heading}>Projects</p>
+                <button style={styles.addButton} onClick={handleShow}><p style={styles.addButtonText} >+ Add New Project</p></button>
             </div>
 
             {/* Header Cards */}
             <div className='d-flex flex-row' style={{ marginLeft: "32px", marginBottom: "20px" }}>
                 <div style={styles.topContainer}>
-                    <p style={styles.topContainerHeading}>New Proposals</p>
+                    <p style={styles.topContainerHeading}>New Projects</p>
                     <div className=''>
-                        <p style={styles.topContainerSubheading}>{proposalCount.Month}</p>
-                        {proposalCount.Percent >= 0
+                        <p style={styles.topContainerSubheading}>{projectCount.Month}</p>
+                        {projectCount.Percent >= 0
                             ? <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
                                 <FontAwesomeIcon icon={faArrowUp} color="#34A853" />
-                                <p style={styles.percent}>{proposalCount.Percent}% increase</p>
+                                <p style={styles.percent}>{projectCount.Percent}% increase</p>
                             </div>
                             : <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
                                 <FontAwesomeIcon icon={faArrowDown} color="#FE3766" />
-                                <p style={{ ...styles.percent, color: "#FE3766" }}>{proposalCount.Percent}% decrease</p>
+                                <p style={{ ...styles.percent, color: "#FE3766" }}>{projectCount.Percent}% decrease</p>
                             </div>
                         }
                     </div>
                 </div>
                 <div style={styles.topContainer}>
-                    <p style={styles.topContainerHeading}>Total Proposals</p>
-                    <p style={styles.topContainerSubheading}>{proposalCount.Total}</p>
+                    <p style={styles.topContainerHeading}>Ongoing Projects</p>
+                    <p style={styles.topContainerSubheading}>{projectCount.Ongoing}</p>
                 </div>
-                <div style={{ ...styles.topContainer, width: "335px", padding: "12px 8px" }} className='d-flex flex-row'>
-                    <div className='d-flex flex-row justify-content-center align-items-center' style={{ gap: "12px" }}>
-                        <div style={{ width: "28px", height: "28px", background: "#E4FEF1", borderRadius: "4px" }} className='d-flex justify-content-center align-items-center'>
-                            <FontAwesomeIcon icon={faCheck} color="#559776" />
-                        </div>
-                        <div className='d-flex flex-column'>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", marginBottom: "4px" }}>Proposals Won</p>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "18px", lineHeight: "28px", color: "#0A0A0A", marginBottom: "0px" }}>{proposalCount.Won}</p>
-                        </div>
-                    </div>
-                    <div style={{ width: "0px", height: "48px", border: "1px solid #EBE9F1", marginLeft: "20px", marginRight: "20px" }}></div>
-                    <div className='d-flex flex-row justify-content-center align-items-center' style={{ gap: "12px" }}>
-                        <div style={{ width: "28px", height: "28px", background: "#FFF1F1", borderRadius: "4px" }} className='d-flex justify-content-center align-items-center'>
-                            <FontAwesomeIcon icon={faX} color="#D93838" />
-                        </div>
-                        <div className='d-flex flex-column'>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", marginBottom: "4px" }}>Proposals Lost</p>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "18px", lineHeight: "28px", color: "#0A0A0A", marginBottom: "0px" }}>{proposalCount.Lost}</p>
-                        </div>
-                    </div>
+                <div style={styles.topContainer}>
+                    <p style={styles.topContainerHeading}>COmpleted Projects</p>
+                    <p style={styles.topContainerSubheading}>{projectCount.Completed}</p>
+                </div>
+                <div style={styles.topContainer}>
+                    <p style={styles.topContainerHeading}>Total Projects</p>
+                    <p style={styles.topContainerSubheading}>{projectCount.Total}</p>
                 </div>
             </div>
             <div style={styles.headerLine}></div>
-            <p style={styles.heading2}>Proposals</p>
-            
+            <p style={styles.heading2}>Projects</p>
+
             {/* Filters and Other Dropdowns */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
                 <input
@@ -1012,48 +954,6 @@ const Proposal = (props) => {
                             </div>
                         </div>}
                 </Modal>
-                <button style={{ ...styles.filterButton, width: "136px", display: selectedProposals.length > 0 ? "flex" : "none", visibility: selectedProposals.length > 0 ? "visible" : "hidden" }} onClick={openStatusModal}><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Update Status</p><FontAwesomeIcon icon={faChevronDown} color="#70757A" /></button>
-                <Modal
-                    show={statusModal}
-                    onHide={closeStatusModal}
-                    style={styles.statusModal}
-                    dialogClassName="filter-dialog"
-                    backdropClassName="filter-backdrop"
-                    animation={false}
-                >
-                    <div style={{ width: "296px", height: "fit-content", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px" }}>
-                        <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Sort By</p>
-                            <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeStatusModal} />
-                        </div>
-                        <div className='d-flex flex-column' style={{ marginLeft: "20px", gap: "8px" }}>
-                            <RadioButtonComponent
-                                label="Lost"
-                                cssClass="sort-radio"
-                                checked={status === 'Lost'}
-                                name="Status"
-                                value={`Lost`}
-                                onChange={(e) => setstatus(e.target.value)} />
-                            <RadioButtonComponent
-                                label="Pending"
-                                checked={status === ""}
-                                cssClass="sort-radio"
-                                name="Status"
-                                value={``}
-                                onChange={(e) => setstatus(e.target.value)} />
-                            <RadioButtonComponent
-                                label="Won"
-                                checked={status === "Won"}
-                                cssClass="sort-radio"
-                                name="Status"
-                                value={`Won`}
-                                onChange={(e) => setstatus(e.target.value)} />
-                        </div>
-                        <div className='d-flex justify-content-end' style={{ marginRight: "20px", marginTop: "10px", marginBottom: "20px" }}>
-                            <Button style={{ ...styles.filterButton3, width: "unset" }} onClick={handleStatusUpdate}>Update</Button>
-                        </div>
-                    </div>
-                </Modal>
             </div>
 
             {/* Table */}
@@ -1063,7 +963,7 @@ const Proposal = (props) => {
                         <tr>
                             <th scope="col" style={{ ...styles.tableHeading, width: "260px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(0)}>
-                                    Proposal Name&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                    Project Name&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
                                     show={sortModal === 0}
@@ -1183,7 +1083,7 @@ const Proposal = (props) => {
                             </th>
                             <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(5)}>
-                                    Closing Deadline&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                    Team&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
                                     show={sortModal === 5}
@@ -1262,36 +1162,36 @@ const Proposal = (props) => {
                                     <LoadingSpinner />
                                 </td>
                             </tr>
-                            : proposals && proposals.map(e => (
+                            : projects && projects.map(e => (
                                 <>
-                                    <tr style={{ ...styles.tableRow, backgroundColor: selectedProposals.includes(e.Proposal_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.Proposal_ID}>
-                                        <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedProposals.includes(e.Proposal_ID) ? "#F5F3FE" : "white", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
+                                    <tr style={{ ...styles.tableRow, backgroundColor: selectedProjects.includes(e.Proposal_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.Proposal_ID}>
+                                        <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedProjects.includes(e.Proposal_ID) ? "#F5F3FE" : "white", borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
                                             <div className='d-flex flex-row align-items-center' style={{ gap: "12px" }}>
-                                                {proposalDetails.includes(e.Proposal_ID) ? <FontAwesomeIcon icon={faChevronDown} onClick={(eve) => setproposalDetails(prev => prev.filter(ele => ele !== e.Proposal_ID))} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faChevronRight} onClick={(eve) => setproposalDetails(prev => [...prev, e.Proposal_ID])} style={{ cursor: "pointer" }} />}
+                                                {projectDetails.includes(e.Proposal_ID) ? <FontAwesomeIcon icon={faChevronDown} onClick={(eve) => setprojectDetails(prev => prev.filter(ele => ele !== e.Proposal_ID))} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faChevronRight} onClick={(eve) => setprojectDetails(prev => [...prev, e.Proposal_ID])} style={{ cursor: "pointer" }} />}
                                                 <Form.Check
                                                     inline
                                                     type="checkbox"
-                                                    checked={selectedProposals.includes(e.Proposal_ID)}
+                                                    checked={selectedProjects.includes(e.Proposal_ID)}
                                                     readOnly={true}
-                                                    onClick={(eve) => { if (eve.target.checked) { setselectedProposals(prev => [...prev, e.Proposal_ID]) } else { setselectedProposals(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
+                                                    onClick={(eve) => { if (eve.target.checked) { setselectedProjects(prev => [...prev, e.Proposal_ID]) } else { setselectedProjects(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
                                                 /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
                                             </div>
                                         </td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.City}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Department}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.City}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Department}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
                                             {formatDate(e.Closing_Deadline) === ""
                                                 ? <></>
                                                 : <div style={styles.dateContainer}>
                                                     <p style={styles.date}>{formatDate(e.Closing_Deadline)}</p>
                                                 </div>}
                                         </td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Bidder_Price)}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Winning_Price)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Bidder_Price)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Winning_Price)}</td>
                                     </tr>
-                                    <tr id={e.Proposal_ID} style={{ ...styles.tableRow, display: proposalDetails.includes(e.Proposal_ID) ? "table-row" : "none", visibility: proposalDetails.includes(e.Proposal_ID) ? "visible" : "hidden" }}>
+                                    <tr id={e.Proposal_ID} style={{ ...styles.tableRow, display: projectDetails.includes(e.Proposal_ID) ? "table-row" : "none", visibility: projectDetails.includes(e.Proposal_ID) ? "visible" : "hidden" }}>
                                         <td colSpan={8} style={{ borderBottom: "1px solid #EBE9F1" }}>
                                             <div className='d-flex flex-row justify-content-between align-items-start' style={{ marginLeft: "64px", marginRight: "32px", marginBottom: "12px", width: isCollapsed ? "88.333vw" : "77.222vw", padding: "12px 24px", gap: "62px", height: "95px", background: "#F7F7F9", borderRadius: "12px", marginTop: "12px" }}>
                                                 <div className='d-flex flex-column '>
@@ -1322,123 +1222,8 @@ const Proposal = (props) => {
                     </tbody>
                 </table>
             </div>
-
-            {/* Page Buttons */}
-            <div className='d-flex flex-row justify-content-end' style={{ marginTop: "20px", marginRight: "24px", marginBottom: "20px" }}>
-                <Button style={styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(currPage - 1)}><FontAwesomeIcon icon={faChevronLeft} color="#70757A" /></Button>
-                <Button style={currPage === 1 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(1)}><p style={currPage === 1 ? styles.curPage : styles.page}>1</p></Button>
-                {pages >= 2 ? <Button style={currPage === 2 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 2} onClick={(e) => handlePage(2)}><p style={currPage === 2 ? styles.curPage : styles.page}>2</p></Button> : <></>}
-                {pages >= 3 ? <Button style={currPage === 3 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 3} onClick={(e) => handlePage(3)}><p style={currPage === 3 ? styles.curPage : styles.page}>3</p></Button> : <></>}
-                {pages >= 4 ? <Button style={currPage === 4 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 4} onClick={(e) => handlePage(4)}><p style={currPage === 4 ? styles.curPage : styles.page}>4</p></Button> : <></>}
-                {pages >= 5 ? <Button style={currPage === 5 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 5} onClick={(e) => handlePage(5)}><p style={currPage === 5 ? styles.curPage : styles.page}>5</p></Button> : <></>}
-                {pages >= 7 ? <p style={{ marginLeft: "8px" }}>.....</p> : <></>}
-                {pages >= 6 ? <Button style={currPage === pages ? styles.curPageContainer : styles.pageContainer}><p style={currPage === pages ? styles.curPage : styles.page}>{pages}</p></Button> : <></>}
-                <Button style={styles.pageContainer} disabled={currPage === pages} onClick={(e) => handlePage(currPage + 1)}><FontAwesomeIcon icon={faChevronRight} color="#70757A" /></Button>
-            </div>
-
-            {/* Floating COntainer */}
-            <div style={{ ...styles.floatingContainer, display: selectedProposals.length === 0 ? "none" : "", visibility: selectedProposals.length === 0 ? "hidden" : "visible" }}>
-                <p style={styles.floatinContainerText}>{selectedProposals.length}</p>
-                <p style={styles.floatingContainerText2}>Items Selected</p>
-                <div style={{ ...styles.floatingContainerLine, marginLeft: "-23px" }}></div>
-                {privileges.includes("Delete RFP") ? <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }} onClick={(e) => handleShowDelete()}>
-                    <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
-                    <p style={styles.floatingContainerIconText}>Delete</p>
-                </div> : <></>}
-                {privileges.includes('Update RFP') ? <Button style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }} disabled={selectedProposals.length !== 1} onClick={handleUpdate}>
-                    <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
-                    <p style={styles.floatingContainerIconText}>Edit</p>
-                </Button> : <></>}
-                <div style={{ ...styles.floatingContainerLine, marginLeft: "10px" }}></div>
-                <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
-                    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color="#6519E1" onClick={(e) => setselectedProposals([])} />
-                </div>
-            </div>
-
-            {/* Modals */}
-            {/* Add Form Modal */}
-            <Modal
-                show={show}
-                onHide={handleClose}
-                backdrop="static"
-                centered
-                size="xl"
-                keyboard={false}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Add Proposal</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {
-                        <ProposalForm
-                            setRed={setred}
-                            setGreen={setgreen}
-                            closeModal={handleClose}
-                            api={apiCall}
-                            apiCall={setCall}
-                        />
-                    }
-                </Modal.Body>
-            </Modal>
-
-            {/* Update Modal */}
-            <Modal
-                show={showUpdate}
-                onHide={handleCloseUpdate}
-                backdrop="static"
-                centered
-                size="xl"
-                keyboard={false}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Update Proposal</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {
-                        <UpdateProposal
-                            row={rowData}
-                            setRed={setred}
-                            setGreen={setgreen}
-                            closeModal={handleCloseUpdate}
-                            api={apiCall}
-                            apiCall={setCall}
-                        />
-                    }
-                </Modal.Body>
-            </Modal>
-
-            {/* Delete Modal */}
-            <Modal
-                show={showDelete}
-                onHide={handleCloseDelete}
-                backdrop="static"
-                size="sm"
-                keyboard={false}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Confirm Deletion</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p style={{ textAlign: "center" }}>
-                        <b>Delete the selected RFP!!</b>
-                    </p>
-                    <div className="d-flex flex-row justify-content-between">
-
-                        <div style={{ display: "inline-block" }}>
-                            <Button variant="danger" onClick={handleCloseDelete}>
-                                Cancel
-                            </Button>
-                        </div>
-                        <div style={{ display: "inline-block", float: "right" }}>
-                            <Button variant="success" onClick={handleDeleteProposal}>
-                                Proceed
-                            </Button>
-                        </div>
-                    </div>
-                </Modal.Body>
-            </Modal>
         </>
     )
 }
 
-export default Proposal
+export default Project

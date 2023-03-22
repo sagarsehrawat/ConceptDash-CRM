@@ -1184,7 +1184,7 @@ const RFP = (props) => {
             </div>
 
             {/* Buttons */}
-            <div className='d-flex flex-row justify-content-end' style={{ marginTop: "20px", marginRight: "24px" }}>
+            <div className='d-flex flex-row justify-content-end' style={{ marginTop: "20px", marginRight: "24px", marginBottom: "20px" }}>
                 <Button style={styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(currPage - 1)}><FontAwesomeIcon icon={faChevronLeft} color="#70757A" /></Button>
                 <Button style={currPage === 1 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(1)}><p style={currPage === 1 ? styles.curPage : styles.page}>1</p></Button>
                 {pages >= 2 ? <Button style={currPage === 2 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 2} onClick={(e) => handlePage(2)}><p style={currPage === 2 ? styles.curPage : styles.page}>2</p></Button> : <></>}
