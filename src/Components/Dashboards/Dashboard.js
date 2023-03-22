@@ -312,7 +312,7 @@ const Dashboard = () => {
     if (nav === 3) return <BudgetCities />;
     if (nav === 4) return <RFP isCollapsed={isCollapsed}/>
     if (nav === 5) return <Proposal isCollapsed={isCollapsed} />
-    if (nav === 6) return <ProjectUpdate setnav={setnav} setproject={setproject} />
+    if (nav === 6) return <Project isCollapsed={isCollapsed} />
     if (nav === 7) return <Employee isCollapsed={isCollapsed}/>;
     if (nav === 8) return <TestDemo />;
     if (nav === 9) return <ExpenseUpdate />;

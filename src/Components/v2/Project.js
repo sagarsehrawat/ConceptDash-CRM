@@ -1,4 +1,4 @@
-import { faArrowDown, faArrowUp, faChevronDown, faChevronRight, faMagnifyingGlass, faPlug, faPlus, faSort, faX } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faEdit, faMagnifyingGlass, faPlug, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
@@ -10,6 +10,8 @@ import filterIcon from '../../Images/Filter.svg'
 import axios from 'axios'
 import { DELETE_PROJECT, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_PROJECTS, GET_PROJECT_CATEGORIES, HOST } from '../Constants/Constants'
 import moment from 'moment'
+import AddProject from '../Form/AddProject'
+import UpdateProjectForm from '../Form/UpdateProjectForm'
 
 const Project = (props) => {
     const { isCollapsed } = props
@@ -33,7 +35,7 @@ const Project = (props) => {
     let limit = 50;
     const [pages, setpages] = useState(1);
     const [currPage, setcurrPage] = useState(1);
-    const [sort, setsort] = useState("Proposal_ID DESC");
+    const [sort, setsort] = useState("Project_Id DESC");
     const [value, setValue] = useState("");
     const [searchCity, setsearchCity] = useState("");
     const [filter, setfilter] = useState({ dept: [], cat: [], city: [], manager: [] });
@@ -409,7 +411,7 @@ const Project = (props) => {
             color: "#FE3766"
         },
         statusContainer: {
-            width: "75px",
+            width: "90px",
             height: "24px",
             background: "#FFF4EF",
             borderRadius: "24px"
@@ -657,6 +659,7 @@ const Project = (props) => {
                     },
                 })
                 .then((res) => {
+                    console.log(res.data.res)
                     setprojects(res.data.res);
                     setpages(res.data.totalPages)
                     setIsLoading(false);
@@ -735,7 +738,7 @@ const Project = (props) => {
 
     const [rowData, setrowData] = useState([]);
     const handleUpdate = (e) => {
-        const foundObject = projects.find(obj => obj.Proposal_ID === selectedProjects[0]);
+        const foundObject = projects.find(obj => obj.Project_Id === selectedProjects[0]);
         setrowData(foundObject);
         handleShowUpdate();
     };
@@ -790,22 +793,22 @@ const Project = (props) => {
     }
 
     const statusComponent = (status) => {
-        if (status === null) {
+        if (status === null || status === "Not Started Yet") {
             return (
-                <div style={{ ...styles.statusContainer, border: "1px solid #FD9568" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#FD9568" }}>Pending</p>
+                <div style={{ ...styles.statusContainer, background: "#FFF4EF", border: "0.4px solid #FD9568" }} className='d-flex justify-content-center'>
+                    <p style={{ ...styles.status, color: "#FD9568" }}>Not Started</p>
                 </div>
             )
-        } else if (status === "Lost") {
+        } else if (status === "Ongoing") {
             return (
-                <div style={{ ...styles.statusContainer, border: "1px solid #FE3766" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#FE3766" }}>Lost</p>
+                <div style={{ ...styles.statusContainer, background: "#E4FEF1", border: "0.4px solid #559776", }} className='d-flex justify-content-center'>
+                    <p style={{ ...styles.status, color: "#559776" }}>Ongoing</p>
                 </div>
             )
-        } else if (status === "Won") {
+        } else if (status === "Completed") {
             return (
-                <div style={{ ...styles.statusContainer, border: "1px solid #34A853" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#34A853" }}>Won</p>
+                <div style={{ ...styles.statusContainer, background: "#E4EEFE", border: "0.4px solid #5079E1" }} className='d-flex justify-content-center'>
+                    <p style={{ ...styles.status, color: "#5079E1" }}>Completed</p>
                 </div>
             )
         }
@@ -1009,7 +1012,7 @@ const Project = (props) => {
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "100px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(2)}>
                                     Status&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
@@ -1033,7 +1036,7 @@ const Project = (props) => {
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "140px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "130px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(3)}>
                                     Department&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
@@ -1081,33 +1084,14 @@ const Project = (props) => {
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
-                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(5)}>
-                                    Team&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                            {isCollapsed ? <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline"}} className=''>
+                                    Team
                                 </div>
-                                <Modal
-                                    show={sortModal === 5}
-                                    onHide={handleCloseSort}
-                                    style={{ ...styles.sortModal, left: sortModalLeft(5) }}
-                                    dialogClassName="filter-dialog"
-                                    backdropClassName="filter-backdrop"
-                                    animation={false}
-                                >
-                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Closing_Deadline"); setCall(apiCall + 1); handleCloseSort() }}>
-                                            <FontAwesomeIcon icon={faArrowUp} />
-                                            <p style={styles.sortText}>Sort Ascending</p>
-                                        </div>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Closing_Deadline DESC"); setCall(apiCall + 1); handleCloseSort() }}>
-                                            <FontAwesomeIcon icon={faArrowDown} />
-                                            <p style={styles.sortText}>Sort Descending</p>
-                                        </div>
-                                    </div>
-                                </Modal>
-                            </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>
+                            </th> : <></>}
+                            <th scope="col" style={{ ...styles.tableHeading, width: "140px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(6)}>
-                                    Bid Price&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                    Due Date&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
                                     show={sortModal === 6}
@@ -1118,20 +1102,20 @@ const Project = (props) => {
                                     animation={false}
                                 >
                                     <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Bidder_Price"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Due_Date"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowUp} />
                                             <p style={styles.sortText}>Sort Ascending</p>
                                         </div>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Bidder_price DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Due_Date DESC"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowDown} />
                                             <p style={styles.sortText}>Sort Descending</p>
                                         </div>
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "180px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(7)}>
-                                    Winning Bid Price&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                    Next Follow Up&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
                                     show={sortModal === 7}
@@ -1142,11 +1126,35 @@ const Project = (props) => {
                                     animation={false}
                                 >
                                     <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Winning_Price"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Next_Follow_Up"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowUp} />
                                             <p style={styles.sortText}>Sort Ascending</p>
                                         </div>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Winning_Price DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Next_Follow_Up DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(8)}>
+                                    Project Value&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 8}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(7) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Value"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Value DESC"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowDown} />
                                             <p style={styles.sortText}>Sort Descending</p>
                                         </div>
@@ -1164,55 +1172,52 @@ const Project = (props) => {
                             </tr>
                             : projects && projects.map(e => (
                                 <>
-                                    <tr style={{ ...styles.tableRow, backgroundColor: selectedProjects.includes(e.Proposal_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.Proposal_ID}>
-                                        <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedProjects.includes(e.Proposal_ID) ? "#F5F3FE" : "white", borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
+                                    <tr style={{ ...styles.tableRow, backgroundColor: selectedProjects.includes(e.Project_Id) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.Project_Id}>
+                                        <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedProjects.includes(e.Project_Id) ? "#F5F3FE" : "white", borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>
                                             <div className='d-flex flex-row align-items-center' style={{ gap: "12px" }}>
-                                                {projectDetails.includes(e.Proposal_ID) ? <FontAwesomeIcon icon={faChevronDown} onClick={(eve) => setprojectDetails(prev => prev.filter(ele => ele !== e.Proposal_ID))} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faChevronRight} onClick={(eve) => setprojectDetails(prev => [...prev, e.Proposal_ID])} style={{ cursor: "pointer" }} />}
+                                                {projectDetails.includes(e.Project_Id) ? <FontAwesomeIcon icon={faChevronDown} onClick={(eve) => setprojectDetails(prev => prev.filter(ele => ele !== e.Project_Id))} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faChevronRight} onClick={(eve) => setprojectDetails(prev => [...prev, e.Project_Id])} style={{ cursor: "pointer" }} />}
                                                 <Form.Check
                                                     inline
                                                     type="checkbox"
-                                                    checked={selectedProjects.includes(e.Proposal_ID)}
+                                                    checked={selectedProjects.includes(e.Project_Id)}
                                                     readOnly={true}
-                                                    onClick={(eve) => { if (eve.target.checked) { setselectedProjects(prev => [...prev, e.Proposal_ID]) } else { setselectedProjects(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
+                                                    onClick={(eve) => { if (eve.target.checked) { setselectedProjects(prev => [...prev, e.Project_Id]) } else { setselectedProjects(prev => prev.filter(ele => ele !== e.Project_Id)) } }}
                                                 /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
                                             </div>
                                         </td>
-                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.City}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Department}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
-                                            {formatDate(e.Closing_Deadline) === ""
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.City}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.dept}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
+                                        {isCollapsed ? <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.Team_Members}</td> : <></>}
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>
+                                            {formatDate(e.Project_Due_Date) === ""
                                                 ? <></>
                                                 : <div style={styles.dateContainer}>
-                                                    <p style={styles.date}>{formatDate(e.Closing_Deadline)}</p>
+                                                    <p style={styles.date}>{formatDate(e.Project_Due_Date)}</p>
                                                 </div>}
                                         </td>
-                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Bidder_Price)}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Winning_Price)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{formatDate(e.Next_Follow_Up)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Project_Value)}</td>
                                     </tr>
-                                    <tr id={e.Proposal_ID} style={{ ...styles.tableRow, display: projectDetails.includes(e.Proposal_ID) ? "table-row" : "none", visibility: projectDetails.includes(e.Proposal_ID) ? "visible" : "hidden" }}>
+                                    <tr id={e.Project_Id} style={{ ...styles.tableRow, display: projectDetails.includes(e.Project_Id) ? "table-row" : "none", visibility: projectDetails.includes(e.Project_Id) ? "visible" : "hidden" }}>
                                         <td colSpan={8} style={{ borderBottom: "1px solid #EBE9F1" }}>
                                             <div className='d-flex flex-row justify-content-between align-items-start' style={{ marginLeft: "64px", marginRight: "32px", marginBottom: "12px", width: isCollapsed ? "88.333vw" : "77.222vw", padding: "12px 24px", gap: "62px", height: "95px", background: "#F7F7F9", borderRadius: "12px", marginTop: "12px" }}>
                                                 <div className='d-flex flex-column '>
-                                                    <p style={styles.tableRow2Heading}>Design Price ($)</p>
-                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Design_Price)}</p>
+                                                    <p style={styles.tableRow2Heading}>Start Date</p>
+                                                    <p style={styles.tableRow2Subheading}>{formatDate(e.Date_Created)}</p>
+                                                </div>
+                                                {isCollapsed ? <></> : <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Team</p>
+                                                    <p style={styles.tableRow2Subheading}>{e.Team_Members}</p>
+                                                </div>}
+                                                <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Project Category</p>
+                                                    <p style={styles.tableRow2Subheading}>{e.Project_Category}</p>
                                                 </div>
                                                 <div className='d-flex flex-column '>
-                                                    <p style={styles.tableRow2Heading}>Contract Admin Price ($)</p>
-                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Contract_Admin_Price)}</p>
-                                                </div>
-                                                <div className='d-flex flex-column '>
-                                                    <p style={styles.tableRow2Heading}>Provisional Item Price ($)</p>
-                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Provisional_Items)}</p>
-                                                </div>
-                                                <div className='d-flex flex-column '>
-                                                    <p style={styles.tableRow2Heading}>Sub Consultant Price ($)</p>
-                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Sub_Consultant_Price)}</p>
-                                                </div>
-                                                <div className='d-flex flex-column '>
-                                                    <p style={styles.tableRow2Heading}>Winning Bidders</p>
-                                                    <p style={styles.tableRow2Subheading}>{e.Winning_Bidder ?? "-"}</p>
+                                                    <p style={styles.tableRow2Heading}>Description</p>
+                                                    <p style={styles.tableRow2Subheading}>{e.Notes ?? "-"}</p>
                                                 </div>
                                             </div>
                                         </td>
@@ -1222,6 +1227,121 @@ const Project = (props) => {
                     </tbody>
                 </table>
             </div>
+
+            {/* Page Buttons */}
+            <div className='d-flex flex-row justify-content-end' style={{ marginTop: "20px", marginRight: "24px", marginBottom: "20px" }}>
+                <Button style={styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(currPage - 1)}><FontAwesomeIcon icon={faChevronLeft} color="#70757A" /></Button>
+                <Button style={currPage === 1 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(1)}><p style={currPage === 1 ? styles.curPage : styles.page}>1</p></Button>
+                {pages >= 2 ? <Button style={currPage === 2 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 2} onClick={(e) => handlePage(2)}><p style={currPage === 2 ? styles.curPage : styles.page}>2</p></Button> : <></>}
+                {pages >= 3 ? <Button style={currPage === 3 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 3} onClick={(e) => handlePage(3)}><p style={currPage === 3 ? styles.curPage : styles.page}>3</p></Button> : <></>}
+                {pages >= 4 ? <Button style={currPage === 4 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 4} onClick={(e) => handlePage(4)}><p style={currPage === 4 ? styles.curPage : styles.page}>4</p></Button> : <></>}
+                {pages >= 5 ? <Button style={currPage === 5 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 5} onClick={(e) => handlePage(5)}><p style={currPage === 5 ? styles.curPage : styles.page}>5</p></Button> : <></>}
+                {pages >= 7 ? <p style={{ marginLeft: "8px" }}>.....</p> : <></>}
+                {pages >= 6 ? <Button style={currPage === pages ? styles.curPageContainer : styles.pageContainer}><p style={currPage === pages ? styles.curPage : styles.page}>{pages}</p></Button> : <></>}
+                <Button style={styles.pageContainer} disabled={currPage === pages} onClick={(e) => handlePage(currPage + 1)}><FontAwesomeIcon icon={faChevronRight} color="#70757A" /></Button>
+            </div>
+
+            {/* Floating COntainer */}
+            <div style={{ ...styles.floatingContainer, display: selectedProjects.length === 0 ? "none" : "", visibility: selectedProjects.length === 0 ? "hidden" : "visible" }}>
+                <p style={styles.floatinContainerText}>{selectedProjects.length}</p>
+                <p style={styles.floatingContainerText2}>Items Selected</p>
+                <div style={{ ...styles.floatingContainerLine, marginLeft: "-23px" }}></div>
+                {privileges.includes("Delete RFP") ? <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }} onClick={(e) => handleShowDelete()}>
+                    <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
+                    <p style={styles.floatingContainerIconText}>Delete</p>
+                </div> : <></>}
+                {privileges.includes('Update RFP') ? <Button style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }} disabled={selectedProjects.length !== 1} onClick={handleUpdate}>
+                    <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
+                    <p style={styles.floatingContainerIconText}>Edit</p>
+                </Button> : <></>}
+                <div style={{ ...styles.floatingContainerLine, marginLeft: "10px" }}></div>
+                <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
+                    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color="#6519E1" onClick={(e) => setselectedProjects([])} />
+                </div>
+            </div>
+
+            {/* Modals */}
+            {/* Add Form Modal */}
+            <Modal
+                show={show}
+                onHide={handleClose}
+                backdrop="static"
+                centered
+                size="xl"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Add Project</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {
+                        <AddProject
+                            setRed={setred}
+                            setGreen={setgreen}
+                            closeModal={handleClose}
+                            api={apiCall}
+                            apiCall={setCall}
+                        />
+                    }
+                </Modal.Body>
+            </Modal>
+
+            {/* Update Modal */}
+            <Modal
+                show={showUpdate}
+                onHide={handleCloseUpdate}
+                backdrop="static"
+                centered
+                size="xl"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Project</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {
+                        <UpdateProjectForm
+                            row={rowData}
+                            setRed={setred}
+                            setGreen={setgreen}
+                            closeModal={handleCloseUpdate}
+                            api={apiCall}
+                            apiCall={setCall}
+                        />
+                    }
+                </Modal.Body>
+            </Modal>
+
+            {/* Delete Modal */}
+            <Modal
+                show={showDelete}
+                onHide={handleCloseDelete}
+                backdrop="static"
+                size="sm"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Deletion</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p style={{ textAlign: "center" }}>
+                        <b>Delete the selected RFP!!</b>
+                    </p>
+                    <div className="d-flex flex-row justify-content-between">
+
+                        <div style={{ display: "inline-block" }}>
+                            <Button variant="danger" onClick={handleCloseDelete}>
+                                Cancel
+                            </Button>
+                        </div>
+                        <div style={{ display: "inline-block", float: "right" }}>
+                            <Button variant="success" onClick={handleDeleteProject}>
+                                Proceed
+                            </Button>
+                        </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
         </>
     )
 }
