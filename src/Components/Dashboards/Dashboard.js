@@ -60,6 +60,8 @@ import Employee from "../v2/Employee";
 import settingsIcon from '../../Images/Settings icon.svg'
 import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../v2/Customers";
+import Project from "../v2/Project";
+import ProjectDetail from "../Update/ProjectDetail";
 
 
 const Dashboard = () => {
@@ -289,20 +291,6 @@ const Dashboard = () => {
     },
   };
 
-  const [isLoadingTasks, setisLoadingTasks] = useState(false);
-  const windowSize = useRef([window.innerWidth, window.innerHeight]);
-  const [title1, settitle1] = useState([]);
-  const [title2, settitle2] = useState([]);
-  const [title3, settitle3] = useState([]);
-
-  const [dDate1, setdDate1] = useState([])
-  const [dDate2, setdDate2] = useState([])
-  const [dDate3, setdDate3] = useState([])
-
-  const [month1, setmonth1] = useState([])
-  const [month2, setmonth2] = useState([])
-  const [month3, setmonth3] = useState([])
-
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -316,58 +304,22 @@ const Dashboard = () => {
     };
   }, []);
 
-  useEffect(() => {
-    setisLoadingTasks(true);
-    const call = async () => {
-      await axios
-        .get(HOST + GET_ADMIN_TASKS, {
-          headers: {
-            auth: "Rose " + localStorage.getItem("auth"),
-            id: localStorage.getItem("employeeId"),
-          },
-        })
-        .then((res) => {
-          settitle1(res.data.res[0].Title)
-          settitle2(res.data.res[1].Title)
-          settitle3(res.data.res[2].Title)
-          const date1 = res.data.res[0].Due_Date;
-          const date2 = res.data.res[1].Due_Date;
-          const date3 = res.data.res[2].Due_Date;
-          const utcDate1 = new Date(date1);
-          const utcDate2 = new Date(date2);
-          const utcDate3 = new Date(date3);
-          const options = { month: "long" };
-          setmonth1(utcDate1.toLocaleString("en-US", options))
-          setmonth2(utcDate2.toLocaleString("en-US", options))
-          setmonth3(utcDate3.toLocaleString("en-US", options))
-          setdDate1(utcDate1.getUTCDate());
-          setdDate2(utcDate2.getUTCDate());
-          setdDate3(utcDate3.getUTCDate());
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      setisLoadingTasks(false);
-    };
-    call();
-  }, []);
-
 
   const handleDash = (e) => {
-    if (nav === 0){
-       return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth}/>;}
+    if (nav === 0){return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth}/>;}
     if (nav === 1) return <></>;
     if (nav === 2) return <></>;
     if (nav === 3) return <BudgetCities />;
     if (nav === 4) return <RFP isCollapsed={isCollapsed}/>
     if (nav === 5) return <Proposal isCollapsed={isCollapsed} />
-    if (nav === 6) return <ProjectUpdate />;
+    if (nav === 6) return <ProjectUpdate setnav={setnav} setproject={setproject} />
     if (nav === 7) return <Employee isCollapsed={isCollapsed}/>;
     if (nav === 8) return <TestDemo />;
     if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <Customers isCollapsed={isCollapsed}/>;
     if (nav === 12) return <></>;
+    if(nav===14) return <ProjectDetail setnav={setnav} project={project} />
   };
 
   const [show, setShow] = useState(false);
@@ -494,7 +446,7 @@ const Dashboard = () => {
                       ? mystyles.sidebarMenuItemActive.collapsed
                       : mystyles.sidebarMenuItem
                   }
-                  onClick={(e) => {setnav(0); if(isCollapsed){setisCollapsed(false); collapseSidebar()}}}
+                  onClick={(e) => {setnav(0);}}
                 >
                   <div
                     style={
@@ -776,7 +728,7 @@ const Dashboard = () => {
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
-                  onClick={(e) => {setnav(0); if(isCollapsed){setisCollapsed(false); collapseSidebar()}}}
+                  onClick={(e) => {setnav(0);}}
                 >
                   <div
                     style={

@@ -28,8 +28,9 @@ const Home = (props) => {
   const styles = {
     contentArea: {
       width: `${viewportWidth - 280 - (isCollapsed ? 68 : 228)}px`,
-      height: "100%",
+      height: `${window.innerHeight - 56}px`,
       background: "#F8FAFB",
+      overflowY: "auto"
     },
     projectOverviewLine: {
       height: "0px",
