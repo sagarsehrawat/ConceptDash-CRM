@@ -1,5 +1,5 @@
-export const HOST = 'https://crm-api.conceptdash.ca'
-// export const HOST = 'http://localhost:8080'
+// export const HOST = 'https://crm-api.conceptdash.ca'
+export const HOST = 'http://localhost:8080'
 
 // get apis
 export const GET_ALL_USERS = '/api/get/customers'
@@ -66,6 +66,8 @@ export const GET_PROJECT_EXTRAS = '/api/get/project/extras'
 
 export const GET_EMPLOYEE_COUNT = '/api/get/employee/count'
 export const GET_CUSTOMERS_COUNT = '/api/get/customers/count'
+export const GET_PROJECT_VALUES = '/api/get/value/project'
+export const GET_HOURS_WORKED = '/api/get/hoursWorked'
 
 export const DOWNLOAD_BUDGET_DESIGN = '/api/get/file/budgets'
 
@@ -131,6 +133,7 @@ export const UPDATE_EXPENSE_TRANSACTION = '/api/update/expenseTransaction'
 export const COUNTS = '/api/get/counts'
 export const RFP_ANALYSIS = '/api/get/chart/rfp'
 export const RFP_TRENDING = '/api/get/chart/rfp/trending'
+export const PROJECT_TRENDING = '/api/get/chart/project/trending'
 export const RFP_ACTION = '/api/get/chart/rfp/action'
 export const PROPOSAL_STATUS_COUNTS = '/api/get/status/proposal'
 export const BUDGET_CHART = '/api/get/chart/budget'
