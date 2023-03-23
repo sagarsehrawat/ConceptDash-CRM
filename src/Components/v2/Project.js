@@ -1,31 +1,29 @@
-import { faArrowDown, faArrowsUpDown, faArrowUp, faCheck, faChevronDown, faChevronLeft, faChevronRight, faEdit, faFilter, faMagnifyingGlass, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faEdit, faMagnifyingGlass, faPlug, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { RadioButtonComponent } from '@syncfusion/ej2-react-buttons'
-import axios from 'axios'
-import moment from 'moment'
-import React, { useState, useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import AuthenticationContext from '../../Context/AuthContext'
-import { DELETE_PROPOSAL, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGES_PROPOSALS, GET_PAGE_PROPOSALS, GET_PROJECT_CATEGORIES, GET_PROPOSAL_COUNT, HOST, UPDATE_STATUS_PROPOSAL } from '../Constants/Constants'
 import GreenAlert from '../Loader/GreenAlert'
 import LoadingSpinner from '../Loader/Loader'
 import RedAlert from '../Loader/RedAlert'
-import TableScrollbar from 'react-table-scrollbar';
-import ProposalForm from '../Form/ProposalForm'
-import UpdateProposal from '../Form/UpdateProposal'
 import filterIcon from '../../Images/Filter.svg'
+import axios from 'axios'
+import { DELETE_PROJECT, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_PROJECTS, GET_PROJECT_CATEGORIES, HOST } from '../Constants/Constants'
+import moment from 'moment'
+import AddProject from '../Form/AddProject'
+import UpdateProjectForm from '../Form/UpdateProjectForm'
 
-const Proposal = (props) => {
+const Project = (props) => {
     const { isCollapsed } = props
     const { privileges, setPrivileges } = useContext(AuthenticationContext)
     const [apiCall, setCall] = useState(0);
     const [green, setgreen] = useState(false);
     const [red, setred] = useState(false);
 
-    const [proposals, setproposals] = useState([])
-    const [proposalDetails, setproposalDetails] = useState([])
-    const [selectedProposals, setselectedProposals] = useState([])
-    const [proposalCount, setproposalCount] = useState({ Total: 0, Month: 0, Percent: 0, Won: 0, Lost: 0 })
+    const [projects, setprojects] = useState([])
+    const [projectDetails, setprojectDetails] = useState([])
+    const [selectedProjects, setselectedProjects] = useState([])
+    const [projectCount, setprojectCount] = useState({ Total: 0, Month: 0, Percent: 0, Ongoing: 0, Completed: 0 })
     const [cities, setcities] = useState([]);
     const [depts, setdepts] = useState([]);
     const [projectCats, setprojectCats] = useState([]);
@@ -37,7 +35,7 @@ const Proposal = (props) => {
     let limit = 50;
     const [pages, setpages] = useState(1);
     const [currPage, setcurrPage] = useState(1);
-    const [sort, setsort] = useState("Proposal_ID DESC");
+    const [sort, setsort] = useState("Project_Id DESC");
     const [value, setValue] = useState("");
     const [searchCity, setsearchCity] = useState("");
     const [filter, setfilter] = useState({ dept: [], cat: [], city: [], manager: [] });
@@ -413,7 +411,7 @@ const Proposal = (props) => {
             color: "#FE3766"
         },
         statusContainer: {
-            width: "75px",
+            width: "90px",
             height: "24px",
             background: "#FFF4EF",
             borderRadius: "24px"
@@ -574,25 +572,25 @@ const Proposal = (props) => {
     useEffect(() => {
         setIsLoading2([true, true, true, true, true, false])
         const call = async () => {
-            await axios
-                .get(HOST + GET_PROPOSAL_COUNT, {
-                    headers: {
-                        auth: "Rose " + localStorage.getItem("auth"),
-                    },
-                })
-                .then((res) => {
-                    let obj = proposalCount
-                    obj.Total = res.data.res[0].Total
-                    obj.Month = res.data.res[0].Month
-                    obj.Percent = res.data.res[0].Percent ?? 0
-                    obj.Won = res.data.res[0].Won
-                    obj.Lost = res.data.res[0].Lost
-                    setproposalCount(obj)
-                    setIsLoading2(prev => [false, ...prev.slice(1, 6)])
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            // await axios
+            //     .get(HOST + GET_PROPOSAL_COUNT, {
+            //         headers: {
+            //             auth: "Rose " + localStorage.getItem("auth"),
+            //         },
+            //     })
+            //     .then((res) => {
+            //         let obj = proposalCount
+            //         obj.Total = res.data.res[0].Total
+            //         obj.Month = res.data.res[0].Month
+            //         obj.Percent = res.data.res[0].Percent ?? 0
+            //         obj.Won = res.data.res[0].Won
+            //         obj.Lost = res.data.res[0].Lost
+            //         setproposalCount(obj)
+            //         setIsLoading2(prev => [false, ...prev.slice(1, 6)])
+            //     })
+            //     .catch((err) => {
+            //         console.log(err);
+            //     });
 
             await axios
                 .get(HOST + GET_CITIES, {
@@ -650,7 +648,7 @@ const Proposal = (props) => {
         setcurrPage(1)
         const call = async () => {
             await axios
-                .get(HOST + GET_PAGE_PROPOSALS, {
+                .get(HOST + GET_PAGE_PROJECTS, {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
                         limit: limit,
@@ -661,7 +659,8 @@ const Proposal = (props) => {
                     },
                 })
                 .then((res) => {
-                    setproposals(res.data.res);
+                    console.log(res.data.res)
+                    setprojects(res.data.res);
                     setpages(res.data.totalPages)
                     setIsLoading(false);
                 })
@@ -676,7 +675,7 @@ const Proposal = (props) => {
         setIsLoading(true);
         setcurrPage(page);
         await axios
-            .get(HOST + GET_PAGE_PROPOSALS, {
+            .get(HOST + GET_PAGE_PROJECTS, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
                     limit: limit,
@@ -687,7 +686,7 @@ const Proposal = (props) => {
                 },
             })
             .then((res) => {
-                setproposals(res.data.res);
+                setprojects(res.data.res);
                 setpages(res.data.totalPages)
                 setIsLoading(false);
             })
@@ -710,21 +709,21 @@ const Proposal = (props) => {
         }
     }
 
-    const handleDeleteProposal = async (e) => {
+    const handleDeleteProject = async (e) => {
         setIsLoading(true)
         e.preventDefault();
         await axios
             .post(
-                HOST + DELETE_PROPOSAL,
+                HOST + DELETE_PROJECT,
                 {
-                    ids: JSON.stringify(selectedProposals),
+                    ids: JSON.stringify(selectedProjects),
                 },
                 { headers: { auth: "Rose " + localStorage.getItem("auth") } }
             )
             .then((res) => {
                 if (res.data.success) {
                     handleCloseDelete();
-                    setselectedProposals([])
+                    setselectedProjects([])
                     setgreen(true)
                     setCall(apiCall + 1);
                 } else {
@@ -739,56 +738,10 @@ const Proposal = (props) => {
 
     const [rowData, setrowData] = useState([]);
     const handleUpdate = (e) => {
-        const foundObject = proposals.find(obj => obj.Proposal_ID === selectedProposals[0]);
+        const foundObject = projects.find(obj => obj.Project_Id === selectedProjects[0]);
         setrowData(foundObject);
         handleShowUpdate();
     };
-
-    const handleStatusUpdate = async (e) => {
-        e.preventDefault();
-
-        await axios
-            .post(
-                HOST + UPDATE_STATUS_PROPOSAL,
-                {
-                    ids: JSON.stringify(selectedProposals),
-                    status: status
-                },
-                { headers: { auth: "Rose " + localStorage.getItem("auth") } }
-            )
-            .then((res) => {
-                if (res.data.success) {
-                    for (let i = 0; i < proposals.length; i++) {
-                        if (selectedProposals.includes(proposals[i].Proposal_ID)) {
-                            const st1 = proposals[i].Status
-                            proposals[i].Status = (status === '' ? null : status)
-                            if (st1 !== proposals[i].Status) {
-                                if (st1 === null) {
-                                    if (proposals[i].Status !== null) proposalCount[proposals[i].Status]++;
-                                } else {
-                                    proposalCount[st1]--;
-                                    if (proposals[i].Status !== null) proposalCount[proposals[i].Status]++;
-                                }
-                            }
-                        }
-                    }
-                    closeStatusModal()
-                    setselectedProposals([])
-                    setgreen(true)
-                } else {
-                    setred(true)
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-
-    const formatDate = (date) => {
-        if (date === "" || date === null || date === undefined) return "";
-        const formattedDate = moment(date)
-        return formattedDate.format('D MMM, YYYY')
-    }
 
     const filterSize = () => {
         return filter.city.length + filter.cat.length + filter.dept.length + filter.manager.length;
@@ -807,6 +760,11 @@ const Proposal = (props) => {
         };
     }, []);
 
+    const formatDate = (date) => {
+        if (date === "" || date === null || date === undefined) return "";
+        const formattedDate = moment(date)
+        return formattedDate.format('D MMM, YYYY')
+    }
 
     const handleTableScroll = () => {
         setscrolled(tableRef.current.scrollLeft)
@@ -835,22 +793,22 @@ const Proposal = (props) => {
     }
 
     const statusComponent = (status) => {
-        if (status === null) {
+        if (status === null || status === "Not Started Yet") {
             return (
-                <div style={{ ...styles.statusContainer, border: "1px solid #FD9568" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#FD9568" }}>Pending</p>
+                <div style={{ ...styles.statusContainer, background: "#FFF4EF", border: "0.4px solid #FD9568" }} className='d-flex justify-content-center'>
+                    <p style={{ ...styles.status, color: "#FD9568" }}>Not Started</p>
                 </div>
             )
-        } else if (status === "Lost") {
+        } else if (status === "Ongoing") {
             return (
-                <div style={{ ...styles.statusContainer, border: "1px solid #FE3766" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#FE3766" }}>Lost</p>
+                <div style={{ ...styles.statusContainer, background: "#E4FEF1", border: "0.4px solid #559776", }} className='d-flex justify-content-center'>
+                    <p style={{ ...styles.status, color: "#559776" }}>Ongoing</p>
                 </div>
             )
-        } else if (status === "Won") {
+        } else if (status === "Completed") {
             return (
-                <div style={{ ...styles.statusContainer, border: "1px solid #34A853" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#34A853" }}>Won</p>
+                <div style={{ ...styles.statusContainer, background: "#E4EEFE", border: "0.4px solid #5079E1" }} className='d-flex justify-content-center'>
+                    <p style={{ ...styles.status, color: "#5079E1" }}>Completed</p>
                 </div>
             )
         }
@@ -861,57 +819,44 @@ const Proposal = (props) => {
             {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
             {red === true ? <RedAlert setRed={setred} /> : <></>}
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
-                <p style={styles.heading}>Proposals</p>
-                <button style={styles.addButton} onClick={handleShow}><p style={styles.addButtonText} >+ Add New proposal</p></button>
+                <p style={styles.heading}>Projects</p>
+                <button style={styles.addButton} onClick={handleShow}><p style={styles.addButtonText} >+ Add New Project</p></button>
             </div>
 
             {/* Header Cards */}
             <div className='d-flex flex-row' style={{ marginLeft: "32px", marginBottom: "20px" }}>
                 <div style={styles.topContainer}>
-                    <p style={styles.topContainerHeading}>New Proposals</p>
+                    <p style={styles.topContainerHeading}>New Projects</p>
                     <div className=''>
-                        <p style={styles.topContainerSubheading}>{proposalCount.Month}</p>
-                        {proposalCount.Percent >= 0
+                        <p style={styles.topContainerSubheading}>{projectCount.Month}</p>
+                        {projectCount.Percent >= 0
                             ? <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
                                 <FontAwesomeIcon icon={faArrowUp} color="#34A853" />
-                                <p style={styles.percent}>{proposalCount.Percent}% increase</p>
+                                <p style={styles.percent}>{projectCount.Percent}% increase</p>
                             </div>
                             : <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
                                 <FontAwesomeIcon icon={faArrowDown} color="#FE3766" />
-                                <p style={{ ...styles.percent, color: "#FE3766" }}>{proposalCount.Percent}% decrease</p>
+                                <p style={{ ...styles.percent, color: "#FE3766" }}>{projectCount.Percent}% decrease</p>
                             </div>
                         }
                     </div>
                 </div>
                 <div style={styles.topContainer}>
-                    <p style={styles.topContainerHeading}>Total Proposals</p>
-                    <p style={styles.topContainerSubheading}>{proposalCount.Total}</p>
+                    <p style={styles.topContainerHeading}>Ongoing Projects</p>
+                    <p style={styles.topContainerSubheading}>{projectCount.Ongoing}</p>
                 </div>
-                <div style={{ ...styles.topContainer, width: "335px", padding: "12px 8px" }} className='d-flex flex-row'>
-                    <div className='d-flex flex-row justify-content-center align-items-center' style={{ gap: "12px" }}>
-                        <div style={{ width: "28px", height: "28px", background: "#E4FEF1", borderRadius: "4px" }} className='d-flex justify-content-center align-items-center'>
-                            <FontAwesomeIcon icon={faCheck} color="#559776" />
-                        </div>
-                        <div className='d-flex flex-column'>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", marginBottom: "4px" }}>Proposals Won</p>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "18px", lineHeight: "28px", color: "#0A0A0A", marginBottom: "0px" }}>{proposalCount.Won}</p>
-                        </div>
-                    </div>
-                    <div style={{ width: "0px", height: "48px", border: "1px solid #EBE9F1", marginLeft: "20px", marginRight: "20px" }}></div>
-                    <div className='d-flex flex-row justify-content-center align-items-center' style={{ gap: "12px" }}>
-                        <div style={{ width: "28px", height: "28px", background: "#FFF1F1", borderRadius: "4px" }} className='d-flex justify-content-center align-items-center'>
-                            <FontAwesomeIcon icon={faX} color="#D93838" />
-                        </div>
-                        <div className='d-flex flex-column'>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", marginBottom: "4px" }}>Proposals Lost</p>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "18px", lineHeight: "28px", color: "#0A0A0A", marginBottom: "0px" }}>{proposalCount.Lost}</p>
-                        </div>
-                    </div>
+                <div style={styles.topContainer}>
+                    <p style={styles.topContainerHeading}>COmpleted Projects</p>
+                    <p style={styles.topContainerSubheading}>{projectCount.Completed}</p>
+                </div>
+                <div style={styles.topContainer}>
+                    <p style={styles.topContainerHeading}>Total Projects</p>
+                    <p style={styles.topContainerSubheading}>{projectCount.Total}</p>
                 </div>
             </div>
             <div style={styles.headerLine}></div>
-            <p style={styles.heading2}>Proposals</p>
-            
+            <p style={styles.heading2}>Projects</p>
+
             {/* Filters and Other Dropdowns */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
                 <input
@@ -1012,48 +957,6 @@ const Proposal = (props) => {
                             </div>
                         </div>}
                 </Modal>
-                <button style={{ ...styles.filterButton, width: "136px", display: selectedProposals.length > 0 ? "flex" : "none", visibility: selectedProposals.length > 0 ? "visible" : "hidden" }} onClick={openStatusModal}><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Update Status</p><FontAwesomeIcon icon={faChevronDown} color="#70757A" /></button>
-                <Modal
-                    show={statusModal}
-                    onHide={closeStatusModal}
-                    style={styles.statusModal}
-                    dialogClassName="filter-dialog"
-                    backdropClassName="filter-backdrop"
-                    animation={false}
-                >
-                    <div style={{ width: "296px", height: "fit-content", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px" }}>
-                        <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Sort By</p>
-                            <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeStatusModal} />
-                        </div>
-                        <div className='d-flex flex-column' style={{ marginLeft: "20px", gap: "8px" }}>
-                            <RadioButtonComponent
-                                label="Lost"
-                                cssClass="sort-radio"
-                                checked={status === 'Lost'}
-                                name="Status"
-                                value={`Lost`}
-                                onChange={(e) => setstatus(e.target.value)} />
-                            <RadioButtonComponent
-                                label="Pending"
-                                checked={status === ""}
-                                cssClass="sort-radio"
-                                name="Status"
-                                value={``}
-                                onChange={(e) => setstatus(e.target.value)} />
-                            <RadioButtonComponent
-                                label="Won"
-                                checked={status === "Won"}
-                                cssClass="sort-radio"
-                                name="Status"
-                                value={`Won`}
-                                onChange={(e) => setstatus(e.target.value)} />
-                        </div>
-                        <div className='d-flex justify-content-end' style={{ marginRight: "20px", marginTop: "10px", marginBottom: "20px" }}>
-                            <Button style={{ ...styles.filterButton3, width: "unset" }} onClick={handleStatusUpdate}>Update</Button>
-                        </div>
-                    </div>
-                </Modal>
             </div>
 
             {/* Table */}
@@ -1063,7 +966,7 @@ const Proposal = (props) => {
                         <tr>
                             <th scope="col" style={{ ...styles.tableHeading, width: "260px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(0)}>
-                                    Proposal Name&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                    Project Name&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
                                     show={sortModal === 0}
@@ -1109,7 +1012,7 @@ const Proposal = (props) => {
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "100px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(2)}>
                                     Status&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
@@ -1133,7 +1036,7 @@ const Proposal = (props) => {
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "140px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "130px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(3)}>
                                     Department&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
@@ -1181,33 +1084,14 @@ const Proposal = (props) => {
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
-                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(5)}>
-                                    Closing Deadline&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                            {isCollapsed ? <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline"}} className=''>
+                                    Team
                                 </div>
-                                <Modal
-                                    show={sortModal === 5}
-                                    onHide={handleCloseSort}
-                                    style={{ ...styles.sortModal, left: sortModalLeft(5) }}
-                                    dialogClassName="filter-dialog"
-                                    backdropClassName="filter-backdrop"
-                                    animation={false}
-                                >
-                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Closing_Deadline"); setCall(apiCall + 1); handleCloseSort() }}>
-                                            <FontAwesomeIcon icon={faArrowUp} />
-                                            <p style={styles.sortText}>Sort Ascending</p>
-                                        </div>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Closing_Deadline DESC"); setCall(apiCall + 1); handleCloseSort() }}>
-                                            <FontAwesomeIcon icon={faArrowDown} />
-                                            <p style={styles.sortText}>Sort Descending</p>
-                                        </div>
-                                    </div>
-                                </Modal>
-                            </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>
+                            </th> : <></>}
+                            <th scope="col" style={{ ...styles.tableHeading, width: "140px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(6)}>
-                                    Bid Price&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                    Due Date&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
                                     show={sortModal === 6}
@@ -1218,20 +1102,20 @@ const Proposal = (props) => {
                                     animation={false}
                                 >
                                     <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Bidder_Price"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Due_Date"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowUp} />
                                             <p style={styles.sortText}>Sort Ascending</p>
                                         </div>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Bidder_price DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Due_Date DESC"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowDown} />
                                             <p style={styles.sortText}>Sort Descending</p>
                                         </div>
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "180px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(7)}>
-                                    Winning Bid Price&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                    Next Follow Up&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
                                     show={sortModal === 7}
@@ -1242,11 +1126,35 @@ const Proposal = (props) => {
                                     animation={false}
                                 >
                                     <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Winning_Price"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Next_Follow_Up"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowUp} />
                                             <p style={styles.sortText}>Sort Ascending</p>
                                         </div>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Winning_Price DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Next_Follow_Up DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(8)}>
+                                    Project Value&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 8}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(7) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Value"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Value DESC"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowDown} />
                                             <p style={styles.sortText}>Sort Descending</p>
                                         </div>
@@ -1262,57 +1170,54 @@ const Proposal = (props) => {
                                     <LoadingSpinner />
                                 </td>
                             </tr>
-                            : proposals && proposals.map(e => (
+                            : projects && projects.map(e => (
                                 <>
-                                    <tr style={{ ...styles.tableRow, backgroundColor: selectedProposals.includes(e.Proposal_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.Proposal_ID}>
-                                        <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedProposals.includes(e.Proposal_ID) ? "#F5F3FE" : "white", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
+                                    <tr style={{ ...styles.tableRow, backgroundColor: selectedProjects.includes(e.Project_Id) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.Project_Id}>
+                                        <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedProjects.includes(e.Project_Id) ? "#F5F3FE" : "white", borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>
                                             <div className='d-flex flex-row align-items-center' style={{ gap: "12px" }}>
-                                                {proposalDetails.includes(e.Proposal_ID) ? <FontAwesomeIcon icon={faChevronDown} onClick={(eve) => setproposalDetails(prev => prev.filter(ele => ele !== e.Proposal_ID))} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faChevronRight} onClick={(eve) => setproposalDetails(prev => [...prev, e.Proposal_ID])} style={{ cursor: "pointer" }} />}
+                                                {projectDetails.includes(e.Project_Id) ? <FontAwesomeIcon icon={faChevronDown} onClick={(eve) => setprojectDetails(prev => prev.filter(ele => ele !== e.Project_Id))} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faChevronRight} onClick={(eve) => setprojectDetails(prev => [...prev, e.Project_Id])} style={{ cursor: "pointer" }} />}
                                                 <Form.Check
                                                     inline
                                                     type="checkbox"
-                                                    checked={selectedProposals.includes(e.Proposal_ID)}
+                                                    checked={selectedProjects.includes(e.Project_Id)}
                                                     readOnly={true}
-                                                    onClick={(eve) => { if (eve.target.checked) { setselectedProposals(prev => [...prev, e.Proposal_ID]) } else { setselectedProposals(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
+                                                    onClick={(eve) => { if (eve.target.checked) { setselectedProjects(prev => [...prev, e.Project_Id]) } else { setselectedProjects(prev => prev.filter(ele => ele !== e.Project_Id)) } }}
                                                 /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
                                             </div>
                                         </td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.City}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Department}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
-                                            {formatDate(e.Closing_Deadline) === ""
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.City}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.dept}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
+                                        {isCollapsed ? <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.Team_Members}</td> : <></>}
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>
+                                            {formatDate(e.Project_Due_Date) === ""
                                                 ? <></>
                                                 : <div style={styles.dateContainer}>
-                                                    <p style={styles.date}>{formatDate(e.Closing_Deadline)}</p>
+                                                    <p style={styles.date}>{formatDate(e.Project_Due_Date)}</p>
                                                 </div>}
                                         </td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Bidder_Price)}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Winning_Price)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{formatDate(e.Next_Follow_Up)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Project_Value)}</td>
                                     </tr>
-                                    <tr id={e.Proposal_ID} style={{ ...styles.tableRow, display: proposalDetails.includes(e.Proposal_ID) ? "table-row" : "none", visibility: proposalDetails.includes(e.Proposal_ID) ? "visible" : "hidden" }}>
+                                    <tr id={e.Project_Id} style={{ ...styles.tableRow, display: projectDetails.includes(e.Project_Id) ? "table-row" : "none", visibility: projectDetails.includes(e.Project_Id) ? "visible" : "hidden" }}>
                                         <td colSpan={8} style={{ borderBottom: "1px solid #EBE9F1" }}>
                                             <div className='d-flex flex-row justify-content-between align-items-start' style={{ marginLeft: "64px", marginRight: "32px", marginBottom: "12px", width: isCollapsed ? "88.333vw" : "77.222vw", padding: "12px 24px", gap: "62px", height: "95px", background: "#F7F7F9", borderRadius: "12px", marginTop: "12px" }}>
                                                 <div className='d-flex flex-column '>
-                                                    <p style={styles.tableRow2Heading}>Design Price ($)</p>
-                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Design_Price)}</p>
+                                                    <p style={styles.tableRow2Heading}>Start Date</p>
+                                                    <p style={styles.tableRow2Subheading}>{formatDate(e.Date_Created)}</p>
+                                                </div>
+                                                {isCollapsed ? <></> : <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Team</p>
+                                                    <p style={styles.tableRow2Subheading}>{e.Team_Members}</p>
+                                                </div>}
+                                                <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Project Category</p>
+                                                    <p style={styles.tableRow2Subheading}>{e.Project_Category}</p>
                                                 </div>
                                                 <div className='d-flex flex-column '>
-                                                    <p style={styles.tableRow2Heading}>Contract Admin Price ($)</p>
-                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Contract_Admin_Price)}</p>
-                                                </div>
-                                                <div className='d-flex flex-column '>
-                                                    <p style={styles.tableRow2Heading}>Provisional Item Price ($)</p>
-                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Provisional_Items)}</p>
-                                                </div>
-                                                <div className='d-flex flex-column '>
-                                                    <p style={styles.tableRow2Heading}>Sub Consultant Price ($)</p>
-                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Sub_Consultant_Price)}</p>
-                                                </div>
-                                                <div className='d-flex flex-column '>
-                                                    <p style={styles.tableRow2Heading}>Winning Bidders</p>
-                                                    <p style={styles.tableRow2Subheading}>{e.Winning_Bidder ?? "-"}</p>
+                                                    <p style={styles.tableRow2Heading}>Description</p>
+                                                    <p style={styles.tableRow2Subheading}>{e.Notes ?? "-"}</p>
                                                 </div>
                                             </div>
                                         </td>
@@ -1337,21 +1242,21 @@ const Proposal = (props) => {
             </div>
 
             {/* Floating COntainer */}
-            <div style={{ ...styles.floatingContainer, display: selectedProposals.length === 0 ? "none" : "", visibility: selectedProposals.length === 0 ? "hidden" : "visible" }}>
-                <p style={styles.floatinContainerText}>{selectedProposals.length}</p>
+            <div style={{ ...styles.floatingContainer, display: selectedProjects.length === 0 ? "none" : "", visibility: selectedProjects.length === 0 ? "hidden" : "visible" }}>
+                <p style={styles.floatinContainerText}>{selectedProjects.length}</p>
                 <p style={styles.floatingContainerText2}>Items Selected</p>
                 <div style={{ ...styles.floatingContainerLine, marginLeft: "-23px" }}></div>
                 {privileges.includes("Delete RFP") ? <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }} onClick={(e) => handleShowDelete()}>
                     <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
                     <p style={styles.floatingContainerIconText}>Delete</p>
                 </div> : <></>}
-                {privileges.includes('Update RFP') ? <Button style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }} disabled={selectedProposals.length !== 1} onClick={handleUpdate}>
+                {privileges.includes('Update RFP') ? <Button style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }} disabled={selectedProjects.length !== 1} onClick={handleUpdate}>
                     <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
                     <p style={styles.floatingContainerIconText}>Edit</p>
                 </Button> : <></>}
                 <div style={{ ...styles.floatingContainerLine, marginLeft: "10px" }}></div>
                 <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
-                    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color="#6519E1" onClick={(e) => setselectedProposals([])} />
+                    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color="#6519E1" onClick={(e) => setselectedProjects([])} />
                 </div>
             </div>
 
@@ -1366,11 +1271,11 @@ const Proposal = (props) => {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Add Proposal</Modal.Title>
+                    <Modal.Title>Add Project</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {
-                        <ProposalForm
+                        <AddProject
                             setRed={setred}
                             setGreen={setgreen}
                             closeModal={handleClose}
@@ -1391,11 +1296,11 @@ const Proposal = (props) => {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Update Proposal</Modal.Title>
+                    <Modal.Title>Update Project</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {
-                        <UpdateProposal
+                        <UpdateProjectForm
                             row={rowData}
                             setRed={setred}
                             setGreen={setgreen}
@@ -1430,7 +1335,7 @@ const Proposal = (props) => {
                             </Button>
                         </div>
                         <div style={{ display: "inline-block", float: "right" }}>
-                            <Button variant="success" onClick={handleDeleteProposal}>
+                            <Button variant="success" onClick={handleDeleteProject}>
                                 Proceed
                             </Button>
                         </div>
@@ -1441,4 +1346,4 @@ const Proposal = (props) => {
     )
 }
 
-export default Proposal
+export default Project

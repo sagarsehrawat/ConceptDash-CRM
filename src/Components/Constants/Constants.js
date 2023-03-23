@@ -146,7 +146,7 @@ export const LOGIN = '/api/login'
 
 // Pagination and search and filtering
 export const GET_PAGE_BUDGETS = '/api/get/page/budgets'
-export const GET_PAGE_PROJECTS = '/api/v2/get/page/projects'
+export const GET_PAGE_PROJECTS = '/api/get/page/projects'
 export const GET_PAGES_BUDGETS = '/api/get/pages/budgets'
 export const GET_PAGE_COMPANIES = '/api/get/page/companies'
 export const GET_PAGES_COMPANIES = '/api/get/pages/companies'

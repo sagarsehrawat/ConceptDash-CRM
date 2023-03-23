@@ -15,10 +15,6 @@ import RFPCharts from "./RFPCharts";
 import LoadingSpinner from "../Loader/Loader";
 import {
   ScheduleComponent,
-  Day,
-  Week,
-  WorkWeek,
-  Month,
   Agenda,
   Inject,
   ViewsDirective,
@@ -29,12 +25,13 @@ import { gapi } from "gapi-script";
 import ProjectCharts from "./ProjectCharts";
 
 const Home = (props) => {
-  const { isCollapsed } = props;
+  const { isCollapsed, viewportWidth } = props;
   const styles = {
     contentArea: {
-      width: "64.722vw",
-      height: "842px",
+      width: `${viewportWidth - 280 - (isCollapsed ? 68 : 228)}px`,
+      height: `${window.innerHeight - 56}px`,
       background: "#F8FAFB",
+      overflowY: "auto"
     },
     projectOverviewLine: {
       height: "0px",
@@ -55,11 +52,12 @@ const Home = (props) => {
       marginTop: "20px",
     },
     projectOverviewContainers: {
-      width: "208px",
+      width: "25%",
       height: "68px",
       background: "#FFFFFF",
       border: "1px solid #EBE9F1",
       borderRadius: "12px",
+      margin: "0px 10px"
     },
     projectOverviewSubheading: {
       height: "20px",
@@ -140,9 +138,7 @@ const Home = (props) => {
       borderRadius: "5px",
     },
     chartsContainer: {
-      marginLeft: "20px",
-      marginRight: "20px",
-      marginTop: "20px",
+      margin: "20px",
     },
     deadlines: {
       boxSizing: "border-box",
@@ -575,28 +571,21 @@ const Home = (props) => {
           <div style={styles.projectOverviewBox}>
             <p style={styles.projectOverviewHeading}>Projects Overview</p>
             <div
-              className="d-flex flex-row justify-content-between"
-              style={{
-                marginLeft: "20px",
-                marginRight: "20px",
-                marginBottom: "20px",
-              }}
+              className="row justify-content-between" style={{margin: "20px"}}
             >
-              <div style={styles.projectOverviewContainers}>
+              <div style={{...styles.projectOverviewContainers, marginLeft: "0px"}} className='col p-0'>
                 <p style={styles.projectOverviewSubheading}>Ongoing Projects</p>
                 <p style={styles.projectOverviewNumber}>{projects[0]}</p>
               </div>
-              <div style={styles.projectOverviewContainers}>
+              <div style={styles.projectOverviewContainers} className='col p-0'>
                 <p style={styles.projectOverviewSubheading}>New Projects</p>
                 <p style={styles.projectOverviewNumber}>{projects[1]}</p>
               </div>
-              <div style={styles.projectOverviewContainers}>
-                <p style={styles.projectOverviewSubheading}>
-                  Completed Projects
-                </p>
+              <div style={styles.projectOverviewContainers} className='col p-0'>
+                <p style={styles.projectOverviewSubheading}>Completed Projects</p>
                 <p style={styles.projectOverviewNumber}>{projects[2]}</p>
               </div>
-              <div style={styles.projectOverviewContainers}>
+              <div style={{...styles.projectOverviewContainers, marginRight: "0px"}} className='col p-0'>
                 <p style={styles.projectOverviewSubheading}>Total Projects</p>
                 <p style={styles.projectOverviewNumber}>
                   {projects[0] + projects[1] + projects[2] + projects[3]}
@@ -680,7 +669,7 @@ const Home = (props) => {
           </div>
           <div
             style={styles.chartsContainer}
-            className="row justify-content-between"
+            className=""
           >
             {handleChartsComponent()}
           </div>
