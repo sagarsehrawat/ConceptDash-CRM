@@ -17,6 +17,24 @@ import Select from "react-select";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
 
+const styles = {
+  nameHeading: {
+    height: "20px",
+    fontFamily: "'Roboto'",
+    fontStyle: "normal",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: "#70757A"
+  },
+  nameInput: {
+    width: "740px",
+    height: "32px",
+    border: "1px solid #EBE9F1",
+    borderRadius: "6px",
+    padding:6
+  }
+}
 function UpdateProjectForm(props) {
   
   const [isLoading, setisLoading] = useState(false)
@@ -230,37 +248,81 @@ function UpdateProjectForm(props) {
     });
   return (
     isLoading?<LoadingSpinner/>:
-    <div>
-      <Form className="form-main" onSubmit={handleSubmit}>
-        <Row className="mb-4">
+    <div style={{ marginLeft:'27px', marginTop:'20px', marginBottom:'20px'}}>
+      <Form className="form-main" onSubmit={handleSubmit} style={{marginTop:'0px', marginLeft:'0px', marginRight:'0px'}}>
+        <Row>
           <Form.Group as={Col}>
-            <Form.Label>Project Name</Form.Label>
+                <Form.Label style={styles.nameHeading}>Project Name</Form.Label>
             <Form.Control
+                style={styles.nameInput}
               value={pname}
               name="projectName"
               type="text"
-              placeholder="Project Name*"
+              placeholder="Enter Project Name"
               onChange={handleChange}
             />
           </Form.Group>
         </Row>
-        <Row className="mb-4">
+        <Row>
           <Form.Group as={Col}>
-            <Form.Label>Project Due Date</Form.Label>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Description</Form.Label>
             <Form.Control
-              value={dDate}
-              name="dueDate"
-              type="date"
-              placeholder="Project Due Date*"
+                style={styles.nameInput}
+              name="notes"
+              as='textarea'
+              value={notes}
+              placeholder="Notes"
               onChange={handleChange}
             />
           </Form.Group>
         </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-          <Form.Label>Department</Form.Label>
-          <Form.Select defaultValue={dept} onChange={handleChange} name="dept">
-              <option value="">Select Department</option>
+        <Row>
+        <Form.Group style={{width:'253px'}}>
+              <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Value</Form.Label>
+            <Form.Control
+                style={{...styles.nameInput, width:'233px'}}
+              value={pValue}
+              name="projectValue"
+              placeholder="Choose Project Value"
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group style={{width:'253px'}}>
+              <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Status</Form.Label>
+            <Form.Select
+            style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
+              defaultValue={state}
+              name="status"
+              onChange={handleChange}
+            >
+              <option value="">Status</option>
+              <option value="Not Started Yet">Not Started Yet</option>
+              <option value="Completed">Completed</option>
+              <option value="Ongoing">Ongoing</option>
+            </Form.Select>
+          </Form.Group>
+          <Form.Group style={{width:'253px'}} controlId="formGridCity">
+              <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>City</Form.Label>
+            <Form.Select
+            style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}}
+              defaultValue={city}
+              onChange={handleChange}
+              name="city"
+            >
+              <option value="">Choose City</option>
+              {cities.length > 0
+                ? cities.map((e) => <option selected={e.City_ID===displayCity} value={e.City_ID}>{e.City}</option>)
+                : ""}
+            </Form.Select>
+          </Form.Group>
+          
+        </Row>
+        <Row>
+        <Form.Group style={{width:'253px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Department</Form.Label>
+          <Form.Select style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}} defaultValue={dept} onChange={handleChange} name="dept">
+              <option value="">Choose Department</option>
               {depts.length > 0
                 ? depts.map((e) => (
                     <option value={e.Department_ID} selected={e.Department_ID===department}>{e.Department}</option>
@@ -268,42 +330,10 @@ function UpdateProjectForm(props) {
                 : ""}
             </Form.Select>
           </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Follow Up Notes</Form.Label>
-            <Form.Control
-              value={fNotes}
-              name="followNotes"
-              type="text"
-              placeholder="Follow Up Notes"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Next Follow Up</Form.Label>
-            <Form.Control
-              name="nextFollow"
-              type="date"
-              value={nfDate}
-              placeholder="Next Follow Up"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              value={pValue}
-              name="projectValue"
-              type="text"
-              placeholder="Project Value*"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
+          <Form.Group style={{width:'253px'}}>
+              <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Category</Form.Label>
             <Form.Select
+            style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
               defaultValue={pCategory}
               name="projectCategory"
               onChange={handleChange}
@@ -321,40 +351,56 @@ function UpdateProjectForm(props) {
             </Form.Select>
           </Form.Group>
         </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col} controlId="formGridCity">
-            <Form.Select
-              defaultValue={city}
+        <Row>
+          <Form.Group style={{width:'253px'}}>
+              <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Due Date</Form.Label>
+            <Form.Control
+              value={dDate}
+              name="dueDate"
+              type="date"
+              placeholder="Project Due Date"
               onChange={handleChange}
-              name="city"
-            >
-              <option value="">Select City</option>
-              {cities.length > 0
-                ? cities.map((e) => <option selected={e.City_ID===displayCity} value={e.City_ID}>{e.City}</option>)
-                : ""}
-            </Form.Select>
+              style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
+            />
           </Form.Group>
-          
+          <Form.Group style={{width:'253px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Next Follow Up</Form.Label>
+            <Form.Control
+              name="nextFollow"
+              type="date"
+              value={nfDate}
+              placeholder="Next Follow Up"
+              onChange={handleChange}
+              style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
+            />
+          </Form.Group>
         </Row>
-        <Row className="mb-4">
+        {/* <Row>
+        
+          
           <Form.Group as={Col}>
-            <Select
-              isMulti
-              onChange={doChange}
-              options={attendees}
-              defaultValue={members}
-              name="employee"
-              placeholder="Team Members"
-            >
-            </Select>
+            <Form.Label>Follow Up Notes</Form.Label>
+            <Form.Control
+              value={fNotes}
+              name="followNotes"
+              type="text"
+              placeholder="Follow Up Notes"
+              onChange={handleChange}
+            />
           </Form.Group>
-          <Form.Group as={Col}>
+        </Row> */}
+       
+        
+        <Row>
+        <Form.Group style={{width:'253px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Manager</Form.Label>
             <Form.Select
               defaultValue={pManager}
               name="projectManager"
               onChange={handleChange}
+              style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
             >
-              <option value="">Project Manager</option>
+              <option value="">Choose Project Manager</option>
               {employees.length !== 0 ? (
                 employees.map((option) => (
                   <option value={option.Employee_ID} selected={option.Employee_ID===manager}>{option.Full_Name}</option>
@@ -364,52 +410,32 @@ function UpdateProjectForm(props) {
               )}
             </Form.Select>
           </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Select
-              defaultValue={state}
-              name="status"
-              onChange={handleChange}
+          <Form.Group style={{width:'253px'}}>
+              <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Team Members</Form.Label>
+            <Select
+              isMulti
+              onChange={doChange}
+              options={attendees}
+              defaultValue={members}
+              name="employee"
+              placeholder="Choose Team Members"
+              menuPosition="fixed"
             >
-              <option value="">Status</option>
-              <option value="Not Started Yet">Not Started Yet</option>
-              <option value="Completed">Completed</option>
-              <option value="Ongoing">Ongoing</option>
-            </Form.Select>
+            </Select>
           </Form.Group>
+          
         </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Notes</Form.Label>
-            <Form.Control
-              name="notes"
-              type="text"
-              as='textarea'
-              value={notes}
-              placeholder="Notes"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Relevent Files</Form.Label>
-            <Form.Control
-              name="attachments"
-              type="file"
-              placeholder="Attachments*"
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Row>
-        <Button
-          className="submit-btn"
-          variant="primary"
-          type="submit"
-        >
-          Submit
-        </Button>
+        
+        
+        <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
+            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+              Cancel
+            </Button>
+            <Button style={{backgroundColor:'#6519E1'}} type="submit">
+              Update project
+            </Button>
+            </div>
+        
       </Form>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

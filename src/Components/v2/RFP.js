@@ -858,7 +858,7 @@ const RFP = (props) => {
                                 {isLoading2[1] ? <LoadingSpinner /> : cities.map(e => {
                                     if (e.City.toLowerCase().startsWith(searchCity.toLowerCase())) {
                                         return (
-                                            <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.city.includes(e.City_ID) ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('city', e.City_ID)}><p style={styles.filterBodyText}>{e.City}</p></div>
+                                            <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.city.includes(e.City_ID) ? "#DBDBF4" : "#F7F7F9" }} onClick={() => handleFilter('city', e.City_ID)}><p style={styles.filterBodyText}>{e.City}</p></div>
                                         )
                                     } else {
                                         return <></>
@@ -869,7 +869,7 @@ const RFP = (props) => {
                             <div style={styles.filterSubcontainer} className='filter-container'>
                                 <p style={styles.filterSubheading}>Source {filter.source.length === 0 ? "" : `/${filter.source.length}`}</p>
                                 <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Construct Connect') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Construct Connect')}><p style={styles.filterBodyText}>Construct Connect</p></div>
-                                <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Bids & Tenders') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Bids & Tenders')}><p style={styles.filterBodyText}>Bids & Tenders</p></div>
+                                <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Bids and Tenders') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Bids and Tenders')}><p style={styles.filterBodyText}>Bids & Tenders</p></div>
                                 <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Biddingo') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Biddingo')}><p style={styles.filterBodyText}>Biddingo</p></div>
                                 <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Merx') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Merx')}><p style={styles.filterBodyText}>Merx</p></div>
                             </div>
@@ -877,7 +877,7 @@ const RFP = (props) => {
                                 <p style={styles.filterSubheading}>Department {filter.dept.length === 0 ? "" : `/${filter.dept.length}`}</p>
                                 {isLoading2[2] ? <LoadingSpinner /> : depts.map(e => {
                                     return (
-                                        <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.dept.includes(e.Department_ID) ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('dept', e.Department_ID)}><p style={styles.filterBodyText}>{e.Department}</p></div>
+                                        <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.dept.includes(e.Department_ID) ? "#DBDBF4" : "#F7F7F9" }} onClick={() => handleFilter('dept', e.Department_ID)}><p style={styles.filterBodyText}>{e.Department}</p></div>
                                     )
                                 })}
                             </div>
@@ -885,7 +885,7 @@ const RFP = (props) => {
                                 <p style={styles.filterSubheading}>Project Category {filter.cat.length === 0 ? "" : `/${filter.cat.length}`}</p>
                                 {isLoading2[3] ? <LoadingSpinner /> : projectCats.map(e => {
                                     return (
-                                        <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.cat.includes(e.Project_Cat_ID) ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('cat', e.Project_Cat_ID)}><p style={styles.filterBodyText}>{e.Project_Category}</p></div>
+                                        <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.cat.includes(e.Project_Cat_ID) ? "#DBDBF4" : "#F7F7F9" }} onClick={() => handleFilter('cat', e.Project_Cat_ID)}><p style={styles.filterBodyText}>{e.Project_Category}</p></div>
                                     )
                                 })}
                             </div>
@@ -893,7 +893,7 @@ const RFP = (props) => {
                                 <p style={styles.filterSubheading}>Project Managers {filter.manager.length === 0 ? "" : `/${filter.manager.length}`}</p>
                                 {isLoading2[4] ? <LoadingSpinner /> : employees.map(e => {
                                     return (
-                                        <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.manager.includes(e.Employee_ID) ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('manager', e.Employee_ID)}><p style={styles.filterBodyText}>{e.Full_Name}</p></div>
+                                        <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.manager.includes(e.Employee_ID) ? "#DBDBF4" : "#F7F7F9" }} onClick={() => handleFilter('manager', e.Employee_ID)}><p style={styles.filterBodyText}>{e.Full_Name}</p></div>
                                     )
                                 })}
                             </div>

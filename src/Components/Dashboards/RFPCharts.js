@@ -15,15 +15,16 @@ const styles = {
         fontSize: "18px",
         color: "#0A0A0A",
         paddingLeft: "0px",
-        marginBottom: "8px",
+        marginBottom: "8px"
     },
     trendingContainer: {
-        width: "25%",
+        width: "208px",
         height: "140px",
+        left: "20px",
+        top: "116px",
         background: "#FEFEFE",
         border: "1px solid #EBE9F1",
-        borderRadius: "12px",
-        margin: "0px 10px"
+        borderRadius: "12px"
     },
     trendingContainerHeading: {
         height: "20px",
@@ -40,9 +41,9 @@ const styles = {
     trendingContainer2: {
         padding: "4px 8px",
         gap: "50px",
+        width: "192px",
         height: "28px",
         marginLeft: "8px",
-        marginRight: "8px",
         marginBottom: "6px",
         background: "#FFFFFF",
         boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
@@ -84,7 +85,7 @@ const styles = {
         marginBottom: "0px"
     },
     largeContainer: {
-        width: "100%",
+        width: "892px",
         height: "402px",
         background: "#FFFFFF",
         border: "1px solid #EBE9F1",
@@ -254,7 +255,7 @@ const RFPCharts = (props) => {
         <>
             <p style={styles.trendingHeader}>Trending</p>
             <div style={{ padding: "0px" }} className='d-flex flex-row justify-content-between'>
-                <div className='col p-0' style={{...styles.trendingContainer, marginLeft: "0px"}}>
+                <div style={styles.trendingContainer}>
                     <p style={styles.trendingContainerHeading}>Cities</p>
                     {isLoading[0]
                         ? <LoadingSpinner />
@@ -265,7 +266,7 @@ const RFPCharts = (props) => {
                         })
                     }
                 </div>
-                <div className='col p-0' style={styles.trendingContainer}>
+                <div style={styles.trendingContainer}>
                     <p style={styles.trendingContainerHeading}>Departments</p>
                     {isLoading[0]
                         ? <LoadingSpinner />
@@ -276,7 +277,7 @@ const RFPCharts = (props) => {
                         })
                     }
                 </div>
-                <div className='col p-0' style={styles.trendingContainer}>
+                <div style={styles.trendingContainer}>
                     <p style={styles.trendingContainerHeading}>Project Category</p>
                     {isLoading[0]
                         ? <LoadingSpinner />
@@ -287,7 +288,7 @@ const RFPCharts = (props) => {
                         })
                     }
                 </div>
-                <div className='col p-0' style={{ ...styles.trendingContainer, backgroundColor: "#FFFFFF", marginRight: "0px" }}>
+                <div style={{ ...styles.trendingContainer, backgroundColor: "#FFFFFF" }}>
                     <p style={styles.trendingContainerHeading}>Action Go/No Go</p>
                     {isLoading[1] ? <LoadingSpinner /> :
                         <>
@@ -310,13 +311,14 @@ const RFPCharts = (props) => {
                         </>}
                 </div>
             </div>
+      <div className="d-flex flex-row justify-content-evenly">
             <div style={styles.largeContainer}>
-                <div className='row justify-content-between' style={{ marginLeft: "16px", marginRight: "16px" }}>
+                <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "16px", marginRight: "16px" }}>
                     <p style={styles.largeContainerHeading}>RFP Overview</p>
                     <img src={pinnedActive} alt="Dashboard Icon" style={styles.pinnedIcon} />
                 </div>
-                <Line options={rfpOverviewOptions} data={data} height={105} />
-            </div>
+                <Line options={rfpOverviewOptions} data={data} height={115} />
+            </div></div>
         </>
     )
 }

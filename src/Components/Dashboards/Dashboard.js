@@ -41,6 +41,8 @@ import proposalsActive from "../../Images/Proposals_Active.svg";
 import proposalsInactive from "../../Images/Proposals.svg";
 import rfpActive from "../../Images/RFP_Active.svg";
 import rfpInactive from "../../Images/RFP.svg";
+import T from "../../Images/T.svg";
+import askforce from "../../Images/ASKFORCE.svg";
 import AdminDash from "../AdminDash/AdminDash";
 import BudgetCities from "../Update/BudgetCities";
 import RFPUpdate from "../Update/RFPUpdate";
@@ -153,8 +155,9 @@ const Dashboard = () => {
       },
       nonCollapsed: {
         height: "26px",
-        marginLeft: "68px",
-        marginTop: "15px",
+        marginLeft: "32px",
+        marginTop: "17px",
+        marginBottom: "8px",
         fontFamily: "'Roboto'",
         fontStyle: "normal",
         fontWeight: 800,
@@ -435,7 +438,7 @@ const Dashboard = () => {
         <Sidebar className="d-flex flex-column" rootStyles={mystyles.sidebar} width="228px" collapsedWidth="68px">
           {isCollapsed
             ? <>
-              <p style={mystyles.branding.collapsed}>TF</p>
+              <p style={mystyles.branding.collapsed}><img src={T} /></p>
               <div style={mystyles.sidebarIconContainer.collapsed} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
                 <FontAwesomeIcon icon={faChevronRight} color={primaryColour} />
               </div>
@@ -717,7 +720,7 @@ const Dashboard = () => {
               </div>
             </>
             : <>
-              <p style={mystyles.branding.nonCollapsed}>TASKFORCE</p>
+              <p style={mystyles.branding.nonCollapsed}><img style={{zIndex:1}} src={T} /><img style={{position: 'absolute', zIndex:2, marginTop:'10px', marginLeft:'-11px'}} src={askforce} /></p>
               <div style={mystyles.sidebarIconContainer.nonCollapsed} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
                 <FontAwesomeIcon icon={faChevronLeft} color={primaryColour} />
               </div>

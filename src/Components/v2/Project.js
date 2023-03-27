@@ -7,11 +7,16 @@ import GreenAlert from '../Loader/GreenAlert'
 import LoadingSpinner from '../Loader/Loader'
 import RedAlert from '../Loader/RedAlert'
 import filterIcon from '../../Images/Filter.svg'
+import projectForm from '../../Images/projectForm.svg'
+import Delete from '../../Images/Delete.svg'
+import editD from '../../Images/edit-disabled.svg'
+import cross from '../../Images/cross.svg'
 import axios from 'axios'
-import { DELETE_PROJECT, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_PROJECTS, GET_PROJECT_CATEGORIES, HOST } from '../Constants/Constants'
+import { DELETE_PROJECT, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_PROJECTS, GET_PROJECT_CATEGORIES, HOST, PROJECT_CHART } from '../Constants/Constants'
 import moment from 'moment'
 import AddProject from '../Form/AddProject'
 import UpdateProjectForm from '../Form/UpdateProjectForm'
+import ProjectForm from '../Form/ProjectForm'
 
 const Project = (props) => {
     const { isCollapsed } = props
@@ -23,7 +28,7 @@ const Project = (props) => {
     const [projects, setprojects] = useState([])
     const [projectDetails, setprojectDetails] = useState([])
     const [selectedProjects, setselectedProjects] = useState([])
-    const [projectCount, setprojectCount] = useState({ Total: 0, Month: 0, Percent: 0, Ongoing: 0, Completed: 0 })
+    
     const [cities, setcities] = useState([]);
     const [depts, setdepts] = useState([]);
     const [projectCats, setprojectCats] = useState([]);
@@ -567,8 +572,29 @@ const Project = (props) => {
             color: "#0A0A0A",
             margin: "0px"
         },
+        addModal: {
+            position: "absolute",
+            width: "780px",
+            height: 'fit-content',
+            left: "28vw",
+            marginTop: "10vh",
+            background: "#FFFFFF",
+            boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+            borderRadius: "12px",
+        },
+        addHeading: {
+            width: "auto",
+            height: "28px",
+            marginLeft: "8px",
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 500,
+            fontSize: "18px",
+            lineHeight: "28px",
+            color: "#0A0A0A"
+        }
     }
-
+    const [projectCount, setprojectCount] = useState({ Total: 0, Percent: 0, Ongoing: 0, Completed: 0 })
     useEffect(() => {
         setIsLoading2([true, true, true, true, true, false])
         const call = async () => {
@@ -638,6 +664,31 @@ const Project = (props) => {
                 })
                 .catch((err) => {
                     console.log(err);
+                });
+
+            await axios
+                .get(HOST + PROJECT_CHART, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    chart: "Status",
+                },
+                })
+                .then((res) => {
+                    const arr = res.data.res;
+                    let p = projectCount;
+                    let sum = 0;
+                    arr.map((e) => {
+                    //   if (e.Status === null) p[] = e.Count;
+                      if (e.Status === "Ongoing") p['Ongoing'] = e.Count;
+                      if (e.Status === "Not Started Yet") p[3] = e.Count;
+                      if (e.Status === "Completed") p['Completed'] = e.Count;
+                      sum+=e.Count;
+                    });
+                    p['Total'] = sum
+                    setprojectCount(p);
+                })
+                .catch((err) => {
+                console.error("Error fetching chart data: ", err);
                 });
         }
         call()
@@ -1246,16 +1297,18 @@ const Project = (props) => {
                 <p style={styles.floatinContainerText}>{selectedProjects.length}</p>
                 <p style={styles.floatingContainerText2}>Items Selected</p>
                 <div style={{ ...styles.floatingContainerLine, marginLeft: "-23px" }}></div>
-                {privileges.includes("Delete RFP") ? <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }} onClick={(e) => handleShowDelete()}>
-                    <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
+                {privileges.includes("Delete RFP") ? <div style={{ marginBottom: '15px',display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "50px", cursor: "pointer" }} onClick={(e) => handleShowDelete()}>
+                    {/* <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} /> */}
+                    <img src={Delete} />
                     <p style={styles.floatingContainerIconText}>Delete</p>
                 </div> : <></>}
-                {privileges.includes('Update RFP') ? <Button style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }} disabled={selectedProjects.length !== 1} onClick={handleUpdate}>
-                    <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
-                    <p style={styles.floatingContainerIconText}>Edit</p>
+                {privileges.includes('Update RFP') ? <Button style={{ marginBottom: '15px',display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }} disabled={selectedProjects.length !== 1} onClick={handleUpdate}>
+                    {/* <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" /> */}
+                    <img src={editD} />
+                    {selectedProjects.length !== 1?<p style={{...styles.floatingContainerIconText, color:'#70757A'}}>Edit</p>:<p style={styles.floatingContainerIconText}>Edit</p>}
                 </Button> : <></>}
                 <div style={{ ...styles.floatingContainerLine, marginLeft: "10px" }}></div>
-                <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
+                <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "40px" }}>
                     <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color="#6519E1" onClick={(e) => setselectedProjects([])} />
                 </div>
             </div>
@@ -1266,16 +1319,19 @@ const Project = (props) => {
                 show={show}
                 onHide={handleClose}
                 backdrop="static"
-                centered
-                size="xl"
-                keyboard={false}
+                style={styles.addModal}
+                dialogClassName="filter-dialog"
+                animation={false}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Add Project</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {
-                        <AddProject
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={projectForm} />
+                        <div style={styles.addHeading}>Creating new project</div>
+                    </div>
+                    <div><img onClick={handleClose} style={{marginRight:'25px',float: 'right'}} src={cross} /></div>
+                </div>
+                {
+                        <ProjectForm
                             setRed={setred}
                             setGreen={setgreen}
                             closeModal={handleClose}
@@ -1283,7 +1339,7 @@ const Project = (props) => {
                             apiCall={setCall}
                         />
                     }
-                </Modal.Body>
+                
             </Modal>
 
             {/* Update Modal */}
@@ -1291,14 +1347,18 @@ const Project = (props) => {
                 show={showUpdate}
                 onHide={handleCloseUpdate}
                 backdrop="static"
-                centered
-                size="xl"
-                keyboard={false}
+                style={styles.addModal}
+                dialogClassName="filter-dialog"
+                animation={false}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Update Project</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={projectForm} />
+                        <div style={styles.addHeading}>Update project</div>
+                    </div>
+                    <div><img onClick={handleCloseUpdate} style={{marginRight:'25px',float: 'right'}} src={cross} /></div>
+                </div>
+                
                     {
                         <UpdateProjectForm
                             row={rowData}
@@ -1309,7 +1369,7 @@ const Project = (props) => {
                             apiCall={setCall}
                         />
                     }
-                </Modal.Body>
+                
             </Modal>
 
             {/* Delete Modal */}
