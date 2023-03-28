@@ -43,18 +43,9 @@ import rfpActive from "../../Images/RFP_Active.svg";
 import rfpInactive from "../../Images/RFP.svg";
 import T from "../../Images/T.svg";
 import askforce from "../../Images/ASKFORCE.svg";
-import AdminDash from "../AdminDash/AdminDash";
-import BudgetCities from "../Update/BudgetCities";
-import RFPUpdate from "../Update/RFPUpdate";
-import ProposalsUpdate from "../Update/ProposalsUpdate";
-import ProjectUpdate from "../Update/ProjectUpdate";
-import EmployeeUpdate from "../Update/EmployeeUpdate";
 import ExpenseUpdate from "../Update/ExpenseUpdate";
 import CompanyUpdate from "../Update/CompanyUpdate";
-import CustomerUpdate from "../Update/CustomerUpdate";
 import Home from "./Home";
-import { HOST, GET_ADMIN_TASKS } from "../Constants/Constants";
-import LoadingSpinner from "../Loader/Loader";
 import RFP from "../v2/RFP";
 import TestDemo from "../v2/Calendar.js";
 import Proposal from "../v2/Proposal";
@@ -64,6 +55,7 @@ import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../v2/Customers";
 import Project from "../v2/Project";
 import ProjectDetail from "../Update/ProjectDetail";
+import BudgetCities from "../v2/BudgetCities";
 
 
 const Dashboard = () => {
@@ -312,7 +304,7 @@ const Dashboard = () => {
     if (nav === 0){return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth}/>;}
     if (nav === 1) return <></>;
     if (nav === 2) return <></>;
-    if (nav === 3) return <BudgetCities />;
+    if (nav === 3) return <BudgetCities isCollapsed={isCollapsed} />;
     if (nav === 4) return <RFP isCollapsed={isCollapsed}/>
     if (nav === 5) return <Proposal isCollapsed={isCollapsed} />
     if (nav === 6) return <Project isCollapsed={isCollapsed} />
