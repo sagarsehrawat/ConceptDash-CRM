@@ -58,6 +58,15 @@ th {
   width: 786px !important;
 }
 
+.filter-dialog2>.modal-content {
+  width: 446px !important;
+}
+
+.filter-dialog2 {
+  margin: 0px !important;
+  max-width: none;
+}
+
 .filter-dialog {
   margin: 0px !important;
   max-width: none;
@@ -256,4 +265,8 @@ input:focus {
   color: #70757A;
   width: 73px;
   height: 28px;
+}
+
+.react-select-7-listbox{
+  z-index: 4;
 }
