@@ -23,6 +23,17 @@ import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import AuthContext from "../../Context/AuthContext";
 
+const styles = {
+  container: {
+    width: "740px",
+    height: "auto",
+    marginLeft: "20px",
+    marginTop: "26px",
+    background: "#FFFFFF",
+    boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+    borderRadius: "12px"
+  }
+}
 function AddProject(props) {
   const { privileges, setPrivileges } = useContext(AuthContext);
   const [apiCallCity, setCallCity] = useState(0);
@@ -172,7 +183,7 @@ function AddProject(props) {
   const handleShowCategoryForm = () => setShowCategoryForm(true);
 
   return (
-    <>
+    <div style={{width: '740px', marginLeft:'20px', marginTop:'20px'}}>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
       {red === true ? <RedAlert setRed={setred} /> : <></>}
       {isLoading ? (
@@ -190,6 +201,19 @@ function AddProject(props) {
                       ))
                     : ""}
                 </Form.Select>
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Button
+                  style={{
+                    width: "100%",
+                    backgroundColor: "grey",
+                    border: "none",
+                  }}
+                  onClick={handleShowCityForm}
+                  disabled={!privileges.includes("Add City")}
+                >
+                  Add City
+                </Button>
               </Form.Group>
               <Form.Group as={Col}>
                 <Button
@@ -443,7 +467,7 @@ function AddProject(props) {
           </Modal>
         </>
       )}
-    </>
+    </div>
   );
 }
 

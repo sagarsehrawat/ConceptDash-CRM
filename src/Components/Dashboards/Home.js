@@ -22,6 +22,8 @@ import {
 } from "@syncfusion/ej2-react-schedule";
 import { Internationalization, extend } from "@syncfusion/ej2-base";
 import { gapi } from "gapi-script";
+import ProjectCharts from "./ProjectCharts";
+import ProposalCharts from "./ProposalCharts";
 
 const Home = (props) => {
   const { isCollapsed, viewportWidth } = props;
@@ -480,8 +482,8 @@ const Home = (props) => {
   const handleChartsComponent = () => {
     if (chartComponent === "0") return <BudgetCharts year={year} />;
     if (chartComponent === "1") return <RFPCharts month={month} />;
-    if (chartComponent === "2") return proposalCharts();
-    if (chartComponent === "3") return projectCharts();
+    if (chartComponent === "2") return <ProposalCharts month={month} />;
+    if (chartComponent === "3") return <ProjectCharts month={month}/>;
   };
 
   const proposalCharts = () => {
@@ -615,15 +617,15 @@ const Home = (props) => {
               </option>
             </Form.Select>
             <div className="d-flex flex-row">
-              <Button style={styles.exportButton}>
+              {/* <Button style={styles.exportButton}>
                 <FontAwesomeIcon
                   icon={faCloudArrowDown}
                   style={styles.exportButtonIcon}
                   color={primaryColour}
                 />
                 <p style={styles.exportButtonText}>Export</p>
-              </Button>
-              {chartComponent === "1" ? (
+              </Button> */}
+              {chartComponent === "1" || chartComponent === "3" || chartComponent === "2" ? (
                 <Form.Select
                   style={styles.headerDropdown3}
                   onChange={(e) => {

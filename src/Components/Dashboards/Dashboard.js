@@ -41,18 +41,11 @@ import proposalsActive from "../../Images/Proposals_Active.svg";
 import proposalsInactive from "../../Images/Proposals.svg";
 import rfpActive from "../../Images/RFP_Active.svg";
 import rfpInactive from "../../Images/RFP.svg";
-import AdminDash from "../AdminDash/AdminDash";
-import BudgetCities from "../Update/BudgetCities";
-import RFPUpdate from "../Update/RFPUpdate";
-import ProposalsUpdate from "../Update/ProposalsUpdate";
-import ProjectUpdate from "../Update/ProjectUpdate";
-import EmployeeUpdate from "../Update/EmployeeUpdate";
+import T from "../../Images/T.svg";
+import askforce from "../../Images/ASKFORCE.svg";
 import ExpenseUpdate from "../Update/ExpenseUpdate";
 import CompanyUpdate from "../Update/CompanyUpdate";
-import CustomerUpdate from "../Update/CustomerUpdate";
 import Home from "./Home";
-import { HOST, GET_ADMIN_TASKS } from "../Constants/Constants";
-import LoadingSpinner from "../Loader/Loader";
 import RFP from "../v2/RFP";
 import TestDemo from "../v2/Calendar.js";
 import Proposal from "../v2/Proposal";
@@ -62,6 +55,7 @@ import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../v2/Customers";
 import Project from "../v2/Project";
 import ProjectDetail from "../Update/ProjectDetail";
+import BudgetCities from "../v2/BudgetCities";
 
 
 const Dashboard = () => {
@@ -153,8 +147,9 @@ const Dashboard = () => {
       },
       nonCollapsed: {
         height: "26px",
-        marginLeft: "68px",
-        marginTop: "15px",
+        marginLeft: "32px",
+        marginTop: "17px",
+        marginBottom: "8px",
         fontFamily: "'Roboto'",
         fontStyle: "normal",
         fontWeight: 800,
@@ -309,10 +304,10 @@ const Dashboard = () => {
     if (nav === 0){return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth}/>;}
     if (nav === 1) return <></>;
     if (nav === 2) return <></>;
-    if (nav === 3) return <BudgetCities />;
+    if (nav === 3) return <BudgetCities isCollapsed={isCollapsed} />;
     if (nav === 4) return <RFP isCollapsed={isCollapsed}/>
     if (nav === 5) return <Proposal isCollapsed={isCollapsed} />
-    if (nav === 6) return <ProjectUpdate setnav={setnav} setproject={setproject} />
+    if (nav === 6) return <Project isCollapsed={isCollapsed} />
     if (nav === 7) return <Employee isCollapsed={isCollapsed}/>;
     if (nav === 8) return <TestDemo />;
     if (nav === 9) return <ExpenseUpdate />;
@@ -435,7 +430,7 @@ const Dashboard = () => {
         <Sidebar className="d-flex flex-column" rootStyles={mystyles.sidebar} width="228px" collapsedWidth="68px">
           {isCollapsed
             ? <>
-              <p style={mystyles.branding.collapsed}>TF</p>
+              <p style={mystyles.branding.collapsed}><img src={T} /></p>
               <div style={mystyles.sidebarIconContainer.collapsed} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
                 <FontAwesomeIcon icon={faChevronRight} color={primaryColour} />
               </div>
@@ -717,7 +712,7 @@ const Dashboard = () => {
               </div>
             </>
             : <>
-              <p style={mystyles.branding.nonCollapsed}>TASKFORCE</p>
+              <p style={mystyles.branding.nonCollapsed}><img style={{zIndex:1}} src={T} /><img style={{position: 'absolute', zIndex:2, marginTop:'10px', marginLeft:'-11px'}} src={askforce} /></p>
               <div style={mystyles.sidebarIconContainer.nonCollapsed} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
                 <FontAwesomeIcon icon={faChevronLeft} color={primaryColour} />
               </div>

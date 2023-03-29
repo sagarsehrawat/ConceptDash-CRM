@@ -849,7 +849,7 @@ const Proposal = (props) => {
             )
         } else if (status === "Won") {
             return (
-                <div style={{ ...styles.statusContainer, border: "1px solid #34A853" }} className='d-flex justify-content-center'>
+                <div style={{ ...styles.statusContainer, background: "#E4FEF1", border: "1px solid #34A853" }} className='d-flex justify-content-center'>
                     <p style={{ ...styles.status, color: "#34A853" }}>Won</p>
                 </div>
             )
@@ -1102,7 +1102,7 @@ const Proposal = (props) => {
                                             <FontAwesomeIcon icon={faArrowUp} />
                                             <p style={styles.sortText}>Sort Ascending</p>
                                         </div>
-                                        <div className='d-flex flex-row1justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("City DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("City DESC"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowDown} />
                                             <p style={styles.sortText}>Sort Descending</p>
                                         </div>
@@ -1293,7 +1293,7 @@ const Proposal = (props) => {
                                     </tr>
                                     <tr id={e.Proposal_ID} style={{ ...styles.tableRow, display: proposalDetails.includes(e.Proposal_ID) ? "table-row" : "none", visibility: proposalDetails.includes(e.Proposal_ID) ? "visible" : "hidden" }}>
                                         <td colSpan={8} style={{ borderBottom: "1px solid #EBE9F1" }}>
-                                            <div className='d-flex flex-row justify-content-between align-items-start' style={{ marginLeft: "64px", marginRight: "32px", marginBottom: "12px", width: isCollapsed ? "88.333vw" : "77.222vw", padding: "12px 24px", gap: "62px", height: "95px", background: "#F7F7F9", borderRadius: "12px", marginTop: "12px" }}>
+                                            <div className='d-flex flex-row justify-content-between align-items-start' style={{ marginLeft: "64px", marginRight: "32px", marginBottom: "12px", padding: "12px 24px", gap: "62px", height: "95px", background: "#F7F7F9", borderRadius: "12px", marginTop: "12px" }}>
                                                 <div className='d-flex flex-column '>
                                                     <p style={styles.tableRow2Heading}>Design Price ($)</p>
                                                     <p style={styles.tableRow2Subheading}>{addComma(e.Design_Price)}</p>
