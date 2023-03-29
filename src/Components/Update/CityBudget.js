@@ -302,7 +302,6 @@ const CityBudget = (props) => {
     handleShowDelete();
   };
   const handleDeleteBudget = (e) => {
-    setIsLoading(true);
     e.preventDefault();
     setIsLoading(true);
     axios
