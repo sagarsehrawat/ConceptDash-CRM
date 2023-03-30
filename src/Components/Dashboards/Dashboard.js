@@ -56,7 +56,7 @@ import Customers from "../v2/Customers";
 import Project from "../v2/Project";
 import ProjectDetail from "../Update/ProjectDetail";
 import BudgetCities from "../v2/BudgetCities";
-import TimeSheet from "../TimeSheet/TimeSheet";
+import Tasks from "../v2/Tasks";
 
 
 const Dashboard = () => {
@@ -304,7 +304,7 @@ const Dashboard = () => {
   const handleDash = (e) => {
     if (nav === 0){return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth}/>;}
     if (nav === 1) return <></>;
-    if (nav === 2) return <></>;
+    if (nav === 2) return <Tasks isCollapsed={isCollapsed}/>;
     if (nav === 3) return <BudgetCities isCollapsed={isCollapsed} />;
     if (nav === 4) return <RFP isCollapsed={isCollapsed}/>
     if (nav === 5) return <Proposal isCollapsed={isCollapsed} />
