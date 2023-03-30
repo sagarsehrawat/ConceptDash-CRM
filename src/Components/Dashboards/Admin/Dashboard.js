@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
-import TestDemo from "../../Calendar";
 import AdminDash from "../../AdminDash/AdminDash";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -189,18 +188,7 @@ const Dashboard = () => {
 
         <main class="s-layout__content1" style={{ "paddingTop": "8vh" }}>{handleDash()}</main>
       </div>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        // dialogClassName="modal-150w"
-        aria-labelledby="example-custom-modal-styling-title"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Calendar</Modal.Title>
-        </Modal.Header>
-        <Modal.Body >{<TestDemo />}</Modal.Body>
-      </Modal>
+
     </div>
   );
 };
