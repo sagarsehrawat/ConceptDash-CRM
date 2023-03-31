@@ -10,6 +10,8 @@ import timesheet from "../../Images/Timesheet.svg";
 import report from "../../Images/Report.svg";
 import person from "../../Images/Person.svg";
 import filter from "../../Images/Filter.svg";
+import edit from "../../Images/Editor.svg";
+import del from "../../Images/Delete.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from 'moment'
 import {
@@ -977,7 +979,7 @@ function Tasks(props) {
                             <>
                                 <tr>
                                 <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [!prev[0], ...prev.slice(1)])} >
-                                    <FontAwesomeIcon icon={details[0] ? faChevronRight : faChevronDown} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                                    <FontAwesomeIcon icon={details[0] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                                     Projects
                                 </td>
                                 </tr>
@@ -1016,7 +1018,269 @@ function Tasks(props) {
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                    
+                                        <img style={{marginRight: '20px'}} src={edit}/>
+                                        <img src={del}/>
+                                    </td>
+                                </tr>
+                                )) : <></>}
+                            </>
+                            }
+
+                            {/* Proposals */}
+                            {proposals.length === 0 ? <></> :
+                            <>
+                                <tr>
+                                <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], !prev[1], ...prev.slice(2)])} >
+                                    <FontAwesomeIcon icon={details[1] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                                    Proposals
+                                </td>
+                                </tr>
+                                {details[1] ? proposals.map((e) => (
+                                <tr style={styles.row2}>
+                                    <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name?e.Project_Name:'-'}</p>&nbsp;&nbsp;
+                                    <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.Title}</p>
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {formatDate(e.Start_Date)}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {formatDate(e.Due_Date)}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {e.Assigner}
+                                    </td>
+                                    <td style={styles.cell} align='center'>
+                                        {e.Priority===1
+                                        ?<div style={{width:'78px', height:'20px', background:'#559776', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
+                                        e.Priority===2?<div style={{width:'49px', height:'20px', background:'#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#D93838"}}>High</p></div>:
+                                        e.Priority===3?<div style={{width:'68px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>Medium</p></div>
+                                        :<div style={{width:'47px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Low</p></div>
+                                        }
+                                    </td>
+                                    <td style={styles.cell}>
+                                    {e.Status===0
+                                        ?<div style={{width:'85px', height:'20px', background:'#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#5079E1"}}>Not Started</p></div>:
+                                        e.Priority===1?<div style={{width:'49px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
+                                        <div style={{width:'68px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Completed</p></div>
+                                        }
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {e.Reviewer}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        <img style={{marginRight: '20px'}} src={edit}/>
+                                        <img src={del}/>
+                                    </td>
+                                </tr>
+                                )) : <></>}
+                            </>
+                            }
+
+                            {/* RFPs */}
+                            {rfps.length === 0 ? <></> :
+                            <>
+                                <tr>
+                                <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], prev[1], !prev[2], ...prev.slice(3)])} >
+                                    <FontAwesomeIcon icon={details[2] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                                    RFPs
+                                </td>
+                                </tr>
+                                {details[2] ? rfps.map((e) => (
+                                <tr style={styles.row2}>
+                                    <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name?e.Project_Name:'-'}</p>&nbsp;&nbsp;
+                                    <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.Title}</p>
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {formatDate(e.Start_Date)}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {formatDate(e.Due_Date)}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {e.Assigner}
+                                    </td>
+                                    <td style={styles.cell} align='center'>
+                                        {e.Priority===1
+                                        ?<div style={{width:'78px', height:'20px', background:'#559776', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
+                                        e.Priority===2?<div style={{width:'49px', height:'20px', background:'#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#D93838"}}>High</p></div>:
+                                        e.Priority===3?<div style={{width:'68px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>Medium</p></div>
+                                        :<div style={{width:'47px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Low</p></div>
+                                        }
+                                    </td>
+                                    <td style={styles.cell}>
+                                    {e.Status===0
+                                        ?<div style={{width:'85px', height:'20px', background:'#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#5079E1"}}>Not Started</p></div>:
+                                        e.Priority===1?<div style={{width:'49px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
+                                        <div style={{width:'68px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Completed</p></div>
+                                        }
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {e.Reviewer}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        <img style={{marginRight: '20px'}} src={edit}/>
+                                        <img src={del}/>
+                                    </td>
+                                </tr>
+                                )) : <></>}
+                            </>
+                            }
+
+                            {/* General */}
+                            {general.length === 0 ? <></> :
+                            <>
+                                <tr>
+                                <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], prev[1], prev[2], !prev[3], ...prev.slice(4)])} >
+                                    <FontAwesomeIcon icon={details[3] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                                    General
+                                </td>
+                                </tr>
+                                {details[3] ? general.map((e) => (
+                                <tr style={styles.row2}>
+                                    <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name?e.Project_Name:'General'}</p>&nbsp;&nbsp;
+                                    <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.Title}</p>
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {formatDate(e.Start_Date)}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {formatDate(e.Due_Date)}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {e.Assigner}
+                                    </td>
+                                    <td style={styles.cell} align='center'>
+                                        {e.Priority===1
+                                        ?<div style={{width:'78px', height:'20px', background:'#559776', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
+                                        e.Priority===2?<div style={{width:'49px', height:'20px', background:'#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#D93838"}}>High</p></div>:
+                                        e.Priority===3?<div style={{width:'68px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>Medium</p></div>
+                                        :<div style={{width:'47px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Low</p></div>
+                                        }
+                                    </td>
+                                    <td style={styles.cell}>
+                                    {e.Status===0
+                                        ?<div style={{width:'85px', height:'20px', background:'#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#5079E1"}}>Not Started</p></div>:
+                                        e.Priority===1?<div style={{width:'49px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
+                                        <div style={{width:'68px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Completed</p></div>
+                                        }
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {e.Reviewer}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        <img style={{marginRight: '20px'}} src={edit}/>
+                                        <img src={del}/>
+                                    </td>
+                                </tr>
+                                )) : <></>}
+                            </>
+                            }
+
+                            {/* Finance */}
+                            {finance.length === 0 ? <></> :
+                            <>
+                                <tr>
+                                <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], prev[1], prev[2], prev[3], !prev[4], ...prev.slice(5)])} >
+                                    <FontAwesomeIcon icon={details[4] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                                    Finance
+                                </td>
+                                </tr>
+                                {details[4] ? finance.map((e) => (
+                                <tr style={styles.row2}>
+                                    <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name?e.Project_Name:'Finance'}</p>&nbsp;&nbsp;
+                                    <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.Title}</p>
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {formatDate(e.Start_Date)}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {formatDate(e.Due_Date)}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {e.Assigner}
+                                    </td>
+                                    <td style={styles.cell} align='center'>
+                                        {e.Priority===1
+                                        ?<div style={{width:'78px', height:'20px', background:'#559776', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
+                                        e.Priority===2?<div style={{width:'49px', height:'20px', background:'#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#D93838"}}>High</p></div>:
+                                        e.Priority===3?<div style={{width:'68px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>Medium</p></div>
+                                        :<div style={{width:'47px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Low</p></div>
+                                        }
+                                    </td>
+                                    <td style={styles.cell}>
+                                    {e.Status===0
+                                        ?<div style={{width:'85px', height:'20px', background:'#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#5079E1"}}>Not Started</p></div>:
+                                        e.Priority===1?<div style={{width:'49px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
+                                        <div style={{width:'68px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Completed</p></div>
+                                        }
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {e.Reviewer}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        <img style={{marginRight: '20px'}} src={edit}/>
+                                        <img src={del}/>
+                                    </td>
+                                </tr>
+                                )) : <></>}
+                            </>
+                            }
+
+
+                            {/* HR */}
+                            {hr.length === 0 ? <></> :
+                            <>
+                                <tr>
+                                <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], prev[1], prev[2], prev[3], prev[4], !prev[5], ...prev.slice(6)])} >
+                                    <FontAwesomeIcon icon={details[5] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                                    HR
+                                </td>
+                                </tr>
+                                {details[5] ? hr.map((e) => (
+                                <tr style={styles.row2}>
+                                    <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name?e.Project_Name:'HR'}</p>&nbsp;&nbsp;
+                                    <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.Title}</p>
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {formatDate(e.Start_Date)}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {formatDate(e.Due_Date)}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {e.Assigner}
+                                    </td>
+                                    <td style={styles.cell} align='center'>
+                                        {e.Priority===1
+                                        ?<div style={{width:'78px', height:'20px', background:'#559776', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
+                                        e.Priority===2?<div style={{width:'49px', height:'20px', background:'#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#D93838"}}>High</p></div>:
+                                        e.Priority===3?<div style={{width:'68px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>Medium</p></div>
+                                        :<div style={{width:'47px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Low</p></div>
+                                        }
+                                    </td>
+                                    <td style={styles.cell}>
+                                    {e.Status===0
+                                        ?<div style={{width:'85px', height:'20px', background:'#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#5079E1"}}>Not Started</p></div>:
+                                        e.Priority===1?<div style={{width:'49px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
+                                        <div style={{width:'68px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Completed</p></div>
+                                        }
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {e.Reviewer}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        <img style={{marginRight: '20px'}} src={edit}/>
+                                        <img src={del}/>
                                     </td>
                                 </tr>
                                 )) : <></>}
