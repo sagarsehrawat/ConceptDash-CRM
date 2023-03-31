@@ -501,7 +501,8 @@ const BudgetCities = (props) => {
 
     const addComma = (num) => {
         if (num === null || num === "" || num === undefined) return ""
-        return `$ ${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+        const n = num
+        return `$ ${n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
     }
 
     const statusComponent = (status) => {
@@ -673,6 +674,31 @@ const BudgetCities = (props) => {
                             </tbody>
                         </table>
                     </div>
+                    {/* Update City Modal */}
+                    <Modal
+                        show={showUpdate}
+                        onHide={handleCloseUpdate}
+                        backdrop="static"
+                        centered
+                        size="xl"
+                        keyboard={false}
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title>Update Budget City</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            {
+                                <UpdateCityBudget
+                                    row={rowData}
+                                    setRed={setred}
+                                    setGreen={setgreen}
+                                    closeModal={handleCloseUpdate}
+                                    api={apiCall}
+                                    apiCall={setCall}
+                                />
+                            }
+                        </Modal.Body>
+                    </Modal>
                 </>
                 : <>
                     <div className='d-flex flex-row align-items-baseline' style={styles.headerContainer}>
@@ -800,7 +826,7 @@ const BudgetCities = (props) => {
                                     </div>
                                     <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
                                         {/* <Button style={styles.filterButton2} onClick={(e) => setfilter2('Advanced')}>Go to Advanced Filters</Button> */}
-                                        <Button style={styles.filterButton3} onClick={(e) => { setCall2(apiCall2+1); closeFilterModal(); }}>Filter</Button>
+                                        <Button style={styles.filterButton3} onClick={(e) => { setCall2(apiCall2 + 1); closeFilterModal(); }}>Filter</Button>
                                     </div>
                                 </div>
                             </Modal>
@@ -809,7 +835,7 @@ const BudgetCities = (props) => {
                                 defaultValue={{ value: year, label: year }}
                                 onChange={async (e) => {
                                     setYear(e.value);
-                                    setCall2(apiCall2+1)
+                                    setCall2(apiCall2 + 1)
                                 }}
                                 styles={customStyles}
                                 options={[
@@ -969,31 +995,6 @@ const BudgetCities = (props) => {
                         </Modal.Body>
                     </Modal>
                 </>}
-            {/* Update City Modal */}
-            <Modal
-                show={showUpdate}
-                onHide={handleCloseUpdate}
-                backdrop="static"
-                centered
-                size="xl"
-                keyboard={false}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Update Budget City</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {
-                        <UpdateCityBudget
-                            row={rowData}
-                            setRed={setred}
-                            setGreen={setgreen}
-                            closeModal={handleCloseUpdate}
-                            api={apiCall}
-                            apiCall={setCall}
-                        />
-                    }
-                </Modal.Body>
-            </Modal>
         </>
     )
 }
