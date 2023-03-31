@@ -8,6 +8,8 @@ import axios from 'axios'
 import { ADD_TIMESHEET, GET_EMPLOYEENAMES, GET_WEEKLY_TIMESHEET, HOST } from '../Constants/Constants'
 import GreenAlert from '../Loader/GreenAlert'
 import RedAlert from '../Loader/RedAlert'
+import { Modal } from 'react-bootstrap'
+import AddTask from '../Form/AddTask'
 
 const TimeSheet = (props) => {
   const { isCollapsed } = props
@@ -34,6 +36,11 @@ const TimeSheet = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [timerId, setTimerId] = useState(null);
+
+    //Add Form Modal
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
   const styles = {
     searchInputContainer: {
@@ -324,7 +331,7 @@ const TimeSheet = (props) => {
             ))}
           </select>
         </div>
-        <button style={styles.addButton}>+ Add New Task</button>
+        <button style={styles.addButton} onClick={handleShow}>+ Add New Task</button>
       </div>
 
       {/* Table Header */}
@@ -932,6 +939,30 @@ const TimeSheet = (props) => {
           </tr>
         </thead>
       </table>
+
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        centered
+        size="xl"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Task</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {
+            <AddTask
+              setRed={setred}
+              setGreen={setgreen}
+              closeModal={handleClose}
+              api={apiCall}
+              apiCall={setCall}
+            />
+          }
+        </Modal.Body>
+      </Modal>
     </>
   )
 }
