@@ -183,6 +183,7 @@ const TimeSheet = (props) => {
           },
         })
         .then((res) => {
+          console.log(res.data.res)
           let h = {
             Projects: [],
             Proposals: [],
