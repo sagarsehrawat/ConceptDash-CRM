@@ -32,6 +32,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { GET_EMPLOYEENAMES, GET_PAGE_TASKS, HOST } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import AddTask from "../Form/AddTask";
+import TimeSheet from "../TimeSheet/TimeSheet";
 
 function Tasks(props) {
   const { isCollapsed } = props;
@@ -360,10 +361,10 @@ function Tasks(props) {
                   },
                 }}
                 sx={{
-                  //   marginRight: "400px",
+                    //   marginRight: "400px",
                   marginLeft: "20px",
-                  float: "left",
-                  height: "57px",
+                    float: "left",
+                    height: "57px",
                 }}
               >
                 <Tab
@@ -864,38 +865,17 @@ function Tasks(props) {
               </div>
             </TabPanel>
             <TabPanel value="2">
-              <div
-                style={{
-                  width: "100%",
-                  float: "left",
-                  marginLeft: "5px",
-                  marginTop: "20px",
-                }}
-              >
+              <div style={{ width: '100%', float: 'left', marginLeft: '5px', marginTop: '20px' }}>
                 Board
               </div>
             </TabPanel>
             <TabPanel value="3">
-              <div
-                style={{
-                  width: "100%",
-                  float: "left",
-                  marginLeft: "5px",
-                  marginTop: "20px",
-                }}
-              >
-                Timesheet
-              </div>
+                <div style={{width: '100%', float:'left',}}>
+                    <TimeSheet />
+                </div>
             </TabPanel>
             <TabPanel value="4">
-              <div
-                style={{
-                  width: "100%",
-                  float: "left",
-                  marginLeft: "5px",
-                  marginTop: "20px",
-                }}
-              >
+              <div style={{ width: '100%', float: 'left', marginLeft: '5px', marginTop: '20px' }}>
                 Reports
               </div>
             </TabPanel>
