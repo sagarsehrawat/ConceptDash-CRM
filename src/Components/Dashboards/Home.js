@@ -539,6 +539,7 @@ const Home = (props) => {
           },
         })
         .then((res) => {
+          console.log(res.data.res)
           settitle1(res.data.res[0].Title);
           settitle2(res.data.res[1].Title);
           settitle3(res.data.res[2].Title);
