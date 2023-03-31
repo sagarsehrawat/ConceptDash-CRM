@@ -230,7 +230,7 @@ function AddTask(props) {
               id="3"
               label="Proposals"
             />
-            <Form.Check value='RFPs' inline type="radio" name="group1" id="4" label="RFPs" />
+            <Form.Check value='RFP' inline type="radio" name="group1" id="4" label="RFPs" />
             <Form.Check value='HR' inline type="radio" name="group1" id="5" label="HR" />
             <Form.Check
               value='Finance'

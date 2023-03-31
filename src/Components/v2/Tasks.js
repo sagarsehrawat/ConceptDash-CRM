@@ -11,6 +11,7 @@ import report from "../../Images/Report.svg";
 import person from "../../Images/Person.svg";
 import filter from "../../Images/Filter.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from 'moment'
 import {
   faArrowDown,
   faArrowsUpDown,
@@ -40,6 +41,7 @@ function Tasks(props) {
   const [apiCall, setCall] = useState(0);
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
+  const [details, setdetails] = useState([false, false, false, false, false, false])
   const styles = {
     heading: {
       width: "48px",
@@ -54,8 +56,16 @@ function Tasks(props) {
       color: "#0A0A0A",
     },
     headerContainer: {
-      marginLeft: "4px",
+      marginLeft: "32px",
       marginRight: "24px",
+    },
+    priorityText: {
+        height: "16px",
+        fontFamily: "'Roboto'",
+        fontStyle: "normal",
+        fontWeight: 400,
+        fontSize: "12px",
+        lineHeight: "16px"
     },
     searchInputContainer: {
       boxSizing: "border-box",
@@ -244,6 +254,49 @@ function Tasks(props) {
       marginLeft: "30px",
       marginBottom: "10px",
     },
+    table: {
+        width: "100%",
+        overflowX: "hidden",
+        borderCollapse: "collapse"
+      },
+      tableHeader2: {
+        height: "35px",
+        background: "#F7F7F9",
+        textAlign: "center",
+        borderBottom: "0px"
+      },
+      tableHeading: {
+        fontFamily: "'Roboto'",
+        fontStyle: "normal",
+        fontWeight: 500,
+        fontSize: "13px",
+        color: "#70757A",
+        borderBottom: "1px solid #EBE9F1",
+        verticalAlign: "middle",
+        textAlign: "center",
+      },
+      tableBody: {
+        background: "#FFFFFF",
+        width: '100%'
+      },
+      row2: {
+        height: "44px",
+        width: "100%",
+        background: "#FFFFFF",
+        borderBottom: "1px solid #EBE9F1",
+      },
+      cell: {
+        height: "44px",
+        float: "center",
+        textAlign: "center",
+        // borderBottom: "1px solid #EBE9F1",
+        // borderRight: "1px solid #EBE9F1",
+        fontFamily: "'Roboto'",
+        fontStyle: "normal",
+        fontWeight: 400,
+        fontSize: "13px",
+        lineHeight: '20px'
+      },
   };
 
   //Add Form Modal
@@ -267,6 +320,12 @@ function Tasks(props) {
   };
   const [value, setvalue] = useState("");
   const [employees, setemployees] = useState([]);
+  const [general, setgeneral] = useState([]);
+  const [projects, setprojects] = useState([]);
+  const [proposals, setproposals] = useState([]);
+  const [rfps, setrfps] = useState([]);
+  const [hr, sethr] = useState([]);
+  const [finance, setfinance] = useState([]);
   const [isLoadingEmp, setisLoadingEmp] = useState(false);
   const [returnData, setreturnData] = useState({
     employee: [],
@@ -293,8 +352,9 @@ function Tasks(props) {
     };
     call();
   }, []);
+  const [isLoading, setisLoading] = useState(false)
   useEffect(() => {
-    // setIsLoading(true);
+    setisLoading(true);
     const call = async () => {
         await axios
             .get(HOST + GET_PAGE_TASKS, {
@@ -306,7 +366,30 @@ function Tasks(props) {
             })
             .then((res) => {
                 console.log(res.data.res);
-                // setIsLoading(false);
+                let pj = [], prop = [], rf = [], gen = [], fin = [], HR = []
+                let arr = res.data.res;
+                for(let i=0;i<arr.length;i++) {
+                    if(arr[i].Type==="Projects") {
+                        pj.push(arr[i]);
+                    } else if(arr[i].Type==="Proposals") {
+                        prop.push(arr[i])
+                    } else if(arr[i].Type==="RFP") {
+                        rf.push(arr[i])
+                    } else if(arr[i].Type==="General") {
+                        gen.push(arr[i])
+                    } else if(arr[i].Type==="Finance") {
+                        fin.push(arr[i])
+                    } else {
+                        HR.push(arr[i])
+                    }
+                }
+                setprojects(pj);
+                setproposals(prop);
+                setrfps(rf);
+                setgeneral(gen);
+                setfinance(fin);
+                sethr(HR);
+                setisLoading(false);
             })
             .catch((err) => {
                 console.log(err);
@@ -337,6 +420,11 @@ function Tasks(props) {
       returnData.priority.length
     );
   };
+  const formatDate = (date) => {
+    if (date === "" || date === null || date === undefined) return "";
+    const formattedDate = moment(date)
+    return formattedDate.format('D MMM, YYYY')
+}
   return (
     <div>
       <div style={styles.heading}>Tasks</div>
@@ -446,7 +534,7 @@ function Tasks(props) {
                 style={{
                   width: "100%",
                   float: "left",
-                  marginLeft: "5px",
+                //   marginLeft: "5px",
                   marginTop: "20px",
                 }}
               >
@@ -458,12 +546,12 @@ function Tasks(props) {
                     <input
                       style={styles.searchInputContainer}
                       type="text"
-                      // value={value}
-                      // onChange={filterData}
+                      value={value}
+                      onChange={(e) => setvalue(e.target.value)}
                       placeholder="Search Tasks"
                     />
                     <Button style={styles.searchButton}>
-                      <FontAwesomeIcon icon={faMagnifyingGlass} color="black" />
+                      <FontAwesomeIcon onClick={(e) => setCall(apiCall + 1)} icon={faMagnifyingGlass} color="black" />
                     </Button>
 
                     {localStorage.getItem("department") === "Admin" ? (
@@ -861,6 +949,85 @@ function Tasks(props) {
                   <button style={styles.addButton} onClick={handleShow}>
                     <p style={styles.addButtonText}>+ Add New Task</p>
                   </button>
+                </div>
+                {/* Table */}
+                <div style={{ borderBottom: "1px solid #EBE9F1", height: "548px", overflow: "auto", position: "relative", marginTop:'32px', width:'100%' }}>
+                    <table style={styles.table} className='rfp-table'>
+                    <thead style={styles.tableHeader2}>
+                        <tr>
+                        <th scope="col" style={{ ...styles.tableHeading, width: "26vw", borderBottom: "1px solid #EBE9F1", textAlign: "left", paddingLeft: "32px" }} className='fixed-header'>Tasks</th>
+                        <th scope="col" style={{ ...styles.tableHeading, width:isCollapsed? '9vw': '8vw' }} className='fixed-header2'>Start Date</th>
+                        <th scope="col" style={{ ...styles.tableHeading, width:isCollapsed? '10vw': '8vw' }} className='fixed-header2'>Due Date</th>
+                        <th scope="col" style={{ ...styles.tableHeading, width:isCollapsed? '10vw': '8vw' }} className='fixed-header2'>Assigned By</th>
+                        <th scope="col" style={{ ...styles.tableHeading, width:isCollapsed? '10vw': '8vw' }} className='fixed-header2'>Priority</th>
+                        <th scope="col" style={{ ...styles.tableHeading, width:isCollapsed? '10vw': '8vw' }} className='fixed-header2'>Status</th>
+                        <th scope="col" style={{ ...styles.tableHeading, width:isCollapsed? '10vw': '9vw' }} className='fixed-header2'>Reviewed By</th>
+                        <th scope="col" style={{ ...styles.tableHeading, width:isCollapsed? '10vw': '9vw' }} className='fixed-header2'>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody style={styles.tableBody}>
+                        {isLoading ? <tr style={{ height: "512px", width: "100%", background: "white" }}>
+                        <td colSpan={9}>
+                            <LoadingSpinner />
+                        </td>
+                        </tr> :
+                        <>
+                            {/* Projects */}
+                            {projects.length === 0 ? <></> :
+                            <>
+                                <tr>
+                                <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [!prev[0], ...prev.slice(1)])} >
+                                    <FontAwesomeIcon icon={details[0] ? faChevronRight : faChevronDown} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                                    Projects
+                                </td>
+                                </tr>
+                                {details[0] ? projects.map((e) => (
+                                <tr style={styles.row2}>
+                                    <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name?e.Project_Name:'-'}</p>&nbsp;&nbsp;
+                                    <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.Title}</p>
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {formatDate(e.Start_Date)}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {formatDate(e.Due_Date)}
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {e.Assigner}
+                                    </td>
+                                    <td style={styles.cell} align='center'>
+                                        {e.Priority===1
+                                        ?<div style={{width:'78px', height:'20px', background:'#559776', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
+                                        e.Priority===2?<div style={{width:'49px', height:'20px', background:'#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#D93838"}}>High</p></div>:
+                                        e.Priority===3?<div style={{width:'68px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>Medium</p></div>
+                                        :<div style={{width:'47px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Low</p></div>
+                                        }
+                                    </td>
+                                    <td style={styles.cell}>
+                                    {e.Status===0
+                                        ?<div style={{width:'85px', height:'20px', background:'#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#5079E1"}}>Not Started</p></div>:
+                                        e.Priority===1?<div style={{width:'49px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
+                                        <div style={{width:'68px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Completed</p></div>
+                                        }
+                                    </td>
+                                    <td style={styles.cell}>
+                                        {e.Reviewer}
+                                    </td>
+                                    <td style={styles.cell}>
+                                    
+                                    </td>
+                                </tr>
+                                )) : <></>}
+                            </>
+                            }
+
+
+                        
+                        </>}
+                    </tbody>
+                    </table>
                 </div>
               </div>
             </TabPanel>
