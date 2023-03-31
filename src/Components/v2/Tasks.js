@@ -8,6 +8,7 @@ import React, { useContext, useEffect, useState } from "react";
 import taskList from "../../Images/TaskList.svg";
 import timesheet from "../../Images/Timesheet.svg";
 import report from "../../Images/Report.svg";
+import TimeSheet from "../TimeSheet/TimeSheet";
 
 const styles = {
   heading: {
@@ -52,10 +53,10 @@ function Tasks() {
                   },
                 }}
                 sx={{
-                //   marginRight: "400px",
+                  //   marginRight: "400px",
                   marginLeft: "20px",
-                float: 'left',
-                height: '57px'
+                  float: 'left',
+                  height: '57px'
                 }}
               >
                 <Tab
@@ -69,7 +70,7 @@ function Tasks() {
                   sx={{ fontSize: 12 }}
                   label="Task List"
                   value="1"
-                  icon={<img style={{marginRight:'6px', marginTop:'6px'}} src={taskList} />}
+                  icon={<img style={{ marginRight: '6px', marginTop: '6px' }} src={taskList} />}
                 />
                 <Tab
                   style={{
@@ -82,7 +83,7 @@ function Tasks() {
                   sx={{ fontSize: 12 }}
                   label="Task Board"
                   value="2"
-                  icon={<img style={{marginRight:'6px', marginTop:'6px'}} src={timesheet} />}
+                  icon={<img style={{ marginRight: '6px', marginTop: '6px' }} src={timesheet} />}
                 />
                 <Tab
                   style={{
@@ -96,7 +97,7 @@ function Tasks() {
 
                   label="Timesheet"
                   value="3"
-                  icon={<img style={{marginRight:'6px', marginTop:'6px'}} src={timesheet} />}
+                  icon={<img style={{ marginRight: '6px', marginTop: '6px' }} src={timesheet} />}
                 />
                 <Tab
                   style={{
@@ -109,29 +110,29 @@ function Tasks() {
                   sx={{ fontSize: 12 }}
                   label="Report/Overview"
                   value="4"
-                  icon={<img style={{marginRight:'6px', marginTop:'6px'}} src={report} />}
+                  icon={<img style={{ marginRight: '6px', marginTop: '6px' }} src={report} />}
                 />
               </TabList>
             </Box>
             <TabPanel value="1">
-                <div style={{width: '100%', float:'left', marginLeft:'5px', marginTop:'20px'}}>
-                    Tasks
-                </div>
+              <div style={{ width: '100%', float: 'left', marginLeft: '5px', marginTop: '20px' }}>
+                Tasks
+              </div>
             </TabPanel>
             <TabPanel value="2">
-                <div style={{width: '100%', float:'left', marginLeft:'5px', marginTop:'20px'}}>
-                    Board
-                </div>
+              <div style={{ width: '100%', float: 'left', marginLeft: '5px', marginTop: '20px' }}>
+                Board
+              </div>
             </TabPanel>
             <TabPanel value="3">
-                <div style={{width: '100%', float:'left', marginLeft:'5px', marginTop:'20px'}}>
-                    Timesheet
+                <div style={{width: '100%', float:'left',}}>
+                    <TimeSheet />
                 </div>
             </TabPanel>
             <TabPanel value="4">
-                <div style={{width: '100%', float:'left', marginLeft:'5px', marginTop:'20px'}}>
-                    Reports
-                </div>
+              <div style={{ width: '100%', float: 'left', marginLeft: '5px', marginTop: '20px' }}>
+                Reports
+              </div>
             </TabPanel>
           </TabContext>
         </Box>

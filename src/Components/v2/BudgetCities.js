@@ -23,6 +23,7 @@ const BudgetCities = (props) => {
     const { isCollapsed } = props
     const { privileges, setPrivileges } = useContext(AuthenticationContext)
     const [apiCall, setCall] = useState(0);
+    const [apiCall2, setCall2] = useState(0);
     const [green, setgreen] = useState(false);
     const [red, setred] = useState(false);
     const [budget, setbudget] = useState(true);
@@ -535,27 +536,31 @@ const BudgetCities = (props) => {
         handleShowUpdate2();
     };
 
-    const getCityBudgets = async () => {
-        setIsLoading3(true)
-        await axios
-            .get(HOST + GET_CITY_BUDGETS, {
-                headers: {
-                    auth: "Rose " + localStorage.getItem("auth"),
-                    search: value2,
-                    filter: JSON.stringify(filter),
-                    city: city.City_ID,
-                    year: year,
-                },
-            })
-            .then((res) => {
-                setbudgets(res.data.res)
-                settotalAmount(res.data.totalAmount);
-                setIsLoading3(false);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
+    useEffect(() => {
+        const getCityBudgets = async () => {
+            setIsLoading3(true)
+            await axios
+                .get(HOST + GET_CITY_BUDGETS, {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                        search: value2,
+                        filter: JSON.stringify(filter),
+                        city: city.City_ID,
+                        year: year,
+                    },
+                })
+                .then((res) => {
+                    console.log(res.data.res)
+                    setbudgets(res.data.res)
+                    settotalAmount(res.data.totalAmount);
+                    setIsLoading3(false);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+        getCityBudgets()
+    }, [apiCall2])
 
     const handleDeleteBudget = (e) => {
         e.preventDefault();
@@ -657,7 +662,7 @@ const BudgetCities = (props) => {
                                             <td style={{ ...styles.tableCell }}>
                                                 <div className='d-flex flex-row'>
                                                     <FontAwesomeIcon icon={faPencil} style={{ cursor: "pointer", marginRight: "23px" }} color="#70757A" height="18px" onClick={(eve) => { handleUpdate(e) }} />
-                                                    <FontAwesomeIcon icon={faArrowRight} style={{ cursor: "pointer" }} color="#70757A" height="18px" onClick={(eve) => { getCityBudgets(); setcity(e); setbudget(false) }} />
+                                                    <FontAwesomeIcon icon={faArrowRight} style={{ cursor: "pointer" }} color="#70757A" height="18px" onClick={(eve) => { setcity(e); setbudget(false); setCall2(apiCall2 + 1) }} />
                                                 </div>
                                             </td>
                                         </tr>)
@@ -671,7 +676,7 @@ const BudgetCities = (props) => {
                 </>
                 : <>
                     <div className='d-flex flex-row align-items-baseline' style={styles.headerContainer}>
-                        <FontAwesomeIcon icon={faArrowLeft} color="#70757A" style={{ marginRight: "16px", cursor: "pointer" }} onClick={(e) => { setbudget(true); setValue2(""); setYear(new Date().getFullYear().toString()); setfilter({ dept: [], cat: [], budgetCategory: [] }) }} />
+                        <FontAwesomeIcon icon={faArrowLeft} color="#70757A" style={{ marginRight: "16px", cursor: "pointer" }} onClick={(e) => { setbudget(true); setValue2(""); setYear(new Date().getFullYear().toString()); setbudgets([]); setfilter({ dept: [], cat: [], budgetCategory: [] }) }} />
                         <p style={styles.heading}>{city.City}</p>
                     </div>
 
@@ -752,7 +757,7 @@ const BudgetCities = (props) => {
                                 onChange={(e) => setValue2(e.target.value)}
                                 placeholder="Search"
                             />
-                            <Button style={styles.searchButton} onClick={(e) => getCityBudgets()}><FontAwesomeIcon icon={faMagnifyingGlass} color="#000000" /></Button>
+                            <Button style={styles.searchButton} onClick={(e) => setCall2(apiCall2 + 1)}><FontAwesomeIcon icon={faMagnifyingGlass} color="#000000" /></Button>
                             <Button style={{ ...styles.filterButton, backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }} onClick={openFilterModal}><img src={filterIcon} alt="Filter Icon" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>{filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}</Button>
                             <Modal
                                 show={filterModal}
@@ -795,16 +800,16 @@ const BudgetCities = (props) => {
                                     </div>
                                     <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
                                         {/* <Button style={styles.filterButton2} onClick={(e) => setfilter2('Advanced')}>Go to Advanced Filters</Button> */}
-                                        <Button style={styles.filterButton3} onClick={(e) => { getCityBudgets(); closeFilterModal(); }}>Filter</Button>
+                                        <Button style={styles.filterButton3} onClick={(e) => { setCall2(apiCall2+1); closeFilterModal(); }}>Filter</Button>
                                     </div>
                                 </div>
                             </Modal>
                             <ReactSelect
                                 placeholder="Year"
                                 defaultValue={{ value: year, label: year }}
-                                onChange={(e) => {
+                                onChange={async (e) => {
                                     setYear(e.value);
-                                    getCityBudgets()
+                                    setCall2(apiCall2+1)
                                 }}
                                 styles={customStyles}
                                 options={[

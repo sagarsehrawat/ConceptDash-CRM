@@ -4,6 +4,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import AuthenticationContext from '../../Context/AuthContext'
 import LoadingSpinner from '../Loader/Loader'
 import moment from 'moment'
+import axios from 'axios'
+import { GET_EMPLOYEENAMES, GET_WEEKLY_TIMESHEET, HOST } from '../Constants/Constants'
 
 const TimeSheet = (props) => {
   const { isCollapsed } = props
@@ -13,15 +15,18 @@ const TimeSheet = (props) => {
   const [red, setred] = useState(false);
 
   const [hours, sethours] = useState({
-    Projects: [["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""],],
-    Proposals: [["", "", "", "", ""], ["", "", "", "", ""],],
-    General: [["", "", "", "", ""],],
-    RFP: [["", "", "", "", ""],],
-    HR: [["", "", "", "", ""],],
-    Finance: [["", "", "", "", ""],]
+    Projects: [],
+    Proposals: [],
+    General: [],
+    RFP: [],
+    HR: [],
+    Finance: []
   });
   const [details, setdetails] = useState([false, false, false, false, false, false])
   const [date, setdate] = useState(moment());
+
+  const [employees, setemployees] = useState([]);
+  const [employeeId, setemployeeId] = useState(localStorage.getItem('employeeId'));
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -139,39 +144,102 @@ const TimeSheet = (props) => {
     }
   }
 
-  useEffect(() => {
-    const call = async () => {
-      
-    }
-    call()
-  }, [])
-  
+    useEffect(() => {
+      const call = async () => {
+        await axios
+        .get(HOST + GET_EMPLOYEENAMES, {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+          },
+        })
+        .then((res) => {
+          let id = localStorage.getItem('employeeId')
+          let arr = res.data.res.filter(e => (parseInt(id)!==e.Employee_ID))
+          setemployees(arr)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+      call()
+    }, [date])
+
 
   useEffect(() => {
     const call = async () => {
-
+      setIsLoading(true)
+      await axios
+        .get(HOST + GET_WEEKLY_TIMESHEET, {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            employeeid: employeeId,
+            startdate: date.clone().startOf('isoWeek').format('YYYY-MM-DD')
+          },
+        })
+        .then((res) => {
+          let h = {
+            Projects: [],
+            Proposals: [],
+            General: [],
+            RFP: [],
+            HR: [],
+            Finance: []
+          };
+          res.data.res.map(e => {
+            let arr = []
+            for (let i = 1; i <= 5; i++) {
+              if (e[`day_${i}`] === null) {
+                arr.push("");
+                continue;
+              }
+              let [hr, min] = e[`day_${i}`].split(":")
+              hr = parseInt(hr);
+              min = parseInt(min);
+              if (min === 0) {
+                arr.push(`${hr}:00`)
+              } else {
+                arr.push(`${hr}:${min}`)
+              }
+            }
+            arr.push(e.Project_Name)
+            arr.push(e.Title)
+            h[e.Type].push(arr)
+          })
+          sethours(h)
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
     call()
   }, [apiCall])
-  
+
 
   const handleChange = (e, row, col, val) => {
-    console.log(e, row, col, val)
     const h = { ...hours };
     h[e][row][col] = val.target.value;
     sethours(h)
   }
 
   const getDayTotal = (idx) => {
-    if (idx === 5) return Object.values(hours).reduce((total, category) => {
-      return total + category.reduce((catTotal, row) => {
-        return catTotal + row.reduce((rowTotal, col) => {
-          if (col === '') return rowTotal
-          else return rowTotal + parseInt(col);
-        }, 0);
-      }, 0);
-    }, 0);
-    return hours.Projects.reduce((acc, val) => { if (val[idx] !== '') { return acc + parseInt(val[idx]); } return acc; }, 0) + hours.Proposals.reduce((acc, val) => { if (val[idx] !== '') { return acc + parseInt(val[idx]); } return acc; }, 0) + hours.RFP.reduce((acc, val) => { if (val[idx] !== '') { return acc + parseInt(val[idx]); } return acc; }, 0) + hours.Finance.reduce((acc, val) => { if (val[idx] !== '') { return acc + parseInt(val[idx]); } return acc; }, 0) + hours.HR.reduce((acc, val) => { if (val[idx] !== '') { return acc + parseInt(val[idx]); } return acc; }, 0) + hours.General.reduce((acc, val) => { if (val[idx] !== '') { return acc + parseInt(val[idx]); } return acc; }, 0)
+    if (idx === 5) return addTime([...hours.Projects.map(e => addTime(e.slice(0, 5))), ...hours.Proposals.map(e => addTime(e.slice(0, 5))), ...hours.RFP.map(e => addTime(e.slice(0, 5))), ...hours.Finance.map(e => addTime(e.slice(0, 5))), ...hours.HR.map(e => addTime(e.slice(0, 5))), ...hours.General.map(e => addTime(e.slice(0, 5))),])
+    return addTime([...hours.Projects.map(e=> (e[idx])), ...hours.Proposals.map(e=> (e[idx])), ...hours.RFP.map(e=> (e[idx])), ...hours.Finance.map(e=> (e[idx])), ...hours.HR.map(e=> (e[idx])), ...hours.General.map(e=> (e[idx]))])  
+  }
+
+  const addTime = (times) => {
+    let totalMinutes = 0;
+    for (let i = 0; i < times.length; i++) {
+      let time = times[i];
+      if (time) {
+        let [hours, minutes] = time.split(':');
+        totalMinutes += parseInt(hours) * 60 + parseInt(minutes);
+      }
+    }
+    let hours = Math.floor(totalMinutes / 60);
+    let minutes = totalMinutes % 60;
+
+    return `${hours}:${minutes.toString().padStart(2, '0')}`;
   }
 
   return (
@@ -187,8 +255,11 @@ const TimeSheet = (props) => {
             placeholder="Search"
           />
           <button style={styles.searchButton} onClick={(e) => setCall(apiCall + 1)}><FontAwesomeIcon icon={faMagnifyingGlass} color="#000000" /></button>
-          <select style={styles.employeeDropdown}>
-            <option>My Timesheet</option>
+          <select style={styles.employeeDropdown} onChange={(e) => {setemployeeId(e.target.value); setCall(apiCall+1);}}>
+            <option value={localStorage.getItem('employeeId')}>My Timesheet</option>
+            {employees.map(e => (
+              <option value={e.Employee_ID}>{e.Full_Name}</option>
+            ))}
           </select>
         </div>
         <button style={styles.addButton}>+ Add New Task</button>
@@ -196,11 +267,11 @@ const TimeSheet = (props) => {
 
       {/* Table Header */}
       <div style={styles.tableHeader} className='d-flex flex-row justify-content-start align-items-center'>
-        <FontAwesomeIcon icon={faChevronLeft} color="#6519E1" style={{ cursor: "pointer", marginRight: "18px" }} onClick={(e) => setdate(date.clone().subtract(7, 'days'))} />
+        <FontAwesomeIcon icon={faChevronLeft} color="#6519E1" style={{ cursor: "pointer", marginRight: "18px" }} onClick={(e) => {setdate(date.clone().subtract(7, 'days')); setCall(apiCall+1)}} />
         <FontAwesomeIcon icon={faCalendarDays} color="#6519E1" style={{ marginRight: "10px" }} />
         <div style={{ width: "0px", height: "22px", border: "1px solid #EBE9F1", marginRight: "8px" }}></div>
         <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", marginRight: "16px" }}>{`${date.clone().startOf('isoWeek').format('DD')} - ${date.clone().startOf('isoWeek').add(4, 'days').format('DD MMM, YYYY')}`}</p>
-        <FontAwesomeIcon icon={faChevronRight} color="#6519E1" style={{ cursor: "pointer", marginRight: "18px" }} onClick={(e) => setdate(date.clone().add(7, 'days'))} />
+        <FontAwesomeIcon icon={faChevronRight} color="#6519E1" style={{ cursor: "pointer", marginRight: "18px" }} onClick={(e) => {setdate(date.clone().add(7, 'days')); setCall(apiCall+1)}} />
       </div>
 
       {/* Table */}
@@ -218,7 +289,7 @@ const TimeSheet = (props) => {
             </tr>
           </thead>
           <tbody style={styles.tableBody}>
-            {true ? <tr style={{ height: "512px", width: "100%", background: "white" }}>
+            {isLoading ? <tr style={{ height: "512px", width: "100%", background: "white" }}>
               <td colSpan={7}>
                 <LoadingSpinner />
               </td>
@@ -234,16 +305,17 @@ const TimeSheet = (props) => {
                       </td>
                     </tr>
                     {details[0] ? hours.Projects.map((e, idx) => (
-                      <tr style={styles.row2}>
+                      <tr style={styles.row2} id={idx}>
                         <td style={styles.cell}>
-                          <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>Chatham Kent Services</p>&nbsp;&nbsp;
+                          <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e[5]}</p>&nbsp;&nbsp;
                           <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
-                          <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>Task Name</p>
+                          <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e[6]}</p>
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
-                            style={{ ...styles.input, width: hours.Projects[idx][0] !== "" ? "15px" : "-webkit-fill-available" }}
+                            placeholder='0:00 hr'
+                            disabled
+                            style={{ ...styles.input, width: hours.Projects[idx][0] !== "" ? "35px" : "-webkit-fill-available" }}
                             defaultValue={hours.Projects[idx][0]}
                             onChange={(e) => handleChange("Projects", idx, 0, e)}
                           />
@@ -251,8 +323,9 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
-                            style={{ ...styles.input, width: hours.Projects[idx][1] !== "" ? "15px" : "-webkit-fill-available" }}
+                            placeholder='0:00 hr'
+                            disabled
+                            style={{ ...styles.input, width: hours.Projects[idx][1] !== "" ? "35px" : "-webkit-fill-available" }}
                             defaultValue={hours.Projects[idx][1]}
                             onChange={(e) => handleChange("Projects", idx, 1, e)}
                           />
@@ -260,8 +333,9 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
-                            style={{ ...styles.input, width: hours.Projects[idx][2] !== "" ? "15px" : "-webkit-fill-available" }}
+                            placeholder='0:00 hr'
+                            disabled
+                            style={{ ...styles.input, width: hours.Projects[idx][2] !== "" ? "35px" : "-webkit-fill-available" }}
                             defaultValue={hours.Projects[idx][2]}
                             onChange={(e) => handleChange("Projects", idx, 2, e)}
                           />
@@ -269,8 +343,9 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
-                            style={{ ...styles.input, width: hours.Projects[idx][3] !== "" ? "15px" : "-webkit-fill-available" }}
+                            placeholder='0:00 hr'
+                            disabled
+                            style={{ ...styles.input, width: hours.Projects[idx][3] !== "" ? "35px" : "-webkit-fill-available" }}
                             defaultValue={hours.Projects[idx][3]}
                             onChange={(e) => handleChange("Projects", idx, 3, e)}
                           />
@@ -278,15 +353,16 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
-                            style={{ ...styles.input, width: hours.Projects[idx][4] !== "" ? "15px" : "-webkit-fill-available" }}
+                            placeholder='0:00 hr'
+                            disabled
+                            style={{ ...styles.input, width: hours.Projects[idx][4] !== "" ? "35px" : "-webkit-fill-available" }}
                             defaultValue={hours.Projects[idx][4]}
                             onChange={(e) => handleChange("Projects", idx, 4, e)}
                           />
                           {hours.Projects[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={{ ...styles.cell, background: "#DBDBF4" }}>
-                          {hours.Projects[idx].reduce((acc, val) => { if (val !== '') { return acc + parseInt(val); } return acc; }, 0) + " hr"}
+                          {addTime(hours.Projects[idx].slice(0, 5)) + " hr"}
                         </td>
                       </tr>
                     )) : <></>}
@@ -311,7 +387,8 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
+                            disabled
                             style={{ ...styles.input, width: hours.Proposals[idx][0] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.Proposals[idx][0]}
                             onChange={(e) => handleChange("Proposals", idx, 0, e)}
@@ -320,7 +397,8 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
+                            disabled
                             style={{ ...styles.input, width: hours.Proposals[idx][1] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.Proposals[idx][1]}
                             onChange={(e) => handleChange("Proposals", idx, 1, e)}
@@ -329,7 +407,8 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
+                            disabled
                             style={{ ...styles.input, width: hours.Proposals[idx][2] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.Proposals[idx][2]}
                             onChange={(e) => handleChange("Proposals", idx, 2, e)}
@@ -338,7 +417,8 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
+                            disabled
                             style={{ ...styles.input, width: hours.Proposals[idx][3] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.Proposals[idx][3]}
                             onChange={(e) => handleChange("Proposals", idx, 3, e)}
@@ -347,7 +427,8 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
+                            disabled
                             style={{ ...styles.input, width: hours.Proposals[idx][4] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.Proposals[idx][4]}
                             onChange={(e) => handleChange("Proposals", idx, 4, e)}
@@ -355,7 +436,7 @@ const TimeSheet = (props) => {
                           {hours.Proposals[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={{ ...styles.cell, background: "#DBDBF4" }}>
-                          {hours.Proposals[idx].reduce((acc, val) => { if (val !== '') { return acc + parseInt(val); } return acc; }, 0) + " hr"}
+                          {addTime(hours.Proposals[idx].slice(0, 5)) + " hr"}
                         </td>
                       </tr>
                     )) : <></>}
@@ -380,7 +461,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][0] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.RFP[idx][0]}
                             onChange={(e) => handleChange("RFP", idx, 0, e)}
@@ -389,7 +470,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][1] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.RFP[idx][1]}
                             onChange={(e) => handleChange("RFP", idx, 1, e)}
@@ -398,7 +479,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][2] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.RFP[idx][2]}
                             onChange={(e) => handleChange("RFP", idx, 2, e)}
@@ -407,7 +488,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][3] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.RFP[idx][3]}
                             onChange={(e) => handleChange("RFP", idx, 3, e)}
@@ -416,7 +497,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][4] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.RFP[idx][4]}
                             onChange={(e) => handleChange("RFP", idx, 4, e)}
@@ -424,7 +505,7 @@ const TimeSheet = (props) => {
                           {hours.RFP[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={{ ...styles.cell, background: "#DBDBF4" }}>
-                          {hours.RFP[idx].reduce((acc, val) => { if (val !== '') { return acc + parseInt(val); } return acc; }, 0) + " hr"}
+                          {addTime(hours.RFP[idx].slice(0, 5)) + " hr"}
                         </td>
                       </tr>
                     )) : <></>}
@@ -448,7 +529,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][0] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.General[idx][0]}
                             onChange={(e) => handleChange("General", idx, 0, e)}
@@ -457,7 +538,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][1] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.General[idx][1]}
                             onChange={(e) => handleChange("General", idx, 1, e)}
@@ -466,7 +547,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][2] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.General[idx][2]}
                             onChange={(e) => handleChange("General", idx, 2, e)}
@@ -475,7 +556,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][3] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.General[idx][3]}
                             onChange={(e) => handleChange("General", idx, 3, e)}
@@ -484,7 +565,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][4] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.General[idx][4]}
                             onChange={(e) => handleChange("General", idx, 4, e)}
@@ -492,7 +573,7 @@ const TimeSheet = (props) => {
                           {hours.General[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={{ ...styles.cell, background: "#DBDBF4" }}>
-                          {hours.General[idx].reduce((acc, val) => { if (val !== '') { return acc + parseInt(val); } return acc; }, 0) + " hr"}
+                          {addTime(hours.General[idx].slice(0, 5)) + " hr"}
                         </td>
                       </tr>
                     )) : <></>}
@@ -516,7 +597,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.HR[idx][0] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.HR[idx][0]}
                             onChange={(e) => handleChange("HR", idx, 0, e)}
@@ -525,7 +606,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.HR[idx][1] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.HR[idx][1]}
                             onChange={(e) => handleChange("HR", idx, 1, e)}
@@ -534,7 +615,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.HR[idx][2] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.HR[idx][2]}
                             onChange={(e) => handleChange("HR", idx, 2, e)}
@@ -543,7 +624,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.HR[idx][3] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.HR[idx][3]}
                             onChange={(e) => handleChange("HR", idx, 3, e)}
@@ -552,7 +633,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.HR[idx][4] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.HR[idx][4]}
                             onChange={(e) => handleChange("HR", idx, 4, e)}
@@ -560,7 +641,7 @@ const TimeSheet = (props) => {
                           {hours.HR[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={{ ...styles.cell, background: "#DBDBF4" }}>
-                          {hours.HR[idx].reduce((acc, val) => { if (val !== '') { return acc + parseInt(val); } return acc; }, 0) + " hr"}
+                          {addTime(hours.HR[idx].slice(0, 5)) + " hr"}
                         </td>
                       </tr>
                     )) : <></>}
@@ -584,7 +665,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.Finance[idx][0] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.Finance[idx][0]}
                             onChange={(e) => handleChange("Finance", idx, 0, e)}
@@ -593,7 +674,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.Finance[idx][1] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.Finance[idx][1]}
                             onChange={(e) => handleChange("Finance", idx, 1, e)}
@@ -602,7 +683,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.Finance[idx][2] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.Finance[idx][2]}
                             onChange={(e) => handleChange("Finance", idx, 2, e)}
@@ -611,7 +692,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.Finance[idx][3] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.Finance[idx][3]}
                             onChange={(e) => handleChange("Finance", idx, 3, e)}
@@ -620,7 +701,7 @@ const TimeSheet = (props) => {
                         </td>
                         <td style={styles.cell}>
                           <input
-                            placeholder='0 hr'
+                            placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.Finance[idx][4] !== "" ? "15px" : "-webkit-fill-available" }}
                             defaultValue={hours.Finance[idx][4]}
                             onChange={(e) => handleChange("Finance", idx, 4, e)}
@@ -628,7 +709,7 @@ const TimeSheet = (props) => {
                           {hours.Finance[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={{ ...styles.cell, background: "#DBDBF4" }}>
-                          {hours.Finance[idx].reduce((acc, val) => { if (val !== '') { return acc + parseInt(val); } return acc; }, 0) + " hr"}
+                          {addTime(hours.Finance[idx].slice(0, 5)) + " hr"}
                         </td>
                       </tr>
                     )) : <></>}
@@ -640,7 +721,6 @@ const TimeSheet = (props) => {
       {/* Footer Table */}
       <table style={styles.table} >
         <thead style={styles.tableHeader2}>
-          {isLoading ? <></> :
             <tr style={{ background: "#DBDBF4" }}>
               <th scope="col" style={{ ...styles.cell, border: "none", background: "#DBDBF4", paddingLeft: "56px", textAlign: "left", width: "350px", borderBottom: "1px solid #EBE9F1", }} className=''>Total</th>
               <th scope="col" style={{ ...styles.cell, border: "none", background: "#DBDBF4", padding: "0px", textAlign: "center", width: "136px" }} className=''>{getDayTotal(0)} hr</th>
@@ -650,7 +730,6 @@ const TimeSheet = (props) => {
               <th scope="col" style={{ ...styles.cell, border: "none", background: "#DBDBF4", padding: "0px", textAlign: "center", width: "136px" }} className=''>{getDayTotal(4)} hr</th>
               <th scope="col" style={{ ...styles.cell, border: "none", background: "#DBDBF4", padding: "0px", textAlign: "center", width: "136px" }} className=''>{getDayTotal(5)} hr</th>
             </tr>
-          }
         </thead>
       </table>
     </>

@@ -157,6 +157,18 @@ body>div.fade.modal.show>div {
   font-size: 16px;
 }
 
+.css-1pe3og0{
+  font-family: unset !important;
+  font-weight: unset !important;
+  font-size: unset !important;
+  line-height: unset !important;
+  letter-spacing: unset !important;
+}
+
+.css-13xfq8m-MuiTabPanel-root{
+  padding: unset !important;
+}
+
 /* Calendar CSS */
 
 .e-appointment {

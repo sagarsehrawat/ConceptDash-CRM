@@ -166,6 +166,7 @@ export const GET_PAGES_PROPOSALS = '/api/get/pages/proposals'
 export const GET_PAGE_CUSTOMERS = '/api/get/customer'
 export const GET_PAGES_CUSTOMERSS = '/api/get/pages/customers'
 export const GET_EXPENSE_TRANSACTIONS = '/api/get/page/expenseTransactions'
+export const GET_WEEKLY_TIMESHEET = '/api/get/page/timesheet'
 
 //Google APIs
 export const GET_GOOGLE_DRIVE_URL = '/google-api/get/fileLink'
