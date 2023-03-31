@@ -24,6 +24,7 @@ const TimeSheet = (props) => {
     HR: [],
     Finance: []
   });
+  const [prevHours, setprevHours] = useState(null);
   const [details, setdetails] = useState([false, false, false, false, false, false])
   const [date, setdate] = useState(moment());
 
@@ -214,11 +215,13 @@ const TimeSheet = (props) => {
             arr.push(e.Task_ID)
             h[e.Type].push(arr)
           })
-          console.log(h)
           sethours(h)
+          h = JSON.parse(JSON.stringify(h))
+          setprevHours(h)
           setIsLoading(false);
         })
         .catch((err) => {
+          setIsLoading(false)
           console.log(err);
         });
     }
@@ -228,7 +231,6 @@ const TimeSheet = (props) => {
 
   const handleChange = (e, row, col, val, taskId, date) => {
     const h = { ...hours };
-    const prev = h[e][row][col]
     let value = val.target.value
     h[e][row][col] = value;
     sethours(h)
@@ -236,8 +238,8 @@ const TimeSheet = (props) => {
       clearTimeout(timerId); // cancel previous timer
     }
     setTimerId(setTimeout(() => {
-      timeAPI(e, row, col, taskId, date, value, prev)
-    }, 3000));
+      timeAPI(e, row, col, taskId, date, value)
+    }, 2500));
   }
 
   const getDayTotal = (idx) => {
@@ -260,13 +262,13 @@ const TimeSheet = (props) => {
     return `${hours}:${minutes.toString().padStart(2, '0')}`;
   }
 
-  const timeAPI = async (e, row, col, taskId, date, time, prev) => {
-    console.log(e, row, col, taskId, date, time)
+  const timeAPI = async (e, row, col, taskId, date, time) => {
     if (/^\d+$/.test(time)) {
-      time = time + ':00';
+      if(parseInt(time) === 0 || parseInt(time)>12) time = null
+      else time = parseInt(time) + ':00';
     } else if (/^\d+:\d{2}$/.test(time)) {
       const [hours, minutes] = time.split(':');
-      if (parseInt(minutes) < 0 || parseInt(minutes) > 59) {
+      if (hours===0 || hours>12 || parseInt(minutes) < 0 || parseInt(minutes) > 59) {
         time = null
       }
     } else if(time === ''){
@@ -274,21 +276,17 @@ const TimeSheet = (props) => {
     } else {
       time = null
     }
+
     const h = { ...hours };
-    if(time){
-      h[e][row][col] = time;
-    }else{
-      h[e][row][col] = '';
-      return;
-    }
+    h[e][row][col] = time!==null ? time : prevHours[e][row][col]
     sethours(h)
-    time = `0${time}:00`
+    if(time===null) return;
 
     await axios
       .post(HOST + ADD_TIMESHEET,
         {
           employeeId: employeeId,
-          time: time,
+          time: time==='' ? '' : `0${time}:00`,
           date: date,
           taskId: taskId
         },
@@ -300,11 +298,12 @@ const TimeSheet = (props) => {
 
       )
       .then((res) => {
-        console.log(res)
         if (!res.data.success) {
-          h[e][row][col] = prev
+          h[e][row][col] = prevHours[e][row][col]
           sethours(h)
           setred(true)
+        }else{
+          setprevHours(h)
         }
       })
       .catch((err) => {
@@ -380,7 +379,7 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][0] !== "" ? "30px" : "50px" }}
                             value={hours.Projects[idx][0]}
                             onChange={(eve) => handleChange("Projects", idx, 0, eve, e[9], date.clone().startOf('isoWeek').format('YYYY-MM-DD'))}
@@ -390,7 +389,7 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][1] !== "" ? "30px" : "50px" }}
                             value={hours.Projects[idx][1]}
                             onChange={(eve) => handleChange("Projects", idx, 1, eve, e[9], date.clone().startOf('isoWeek').add(1, 'days').format('YYYY-MM-DD'))}
@@ -400,50 +399,50 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][2] !== "" ? "30px" : "50px" }}
                             value={hours.Projects[idx][2]}
-                            onChange={(e) => handleChange("Projects", idx, 2, e)}
+                            onChange={(eve) => handleChange("Projects", idx, 2, eve, e[9], date.clone().startOf('isoWeek').add(2, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Projects[idx][2] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][3] !== "" ? "30px" : "50px" }}
                             value={hours.Projects[idx][3]}
-                            onChange={(e) => handleChange("Projects", idx, 3, e)}
+                            onChange={(eve) => handleChange("Projects", idx, 3, eve, e[9], date.clone().startOf('isoWeek').add(3, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Projects[idx][3] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][4] !== "" ? "30px" : "50px" }}
                             value={hours.Projects[idx][4]}
-                            onChange={(e) => handleChange("Projects", idx, 4, e)}
+                            onChange={(eve) => handleChange("Projects", idx, 4, eve, e[9], date.clone().startOf('isoWeek').add(4, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Projects[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][5] !== "" ? "30px" : "50px" }}
                             value={hours.Projects[idx][5]}
-                            onChange={(e) => handleChange("Projects", idx, 5, e)}
+                            onChange={(eve) => handleChange("Projects", idx, 5, eve, e[9], date.clone().startOf('isoWeek').add(5, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Projects[idx][5] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][6] !== "" ? "30px" : "50px" }}
                             value={hours.Projects[idx][6]}
-                            onChange={(e) => handleChange("Projects", idx, 6, e)}
+                            onChange={(eve) => handleChange("Projects", idx, 6, eve, e[9], date.clone().startOf('isoWeek').add(6, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Projects[idx][6] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -474,70 +473,70 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][0] !== "" ? "30px" : "50px" }}
                             value={hours.Proposals[idx][0]}
-                            onChange={(e) => handleChange("Proposals", idx, 0, e)}
+                            onChange={(eve) => handleChange("Proposals", idx, 0, eve, e[9], date.clone().startOf('isoWeek').format('YYYY-MM-DD'))}
                           />
                           {hours.Proposals[idx][0] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][1] !== "" ? "30px" : "50px" }}
                             value={hours.Proposals[idx][1]}
-                            onChange={(e) => handleChange("Proposals", idx, 1, e)}
+                            onChange={(eve) => handleChange("Proposals", idx, 1, eve, e[9], date.clone().startOf('isoWeek').add(1, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Proposals[idx][1] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][2] !== "" ? "30px" : "50px" }}
                             value={hours.Proposals[idx][2]}
-                            onChange={(e) => handleChange("Proposals", idx, 2, e)}
+                            onChange={(eve) => handleChange("Proposals", idx, 2, eve, e[9], date.clone().startOf('isoWeek').add(2, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Proposals[idx][2] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][3] !== "" ? "30px" : "50px" }}
                             value={hours.Proposals[idx][3]}
-                            onChange={(e) => handleChange("Proposals", idx, 3, e)}
+                            onChange={(eve) => handleChange("Proposals", idx, 3, eve, e[9], date.clone().startOf('isoWeek').add(3, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Proposals[idx][3] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][4] !== "" ? "30px" : "50px" }}
                             value={hours.Proposals[idx][4]}
-                            onChange={(e) => handleChange("Proposals", idx, 4, e)}
+                            onChange={(eve) => handleChange("Proposals", idx, 4, eve, e[9], date.clone().startOf('isoWeek').add(4, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Proposals[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][5] !== "" ? "30px" : "50px" }}
                             value={hours.Proposals[idx][5]}
-                            onChange={(e) => handleChange("Proposals", idx, 5, e)}
+                            onChange={(eve) => handleChange("Proposals", idx, 5, eve, e[9], date.clone().startOf('isoWeek').add(5, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Proposals[idx][5] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][6] !== "" ? "30px" : "50px" }}
                             value={hours.Proposals[idx][6]}
-                            onChange={(e) => handleChange("Proposals", idx, 6, e)}
+                            onChange={(eve) => handleChange("Proposals", idx, 6, eve, e[9], date.clone().startOf('isoWeek').add(6, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Proposals[idx][6] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -569,9 +568,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][0] !== "" ? "30px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.RFP[idx][0]}
-                            onChange={(e) => handleChange("RFP", idx, 0, e)}
+                            onChange={(eve) => handleChange("RFP", idx, 0, eve, e[9], date.clone().startOf('isoWeek').format('YYYY-MM-DD'))}
                           />
                           {hours.RFP[idx][0] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -579,9 +578,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][1] !== "" ? "30px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.RFP[idx][1]}
-                            onChange={(e) => handleChange("RFP", idx, 1, e)}
+                            onChange={(eve) => handleChange("RFP", idx, 1, eve, e[9], date.clone().startOf('isoWeek').add(1, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.RFP[idx][1] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -589,9 +588,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][2] !== "" ? "30px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.RFP[idx][2]}
-                            onChange={(e) => handleChange("RFP", idx, 2, e)}
+                            onChange={(eve) => handleChange("RFP", idx, 2, eve, e[9], date.clone().startOf('isoWeek').add(2, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.RFP[idx][2] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -599,9 +598,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][3] !== "" ? "30px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.RFP[idx][3]}
-                            onChange={(e) => handleChange("RFP", idx, 3, e)}
+                            onChange={(eve) => handleChange("RFP", idx, 3, eve, e[9], date.clone().startOf('isoWeek').add(3, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.RFP[idx][3] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -609,9 +608,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][4] !== "" ? "30px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.RFP[idx][4]}
-                            onChange={(e) => handleChange("RFP", idx, 4, e)}
+                            onChange={(eve) => handleChange("RFP", idx, 4, eve, e[9], date.clone().startOf('isoWeek').add(4, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.RFP[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -619,9 +618,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][5] !== "" ? "30px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.RFP[idx][5]}
-                            onChange={(e) => handleChange("RFP", idx, 5, e)}
+                            onChange={(eve) => handleChange("RFP", idx, 5, eve, e[9], date.clone().startOf('isoWeek').add(5, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.RFP[idx][5] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -629,9 +628,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][6] !== "" ? "30px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.RFP[idx][6]}
-                            onChange={(e) => handleChange("RFP", idx, 6, e)}
+                            onChange={(eve) => handleChange("RFP", idx, 6, eve, e[9], date.clone().startOf('isoWeek').add(6, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.RFP[idx][6] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -660,9 +659,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][0] !== "" ? "15px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][0]}
-                            onChange={(e) => handleChange("General", idx, 0, e)}
+                            onChange={(eve) => handleChange("General", idx, 0, eve, e[9], date.clone().startOf('isoWeek').format('YYYY-MM-DD'))}
                           />
                           {hours.General[idx][0] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -670,9 +669,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][1] !== "" ? "15px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][1]}
-                            onChange={(e) => handleChange("General", idx, 1, e)}
+                            onChange={(eve) => handleChange("General", idx, 1, eve, e[9], date.clone().startOf('isoWeek').add(1, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.General[idx][1] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -680,9 +679,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][2] !== "" ? "15px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][2]}
-                            onChange={(e) => handleChange("General", idx, 2, e)}
+                            onChange={(eve) => handleChange("General", idx, 2, eve, e[9], date.clone().startOf('isoWeek').add(2, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.General[idx][2] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -690,9 +689,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][3] !== "" ? "15px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][3]}
-                            onChange={(e) => handleChange("General", idx, 3, e)}
+                            onChange={(eve) => handleChange("General", idx, 3, eve, e[9], date.clone().startOf('isoWeek').add(3, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.General[idx][3] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -700,9 +699,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][4] !== "" ? "15px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][4]}
-                            onChange={(e) => handleChange("General", idx, 4, e)}
+                            onChange={(eve) => handleChange("General", idx, 4, eve, e[9], date.clone().startOf('isoWeek').add(4, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.General[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -710,9 +709,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][5] !== "" ? "15px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][5]}
-                            onChange={(e) => handleChange("General", idx, 5, e)}
+                            onChange={(eve) => handleChange("General", idx, 5, eve, e[9], date.clone().startOf('isoWeek').add(5, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.General[idx][5] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -720,9 +719,9 @@ const TimeSheet = (props) => {
                           <input
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][6] !== "" ? "15px" : "50px" }}
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][6]}
-                            onChange={(e) => handleChange("General", idx, 6, e)}
+                            onChange={(eve) => handleChange("General", idx, 6, eve, e[9], date.clone().startOf('isoWeek').add(6, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.General[idx][6] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -750,70 +749,70 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][0] !== "" ? "30px" : "50px" }}
                             value={hours.HR[idx][0]}
-                            onChange={(e) => handleChange("HR", idx, 0, e)}
+                            onChange={(eve) => handleChange("HR", idx, 0, eve, e[9], date.clone().startOf('isoWeek').format('YYYY-MM-DD'))}
                           />
                           {hours.HR[idx][0] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][1] !== "" ? "30px" : "50px" }}
                             value={hours.HR[idx][1]}
-                            onChange={(e) => handleChange("HR", idx, 1, e)}
+                            onChange={(eve) => handleChange("HR", idx, 1, eve, e[9], date.clone().startOf('isoWeek').add(1, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.HR[idx][1] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][2] !== "" ? "30px" : "50px" }}
                             value={hours.HR[idx][2]}
-                            onChange={(e) => handleChange("HR", idx, 2, e)}
+                            onChange={(eve) => handleChange("HR", idx, 2, eve, e[9], date.clone().startOf('isoWeek').add(2, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.HR[idx][2] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][3] !== "" ? "30px" : "50px" }}
                             value={hours.HR[idx][3]}
-                            onChange={(e) => handleChange("HR", idx, 3, e)}
+                            onChange={(eve) => handleChange("HR", idx, 3, eve, e[9], date.clone().startOf('isoWeek').add(3, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.HR[idx][3] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][4] !== "" ? "30px" : "50px" }}
                             value={hours.HR[idx][4]}
-                            onChange={(e) => handleChange("HR", idx, 4, e)}
+                            onChange={(eve) => handleChange("HR", idx, 4, eve, e[9], date.clone().startOf('isoWeek').add(4, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.HR[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][5] !== "" ? "30px" : "50px" }}
                             value={hours.HR[idx][5]}
-                            onChange={(e) => handleChange("HR", idx, 5, e)}
+                            onChange={(eve) => handleChange("HR", idx, 5, eve, e[9], date.clone().startOf('isoWeek').add(5, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.HR[idx][5] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][6] !== "" ? "30px" : "50px" }}
                             value={hours.HR[idx][6]}
-                            onChange={(e) => handleChange("HR", idx, 6, e)}
+                            onChange={(eve) => handleChange("HR", idx, 6, eve, e[9], date.clone().startOf('isoWeek').add(6, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.HR[idx][6] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
@@ -841,70 +840,70 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][0] !== "" ? "30px" : "50px" }}
                             value={hours.Finance[idx][0]}
-                            onChange={(e) => handleChange("Finance", idx, 0, e)}
+                            onChange={(eve) => handleChange("Finance", idx, 0, eve, e[9], date.clone().startOf('isoWeek').format('YYYY-MM-DD'))}
                           />
                           {hours.Finance[idx][0] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][1] !== "" ? "30px" : "50px" }}
                             value={hours.Finance[idx][1]}
-                            onChange={(e) => handleChange("Finance", idx, 1, e)}
+                            onChange={(eve) => handleChange("Finance", idx, 1, eve, e[9], date.clone().startOf('isoWeek').add(1, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Finance[idx][1] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][2] !== "" ? "30px" : "50px" }}
                             value={hours.Finance[idx][2]}
-                            onChange={(e) => handleChange("Finance", idx, 2, e)}
+                            onChange={(eve) => handleChange("Finance", idx, 2, eve, e[9], date.clone().startOf('isoWeek').add(2, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Finance[idx][2] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][3] !== "" ? "30px" : "50px" }}
                             value={hours.Finance[idx][3]}
-                            onChange={(e) => handleChange("Finance", idx, 3, e)}
+                            onChange={(eve) => handleChange("Finance", idx, 3, eve, e[9], date.clone().startOf('isoWeek').add(3, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Finance[idx][3] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][4] !== "" ? "30px" : "50px" }}
                             value={hours.Finance[idx][4]}
-                            onChange={(e) => handleChange("Finance", idx, 4, e)}
+                            onChange={(eve) => handleChange("Finance", idx, 4, eve, e[9], date.clone().startOf('isoWeek').add(4, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Finance[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][5] !== "" ? "30px" : "50px" }}
                             value={hours.Finance[idx][5]}
-                            onChange={(e) => handleChange("Finance", idx, 5, e)}
+                            onChange={(eve) => handleChange("Finance", idx, 5, eve, e[9], date.clone().startOf('isoWeek').add(5, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Finance[idx][5] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
                           <input
                             placeholder='0:00 hr'
-                            disabled={employeeId !== localStorage.getItem('employeeId')}
+                            disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][6] !== "" ? "30px" : "50px" }}
                             value={hours.Finance[idx][6]}
-                            onChange={(e) => handleChange("Finance", idx, 6, e)}
+                            onChange={(eve) => handleChange("Finance", idx, 6, eve, e[9], date.clone().startOf('isoWeek').add(6, 'days').format('YYYY-MM-DD'))}
                           />
                           {hours.Finance[idx][6] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
