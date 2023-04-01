@@ -557,7 +557,6 @@ const BudgetCities = (props) => {
                     },
                 })
                 .then((res) => {
-                    console.log(res.data.res)
                     setbudgets(res.data.res)
                     settotalAmount(res.data.totalAmount);
                     setIsLoading3(false);
@@ -571,7 +570,7 @@ const BudgetCities = (props) => {
 
     const handleDeleteBudget = (e) => {
         e.preventDefault();
-        setIsLoading(true);
+        setIsLoading3(true);
         axios
             .post(
                 HOST + DELETE_BUDGET,
@@ -581,13 +580,19 @@ const BudgetCities = (props) => {
                 { headers: { auth: "Rose " + localStorage.getItem("auth") } }
             )
             .then((res) => {
+                handleCloseDelete();
                 if (res.data.success) {
-                    handleCloseDelete();
-                    setCall(apiCall + 1);
+                    setgreen(true)
+                    setCall2(apiCall2 + 1);
+                }else{
+                    setred(true)
+                    setIsLoading3(false)
                 }
             })
             .catch((err) => {
                 console.log(err);
+                setred(true)
+                setIsLoading3(false)
             });
     };
 

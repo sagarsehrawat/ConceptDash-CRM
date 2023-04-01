@@ -314,7 +314,10 @@ const RFP = (props) => {
             marginRight: "12px",
             display: "flex",
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
+            border: "none",
+            outline: "none",
+            boxShadow: "none"
         },
         filterButton: {
             display: "flex",
@@ -681,17 +684,20 @@ const RFP = (props) => {
                 { headers: { auth: "Rose " + localStorage.getItem("auth") } }
             )
             .then((res) => {
+                handleCloseDelete();
                 if (res.data.success) {
-                    handleCloseDelete();
                     selectedRfps([])
                     setgreen(true)
                     setCall(apiCall + 1);
                 } else {
                     setred(true)
+                    setIsLoading(false)
                 }
             })
             .catch((err) => {
                 console.log(err);
+                setred(true)
+                setIsLoading(false)
             });
     };
     const [rowData, setrowData] = useState([]);
@@ -725,26 +731,26 @@ const RFP = (props) => {
     }
 
     const sortModalLeft = (idx) => {
-        if(isCollapsed){
-            if(idx===0) return `${100}px`
-            if(idx===1) return `${398 - scrolled}px`
-            if(idx===2) return `${549 - scrolled}px`
-            if(idx===3) return `${739 - scrolled}px`
-            if(idx===4) return `${919 - scrolled}px`
-            if(idx===5) return `${1098 - scrolled}px`
-            if(idx===6) return `${1348 - scrolled}px`
-            if(idx===7) return `${1548 - scrolled}px`
-            if(idx===8) return `${1654 - scrolled}px`
-        }else{
-            if(idx===0) return `${260}px`
-            if(idx===1) return `${558 - scrolled}px`
-            if(idx===2) return `${709 - scrolled}px`
-            if(idx===3) return `${899 - scrolled}px`
-            if(idx===4) return `${1079 - scrolled}px`
-            if(idx===5) return `${1258 - scrolled}px`
-            if(idx===6) return `${1508 - scrolled}px`
-            if(idx===7) return `${1708 - scrolled}px`
-            if(idx===8) return `${1814 - scrolled}px`
+        if (isCollapsed) {
+            if (idx === 0) return `${100}px`
+            if (idx === 1) return `${398 - scrolled}px`
+            if (idx === 2) return `${549 - scrolled}px`
+            if (idx === 3) return `${739 - scrolled}px`
+            if (idx === 4) return `${919 - scrolled}px`
+            if (idx === 5) return `${1098 - scrolled}px`
+            if (idx === 6) return `${1348 - scrolled}px`
+            if (idx === 7) return `${1548 - scrolled}px`
+            if (idx === 8) return `${1654 - scrolled}px`
+        } else {
+            if (idx === 0) return `${260}px`
+            if (idx === 1) return `${558 - scrolled}px`
+            if (idx === 2) return `${709 - scrolled}px`
+            if (idx === 3) return `${899 - scrolled}px`
+            if (idx === 4) return `${1079 - scrolled}px`
+            if (idx === 5) return `${1258 - scrolled}px`
+            if (idx === 6) return `${1508 - scrolled}px`
+            if (idx === 7) return `${1708 - scrolled}px`
+            if (idx === 8) return `${1814 - scrolled}px`
         }
     }
 
@@ -825,7 +831,7 @@ const RFP = (props) => {
                     onChange={(e) => setValue(e.target.value)}
                     placeholder="Search"
                 />
-                <Button style={styles.searchButton} onClick={(e) => setCall(apiCall + 1)}><FontAwesomeIcon icon={faMagnifyingGlass} color="#000000" /></Button>
+                <button style={styles.searchButton} onClick={(e) => setCall(apiCall + 1)}><FontAwesomeIcon icon={faMagnifyingGlass} color="#000000" /></button>
                 <Button style={{ ...styles.filterButton, backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }} onClick={openFilterModal}><img src={filterIcon} alt="Filter Icon" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>{filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}</Button>
                 <Modal
                     show={filterModal}
