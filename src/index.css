@@ -157,6 +157,18 @@ body>div.fade.modal.show>div {
   font-size: 16px;
 }
 
+.css-1pe3og0{
+  font-family: unset !important;
+  font-weight: unset !important;
+  font-size: unset !important;
+  line-height: unset !important;
+  letter-spacing: unset !important;
+}
+
+.css-13xfq8m-MuiTabPanel-root{
+  padding: unset !important;
+}
+
 /* Calendar CSS */
 
 .e-appointment {
@@ -247,13 +259,21 @@ body>div.fade.modal.show>div {
 
 /* Form CSS */
 input:focus {
-  outline: none;
-  box-shadow: none;
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #6519E1 !important;
+}
+
+textarea:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #6519E1 !important;
 }
 
 .form-select:focus {
-  outline: none;
-  box-shadow: none;
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #6519E1 !important;
 }
 
 .add-title-placeholder::placeholder {

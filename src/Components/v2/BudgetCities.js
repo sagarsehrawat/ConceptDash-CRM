@@ -17,18 +17,23 @@ import ReactSelect from 'react-select'
 import UpdateCityBudget from '../Form/UpdateCityBudget'
 import UpdateBudget from '../Form/UpdateBudget'
 import BudgetsForm from '../Form/BudgetsForm'
-import dollar from '../../Images/Budget.svg'
+import dollar from '../../Images/Dollar.svg'
+import website from '../../Images/Website.svg'
+import UpdateCity1 from '../v2-forms/UpdateCity1'
+import UpdateCity2 from '../v2-forms/UpdateCity2'
 
 const BudgetCities = (props) => {
     const { isCollapsed } = props
     const { privileges, setPrivileges } = useContext(AuthenticationContext)
     const [apiCall, setCall] = useState(0);
+    const [apiCall2, setCall2] = useState(0);
     const [green, setgreen] = useState(false);
     const [red, setred] = useState(false);
     const [budget, setbudget] = useState(true);
     const [city, setcity] = useState({});
 
     const [cities, setcities] = useState([]);
+    const [idx, setidx] = useState(null);
     const [budgets, setbudgets] = useState([]);
     const [totalAmount, settotalAmount] = useState();
     const [budgetCount, setbudgetCount] = useState({ Done: 0, Draft: 0, Not_Found: 0 });
@@ -65,6 +70,12 @@ const BudgetCities = (props) => {
     const [showUpdate2, setShowUpdate2] = useState(false);
     const handleCloseUpdate2 = () => setShowUpdate2(false);
     const handleShowUpdate2 = () => setShowUpdate2(true);
+
+
+    //Update Modal 3
+    const [showUpdate3, setShowUpdate3] = useState(false);
+    const handleCloseUpdate3 = () => setShowUpdate3(false);
+    const handleShowUpdate3 = () => setShowUpdate3(true);
 
     //Delete Modal
     const [showDelete, setShowDelete] = useState(false);
@@ -500,7 +511,8 @@ const BudgetCities = (props) => {
 
     const addComma = (num) => {
         if (num === null || num === "" || num === undefined) return ""
-        return `$ ${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+        const n = num
+        return `$ ${n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
     }
 
     const statusComponent = (status) => {
@@ -526,40 +538,39 @@ const BudgetCities = (props) => {
     }
 
     const [rowData, setrowData] = useState([]);
-    const handleUpdate = (e) => {
-        setrowData(e);
-        handleShowUpdate();
-    };
     const handleUpdate2 = (e) => {
         setrowData(e);
         handleShowUpdate2();
     };
 
-    const getCityBudgets = async () => {
-        setIsLoading3(true)
-        await axios
-            .get(HOST + GET_CITY_BUDGETS, {
-                headers: {
-                    auth: "Rose " + localStorage.getItem("auth"),
-                    search: value2,
-                    filter: JSON.stringify(filter),
-                    city: city.City_ID,
-                    year: year,
-                },
-            })
-            .then((res) => {
-                setbudgets(res.data.res)
-                settotalAmount(res.data.totalAmount);
-                setIsLoading3(false);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
+    useEffect(() => {
+        const getCityBudgets = async () => {
+            setIsLoading3(true)
+            await axios
+                .get(HOST + GET_CITY_BUDGETS, {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                        search: value2,
+                        filter: JSON.stringify(filter),
+                        city: city.City_ID,
+                        year: year,
+                    },
+                })
+                .then((res) => {
+                    setbudgets(res.data.res)
+                    settotalAmount(res.data.totalAmount);
+                    setIsLoading3(false);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+        getCityBudgets()
+    }, [apiCall2])
 
     const handleDeleteBudget = (e) => {
         e.preventDefault();
-        setIsLoading(true);
+        setIsLoading3(true);
         axios
             .post(
                 HOST + DELETE_BUDGET,
@@ -569,13 +580,19 @@ const BudgetCities = (props) => {
                 { headers: { auth: "Rose " + localStorage.getItem("auth") } }
             )
             .then((res) => {
+                handleCloseDelete();
                 if (res.data.success) {
-                    handleCloseDelete();
-                    setCall(apiCall + 1);
+                    setgreen(true)
+                    setCall2(apiCall2 + 1);
+                }else{
+                    setred(true)
+                    setIsLoading3(false)
                 }
             })
             .catch((err) => {
                 console.log(err);
+                setred(true)
+                setIsLoading3(false)
             });
     };
 
@@ -639,7 +656,7 @@ const BudgetCities = (props) => {
                                     <td colSpan={8}>
                                         <LoadingSpinner />
                                     </td>
-                                </tr> : cities && cities.map(e => {
+                                </tr> : cities && cities.map((e, idx) => {
                                     if (e.City.toLowerCase().startsWith(value.toLowerCase())) {
                                         return (<tr style={{ ...styles.tableRow }} className='fixed-col' id={e.City_Budget_ID}>
                                             <td className='fixed-col' style={{ ...styles.tableCell, fontWeight: "500" }}>
@@ -656,8 +673,8 @@ const BudgetCities = (props) => {
                                             <td style={{ ...styles.tableCell, color: "#70757A" }}><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Remarks}</p></td>
                                             <td style={{ ...styles.tableCell }}>
                                                 <div className='d-flex flex-row'>
-                                                    <FontAwesomeIcon icon={faPencil} style={{ cursor: "pointer", marginRight: "23px" }} color="#70757A" height="18px" onClick={(eve) => { handleUpdate(e) }} />
-                                                    <FontAwesomeIcon icon={faArrowRight} style={{ cursor: "pointer" }} color="#70757A" height="18px" onClick={(eve) => { getCityBudgets(); setcity(e); setbudget(false) }} />
+                                                    <FontAwesomeIcon icon={faPencil} style={{ cursor: "pointer", marginRight: "23px" }} color="#70757A" height="18px" onClick={(eve) => { setidx(idx); handleShowUpdate() }} />
+                                                    <FontAwesomeIcon icon={faArrowRight} style={{ cursor: "pointer" }} color="#70757A" height="18px" onClick={(eve) => { setidx(idx); setcity(e); setbudget(false); setCall2(apiCall2 + 1) }} />
                                                 </div>
                                             </td>
                                         </tr>)
@@ -668,10 +685,35 @@ const BudgetCities = (props) => {
                             </tbody>
                         </table>
                     </div>
+                    {/* Update City Modal */}
+                    <Modal
+                        show={showUpdate}
+                        onHide={handleCloseUpdate}
+                        backdrop="static"
+                        centered
+                        size="xl"
+                        keyboard={false}
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title>Update City</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <UpdateCity1
+                                cities={cities}
+                                setcities={setcities}
+                                budgetCount={budgetCount}
+                                setbudgetCount={setbudgetCount}
+                                idx={idx}
+                                setgreen={setgreen}
+                                setred={setred}
+                                handleCloseUpdate={handleCloseUpdate}
+                            />
+                        </Modal.Body>
+                    </Modal>
                 </>
                 : <>
                     <div className='d-flex flex-row align-items-baseline' style={styles.headerContainer}>
-                        <FontAwesomeIcon icon={faArrowLeft} color="#70757A" style={{ marginRight: "16px", cursor: "pointer" }} onClick={(e) => { setbudget(true); setValue2(""); setYear(new Date().getFullYear().toString()); setfilter({ dept: [], cat: [], budgetCategory: [] }) }} />
+                        <FontAwesomeIcon icon={faArrowLeft} color="#70757A" style={{ marginRight: "16px", cursor: "pointer" }} onClick={(e) => { setbudget(true); setValue2(""); setYear(new Date().getFullYear().toString()); setbudgets([]); setfilter({ dept: [], cat: [], budgetCategory: [] }) }} />
                         <p style={styles.heading}>{city.City}</p>
                     </div>
 
@@ -681,7 +723,7 @@ const BudgetCities = (props) => {
                             <div className='d-flex flex-row justify-content-between'>
                                 <div className='d-flex flex-row justify-content-center align-items-center'>
                                     <div style={{ width: "32px", height: "32px", background: "#F3F3F4", borderRadius: "50%" }} className='d-flex justify-content-center align-items-center'>
-                                        <img src={dollar} alt="Website Icon" />
+                                        <img src={website} alt="Website Icon" />
                                     </div>
                                     <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
                                         <p style={styles.topContainerHeading2}>City Website</p>
@@ -690,7 +732,7 @@ const BudgetCities = (props) => {
                                 </div>
                                 <div className='d-flex flex-row justify-content-center align-items-center'>
                                     <div style={{ width: "32px", height: "32px", background: "#F3F3F4", borderRadius: "50%" }} className='d-flex justify-content-center align-items-center'>
-                                        <img src={dollar} alt="Website Icon" />
+                                        <img src={website} alt="Website Icon" />
                                     </div>
                                     <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
                                         <p style={styles.topContainerHeading2}>Budget 2022</p>
@@ -699,7 +741,7 @@ const BudgetCities = (props) => {
                                 </div>
                                 <div className='d-flex flex-row justify-content-center align-items-center'>
                                     <div style={{ width: "32px", height: "32px", background: "#F3F3F4", borderRadius: "50%" }} className='d-flex justify-content-center align-items-center'>
-                                        <img src={dollar} alt="Website Icon" />
+                                        <img src={website} alt="Website Icon" />
                                     </div>
                                     <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
                                         <p style={{ ...styles.topContainerHeading2, width: "447px" }}>Budget 2023</p>
@@ -737,7 +779,7 @@ const BudgetCities = (props) => {
                                 </div>
                             </div>
                         </div>
-                        <FontAwesomeIcon icon={faPencil} color="#70757A" style={{ cursor: "pointer", display: "inline" }} onClick={(eve) => { handleUpdate(city) }} />
+                        <FontAwesomeIcon icon={faPencil} color="#70757A" style={{ cursor: "pointer", display: "inline" }} onClick={handleShowUpdate3} />
                     </div>
                     <div style={styles.headerLine}></div>
                     <p style={styles.heading2}>Budgets in </p><p style={{ ...styles.heading2, color: "#DE2424", marginLeft: "0px" }}>{city.City}</p>
@@ -752,7 +794,7 @@ const BudgetCities = (props) => {
                                 onChange={(e) => setValue2(e.target.value)}
                                 placeholder="Search"
                             />
-                            <Button style={styles.searchButton} onClick={(e) => getCityBudgets()}><FontAwesomeIcon icon={faMagnifyingGlass} color="#000000" /></Button>
+                            <Button style={styles.searchButton} onClick={(e) => setCall2(apiCall2 + 1)}><FontAwesomeIcon icon={faMagnifyingGlass} color="#000000" /></Button>
                             <Button style={{ ...styles.filterButton, backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }} onClick={openFilterModal}><img src={filterIcon} alt="Filter Icon" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>{filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}</Button>
                             <Modal
                                 show={filterModal}
@@ -795,16 +837,16 @@ const BudgetCities = (props) => {
                                     </div>
                                     <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
                                         {/* <Button style={styles.filterButton2} onClick={(e) => setfilter2('Advanced')}>Go to Advanced Filters</Button> */}
-                                        <Button style={styles.filterButton3} onClick={(e) => { getCityBudgets(); closeFilterModal(); }}>Filter</Button>
+                                        <Button style={styles.filterButton3} onClick={(e) => { setCall2(apiCall2 + 1); closeFilterModal(); }}>Filter</Button>
                                     </div>
                                 </div>
                             </Modal>
                             <ReactSelect
                                 placeholder="Year"
                                 defaultValue={{ value: year, label: year }}
-                                onChange={(e) => {
+                                onChange={async (e) => {
                                     setYear(e.value);
-                                    getCityBudgets()
+                                    setCall2(apiCall2 + 1)
                                 }}
                                 styles={customStyles}
                                 options={[
@@ -880,6 +922,32 @@ const BudgetCities = (props) => {
                         <p style={{ fontFamily: 'Roboto', fontstyle: "normal", width: "238px", height: "20px", fontWeight: 500, fontSize: "13px", display: "inline-block" }}>{totalAmount ? addComma(totalAmount) : "$ 0"}</p>
                     </div>
 
+                    {/* Update City Modal */}
+                    <Modal
+                        show={showUpdate3}
+                        onHide={handleCloseUpdate3}
+                        backdrop="static"
+                        centered
+                        size="xl"
+                        keyboard={false}
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title>Update City</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <UpdateCity2
+                                city={city}
+                                setcity={setcity}
+                                cities={cities}
+                                setcities={setcities}
+                                idx={idx}
+                                setgreen={setgreen}
+                                setred={setred}
+                                handleCloseUpdate={handleCloseUpdate3}
+                            />
+                        </Modal.Body>
+                    </Modal>
+
                     {/* Add Form Modal */}
                     <Modal
                         show={show}
@@ -926,8 +994,8 @@ const BudgetCities = (props) => {
                                     setRed={setred}
                                     setGreen={setgreen}
                                     closeModal={handleCloseUpdate2}
-                                    api={apiCall}
-                                    apiCall={setCall}
+                                    api={apiCall2}
+                                    apiCall={setCall2}
                                 />
                             }
                         </Modal.Body>
@@ -964,31 +1032,6 @@ const BudgetCities = (props) => {
                         </Modal.Body>
                     </Modal>
                 </>}
-            {/* Update City Modal */}
-            <Modal
-                show={showUpdate}
-                onHide={handleCloseUpdate}
-                backdrop="static"
-                centered
-                size="xl"
-                keyboard={false}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Update Budget City</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {
-                        <UpdateCityBudget
-                            row={rowData}
-                            setRed={setred}
-                            setGreen={setgreen}
-                            closeModal={handleCloseUpdate}
-                            api={apiCall}
-                            apiCall={setCall}
-                        />
-                    }
-                </Modal.Body>
-            </Modal>
         </>
     )
 }

@@ -1,5 +1,5 @@
-export const HOST = 'https://crm-api.conceptdash.ca'
-// export const HOST = 'http://localhost:8080'
+// export const HOST = 'https://crm-api.conceptdash.ca'
+export const HOST = 'http://localhost:8080'
 
 // get apis
 export const GET_ALL_USERS = '/api/get/customers'
@@ -29,6 +29,7 @@ export const GET_RFP = '/api/get/rfp'
 export const GET_RFP_COUNT = '/api/get/rfp/count'
 export const GET_RFP_ID = '/api/get/rfp/id'
 export const GET_RFP_NAMES = '/api/get/list/rfp'
+export const GET_PROPOSALS_NAMES = '/api/get/list/proposals'
 export const GET_TASKS = '/api/get/tasks'
 export const GET_ADMIN_TASKS = '/api/get/admin/tasks'
 export const GET_CITIES = '/api/get/list/cities'
@@ -123,7 +124,8 @@ export const DELETE_TRANSACTION = '/api/delete/expenseTransaction/id'
 
 // update apis
 export const UPDATE_BUDGET = '/api/update/budget'
-export const UPDATE_BUDGET_CITY = '/api/update/budgetCity'
+export const UPDATE_BUDGET_CITY1 = '/api/update/budgetCity1'
+export const UPDATE_BUDGET_CITY2 = '/api/update/budgetCity2'
 export const UPDATE_COMPANY = '/api/update/company'
 export const UPDATE_CLIENT = '/api/update/client'
 export const UPDATE_EMPLOYEE = '/api/update/employee'
@@ -166,6 +168,8 @@ export const GET_PAGES_PROPOSALS = '/api/get/pages/proposals'
 export const GET_PAGE_CUSTOMERS = '/api/get/customer'
 export const GET_PAGES_CUSTOMERSS = '/api/get/pages/customers'
 export const GET_EXPENSE_TRANSACTIONS = '/api/get/page/expenseTransactions'
+export const GET_PAGE_TASKS = '/api/get/page/tasks'
+export const GET_WEEKLY_TIMESHEET = '/api/get/page/timesheet'
 
 //Google APIs
 export const GET_GOOGLE_DRIVE_URL = '/google-api/get/fileLink'
