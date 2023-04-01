@@ -42,6 +42,7 @@ const RFP = (props) => {
     const [value, setValue] = useState("");
     const [searchCity, setsearchCity] = useState("");
     const [filter, setfilter] = useState({ dept: [], cat: [], city: [], manager: [], source: [] });
+    const [prevFilter, setprevFilter] = useState({ dept: [], cat: [], city: [], manager: [], source: [] });
     const [filter2, setfilter2] = useState('Basic')
     const [advancedFilter, setadvancedFilter] = useState([['', 'IS', '']])
 
@@ -52,7 +53,7 @@ const RFP = (props) => {
 
     //Filter Modal
     const [filterModal, setfilterModal] = useState(false);
-    const closeFilterModal = () => setfilterModal(false);
+    const closeFilterModal = () => {setfilter(prevFilter); setfilterModal(false)};
     const openFilterModal = () => setfilterModal(true);
 
     //Sort Modal
@@ -845,7 +846,7 @@ const RFP = (props) => {
                         <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
                             <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
                             <div className='d-flex align-items-center'>
-                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [], source: [] })}>Clear All</Button>
+                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => {setfilter({ dept: [], cat: [], city: [], manager: [], source: [] }); setprevFilter({ dept: [], cat: [], city: [], manager: [], source: [] }); setCall(apiCall+1); setfilterModal(false);}}>Clear All</Button>
                                 <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeFilterModal} />
                             </div>
                         </div>
@@ -906,7 +907,7 @@ const RFP = (props) => {
                         </div>
                         <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
                             {/* <Button style={styles.filterButton2} onClick={(e) => setfilter2('Advanced')}>Go to Advanced Filters</Button> */}
-                            <Button style={styles.filterButton3} onClick={(e) => { setCall(apiCall + 1); closeFilterModal(); }}>Filter</Button>
+                            <Button style={styles.filterButton3} onClick={(e) => { setprevFilter(filter); setCall(apiCall + 1); setfilterModal(false) }}>Filter</Button>
                         </div>
                     </div> :
                         <div className='d-flex flex-column' style={{ width: "786px", height: "auto", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px", padding: "20px", gap: "20px" }}>
