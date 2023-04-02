@@ -1006,9 +1006,9 @@ function Employee(props) {
         style={styles.headerContainer}
       >
         <p style={styles.heading}>Employees</p>
-        <button style={styles.addButton} onClick={handleShow}>
+        {/* <button style={styles.addButton} onClick={handleShow}>
           <p style={styles.addButtonText}>+ Add New Employee</p>
-        </button>
+        </button> */}
       </div>
       <div
         className="d-flex flex-row"
