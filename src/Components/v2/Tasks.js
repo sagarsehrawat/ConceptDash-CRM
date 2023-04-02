@@ -404,6 +404,7 @@ function Tasks(props) {
     call();
   }, []);
   const [isLoading, setisLoading] = useState(false)
+  const [eid, seteid] = useState(localStorage.getItem('employeeId'))
   useEffect(() => {
     setisLoading(true);
     const call = async () => {
@@ -413,6 +414,7 @@ function Tasks(props) {
                     auth: "Rose " + localStorage.getItem("auth"),
                     filter: JSON.stringify(returnData),
                     search: value,
+                    id: eid
                 },
             })
             .then((res) => {
@@ -692,92 +694,43 @@ const [updateTask, setupdateTask] = useState([]);
                       backdropClassName="filter-backdrop"
                       animation={false}
                     >
-                      <div className="d-flex flex-row align-items-center">
-                        <Button
-                          style={{
-                            fontFamily: "'Roboto'",
-                            fontStyle: "normal",
-                            fontWeight: 400,
-                            fontSize: "14px",
-                            backgroundColor: "white",
-                            border: "none",
-                            color: "#6519E1",
-                            marginRight: "70px",
-                            marginTop: "8px",
-                            marginLeft: "8px",
-                            marginBottom: "8px",
-                          }}
-                          disabled={filterSize() === 0}
-                          onClick={(e) =>
-                            setreturnData({
-                              employee: [],
-                              assignedBy: [],
-                              status: [],
-                              priority: [],
-                            })
-                          }
-                        >
-                          Clear All
-                        </Button>
-                        <FontAwesomeIcon
-                          icon={faX}
-                          style={{ height: "9px", cursor: "pointer" }}
-                          color="#6519E1"
-                          onClick={closeFilterModal}
-                        />
-                      </div>
-                      <div
-                        style={styles.filterSubcontainer}
-                        className="filter-container"
-                      >
-                        <p style={styles.filterSubheading}>
-                          Employees{" "}
-                          {returnData.employee.length === 0
-                            ? ""
-                            : `/${returnData.employee.length}`}
-                        </p>
-                        {isLoadingEmp ? (
-                          <LoadingSpinner />
-                        ) : (
-                          employees.map((e) => {
-                            return (
-                              <div
-                                style={{
-                                  ...styles.filterSubSubContainer,
-                                  backgroundColor: returnData.employee.includes(
-                                    e.Employee_ID
-                                  )
-                                    ? "#DBDBF4"
-                                    : "#F7F7F9",
-                                }}
-                                onClick={() =>
-                                  handleFilter("employee", e.Employee_ID)
-                                }
-                              >
-                                <p style={styles.filterBodyText}>
-                                  {e.Full_Name}
-                                </p>
-                              </div>
-                            );
-                          })
-                        )}
-                      </div>
-                      <div
-                        className="d-flex flex-row"
-                        style={{
-                          marginLeft: "20px",
-                          marginRight: "20px",
-                          marginTop: "20px",
-                        }}
-                      >
-                        {/* <Button style={styles.filterButton2} onClick={(e) => setfilter2('Advanced')}>Go to Advanced Filters</Button> */}
-                        <Button
-                          style={styles.filterButton3}
-                          onClick={(e) => { setCall(apiCall + 1); closeFilterModal(); }}
-                        >
-                          Filter
-                        </Button>
-                      </div>
+                                            
+                                        <div
+                                            style={styles.filterSubcontainer}
+                                            className="filter-container"
+                                        >
+                                            <p style={styles.filterSubheading}>
+                                            &nbsp;</p>
+                                            {employees.map((e)=>{
+                                              return(
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: eid===e.Employee_ID
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        seteid(e.Employee_ID)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    {e.Full_Name}
+                                                    </p>
+                                                </div>
+                                              )
+                                            })}
+                                                
+                                                <Button
+                                                    style={styles.updateButtonStatus}
+                                                    onClick={(e) => {
+                                                      setCall(apiCall + 1);
+                                                      closeFilterModal();
+                                                    }}
+                                                    >
+                                                    Update
+                                                </Button>
+                                        </div>
                     </Modal>
                     <div
                       className="d-flex flex-row"
@@ -1951,9 +1904,6 @@ const [updateTask, setupdateTask] = useState([]);
                                 )) : <></>}
                             </>
                             }
-
-
-                        
                         </>}
                     </tbody>
                     </table>
