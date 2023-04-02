@@ -27,7 +27,7 @@ const styles = {
     marginBottom: "8px",
   },
   trendingContainer: {
-    width: "208px",
+    width: "24%",
     height: "140px",
     left: "20px",
     top: "116px",
@@ -49,8 +49,9 @@ const styles = {
   },
   trendingContainer2: {
     padding: "4px 8px",
+    marginRight: "8px",
     gap: "50px",
-    width: "192px",
+    // width: "100%",
     height: "28px",
     marginLeft: "8px",
     marginBottom: "6px",
@@ -94,12 +95,13 @@ const styles = {
     marginBottom: "0px",
   },
   largeContainer: {
-    width: "892px",
-    height: "402px",
+    width: "100%",
+    height: "auto",
     background: "#FFFFFF",
     border: "1px solid #EBE9F1",
     borderRadius: "12px",
     marginTop: "24px",
+    paddingBottom:'10px'
   },
   pinnedIcon: {
     width: "20px",
@@ -171,7 +173,7 @@ const styles = {
     border: "1px solid #EBE9F1",
     borderRadius: "5px",
     marginTop: "12px",
-    marginLeft: "500px",
+    // marginLeft: "500px",
   },
   projectName: {
     marginLeft: "40px",
@@ -336,6 +338,7 @@ function ProjectCharts(props) {
           },
         })
         .then((res) => {
+          console.log(res.data.res)
           setHoursWorked(res.data.res);
           let total = 0;
           res.data.res.map((e) => {
@@ -531,6 +534,7 @@ function ProjectCharts(props) {
       <div className="d-flex flex-row justify-content-evenly">
       <div style={styles.largeContainer}>
         <div
+        className="d-flex flex-row justify-content-between"
           style={{
             marginLeft: "16px",
             marginRight: "16px",
@@ -539,30 +543,21 @@ function ProjectCharts(props) {
           }}
         >
           <div style={styles.largeContainerHeading}>Hours Worked</div>
-          <Form.Select
-            style={styles.headerDropdown3}
-            onChange={(e) => {
-              e.preventDefault();
-              setproject(e.target.value);
-            }}
-          >
-            <option>Select Project</option>
-            {projectName.map((e) => (
-              <option value={e.Project_Name}>{e.Project_Name}</option>
-            ))}
-          </Form.Select>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              float: "right",
-              width: "20px",
-              marginLeft: "23px",
-              marginTop: "16px",
-            }}
-          >
-            <img src={pinnedActive} alt="Dashboard Icon" />
-          </div>
+          <div style={{dispaly:'flex', flexDirection:'row'}}>
+            <Form.Select
+              style={styles.headerDropdown3}
+              onChange={(e) => {
+                e.preventDefault();
+                setproject(e.target.value);
+              }}
+            >
+              <option>Select Project</option>
+              {projectName.map((e) => (
+                <option value={e.Project_Name}>{e.Project_Name}</option>
+              ))}
+            </Form.Select>
+            {/* <img src={pinnedActive} alt="Dashboard Icon" /> */}
+            </div>
         </div>
         {isLoadingChart1?<LoadingSpinner/>:<>{project === "" ? (
           <div style={{textAlign: 'center', fontSize: '2rem', marginTop: '100px'}}>Please Select a project</div>

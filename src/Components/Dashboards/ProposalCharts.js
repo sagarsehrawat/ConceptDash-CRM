@@ -23,7 +23,7 @@ import { Form } from "react-bootstrap";
 
 const styles = {
     container: {
-        width: "48%",
+        width: "32%",
         margin: "0px 10px",
         boxSizing: "border-box",
         height: "auto",
@@ -45,13 +45,14 @@ const styles = {
     marginBottom: "8px",
   },
   trendingContainer: {
-    width: "208px",
+    width: "24%",
     height: "140px",
     left: "20px",
     top: "116px",
     background: "#FEFEFE",
     border: "1px solid #EBE9F1",
     borderRadius: "12px",
+    paddingRight: "8px",
   },
   trendingContainerHeading: {
     height: "20px",
@@ -68,7 +69,7 @@ const styles = {
   trendingContainer2: {
     padding: "4px 8px",
     gap: "50px",
-    width: "192px",
+    // width: "192px",
     height: "28px",
     marginLeft: "8px",
     marginBottom: "6px",
@@ -112,12 +113,13 @@ const styles = {
     marginBottom: "0px",
   },
   largeContainer: {
-    width: "892px",
-    height: "402px",
+    width: "100%",
+    height: "auto",
     background: "#FFFFFF",
     border: "1px solid #EBE9F1",
     borderRadius: "12px",
     marginTop: "24px",
+    paddingBottom:'20px'
   },
   pinnedIcon: {
     width: "20px",
@@ -563,7 +565,7 @@ function ProposalCharts(props) {
     ]
   };
   const dOptions = {
-    cutout: 90,
+    cutout: 130,
     plugins: {
       legend: {
         position: "bottom",
@@ -691,7 +693,7 @@ function ProposalCharts(props) {
         
       </div>
       <div className="d-flex flex-row justify-content-evenly">
-        <div style={styles.largeContainer}>
+        {/* <div style={styles.largeContainer}>
           <div
           className="d-flex flex-row justify-content-between"
             style={{
@@ -743,7 +745,7 @@ function ProposalCharts(props) {
                 </div>
             </>
           )}
-        </div>
+        </div> */}
       </div>
       <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "16px", marginRight: "16px" }}>
 

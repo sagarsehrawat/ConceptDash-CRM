@@ -302,7 +302,7 @@ const Dashboard = () => {
 
 
   const handleDash = (e) => {
-    if (nav === 0){return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth}/>;}
+    if (nav === 0){return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth} setnav={setnav}/>;}
     if (nav === 1) return <></>;
     if (nav === 2) return <Tasks isCollapsed={isCollapsed}/>;
     if (nav === 3) return <BudgetCities isCollapsed={isCollapsed} />;
@@ -315,7 +315,7 @@ const Dashboard = () => {
     if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <Customers isCollapsed={isCollapsed}/>;
     if (nav === 12) return <></>;
-    if(nav===14) return <ProjectDetail setnav={setnav} project={project} />
+    if (nav===14) return <ProjectDetail setnav={setnav} project={project} />
   };
 
   const [show, setShow] = useState(false);
