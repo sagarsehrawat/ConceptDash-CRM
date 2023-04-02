@@ -869,7 +869,7 @@ const Proposal = (props) => {
             {red === true ? <RedAlert setRed={setred} /> : <></>}
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
                 <p style={styles.heading}>Proposals</p>
-                <button style={styles.addButton} onClick={handleShow}><p style={styles.addButtonText} >+ Add New proposal</p></button>
+                <button style={styles.addButton} disabled={!privileges.includes('Add Proposal')} onClick={handleShow}><p style={styles.addButtonText} >+ Add New proposal</p></button>
             </div>
 
             {/* Header Cards */}
@@ -1348,11 +1348,11 @@ const Proposal = (props) => {
                 <p style={styles.floatinContainerText}>{selectedProposals.length}</p>
                 <p style={styles.floatingContainerText2}>Items Selected</p>
                 <div style={{ ...styles.floatingContainerLine, marginLeft: "-23px" }}></div>
-                {privileges.includes("Delete RFP") ? <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }} onClick={(e) => handleShowDelete()}>
+                {privileges.includes("Delete Proposal") ? <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }} onClick={(e) => handleShowDelete()}>
                     <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
                     <p style={styles.floatingContainerIconText}>Delete</p>
                 </div> : <></>}
-                {privileges.includes('Update RFP') ? <Button style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }} disabled={selectedProposals.length !== 1} onClick={handleUpdate}>
+                {privileges.includes('Update Proposal') ? <Button style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }} disabled={selectedProposals.length !== 1} onClick={handleUpdate}>
                     <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
                     <p style={styles.floatingContainerIconText}>Edit</p>
                 </Button> : <></>}
