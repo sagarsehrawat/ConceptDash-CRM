@@ -302,7 +302,6 @@ const CityBudget = (props) => {
     handleShowDelete();
   };
   const handleDeleteBudget = (e) => {
-    setIsLoading(true);
     e.preventDefault();
     setIsLoading(true);
     axios
@@ -331,7 +330,6 @@ const CityBudget = (props) => {
   const shortenLink = (url) => {
     if(!url) return "";
     if (url.length < 50) return url
-
     return url.substring(0, 50) + "..."
   }
 

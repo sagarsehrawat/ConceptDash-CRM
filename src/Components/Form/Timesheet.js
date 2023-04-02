@@ -31,6 +31,7 @@ function Timesheet(props) {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
+          console.log(res.data.res)
           let your = [], ongoing = [], allProjects = [];
           for (let i = 0; i < res.data.res.length; i++) {
             const data = res.data.res[i]
@@ -39,9 +40,9 @@ function Timesheet(props) {
               ongoing.push(data.Project_Name)
             }
 
-            if ((data.Project_Manager_ID === localStorage.getItem('employeeId') || data.Team_Members.includes(localStorage.getItem('employeeName'))) && data.Status === "Ongoing") {
-              your.push(data.Project_Name)
-            }
+            // if ((data.Project_Manager_ID === localStorage.getItem('employeeId') || data.Team_Members.includes(localStorage.getItem('employeeName'))) && data.Status === "Ongoing") {
+            //   your.push(data.Project_Name)
+            // }
 
             allProjects.push(data.Project_Name)
           }

@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
-import Cards from "../../Cards/Cards";
-import TestDemo from "../../Calendar";
 import AdminDash from "../../AdminDash/AdminDash";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -10,13 +8,11 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Modal from "react-bootstrap/Modal";
 import "./Mode.css";
-import TimeSheetTable from "../../Expenses/Expenses";
 import Todo from "../../Todo/Todo";
 import ProjectUpdate from "../../Update/ProjectUpdate";
 import EmployeeUpdate from "../../Update/EmployeeUpdate";
 import CompanyUpdate from "../../Update/CompanyUpdate";
 import AssetUpdate from "../../Update/AssetUpdate";
-import BudgetUpdate from "../../Update/BudgetUpdate";
 import RFPUpdate from "../../Update/RFPUpdate";
 import ProposalsUpdate from "../../Update/ProposalsUpdate";
 import CustomerUpdate from "../../Update/CustomerUpdate";
@@ -27,10 +23,12 @@ import ExpenseUpdate from "../../Update/ExpenseUpdate";
 import AuthContext from '../../../Context/AuthContext'
 import CityBudget from "../../Update/CityBudget";
 import BudgetCities from "../../Update/BudgetCities";
+import ProjectDetail from "../../Update/ProjectDetail";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [nav, setnav] = useState(0);
   const [city, setcity] = useState({});
+  const [project, setproject] = useState({});
   
   const { privileges, setPrivileges } = useContext(AuthContext)
 
@@ -41,14 +39,14 @@ const Dashboard = () => {
     if (nav === 3) return <ProposalsUpdate />;
     if (nav === 4) return <CustomerUpdate category={"Customers"} />;
     if (nav === 5) return <EmployeeUpdate />;
-    if (nav === 6) return <ProjectUpdate />;
+    if (nav === 6) return <ProjectUpdate setnav={setnav} setproject={setproject}/>;
     if (nav === 7) return <CompanyUpdate />;
-    if (nav === 8) return <Cards />;
     if (nav === 9) return <AssetUpdate />;
     if (nav === 10) return <ExpenseUpdate />;
     if (nav === 11) return <Todo />;
     if (nav === 12) return <Privileges />
     if (nav === 13) return <CityBudget setnav={setnav} city={city} />
+    if(nav===14) return <ProjectDetail setnav={setnav} project={project} />
   };
   const [show, setShow] = useState(false);
 
@@ -190,18 +188,7 @@ const Dashboard = () => {
 
         <main class="s-layout__content1" style={{ "paddingTop": "8vh" }}>{handleDash()}</main>
       </div>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        // dialogClassName="modal-150w"
-        aria-labelledby="example-custom-modal-styling-title"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Calendar</Modal.Title>
-        </Modal.Header>
-        <Modal.Body >{<TestDemo />}</Modal.Body>
-      </Modal>
+
     </div>
   );
 };

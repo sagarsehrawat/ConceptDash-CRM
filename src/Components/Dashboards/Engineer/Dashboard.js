@@ -26,8 +26,8 @@ import {
   COUNTS,
   RFP_ANALYSIS,
   PROPOSAL_STATUS_COUNTS,
-  BUDGET_AMOUNT,
   UPDATE_TASK,
+  BUDGET_CHART,
 } from "../../Constants/Constants";
 import axios from "axios";
 import Box from "@mui/material/Box";
@@ -37,7 +37,6 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import TestDemo from "../../Calendar";
 import TimeSheet from "../../TimeSheet/TimeSheet";
 import AddMyTask from "../../Form/AddMyTask";
 import UpdateTask from "../../Form/UpdateTask";
@@ -116,7 +115,7 @@ const Dashboard = () => {
           console.log(err);
         });
       await axios
-        .get(HOST + BUDGET_AMOUNT, {
+        .get(HOST + BUDGET_CHART, {
           headers: {
             auth: "Rose " + localStorage.getItem("auth"),
             chart: "Budget Amount",
@@ -600,7 +599,8 @@ const Dashboard = () => {
                       "1px 1px 1px 1px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19)",
                   }}
                 >
-                  <div style={{ textAlign: "center" }}>{<TestDemo />}</div>
+                  
+
                 </div>
               </div>
               {/* <Box sx={{ width: "100%", typography: "body1" }}>

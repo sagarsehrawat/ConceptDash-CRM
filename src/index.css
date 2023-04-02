@@ -1,15 +1,288 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-y: auto !important;
   overflow-x: hidden;
+  font-family: 'Roboto';
+  background-color: rgb(248, 250, 251);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+p{
+  margin: 0;
+}
+
+table {
+  table-layout: fixed;
+}
+
+th {
+  padding: 0px;
+  margin: 0px;
+}
+
+.fixed-header {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  background-color: #F7F7F9;
+}
+
+.fixed-header2 {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  background-color: #F7F7F9;
+}
+
+.fixed-col {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: white;
+  border-right: "1px solid #EBE9F1"
+}
+
+.rfp-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.modal-content {
+  border: none;
+}
+
+.filter-dialog>.modal-content {
+  width: 786px !important;
+}
+
+.filter-dialog2>.modal-content {
+  width: 446px !important;
+}
+
+.filter-dialog2 {
+  margin: 0px !important;
+  max-width: none;
+}
+
+.filter-dialog {
+  margin: 0px !important;
+  max-width: none;
+}
+
+.event-dialog {
+  margin: 0px !important;
+  max-width: none;
+}
+
+.event-dialog>.modal-content {
+  width: 587px !important;
+  height: fit-content !important;
+}
+
+.filter-backdrop {
+  opacity: 0 !important;
+}
+
+.fade.modal.show {
+  opacity: unset;
+}
+
+body>div.fade.modal.show>div {
+  margin-top: 120px;
+}
+
+.modal-backdrop.fade {
+  opacity: 0.3;
+  width: 100%;
+}
+
+.filter-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.form-check-input:checked {
+  border-color: #6519E1;
+  color: #6519E1;
+}
+
+.form-check-input:checked::before {
+  background-color: #6519E1;
+  border-color: #6519E1;
+  color: #6519E1;
+}
+
+.form-check-input:checked {
+  background-color: #6519E1;
+  border-color: #6519E1;
+}
+
+.e-radio:checked+label::before {
+  border-color: #6519E1 !important;
+}
+
+.e-radio:checked+label::after {
+  background-color: #6519E1 !important;
+  border-color: #6519E1 !important;
+  color: #6519E1 !important;
+}
+
+.sort-radio>label>span {
+  font-family: 'Roboto' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  color: #0A0A0A !important;
+}
+
+.css-dip3t8 {
+  background-color: transparent !important;
+  z-index: 0 !important;
+  position: unset !important;
+}
+
+.nav-dropdown>a:hover {
+  text-decoration: none;
+}
+
+.hover:hover {
+  background: rgba(112, 117, 122, 0.2);
+  border-radius: 4px;
+}
+
+.form-select {
+  font-size: 16px;
+}
+
+.css-1pe3og0{
+  font-family: unset !important;
+  font-weight: unset !important;
+  font-size: unset !important;
+  line-height: unset !important;
+  letter-spacing: unset !important;
+}
+
+.css-13xfq8m-MuiTabPanel-root{
+  padding: unset !important;
+}
+
+/* Calendar CSS */
+
+.e-appointment {
+  background: #DBDBF4 !important;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12);
+  border-radius: 6px !important;
+}
+
+.e-appointment-details {
+  height: 100%;
+}
+
+.e-appointment-details>div {
+  height: 100%;
+  display: flex;
+  justify-content: start;
+}
+
+.e-header-day {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px !important;
+  margin-left: 28px;
+  text-align: center;
+  color: #0A0A0A;
+}
+
+.e-header-date {
+  width: 42px;
+  height: 42px;
+  width: 42px;
+  height: 42px;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  margin-left: 16px;
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+}
+
+.e-current-day>.e-header-date {
+  background: #6519E1;
+  color: #FBFBFB;
+}
+
+.e-schedule {
+  border: none;
+}
+
+.e-schedule .e-vertical-view .e-header-cells {
+  height: 72px;
+}
+
+.e-work-cells {
+  background-color: #FFFFFF !important;
+}
+
+.e-schedule .e-vertical-view .e-alternate-cells {
+  border: 1px solid #EBE9F1;
+  border-bottom: none;
+}
+
+.e-time-slots>span {
+  display: none;
+  visibility: hidden;
+}
+
+.e-schedule-toolbar-container {
+  z-index: -1;
+  position: absolute;
+}
+
+.e-current-time {
+  display: none;
+  visibility: hidden;
+}
+
+.e-current-timeline {
+  border: 1px solid #6519E1 !important;
+}
+
+/* Form CSS */
+input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #6519E1 !important;
+}
+
+textarea:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #6519E1 !important;
+}
+
+.form-select:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #6519E1 !important;
+}
+
+.add-title-placeholder::placeholder {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
+  color: #70757A;
+  width: 73px;
+  height: 28px;
 }

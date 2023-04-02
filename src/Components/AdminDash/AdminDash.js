@@ -10,7 +10,6 @@ import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import TestDemo from "../../Components/Calendar";
 import { Form } from "react-bootstrap";
 import axios from "axios";
 import {
@@ -20,11 +19,11 @@ import {
   COUNTS,
   RFP_ANALYSIS,
   PROPOSAL_STATUS_COUNTS,
-  BUDGET_AMOUNT,
   GET_WORK_HOURS,
   GET_PROJECT_STATUS,
   GET_TASKS_BY_ID,
   UPDATE_TASK,
+  BUDGET_CHART,
 } from "../Constants/Constants";
 import AddTask from "../Form/AddTask";
 import LoadingSpinner from "../Loader/Loader";
@@ -307,7 +306,7 @@ function AdminDash() {
       },
     ],
   };
-  const budgetApi = HOST + BUDGET_AMOUNT;
+  const budgetApi = HOST + BUDGET_CHART;
   const [charts, setCharts] = useState([]);
 
   const [budgets, setbudgets] = useState(false);
@@ -782,21 +781,6 @@ function AdminDash() {
               </div> */}
             </div>
           </div>
-          <Modal
-            // style={{'margin':'2rem'}}
-            show={show}
-            onHide={handleClose}
-            size="lg"
-            dialogClassName="modal-150w"
-            aria-labelledby="example-custom-modal-styling-title"
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Calendar</Modal.Title>
-            </Modal.Header>
-            <Modal.Body style={{ marginLeft: "4vw" }}>
-              {<TestDemo />}
-            </Modal.Body>
-          </Modal>
 
           <Modal
             show={showAT}

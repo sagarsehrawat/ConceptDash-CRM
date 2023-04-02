@@ -5,37 +5,39 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { HOST, GET_EMPLOYEENAMES, ADD_TASK } from "../Constants/Constants";
+import { HOST, GET_EMPLOYEENAMES, ADD_TASK, GET_PROJECT_NAMES, GET_RFP_NAMES, GET_PROPOSALS_NAMES } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
 
 function AddTask(props) {
-  const [isLoading, setisLoading] = useState(false)
-  const { setGreen, closeModal, setRed } = props
-  
+  const [isLoading, setisLoading] = useState(false);
+  const { setGreen, closeModal, setRed } = props;
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [isSubmit, setIsSubmit] = useState(false);
-  const [due, setdue] = useState("")
-    const [form, setform] = useState({
+  const [due, setdue] = useState("");
+  const [form, setform] = useState({
+    type: "",
     title: "",
+    id: "",
+    reviewedBy: "",
     priority: "",
     assignedTo: "",
     description: "",
     startDate: "",
     dueDate: "",
-    completedOn: "",
   });
   let date = new Date();
   let month;
-  if(date.getMonth()<9) {
-    month = `0${date.getMonth()+1}`
+  if (date.getMonth() < 9) {
+    month = `0${date.getMonth() + 1}`;
   } else {
-    month = date.getMonth()+1;
+    month = date.getMonth() + 1;
   }
-  let entry_date = `${date.getFullYear()}-${month}-${date.getDate()}`
-  let due_date = due?due.substring(0, 10):'';
+  let entry_date = `${date.getFullYear()}-${month}-${date.getDate()}`;
+  let due_date = due ? due.substring(0, 10) : "";
   const handleChange = (e) => {
     const { name, value } = e.target;
     const newForm = form;
@@ -44,8 +46,11 @@ function AddTask(props) {
   };
 
   const [employees, setemployees] = useState([]);
+  const [projects, setprojects] = useState([]);
+  const [proposals, setproposals] = useState([]);
+  const [rfp, setrfp] = useState([]);
   useEffect(() => {
-    setisLoading(true)
+    setisLoading(true);
     const call = async () => {
       await axios
         .get(HOST + GET_EMPLOYEENAMES, {
@@ -57,11 +62,40 @@ function AddTask(props) {
         .catch((err) => {
           console.log(err);
         });
-        setisLoading(false)
+        await axios
+        .get(HOST + GET_PROJECT_NAMES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setprojects(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        await axios
+        .get(HOST + GET_PROPOSALS_NAMES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setproposals(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        await axios
+        .get(HOST + GET_RFP_NAMES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setrfp(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      setisLoading(false);
     };
     call();
   }, []);
-  console.log(due_date?(new Date(due_date).toISOString()):'')
   const handleSubmit = (e) => {
     setisLoading(true);
     e.preventDefault();
@@ -73,23 +107,22 @@ function AddTask(props) {
           headers: {
             auth: "Rose " + localStorage.getItem("auth"),
           },
+          type: type,
+          id: id,
           title: form.title,
           priority: form.priority,
           assignedTo: form.assignedTo,
           description: form.description,
-          startDate: new Date(entry_date).toISOString(),
-          startTime: `${new Date().getHours()}:${new Date().getMinutes()}:00`,
-          dueDate: new Date(due_date).toISOString(),
-          dueTime: `${new Date(due).getHours()}:${new Date(
-            due
-          ).getMinutes()}:00`,
-          assignedBy: localStorage.getItem('employeeId')
+          startDate: form.startDate,
+          dueDate: form.dueDate,
+          assignedBy: localStorage.getItem("employeeId"),
+          reviewedBy: form.reviewedBy,
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res)
-        setisLoading(false)
+        console.log(res);
+        setisLoading(false);
         if (res.data.success) {
           closeModal();
           setGreen(true);
@@ -115,54 +148,145 @@ function AddTask(props) {
     let newValue = e.target.value + ":00" + offset1;
     setdue(newValue);
   };
-  return (
-    isLoading?<LoadingSpinner/>:
+  const [radio, setradio] = useState("1");
+  const [type, settype] = useState("General");
+  const radioChange = (e) => {
+    setradio(e.target.id.toString());
+    settype(e.target.value)
+  };
+  const [id, setid] = useState('');
+  const handleID = (e) =>{
+    setid(e.target.value);
+  }
+  const evaluateOptions = () => {
+    if (radio === "2") {
+      return (
+        <Form.Group as={Col}>
+          <Form.Label>Choose Project</Form.Label>
+          <Form.Select onChange={handleID}>
+            <option>Select Project</option>
+            {projects?projects.map((e)=>(
+              <option value={e.Project_ID}>{e.Project_Name}</option>
+            )):<></>}
+          </Form.Select>
+        </Form.Group>
+      );
+    } else if (radio === "3") {
+      return (
+        <Form.Group as={Col}>
+          <Form.Label>Choose Proposal</Form.Label>
+          <Form.Select onChange={handleID}>
+            <option>Select Proposal</option>
+            {proposals?proposals.map((e)=>(
+              <option value={e.Proposal_ID}>{e.Project_Name}</option>
+            )):<></>}
+          </Form.Select>
+        </Form.Group>
+      );
+    } else if (radio === "4") {
+      return (
+        <Form.Group as={Col}>
+          <Form.Label>Choose RFP</Form.Label>
+          <Form.Select onChange={handleID}>
+            <option>Select RFP</option>
+            {rfp?rfp.map((e)=>(
+              <option value={e.RFP_ID}>{e.Project_Name}</option>
+            )):<></>}
+          </Form.Select>
+        </Form.Group>
+      );
+    }  else {
+      return <></>;
+    }
+  };
+  return isLoading ? (
+    <LoadingSpinner />
+  ) : (
     <div>
       <Form className="form-main" onSubmit={handleSubmit}>
         <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              name="title"
-              placeholder="Title"
-              onChange={handleChange}
-              required
+          <Form.Group onChange={radioChange}>
+            <Form.Check
+              value='General'
+              inline
+              type="radio"
+              defaultChecked
+              name="group1"
+              id="1"
+              label="General"
             />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Select
-              name="priority"
-              required
-              placeholder="Priority"
-              onChange={handleChange}
-            >
-              <option>Select Priority</option>
-              <option value='0'>Super urgent</option>
-              <option value='1'>Urgent</option>
-              <option value='2'>Moderate</option>
-              <option value='3'>Low</option>
-            </Form.Select>
+            <Form.Check
+              value='Projects'
+              inline
+              type="radio"
+              name="group1"
+              id="2"
+              label="Projects"
+            />
+            <Form.Check
+              value='Proposals'
+              inline
+              type="radio"
+              name="group1"
+              id="3"
+              label="Proposals"
+            />
+            <Form.Check value='RFP' inline type="radio" name="group1" id="4" label="RFPs" />
+            <Form.Check value='HR' inline type="radio" name="group1" id="5" label="HR" />
+            <Form.Check
+              value='Finance'
+              inline
+              type="radio"
+              name="group1"
+              id="6"
+              label="Finance"
+            />
           </Form.Group>
         </Row>
-        {/* <Row className="mb-4">
+        <Row className="mb-4">
+          {evaluateOptions()}
+        </Row>
+        <Row className="mb-4">
           <Form.Group as={Col}>
+            <Form.Label>Enter Task Name</Form.Label>
             <Form.Control
-              name="completed"
-              type="number"
-              placeholder="% Completed"
+              name="title"
+              placeholder="Task Name"
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+          
+        </Row>
+        <Row className="mb-4">
+          <Form.Group as={Col}>
+            <Form.Label>Task Description</Form.Label>
+            <Form.Control
+              name="description"
+              as="textarea"
+              rows={2}
               onChange={handleChange}
             />
           </Form.Group>
-        </Row> */}
+        </Row>
+        <hr style={{
+          background: '#EBE9F1',
+          color: '#EBE9F1',
+          borderColor: '#EBE9F1',
+          height: '1px',
+        }}/>
+        <Row className="mb-4">
+          <Form.Label>Task Information</Form.Label>
+        </Row>
         <Row className="mb-4">
           <Form.Group as={Col}>
-            <Form.Label>Assigned To</Form.Label>
+            <Form.Label>Task Owner</Form.Label>
             <Form.Select
               name="assignedTo"
-              type="text"
               onChange={handleChange}
               required
             >
-              <option value="">Select Employee</option>
+              <option>Owner</option>
               {employees.length !== 0 ? (
                 employees.map((option) => (
                   <option value={option.Employee_ID}>{option.Full_Name}</option>
@@ -172,7 +296,40 @@ function AddTask(props) {
               )}
             </Form.Select>
           </Form.Group>
-          {/* <Form.Group as={Col}>
+          <Form.Group as={Col}>
+            <Form.Label>Reviewd By</Form.Label>
+            <Form.Select
+              name="reviewedBy"
+              onChange={handleChange}
+              required
+            >
+              <option>Reviewer</option>
+              {employees.length !== 0 ? (
+                employees.map((option) => (
+                  <option value={option.Employee_ID}>{option.Full_Name}</option>
+                ))
+              ) : (
+                <option value="">None</option>
+              )}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group as={Col}>
+            <Form.Label>Task Priority</Form.Label>
+            <Form.Select
+              name="priority"
+              required
+              onChange={handleChange}
+            >
+              <option>Choose Priority</option>
+              <option value="1">Super urgent</option>
+              <option value="2">Urgent</option>
+              <option value="3">Moderate</option>
+              <option value="4">Low</option>
+            </Form.Select>
+          </Form.Group>
+        </Row>
+        <Row className="mb-4">
+        <Form.Group as={Col}>
             <Form.Label>Start Date</Form.Label>
             <Form.Control
               name="startDate"
@@ -180,39 +337,19 @@ function AddTask(props) {
               onChange={handleChange}
               required
             />
-          </Form.Group> */}
+          </Form.Group>
           <Form.Group as={Col}>
             <Form.Label>Due Date</Form.Label>
-            <Form.Control name="dueDate" type="datetime-local" onChange={handleChange2} required />
-          </Form.Group>
-          {/* <Form.Group as={Col}>
-            <Form.Label>Completed On</Form.Label>
             <Form.Control
-              name="completedOn"
+              name="dueDate"
               type="date"
               onChange={handleChange}
-            />
-          </Form.Group> */}
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Control
-              name="description"
-              as="textarea"
-              rows={2}
-              placeholder="Description"
-              onChange={handleChange}
+              required
             />
           </Form.Group>
-          {/* <Form.Group as={Col}>
-            <Form.Control
-              name="attachments"
-              type="file"
-              placeholder="Attachments"
-              onChange={handleChange}
-            />
-          </Form.Group> */}
         </Row>
+        
+       
         <Button
           className="submit-btn"
           variant="primary"
