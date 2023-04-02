@@ -5,9 +5,8 @@ import { Bar, Pie } from 'react-chartjs-2'
 import axios from 'axios'
 import LoadingSpinner from '../Loader/Loader'
 import { BUDGET_CHART, BUDGET_CHART_DEPARTMENT, HOST } from '../Constants/Constants'
-import { primaryColour } from '../Constants/styles'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowUpRightDots } from '@fortawesome/free-solid-svg-icons'
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 const budgetChartStyles = {
     container: {
@@ -218,6 +217,7 @@ const budgetCategoryOptions = {
     },
     scales: {
         y: {
+            type: 'linear',
             ticks: {
                 display: false,
                 beginAtZero: true,
@@ -228,6 +228,7 @@ const budgetCategoryOptions = {
             },
         },
         x: {
+            type: 'linear',
             grid: {
                 display: false,
             },
