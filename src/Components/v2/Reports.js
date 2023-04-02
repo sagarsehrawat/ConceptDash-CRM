@@ -168,6 +168,15 @@ function Reports(props) {
     };
     call();
   }, []);
+  let projectData = {}, projectHoursData = {};
+  projects.map(e => {
+      if (!projectData[e.Project_Name]) {
+        projectData[e.Project_Name] = [];
+        projectHoursData[e.Project_Name] = 0
+    }
+    projectHoursData[e.Project_Name]+=e.total
+    projectData[e.Project_Name].push(e);
+  })
   const proposalData = proposals.reduce((result, current) => {
     if (!result[current.Project_Name]) {
       result[current.Project_Name] = [];
@@ -175,13 +184,13 @@ function Reports(props) {
     result[current.Project_Name].push(current);
     return result;
   }, {});
-  const projectData = projects.reduce((result, current) => {
-    if (!result[current.Project_Name]) {
-      result[current.Project_Name] = [];
-    }
-    result[current.Project_Name].push(current);
-    return result;
-  }, {});
+  // const projectData = projects.reduce((result, current) => {
+  //   if (!result[current.Project_Name]) {
+  //     result[current.Project_Name] = [];
+  //   }
+  //   result[current.Project_Name].push(current);
+  //   return result;
+  // }, {});
   const rfpData = rfp.reduce((result, current) => {
     if (!result[current.Project_Name]) {
       result[current.Project_Name] = [];
@@ -339,7 +348,7 @@ function Reports(props) {
                                 </td>
                                 <td> </td>
                                 <td> </td>
-                                <td>Total</td>
+                                <td>{projectHoursData[e]}</td>
                                 </tr>
                                 <div style={{width:'100vw', paddingTop:'6px', background:"#FFFFFF"}}>
                                 {name===e?projectData[e].map((f)=>{
