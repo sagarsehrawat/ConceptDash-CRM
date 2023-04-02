@@ -237,6 +237,14 @@ const Dashboard = () => {
         textAlign: "center",
       }
     },
+    sidebarMenuItem: {
+      width: "100%",
+      height: "40px",
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      cursor: "pointer",
+    },
     sidebarMenuItemTextActive: {
       height: "20px",
       fontFamily: "'Roboto'",
@@ -246,14 +254,6 @@ const Dashboard = () => {
       margin: "0px",
       marginLeft: "12px",
       color: "#FBFBFB",
-    },
-    sidebarMenuItem: {
-      width: "204px",
-      height: "40px",
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      cursor: "pointer",
     },
     sidebarMenuItemIcon: {
       nonCollapsed: {
@@ -458,7 +458,7 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-                <div
+                {/* <div
                   style={
                     nav === 1
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -478,7 +478,7 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
+                </div> */}
                 <div
                   style={
                     nav === 2
@@ -626,7 +626,7 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-                <div
+                {/* <div
                   style={
                     nav === 9
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -646,7 +646,7 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
+                </div> */}
                 <div
                   style={
                     nav === 10
@@ -689,7 +689,7 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-                <div
+                {/* <div
                   style={
                     nav === 12
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -709,7 +709,7 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
             </>
             : <>
@@ -750,7 +750,7 @@ const Dashboard = () => {
                   </p>
                 </div>
 
-                <div
+                {/* <div
                   style={
                     nav === 1
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -779,7 +779,7 @@ const Dashboard = () => {
                   >
                     Pinned
                   </p>
-                </div>
+                </div> */}
                 <div
                   style={
                     nav === 2
@@ -990,7 +990,7 @@ const Dashboard = () => {
                     Calendar
                   </p>
                 </div>
-                <div
+                {/* <div
                   style={
                     nav === 9
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -1019,7 +1019,7 @@ const Dashboard = () => {
                   >
                     Expenses
                   </p>
-                </div>
+                </div> */}
                 <div
                   style={
                     nav === 10
@@ -1080,7 +1080,7 @@ const Dashboard = () => {
                     Contacts
                   </p>
                 </div>
-                <div
+                {/* <div
                   style={
                     nav === 12
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -1109,7 +1109,7 @@ const Dashboard = () => {
                   >
                     Celebrations
                   </p>
-                </div>
+                </div> */}
               </div>
             </>}
         </Sidebar>

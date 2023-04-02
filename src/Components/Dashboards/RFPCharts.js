@@ -18,13 +18,12 @@ const styles = {
         marginBottom: "8px"
     },
     trendingContainer: {
-        width: "208px",
+        width: "24% !important",
         height: "140px",
-        left: "20px",
-        top: "116px",
         background: "#FEFEFE",
         border: "1px solid #EBE9F1",
-        borderRadius: "12px"
+        borderRadius: "12px",
+        margin: "0px 10px"
     },
     trendingContainerHeading: {
         height: "20px",
@@ -41,9 +40,9 @@ const styles = {
     trendingContainer2: {
         padding: "4px 8px",
         gap: "50px",
-        width: "192px",
         height: "28px",
         marginLeft: "8px",
+        marginRight: "8px",
         marginBottom: "6px",
         background: "#FFFFFF",
         boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
@@ -85,7 +84,7 @@ const styles = {
         marginBottom: "0px"
     },
     largeContainer: {
-        width: "892px",
+        width: "100%",
         height: "402px",
         background: "#FFFFFF",
         border: "1px solid #EBE9F1",
@@ -254,8 +253,8 @@ const RFPCharts = (props) => {
     return (
         <>
             <p style={styles.trendingHeader}>Trending</p>
-            <div style={{ padding: "0px" }} className='d-flex flex-row justify-content-between'>
-                <div style={styles.trendingContainer}>
+            <div className='row justify-content-between' style={{ width: "100%", marginLeft: "0px", marginRight: "0px" }}>
+                <div style={{ ...styles.trendingContainer, marginLeft: "0px" }} className='col p-0'>
                     <p style={styles.trendingContainerHeading}>Cities</p>
                     {isLoading[0]
                         ? <LoadingSpinner />
@@ -266,7 +265,7 @@ const RFPCharts = (props) => {
                         })
                     }
                 </div>
-                <div style={styles.trendingContainer}>
+                <div style={styles.trendingContainer} className='col p-0'>
                     <p style={styles.trendingContainerHeading}>Departments</p>
                     {isLoading[0]
                         ? <LoadingSpinner />
@@ -277,7 +276,7 @@ const RFPCharts = (props) => {
                         })
                     }
                 </div>
-                <div style={styles.trendingContainer}>
+                <div style={styles.trendingContainer} className='col p-0'>
                     <p style={styles.trendingContainerHeading}>Project Category</p>
                     {isLoading[0]
                         ? <LoadingSpinner />
@@ -288,15 +287,15 @@ const RFPCharts = (props) => {
                         })
                     }
                 </div>
-                <div style={{ ...styles.trendingContainer, backgroundColor: "#FFFFFF" }}>
+                <div style={{ ...styles.trendingContainer, backgroundColor: "#FFFFFF", marginRight: "0px" }} className='col p-0'>
                     <p style={styles.trendingContainerHeading}>Action Go/No Go</p>
                     {isLoading[1] ? <LoadingSpinner /> :
                         <>
-                            <div style={{ marginLeft: "8px" }} className='d-flex flex-row align-items-center'>
+                            <div style={{ marginLeft: "8px" }} className='d-flex flex-row align-items-center justify-content-between'>
                                 <p style={styles.actionChartSubheader}>{action[4]} RFPs</p>
-                                <p style={styles.actionChartSubheader2}>{(Math.abs(action[4] - action[3]) / action[3]) * 100}% than last week</p>
+                                <p style={styles.actionChartSubheader2}>{(action[3] !== 0 ? Math.abs(action[4] - action[3]) / action[3] : 0) * 100}% than last week</p>
                             </div>
-                            <div style={{ width: "200px", height: "75px", }} className='d-flex flex-row justify-content-center align-items-center'>
+                            <div style={{ width: "300px", height: "75px", }} className='d-flex flex-row justify-content-center align-items-center'>
                                 <Line options={options} data={{
                                     labels: [1, 2, 3, 4, 5],
                                     datasets: [
@@ -307,18 +306,22 @@ const RFPCharts = (props) => {
                                             pointRadius: 0
                                         },
                                     ],
-                                }} width={265} height={90} /></div>
+                                }} width={300} height={90} /></div>
                         </>}
                 </div>
             </div>
-      <div className="d-flex flex-row justify-content-evenly">
-            <div style={styles.largeContainer}>
-                <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "16px", marginRight: "16px" }}>
-                    <p style={styles.largeContainerHeading}>RFP Overview</p>
-                    <img src={pinnedActive} alt="Dashboard Icon" style={styles.pinnedIcon} />
+            <div className="d-flex flex-row justify-content-evenly">
+                <div style={styles.largeContainer}>
+                    <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "16px", marginRight: "16px" }}>
+                        <p style={styles.largeContainerHeading}>RFP Overview</p>
+                        <img src={pinnedActive} alt="Dashboard Icon" style={styles.pinnedIcon} />
+                    </div>
+                    <div style={{height: "100px"}}>
+                        <Line options={rfpOverviewOptions} data={data} height={78} />
+                    </div>
+                        
                 </div>
-                <Line options={rfpOverviewOptions} data={data} height={115} />
-            </div></div>
+            </div>
         </>
     )
 }
