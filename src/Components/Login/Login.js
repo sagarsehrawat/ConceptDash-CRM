@@ -170,10 +170,7 @@ const Login = () => {
                 navigate("/admin");
                 break;
               case "Engineer":
-                navigate("/admin");
-                break;
-              case "Manager":
-                navigate("/manager");
+                navigate("/engineers");
                 break;
               default:
                 break;
