@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { HOST, UPDATE_BUDGET, UPDATE_BUDGET_CITY, UPDATE_CITY_BUDGET } from "../Constants/Constants";
+import { HOST, UPDATE_BUDGET, UPDATE_CITY_BUDGET } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
 
@@ -59,37 +59,37 @@ function UpdateCityBudget(props) {
     setisLoading(true);
     e.preventDefault();
     setIsSubmit(true);
-    axios
-      .post(
-        HOST + UPDATE_BUDGET_CITY,
-        {
-          id: props.row.City_Budget_ID,
-          cityId: props.row.City_ID,
-          population: form.population,
-          year22: form.year22,
-          year23: form.year23,
-          website22: form.website22,
-          website23: form.website23,
-          capitalBudget: form.capitalBudget,
-          remarks: form.remarks
-        },
-        { headers: { auth: "Rose " + localStorage.getItem("auth") } }
-      )
-      .then((res) => {
-        setisLoading(false);
-        if (res.data.success) {
-          closeModal();
-          setGreen(true);
-          apiCall(api + 1);
-        } else {
-          setRed(true);
-        }
-      })
-      .catch((err) => {
-        setisLoading(false);
-        setRed(true);
-        console.log(err);
-      });
+    // axios
+    //   .post(
+    //     HOST + UPDATE_BUDGET_CITY,
+    //     {
+    //       id: props.row.City_Budget_ID,
+    //       cityId: props.row.City_ID,
+    //       population: form.population,
+    //       year22: form.year22,
+    //       year23: form.year23,
+    //       website22: form.website22,
+    //       website23: form.website23,
+    //       capitalBudget: form.capitalBudget,
+    //       remarks: form.remarks
+    //     },
+    //     { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+    //   )
+    //   .then((res) => {
+    //     setisLoading(false);
+    //     if (res.data.success) {
+    //       closeModal();
+    //       setGreen(true);
+    //       apiCall(api + 1);
+    //     } else {
+    //       setRed(true);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     setisLoading(false);
+    //     setRed(true);
+    //     console.log(err);
+    //   });
   };
   const [isLoading, setisLoading] = useState(false);
   return (

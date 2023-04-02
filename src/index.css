@@ -259,13 +259,21 @@ body>div.fade.modal.show>div {
 
 /* Form CSS */
 input:focus {
-  outline: none;
-  box-shadow: none;
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #6519E1 !important;
+}
+
+textarea:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #6519E1 !important;
 }
 
 .form-select:focus {
-  outline: none;
-  box-shadow: none;
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #6519E1 !important;
 }
 
 .add-title-placeholder::placeholder {

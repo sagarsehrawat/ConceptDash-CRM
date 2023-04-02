@@ -44,6 +44,7 @@ const Project = (props) => {
     const [value, setValue] = useState("");
     const [searchCity, setsearchCity] = useState("");
     const [filter, setfilter] = useState({ dept: [], cat: [], city: [], manager: [] });
+    const [prevFilter, setprevFilter] = useState({ dept: [], cat: [], city: [], manager: [] });
     const [filter2, setfilter2] = useState('Basic')
     const [status, setstatus] = useState(null)
     const [advancedFilter, setadvancedFilter] = useState([['', 'IS', '']])
@@ -55,7 +56,7 @@ const Project = (props) => {
 
     //Filter Modal
     const [filterModal, setfilterModal] = useState(false);
-    const closeFilterModal = () => setfilterModal(false);
+    const closeFilterModal = () => {setfilter(prevFilter); setfilterModal(false)};
     const openFilterModal = () => setfilterModal(true);
 
     //Status Modal
@@ -206,7 +207,10 @@ const Project = (props) => {
             marginRight: "12px",
             display: "flex",
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
+            border: "none",
+            outline: "none",
+            boxShadow: "none"
         },
         filterButton: {
             display: "flex",
@@ -772,17 +776,19 @@ const Project = (props) => {
                 { headers: { auth: "Rose " + localStorage.getItem("auth") } }
             )
             .then((res) => {
+                handleCloseDelete();
                 if (res.data.success) {
-                    handleCloseDelete();
                     setselectedProjects([])
                     setgreen(true)
                     setCall(apiCall + 1);
                 } else {
                     setred(true)
+                    setIsLoading(false)
                 }
             })
             .catch((err) => {
                 setIsLoading(false)
+                setred(true)
                 console.log(err);
             });
     };
@@ -800,7 +806,8 @@ const Project = (props) => {
 
     const addComma = (num) => {
         if (num === null || num === "" || num === undefined) return ""
-        return `$ ${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+        const n = num
+        return `$ ${n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
     }
 
     useEffect(() => {
@@ -824,22 +831,24 @@ const Project = (props) => {
     const sortModalLeft = (idx) => {
         if (isCollapsed) {
             if (idx === 0) return `${90}px`
-            if (idx === 1) return `${391 - scrolled}px`
-            if (idx === 2) return `${491 - scrolled}px`
-            if (idx === 3) return `${598 - scrolled}px`
-            if (idx === 4) return `${748 - scrolled}px`
+            if (idx === 1) return `${349 - scrolled}px`
+            if (idx === 2) return `${440 - scrolled}px`
+            if (idx === 3) return `${559 - scrolled}px`
+            if (idx === 4) return `${689 - scrolled}px`
             if (idx === 5) return `${943 - scrolled}px`
-            if (idx === 6) return `${1084 - scrolled}px`
-            if (idx === 7) return `${1250 - scrolled}px`
+            if (idx === 6) return `${1008 - scrolled}px`
+            if (idx === 7) return `${1150 - scrolled}px`
+            if (idx === 8) return `${1230 - scrolled}px`
         } else {
             if (idx === 0) return `${250}px`
-            if (idx === 1) return `${530 - scrolled}px`
-            if (idx === 2) return `${619 - scrolled}px`
-            if (idx === 3) return `${720 - scrolled}px`
-            if (idx === 4) return `${859 - scrolled}px`
-            if (idx === 5) return `${1039 - scrolled}px`
-            if (idx === 6) return `${1220 - scrolled}px`
-            if (idx === 7) return `${1321 - scrolled}px`
+            if (idx === 1) return `${508 - scrolled}px`
+            if (idx === 2) return `${599 - scrolled}px`
+            if (idx === 3) return `${719 - scrolled}px`
+            if (idx === 4) return `${849 - scrolled}px`
+            if (idx === 5) return `${1008 - scrolled}px`
+            if (idx === 6) return `${1008 - scrolled}px`
+            if (idx === 7) return `${1233 - scrolled}px`
+            if (idx === 8) return `${1242 - scrolled}px`
         }
     }
 
@@ -931,7 +940,7 @@ const Project = (props) => {
                         <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
                             <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
                             <div className='d-flex align-items-center'>
-                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [] })}>Clear All</Button>
+                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => {setfilter({ dept: [], cat: [], city: [], manager: [] }); setprevFilter({ dept: [], cat: [], city: [], manager: [] }); setCall(apiCall+1); setfilterModal(false);}}>Clear All</Button>
                                 <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeFilterModal} />
                             </div>
                         </div>
@@ -985,7 +994,7 @@ const Project = (props) => {
                         </div>
                         <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
                             {/* <Button style={styles.filterButton2} onClick={(e) => setfilter2('Advanced')}>Go to Advanced Filters</Button> */}
-                            <Button style={styles.filterButton3} onClick={(e) => { setCall(apiCall + 1); closeFilterModal(); }}>Filter</Button>
+                            <Button style={styles.filterButton3} onClick={(e) => { setprevFilter(filter); setCall(apiCall + 1); setfilterModal(false) }}>Filter</Button>
                         </div>
                     </div> :
                         <div className='d-flex flex-column' style={{ width: "786px", height: "auto", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px", padding: "20px", gap: "20px" }}>
@@ -1056,7 +1065,7 @@ const Project = (props) => {
                                             <FontAwesomeIcon icon={faArrowUp} />
                                             <p style={styles.sortText}>Sort Ascending</p>
                                         </div>
-                                        <div className='d-flex flex-row1justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("City DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("City DESC"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowDown} />
                                             <p style={styles.sortText}>Sort Descending</p>
                                         </div>
