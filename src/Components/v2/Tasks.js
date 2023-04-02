@@ -35,6 +35,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { DELETE_TASK, GET_EMPLOYEENAMES, GET_PAGE_TASKS, HOST, UPDATE_TASK_STATUS } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import AddTask from "../Form/AddTask";
+import UpdateTask from "../Form/UpdateTask";
 import TimeSheet from "../TimeSheet/TimeSheet";
 import Reports from "./Reports";
 
@@ -45,6 +46,9 @@ function Tasks(props) {
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
   const [details, setdetails] = useState([false, false, false, false, false, false])
+  const [apiCall2, setCall2] = useState(0);
+  const [task, settask] = useState(true);
+
   const styles = {
     heading: {
       width: "48px",
@@ -335,6 +339,11 @@ function Tasks(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  
+    //Update Form Modal
+    const [showUpdate, setShowUpdate] = useState(false);
+    const handleCloseUpdate = () => setShowUpdate(false);
+    const handleShowUpdate = () => setShowUpdate(true);
 
   //Filter Modal
   const [filterModal, setfilterModal] = useState(false);
@@ -407,7 +416,6 @@ function Tasks(props) {
                 },
             })
             .then((res) => {
-                console.log(res.data.res);
                 let pj = [], prop = [], rf = [], gen = [], fin = [], HR = []
                 let arr = res.data.res;
                 for(let i=0;i<arr.length;i++) {
@@ -438,7 +446,7 @@ function Tasks(props) {
             });
     }
     call()
-}, [apiCall])
+}, [apiCall, apiCall2])
 
 const updateStatus = async () => {
     axios
@@ -518,6 +526,8 @@ const handleDelete = () =>{
       });
 }
 const [deleteID, setdeleteID] = useState('');
+const [idx, setidx] = useState('');
+const [updateTask, setupdateTask] = useState([]);
   return (
     <div>
       <div style={styles.heading}>Tasks</div>
@@ -1074,7 +1084,7 @@ const [deleteID, setdeleteID] = useState('');
                                     Projects
                                 </td>
                                 </tr>
-                                {details[0] ? projects.map((e) => (
+                                {details[0] ? projects.map((e, idx) => (
                                 <tr style={styles.row2}>
                                     <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
                                     <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name?e.Project_Name:'-'}</p>&nbsp;&nbsp;
@@ -1203,7 +1213,7 @@ const [deleteID, setdeleteID] = useState('');
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
                                         <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
@@ -1349,7 +1359,7 @@ const [deleteID, setdeleteID] = useState('');
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px',cursor:'pointer'}} src={edit}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
                                         <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
@@ -1495,7 +1505,7 @@ const [deleteID, setdeleteID] = useState('');
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
                                         <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
@@ -1641,7 +1651,7 @@ const [deleteID, setdeleteID] = useState('');
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px',cursor:'pointer'}} src={edit}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
                                         <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
@@ -1787,7 +1797,7 @@ const [deleteID, setdeleteID] = useState('');
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px',cursor:'pointer'}} src={edit}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
                                         <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
@@ -1934,7 +1944,7 @@ const [deleteID, setdeleteID] = useState('');
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px',cursor:'pointer'}} src={edit}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
                                         <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
@@ -1987,6 +1997,31 @@ const [deleteID, setdeleteID] = useState('');
               closeModal={handleClose}
               api={apiCall}
               apiCall={setCall}
+            />
+          }
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        show={showUpdate}
+        onHide={handleCloseUpdate}
+        backdrop="static"
+        centered
+        size="xl"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Update Task</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {
+            <UpdateTask
+            updateTask={updateTask}
+            setgreen={setgreen}
+            setred={setred}
+            closeModal={handleCloseUpdate}
+            api={apiCall2}
+            apiCall={setCall2}
             />
           }
         </Modal.Body>

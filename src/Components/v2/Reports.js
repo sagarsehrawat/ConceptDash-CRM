@@ -52,7 +52,7 @@ function Reports(props) {
             fontWeight: 400,
             fontSize: "13px",
             lineHeight: "20px",
-            textAlign: "center",
+            // textAlign: "center",
             color: "#70757A"
           },
         tableHeader: {
@@ -123,6 +123,14 @@ function Reports(props) {
   const [finance, setfinance] = useState([])
   const [hr, sethr] = useState([])
   const [isLoading, setisLoading] = useState(false)
+  const [sDate, setsDate] = useState('')
+  const [dDate, setdDate] = useState('')
+  const dateChange1 = (e) =>{
+    setsDate(e.target.value.toString())
+  }
+  const dateChange2 = (e) =>{
+    setdDate(e.target.value.toString())
+  }
   useEffect(() => {
     setisLoading(true)
     const call = async () => {
@@ -130,6 +138,8 @@ function Reports(props) {
         .get(HOST + GET_PAGE_REPORT, {
           headers: {
             auth: "Rose " + localStorage.getItem("auth"),
+            sDate: sDate,
+            dDate: dDate,
           },
         })
         .then((res) => {
@@ -219,7 +229,6 @@ function Reports(props) {
     result[current.Project_Name].push(current);
     return result;
   }, {});
-  console.log(proposalData)
   const proposalvalues = Object.keys(proposalData)
   const projectvalues = Object.keys(projectData)
   const rfpvalues = Object.keys(rfpData)
@@ -228,6 +237,15 @@ function Reports(props) {
   const hrvalues = Object.keys(hrData)
 
   const [name, setname] = useState('');
+  const minutesToHoursAndMinutes = (durationInMinutes)=> {
+    const hours = Math.floor(durationInMinutes / 60);
+    const minutes = durationInMinutes % 60;
+    return {
+      hours: hours,
+      minutes: minutes
+    };
+  }
+  
   return (
     <div>
       <div style={styles.Topbar}>
@@ -278,18 +296,18 @@ function Reports(props) {
         {/* <FontAwesomeIcon icon={faChevronLeft} color="#6519E1" style={{ cursor: "pointer", marginRight: "18px" }} /> */}
         <div style={{width:'172px', marginRight:'12px', marginTop:'16px'}}>
             <p style={styles.fromText}>From</p>
-            <div><Form.Control style={{height:'36px'}} type="date" /></div>
+            <div><Form.Control style={{height:'36px'}} type="date" onChange={dateChange1} /></div>
         </div>
         <div style={{width:'172px', marginRight:'12px', marginTop:'16px'}}>
             <p style={styles.fromText}>To</p>
-            <div><Form.Control style={{height:'36px'}} type="date" /></div>
+            <div><Form.Control style={{height:'36px'}} type="date" onChange={dateChange2} /></div>
         </div>
-        <div style={styles.filterBox}>
+        {/* <div style={styles.filterBox}>
             <img src={filter} />
             <div>Filters</div>
             <FontAwesomeIcon icon={faChevronDown}  />
 
-        </div>
+        </div> */}
         {/* <FontAwesomeIcon icon={faCalendarDays} color="#6519E1" style={{ marginRight: "10px" }} />
         <div style={{ width: "0px", height: "22px", border: "1px solid #EBE9F1", marginRight: "8px" }}></div>
         <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", marginRight: "16px" }}>nb</p>
@@ -330,7 +348,7 @@ function Reports(props) {
                                     <div style={{display:'flex', flexDirection:'row', width:'100%',borderBottom: '1px solid #EBE9F1', paddingTop:'9px'}}>
                                         <div style={{...styles.tasktitle, paddingLeft:'60px', width:'33vw'}}>{f.Title}</div>
                                         <div style={{...styles.taskowner, width:isCollapsed? '27vw': '23vw'}}>{f.Assigned}</div>
-                                        <div style={styles.taskhrs}>{f.total?f.total:'0'} h</div>
+                                        <div style={{...styles.taskhrs, width:isCollapsed? '17vw': '15vw' }}>{f.total?`${minutesToHoursAndMinutes(f.total).hours} h`:'0'}</div>
                                     </div>
                                 )
                                 }):<></>}</div>
@@ -356,7 +374,7 @@ function Reports(props) {
                                     <div style={{display:'flex', flexDirection:'row', width:'100%',borderBottom: '1px solid #EBE9F1', paddingTop:'9px'}}>
                                         <div style={{...styles.tasktitle, paddingLeft:'60px', width:'33vw'}}>{f.Title}</div>
                                         <div style={{...styles.taskowner, width:isCollapsed? '27vw': '23vw'}}>{f.Assigned}</div>
-                                        <div style={styles.taskhrs}>{f.total?f.total:'0'} h</div>
+                                        <div style={{...styles.taskhrs, width:isCollapsed? '17vw': '15vw' }}>{f.total?`${minutesToHoursAndMinutes(f.total).hours} h`:'0'}</div>
                                     </div>
                                 )
                                 }):<></>}</div>
@@ -382,7 +400,7 @@ function Reports(props) {
                                     <div style={{display:'flex', flexDirection:'row', width:'100%',borderBottom: '1px solid #EBE9F1', paddingTop:'9px'}}>
                                         <div style={{...styles.tasktitle, paddingLeft:'60px', width:'33vw'}}>{f.Title}</div>
                                         <div style={{...styles.taskowner, width:isCollapsed? '27vw': '23vw'}}>{f.Assigned}</div>
-                                        <div style={styles.taskhrs}>{f.total?f.total:'0'} h</div>
+                                        <div style={{...styles.taskhrs, width:isCollapsed? '17vw': '15vw' }}>{f.total?`${minutesToHoursAndMinutes(f.total).hours} h`:'0'}</div>
                                     </div>
                                 )
                                 }):<></>}</div>
@@ -408,7 +426,7 @@ function Reports(props) {
                                     <div style={{display:'flex', flexDirection:'row', width:'100%',borderBottom: '1px solid #EBE9F1', paddingTop:'9px'}}>
                                         <div style={{...styles.tasktitle, paddingLeft:'60px', width:'33vw'}}>{f.Title}</div>
                                         <div style={{...styles.taskowner, width:isCollapsed? '27vw': '23vw'}}>{f.Assigned}</div>
-                                        <div style={styles.taskhrs}>{f.total?f.total:'0'} h</div>
+                                        <div style={{...styles.taskhrs, width:isCollapsed? '17vw': '15vw' }}>{f.total?`${minutesToHoursAndMinutes(f.total).hours} h`:'0'}</div>
                                     </div>
                                 )
                                 }):<></>}</div>
@@ -434,7 +452,7 @@ function Reports(props) {
                                     <div style={{display:'flex', flexDirection:'row', width:'100%',borderBottom: '1px solid #EBE9F1', paddingTop:'9px'}}>
                                         <div style={{...styles.tasktitle, paddingLeft:'60px', width:'33vw'}}>{f.Title}</div>
                                         <div style={{...styles.taskowner, width:isCollapsed? '27vw': '23vw'}}>{f.Assigned}</div>
-                                        <div style={styles.taskhrs}>{f.total?f.total:'0'} h</div>
+                                        <div style={{...styles.taskhrs, width:isCollapsed? '17vw': '15vw' }}>{f.total?`${minutesToHoursAndMinutes(f.total).hours} h`:'0'}</div>
                                     </div>
                                 )
                                 }):<></>}</div>
@@ -459,7 +477,7 @@ function Reports(props) {
                                     <div style={{display:'flex', flexDirection:'row', width:'100%',borderBottom: '1px solid #EBE9F1', paddingTop:'9px'}}>
                                         <div style={{...styles.tasktitle, paddingLeft:'60px', width:'33vw'}}>{f.Title}</div>
                                         <div style={{...styles.taskowner, width:isCollapsed? '27vw': '23vw'}}>{f.Assigned}</div>
-                                        <div style={styles.taskhrs}>{f.total?f.total:'0'} h</div>
+                                        <div style={{...styles.taskhrs, width:isCollapsed? '17vw': '15vw' }}>{f.total?`${minutesToHoursAndMinutes(f.total).hours} h`:'0'}</div>
                                     </div>
                                 )
                                 }):<></>}</div>
