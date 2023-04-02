@@ -10,6 +10,7 @@ import LoadingSpinner from "../Loader/Loader";
 
 function Reports(props) {
   const { isCollapsed } = props;
+  const [apiCall, setCall] = useState(0);
     const styles = {
         Topbar: {
             marginLeft: '30px',
@@ -138,8 +139,8 @@ function Reports(props) {
         .get(HOST + GET_PAGE_REPORT, {
           headers: {
             auth: "Rose " + localStorage.getItem("auth"),
-            sDate: sDate,
-            dDate: dDate,
+            sdate: sDate,
+            ddate: dDate,
           },
         })
         .then((res) => {
@@ -177,7 +178,7 @@ function Reports(props) {
         });
     };
     call();
-  }, []);
+  }, [apiCall]);
   const proposalData = proposals.reduce((result, current) => {
     if (!result[current.Project_Name]) {
       result[current.Project_Name] = [];
@@ -185,6 +186,7 @@ function Reports(props) {
     result[current.Project_Name].push(current);
     return result;
   }, {});
+  
   const projectData = projects.reduce((result, current) => {
     if (!result[current.Project_Name]) {
       result[current.Project_Name] = [];
@@ -293,12 +295,10 @@ function Reports(props) {
             <p style={styles.fromText}>To</p>
             <div><Form.Control style={{height:'36px'}} type="date" onChange={dateChange2} /></div>
         </div>
-        {/* <div style={styles.filterBox}>
-            <img src={filter} />
-            <div>Filters</div>
-            <FontAwesomeIcon icon={faChevronDown}  />
+        <div style={styles.filterBox} onClick={()=>setCall(apiCall+1)}>
+            Filter
 
-        </div> */}
+        </div>
         {/* <FontAwesomeIcon icon={faCalendarDays} color="#6519E1" style={{ marginRight: "10px" }} />
         <div style={{ width: "0px", height: "22px", border: "1px solid #EBE9F1", marginRight: "8px" }}></div>
         <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", marginRight: "16px" }}>nb</p>
