@@ -566,7 +566,7 @@ const [deleteID, setdeleteID] = useState('');
                     />
                   }
                 />
-                <Tab
+                {/* <Tab
                   style={{
                     color: value1 == 2 ? "#6519E1" : "#70757A",
                     display: "flex",
@@ -583,7 +583,7 @@ const [deleteID, setdeleteID] = useState('');
                       src={timesheet}
                     />
                   }
-                />
+                /> */}
                 <Tab
                   style={{
                     color: value1 == 3 ? "#6519E1" : "#70757A",
@@ -1950,11 +1950,11 @@ const [deleteID, setdeleteID] = useState('');
                 </div>
               </div>
             </TabPanel>
-            <TabPanel value="2">
+            {/* <TabPanel value="2">
               <div style={{ width: '100%', float: 'left', marginLeft: '5px', marginTop: '20px' }}>
                 Board
               </div>
-            </TabPanel>
+            </TabPanel> */}
             <TabPanel value="3">
                 <div style={{width: '100%', float:'left',}}>
                     <TimeSheet />
