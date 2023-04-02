@@ -1006,7 +1006,7 @@ function Employee(props) {
         style={styles.headerContainer}
       >
         <p style={styles.heading}>Employees</p>
-        {/* <button style={styles.addButton} onClick={handleShow}>
+        {/* <button style={styles.addButton} disabled={!privileges.includes('Add Employee')} onClick={handleShow}>
           <p style={styles.addButtonText}>+ Add New Employee</p>
         </button> */}
       </div>
@@ -1493,10 +1493,10 @@ function Employee(props) {
                                           >
                                             Professional Details
                                           </div>
-                                          <img
+                                          {/* <img
                                             style={styles.editIcon}
                                             src={editIcon}
-                                          />
+                                          /> */}
                                         </div>
                                         <div
                                           style={{ width: "693px" }}
@@ -1625,10 +1625,10 @@ function Employee(props) {
                                           >
                                             Personal Details
                                           </div>
-                                          <img
+                                          {/* <img
                                             style={styles.editIcon}
                                             src={editIcon}
-                                          />
+                                          /> */}
                                         </div>
                                         <div
                                           style={{ width: "693px" }}
@@ -2146,10 +2146,10 @@ function Employee(props) {
                                           >
                                             Professional Details
                                           </div>
-                                          <img
+                                          {/* <img
                                             style={styles.editIcon}
                                             src={editIcon}
-                                          />
+                                          /> */}
                                         </div>
                                         <div
                                           style={{ width: "693px" }}
@@ -2278,10 +2278,10 @@ function Employee(props) {
                                           >
                                             Personal Details
                                           </div>
-                                          <img
+                                          {/* <img
                                             style={styles.editIcon}
                                             src={editIcon}
-                                          />
+                                          /> */}
                                         </div>
                                         <div
                                           style={{ width: "693px" }}

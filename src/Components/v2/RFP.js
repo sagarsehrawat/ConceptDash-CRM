@@ -795,7 +795,7 @@ const RFP = (props) => {
             {red === true ? <RedAlert setRed={setred} /> : <></>}
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
                 <p style={styles.heading}>RFPs (Request For Proposals)</p>
-                <button style={styles.addButton} disabled={!Sprivileges.includes("Add RFP")} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button>
+                <button style={styles.addButton} disabled={!privileges.includes("Add RFP")} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button>
             </div>
 
             {/* Header Cards */}

@@ -543,7 +543,9 @@ const Home = (props) => {
           },
         })
         .then((res) => {
-          console.log(res.data.res)
+          if(res.data.res.length===0) {
+            setisLoadingTasks(false);
+          } else {
           settitle1(res.data.res[0].Title);
           settitle2(res.data.res[1].Title);
           settitle3(res.data.res[2].Title);
@@ -560,7 +562,7 @@ const Home = (props) => {
           setdDate1(utcDate1.getUTCDate());
           setdDate2(utcDate2.getUTCDate());
           setdDate3(utcDate3.getUTCDate());
-          setisLoadingTasks(false);
+          setisLoadingTasks(false);}
         })
         .catch((err) => {
           console.log(err);
