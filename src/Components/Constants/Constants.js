@@ -118,6 +118,7 @@ export const DELETE_RFP = '/api/delete/rfp/id'
 export const DELETE_PROJECT = '/api/delete/project/id'
 export const DELETE_CONTACT = '/api/delete/customer/id'
 export const DELETE_COMPANY = '/api/delete/company/id'
+export const DELETE_TASK = '/api/delete/task/id'
 export const DELETE_TRANSACTION = '/api/delete/expenseTransaction/id'
 
 
@@ -137,6 +138,7 @@ export const UPDATE_PROJECT_TASK_5 = '/api/update/projectTask5'
 export const UPDATE_PROJECT_TASK_4 = '/api/update/projectTask4'
 export const UPDATE_PRIVILEGE = '/api/update/privileges'
 export const UPDATE_EXPENSE_TRANSACTION = '/api/update/expenseTransaction'
+export const UPDATE_TASK_STATUS = '/api/update/status/task'
 
 //Chart APIs
 export const COUNTS = '/api/get/counts'
@@ -169,6 +171,7 @@ export const GET_PAGES_CUSTOMERSS = '/api/get/pages/customers'
 export const GET_EXPENSE_TRANSACTIONS = '/api/get/page/expenseTransactions'
 export const GET_PAGE_TASKS = '/api/get/page/tasks'
 export const GET_WEEKLY_TIMESHEET = '/api/get/page/timesheet'
+export const GET_PAGE_REPORT = '/api/get/page/reports'
 
 //Google APIs
 export const GET_GOOGLE_DRIVE_URL = '/google-api/get/fileLink'
