@@ -26,6 +26,7 @@ import ProjectCharts from "./ProjectCharts";
 import ProposalCharts from "./ProposalCharts";
 
 const Home = (props) => {
+  const { setnav } = props;
   const { isCollapsed, viewportWidth } = props;
   const styles = {
     contentArea: {
@@ -143,7 +144,7 @@ const Home = (props) => {
     },
     deadlines: {
       boxSizing: "border-box",
-      width: "18.056vw",
+      width: "100%",
       height: "93px",
       left: "1180px",
       marginTop: "20px",
@@ -153,7 +154,7 @@ const Home = (props) => {
       borderRadius: "12px",
     },
     celebrations: {
-      width: "18.056vw",
+      width: "100%",
       height: "96px",
       left: "1180px",
       marginTop: "16px",
@@ -164,7 +165,7 @@ const Home = (props) => {
     },
     tasks: {
       boxSizing: "border-box",
-      width: "18.056vw",
+      width: "100%",
       height: "252px",
       left: "1180px",
       marginTop: "16px",
@@ -174,7 +175,7 @@ const Home = (props) => {
     },
     calendar: {
       boxSizing: "border-box",
-      width: "18.056vw",
+      width: "18vw",
       height: "321px",
       left: "1180px",
       marginTop: "16px",
@@ -237,9 +238,9 @@ const Home = (props) => {
       color: "#0A0A0A",
     },
     calendarBottom: {
-      width: "90px",
+      width: "100%",
       height: "14px",
-      marginLeft: "85px",
+      // marginLeft: "85px",
       marginTop: "6px",
       marginBottom: "10px",
       fontFamily: "'Roboto'",
@@ -249,11 +250,12 @@ const Home = (props) => {
       lineHeight: "100%",
       color: "#6519E1",
       cursor: "pointer",
+      textAlign: 'center'
     },
     tasksBottom: {
-      width: "90px",
+      width: "100%",
       height: "14px",
-      marginLeft: "105px",
+      // marginLeft: "105px",
       marginBottom: "12px",
       marginTop: "10px",
       fontFamily: "'Roboto'",
@@ -263,10 +265,12 @@ const Home = (props) => {
       lineHeight: "100%",
       color: "#6519E1",
       cursor: "pointer",
+      textAlign: 'center'
     },
     celebrationsCross: {
-      marginLeft: '113.6px',
+      // marginLeft: '113.6px',
       marginTop: '12.6px',
+      marginRight: '12.6px',
     },
     celebrationBottom: {
       width: "52px",
@@ -289,7 +293,7 @@ const Home = (props) => {
       borderRadius: "40px",
     },
     task1: {
-      width: "225px",
+      width: "100%",
       height: "44px",
       left: "19px",
       top: "49px",
@@ -321,7 +325,7 @@ const Home = (props) => {
       borderRadius: "40px",
     },
     task2: {
-      width: "225px",
+      width: "100%",
       height: "44px",
       left: "19px",
       top: "107px",
@@ -340,7 +344,7 @@ const Home = (props) => {
       borderRadius: "40px",
     },
     task3: {
-      width: "225px",
+      width: "100%",
       height: "44px",
       left: "19px",
       top: "165px",
@@ -465,7 +469,7 @@ const Home = (props) => {
   }
   function eventTemplate(props) {
     return (
-      <div className="template-wrap">
+      <div className="template-wrap" style={{width:'100%'}}>
         <div className="subject">{props.Subject}</div>
         <div className="time">
           Time: {getTimeString(props.StartTime)} -{" "}
@@ -539,7 +543,9 @@ const Home = (props) => {
           },
         })
         .then((res) => {
-          console.log(res.data.res)
+          if(res.data.res.length===0) {
+            setisLoadingTasks(false);
+          } else {
           settitle1(res.data.res[0].Title);
           settitle2(res.data.res[1].Title);
           settitle3(res.data.res[2].Title);
@@ -556,7 +562,7 @@ const Home = (props) => {
           setdDate1(utcDate1.getUTCDate());
           setdDate2(utcDate2.getUTCDate());
           setdDate3(utcDate3.getUTCDate());
-          setisLoadingTasks(false);
+          setisLoadingTasks(false);}
         })
         .catch((err) => {
           console.log(err);
@@ -676,7 +682,7 @@ const Home = (props) => {
             {handleChartsComponent()}
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", flexDirection: "column", paddingRight:'20px' }}>
           <div style={styles.deadlines}>
             <div style={{ display: "flex", flexDirection: "row" }}>
               <img
@@ -688,7 +694,7 @@ const Home = (props) => {
             </div>
           </div>
           <div style={styles.celebrations}>
-            <div style={{ display: "flex", flexDirection: "row" }}>
+            <div className="d-flex justify-content-between align-items-center" style={{ display: "flex", flexDirection: "row" }}>
               <div style={styles.celebrationHeading}>Celebrations</div>
               <img src={cross} style={styles.celebrationsCross} />
             </div>
@@ -699,7 +705,7 @@ const Home = (props) => {
               <LoadingSpinner />
             ) : (
               <>
-                <div style={{display: 'flex', flexDirection: 'row', marginTop: '5px', marginLeft: '16px'}}>
+                <div style={{display: 'flex', flexDirection: 'row', marginTop: '5px', marginLeft: '16px', paddingRight:'20px'}}>
                   <div style={styles.rect1}></div>
                   <div style={styles.task1}>
                     {title1}
@@ -710,7 +716,7 @@ const Home = (props) => {
                     </div>
                   </div>
                 </div>
-                <div style={{display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px'}}>
+                <div style={{display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px', paddingRight:'20px'}}>
                   <span style={styles.rect2}></span>
                   <div style={styles.task2}>
                     {title2}
@@ -722,7 +728,7 @@ const Home = (props) => {
                     </div>
                   </div>
                 </div>
-                <div style={{display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px'}}>
+                <div style={{display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px', paddingRight:'20px'}}>
                   <span style={styles.rect3}></span>
                   <div style={styles.task3}>
                     {title3}
@@ -736,7 +742,7 @@ const Home = (props) => {
                 </div>
               </>
             )}
-            <div style={styles.tasksBottom}>View All</div>
+            <div style={styles.tasksBottom} onClick={()=>setnav(2)}>View All</div>
           </div>
           <div style={styles.calendar}>
             <p style={styles.calendarHeading}>Calendar Upcoming</p>
@@ -763,7 +769,7 @@ const Home = (props) => {
                 <Inject services={[Agenda]} />
               </ScheduleComponent>
             )}
-            <div style={styles.calendarBottom}>View Calendar</div>
+            <div style={styles.calendarBottom} onClick={()=>setnav(8)}>View Calendar</div>
           </div>
         </div>
       </div>

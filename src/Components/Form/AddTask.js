@@ -20,6 +20,7 @@ function AddTask(props) {
   const [due, setdue] = useState("");
   const [form, setform] = useState({
     type: "",
+    title: "",
     id: "",
     reviewedBy: "",
     priority: "",

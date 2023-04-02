@@ -69,7 +69,7 @@ const Dashboard = () => {
   const [isCollapsed, setisCollapsed] = useState(false);
 
   const { privileges, setPrivileges } = useContext(AuthenticationContext);
-
+  console.log(privileges)
   const mystyles = {
     topNavbar: {
       height: "56px",
@@ -237,6 +237,14 @@ const Dashboard = () => {
         textAlign: "center",
       }
     },
+    sidebarMenuItem: {
+      width: "100%",
+      height: "40px",
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      cursor: "pointer",
+    },
     sidebarMenuItemTextActive: {
       height: "20px",
       fontFamily: "'Roboto'",
@@ -246,14 +254,6 @@ const Dashboard = () => {
       margin: "0px",
       marginLeft: "12px",
       color: "#FBFBFB",
-    },
-    sidebarMenuItem: {
-      width: "204px",
-      height: "40px",
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      cursor: "pointer",
     },
     sidebarMenuItemIcon: {
       nonCollapsed: {
@@ -302,7 +302,7 @@ const Dashboard = () => {
 
 
   const handleDash = (e) => {
-    if (nav === 0){return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth}/>;}
+    if (nav === 0){return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth} setnav={setnav}/>;}
     if (nav === 1) return <></>;
     if (nav === 2) return <Tasks isCollapsed={isCollapsed}/>;
     if (nav === 3) return <BudgetCities isCollapsed={isCollapsed} />;
@@ -315,7 +315,7 @@ const Dashboard = () => {
     if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <Customers isCollapsed={isCollapsed}/>;
     if (nav === 12) return <></>;
-    if(nav===14) return <ProjectDetail setnav={setnav} project={project} />
+    if (nav===14) return <ProjectDetail setnav={setnav} project={project} />
   };
 
   const [show, setShow] = useState(false);
@@ -458,7 +458,7 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-                <div
+                {/* <div
                   style={
                     nav === 1
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -478,7 +478,7 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
+                </div> */}
                 <div
                   style={
                     nav === 2
@@ -500,7 +500,7 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-                <div
+                {privileges.includes('View Budget') ? <div
                   style={
                     nav === 3
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -520,8 +520,8 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
-                <div
+                </div> : <></>}
+                {privileges.includes('View RFP') ? <div
                   style={
                     nav === 4
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -541,8 +541,8 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
-                <div
+                </div> : <></>}
+                {privileges.includes('View Proposal') ? <div
                   style={
                     nav === 5
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -562,8 +562,8 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
-                <div
+                </div> : <></>}
+                {privileges.includes('View Project') ? <div
                   style={
                     nav === 6
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -583,8 +583,8 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
-                <div
+                </div> : <></>}
+                {privileges.includes('View Employee') ? <div
                   style={
                     nav === 7
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -604,7 +604,7 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
+                </div> : <></>}
                 <div
                   style={
                     nav === 8
@@ -626,7 +626,7 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-                <div
+                {/* <div
                   style={
                     nav === 9
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -646,8 +646,8 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
-                <div
+                </div> */}
+                {privileges.includes('View Companies') ? <div
                   style={
                     nav === 10
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -667,8 +667,8 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
-                <div
+                </div> : <></>}
+                {privileges.includes('View Contacts') ? <div
                   style={
                     nav === 11
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -688,8 +688,8 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
-                <div
+                </div> : <></>}
+                {/* <div
                   style={
                     nav === 12
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -709,7 +709,7 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
             </>
             : <>
@@ -750,7 +750,7 @@ const Dashboard = () => {
                   </p>
                 </div>
 
-                <div
+                {/* <div
                   style={
                     nav === 1
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -779,7 +779,7 @@ const Dashboard = () => {
                   >
                     Pinned
                   </p>
-                </div>
+                </div> */}
                 <div
                   style={
                     nav === 2
@@ -810,7 +810,7 @@ const Dashboard = () => {
                     Tasks List
                   </p>
                 </div>
-                <div
+                {privileges.includes('View Budget') ? <div
                   style={
                     nav === 3
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -839,8 +839,8 @@ const Dashboard = () => {
                   >
                     Budgets
                   </p>
-                </div>
-                <div
+                </div> : <></>}
+                {privileges.includes('View RFP') ? <div
                   style={
                     nav === 4
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -869,8 +869,8 @@ const Dashboard = () => {
                   >
                     RFPs
                   </p>
-                </div>
-                <div
+                </div> : <></>}
+                {privileges.includes('View Proposal') ? <div
                   style={
                     nav === 5
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -899,8 +899,8 @@ const Dashboard = () => {
                   >
                     Proposals
                   </p>
-                </div>
-                <div
+                </div> : <></>}
+                {privileges.includes('View Project') ? <div
                   style={
                     nav === 6
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -929,8 +929,8 @@ const Dashboard = () => {
                   >
                     Projects
                   </p>
-                </div>
-                <div
+                </div> : <></>}
+                {privileges.includes('View Employee') ? <div
                   style={
                     nav === 7
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -959,7 +959,7 @@ const Dashboard = () => {
                   >
                     Employees
                   </p>
-                </div>
+                </div> : <></>}
                 <div
                   style={
                     nav === 8
@@ -990,7 +990,7 @@ const Dashboard = () => {
                     Calendar
                   </p>
                 </div>
-                <div
+                {/* <div
                   style={
                     nav === 9
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -1019,8 +1019,8 @@ const Dashboard = () => {
                   >
                     Expenses
                   </p>
-                </div>
-                <div
+                </div> */}
+                {privileges.includes('View Companies') ? <div
                   style={
                     nav === 10
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -1049,8 +1049,8 @@ const Dashboard = () => {
                   >
                     Companies
                   </p>
-                </div>
-                <div
+                </div> : <></>}
+                {privileges.includes('View Contacts') ? <div
                   style={
                     nav === 11
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -1079,8 +1079,8 @@ const Dashboard = () => {
                   >
                     Contacts
                   </p>
-                </div>
-                <div
+                </div> : <></>}
+                {/* <div
                   style={
                     nav === 12
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -1109,7 +1109,7 @@ const Dashboard = () => {
                   >
                     Celebrations
                   </p>
-                </div>
+                </div> */}
               </div>
             </>}
         </Sidebar>

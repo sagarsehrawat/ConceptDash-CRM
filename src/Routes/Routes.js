@@ -49,36 +49,7 @@ const AllRoutes = () => {
                     {/*******************Protected Routes******** */}
                     <Route path='/' element={<ProtectedRoutes />} >
                         <Route exact path='/admin' element={<Dashboard />} />
-                        <Route exact path='/manager' element={<Manager />} />
-                        <Route exact path='/customerform' element={<CustomerForm />} />
-                        <Route exact path='/addProject' element={<ProjectForm />} />
-                        <Route exact path='/generateInvoice' element={<InvoiceForm />} />
-                        <Route exact path='/addquote' element={<QuoteForm />} />
-                        <Route exact path='/orderform' element={<OrderForm />} />
-                        <Route exact path='/engineers' element={<Engineer />} />
-                        <Route exact path='/it' element={<IT />} />
-                        <Route exact path='/companyform' element={<CompanyForm />} />
-                        <Route exact path='/assetform' element={<AssetForm />} />
-                        <Route exact path='/addsoftware' element={<SoftwareForm />} />
-                        <Route exact path='/jobTitleform' element={<JobTitle />} />
-                        <Route exact path='/addtimesheet' element={<Timesheet />} />
-                        <Route exact path='/addTask' element={<AddTask />} />
-                        <Route exact path='/addMyTask' element={<AddMyTask />} />
-                        <Route exact path='/updateEmployee' element={<UpdateEmployeeForm />} />
-                        <Route exact path='/updateTask' element={<UpdateTask />} />
-                        <Route exact path='/updateProject' element={<ProjectUpdate />} />
-                        <Route exact path='/updateProjectForm' element={<UpdateProjectForm />} />
-                        <Route exact path='/updateCompany' element={<UpdateCompany />} />
-                        <Route exact path='/budgetForm' element={<BudgetsForm />} />
-                        <Route exact path='/updateBudget' element={<UpdateBudget />} />
-                        <Route exact path='/addRFP' element={<RFPform />} />
-                        <Route exact path='/updateRFP' element={<UpdateRFP />} />
-                        <Route exact path='/RFPtable' element={<RFPUpdate />} />
-                        <Route exact path='/Budgettable' element={<BudgetUpdate />} />
-                        <Route exact path='/Proposaltable' element={<ProposalsUpdate />} />
-                        <Route exact path='/addProposal' element={<ProposalForm />} />
-                        <Route exact path='/updateProposal' element={<UpdateProposal />} />
-                        <Route exact path='/customerUpdate' element={<UpdateCustomer />} />
+                        <Route exact path='/engineers' element={<Dashboard />} />
                     </Route>
                 </Routes>
             </Router>

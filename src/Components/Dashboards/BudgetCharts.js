@@ -593,7 +593,7 @@ const BudgetCharts = (props) => {
                                                 {parseInt(year) >= 2 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 2])}</td> : <></>}
                                                 {parseInt(year) >= 1 ? <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y - 1])}</td> : <></>}
                                                 <td style={budgetChartStyles.tableCell}>{addComma(projectCategoryBudgetChartData[e][y])}</td>
-                                                <td style={budgetChartStyles.tableCell} className='d-flex justify-content-center'>
+                                                <td style={{...budgetChartStyles.tableCell, marginTop: "11px"}} className='d-flex justify-content-center'>
                                                     {projectCategoryBudgetChartData[e]['percent'] >= 0 ?
                                                         <div style={budgetChartStyles.percentContainer1}>{projectCategoryBudgetChartData[e]['percent']} %</div>
                                                         : <div style={budgetChartStyles.percentContainer2}>{-projectCategoryBudgetChartData[e]['percent']} %</div>

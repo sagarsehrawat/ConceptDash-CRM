@@ -20,6 +20,7 @@ import filterIcon from '../../Images/Filter.svg'
 const RFP = (props) => {
     const { isCollapsed } = props
     const { privileges, setPrivileges } = useContext(AuthenticationContext)
+    console.log(privileges.includes("Add RFP"))
     const [apiCall, setCall] = useState(0);
     const [green, setgreen] = useState(false);
     const [red, setred] = useState(false);
@@ -794,7 +795,7 @@ const RFP = (props) => {
             {red === true ? <RedAlert setRed={setred} /> : <></>}
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
                 <p style={styles.heading}>RFPs (Request For Proposals)</p>
-                <button style={styles.addButton} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button>
+                <button style={styles.addButton} disabled={!privileges.includes("Add RFP")} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button>
             </div>
 
             {/* Header Cards */}

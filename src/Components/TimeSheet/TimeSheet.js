@@ -325,7 +325,7 @@ const TimeSheet = (props) => {
       {/* Header Buttons and Dropdowns */}
       <div className='d-flex flex-row justify-content-between align-items-center' style={{ marginLeft: "32px", marginRight: "32px", marginTop: "20px", marginBottom: "32px" }}>
         <div className='d-flex flex-row'>
-          <select style={styles.employeeDropdown} onChange={(e) => { setemployeeId(e.target.value); setCall(apiCall + 1); }} disabled={localStorage.getItem('department') === "Engineer"}>
+          <select style={styles.employeeDropdown} onChange={(e) => { setemployeeId(e.target.value); setCall(apiCall + 1); }} disabled={!privileges.includes('View Employee Timesheet')}>
             <option value={localStorage.getItem('employeeId')}>My Timesheet</option>
             {employees.map(e => (
               <option value={e.Employee_ID}>{e.Full_Name}</option>

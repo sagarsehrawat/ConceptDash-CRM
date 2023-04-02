@@ -32,10 +32,12 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button, Form, Modal } from "react-bootstrap";
-import { GET_EMPLOYEENAMES, GET_PAGE_TASKS, HOST } from "../Constants/Constants";
+import { DELETE_TASK, GET_EMPLOYEENAMES, GET_PAGE_TASKS, HOST, UPDATE_TASK_STATUS } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import AddTask from "../Form/AddTask";
+import UpdateTask from "../Form/UpdateTask";
 import TimeSheet from "../TimeSheet/TimeSheet";
+import Reports from "./Reports";
 
 function Tasks(props) {
   const { isCollapsed } = props;
@@ -44,6 +46,9 @@ function Tasks(props) {
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
   const [details, setdetails] = useState([false, false, false, false, false, false])
+  const [apiCall2, setCall2] = useState(0);
+  const [task, settask] = useState(true);
+
   const styles = {
     heading: {
       width: "48px",
@@ -239,6 +244,24 @@ function Tasks(props) {
       lineHeight: "16px",
       color: "#0A0A0A",
     },
+    updateButtonStatus: {
+      padding: "4px 12px",
+      gap: "10px",
+      width: "65px",
+      height: "28px",
+      background: "#6519E1",
+      border: "1px solid #6519E1",
+      boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
+      borderRadius: "6px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      lineHeight: "20px",
+      textAlign: 'center',
+      marginTop: "20px",
+      marginLeft: "25px",
+    },
     filterButton3: {
       padding: "4px 12px",
       gap: "10px",
@@ -299,12 +322,28 @@ function Tasks(props) {
         fontSize: "13px",
         lineHeight: '20px'
       },
+      statusModal: {
+        position: "absolute",
+        width: "175px",
+        height: "fit-content",
+        // left: isCollapsed ? "950px" : "1110px",
+        left: "45%",
+        top: "232px",
+        background: "#FFFFFF",
+        boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+        borderRadius: "6px",
+      },
   };
 
   //Add Form Modal
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  
+    //Update Form Modal
+    const [showUpdate, setShowUpdate] = useState(false);
+    const handleCloseUpdate = () => setShowUpdate(false);
+    const handleShowUpdate = () => setShowUpdate(true);
 
   //Filter Modal
   const [filterModal, setfilterModal] = useState(false);
@@ -315,6 +354,16 @@ function Tasks(props) {
   const [filterModal1, setfilterModal1] = useState(false);
   const closeFilterModal1 = () => setfilterModal1(false);
   const openFilterModal1 = () => setfilterModal1(true);
+
+  //Status Update Modal
+  const [statusModal, setstatusModal] = useState(false);
+  const closestatusModal = () => setstatusModal(false);
+  const openstatusModal = () => setstatusModal(true);
+
+  //Delete Modal
+  const [showDelete, setShowDelete] = useState(false);
+  const handleCloseDelete = () => setShowDelete(false);
+  const handleShowDelete = () => setShowDelete(true);
 
   const [value1, setValue1] = useState("1");
   const handleChange = (event, newValue) => {
@@ -367,7 +416,6 @@ function Tasks(props) {
                 },
             })
             .then((res) => {
-                console.log(res.data.res);
                 let pj = [], prop = [], rf = [], gen = [], fin = [], HR = []
                 let arr = res.data.res;
                 for(let i=0;i<arr.length;i++) {
@@ -398,7 +446,32 @@ function Tasks(props) {
             });
     }
     call()
-}, [apiCall])
+}, [apiCall, apiCall2])
+
+const updateStatus = async () => {
+    axios
+      .post(
+        HOST + UPDATE_TASK_STATUS,
+        {
+          id :id,
+          status: currStatus
+        },
+        { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+      )
+      .then((res) => {
+        if (res.data.success) {
+          closestatusModal()
+          setgreen(true);
+          setCall(apiCall+1)
+        } else {
+          setred(true)
+        }
+      })
+      .catch((err) => {
+        setred(true);
+        console.log(err);
+      });
+}
   const handleFilter = (key, value) => {
     if (returnData[key].includes(value)) {
       setreturnData((prevFilter) => ({
@@ -427,6 +500,34 @@ function Tasks(props) {
     const formattedDate = moment(date)
     return formattedDate.format('D MMM, YYYY')
 }
+const [currStatus, setcurrStatus] = useState('')
+const [id, setid] = useState('')
+const handleDelete = () =>{
+    axios
+      .post(
+        HOST + DELETE_TASK,
+        {
+          id :deleteID,
+        },
+        { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+      )
+      .then((res) => {
+        if (res.data.success) {
+          handleCloseDelete()
+          setgreen(true);
+          setCall(apiCall+1)
+        } else {
+          setred(true)
+        }
+      })
+      .catch((err) => {
+        setred(true);
+        console.log(err);
+      });
+}
+const [deleteID, setdeleteID] = useState('');
+const [idx, setidx] = useState('');
+const [updateTask, setupdateTask] = useState([]);
   return (
     <div>
       <div style={styles.heading}>Tasks</div>
@@ -475,7 +576,7 @@ function Tasks(props) {
                     />
                   }
                 />
-                <Tab
+                {/* <Tab
                   style={{
                     color: value1 == 2 ? "#6519E1" : "#70757A",
                     display: "flex",
@@ -492,7 +593,7 @@ function Tasks(props) {
                       src={timesheet}
                     />
                   }
-                />
+                /> */}
                 <Tab
                   style={{
                     color: value1 == 3 ? "#6519E1" : "#70757A",
@@ -983,7 +1084,7 @@ function Tasks(props) {
                                     Projects
                                 </td>
                                 </tr>
-                                {details[0] ? projects.map((e) => (
+                                {details[0] ? projects.map((e, idx) => (
                                 <tr style={styles.row2}>
                                     <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
                                     <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name?e.Project_Name:'-'}</p>&nbsp;&nbsp;
@@ -1001,25 +1102,119 @@ function Tasks(props) {
                                     </td>
                                     <td style={styles.cell} align='center'>
                                         {e.Priority===1
-                                        ?<div style={{width:'78px', height:'20px', background:'#559776', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
+                                        ?<div style={{width:'78px', height:'20px', background:'#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
                                         e.Priority===2?<div style={{width:'49px', height:'20px', background:'#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#D93838"}}>High</p></div>:
                                         e.Priority===3?<div style={{width:'68px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>Medium</p></div>
                                         :<div style={{width:'47px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Low</p></div>
                                         }
                                     </td>
-                                    <td style={styles.cell}>
+                                    <td style={{...styles.cell, cursor:'pointer'}} onClick={()=>{setcurrStatus(e.Status);setid(e.Task_ID);openstatusModal();}}>
                                     {e.Status===0
                                         ?<div style={{width:'85px', height:'20px', background:'#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#5079E1"}}>Not Started</p></div>:
-                                        e.Priority===1?<div style={{width:'49px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
+                                        e.Status===1?<div style={{width:'78px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
                                         <div style={{width:'68px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Completed</p></div>
                                         }
                                     </td>
+                                    <Modal
+                                        show={statusModal}
+                                        onHide={closestatusModal}
+                                        style={styles.statusModal}
+                                        dialogClassName="filter-dialog"
+                                        backdropClassName="filter-backdrop"
+                                        animation={false}
+                                    >
+                                        <div className="d-flex flex-row align-items-center">
+                                            <div
+                                            style={{
+                                                fontFamily: "'Roboto'",
+                                                fontStyle: "normal",
+                                                fontWeight: 400,
+                                                fontSize: "14px",
+                                                backgroundColor: "white",
+                                                border: "none",
+                                                color: "#6519E1",
+                                                marginRight: "65px",
+                                                marginTop: "8px",
+                                                marginLeft: "8px",
+                                                marginBottom: "8px",
+                                            }}
+                                            >
+                                            Update Status
+                                            </div>
+                                            <FontAwesomeIcon
+                                            icon={faX}
+                                            style={{ height: "9px", cursor: "pointer" }}
+                                            color="#6519E1"
+                                            onClick={closestatusModal}
+                                            />
+                                        </div>
+                                        <div
+                                            style={styles.filterSubcontainer}
+                                            className="filter-container"
+                                        >
+                                            <p style={styles.filterSubheading}>
+                                            &nbsp;</p>
+                                            
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===0
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(0)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    Not Started
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===1
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(1)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    In Progress
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===2
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(2)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    Completed
+                                                    </p>
+                                                </div>
+                                                <Button
+                                                    style={styles.updateButtonStatus}
+                                                    onClick={updateStatus}
+                                                    >
+                                                    Update
+                                                </Button>
+                                        </div>
+                                        
+                                    </Modal>
                                     <td style={styles.cell}>
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px'}} src={edit}/>
-                                        <img src={del}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
+                                        <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
                                 )) : <></>}
@@ -1053,25 +1248,119 @@ function Tasks(props) {
                                     </td>
                                     <td style={styles.cell} align='center'>
                                         {e.Priority===1
-                                        ?<div style={{width:'78px', height:'20px', background:'#559776', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
+                                        ?<div style={{width:'78px', height:'20px', background:'#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
                                         e.Priority===2?<div style={{width:'49px', height:'20px', background:'#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#D93838"}}>High</p></div>:
                                         e.Priority===3?<div style={{width:'68px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>Medium</p></div>
                                         :<div style={{width:'47px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Low</p></div>
                                         }
                                     </td>
-                                    <td style={styles.cell}>
+                                    <td style={{...styles.cell, cursor:'pointer'}} onClick={()=>{setcurrStatus(e.Status);setid(e.Task_ID);openstatusModal();}}>
                                     {e.Status===0
                                         ?<div style={{width:'85px', height:'20px', background:'#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#5079E1"}}>Not Started</p></div>:
-                                        e.Priority===1?<div style={{width:'49px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
+                                        e.Status===1?<div style={{width:'78px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
                                         <div style={{width:'68px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Completed</p></div>
                                         }
                                     </td>
+                                    <Modal
+                                        show={statusModal}
+                                        onHide={closestatusModal}
+                                        style={styles.statusModal}
+                                        dialogClassName="filter-dialog"
+                                        backdropClassName="filter-backdrop"
+                                        animation={false}
+                                    >
+                                        <div className="d-flex flex-row align-items-center">
+                                            <div
+                                            style={{
+                                                fontFamily: "'Roboto'",
+                                                fontStyle: "normal",
+                                                fontWeight: 400,
+                                                fontSize: "14px",
+                                                backgroundColor: "white",
+                                                border: "none",
+                                                color: "#6519E1",
+                                                marginRight: "65px",
+                                                marginTop: "8px",
+                                                marginLeft: "8px",
+                                                marginBottom: "8px",
+                                            }}
+                                            >
+                                            Update Status
+                                            </div>
+                                            <FontAwesomeIcon
+                                            icon={faX}
+                                            style={{ height: "9px", cursor: "pointer" }}
+                                            color="#6519E1"
+                                            onClick={closestatusModal}
+                                            />
+                                        </div>
+                                        <div
+                                            style={styles.filterSubcontainer}
+                                            className="filter-container"
+                                        >
+                                            <p style={styles.filterSubheading}>
+                                            &nbsp;</p>
+                                            
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===0
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(0)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    Not Started
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===1
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(1)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    In Progress
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===2
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(2)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    Completed
+                                                    </p>
+                                                </div>
+                                                <Button
+                                                    style={styles.updateButtonStatus}
+                                                    onClick={updateStatus}
+                                                    >
+                                                    Update
+                                                </Button>
+                                        </div>
+                                        
+                                    </Modal>
                                     <td style={styles.cell}>
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px'}} src={edit}/>
-                                        <img src={del}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
+                                        <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
                                 )) : <></>}
@@ -1105,25 +1394,119 @@ function Tasks(props) {
                                     </td>
                                     <td style={styles.cell} align='center'>
                                         {e.Priority===1
-                                        ?<div style={{width:'78px', height:'20px', background:'#559776', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
+                                        ?<div style={{width:'78px', height:'20px', background:'#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
                                         e.Priority===2?<div style={{width:'49px', height:'20px', background:'#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#D93838"}}>High</p></div>:
                                         e.Priority===3?<div style={{width:'68px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>Medium</p></div>
                                         :<div style={{width:'47px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Low</p></div>
                                         }
                                     </td>
-                                    <td style={styles.cell}>
+                                    <td style={{...styles.cell, cursor:'pointer'}} onClick={()=>{setcurrStatus(e.Status);setid(e.Task_ID);openstatusModal();}}>
                                     {e.Status===0
                                         ?<div style={{width:'85px', height:'20px', background:'#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#5079E1"}}>Not Started</p></div>:
-                                        e.Priority===1?<div style={{width:'49px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
+                                        e.Status===1?<div style={{width:'78px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
                                         <div style={{width:'68px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Completed</p></div>
                                         }
                                     </td>
+                                    <Modal
+                                        show={statusModal}
+                                        onHide={closestatusModal}
+                                        style={styles.statusModal}
+                                        dialogClassName="filter-dialog"
+                                        backdropClassName="filter-backdrop"
+                                        animation={false}
+                                    >
+                                        <div className="d-flex flex-row align-items-center">
+                                            <div
+                                            style={{
+                                                fontFamily: "'Roboto'",
+                                                fontStyle: "normal",
+                                                fontWeight: 400,
+                                                fontSize: "14px",
+                                                backgroundColor: "white",
+                                                border: "none",
+                                                color: "#6519E1",
+                                                marginRight: "65px",
+                                                marginTop: "8px",
+                                                marginLeft: "8px",
+                                                marginBottom: "8px",
+                                            }}
+                                            >
+                                            Update Status
+                                            </div>
+                                            <FontAwesomeIcon
+                                            icon={faX}
+                                            style={{ height: "9px", cursor: "pointer" }}
+                                            color="#6519E1"
+                                            onClick={closestatusModal}
+                                            />
+                                        </div>
+                                        <div
+                                            style={styles.filterSubcontainer}
+                                            className="filter-container"
+                                        >
+                                            <p style={styles.filterSubheading}>
+                                            &nbsp;</p>
+                                            
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===0
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(0)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    Not Started
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===1
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(1)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    In Progress
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===2
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(2)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    Completed
+                                                    </p>
+                                                </div>
+                                                <Button
+                                                    style={styles.updateButtonStatus}
+                                                    onClick={updateStatus}
+                                                    >
+                                                    Update
+                                                </Button>
+                                        </div>
+                                        
+                                    </Modal>
                                     <td style={styles.cell}>
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px'}} src={edit}/>
-                                        <img src={del}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
+                                        <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
                                 )) : <></>}
@@ -1157,25 +1540,119 @@ function Tasks(props) {
                                     </td>
                                     <td style={styles.cell} align='center'>
                                         {e.Priority===1
-                                        ?<div style={{width:'78px', height:'20px', background:'#559776', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
+                                        ?<div style={{width:'78px', height:'20px', background:'#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
                                         e.Priority===2?<div style={{width:'49px', height:'20px', background:'#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#D93838"}}>High</p></div>:
                                         e.Priority===3?<div style={{width:'68px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>Medium</p></div>
                                         :<div style={{width:'47px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Low</p></div>
                                         }
                                     </td>
-                                    <td style={styles.cell}>
+                                    <td style={{...styles.cell, cursor:'pointer'}} onClick={()=>{setcurrStatus(e.Status);setid(e.Task_ID);openstatusModal();}}>
                                     {e.Status===0
                                         ?<div style={{width:'85px', height:'20px', background:'#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#5079E1"}}>Not Started</p></div>:
-                                        e.Priority===1?<div style={{width:'49px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
+                                        e.Status===1?<div style={{width:'78px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
                                         <div style={{width:'68px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Completed</p></div>
                                         }
                                     </td>
+                                    <Modal
+                                        show={statusModal}
+                                        onHide={closestatusModal}
+                                        style={styles.statusModal}
+                                        dialogClassName="filter-dialog"
+                                        backdropClassName="filter-backdrop"
+                                        animation={false}
+                                    >
+                                        <div className="d-flex flex-row align-items-center">
+                                            <div
+                                            style={{
+                                                fontFamily: "'Roboto'",
+                                                fontStyle: "normal",
+                                                fontWeight: 400,
+                                                fontSize: "14px",
+                                                backgroundColor: "white",
+                                                border: "none",
+                                                color: "#6519E1",
+                                                marginRight: "65px",
+                                                marginTop: "8px",
+                                                marginLeft: "8px",
+                                                marginBottom: "8px",
+                                            }}
+                                            >
+                                            Update Status
+                                            </div>
+                                            <FontAwesomeIcon
+                                            icon={faX}
+                                            style={{ height: "9px", cursor: "pointer" }}
+                                            color="#6519E1"
+                                            onClick={closestatusModal}
+                                            />
+                                        </div>
+                                        <div
+                                            style={styles.filterSubcontainer}
+                                            className="filter-container"
+                                        >
+                                            <p style={styles.filterSubheading}>
+                                            &nbsp;</p>
+                                            
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===0
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(0)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    Not Started
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===1
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(1)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    In Progress
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===2
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(2)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    Completed
+                                                    </p>
+                                                </div>
+                                                <Button
+                                                    style={styles.updateButtonStatus}
+                                                    onClick={updateStatus}
+                                                    >
+                                                    Update
+                                                </Button>
+                                        </div>
+                                        
+                                    </Modal>
                                     <td style={styles.cell}>
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px'}} src={edit}/>
-                                        <img src={del}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
+                                        <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
                                 )) : <></>}
@@ -1209,25 +1686,119 @@ function Tasks(props) {
                                     </td>
                                     <td style={styles.cell} align='center'>
                                         {e.Priority===1
-                                        ?<div style={{width:'78px', height:'20px', background:'#559776', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
+                                        ?<div style={{width:'78px', height:'20px', background:'#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
                                         e.Priority===2?<div style={{width:'49px', height:'20px', background:'#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#D93838"}}>High</p></div>:
                                         e.Priority===3?<div style={{width:'68px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>Medium</p></div>
                                         :<div style={{width:'47px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Low</p></div>
                                         }
                                     </td>
-                                    <td style={styles.cell}>
+                                    <td style={{...styles.cell, cursor:'pointer'}} onClick={()=>{setcurrStatus(e.Status);setid(e.Task_ID);openstatusModal();}}>
                                     {e.Status===0
                                         ?<div style={{width:'85px', height:'20px', background:'#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#5079E1"}}>Not Started</p></div>:
-                                        e.Priority===1?<div style={{width:'49px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
+                                        e.Status===1?<div style={{width:'78px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
                                         <div style={{width:'68px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Completed</p></div>
                                         }
                                     </td>
+                                    <Modal
+                                        show={statusModal}
+                                        onHide={closestatusModal}
+                                        style={styles.statusModal}
+                                        dialogClassName="filter-dialog"
+                                        backdropClassName="filter-backdrop"
+                                        animation={false}
+                                    >
+                                        <div className="d-flex flex-row align-items-center">
+                                            <div
+                                            style={{
+                                                fontFamily: "'Roboto'",
+                                                fontStyle: "normal",
+                                                fontWeight: 400,
+                                                fontSize: "14px",
+                                                backgroundColor: "white",
+                                                border: "none",
+                                                color: "#6519E1",
+                                                marginRight: "65px",
+                                                marginTop: "8px",
+                                                marginLeft: "8px",
+                                                marginBottom: "8px",
+                                            }}
+                                            >
+                                            Update Status
+                                            </div>
+                                            <FontAwesomeIcon
+                                            icon={faX}
+                                            style={{ height: "9px", cursor: "pointer" }}
+                                            color="#6519E1"
+                                            onClick={closestatusModal}
+                                            />
+                                        </div>
+                                        <div
+                                            style={styles.filterSubcontainer}
+                                            className="filter-container"
+                                        >
+                                            <p style={styles.filterSubheading}>
+                                            &nbsp;</p>
+                                            
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===0
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(0)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    Not Started
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===1
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(1)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    In Progress
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===2
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(2)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    Completed
+                                                    </p>
+                                                </div>
+                                                <Button
+                                                    style={styles.updateButtonStatus}
+                                                    onClick={updateStatus}
+                                                    >
+                                                    Update
+                                                </Button>
+                                        </div>
+                                        
+                                    </Modal>
                                     <td style={styles.cell}>
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px'}} src={edit}/>
-                                        <img src={del}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
+                                        <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
                                 )) : <></>}
@@ -1262,25 +1833,119 @@ function Tasks(props) {
                                     </td>
                                     <td style={styles.cell} align='center'>
                                         {e.Priority===1
-                                        ?<div style={{width:'78px', height:'20px', background:'#559776', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
+                                        ?<div style={{width:'78px', height:'20px', background:'#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#8B0000"}}>Critical</p></div>:
                                         e.Priority===2?<div style={{width:'49px', height:'20px', background:'#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#D93838"}}>High</p></div>:
                                         e.Priority===3?<div style={{width:'68px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>Medium</p></div>
                                         :<div style={{width:'47px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Low</p></div>
                                         }
                                     </td>
-                                    <td style={styles.cell}>
+                                    <td style={{...styles.cell, cursor:'pointer'}} onClick={()=>{setcurrStatus(e.Status);setid(e.Task_ID);openstatusModal();}}>
                                     {e.Status===0
                                         ?<div style={{width:'85px', height:'20px', background:'#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3vw':'2.1vw'}}><p style={{...styles.priorityText, color: "#5079E1"}}>Not Started</p></div>:
-                                        e.Priority===1?<div style={{width:'49px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
+                                        e.Status===1?<div style={{width:'78px', height:'20px', background:'#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.4vw':'2.5vw'}}><p style={{...styles.priorityText, color: "#FD9568"}}>In Progress</p></div>:
                                         <div style={{width:'68px', height:'20px', background:'#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed?'3.2vw':'2.3vw'}}><p style={{...styles.priorityText, color: "#559776"}}>Completed</p></div>
                                         }
                                     </td>
+                                    <Modal
+                                        show={statusModal}
+                                        onHide={closestatusModal}
+                                        style={styles.statusModal}
+                                        dialogClassName="filter-dialog"
+                                        backdropClassName="filter-backdrop"
+                                        animation={false}
+                                    >
+                                        <div className="d-flex flex-row align-items-center">
+                                            <div
+                                            style={{
+                                                fontFamily: "'Roboto'",
+                                                fontStyle: "normal",
+                                                fontWeight: 400,
+                                                fontSize: "14px",
+                                                backgroundColor: "white",
+                                                border: "none",
+                                                color: "#6519E1",
+                                                marginRight: "65px",
+                                                marginTop: "8px",
+                                                marginLeft: "8px",
+                                                marginBottom: "8px",
+                                            }}
+                                            >
+                                            Update Status
+                                            </div>
+                                            <FontAwesomeIcon
+                                            icon={faX}
+                                            style={{ height: "9px", cursor: "pointer" }}
+                                            color="#6519E1"
+                                            onClick={closestatusModal}
+                                            />
+                                        </div>
+                                        <div
+                                            style={styles.filterSubcontainer}
+                                            className="filter-container"
+                                        >
+                                            <p style={styles.filterSubheading}>
+                                            &nbsp;</p>
+                                            
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===0
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(0)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    Not Started
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===1
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(1)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    In Progress
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    ...styles.filterSubSubContainer,
+                                                    backgroundColor: currStatus===2
+                                                        ? "#DBDBF4"
+                                                        : "#F7F7F9",
+                                                    }}
+                                                    onClick={() =>
+                                                        setcurrStatus(2)
+                                                    }
+                                                >
+                                                    <p style={styles.filterBodyText}>
+                                                    Completed
+                                                    </p>
+                                                </div>
+                                                <Button
+                                                    style={styles.updateButtonStatus}
+                                                    onClick={updateStatus}
+                                                    >
+                                                    Update
+                                                </Button>
+                                        </div>
+                                        
+                                    </Modal>
                                     <td style={styles.cell}>
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px'}} src={edit}/>
-                                        <img src={del}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
+                                        <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
                                 )) : <></>}
@@ -1295,19 +1960,19 @@ function Tasks(props) {
                 </div>
               </div>
             </TabPanel>
-            <TabPanel value="2">
+            {/* <TabPanel value="2">
               <div style={{ width: '100%', float: 'left', marginLeft: '5px', marginTop: '20px' }}>
                 Board
               </div>
-            </TabPanel>
+            </TabPanel> */}
             <TabPanel value="3">
                 <div style={{width: '100%', float:'left',}}>
                     <TimeSheet />
                 </div>
             </TabPanel>
             <TabPanel value="4">
-              <div style={{ width: '100%', float: 'left', marginLeft: '5px', marginTop: '20px' }}>
-                Reports
+              <div style={{ width: '100%', float: 'left', marginTop: '20px' }}>
+                <Reports isCollapsed={isCollapsed}/>
               </div>
             </TabPanel>
           </TabContext>
@@ -1336,6 +2001,61 @@ function Tasks(props) {
           }
         </Modal.Body>
       </Modal>
+
+      <Modal
+        show={showUpdate}
+        onHide={handleCloseUpdate}
+        backdrop="static"
+        centered
+        size="xl"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Update Task</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {
+            <UpdateTask
+            updateTask={updateTask}
+            setgreen={setgreen}
+            setred={setred}
+            closeModal={handleCloseUpdate}
+            api={apiCall2}
+            apiCall={setCall2}
+            />
+          }
+        </Modal.Body>
+      </Modal>
+      {/* Delete Modal */}
+      <Modal
+                show={showDelete}
+                onHide={handleCloseDelete}
+                backdrop="static"
+                size="sm"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Deletion</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p style={{ textAlign: "center", marginBottom:'10px' }}>
+                        <b>Delete the selected Task!!</b>
+                    </p>
+                    <div className="d-flex flex-row justify-content-between">
+
+                        <div style={{ display: "inline-block" }}>
+                            <Button variant="danger" onClick={handleCloseDelete}>
+                                Cancel
+                            </Button>
+                        </div>
+                        <div style={{ display: "inline-block", float: "right" }}>
+                            <Button variant="success" onClick={handleDelete}>
+                                Proceed
+                            </Button>
+                        </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
     </div>
   );
 }
