@@ -179,7 +179,7 @@ function Reports(props) {
     };
     call();
   }, []);
-  let projectData = {}, projectHoursData = {};
+  let projectData = {}, projectHoursData = {}, proposalData ={}, proposalHoursData ={}, rfpData = {}, rfpHoursData = {}, generalData = {}, generalHoursData = {}, financeData = {}, finaneaHoursData = {}, hrData = {}, hrHoursData={};
   projects.map(e => {
       if (!projectData[e.Project_Name]) {
         projectData[e.Project_Name] = [];
@@ -188,13 +188,59 @@ function Reports(props) {
     projectHoursData[e.Project_Name]+=e.total
     projectData[e.Project_Name].push(e);
   })
-  const proposalData = proposals.reduce((result, current) => {
-    if (!result[current.Project_Name]) {
-      result[current.Project_Name] = [];
-    }
-    result[current.Project_Name].push(current);
-    return result;
-  }, {});
+
+  proposals.map(e => {
+    if (!proposalData[e.Project_Name]) {
+        proposalData[e.Project_Name] = [];
+        proposalHoursData[e.Project_Name] = 0
+  }
+  proposalHoursData[e.Project_Name]+=e.total
+  proposalData[e.Project_Name].push(e);
+})
+
+rfp.map(e => {
+    if (!rfpData[e.Project_Name]) {
+        rfpData[e.Project_Name] = [];
+        rfpHoursData[e.Project_Name] = 0
+  }
+  rfpHoursData[e.Project_Name]+=e.total
+  rfpData[e.Project_Name].push(e);
+})
+
+general.map(e => {
+    if (!generalData[e.Project_Name]) {
+        generalData[e.Project_Name] = [];
+        generalHoursData[e.Project_Name] = 0
+  }
+  generalHoursData[e.Project_Name]+=e.total
+  generalData[e.Project_Name].push(e);
+})
+
+finance.map(e => {
+    if (!financeData[e.Project_Name]) {
+        financeData[e.Project_Name] = [];
+        finaneaHoursData[e.Project_Name] = 0
+  }
+  finaneaHoursData[e.Project_Name]+=e.total
+  financeData[e.Project_Name].push(e);
+})
+  
+hr.map(e => {
+    if (!hrData[e.Project_Name]) {
+        hrData[e.Project_Name] = [];
+        hrHoursData[e.Project_Name] = 0
+  }
+  hrHoursData[e.Project_Name]+=e.total
+  hrData[e.Project_Name].push(e);
+})
+  
+//   const proposalData = proposals.reduce((result, current) => {
+//     if (!result[current.Project_Name]) {
+//       result[current.Project_Name] = [];
+//     }
+//     result[current.Project_Name].push(current);
+//     return result;
+//   }, {});
   // const projectData = projects.reduce((result, current) => {
   //   if (!result[current.Project_Name]) {
   //     result[current.Project_Name] = [];
@@ -202,40 +248,34 @@ function Reports(props) {
   //   result[current.Project_Name].push(current);
   //   return result;
   // }, {});
-  const rfpData = rfp.reduce((result, current) => {
-    if (!result[current.Project_Name]) {
-      result[current.Project_Name] = [];
-    }
-    result[current.Project_Name].push(current);
-    return result;
-  }, {});
-  const generalData = general.reduce((result, current) => {
-    if (!result[current.Project_Name]) {
-      result[current.Project_Name] = [];
-    }
-    result[current.Project_Name].push(current);
-    return result;
-  }, {});
-  const financeData = finance.reduce((result, current) => {
-    if (!result[current.Project_Name]) {
-      result[current.Project_Name] = [];
-    }
-    result[current.Project_Name].push(current);
-    return result;
-  }, {});
-  const hrData = hr.reduce((result, current) => {
-    if (!result[current.Project_Name]) {
-      result[current.Project_Name] = [];
-    }
-    result[current.Project_Name].push(current);
-    return result;
-  }, {});
-  const proposalvalues = Object.keys(proposalData)
-  const projectvalues = Object.keys(projectData)
-  const rfpvalues = Object.keys(rfpData)
-  const generalvalues = Object.keys(generalData)
-  const financevalues = Object.keys(financeData)
-  const hrvalues = Object.keys(hrData)
+//   const rfpData = rfp.reduce((result, current) => {
+//     if (!result[current.Project_Name]) {
+//       result[current.Project_Name] = [];
+//     }
+//     result[current.Project_Name].push(current);
+//     return result;
+//   }, {});
+//   const generalData = general.reduce((result, current) => {
+//     if (!result[current.Project_Name]) {
+//       result[current.Project_Name] = [];
+//     }
+//     result[current.Project_Name].push(current);
+//     return result;
+//   }, {});
+//   const financeData = finance.reduce((result, current) => {
+//     if (!result[current.Project_Name]) {
+//       result[current.Project_Name] = [];
+//     }
+//     result[current.Project_Name].push(current);
+//     return result;
+//   }, {});
+//   const hrData = hr.reduce((result, current) => {
+//     if (!result[current.Project_Name]) {
+//       result[current.Project_Name] = [];
+//     }
+//     result[current.Project_Name].push(current);
+//     return result;
+//   }, {});
 
   const [name, setname] = useState('');
   const minutesToHoursAndMinutes = (durationInMinutes)=> {
@@ -329,7 +369,7 @@ function Reports(props) {
                         </td>
                         </tr>:
                         <>
-                        {radio==='3'?proposalvalues.map((e)=>{
+                        {radio==='3'?Object.keys(proposalData).map((e)=>{
                             return(
                                 <>
                                 <tr>
@@ -339,7 +379,7 @@ function Reports(props) {
                                 </td>
                                 <td> </td>
                                 <td> </td>
-                                <td>Total</td>
+                                <td>{minutesToHoursAndMinutes(proposalHoursData[e]).hours} h</td>
                                 </tr>
                                 <div style={{width:'100vw', paddingTop:'6px', background:"#FFFFFF"}}>
                                 {name===e?proposalData[e].map((f)=>{
@@ -355,7 +395,7 @@ function Reports(props) {
                             )
                         }):
                         radio==='2'?
-                        projectvalues.map((e)=>{
+                        Object.keys(projectData).map((e)=>{
                             return(
                                 <>
                                 <tr>
@@ -365,7 +405,7 @@ function Reports(props) {
                                 </td>
                                 <td> </td>
                                 <td> </td>
-                                <td>{projectHoursData[e]}</td>
+                                <td>{minutesToHoursAndMinutes(projectHoursData[e]).hours} h</td>
                                 </tr>
                                 <div style={{width:'100vw', paddingTop:'6px', background:"#FFFFFF"}}>
                                 {name===e?projectData[e].map((f)=>{
@@ -381,7 +421,7 @@ function Reports(props) {
                             )
                         }):
                         radio==='4'?
-                        rfpvalues.map((e)=>{
+                        Object.keys(rfpData).map((e)=>{
                             return(
                                 <>
                                 <tr>
@@ -391,7 +431,7 @@ function Reports(props) {
                                 </td>
                                 <td> </td>
                                 <td> </td>
-                                <td>Total</td>
+                                <td>{minutesToHoursAndMinutes(rfpHoursData[e]).hours} h</td>
                                 </tr>
                                 <div style={{width:'100vw', paddingTop:'6px', background:"#FFFFFF"}}>
                                 {name===e?rfpData[e].map((f)=>{
@@ -407,7 +447,7 @@ function Reports(props) {
                             )
                         }):
                         radio==='5'?
-                        hrvalues.map((e)=>{
+                        Object.keys(hrData).map((e)=>{
                             return(
                                 <>
                                 <tr>
@@ -417,7 +457,7 @@ function Reports(props) {
                                 </td>
                                 <td> </td>
                                 <td> </td>
-                                <td>Total</td>
+                                <td>{minutesToHoursAndMinutes(hrHoursData[e]).hours} h</td>
                                 </tr>
                                 <div style={{width:'100vw', paddingTop:'6px', background:"#FFFFFF"}}>
                                 {name===e?hrData[e].map((f)=>{
@@ -433,7 +473,7 @@ function Reports(props) {
                             )
                         }):
                         radio==='6'?
-                        financevalues.map((e)=>{
+                        Object.keys(financeData).map((e)=>{
                             return(
                                 <>
                                 <tr>
@@ -443,7 +483,7 @@ function Reports(props) {
                                 </td>
                                 <td> </td>
                                 <td> </td>
-                                <td>Total</td>
+                                <td>{minutesToHoursAndMinutes(finaneaHoursData[e]).hours} h</td>
                                 </tr>
                                 <div style={{width:'100vw', paddingTop:'6px', background:"#FFFFFF"}}>
                                 {name===e?financeData[e].map((f)=>{
@@ -458,7 +498,7 @@ function Reports(props) {
                                 </>
                             )
                         }):
-                        generalvalues.map((e)=>{
+                        Object.keys(generalData).map((e)=>{
                             return(
                                 <>
                                 <tr>
@@ -468,7 +508,7 @@ function Reports(props) {
                                 </td>
                                 <td> </td>
                                 <td> </td>
-                                <td>Total</td>
+                                <td>{minutesToHoursAndMinutes(generalHoursData[e]).hours} h</td>
                                 </tr>
                                 <div style={{width:'100vw', paddingTop:'6px', background:"#FFFFFF"}}>
                                 {name===e?generalData[e].map((f)=>{
