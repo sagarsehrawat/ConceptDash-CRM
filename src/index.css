@@ -264,6 +264,12 @@ input:focus {
   border: 1px solid #6519E1 !important;
 }
 
+.no-focus:focus{
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
 textarea:focus {
   outline: none !important;
   box-shadow: none !important;

@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Dropdown, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Dropdown, Modal, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import AuthenticationContext from "../../Context/AuthContext";
 import { Sidebar, Menu, MenuItem, useProSidebar, SubMenu } from "react-pro-sidebar";
@@ -57,6 +57,14 @@ import Project from "../v2/Project";
 import ProjectDetail from "../Update/ProjectDetail";
 import BudgetCities from "../v2/BudgetCities";
 import Tasks from "../v2/Tasks";
+import AddTask from "../Form/AddTask";
+import GreenAlert from "../Loader/GreenAlert";
+import RedAlert from "../Loader/RedAlert";
+import RFPform from "../Form/RFPform";
+import ProposalForm from "../Form/ProposalForm";
+import projectForm from '../../Images/projectForm.svg'
+import cross from '../../Images/cross.svg'
+import ProjectForm from "../Form/ProjectForm";
 
 
 const Dashboard = () => {
@@ -67,8 +75,31 @@ const Dashboard = () => {
   const [city, setcity] = useState({});
   const [project, setproject] = useState({});
   const [isCollapsed, setisCollapsed] = useState(false);
+  const [green, setgreen] = useState(false);
+  const [red, setred] = useState(false);
+  const [apiCall, setCall] = useState(0);
 
   const { privileges, setPrivileges } = useContext(AuthenticationContext);
+
+  //Add Task Form Modal
+  const [taskShow, settaskShow] = useState(false);
+  const handleCloseTask = () => settaskShow(false);
+  const handleShowTask = () => settaskShow(true);
+
+  //Add RFP Form Modal
+  const [rfpShow, setrfpShow] = useState(false);
+  const handleCloseRFP = () => setrfpShow(false);
+  const handleShowRFP = () => setrfpShow(true);
+
+  //Add RFP Form Modal
+  const [proposalShow, setproposalShow] = useState(false);
+  const handleCloseProposal = () => setproposalShow(false);
+  const handleShowProposal = () => setproposalShow(true);
+
+  //Add Project Form Modal
+  const [projectShow, setprojectShow] = useState(false);
+  const handleCloseProject = () => setprojectShow(false);
+  const handleShowProject = () => setprojectShow(true);
 
   const mystyles = {
     topNavbar: {
@@ -93,7 +124,8 @@ const Dashboard = () => {
       marginLeft: "0px",
       paddingLeft: "0px",
       width: "224px",
-      height: "32px"
+      height: "32px",
+      textDecoration: "none !important"
     },
     plusDropdownItemIcon: {
       marginLeft: "10px",
@@ -285,6 +317,27 @@ const Dashboard = () => {
       marginLeft: "12px",
       color: "#0A0A0A",
     },
+    addModal: {
+      position: "absolute",
+      width: "780px",
+      height: 'fit-content',
+      left: "28vw",
+      marginTop: "10vh",
+      background: "#FFFFFF",
+      boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+      borderRadius: "12px",
+  },
+  addHeading: {
+      width: "auto",
+      height: "28px",
+      marginLeft: "8px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 500,
+      fontSize: "18px",
+      lineHeight: "28px",
+      color: "#0A0A0A"
+  }
   };
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
@@ -293,7 +346,7 @@ const Dashboard = () => {
     function handleResize() {
       setViewportWidth(window.innerWidth);
     }
-    
+
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -302,20 +355,20 @@ const Dashboard = () => {
 
 
   const handleDash = (e) => {
-    if (nav === 0){return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth} setnav={setnav}/>;}
+    if (nav === 0) { return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth} setnav={setnav} />; }
     if (nav === 1) return <></>;
-    if (nav === 2) return <Tasks isCollapsed={isCollapsed}/>;
+    if (nav === 2) return <Tasks isCollapsed={isCollapsed} />;
     if (nav === 3) return <BudgetCities isCollapsed={isCollapsed} />;
-    if (nav === 4) return <RFP isCollapsed={isCollapsed}/>
+    if (nav === 4) return <RFP isCollapsed={isCollapsed} />
     if (nav === 5) return <Proposal isCollapsed={isCollapsed} />
     if (nav === 6) return <Project isCollapsed={isCollapsed} />
-    if (nav === 7) return <Employee isCollapsed={isCollapsed}/>;
+    if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
     if (nav === 8) return <TestDemo />;
     if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
-    if (nav === 11) return <Customers isCollapsed={isCollapsed}/>;
+    if (nav === 11) return <Customers isCollapsed={isCollapsed} />;
     if (nav === 12) return <></>;
-    if (nav===14) return <ProjectDetail setnav={setnav} project={project} />
+    if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
   };
 
   const [show, setShow] = useState(false);
@@ -337,7 +390,7 @@ const Dashboard = () => {
           />} id="basic-nav-dropdown"
             className="plus-dropdown"
             align="end">
-            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 0 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(0)} onMouseLeave={() => setplusDropdown(null)}>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 0 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(0)} onMouseLeave={() => setplusDropdown(null)} onClick={handleShowTask}>
               <img
                 src={plusDropdown === 0 ? tasksInactive : tasksActive}
                 alt="Dashboard Icon"
@@ -345,7 +398,7 @@ const Dashboard = () => {
               />
               Assign New Task
             </NavDropdown.Item>
-            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 1 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(1)} onMouseLeave={() => setplusDropdown(null)}>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 1 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(1)} onMouseLeave={() => setplusDropdown(null)} onClick={handleShowRFP}>
               <img
                 src={plusDropdown === 1 ? rfpInactive : rfpActive}
                 alt="Dashboard Icon"
@@ -353,7 +406,7 @@ const Dashboard = () => {
               />
               Add New RFP
             </NavDropdown.Item>
-            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 2 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(2)} onMouseLeave={() => setplusDropdown(null)}>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 2 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(2)} onMouseLeave={() => setplusDropdown(null)} onClick={handleShowProposal}>
               <img
                 src={plusDropdown === 2 ? proposalsInactive : proposalsActive}
                 alt="Dashboard Icon"
@@ -361,7 +414,7 @@ const Dashboard = () => {
               />
               Add New Proposal
             </NavDropdown.Item>
-            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 3 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(3)} onMouseLeave={() => setplusDropdown(null)}>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 3 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(3)} onMouseLeave={() => setplusDropdown(null)} onClick={handleShowProject}>
               <img
                 src={plusDropdown === 3 ? projectsInactive : projectsActive}
                 alt="Dashboard Icon"
@@ -369,22 +422,22 @@ const Dashboard = () => {
               />
               Add New Project
             </NavDropdown.Item>
-            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 4 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(4)} onMouseLeave={() => setplusDropdown(null)}>
+            {/* <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 4 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(4)} onMouseLeave={() => setplusDropdown(null)}>
               <img
                 src={plusDropdown === 4 ? employeeInactive : employeeActive}
                 alt="Dashboard Icon"
                 style={mystyles.plusDropdownItemIcon}
               />
               Add New Employee
-            </NavDropdown.Item>
-            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 5 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={(e) => setplusDropdown(5)} onMouseLeave={(e) => setplusDropdown(null)}>
+            </NavDropdown.Item> */}
+            {/* <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 5 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={(e) => setplusDropdown(5)} onMouseLeave={(e) => setplusDropdown(null)}>
               <img
                 src={plusDropdown === 5 ? contactsInactive : contactsActive}
                 alt="Dashboard Icon"
                 style={mystyles.plusDropdownItemIcon}
               />
               Add New Contact
-            </NavDropdown.Item>
+            </NavDropdown.Item> */}
           </NavDropdown>
           <NavDropdown
             title={
@@ -393,7 +446,7 @@ const Dashboard = () => {
             id="collasible-nav-dropdown"
             align="end"
           >
-            <NavDropdown.Item
+            {/* <NavDropdown.Item
               onClick={(e) => {
                 e.preventDefault();
                 setnav(12);
@@ -401,7 +454,7 @@ const Dashboard = () => {
             >
               Privileges
             </NavDropdown.Item>
-            <NavDropdown.Divider />
+            <NavDropdown.Divider /> */}
             <NavDropdown.Item
               onClick={() => {
                 navigate("/");
@@ -411,9 +464,9 @@ const Dashboard = () => {
               Log Out
             </NavDropdown.Item>
           </NavDropdown>
-          <Nav.Link className="">
-          <img src={notificationIcon} alt="Notification Icon" />
-          </Nav.Link>
+          {/* <Nav.Link className="">
+            <img src={notificationIcon} alt="Notification Icon" />
+          </Nav.Link> */}
           <Nav.Link className="">
             <div
               style={mystyles.accountLabel}
@@ -435,14 +488,14 @@ const Dashboard = () => {
               <div style={mystyles.sidebarIconContainer.collapsed} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
                 <FontAwesomeIcon icon={faChevronRight} color={primaryColour} />
               </div>
-              <div style={{marginTop: "18px"}}>
+              <div style={{ marginTop: "18px" }}>
                 <div
                   style={
                     nav === 0
                       ? mystyles.sidebarMenuItemActive.collapsed
                       : mystyles.sidebarMenuItem
                   }
-                  onClick={(e) => {setnav(0);}}
+                  onClick={(e) => { setnav(0); }}
                 >
                   <div
                     style={
@@ -713,7 +766,7 @@ const Dashboard = () => {
               </div>
             </>
             : <>
-              <p style={mystyles.branding.nonCollapsed}><img style={{zIndex:1}} src={T} /><img style={{position: 'absolute', zIndex:2, marginTop:'10px', marginLeft:'-11px'}} src={askforce} /></p>
+              <p style={mystyles.branding.nonCollapsed}><img style={{ zIndex: 1 }} src={T} /><img style={{ position: 'absolute', zIndex: 2, marginTop: '10px', marginLeft: '-11px' }} src={askforce} /></p>
               <div style={mystyles.sidebarIconContainer.nonCollapsed} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
                 <FontAwesomeIcon icon={faChevronLeft} color={primaryColour} />
               </div>
@@ -724,7 +777,7 @@ const Dashboard = () => {
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
-                  onClick={(e) => {setnav(0);}}
+                  onClick={(e) => { setnav(0); }}
                 >
                   <div
                     style={
@@ -1117,13 +1170,118 @@ const Dashboard = () => {
           style={{
             marginLeft: isCollapsed ? "68px" : "228px",
             backgroundColor: "#F8FAFB",
-            height: `${window.innerHeight-56}px`,
-            width: isCollapsed ? `${viewportWidth-68}px` : `${viewportWidth-228}px`
+            height: `${window.innerHeight - 56}px`,
+            width: isCollapsed ? `${viewportWidth - 68}px` : `${viewportWidth - 228}px`
           }}
         >
+          {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+          {red === true ? <RedAlert setRed={setred} /> : <></>}
           {handleDash()}
         </div>
       </div>
+
+      {/* Add Task Form Modal */}
+      <Modal
+        show={taskShow}
+        onHide={handleCloseTask}
+        backdrop="static"
+        centered
+        size="xl"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Task</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {
+            <AddTask
+              setRed={setred}
+              setGreen={setgreen}
+              closeModal={handleCloseTask}
+              api={apiCall}
+              apiCall={setCall}
+            />
+          }
+        </Modal.Body>
+      </Modal>
+
+      {/* Add RFP Form Modal */}
+      <Modal
+        show={rfpShow}
+        onHide={handleCloseRFP}
+        backdrop="static"
+        centered
+        size="xl"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add RFP</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {
+            <RFPform
+              setRed={setred}
+              setGreen={setgreen}
+              closeModal={handleCloseRFP}
+              api={apiCall}
+              apiCall={setCall}
+            />
+          }
+        </Modal.Body>
+      </Modal>
+
+      {/* Add Proposal Form Modal */}
+      <Modal
+        show={proposalShow}
+        onHide={handleCloseProposal}
+        backdrop="static"
+        centered
+        size="xl"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Proposal</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {
+            <ProposalForm
+              setRed={setred}
+              setGreen={setgreen}
+              closeModal={handleCloseProposal}
+              api={apiCall}
+              apiCall={setCall}
+            />
+          }
+        </Modal.Body>
+      </Modal>
+
+      {/* Add Project Form Modal */}
+      <Modal
+        show={projectShow}
+        onHide={handleCloseProject}
+        backdrop="static"
+        style={mystyles.addModal}
+        dialogClassName="filter-dialog"
+        animation={false}
+      >
+        <div className='d-flex flex-row justify-content-between align-items-center' style={{ marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection: 'row' }}>
+          <div className='d-flex flex-row'>
+            <img src={projectForm} />
+            <div style={mystyles.addHeading}>Creating new project</div>
+          </div>
+          <div><img onClick={handleCloseProject} style={{ marginRight: '25px', float: 'right' }} src={cross} /></div>
+        </div>
+        {
+          <ProjectForm
+            setRed={setred}
+            setGreen={setgreen}
+            closeModal={handleClose}
+            api={apiCall}
+            apiCall={setCall}
+          />
+        }
+
+      </Modal>
     </>
   );
 };
