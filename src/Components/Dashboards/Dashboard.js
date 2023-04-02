@@ -69,7 +69,7 @@ const Dashboard = () => {
   const [isCollapsed, setisCollapsed] = useState(false);
 
   const { privileges, setPrivileges } = useContext(AuthenticationContext);
-
+  console.log(privileges)
   const mystyles = {
     topNavbar: {
       height: "56px",
