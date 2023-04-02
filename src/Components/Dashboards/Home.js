@@ -26,7 +26,6 @@ import ProjectCharts from "./ProjectCharts";
 import ProposalCharts from "./ProposalCharts";
 
 const Home = (props) => {
-  localStorage.clear()
   const { setnav } = props;
   const { isCollapsed, viewportWidth } = props;
   const styles = {

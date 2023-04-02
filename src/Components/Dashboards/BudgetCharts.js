@@ -217,7 +217,6 @@ const budgetCategoryOptions = {
     },
     scales: {
         y: {
-            type: 'linear',
             ticks: {
                 display: false,
                 beginAtZero: true,
@@ -228,7 +227,6 @@ const budgetCategoryOptions = {
             },
         },
         x: {
-            type: 'linear',
             grid: {
                 display: false,
             },
