@@ -404,7 +404,7 @@ function Tasks(props) {
     call();
   }, []);
   const [isLoading, setisLoading] = useState(false)
-  const [eid, seteid] = useState(localStorage.getItem('employeeId'))
+  const [eid, seteid] = useState(parseInt(localStorage.getItem('employeeId')))
   useEffect(() => {
     setisLoading(true);
     const call = async () => {
