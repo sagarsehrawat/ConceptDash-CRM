@@ -34,6 +34,7 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button, Form, Modal } from "react-bootstrap";
+import projectForm from '../../Images/projectForm.svg'
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import LoadingSpinner from "../Loader/Loader";
@@ -60,6 +61,8 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import filterIcon from "../../Images/Filter.svg";
+import EmployeeForm from '../Form/EmployeeForm'
+import UpdateEmployeeForm from '../Form/UpdateEmployeeForm'
 
 function Employee(props) {
   const { isCollapsed } = props;
@@ -72,6 +75,11 @@ function Employee(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+    //Update Form Modal
+    const [showUpdate, setShowUpdate] = useState(false);
+    const handleCloseUpdate = () => setShowUpdate(false);
+    const handleShowUpdate = () => setShowUpdate(true);
 
   //Employee Modal
   const [empModal, setempModal] = useState(false);
@@ -89,6 +97,27 @@ function Employee(props) {
       marginLeft: "32px",
       marginRight: "24px",
     },
+    addmodal: {
+      position: "absolute",
+            width: "786px",
+            height: 'fit-content',
+            left: "28vw",
+            marginTop: "10vh",
+            background: "#FFFFFF",
+            boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+            borderRadius: "12px",
+    },
+    addHeading: {
+      width: "auto",
+      height: "28px",
+      marginLeft: "8px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 500,
+      fontSize: "18px",
+      lineHeight: "28px",
+      color: "#0A0A0A"
+  },
     heading: {
       width: "244px",
       height: "28px",
@@ -990,6 +1019,12 @@ function Employee(props) {
   const filterSize = () => {
     return returnData.dept.length + returnData.title.length;
   };
+  const [rowData, setrowData] = useState([]);
+  const handleUpdate = (e) => {
+    console.log(e)
+    setrowData(e);
+    handleShowUpdate();
+  };
   return (
     <div
       className="big"
@@ -1006,9 +1041,9 @@ function Employee(props) {
         style={styles.headerContainer}
       >
         <p style={styles.heading}>Employees</p>
-        {/* <button style={styles.addButton} disabled={!privileges.includes('Add Employee')} onClick={handleShow}>
+        <button style={styles.addButton} disabled={!privileges.includes('Add Employee')} onClick={handleShow}>
           <p style={styles.addButtonText}>+ Add New Employee</p>
-        </button> */}
+        </button>
       </div>
       <div
         className="d-flex flex-row"
@@ -1472,7 +1507,7 @@ function Employee(props) {
                                           label="Personal Details"
                                           value="2"
                                         />
-                                        <Tab
+                                        {/* <Tab
                                           style={{
                                             color:
                                               value1 == 3
@@ -1482,21 +1517,24 @@ function Employee(props) {
                                           sx={{ fontSize: 10 }}
                                           label="Task List"
                                           value="3"
-                                        />
+                                        /> */}
                                       </TabList>
                                     </Box>
                                     <TabPanel value="1">
-                                      <div>
+                                      <div style={{marginLeft:'20px', marginTop:'10px'}}>
                                         <div style={{ display: "flex" }}>
                                           <div
                                             style={styles.bottomPart1Heading}
                                           >
                                             Professional Details
                                           </div>
-                                          {/* <img
+                                          <img
                                             style={styles.editIcon}
                                             src={editIcon}
-                                          /> */}
+                                            onClick={() => {
+                                              handleUpdate(modalData);
+                                            }}
+                                          />
                                         </div>
                                         <div
                                           style={{ width: "693px" }}
@@ -1625,10 +1663,13 @@ function Employee(props) {
                                           >
                                             Personal Details
                                           </div>
-                                          {/* <img
+                                          <img
                                             style={styles.editIcon}
                                             src={editIcon}
-                                          /> */}
+                                            onClick={() => {
+                                              handleUpdate(modalData);
+                                            }}
+                                          />
                                         </div>
                                         <div
                                           style={{ width: "693px" }}
@@ -1875,7 +1916,6 @@ function Employee(props) {
                                         </div>
                                       </div>
                                     </TabPanel>
-                                    <TabPanel value="3">2351235</TabPanel>
                                   </TabContext>
                                 </Box>
                               </div>
@@ -2125,7 +2165,7 @@ function Employee(props) {
                                           label="Personal Details"
                                           value="2"
                                         />
-                                        <Tab
+                                        {/* <Tab
                                           style={{
                                             color:
                                               value1 == 3
@@ -2135,21 +2175,24 @@ function Employee(props) {
                                           sx={{ fontSize: 10 }}
                                           label="Task List"
                                           value="3"
-                                        />
+                                        /> */}
                                       </TabList>
                                     </Box>
                                     <TabPanel value="1">
-                                      <div>
+                                      <div style={{marginLeft:'20px', marginTop:'10px'}}>
                                         <div style={{ display: "flex" }}>
                                           <div
                                             style={styles.bottomPart1Heading}
                                           >
                                             Professional Details
                                           </div>
-                                          {/* <img
+                                          <img
                                             style={styles.editIcon}
                                             src={editIcon}
-                                          /> */}
+                                            onClick={() => {
+                                              handleUpdate(modalData);
+                                            }}
+                                          />
                                         </div>
                                         <div
                                           style={{ width: "693px" }}
@@ -2278,10 +2321,13 @@ function Employee(props) {
                                           >
                                             Personal Details
                                           </div>
-                                          {/* <img
+                                          <img
                                             style={styles.editIcon}
                                             src={editIcon}
-                                          /> */}
+                                            onClick={() => {
+                                              handleUpdate(modalData);
+                                            }}
+                                          />
                                         </div>
                                         <div
                                           style={{ width: "693px" }}
@@ -2528,7 +2574,7 @@ function Employee(props) {
                                         </div>
                                       </div>
                                     </TabPanel>
-                                    <TabPanel value="3">2351235</TabPanel>
+                                    
                                   </TabContext>
                                 </Box>
                               </div>
@@ -2845,6 +2891,57 @@ function Employee(props) {
           </div>
         </div>
       )}
+      <Modal
+                show={show}
+                onHide={handleClose}
+                backdrop="static"
+                style={styles.addmodal}
+                dialogClassName="filter-dialog"
+                animation={false}
+            >
+              <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={projectForm} />
+                        <div style={styles.addHeading}>Add Employee</div>
+                    </div>
+                    <div><img onClick={handleClose} style={{marginRight:'25px',float: 'right'}} src={cross} /></div>
+                </div>
+                    {
+                        <EmployeeForm
+                            setRed={setred}
+                            setGreen={setgreen}
+                            closeModal={handleClose}
+                            api={apiCall}
+                            apiCall={setCall}
+                        />
+                    }
+            </Modal>
+            <Modal
+                show={showUpdate}
+                onHide={handleCloseUpdate}
+                backdrop="static"
+                style={styles.addmodal}
+                dialogClassName="filter-dialog"
+                animation={false}
+            >
+              <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={projectForm} />
+                        <div style={styles.addHeading}>Update Employee</div>
+                    </div>
+                    <div><img onClick={handleCloseUpdate} style={{marginRight:'25px',float: 'right'}} src={cross} /></div>
+                </div>
+                {
+              <UpdateEmployeeForm
+                row={rowData}
+                setRed={setred}
+                setGreen={setgreen}
+                closeModal={handleCloseUpdate}
+                api={apiCall}
+                apiCall={setCall}
+              />
+            }
+            </Modal>
     </div>
   );
 }
