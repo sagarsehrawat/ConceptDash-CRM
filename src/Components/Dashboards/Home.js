@@ -24,6 +24,7 @@ import { Internationalization, extend } from "@syncfusion/ej2-base";
 import { gapi } from "gapi-script";
 import ProjectCharts from "./ProjectCharts";
 import ProposalCharts from "./ProposalCharts";
+import moment from 'moment';
 
 const Home = (props) => {
   const { setnav } = props;
@@ -499,17 +500,9 @@ const Home = (props) => {
   };
 
   const [isLoadingTasks, setisLoadingTasks] = useState(false);
-  const [title1, settitle1] = useState([]);
-  const [title2, settitle2] = useState([]);
-  const [title3, settitle3] = useState([]);
+  
+  const [sideTasks, setsideTasks] = useState([]);
 
-  const [dDate1, setdDate1] = useState([]);
-  const [dDate2, setdDate2] = useState([]);
-  const [dDate3, setdDate3] = useState([]);
-
-  const [month1, setmonth1] = useState([]);
-  const [month2, setmonth2] = useState([]);
-  const [month3, setmonth3] = useState([]);
   useEffect(() => {
     setisLoadingTasks(true);
     const call = async () => {
@@ -543,25 +536,17 @@ const Home = (props) => {
           },
         })
         .then((res) => {
-          if(res.data.res.length===0) {
+          let arr = res.data.res;
+          let sidetasks = []
+          if(res.data.res.length!==0) {
+            for(let i=0;i<arr.length;i++) {
+              let title = arr[i].Title
+              let dDate = formatDate(arr[i].Due_Date)
+              sidetasks.push({title, dDate})
+            }
+            setsideTasks(sidetasks);
             setisLoadingTasks(false);
           } else {
-          settitle1(res.data.res[0].Title);
-          settitle2(res.data.res[1].Title);
-          settitle3(res.data.res[2].Title);
-          const date1 = res.data.res[0].Due_Date;
-          const date2 = res.data.res[1].Due_Date;
-          const date3 = res.data.res[2].Due_Date;
-          const utcDate1 = new Date(date1);
-          const utcDate2 = new Date(date2);
-          const utcDate3 = new Date(date3);
-          const options = { month: "long" };
-          setmonth1(utcDate1.toLocaleString("en-US", options));
-          setmonth2(utcDate2.toLocaleString("en-US", options));
-          setmonth3(utcDate3.toLocaleString("en-US", options));
-          setdDate1(utcDate1.getUTCDate());
-          setdDate2(utcDate2.getUTCDate());
-          setdDate3(utcDate3.getUTCDate());
           setisLoadingTasks(false);}
         })
         .catch((err) => {
@@ -571,7 +556,12 @@ const Home = (props) => {
 
     call();
   }, []);
-
+  const formatDate = (date) => {
+    if (date === "" || date === null || date === undefined) return "";
+    const formattedDate = moment(date)
+    return formattedDate.format('MMM D')
+}
+console.log(sideTasks[0]);
   return (
     <>
       <div style={{ display: "flex", flexDirection: "row" }}>
@@ -705,41 +695,39 @@ const Home = (props) => {
               <LoadingSpinner />
             ) : (
               <>
-                <div style={{display: 'flex', flexDirection: 'row', marginTop: '5px', marginLeft: '16px', paddingRight:'20px'}}>
+                {sideTasks[0]?<div style={{display: 'flex', flexDirection: 'row', marginTop: '5px', marginLeft: '16px', paddingRight:'20px'}}>
                   <div style={styles.rect1}></div>
                   <div style={styles.task1}>
-                    {title1}
+                    {sideTasks[0]?sideTasks[0].title:"--"}
                     <div>
                       <img src={Time} alt="Time Icon" />
-                      <span> {`${month1[0]}${month1[1]}${month1[2]}`} </span>
-                      <span>{dDate1}</span>
+                      <span> {sideTasks[0]?sideTasks[0].dDate:"--"} </span>
                     </div>
                   </div>
-                </div>
-                <div style={{display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px', paddingRight:'20px'}}>
+                </div>:<></>}
+                {sideTasks[1]?<div style={{display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px', paddingRight:'20px'}}>
                   <span style={styles.rect2}></span>
                   <div style={styles.task2}>
-                    {title2}
+                    {sideTasks[1]?sideTasks[1].title:"--"}
 
                     <div>
                       <img src={Time} alt="Time Icon" />
-                      <span> {`${month2[0]}${month2[1]}${month2[2]}`} </span>
-                      <span>{dDate2}</span>
+                      <span> {sideTasks[1]?sideTasks[1].dDate:"--"} </span>
                     </div>
                   </div>
-                </div>
-                <div style={{display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px', paddingRight:'20px'}}>
+                </div>:<></>}
+                {sideTasks[2]?<div style={{display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px', paddingRight:'20px'}}>
                   <span style={styles.rect3}></span>
                   <div style={styles.task3}>
-                    {title3}
+                    {sideTasks[2]?sideTasks[2].title:"--"}
 
                     <div>
                       <img src={Time} alt="Time Icon" />
-                      <span> {`${month3[0]}${month3[1]}${month3[2]}`} </span>
+                      <span> {sideTasks[2]?sideTasks[2].dDate:"--"} </span>
                       <span>{dDate3}</span>
                     </div>
                   </div>
-                </div>
+                </div>:<></>}
               </>
             )}
             <div style={styles.tasksBottom} onClick={()=>setnav(2)}>View All</div>
