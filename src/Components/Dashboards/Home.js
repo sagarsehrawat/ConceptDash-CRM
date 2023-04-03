@@ -724,7 +724,6 @@ console.log(sideTasks[0]);
                     <div>
                       <img src={Time} alt="Time Icon" />
                       <span> {sideTasks[2]?sideTasks[2].dDate:"--"} </span>
-                      <span>{dDate3}</span>
                     </div>
                   </div>
                 </div>:<></>}
