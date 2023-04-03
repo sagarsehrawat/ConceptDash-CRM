@@ -1166,7 +1166,7 @@ const [updateTask, setupdateTask] = useState([]);
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false);  handleShowUpdate() }}/>
                                         <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
@@ -1312,7 +1312,7 @@ const [updateTask, setupdateTask] = useState([]);
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false);  handleShowUpdate() }}/>
                                         <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
@@ -1458,7 +1458,7 @@ const [updateTask, setupdateTask] = useState([]);
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false);  handleShowUpdate() }}/>
                                         <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
@@ -1604,7 +1604,7 @@ const [updateTask, setupdateTask] = useState([]);
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false);  handleShowUpdate() }}/>
                                         <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
@@ -1750,7 +1750,7 @@ const [updateTask, setupdateTask] = useState([]);
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false);  handleShowUpdate() }}/>
                                         <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
@@ -1897,7 +1897,7 @@ const [updateTask, setupdateTask] = useState([]);
                                         {e.Reviewer}
                                     </td>
                                     <td style={styles.cell}>
-                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); setCall2(apiCall2 + 1); handleShowUpdate() }}/>
+                                        <img style={{marginRight: '20px', cursor:'pointer'}} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false);  handleShowUpdate() }}/>
                                         <img style={{cursor:'pointer'}} src={del} onClick={() => {setdeleteID(e.Task_ID);handleShowDelete();}}/>
                                     </td>
                                 </tr>
