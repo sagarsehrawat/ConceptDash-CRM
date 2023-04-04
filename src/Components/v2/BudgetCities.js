@@ -967,6 +967,9 @@ const BudgetCities = (props) => {
                                 <BudgetsForm
                                     cityid={city.City_ID}
                                     city={city.City}
+                                    cities2={cities}
+                                    setcities2={setcities}
+                                    idx={idx}
                                     setRed={setred}
                                     setGreen={setgreen}
                                     closeModal={handleClose}
@@ -993,6 +996,9 @@ const BudgetCities = (props) => {
                             {
                                 <UpdateBudget
                                     row={rowData}
+                                    cities2={cities}
+                                    setcities2={setcities}
+                                    idx={idx}
                                     setRed={setred}
                                     setGreen={setgreen}
                                     closeModal={handleCloseUpdate2}
