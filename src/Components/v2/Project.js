@@ -1394,7 +1394,7 @@ const Project = (props) => {
                 </Modal.Header>
                 <Modal.Body>
                     <p style={{ textAlign: "center" }}>
-                        <b>Delete the selected RFP!!</b>
+                        <b>Delete the selected Project!!</b>
                     </p>
                     <div className="d-flex flex-row justify-content-between">
 
