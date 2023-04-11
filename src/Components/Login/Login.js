@@ -157,7 +157,6 @@ const Login = () => {
             },
           })
           .then((res) => {
-            console.log(res.data.res);
             let arr = [];
             res.data.res.map((e) => {
               arr.push(e.Privilege);
