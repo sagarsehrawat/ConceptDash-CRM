@@ -906,7 +906,7 @@ const Project = (props) => {
                     <p style={styles.topContainerSubheading}>{projectCount.Ongoing}</p>
                 </div>
                 <div style={styles.topContainer}>
-                    <p style={styles.topContainerHeading}>COmpleted Projects</p>
+                    <p style={styles.topContainerHeading}>Completed Projects</p>
                     <p style={styles.topContainerSubheading}>{projectCount.Completed}</p>
                 </div>
                 <div style={styles.topContainer}>
@@ -1394,7 +1394,7 @@ const Project = (props) => {
                 </Modal.Header>
                 <Modal.Body>
                     <p style={{ textAlign: "center" }}>
-                        <b>Delete the selected Project!!</b>
+                        <b>Delete the selected Projects!!</b>
                     </p>
                     <div className="d-flex flex-row justify-content-between">
 

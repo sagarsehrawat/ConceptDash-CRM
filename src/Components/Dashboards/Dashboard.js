@@ -65,6 +65,8 @@ import ProposalForm from "../Form/ProposalForm";
 import projectForm from '../../Images/projectForm.svg'
 import cross from '../../Images/cross.svg'
 import ProjectForm from "../Form/ProjectForm";
+import Privileges from '../Update/Privileges.js'
+import { GET_EMPLOYEE_PRIVILEGES, HOST } from "../Constants/Constants";
 
 
 const Dashboard = () => {
@@ -326,8 +328,8 @@ const Dashboard = () => {
       background: "#FFFFFF",
       boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
       borderRadius: "12px",
-  },
-  addHeading: {
+    },
+    addHeading: {
       width: "auto",
       height: "28px",
       marginLeft: "8px",
@@ -337,12 +339,31 @@ const Dashboard = () => {
       fontSize: "18px",
       lineHeight: "28px",
       color: "#0A0A0A"
-  }
+    }
   };
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
 
   useEffect(() => {
+    axios
+      .get(HOST + GET_EMPLOYEE_PRIVILEGES, {
+        headers: {
+          auth: "Rose " + localStorage.getItem("auth"),
+          employeeid: localStorage.getItem("employeeId"),
+        },
+      })
+      .then((res) => {
+        let arr = [];
+        res.data.res.map((e) => {
+          arr.push(e.Privilege);
+        });
+        localStorage.setItem("privileges", JSON.stringify(arr));
+        setPrivileges(arr);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     function handleResize() {
       setViewportWidth(window.innerWidth);
     }
@@ -367,7 +388,7 @@ const Dashboard = () => {
     if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <Customers isCollapsed={isCollapsed} />;
-    if (nav === 12) return <></>;
+    if (nav === 12) return <Privileges />;
     if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
   };
 
@@ -446,7 +467,7 @@ const Dashboard = () => {
             id="collasible-nav-dropdown"
             align="end"
           >
-            {/* <NavDropdown.Item
+            {privileges.includes('View Employee Privileges') ? <><NavDropdown.Item
               onClick={(e) => {
                 e.preventDefault();
                 setnav(12);
@@ -454,7 +475,7 @@ const Dashboard = () => {
             >
               Privileges
             </NavDropdown.Item>
-            <NavDropdown.Divider /> */}
+              <NavDropdown.Divider /> </> : <></>}
             <NavDropdown.Item
               onClick={() => {
                 navigate("/");

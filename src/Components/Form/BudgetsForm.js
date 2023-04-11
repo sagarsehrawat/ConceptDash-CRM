@@ -159,8 +159,8 @@ function BudgetsForm(props) {
                   <option value="">Select City</option>
                   {cities.length > 0
                     ? cities.map((e) => (
-                        <option selected={e.City===props.city} value={e.City_ID}>{e.City}</option>
-                      ))
+                      <option selected={e.City === props.city} value={e.City_ID}>{e.City}</option>
+                    ))
                     : ""}
                 </Form.Select>
               </Form.Group>
@@ -184,8 +184,8 @@ function BudgetsForm(props) {
                   <option value="">Select Department</option>
                   {depts.length > 0
                     ? depts.map((e) => (
-                        <option value={e.Department_ID}>{e.Department}</option>
-                      ))
+                      <option value={e.Department_ID}>{e.Department}</option>
+                    ))
                     : ""}
                 </Form.Select>
               </Form.Group>
@@ -208,10 +208,10 @@ function BudgetsForm(props) {
                   <option value="">Select Project Category</option>
                   {projectDepts.length > 0
                     ? projectDepts.map((e) => (
-                        <option value={e.Project_Cat_ID}>
-                          {e.Project_Category}
-                        </option>
-                      ))
+                      <option value={e.Project_Cat_ID}>
+                        {e.Project_Category}
+                      </option>
+                    ))
                     : ""}
                 </Form.Select>
               </Form.Group>
@@ -258,13 +258,14 @@ function BudgetsForm(props) {
               </Form.Group>
               <Form.Group as={Col}>
                 <Form.Label>Budget Year</Form.Label>
-                <Form.Control
-                  name="budgetYear"
-                  value={year}
-                  type="text"
-                  placeholder="Budget Year"
-                  onChange={handleChange}
-                />
+                <Form.Select name="budgetYear" onChange={handleChange}>
+                  <option value={year-2}>{year-2}</option>
+                  <option value={year-1}>{year-1}</option>
+                  <option value={year}>{year}</option>
+                  <option value={year+1}>{year+1}</option>
+                  <option value={year+2}>{year+2}</option>
+                  <option value={year+3}>{year+3}</option>
+                </Form.Select>
               </Form.Group>
               <Form.Group as={Col}>
                 <Form.Label>Source</Form.Label>

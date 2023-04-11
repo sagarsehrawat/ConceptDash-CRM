@@ -742,7 +742,7 @@ const RFP = (props) => {
             if (idx === 5) return `${1098 - scrolled}px`
             if (idx === 6) return `${1348 - scrolled}px`
             if (idx === 7) return `${1548 - scrolled}px`
-            if (idx === 8) return `${1654 - scrolled}px`
+            if (idx === 8) return `${1744 - scrolled}px`
         } else {
             if (idx === 0) return `${260}px`
             if (idx === 1) return `${558 - scrolled}px`
@@ -752,7 +752,7 @@ const RFP = (props) => {
             if (idx === 5) return `${1258 - scrolled}px`
             if (idx === 6) return `${1508 - scrolled}px`
             if (idx === 7) return `${1708 - scrolled}px`
-            if (idx === 8) return `${1814 - scrolled}px`
+            if (idx === 8) return `${1900 - scrolled}px`
         }
     }
 
@@ -1155,10 +1155,13 @@ const RFP = (props) => {
                                     </div>
                                 </Modal>
                             </th>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "180px" }} className='fixed-header2'>
+                                RFP Number   
+                            </th>
                         </tr>
                     </thead>
                     <tbody style={styles.tableBody}>
-                        {isLoading ? <div style={{ height: "408px", width: "1757px", background: "white" }}><LoadingSpinner /></div> : rfps && rfps.map(e => (
+                        {isLoading ? <div style={{ height: "408px", width: "1937px", background: "white" }}><LoadingSpinner /></div> : rfps && rfps.map(e => (
                             <tr style={{ ...styles.tableRow, backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
                                 <td className='fixed-col' style={{ ...styles.tableCell, fontWeight: "500", minWidth: "", borderRight: "1px solid #EBE9F1", backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }}>
                                     <div className='d-flex flex-row align-items-center'>
@@ -1185,6 +1188,7 @@ const RFP = (props) => {
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Project_Category}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Manager_Name}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "120px" }}>{e.Action}</td>
+                                <td style={{ ...styles.tableCell, minWidth: "180px" }}>{e.RFP_Number}</td>
                             </tr>
                         ))}
                     </tbody>

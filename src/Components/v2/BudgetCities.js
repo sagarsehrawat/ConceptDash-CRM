@@ -973,8 +973,8 @@ const BudgetCities = (props) => {
                                     setRed={setred}
                                     setGreen={setgreen}
                                     closeModal={handleClose}
-                                    api={apiCall}
-                                    apiCall={setCall}
+                                    api={apiCall2}
+                                    apiCall={setCall2}
                                 />
                             }
                         </Modal.Body>
