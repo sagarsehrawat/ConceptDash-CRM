@@ -65,6 +65,9 @@ function UpdateBudget(props) {
     call();
   }, []);
 
+  
+  let yr = new Date().getFullYear();
+  const [year, setyear] = useState(yr);
   const depart = props.row.Department;
   const citi = props.row.City;
   const pro_cat = props.row.Project_Category;
@@ -256,12 +259,14 @@ function UpdateBudget(props) {
           </Form.Group>
           <Form.Group as={Col}>
             <Form.Label>Budget Year</Form.Label>
-            <Form.Control
-              value={bYear}
-              name="budgetYear"
-              type="text"
-              onChange={handleChange}
-            />
+            <Form.Select name="budgetYear" onChange={handleChange} defaultValue={bYear}>
+                  <option value={year-2}>{year-2}</option>
+                  <option value={year-1}>{year-1}</option>
+                  <option value={year}>{year}</option>
+                  <option value={year+1}>{year+1}</option>
+                  <option value={year+2}>{year+2}</option>
+                  <option value={year+3}>{year+3}</option>
+                </Form.Select>
           </Form.Group>
           <Form.Group as={Col}>
             <Form.Label>Source</Form.Label>
