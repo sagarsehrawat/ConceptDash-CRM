@@ -219,12 +219,12 @@ function EmployeeForm(props) {
   const handleCloseCityForm = () => setShowCityForm(false);
   const handleShowCityForm = () => setShowCityForm(true);
   return (
-    <>
+    <div style={{ marginLeft:'27px', marginTop:'20px', marginBottom:'20px', width:'731px'}}>
     {green===true ? <GreenAlert setGreen={setgreen}/> : <></>}
     {red===true ? <RedAlert setRed={setred}/> : <></>}
     {isLoading?<LoadingSpinner/>:
       <div>
-        <Form className="form-main" onSubmit={handleSubmit}>
+        <Form className="form-main" onSubmit={handleSubmit} style={{marginTop:'0px', marginLeft:'0px', marginRight:'0px'}}>
           <Row className="mb-4">
             <Form.Group as={Col}>
               <Form.Select
@@ -693,7 +693,7 @@ function EmployeeForm(props) {
           <Modal.Body>{<AddCity setRed={setred} setGreen={setgreen} closeModal={handleCloseCityForm} api={apiCallCity} apiCall={setCallCity}/>}</Modal.Body>
         </Modal>
       </div>}
-    </>
+    </div>
   );
 }
 

@@ -143,7 +143,7 @@ const Login = () => {
         } else {
           if (!res.data.success) alert("Something Went Wrong...");
         }
-        localStorage.setItem("auth", res.data.auth);
+        window.localStorage.setItem("auth", res.data.auth);
         localStorage.setItem("department", res.data.user.department);
         localStorage.setItem("emailWork", res.data.user.emailWork);
         localStorage.setItem("employeeId", res.data.user.employeeId);
@@ -157,7 +157,6 @@ const Login = () => {
             },
           })
           .then((res) => {
-            console.log(res.data.res);
             let arr = [];
             res.data.res.map((e) => {
               arr.push(e.Privilege);

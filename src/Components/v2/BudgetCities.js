@@ -47,13 +47,14 @@ const BudgetCities = (props) => {
     const [value, setValue] = useState("");
     const [value2, setValue2] = useState("");
     const [filter, setfilter] = useState({ dept: [], cat: [], budgetCategory: [] });
+    const [prevFilter, setprevFilter] = useState({ dept: [], cat: [], budgetCategory: [] });
     const [year, setYear] = useState(new Date().getFullYear().toString());
 
     const tableRef = useRef(0);
 
     //Filter Modal
     const [filterModal, setfilterModal] = useState(false);
-    const closeFilterModal = () => { setfilter({ dept: [], cat: [], budgetCategory: [] }); setfilterModal(false); }
+    const closeFilterModal = () => {setfilter(prevFilter); setfilterModal(false)};
     const openFilterModal = () => setfilterModal(true);
 
     //Add Form Modal
@@ -545,6 +546,7 @@ const BudgetCities = (props) => {
 
     useEffect(() => {
         const getCityBudgets = async () => {
+            settotalAmount(0)
             setIsLoading3(true)
             await axios
                 .get(HOST + GET_CITY_BUDGETS, {
@@ -637,14 +639,14 @@ const BudgetCities = (props) => {
                     </div>
 
                     {/* Table */}
-                    <div style={{ borderBottom: "1px solid #EBE9F1", height: "492px", overflow: "auto", position: "relative" }} onScroll={(e) => tableRef.current = e.target.scrollTop} ref={tableRef}>
+                    <div style={{ borderBottom: "1px solid #EBE9F1", height: "542px", overflow: "auto", position: "relative" }} onScroll={(e) => tableRef.current = e.target.scrollTop} ref={tableRef}>
                         <table style={styles.table} className='rfp-table'>
                             <thead style={styles.tableHeader}>
                                 <tr>
                                     <th scope="col" style={{ ...styles.tableHeading, width: "200px" }} className='fixed-header'>City</th>
                                     <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>Region</th>
                                     <th scope="col" style={{ ...styles.tableHeading, width: "130px" }} className='fixed-header2'>Population</th>
-                                    <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>Capital Budget</th>
+                                    <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>Capital Budget 2023</th>
                                     <th scope="col" style={{ ...styles.tableHeading, width: "110px" }} className='fixed-header2'>2022 Budget</th>
                                     <th scope="col" style={{ ...styles.tableHeading, width: "110px" }} className='fixed-header2'>2023 Budget</th>
                                     <th scope="col" style={{ ...styles.tableHeading, width: "240px" }} className='fixed-header2'>Remarks</th>
@@ -652,7 +654,7 @@ const BudgetCities = (props) => {
                                 </tr>
                             </thead>
                             <tbody style={styles.tableBody}>
-                                {isLoading ? <tr style={{ height: "441px", width: "100%", background: "white" }}>
+                                {isLoading ? <tr style={{ height: "542px", width: "100%", background: "white" }}>
                                     <td colSpan={8}>
                                         <LoadingSpinner />
                                     </td>
@@ -713,7 +715,7 @@ const BudgetCities = (props) => {
                 </>
                 : <>
                     <div className='d-flex flex-row align-items-baseline' style={styles.headerContainer}>
-                        <FontAwesomeIcon icon={faArrowLeft} color="#70757A" style={{ marginRight: "16px", cursor: "pointer" }} onClick={(e) => { setbudget(true); setValue2(""); setYear(new Date().getFullYear().toString()); setbudgets([]); setfilter({ dept: [], cat: [], budgetCategory: [] }) }} />
+                        <FontAwesomeIcon icon={faArrowLeft} color="#70757A" style={{ marginRight: "16px", cursor: "pointer" }} onClick={(e) => { setbudget(true); setValue2(""); settotalAmount(0); setYear(new Date().getFullYear().toString()); setbudgets([]); setfilter({ dept: [], cat: [], budgetCategory: [] }); setprevFilter({ dept: [], cat: [], budgetCategory: [] }) }} />
                         <p style={styles.heading}>{city.City}</p>
                     </div>
 
@@ -735,7 +737,7 @@ const BudgetCities = (props) => {
                                         <img src={website} alt="Website Icon" />
                                     </div>
                                     <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
-                                        <p style={styles.topContainerHeading2}>Budget 2022</p>
+                                        <p style={styles.topContainerHeading2}>Budget 2022 Website</p>
                                         <a style={styles.topContainerSubheading2} href={city.Website_22} target="_blank" rel="noreferrer">{city.Website_22 ?? "-"}</a>
                                     </div>
                                 </div>
@@ -744,7 +746,7 @@ const BudgetCities = (props) => {
                                         <img src={website} alt="Website Icon" />
                                     </div>
                                     <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
-                                        <p style={{ ...styles.topContainerHeading2, width: "447px" }}>Budget 2023</p>
+                                        <p style={{ ...styles.topContainerHeading2, width: "447px" }}>Budget 2023 Website</p>
                                         <a style={styles.topContainerSubheading2} href={city.Website_23} target="_blank" rel="noreferrer">{city.Website_23 ?? "-"}</a>
                                     </div>
                                 </div>
@@ -808,7 +810,7 @@ const BudgetCities = (props) => {
                                     <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
                                         <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
                                         <div className='d-flex align-items-center'>
-                                            <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => setfilter({ dept: [], cat: [], budgetCategory: [] })}>Clear All</Button>
+                                            <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => {setfilter({ dept: [], cat: [], budgetCategory: [] }); setprevFilter({ dept: [], cat: [], budgetCategory: [] }); setCall2(apiCall2+1); setfilterModal(false);}}>Clear All</Button>
                                             <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeFilterModal} />
                                         </div>
                                     </div>
@@ -837,7 +839,7 @@ const BudgetCities = (props) => {
                                     </div>
                                     <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
                                         {/* <Button style={styles.filterButton2} onClick={(e) => setfilter2('Advanced')}>Go to Advanced Filters</Button> */}
-                                        <Button style={styles.filterButton3} onClick={(e) => { setCall2(apiCall2 + 1); closeFilterModal(); }}>Filter</Button>
+                                        <Button style={styles.filterButton3} onClick={(e) => { setprevFilter(filter); setCall2(apiCall2 + 1); setfilterModal(false); }}>Filter</Button>
                                     </div>
                                 </div>
                             </Modal>
@@ -872,7 +874,7 @@ const BudgetCities = (props) => {
                     </div>
 
                     {/* Table */}
-                    <div style={{ borderBottom: "1px solid #EBE9F1", height: "492px", overflow: "auto", position: "relative" }}>
+                    <div style={{ borderBottom: "1px solid #EBE9F1", height: "468px", overflow: "auto", position: "relative" }}>
                         <table style={styles.table} className='rfp-table'>
                             <thead style={styles.tableHeader}>
                                 <tr>
@@ -965,11 +967,14 @@ const BudgetCities = (props) => {
                                 <BudgetsForm
                                     cityid={city.City_ID}
                                     city={city.City}
+                                    cities2={cities}
+                                    setcities2={setcities}
+                                    idx={idx}
                                     setRed={setred}
                                     setGreen={setgreen}
                                     closeModal={handleClose}
-                                    api={apiCall}
-                                    apiCall={setCall}
+                                    api={apiCall2}
+                                    apiCall={setCall2}
                                 />
                             }
                         </Modal.Body>
@@ -991,6 +996,9 @@ const BudgetCities = (props) => {
                             {
                                 <UpdateBudget
                                     row={rowData}
+                                    cities2={cities}
+                                    setcities2={setcities}
+                                    idx={idx}
                                     setRed={setred}
                                     setGreen={setgreen}
                                     closeModal={handleCloseUpdate2}

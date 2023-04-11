@@ -25,6 +25,7 @@ function AddTask(props) {
     reviewedBy: "",
     priority: "",
     assignedTo: "",
+    assignedToName: "",
     description: "",
     startDate: "",
     dueDate: "",
@@ -40,8 +41,13 @@ function AddTask(props) {
   let due_date = due ? due.substring(0, 10) : "";
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const newForm = form;
-    newForm[name] = value;
+    const newForm = {...form};
+    if(name==='assignedTo'){
+      newForm['assignedTo'] = value[0]
+      newForm['assignedToName'] = value.slice(2)
+    }else{
+      newForm[name] = value;
+    }
     setform(newForm);
   };
 
@@ -112,6 +118,7 @@ function AddTask(props) {
           title: form.title,
           priority: form.priority,
           assignedTo: form.assignedTo,
+          assignedToName: form.assignedToName,
           description: form.description,
           startDate: form.startDate,
           dueDate: form.dueDate,
@@ -289,7 +296,7 @@ function AddTask(props) {
               <option>Owner</option>
               {employees.length !== 0 ? (
                 employees.map((option) => (
-                  <option value={option.Employee_ID}>{option.Full_Name}</option>
+                  <option value={[option.Employee_ID, option.Full_Name]}>{option.Full_Name}</option>
                 ))
               ) : (
                 <option value="">None</option>

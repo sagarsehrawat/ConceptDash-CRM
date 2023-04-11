@@ -151,10 +151,16 @@ const TimeSheet = (props) => {
     input: {
       border: "none",
       boxShadow: "none",
+      outline: "none",
       width: "30px",
       display: "inline",
       background: "white",
-      padding: "0px"
+      padding: "0px",
+      ':focus' : {
+        border: "none",
+      boxShadow: "none",
+      outline: "none",
+      }
     }
   }
 
@@ -384,7 +390,7 @@ const TimeSheet = (props) => {
                           <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e[8]}</p>
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][0] !== "" ? "30px" : "50px" }}
@@ -394,7 +400,7 @@ const TimeSheet = (props) => {
                           {hours.Projects[idx][0] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][1] !== "" ? "30px" : "50px" }}
@@ -404,7 +410,7 @@ const TimeSheet = (props) => {
                           {hours.Projects[idx][1] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][2] !== "" ? "30px" : "50px" }}
@@ -414,7 +420,7 @@ const TimeSheet = (props) => {
                           {hours.Projects[idx][2] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][3] !== "" ? "30px" : "50px" }}
@@ -424,7 +430,7 @@ const TimeSheet = (props) => {
                           {hours.Projects[idx][3] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][4] !== "" ? "30px" : "50px" }}
@@ -434,7 +440,7 @@ const TimeSheet = (props) => {
                           {hours.Projects[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][5] !== "" ? "30px" : "50px" }}
@@ -444,7 +450,7 @@ const TimeSheet = (props) => {
                           {hours.Projects[idx][5] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Projects[idx][6] !== "" ? "30px" : "50px" }}
@@ -478,7 +484,7 @@ const TimeSheet = (props) => {
                           <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e[8]}</p>
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][0] !== "" ? "30px" : "50px" }}
@@ -488,7 +494,7 @@ const TimeSheet = (props) => {
                           {hours.Proposals[idx][0] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][1] !== "" ? "30px" : "50px" }}
@@ -498,7 +504,7 @@ const TimeSheet = (props) => {
                           {hours.Proposals[idx][1] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][2] !== "" ? "30px" : "50px" }}
@@ -508,7 +514,7 @@ const TimeSheet = (props) => {
                           {hours.Proposals[idx][2] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][3] !== "" ? "30px" : "50px" }}
@@ -518,7 +524,7 @@ const TimeSheet = (props) => {
                           {hours.Proposals[idx][3] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][4] !== "" ? "30px" : "50px" }}
@@ -528,7 +534,7 @@ const TimeSheet = (props) => {
                           {hours.Proposals[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][5] !== "" ? "30px" : "50px" }}
@@ -538,7 +544,7 @@ const TimeSheet = (props) => {
                           {hours.Proposals[idx][5] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Proposals[idx][6] !== "" ? "30px" : "50px" }}
@@ -572,7 +578,7 @@ const TimeSheet = (props) => {
                           <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e[8]}</p>
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][0] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -582,7 +588,7 @@ const TimeSheet = (props) => {
                           {hours.RFP[idx][0] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][1] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -592,7 +598,7 @@ const TimeSheet = (props) => {
                           {hours.RFP[idx][1] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][2] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -602,7 +608,7 @@ const TimeSheet = (props) => {
                           {hours.RFP[idx][2] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][3] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -612,7 +618,7 @@ const TimeSheet = (props) => {
                           {hours.RFP[idx][3] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][4] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -622,7 +628,7 @@ const TimeSheet = (props) => {
                           {hours.RFP[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][5] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -632,7 +638,7 @@ const TimeSheet = (props) => {
                           {hours.RFP[idx][5] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.RFP[idx][6] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -663,7 +669,7 @@ const TimeSheet = (props) => {
                           <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e[8]}</p>
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][0] !== "" ? "15px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -673,7 +679,7 @@ const TimeSheet = (props) => {
                           {hours.General[idx][0] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][1] !== "" ? "15px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -683,7 +689,7 @@ const TimeSheet = (props) => {
                           {hours.General[idx][1] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][2] !== "" ? "15px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -693,7 +699,7 @@ const TimeSheet = (props) => {
                           {hours.General[idx][2] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][3] !== "" ? "15px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -703,7 +709,7 @@ const TimeSheet = (props) => {
                           {hours.General[idx][3] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][4] !== "" ? "15px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -713,7 +719,7 @@ const TimeSheet = (props) => {
                           {hours.General[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][5] !== "" ? "15px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -723,7 +729,7 @@ const TimeSheet = (props) => {
                           {hours.General[idx][5] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             style={{ ...styles.input, width: hours.General[idx][6] !== "" ? "15px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
@@ -754,7 +760,7 @@ const TimeSheet = (props) => {
                           <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e[8]}</p>
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][0] !== "" ? "30px" : "50px" }}
@@ -764,7 +770,7 @@ const TimeSheet = (props) => {
                           {hours.HR[idx][0] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][1] !== "" ? "30px" : "50px" }}
@@ -774,7 +780,7 @@ const TimeSheet = (props) => {
                           {hours.HR[idx][1] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][2] !== "" ? "30px" : "50px" }}
@@ -784,7 +790,7 @@ const TimeSheet = (props) => {
                           {hours.HR[idx][2] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][3] !== "" ? "30px" : "50px" }}
@@ -794,7 +800,7 @@ const TimeSheet = (props) => {
                           {hours.HR[idx][3] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][4] !== "" ? "30px" : "50px" }}
@@ -804,7 +810,7 @@ const TimeSheet = (props) => {
                           {hours.HR[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][5] !== "" ? "30px" : "50px" }}
@@ -814,7 +820,7 @@ const TimeSheet = (props) => {
                           {hours.HR[idx][5] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.HR[idx][6] !== "" ? "30px" : "50px" }}
@@ -845,7 +851,7 @@ const TimeSheet = (props) => {
                           <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e[8]}</p>
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][0] !== "" ? "30px" : "50px" }}
@@ -855,7 +861,7 @@ const TimeSheet = (props) => {
                           {hours.Finance[idx][0] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][1] !== "" ? "30px" : "50px" }}
@@ -865,7 +871,7 @@ const TimeSheet = (props) => {
                           {hours.Finance[idx][1] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][2] !== "" ? "30px" : "50px" }}
@@ -875,7 +881,7 @@ const TimeSheet = (props) => {
                           {hours.Finance[idx][2] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][3] !== "" ? "30px" : "50px" }}
@@ -885,7 +891,7 @@ const TimeSheet = (props) => {
                           {hours.Finance[idx][3] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][4] !== "" ? "30px" : "50px" }}
@@ -895,7 +901,7 @@ const TimeSheet = (props) => {
                           {hours.Finance[idx][4] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][5] !== "" ? "30px" : "50px" }}
@@ -905,7 +911,7 @@ const TimeSheet = (props) => {
                           {hours.Finance[idx][5] !== "" ? <p style={{ display: "inline" }}>hr</p> : ""}
                         </td>
                         <td style={styles.cell}>
-                          <input
+                          <input className='no-focus'
                             placeholder='0:00 hr'
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             style={{ ...styles.input, width: hours.Finance[idx][6] !== "" ? "30px" : "50px" }}

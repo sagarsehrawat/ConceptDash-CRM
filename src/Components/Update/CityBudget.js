@@ -416,7 +416,7 @@ const CityBudget = (props) => {
             </div>
             <div className="col-6">
               <p style={{ display: "inline-block", marginRight: "10px", fontSize: "17px", fontWeight: "bold" }}>Website 2022 - </p>
-              <a href={cityData ? cityData.Website : ""} style={{ display: "inline-block", marginRight: "10px" }} target="_blank" rel="noreferrer">{cityData ? shortenLink(cityData.Website_22) : ""}</a>
+              <a href={cityData ? cityData.Website_22 : ""} style={{ display: "inline-block", marginRight: "10px" }} target="_blank" rel="noreferrer">{cityData ? shortenLink(cityData.Website_22) : ""}</a>
             </div>
             <div className="col-6">
               <p style={{ display: "inline-block", marginRight: "10px", fontSize: "17px", fontWeight: "bold" }}>2022 Budget - </p>
@@ -424,7 +424,7 @@ const CityBudget = (props) => {
             </div>
             <div className="col-6">
               <p style={{ display: "inline-block", marginRight: "10px", fontSize: "17px", fontWeight: "bold" }}>Website 2023 - </p>
-              <a href={cityData ? cityData.Website : ""} style={{ display: "inline-block", marginRight: "10px" }} target="_blank" rel="noreferrer">{cityData ? shortenLink(cityData.Website_23) : ""}</a>
+              <a href={cityData ? cityData.Website_23 : ""} style={{ display: "inline-block", marginRight: "10px" }} target="_blank" rel="noreferrer">{cityData ? shortenLink(cityData.Website_23) : ""}</a>
             </div>
             <div className="col-6">
               <p style={{ display: "inline-block", marginRight: "10px", fontSize: "17px", fontWeight: "bold" }}>2023 Budget - </p>

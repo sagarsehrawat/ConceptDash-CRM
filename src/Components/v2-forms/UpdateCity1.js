@@ -91,7 +91,7 @@ const UpdateCity1 = (props) => {
                         </Form.Group>
                         <Form.Group as={Col}>
                             <Form.Label>Capital Budget</Form.Label>
-                            <Form.Control value={form.capitalBudget} name="capitalBudget" onChange={handleChange} />
+                            <Form.Control disabled value={form.capitalBudget} name="capitalBudget" onChange={handleChange} />
                         </Form.Group>
                     </Row>
 

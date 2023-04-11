@@ -232,6 +232,7 @@ function UpdateEmployeeForm(props) {
     }
     if (name === "birthday") {
       setbirthday(value);
+      console.log(value)
     }
     if (name === "anniversary") {
       setanniv(value);
@@ -379,9 +380,9 @@ function UpdateEmployeeForm(props) {
   const handleShowJTForm = () => setshowJTForm(true);
   return (
     isLoading?<LoadingSpinner/>:
-    <>
+    <div style={{ marginLeft:'27px', marginTop:'20px', marginBottom:'20px', width:'731px'}}>
       <div>
-        <Form className="form-main" onSubmit={handleSubmit}>
+        <Form className="form-main" onSubmit={handleSubmit} style={{marginTop:'0px', marginLeft:'0px', marginRight:'0px'}}>
           <Row className="mb-4">
             <Form.Group as={Col}>
               <Form.Select
@@ -935,7 +936,7 @@ function UpdateEmployeeForm(props) {
           <Modal.Body>{<JobTitle />}</Modal.Body>
         </Modal>
       </div>
-    </>
+    </div>
   );
 }
 

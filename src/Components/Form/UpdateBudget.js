@@ -17,7 +17,7 @@ import LoadingSpinner from "../Loader/Loader";
 
 function UpdateBudget(props) {
   const [isSubmit, setIsSubmit] = useState(false);
-  const { setGreen, closeModal, api, apiCall, setRed } = props;
+  const { setGreen, closeModal, api, apiCall, setRed, cities2, setcities2, idx } = props;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -65,6 +65,9 @@ function UpdateBudget(props) {
     call();
   }, []);
 
+  
+  let yr = new Date().getFullYear();
+  const [year, setyear] = useState(yr);
   const depart = props.row.Department;
   const citi = props.row.City;
   const pro_cat = props.row.Project_Category;
@@ -142,9 +145,12 @@ function UpdateBudget(props) {
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
       .then((res) => {
-        console.log(res)
         setisLoading(false);
         if (res.data.success) {
+          const val = res.data.res[0].Capital_Budget_23
+          const c = cities2
+          c[idx].Capital_Budget_23 = val;
+          setcities2(c)
           closeModal();
           setGreen(true);
           apiCall(api + 1);
@@ -253,12 +259,14 @@ function UpdateBudget(props) {
           </Form.Group>
           <Form.Group as={Col}>
             <Form.Label>Budget Year</Form.Label>
-            <Form.Control
-              value={bYear}
-              name="budgetYear"
-              type="text"
-              onChange={handleChange}
-            />
+            <Form.Select name="budgetYear" onChange={handleChange} defaultValue={bYear}>
+                  <option value={year-2}>{year-2}</option>
+                  <option value={year-1}>{year-1}</option>
+                  <option value={year}>{year}</option>
+                  <option value={year+1}>{year+1}</option>
+                  <option value={year+2}>{year+2}</option>
+                  <option value={year+3}>{year+3}</option>
+                </Form.Select>
           </Form.Group>
           <Form.Group as={Col}>
             <Form.Label>Source</Form.Label>
