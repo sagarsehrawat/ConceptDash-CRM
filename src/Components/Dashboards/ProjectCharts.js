@@ -8,6 +8,7 @@ import {
   GET_PROJECT_VALUES,
   GET_PROJECT_NAMES,
   GET_HOURS_WORKED,
+  PRIMARY_COLOR,
   GET_PROJECT_CITY,
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
@@ -45,7 +46,7 @@ const styles = {
     fontWeight: 500,
     fontSize: "14px",
     lineHeight: "20px",
-    color: "#6519E1",
+    color: PRIMARY_COLOR,
   },
   trendingContainer2: {
     padding: "4px 8px",

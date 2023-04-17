@@ -6,7 +6,7 @@ import moment from 'moment'
 import React, { useState, useContext, useEffect, useRef } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import AuthenticationContext from '../../Context/AuthContext'
-import { DELETE_PROPOSAL, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGES_PROPOSALS, GET_PAGE_PROPOSALS, GET_PROJECT_CATEGORIES, GET_PROPOSAL_COUNT, HOST, UPDATE_STATUS_PROPOSAL } from '../Constants/Constants'
+import {PRIMARY_COLOR, DELETE_PROPOSAL, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGES_PROPOSALS, GET_PAGE_PROPOSALS, GET_PROJECT_CATEGORIES, GET_PROPOSAL_COUNT, HOST, UPDATE_STATUS_PROPOSAL } from '../Constants/Constants'
 import GreenAlert from '../Loader/GreenAlert'
 import LoadingSpinner from '../Loader/Loader'
 import RedAlert from '../Loader/RedAlert'
@@ -14,6 +14,8 @@ import TableScrollbar from 'react-table-scrollbar';
 import ProposalForm from '../Form/ProposalForm'
 import UpdateProposal from '../Form/UpdateProposal'
 import filterIcon from '../../Images/Filter.svg'
+import cross from '../../Images/cross.svg'
+import tIcon from '../../Images/taskIcon.svg'
 
 const Proposal = (props) => {
     const { isCollapsed } = props
@@ -106,7 +108,7 @@ const Proposal = (props) => {
             gap: "8px",
             width: "177px",
             height: "40px",
-            background: "#6519E1",
+            background: PRIMARY_COLOR,
             border: "1px solid #6519E1",
             boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
             borderRadius: "5px",
@@ -322,7 +324,7 @@ const Proposal = (props) => {
             gap: "10px",
             width: "56px",
             height: "28px",
-            background: "#6519E1",
+            background: PRIMARY_COLOR,
             border: "1px solid #6519E1",
             boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
             borderRadius: "6px",
@@ -478,7 +480,7 @@ const Proposal = (props) => {
             fontSize: "14px",
             lineHeight: "20px",
             textAlign: "center",
-            color: "#6519E1",
+            color: PRIMARY_COLOR,
             margin: "0px"
         },
         page: {
@@ -514,7 +516,7 @@ const Proposal = (props) => {
             fontWeight: 500,
             fontSize: "24px",
             lineHeight: "36px",
-            color: "#6519E1",
+            color: PRIMARY_COLOR,
             display: "inline-block"
         },
         floatingContainerText2: {
@@ -573,6 +575,28 @@ const Proposal = (props) => {
             color: "#0A0A0A",
             margin: "0px"
         },
+        addModal: {
+            position: "absolute",
+            width: "780px",
+            height: 'fit-content',
+            left: "28vw",
+            marginTop: "10vh",
+            background: "#FFFFFF",
+            boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+            borderRadius: "12px",
+        },
+        addHeading: {
+            width: "auto",
+            height: "28px",
+            marginLeft: "8px",
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 500,
+            fontSize: "18px",
+            lineHeight: "28px",
+            color: "#0A0A0A",
+            // marginTop:'12px'
+        }
     }
 
     useEffect(() => {
@@ -942,8 +966,8 @@ const Proposal = (props) => {
                         <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
                             <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
                             <div className='d-flex align-items-center'>
-                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => {setfilter({ dept: [], cat: [], city: [], manager: [] }); setprevFilter({ dept: [], cat: [], city: [], manager: [] }); setCall(apiCall+1); setfilterModal(false);}}>Clear All</Button>
-                                <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeFilterModal} />
+                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => {setfilter({ dept: [], cat: [], city: [], manager: [] }); setprevFilter({ dept: [], cat: [], city: [], manager: [] }); setCall(apiCall+1); setfilterModal(false);}}>Clear All</Button>
+                                <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={closeFilterModal} />
                             </div>
                         </div>
                         <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "20px", marginRight: "20px" }}>
@@ -1003,15 +1027,15 @@ const Proposal = (props) => {
                             <div className='d-flex flex-row justify-content-between align-items-center'>
                                 <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
                                 <div className='d-flex align-items-center'>
-                                    <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filter.cat.length === 0 && filter.dept.length === 0 && filter.source.length === 0 && filter.city.length === 0 && filter.manager.length === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [] })}>Clear All</Button>
-                                    <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeFilterModal} />
+                                    <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }} disabled={filter.cat.length === 0 && filter.dept.length === 0 && filter.source.length === 0 && filter.city.length === 0 && filter.manager.length === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [] })}>Clear All</Button>
+                                    <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={closeFilterModal} />
                                 </div>
                             </div>
                             <div className='d-flex flex-row justify-content-between'>
                                 <p style={styles.whereText}>WHERE</p>
                             </div>
                             <div className='d-flex flex-row justify-content-start'>
-                                <FontAwesomeIcon icon={faPlus} color="#6519E1" />
+                                <FontAwesomeIcon icon={faPlus} color={PRIMARY_COLOR} />
                             </div>
                             <div className='d-flex flex-row justify-content-between'>
                                 <Button style={styles.filterButton2} onClick={(e) => setfilter2('Basic')}>Go to Basic Filters</Button>
@@ -1031,7 +1055,7 @@ const Proposal = (props) => {
                     <div style={{ width: "296px", height: "fit-content", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px" }}>
                         <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
                             <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Sort By</p>
-                            <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeStatusModal} />
+                            <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={closeStatusModal} />
                         </div>
                         <div className='d-flex flex-column' style={{ marginLeft: "20px", gap: "8px" }}>
                             <RadioButtonComponent
@@ -1358,7 +1382,7 @@ const Proposal = (props) => {
                 </Button> : <></>}
                 <div style={{ ...styles.floatingContainerLine, marginLeft: "10px" }}></div>
                 <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
-                    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color="#6519E1" onClick={(e) => setselectedProposals([])} />
+                    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={(e) => setselectedProposals([])} />
                 </div>
             </div>
 
@@ -1368,14 +1392,17 @@ const Proposal = (props) => {
                 show={show}
                 onHide={handleClose}
                 backdrop="static"
-                centered
-                size="xl"
-                keyboard={false}
+                style={styles.addModal}
+                dialogClassName="filter-dialog"
+                animation={false}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Add Proposal</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={styles.addHeading}>Add Proposal</div>
+                    </div>
+                    <div><img onClick={handleClose} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
                     {
                         <ProposalForm
                             setRed={setred}
@@ -1385,7 +1412,6 @@ const Proposal = (props) => {
                             apiCall={setCall}
                         />
                     }
-                </Modal.Body>
             </Modal>
 
             {/* Update Modal */}
@@ -1393,14 +1419,17 @@ const Proposal = (props) => {
                 show={showUpdate}
                 onHide={handleCloseUpdate}
                 backdrop="static"
-                centered
-                size="xl"
-                keyboard={false}
+                style={styles.addModal}
+                dialogClassName="filter-dialog"
+                animation={false}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Update Proposal</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={styles.addHeading}>Update Proposal</div>
+                    </div>
+                    <div><img onClick={handleCloseUpdate} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
                     {
                         <UpdateProposal
                             row={rowData}
@@ -1411,7 +1440,6 @@ const Proposal = (props) => {
                             apiCall={setCall}
                         />
                     }
-                </Modal.Body>
             </Modal>
 
             {/* Delete Modal */}

@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import axios from "axios";
-import { GET_EMPLOYEE_PRIVILEGES, HOST, LOGIN } from "../Constants/Constants";
+import { GET_EMPLOYEE_PRIVILEGES, HOST, LOGIN, PRIMARY_COLOR } from "../Constants/Constants";
 import AuthContext from "../../Context/AuthContext";
 import {
   MDBContainer,
@@ -81,7 +81,7 @@ const styles = {
     height: "5vh",
     left: "14vw",
     top: "65vh",
-    background: "#6519E1",
+    background: PRIMARY_COLOR,
     border: "1px solid #6519E1",
     boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
     borderRadius: "8px"

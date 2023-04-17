@@ -11,10 +11,28 @@ import {
   GET_DEPARTMENTS,
   GET_PROJECT_CATEGORIES,
   UPDATE_BUDGET,
+  PRIMARY_COLOR
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
-
+const styles = {
+  nameHeading: {
+    height: "20px",
+    fontFamily: "'Roboto'",
+    fontStyle: "normal",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: "#70757A"
+  },
+  nameInput: {
+    width: "740px",
+    height: "32px",
+    border: "1px solid #EBE9F1",
+    borderRadius: "6px",
+    padding:6
+  }
+}
 function UpdateBudget(props) {
   const [isSubmit, setIsSubmit] = useState(false);
   const { setGreen, closeModal, api, apiCall, setRed, cities2, setcities2, idx } = props;
@@ -83,6 +101,7 @@ function UpdateBudget(props) {
   const [bYear, setbYear] = useState(props.row.Budget_Year);
   const [pName, setpName] = useState(props.row.Project_Name);
   const [bAmount, setbAmount] = useState(props.row.Budget_Amount);
+  const [sNumber, setsNumber] = useState(props.row.Serial_No);
 
   const [form, setform] = useState({
     city: props.row.City_ID ?? "",
@@ -93,6 +112,7 @@ function UpdateBudget(props) {
     budgetAmount: bAmount ?? "",
     budgetYear: bYear ?? "",
     source: props.row.Source ?? "",
+    serialNumber: props.row.Serial_No ?? "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -120,6 +140,9 @@ function UpdateBudget(props) {
     if (name === "source") {
       setsource(value);
     }
+    if (name === "serialNumber") {
+      setsNumber(value);
+    }
     const newForm = form;
     newForm[name] = value;
     setform(newForm);
@@ -141,6 +164,7 @@ function UpdateBudget(props) {
           budgetAmount: form.budgetAmount,
           budgetYear: form.budgetYear,
           source: form.source,
+          serialNumber: form.serialNumber,
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
@@ -168,12 +192,25 @@ function UpdateBudget(props) {
   return isLoading ? (
     <LoadingSpinner />
   ) : (
-    <div>
-      <Form className="form-main" onSubmit={handleSubmit}>
-        <Row className="mb-4">
+    <div style={{ marginLeft:'27px', marginTop:'20px', marginBottom:'20px'}}>
+      <Form className="form-main" onSubmit={handleSubmit} style={{marginTop:'0px', marginLeft:'0px', marginRight:'0px'}}>
+        <Row>
+        <Form.Group as={Col}>
+            <Form.Label style={styles.nameHeading}>Project Name</Form.Label>
+            <Form.Control
+                style={styles.nameInput}
+              value={pName}
+              name="projectName"
+              type="text"
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+        </Row>
+        <Row>
           <Form.Group as={Col} controlId="formGridCity">
-            <Form.Label>City</Form.Label>
-            <Form.Select onChange={handleChange} name="city">
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>City</Form.Label>
+            <Form.Select style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="city">
             <option value="">Select City</option>
               {cities.length > 0
                 ? cities.map((e) => (
@@ -186,10 +223,36 @@ function UpdateBudget(props) {
           </Form.Group>
         </Row>
 
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Department</Form.Label>
-            <Form.Select onChange={handleChange} name="dept">
+        <Row>
+        <Form.Group style={{width:'380px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Budget Amount</Form.Label>
+            <Form.Control
+                style={{...styles.nameInput, width:'360px'}}
+              value={bAmount}
+              name="budgetAmount"
+              type="number"
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group style={{width:'380px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Budget Category</Form.Label>
+            <Form.Select
+            style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
+              defaultValue={budgetCategory}
+              onChange={handleChange}
+              name="budgetCategory"
+            >
+              <option value="">Select Budget Category</option>
+              <option value="Design">Design</option>
+              <option value="Construction">Construction</option>
+            </Form.Select>
+          </Form.Group>
+        </Row>
+        <Row>
+          <Form.Group style={{width:'380px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Department</Form.Label>
+            <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="dept">
             <option value="">Select Department</option>
               {depts.length > 0
                 ? depts.map((e) => (
@@ -203,11 +266,9 @@ function UpdateBudget(props) {
                 : ""}
             </Form.Select>
           </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Project Category</Form.Label>
-            <Form.Select onChange={handleChange} name="projectCat">
+          <Form.Group style={{width:'380px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Category</Form.Label>
+            <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="projectCat">
             <option value="">Select Project Category</option>
               {projectDepts.length > 0
                 ? projectDepts.map((e) => (
@@ -222,44 +283,12 @@ function UpdateBudget(props) {
             </Form.Select>
           </Form.Group>
         </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Budget Category</Form.Label>
-            <Form.Select
-              defaultValue={budgetCategory}
-              onChange={handleChange}
-              name="budgetCategory"
-            >
-              <option value="">Select Budget Category</option>
-              <option value="Design">Design</option>
-              <option value="Construction">Construction</option>
-            </Form.Select>
-          </Form.Group>
-        </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Project Name</Form.Label>
-            <Form.Control
-              value={pName}
-              name="projectName"
-              type="text"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Budget Amount</Form.Label>
-            <Form.Control
-              value={bAmount}
-              name="budgetAmount"
-              type="number"
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Budget Year</Form.Label>
-            <Form.Select name="budgetYear" onChange={handleChange} defaultValue={bYear}>
+        
+        <Row>
+          
+          <Form.Group style={{width:'380px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Budget Year</Form.Label>
+            <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} name="budgetYear" onChange={handleChange} defaultValue={bYear}>
                   <option value={year-2}>{year-2}</option>
                   <option value={year-1}>{year-1}</option>
                   <option value={year}>{year}</option>
@@ -268,9 +297,9 @@ function UpdateBudget(props) {
                   <option value={year+3}>{year+3}</option>
                 </Form.Select>
           </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Source</Form.Label>
-            <Form.Select value={source} name="source" onChange={handleChange}>
+          <Form.Group style={{width:'380px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Source</Form.Label>
+            <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} defaultValue={source} name="source" onChange={handleChange}>
               <option>Select Source</option>
               <option value="Construct Connect">Construct Connect</option>
               <option value="Bids and Tenders">Bids and Tenders</option>
@@ -280,9 +309,27 @@ function UpdateBudget(props) {
           </Form.Group>
         </Row>
 
-        <Button className="submit-btn" variant="primary" type="submit">
-          Submit
-        </Button>
+        <Row>
+        <Form.Group style={{width:'380px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Serial Number</Form.Label>
+                <Form.Control
+                style={{...styles.nameInput, width:'360px'}}
+                  name="serialNumber"
+                  type="text"
+                  onChange={handleChange}
+                  value={sNumber}
+                />
+              </Form.Group>
+        </Row>
+
+        <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
+            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+              Cancel
+            </Button>
+            <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
+              Update Budget
+            </Button>
+            </div>
       </Form>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

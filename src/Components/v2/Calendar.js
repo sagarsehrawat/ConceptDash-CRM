@@ -11,7 +11,7 @@ import { Button, Form, Modal } from 'react-bootstrap'
 import moment from 'moment'
 import { gapi } from 'gapi-script'
 import axios from 'axios'
-import { ADD_TIMESHEET, GET_EMPLOYEENAMES, HOST } from '../Constants/Constants'
+import { ADD_TIMESHEET, GET_EMPLOYEENAMES, HOST , PRIMARY_COLOR} from '../Constants/Constants'
 import Select from 'react-virtualized-select';
 import ReactSelect from 'react-select'
 
@@ -64,7 +64,7 @@ const Calendar = () => {
             fontSize: "14px",
             lineHeight: "20px",
             textAlign: "right",
-            color: "#6519E1",
+            color: PRIMARY_COLOR,
             marginRight: "20px",
             border: "none"
         },
@@ -100,7 +100,7 @@ const Calendar = () => {
             fontStyle: "normal",
             fontWeight: 400,
             fontSize: "16px",
-            color: "#6519E1",
+            color: PRIMARY_COLOR,
             cursor: "pointer"
         },
         calendarContainer: {
@@ -170,7 +170,7 @@ const Calendar = () => {
             fontWeight: 400,
             fontSize: "14px",
             lineHeight: "20px",
-            color: "#6519E1"
+            color: PRIMARY_COLOR
         },
         peopleSelector: {
             control: (base, state) => ({
@@ -221,7 +221,7 @@ const Calendar = () => {
             height: "36px",
             left: "488px",
             top: "324px",
-            background: "#6519E1",
+            background: PRIMARY_COLOR,
             borderRadius: "8px",
             fontFamily: "'Roboto'",
             fontStyle: "normal",

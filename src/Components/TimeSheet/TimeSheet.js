@@ -5,7 +5,7 @@ import AuthenticationContext from '../../Context/AuthContext'
 import LoadingSpinner from '../Loader/Loader'
 import moment from 'moment'
 import axios from 'axios'
-import { ADD_TIMESHEET, GET_EMPLOYEENAMES, GET_WEEKLY_TIMESHEET, HOST } from '../Constants/Constants'
+import { ADD_TIMESHEET, GET_EMPLOYEENAMES, GET_WEEKLY_TIMESHEET, HOST, PRIMARY_COLOR } from '../Constants/Constants'
 import GreenAlert from '../Loader/GreenAlert'
 import RedAlert from '../Loader/RedAlert'
 import { Modal } from 'react-bootstrap'
@@ -343,11 +343,11 @@ const TimeSheet = (props) => {
 
       {/* Table Header */}
       <div style={styles.tableHeader} className='d-flex flex-row justify-content-start align-items-center'>
-        <FontAwesomeIcon icon={faChevronLeft} color="#6519E1" style={{ cursor: "pointer", marginRight: "18px" }} onClick={(e) => { setdate(date.clone().subtract(7, 'days')); setCall(apiCall + 1) }} />
-        <FontAwesomeIcon icon={faCalendarDays} color="#6519E1" style={{ marginRight: "10px" }} />
+        <FontAwesomeIcon icon={faChevronLeft} color={PRIMARY_COLOR} style={{ cursor: "pointer", marginRight: "18px" }} onClick={(e) => { setdate(date.clone().subtract(7, 'days')); setCall(apiCall + 1) }} />
+        <FontAwesomeIcon icon={faCalendarDays} color={PRIMARY_COLOR} style={{ marginRight: "10px" }} />
         <div style={{ width: "0px", height: "22px", border: "1px solid #EBE9F1", marginRight: "8px" }}></div>
         <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", marginRight: "16px" }}>{`${date.clone().startOf('isoWeek').format('DD')} - ${date.clone().startOf('isoWeek').add(6, 'days').format('DD MMM, YYYY')}`}</p>
-        <FontAwesomeIcon icon={faChevronRight} color="#6519E1" style={{ cursor: "pointer", marginRight: "18px" }} onClick={(e) => { setdate(date.clone().add(7, 'days')); setCall(apiCall + 1) }} />
+        <FontAwesomeIcon icon={faChevronRight} color={PRIMARY_COLOR} style={{ cursor: "pointer", marginRight: "18px" }} onClick={(e) => { setdate(date.clone().add(7, 'days')); setCall(apiCall + 1) }} />
       </div>
 
       {/* Table */}

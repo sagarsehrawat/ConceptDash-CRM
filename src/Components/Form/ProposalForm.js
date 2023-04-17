@@ -15,6 +15,7 @@ import {
   ADD_PROPOSAL,
   GET_RFP_ID,
   GET_PROJECT_CATEGORIES,
+  PRIMARY_COLOR
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import Select from "react-select";
@@ -25,6 +26,25 @@ import RedAlert from "../Loader/RedAlert";
 import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import AuthContext from '../../Context/AuthContext'
+import plus from '../../Images/plus.svg'
+const styles = {
+  nameHeading: {
+    height: "20px",
+    fontFamily: "'Roboto'",
+    fontStyle: "normal",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: "#70757A"
+  },
+  nameInput: {
+    width: "740px",
+    height: "32px",
+    border: "1px solid #EBE9F1",
+    borderRadius: "6px",
+    padding:6
+  }
+}
 
 function ProposalForm(props) {
   const { privileges, setPrivileges } = useContext(AuthContext)
@@ -177,7 +197,7 @@ function ProposalForm(props) {
           bidderPrice: form.bidderPrice,
           winningPrice: form.winningPrice,
           winningBidderId: form.winningBidder,
-          cityId: radio ? cityid : form.city,
+          cityId: form.city,
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
@@ -203,8 +223,8 @@ function ProposalForm(props) {
   const [deptid, setdeptid] = useState("");
   const [catId, setcatId] = useState("");
   const [catid, setcatid] = useState("");
-  const [cityid, setcityid] = useState("");
-  const [city, setcity] = useState("");
+  // const [cityid, setcityid] = useState("");
+  // const [city, setcity] = useState("");
   const [managerId, setmanagerId] = useState("");
   const [manager, setmanager] = useState("");
   const handleChange1 = async (e) => {
@@ -216,15 +236,14 @@ function ProposalForm(props) {
         },
       })
       .then(async (res) => {
-        console.log(res.data.res);
         setrfpData(res.data.res);
         setpName(res.data.res[0].Project_Name);
         setdept(res.data.res[0].Department);
         setcatid(res.data.res[0].Project_Category);
         setcatId(res.data.res[0].Project_Cat_ID);
         setdeptid(res.data.res[0].Department_ID);
-        setcity(res.data.res[0].City);
-        setcityid(res.data.res[0].City_ID);
+        // setcity(res.data.res[0].City);
+        // setcityid(res.data.res[0].City_ID);
         setmanager(res.data.res[0].Manager_Name);
         setmanagerId(res.data.res[0].Project_Manager_ID);
       })
@@ -281,17 +300,18 @@ function ProposalForm(props) {
 
   const [isLoading, setisLoading] = useState(false);
   return (
-    <>
+    <div style={{ marginLeft:'27px', marginTop:'20px', marginBottom:'20px'}}>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
       {red === true ? <RedAlert setRed={setred} /> : <></>}
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div>
-          <Form className="form-main" onSubmit={handleSubmit}>
-            <Row className="mb-4">
+        <>
+          <Form className="form-main" onSubmit={handleSubmit} style={{marginTop:'0px', marginLeft:'0px', marginRight:'0px'}}>
+            <Row>
               <Form.Group as={Col}>
-                <Form.Select onChange={handleRadio}>
+                <Form.Label style={styles.nameHeading}>Choose Label</Form.Label>
+                <Form.Select style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}} onChange={handleRadio}>
                   <option value="yes">Create New Proposal</option>
                   <option value="no">Import From RFPs</option>
                 </Form.Select>
@@ -299,9 +319,41 @@ function ProposalForm(props) {
             </Row>
             {!radio ? (
               <div>
-                <Row className="mb-4">
+                <Row>
                   <Form.Group as={Col}>
-                    <Form.Select onChange={handleChange} name="dept" required>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Name</Form.Label>
+                    <Form.Control
+                      style={styles.nameInput}
+                      name="projectName"
+                      type="text"
+                      onChange={handleChange}
+                      required
+                    />
+                  </Form.Group>
+                </Row>
+                <Row>
+                  <Form.Group as={Col} controlId="formGridCity">
+                  <Form.Label style={{...styles.nameHeading,width:'740px', marginTop:'24px'}}>
+                      <div className="d-flex flex-row justify-content-between align-items-center">
+                        <div>City</div>
+                        {privileges.includes('Add City')? <div style={{background:'#EBE9F1',borderRadius:'10px', width:'20px', textAlign:'center', cursor:'pointer'}} onClick={handleShowCityForm}><img alt="Add New City" src={plus} /></div> :<></>}
+                      </div>
+                    </Form.Label>
+                    <Form.Select style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="city" required>
+                      <option value="">Select City</option>
+                      {cities.length > 0
+                        ? cities.map((e) => (
+                          <option value={e.City_ID}>{e.City}</option>
+                        ))
+                        : ""}
+                    </Form.Select>
+                  </Form.Group>
+                </Row>
+                
+                <Row>
+                <Form.Group style={{width:'253px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Department</Form.Label>
+                    <Form.Select style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="dept" required>
                       <option value="">Select Department</option>
                       {depts.length > 0
                         ? depts.map((e) => (
@@ -312,23 +364,10 @@ function ProposalForm(props) {
                         : ""}
                     </Form.Select>
                   </Form.Group>
-                  <Form.Group as={Col}>
-                    <Button
-                      style={{
-                        width: "100%",
-                        backgroundColor: "grey",
-                        border: "none",
-                      }}
-                      onClick={handleShowDeptForm}
-                      disabled={!privileges.includes("Add Department")}
-                    >
-                      Add Department
-                    </Button>
-                  </Form.Group>
-                </Row>
-                <Row className="mb-4">
-                  <Form.Group as={Col}>
+                  <Form.Group style={{width:'253px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Category</Form.Label>
                     <Form.Select
+                    style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
                       onChange={handleChange}
                       name="projectCat"
                       required
@@ -343,31 +382,10 @@ function ProposalForm(props) {
                         : ""}
                     </Form.Select>
                   </Form.Group>
-                  <Form.Group as={Col}>
-                    <Button
-                      style={{
-                        width: "100%",
-                        backgroundColor: "grey",
-                        border: "none",
-                      }}
-                      onClick={handleShowCategoryForm}
-                      disabled={!privileges.includes("Add Project Category")}
-                    >
-                      Add Project Category
-                    </Button>
-                  </Form.Group>
-                </Row>
-
-                <Row className="mb-4">
-                  {/* <Form.Group as={Col}>
-                    <Form.Select name="status" onChange={handleChange}>
-                      <option value="">Select Status</option>
-                      <option value="Lost">Lost</option>
-                      <option value="Won">Won</option>
-                    </Form.Select>
-                  </Form.Group> */}
-                  <Form.Group as={Col}>
+                  <Form.Group style={{width:'253px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Manager</Form.Label>
                     <Form.Select
+                    style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}}
                       name="managerName"
                       onChange={handleChange}
                       required
@@ -385,55 +403,8 @@ function ProposalForm(props) {
                     </Form.Select>
                   </Form.Group>
                 </Row>
-                <Row className="mb-4">
-                  <Form.Group as={Col}>
-                    <Form.Label>Project Name</Form.Label>
-                    <Form.Control
-                      name="projectName"
-                      type="text"
-                      onChange={handleChange}
-                      required
-                    />
-                  </Form.Group>
-                </Row>
-                <Row className="mb-4">
-                  <Form.Group as={Col}>
-                    <Form.Label>Question Deadline</Form.Label>
-                    <Form.Control
-                      name="qDeadline"
-                      onChange={handleChange}
-                      type="date"
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col}>
-                    <Form.Label>Closing Deadline</Form.Label>
-                    <Form.Control
-                      name="cDeadline"
-                      onChange={handleChange}
-                      type="date"
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col}>
-                    <Form.Label>Result Date</Form.Label>
-                    <Form.Control
-                      name="resultDate"
-                      onChange={handleChange}
-                      type="date"
-                    />
-                  </Form.Group>
-                </Row>
-
-                <Row className="mb-4">
-                  <Form.Group as={Col} controlId="formGridCity">
-                    <Form.Select onChange={handleChange} name="city" required>
-                      <option value="">Select City</option>
-                      {cities.length > 0
-                        ? cities.map((e) => (
-                          <option value={e.City_ID}>{e.City}</option>
-                        ))
-                        : ""}
-                    </Form.Select>
-                  </Form.Group>
+                {/* <Row className="mb-4">
+                  
                   <Form.Group as={Col}>
                     <Button
                       style={{
@@ -441,15 +412,64 @@ function ProposalForm(props) {
                         backgroundColor: "grey",
                         border: "none",
                       }}
-                      onClick={handleShowCityForm}
-                      disabled={!privileges.includes("Add City")}
+                      onClick={handleShowDeptForm}
+                      disabled={!privileges.includes("Add Department")}
                     >
-                      Add City
+                      Add Department
                     </Button>
                   </Form.Group>
                 </Row>
                 <Row className="mb-4">
+                  
                   <Form.Group as={Col}>
+                    <Button
+                      style={{
+                        width: "100%",
+                        backgroundColor: "grey",
+                        border: "none",
+                      }}
+                      onClick={handleShowCategoryForm}
+                      disabled={!privileges.includes("Add Project Category")}
+                    >
+                      Add Project Category
+                    </Button>
+                  </Form.Group>
+                </Row> */}
+
+                
+                <Row>
+                  <Form.Group style={{width:'253px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Question Deadline</Form.Label>
+                    <Form.Control
+                    style={{...styles.nameInput, width:'233px'}}
+                      name="qDeadline"
+                      onChange={handleChange}
+                      type="date"
+                    />
+                  </Form.Group>
+                  <Form.Group style={{width:'253px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Closing Deadline</Form.Label>
+                    <Form.Control
+                    style={{...styles.nameInput, width:'234px'}}
+                      name="cDeadline"
+                      onChange={handleChange}
+                      type="date"
+                    />
+                  </Form.Group>
+                  <Form.Group style={{width:'253px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Result Date</Form.Label>
+                    <Form.Control
+                    style={{...styles.nameInput, width:'233px'}}
+                      name="resultDate"
+                      onChange={handleChange}
+                      type="date"
+                    />
+                  </Form.Group>
+                </Row>
+
+                <Row>
+                  <Form.Group style={{width:'755px'}}>
+              <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Team Members</Form.Label>
                     <Select
                       isMulti
                       onChange={doChange}
@@ -559,8 +579,11 @@ function ProposalForm(props) {
               </div>
             ) : (
               <div>
+                <Row>
+                  <Form.Group as={Col}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Select Project</Form.Label>
                 <Form.Select
-                  style={{ marginBottom: "4vh" }}
+                  style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}}
                   onChange={handleChange1}
                 >
                   <option value="">Select Project</option>
@@ -573,13 +596,53 @@ function ProposalForm(props) {
                   ) : (
                     <option value="">None</option>
                   )}
-                </Form.Select>
+                </Form.Select></Form.Group>
+                </Row>
+                
                 {rfpData.length > 0 ? (
                   <div>
-                    <Row className="mb-4">
-                      <Form.Group as={Col}>
-                        <Form.Label>Department</Form.Label>
+                    <Row>
+                    <Form.Group as={Col}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Name</Form.Label>
+                        <Form.Control
+                style={styles.nameInput}
+                          value={pName}
+                          name="projectName"
+                          type="text"
+                          placeholder="Project Name"
+                          onChange={handleChange}
+                          required
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row>
+                      <Form.Group as={Col} controlId="formGridCity">
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>City</Form.Label>
                         <Form.Select
+                        style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}}
+                          // defaultValue={city}
+                          onChange={handleChange}
+                          name="city"
+                        >
+                          <option value="">Select City</option>
+                          {cities.length > 0
+                            ? cities.map((e) => (
+                              <option
+                                value={e.City_ID}
+                                // selected={e.City_ID === cityid}
+                              >
+                                {e.City}
+                              </option>
+                            ))
+                            : ""}
+                        </Form.Select>
+                      </Form.Group>
+                    </Row>
+                    <Row>
+                      <Form.Group style={{width:'253px'}}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Department</Form.Label>
+                        <Form.Select
+                        style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}}
                           defaultValue={dept}
                           onChange={handleChange}
                           name="dept"
@@ -597,9 +660,10 @@ function ProposalForm(props) {
                             : ""}
                         </Form.Select>
                       </Form.Group>
-                      <Form.Group as={Col}>
-                        <Form.Label>Project Category</Form.Label>
+                      <Form.Group style={{width:'253px'}}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Category</Form.Label>
                         <Form.Select
+                        style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}}
                           defaultValue={catid}
                           onChange={handleChange}
                           name="projectCat"
@@ -617,21 +681,10 @@ function ProposalForm(props) {
                             : ""}
                         </Form.Select>
                       </Form.Group>
-                    </Row>
-
-                    <Row className="mb-4">
-                      {/* <Form.Group as={Col}>
-                        <Form.Label>Project Status</Form.Label>
-                        <Form.Select name="status" onChange={handleChange}>
-                          <option value="">Select Status</option>
-                          <option value="Go">Go</option>
-                          <option value="NoGo">NoGo</option>
-                          <option value="Review">Review</option>
-                        </Form.Select>
-                      </Form.Group> */}
-                      <Form.Group as={Col}>
-                        <Form.Label>Project Manager</Form.Label>
+                      <Form.Group style={{width:'253px'}}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Manager</Form.Label>
                         <Form.Select
+                        style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
                           name="managerName"
                           onChange={handleChange}
                           required
@@ -651,38 +704,31 @@ function ProposalForm(props) {
                           )}
                         </Form.Select>
                       </Form.Group>
-                      <Form.Group as={Col}>
-                        <Form.Label>Project Name</Form.Label>
-                        <Form.Control
-                          value={pName}
-                          name="projectName"
-                          type="text"
-                          placeholder="Project Name"
-                          onChange={handleChange}
-                          required
-                        />
-                      </Form.Group>
                     </Row>
-                    <Row className="mb-4">
-                      <Form.Group as={Col}>
-                        <Form.Label>Question Deadline</Form.Label>
+                    <Row>
+                      <Form.Group style={{width:'253px'}}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Question Deadline</Form.Label>
                         <Form.Control
+                        style={{...styles.nameInput, width:'233px'}}
                           name="qDeadline"
                           onChange={handleChange}
                           type="date"
                         />
                       </Form.Group>
-                      <Form.Group as={Col}>
-                        <Form.Label>Closing Deadline</Form.Label>
+                      <Form.Group style={{width:'253px'}}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Closing Deadline</Form.Label>
                         <Form.Control
+                        style={{...styles.nameInput, width:'234px'}}
                           name="cDeadline"
                           onChange={handleChange}
                           type="date"
                         />
                       </Form.Group>
-                      <Form.Group as={Col}>
-                        <Form.Label>Result Date</Form.Label>
+                      <Form.Group style={{width:'253px'}}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Result Date</Form.Label>
                         <Form.Control
+                        
+                        style={{...styles.nameInput, width:'233px'}}
                           name="resultDate"
                           onChange={handleChange}
                           type="date"
@@ -690,29 +736,21 @@ function ProposalForm(props) {
                       </Form.Group>
                     </Row>
 
-                    <Row className="mb-4">
-                      <Form.Group as={Col} controlId="formGridCity">
-                        <Form.Label>City</Form.Label>
-                        <Form.Select
-                          defaultValue={city}
-                          onChange={handleChange}
-                          name="city"
-                        >
-                          <option value="">Select City</option>
-                          {cities.length > 0
-                            ? cities.map((e) => (
-                              <option
-                                value={e.City_ID}
-                                selected={e.City_ID === cityid}
-                              >
-                                {e.City}
-                              </option>
-                            ))
-                            : ""}
-                        </Form.Select>
-                      </Form.Group>
-                    </Row>
-                    <Row className="mb-4">
+                    <Row>
+                  <Form.Group style={{width:'755px'}}>
+              <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Team Members</Form.Label>
+                    <Select
+                      isMulti
+                      onChange={doChange}
+                      options={attendees}
+                      name="team"
+                      placeholder="Team Members"
+                    >
+                      Team Members
+                    </Select>
+                  </Form.Group>
+                </Row>
+                    {/* <Row className="mb-4">
                       <Form.Group as={Col}>
                         <Form.Label>Team</Form.Label>
                         <Select
@@ -724,7 +762,7 @@ function ProposalForm(props) {
                         >
                           Team Members
                         </Select>
-                      </Form.Group>
+                      </Form.Group> */}
                       {/* <Form.Group as={Col}>
                         <Form.Label>Design Price</Form.Label>
                         <Form.Control
@@ -821,16 +859,21 @@ function ProposalForm(props) {
                           )}
                         </Form.Select>
                       </Form.Group> */}
-                    </Row>
+                    {/* </Row> */}
                   </div>
                 ) : (
                   ""
                 )}
               </div>
             )}
-            <Button className="submit-btn" variant="primary" type="submit">
-              Submit
+            <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
+            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+              Cancel
             </Button>
+            <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
+              Add Proposal
+            </Button>
+            </div>
           </Form>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -906,9 +949,9 @@ function ProposalForm(props) {
               }
             </Modal.Body>
           </Modal>
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 }
 

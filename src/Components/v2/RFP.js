@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import TableScrollbar from 'react-table-scrollbar';
-import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST } from '../Constants/Constants';
+import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST, PRIMARY_COLOR } from '../Constants/Constants';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowsUpDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faCross, faDownload, faEdit, faFilter, faMagnifyingGlass, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -14,6 +14,8 @@ import AuthenticationContext from '../../Context/AuthContext';
 import UpdateRFP from '../Form/UpdateRFP';
 import { RadioButtonComponent } from '@syncfusion/ej2-react-buttons';
 import filterIcon from '../../Images/Filter.svg'
+import cross from '../../Images/cross.svg'
+import tIcon from '../../Images/taskIcon.svg'
 
 
 
@@ -102,7 +104,7 @@ const RFP = (props) => {
             gap: "8px",
             width: "157px",
             height: "40px",
-            background: "#6519E1",
+            background: PRIMARY_COLOR,
             border: "1px solid #6519E1",
             boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
             borderRadius: "5px",
@@ -282,7 +284,7 @@ const RFP = (props) => {
             fontSize: "14px",
             lineHeight: "20px",
             textAlign: "center",
-            color: "#6519E1",
+            color: PRIMARY_COLOR,
             margin: "0px"
         },
         page: {
@@ -408,7 +410,7 @@ const RFP = (props) => {
             gap: "10px",
             width: "56px",
             height: "28px",
-            background: "#6519E1",
+            background: PRIMARY_COLOR,
             border: "1px solid #6519E1",
             boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
             borderRadius: "6px",
@@ -456,7 +458,7 @@ const RFP = (props) => {
             fontWeight: 500,
             fontSize: "24px",
             lineHeight: "36px",
-            color: "#6519E1",
+            color: PRIMARY_COLOR,
             display: "inline-block"
         },
         floatingContainerText2: {
@@ -535,6 +537,28 @@ const RFP = (props) => {
             color: "#0A0A0A",
             margin: "0px"
         },
+        addModal: {
+            position: "absolute",
+            width: "780px",
+            height: 'fit-content',
+            left: "28vw",
+            marginTop: "10vh",
+            background: "#FFFFFF",
+            boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+            borderRadius: "12px",
+        },
+        addHeading: {
+            width: "auto",
+            height: "28px",
+            marginLeft: "8px",
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 500,
+            fontSize: "18px",
+            lineHeight: "28px",
+            color: "#0A0A0A",
+            // marginTop:'12px'
+        }
     }
 
     useEffect(() => {
@@ -847,12 +871,12 @@ const RFP = (props) => {
                         <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
                             <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
                             <div className='d-flex align-items-center'>
-                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => {setfilter({ dept: [], cat: [], city: [], manager: [], source: [] }); setprevFilter({ dept: [], cat: [], city: [], manager: [], source: [] }); setCall(apiCall+1); setfilterModal(false);}}>Clear All</Button>
-                                <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeFilterModal} />
+                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => {setfilter({ dept: [], cat: [], city: [], manager: [], source: [] }); setprevFilter({ dept: [], cat: [], city: [], manager: [], source: [] }); setCall(apiCall+1); setfilterModal(false);}}>Clear All</Button>
+                                <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={closeFilterModal} />
                             </div>
                         </div>
                         <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "20px", marginRight: "20px" }}>
-                            <div style={styles.filterSubcontainer} className='filter-container'>
+                            {/* <div style={styles.filterSubcontainer} className='filter-container'>
                                 <p style={styles.filterSubheading}>City {filter.city.length === 0 ? "" : `/${filter.city.length}`}</p>
                                 <input
                                     style={styles.citySearchInputContainer}
@@ -873,7 +897,7 @@ const RFP = (props) => {
                                     }
 
                                 })}
-                            </div>
+                            </div> */}
                             <div style={styles.filterSubcontainer} className='filter-container'>
                                 <p style={styles.filterSubheading}>Source {filter.source.length === 0 ? "" : `/${filter.source.length}`}</p>
                                 <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Construct Connect') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Construct Connect')}><p style={styles.filterBodyText}>Construct Connect</p></div>
@@ -915,8 +939,8 @@ const RFP = (props) => {
                             <div className='d-flex flex-row justify-content-between align-items-center'>
                                 <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
                                 <div className='d-flex align-items-center'>
-                                    <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filter.cat.length === 0 && filter.dept.length === 0 && filter.source.length === 0 && filter.city.length === 0 && filter.manager.length === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [], source: [] })}>Clear All</Button>
-                                    <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeFilterModal} />
+                                    <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }} disabled={filter.cat.length === 0 && filter.dept.length === 0 && filter.source.length === 0 && filter.city.length === 0 && filter.manager.length === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [], source: [] })}>Clear All</Button>
+                                    <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={closeFilterModal} />
                                 </div>
                             </div>
                             <div className='d-flex flex-row justify-content-between'>
@@ -924,7 +948,7 @@ const RFP = (props) => {
                                 {filterInput1}
                             </div>
                             <div className='d-flex flex-row justify-content-start'>
-                                <FontAwesomeIcon icon={faPlus} color="#6519E1" />
+                                <FontAwesomeIcon icon={faPlus} color={PRIMARY_COLOR} />
                             </div>
                             <div className='d-flex flex-row justify-content-between'>
                                 <Button style={styles.filterButton2} onClick={(e) => setfilter2('Basic')}>Go to Basic Filters</Button>
@@ -965,7 +989,7 @@ const RFP = (props) => {
                             </th>
                             <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(1)}>
-                                    City&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                    Client&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
                                     show={sortModal === 1}
@@ -1174,7 +1198,7 @@ const RFP = (props) => {
                                         /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
                                     </div>
                                 </td>
-                                <td style={{ ...styles.tableCell, minWidth: "150px" }}>{e.City}</td>
+                                <td style={{ ...styles.tableCell, minWidth: "150px" }}>{e.Client}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "190px" }}>{e.Source}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "180px" }}>{formatDate(e.Start_Date)}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "180px" }}>
@@ -1222,7 +1246,7 @@ const RFP = (props) => {
                 </Button> : <></>}
                 <div style={{ ...styles.floatingContainerLine, marginLeft: "10px" }}></div>
                 <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
-                    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color="#6519E1" onClick={(e) => setselectedRfps([])} />
+                    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={(e) => setselectedRfps([])} />
                 </div>
             </div>
 
@@ -1231,14 +1255,17 @@ const RFP = (props) => {
                 show={show}
                 onHide={handleClose}
                 backdrop="static"
-                centered
-                size="xl"
-                keyboard={false}
+                style={styles.addModal}
+                dialogClassName="filter-dialog"
+                animation={false}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Add RFP</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={styles.addHeading}>Add New RFP</div>
+                    </div>
+                    <div><img onClick={handleClose} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
                     {
                         <RFPform
                             setRed={setred}
@@ -1248,7 +1275,6 @@ const RFP = (props) => {
                             apiCall={setCall}
                         />
                     }
-                </Modal.Body>
             </Modal>
 
             {/* Delete Modal */}
@@ -1287,14 +1313,17 @@ const RFP = (props) => {
                 show={showUpdate}
                 onHide={handleCloseUpdate}
                 backdrop="static"
-                centered
-                size="xl"
-                keyboard={false}
+                style={styles.addModal}
+                dialogClassName="filter-dialog"
+                animation={false}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Update RFP</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={styles.addHeading}>Update RFP</div>
+                    </div>
+                    <div><img onClick={handleCloseUpdate} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
                     {
                         <UpdateRFP
                             row={rowData}
@@ -1305,7 +1334,6 @@ const RFP = (props) => {
                             apiCall={setCall}
                         />
                     }
-                </Modal.Body>
             </Modal>
         </>
     )

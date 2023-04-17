@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Chart, Line } from 'react-chartjs-2'
-import { HOST, RFP_ACTION, RFP_TRENDING } from '../Constants/Constants'
+import { HOST, RFP_ACTION, RFP_TRENDING, PRIMARY_COLOR } from '../Constants/Constants'
 import LoadingSpinner from '../Loader/Loader'
 import pinnedActive from '../../Images/Pin icon_Active.svg'
 
@@ -35,7 +35,7 @@ const styles = {
         fontWeight: 500,
         fontSize: "14px",
         lineHeight: "20px",
-        color: "#6519E1"
+        color: PRIMARY_COLOR
     },
     trendingContainer2: {
         padding: "4px 8px",
@@ -255,7 +255,7 @@ const RFPCharts = (props) => {
             <p style={styles.trendingHeader}>Trending</p>
             <div className='row justify-content-between' style={{ width: "100%", marginLeft: "0px", marginRight: "0px" }}>
                 <div style={{ ...styles.trendingContainer, marginLeft: "0px" }} className='col p-0'>
-                    <p style={styles.trendingContainerHeading}>Cities</p>
+                    <p style={styles.trendingContainerHeading}>Clients</p>
                     {isLoading[0]
                         ? <LoadingSpinner />
                         : trending.City.map(e => {

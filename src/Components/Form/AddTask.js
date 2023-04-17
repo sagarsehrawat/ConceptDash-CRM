@@ -5,10 +5,29 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { HOST, GET_EMPLOYEENAMES, ADD_TASK, GET_PROJECT_NAMES, GET_RFP_NAMES, GET_PROPOSALS_NAMES } from "../Constants/Constants";
+import { HOST, GET_EMPLOYEENAMES, ADD_TASK, GET_PROJECT_NAMES, GET_RFP_NAMES, GET_PROPOSALS_NAMES, PRIMARY_COLOR } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
 
+
+const styles = {
+  nameHeading: {
+    height: "20px",
+    fontFamily: "'Roboto'",
+    fontStyle: "normal",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: "#70757A"
+  },
+  nameInput: {
+    width: "740px",
+    height: "32px",
+    border: "1px solid #EBE9F1",
+    borderRadius: "6px",
+    padding:6
+  }
+}
 function AddTask(props) {
   const [isLoading, setisLoading] = useState(false);
   const { setGreen, closeModal, setRed } = props;
@@ -169,8 +188,8 @@ function AddTask(props) {
     if (radio === "2") {
       return (
         <Form.Group as={Col}>
-          <Form.Label>Choose Project</Form.Label>
-          <Form.Select onChange={handleID}>
+          <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Choose Project</Form.Label>
+          <Form.Select style={styles.nameInput} onChange={handleID}>
             <option>Select Project</option>
             {projects?projects.map((e)=>(
               <option value={e.Project_ID}>{e.Project_Name}</option>
@@ -181,8 +200,8 @@ function AddTask(props) {
     } else if (radio === "3") {
       return (
         <Form.Group as={Col}>
-          <Form.Label>Choose Proposal</Form.Label>
-          <Form.Select onChange={handleID}>
+          <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Choose Proposal</Form.Label>
+          <Form.Select style={styles.nameInput} onChange={handleID}>
             <option>Select Proposal</option>
             {proposals?proposals.map((e)=>(
               <option value={e.Proposal_ID}>{e.Project_Name}</option>
@@ -193,8 +212,8 @@ function AddTask(props) {
     } else if (radio === "4") {
       return (
         <Form.Group as={Col}>
-          <Form.Label>Choose RFP</Form.Label>
-          <Form.Select onChange={handleID}>
+          <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Choose RFP</Form.Label>
+          <Form.Select style={styles.nameInput} onChange={handleID}>
             <option>Select RFP</option>
             {rfp?rfp.map((e)=>(
               <option value={e.RFP_ID}>{e.Project_Name}</option>
@@ -206,12 +225,16 @@ function AddTask(props) {
       return <></>;
     }
   };
-  return isLoading ? (
+  return(
+    <div style={{ marginLeft:'27px', marginTop:'20px', marginBottom:'20px'}}>
+   {isLoading ? (
     <LoadingSpinner />
   ) : (
-    <div>
-      <Form className="form-main" onSubmit={handleSubmit}>
-        <Row className="mb-4">
+    <>
+   
+      <Form className="form-main" onSubmit={handleSubmit} style={{marginTop:'0px', marginLeft:'0px', marginRight:'0px'}}>
+        <Row>
+            <Form.Label  style={styles.nameHeading}>Choose Task Type</Form.Label>
           <Form.Group onChange={radioChange}>
             <Form.Check
               value='General'
@@ -253,10 +276,11 @@ function AddTask(props) {
         <Row className="mb-4">
           {evaluateOptions()}
         </Row>
-        <Row className="mb-4">
+        <Row>
           <Form.Group as={Col}>
-            <Form.Label>Enter Task Name</Form.Label>
+            <Form.Label style={styles.nameHeading}>Enter Task Name</Form.Label>
             <Form.Control
+                style={styles.nameInput}
               name="title"
               placeholder="Task Name"
               onChange={handleChange}
@@ -265,10 +289,11 @@ function AddTask(props) {
           </Form.Group>
           
         </Row>
-        <Row className="mb-4">
+        <Row>
           <Form.Group as={Col}>
-            <Form.Label>Task Description</Form.Label>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Task Description</Form.Label>
             <Form.Control
+                style={styles.nameInput}
               name="description"
               as="textarea"
               rows={2}
@@ -282,16 +307,17 @@ function AddTask(props) {
           borderColor: '#EBE9F1',
           height: '1px',
         }}/>
-        <Row className="mb-4">
-          <Form.Label>Task Information</Form.Label>
+        <Row>
+          <Form.Label style={{...styles.nameHeading}}>Task Information</Form.Label>
         </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Task Owner</Form.Label>
+        <Row>
+          <Form.Group style={{width:'253px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'20px'}}>Task Owner</Form.Label>
             <Form.Select
               name="assignedTo"
               onChange={handleChange}
               required
+              style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}}
             >
               <option>Owner</option>
               {employees.length !== 0 ? (
@@ -303,12 +329,13 @@ function AddTask(props) {
               )}
             </Form.Select>
           </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Reviewd By</Form.Label>
+          <Form.Group style={{width:'253px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'20px'}}>Reviewd By</Form.Label>
             <Form.Select
               name="reviewedBy"
               onChange={handleChange}
               required
+              style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
             >
               <option>Reviewer</option>
               {employees.length !== 0 ? (
@@ -320,12 +347,13 @@ function AddTask(props) {
               )}
             </Form.Select>
           </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Task Priority</Form.Label>
+          <Form.Group style={{width:'253px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'20px'}}>Task Priority</Form.Label>
             <Form.Select
               name="priority"
               required
               onChange={handleChange}
+              style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}}
             >
               <option>Choose Priority</option>
               <option value="1">Super urgent</option>
@@ -335,36 +363,39 @@ function AddTask(props) {
             </Form.Select>
           </Form.Group>
         </Row>
-        <Row className="mb-4">
-        <Form.Group as={Col}>
-            <Form.Label>Start Date</Form.Label>
+        <Row>
+        <Form.Group style={{width:'253px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Start Date</Form.Label>
             <Form.Control
               name="startDate"
               type="date"
               onChange={handleChange}
               required
+                  style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
             />
           </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Due Date</Form.Label>
+          <Form.Group style={{width:'253px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Due Date</Form.Label>
             <Form.Control
               name="dueDate"
               type="date"
               onChange={handleChange}
               required
+                  style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
             />
           </Form.Group>
         </Row>
         
        
-        <Button
-          className="submit-btn"
-          variant="primary"
-          type="submit"
-          // onClick={handleSubmit}
-        >
-          Submit
-        </Button>
+        
+        <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
+            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+              Cancel
+            </Button>
+            <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
+              Add New Task
+            </Button>
+            </div>
       </Form>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -372,8 +403,9 @@ function AddTask(props) {
         </Modal.Header>
         <Modal.Body>Task Added Successfully</Modal.Body>
       </Modal>
-    </div>
-  );
+    
+  </>)}</div>
+  )
 }
 
 export default AddTask;

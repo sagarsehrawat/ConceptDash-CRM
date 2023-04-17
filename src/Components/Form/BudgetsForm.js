@@ -11,6 +11,7 @@ import {
   GET_DEPARTMENTS,
   GET_PROJECT_CATEGORIES,
   ADD_BUDGET,
+  PRIMARY_COLOR
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import AddCity from "./AddCity";
@@ -19,7 +20,25 @@ import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
-
+import plus from '../../Images/plus.svg'
+const styles = {
+  nameHeading: {
+    height: "20px",
+    fontFamily: "'Roboto'",
+    fontStyle: "normal",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: "#70757A"
+  },
+  nameInput: {
+    width: "740px",
+    height: "32px",
+    border: "1px solid #EBE9F1",
+    borderRadius: "6px",
+    padding:6
+  }
+}
 function BudgetsForm(props) {
   const [apiCallCity, setCallCity] = useState(0);
   const [green, setgreen] = useState(false);
@@ -42,6 +61,7 @@ function BudgetsForm(props) {
     budgetAmount: "",
     budgetYear: year,
     source: "",
+    serialNumber: ''
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -110,6 +130,7 @@ function BudgetsForm(props) {
           budgetAmount: form.budgetAmount,
           budgetYear: form.budgetYear,
           source: form.source,
+          serialNumber: form.serialNumber
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
@@ -145,15 +166,105 @@ function BudgetsForm(props) {
   const handleCloseCategoryForm = () => setShowCategoryForm(false);
   const handleShowCategoryForm = () => setShowCategoryForm(true);
   return (
-    <>
+    <div style={{ marginLeft:'27px', marginTop:'20px', marginBottom:'20px'}}>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
       {red === true ? <RedAlert setRed={setred} /> : <></>}
       {isLoading ? (
         <LoadingSpinner />
       ) : (
         <div>
-          <Form className="form-main" onSubmit={handleSubmit}>
-            <Row className="mb-4">
+          <Form className="form-main" onSubmit={handleSubmit} style={{marginTop:'0px', marginLeft:'0px', marginRight:'0px'}}>
+            <Row>
+            <Form.Group as={Col}>
+                <Form.Label style={styles.nameHeading}>Project Name</Form.Label>
+                <Form.Control
+                style={styles.nameInput}
+                  name="projectName"
+                  type="text"
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </Row>
+            <Row>
+            <Form.Group as={Col}>
+                <Form.Label style={{...styles.nameHeading,width:'740px', marginTop:'24px'}}>
+                  <div className="d-flex flex-row justify-content-between align-items-center">
+                    <div>City</div>
+                    <div style={{background:'#EBE9F1',borderRadius:'10px', width:'20px', textAlign:'center', cursor:'pointer'}} onClick={handleShowCityForm}><img alt="Add New City" src={plus} /></div>
+                  </div>
+                </Form.Label>
+                <Form.Select style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="city" required>
+                  <option value="">Select City</option>
+                  {cities.length > 0
+                    ? cities.map((e) => (
+                      <option selected={e.City === props.city} value={e.City_ID}>{e.City}</option>
+                    ))
+                    : ""}
+                </Form.Select>
+              </Form.Group>
+            </Row>
+            <Row>
+            <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Budget Amount</Form.Label>
+                <Form.Control
+                style={{...styles.nameInput, width:'360px'}}
+                  name="budgetAmount"
+                  type="number"
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Budget Category</Form.Label>
+                <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="budgetCategory">
+                  <option value="">Select Budget Category</option>
+                  <option value="Design">Design</option>
+                  <option value="Construction">Construction</option>
+                </Form.Select>
+              </Form.Group>
+              
+            </Row>
+
+            <Row>
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Department</Form.Label>
+                <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="dept" required>
+                  <option value="">Select Department</option>
+                  {depts.length > 0
+                    ? depts.map((e) => (
+                      <option value={e.Department_ID}>{e.Department}</option>
+                    ))
+                    : ""}
+                </Form.Select>
+              </Form.Group>
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Category</Form.Label>
+                <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="projectCat" required>
+                  <option value="">Select Project Category</option>
+                  {projectDepts.length > 0
+                    ? projectDepts.map((e) => (
+                      <option value={e.Project_Cat_ID}>
+                        {e.Project_Category}
+                      </option>
+                    ))
+                    : ""}
+                </Form.Select>
+              </Form.Group>
+              {/* <Form.Group as={Col}>
+                <Button
+                  style={{
+                    width: "100%",
+                    backgroundColor: "grey",
+                    border: "none",
+                  }}
+                  onClick={handleShowDeptForm}
+                >
+                  Add Department
+                </Button>
+              </Form.Group> */}
+            </Row>
+            {/* <Row className="mb-4">
               <Form.Group as={Col} controlId="formGridCity">
                 <Form.Select onChange={handleChange} name="city" required>
                   <option value="">Select City</option>
@@ -176,45 +287,11 @@ function BudgetsForm(props) {
                   Add City
                 </Button>
               </Form.Group>
-            </Row>
+            </Row> */}
 
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Select onChange={handleChange} name="dept" required>
-                  <option value="">Select Department</option>
-                  {depts.length > 0
-                    ? depts.map((e) => (
-                      <option value={e.Department_ID}>{e.Department}</option>
-                    ))
-                    : ""}
-                </Form.Select>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Button
-                  style={{
-                    width: "100%",
-                    backgroundColor: "grey",
-                    border: "none",
-                  }}
-                  onClick={handleShowDeptForm}
-                >
-                  Add Department
-                </Button>
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Select onChange={handleChange} name="projectCat" required>
-                  <option value="">Select Project Category</option>
-                  {projectDepts.length > 0
-                    ? projectDepts.map((e) => (
-                      <option value={e.Project_Cat_ID}>
-                        {e.Project_Category}
-                      </option>
-                    ))
-                    : ""}
-                </Form.Select>
-              </Form.Group>
+           
+            {/* <Row className="mb-4">
+              
               <Form.Group as={Col}>
                 <Button
                   style={{
@@ -227,38 +304,14 @@ function BudgetsForm(props) {
                   Add Project Category
                 </Button>
               </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Select onChange={handleChange} name="budgetCategory">
-                  <option value="">Select Budget Category</option>
-                  <option value="Design">Design</option>
-                  <option value="Construction">Construction</option>
-                </Form.Select>
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Project Name*</Form.Label>
-                <Form.Control
-                  name="projectName"
-                  type="text"
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Budget Amount*</Form.Label>
-                <Form.Control
-                  name="budgetAmount"
-                  type="number"
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Budget Year</Form.Label>
-                <Form.Select name="budgetYear" onChange={handleChange}>
+            </Row> */}
+            
+            <Row>
+              
+              
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Budget Year</Form.Label>
+                <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} name="budgetYear" onChange={handleChange}>
                   <option value={year-2}>{year-2}</option>
                   <option value={year-1}>{year-1}</option>
                   <option value={year}>{year}</option>
@@ -267,9 +320,9 @@ function BudgetsForm(props) {
                   <option value={year+3}>{year+3}</option>
                 </Form.Select>
               </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Source</Form.Label>
-                <Form.Select name="source" onChange={handleChange}>
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Source</Form.Label>
+                <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} name="source" onChange={handleChange}>
                   <option>Select Source</option>
                   <option value="Construct Connect">Construct Connect</option>
                   <option value="Bids and Tenders">Bids and Tenders</option>
@@ -279,9 +332,25 @@ function BudgetsForm(props) {
               </Form.Group>
             </Row>
 
-            <Button className="submit-btn" variant="primary" type="submit">
-              Submit
+            <Row>
+              <Form.Group style={{width:'380px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Serial Number</Form.Label>
+                <Form.Control
+                style={{...styles.nameInput, width:'360px'}}
+                  name="serialNumber"
+                  type="text"
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            </Row>
+            <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
+            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+              Cancel
             </Button>
+            <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
+              Add New Budget
+            </Button>
+            </div>
           </Form>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -359,7 +428,7 @@ function BudgetsForm(props) {
           </Modal>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

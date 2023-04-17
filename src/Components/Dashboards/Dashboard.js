@@ -13,6 +13,7 @@ import axios from "axios";
 import { Dropdown, Modal, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import AuthenticationContext from "../../Context/AuthContext";
+import tIcon from '../../Images/taskIcon.svg'
 import { Sidebar, Menu, MenuItem, useProSidebar, SubMenu } from "react-pro-sidebar";
 import { primaryColour } from "../Constants/styles";
 import dashboardActive from "../../Images/Dashboard Active state.svg";
@@ -66,7 +67,7 @@ import projectForm from '../../Images/projectForm.svg'
 import cross from '../../Images/cross.svg'
 import ProjectForm from "../Form/ProjectForm";
 import Privileges from '../Update/Privileges.js'
-import { GET_EMPLOYEE_PRIVILEGES, HOST } from "../Constants/Constants";
+import { GET_EMPLOYEE_PRIVILEGES, HOST, PRIMARY_COLOR } from "../Constants/Constants";
 
 
 const Dashboard = () => {
@@ -229,7 +230,7 @@ const Dashboard = () => {
       nonCollapsed: {
         width: "204px",
         height: "40px",
-        background: "#6519E1",
+        background: PRIMARY_COLOR,
         boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
         borderRadius: "5px",
         display: "flex",
@@ -242,7 +243,7 @@ const Dashboard = () => {
         gap: "10px",
         width: "66px",
         height: "40px",
-        background: "#6519E1",
+        background: PRIMARY_COLOR,
         boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
         borderRadius: "8px 0px 0px 8px",
         display: "flex",
@@ -406,7 +407,7 @@ const Dashboard = () => {
         >
           <NavDropdown title={<FontAwesomeIcon
             icon={faCirclePlus}
-            color={primaryColour}
+            color={PRIMARY_COLOR}
             style={mystyles.plusIcon}
           />} id="basic-nav-dropdown"
             className="plus-dropdown"
@@ -507,7 +508,7 @@ const Dashboard = () => {
             ? <>
               <p style={mystyles.branding.collapsed}><img src={T} /></p>
               <div style={mystyles.sidebarIconContainer.collapsed} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
-                <FontAwesomeIcon icon={faChevronRight} color={primaryColour} />
+                <FontAwesomeIcon icon={faChevronRight} color={PRIMARY_COLOR} />
               </div>
               <div style={{ marginTop: "18px" }}>
                 <div
@@ -789,7 +790,7 @@ const Dashboard = () => {
             : <>
               <p style={mystyles.branding.nonCollapsed}><img style={{ zIndex: 1 }} src={T} /><img style={{ position: 'absolute', zIndex: 2, marginTop: '10px', marginLeft: '-11px' }} src={askforce} /></p>
               <div style={mystyles.sidebarIconContainer.nonCollapsed} className='d-flex justify-content-center align-items-center' onClick={(e) => { setisCollapsed(!isCollapsed); collapseSidebar() }}>
-                <FontAwesomeIcon icon={faChevronLeft} color={primaryColour} />
+                <FontAwesomeIcon icon={faChevronLeft} color={PRIMARY_COLOR} />
               </div>
               <div style={mystyles.sidebarMenu}>
                 <div
@@ -1206,14 +1207,17 @@ const Dashboard = () => {
         show={taskShow}
         onHide={handleCloseTask}
         backdrop="static"
-        centered
-        size="xl"
-        keyboard={false}
+        style={mystyles.addModal}
+        dialogClassName="filter-dialog"
+        animation={false}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Task</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+        <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={mystyles.addHeading}>Add New Task</div>
+                    </div>
+                    <div><img onClick={handleCloseTask} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
           {
             <AddTask
               setRed={setred}
@@ -1223,7 +1227,6 @@ const Dashboard = () => {
               apiCall={setCall}
             />
           }
-        </Modal.Body>
       </Modal>
 
       {/* Add RFP Form Modal */}
@@ -1231,14 +1234,17 @@ const Dashboard = () => {
         show={rfpShow}
         onHide={handleCloseRFP}
         backdrop="static"
-        centered
-        size="xl"
-        keyboard={false}
+        style={mystyles.addModal}
+        dialogClassName="filter-dialog"
+        animation={false}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Add RFP</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+        <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={mystyles.addHeading}>Add New RFP</div>
+                    </div>
+                    <div><img onClick={handleCloseRFP} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
           {
             <RFPform
               setRed={setred}
@@ -1248,7 +1254,6 @@ const Dashboard = () => {
               apiCall={setCall}
             />
           }
-        </Modal.Body>
       </Modal>
 
       {/* Add Proposal Form Modal */}
@@ -1256,14 +1261,17 @@ const Dashboard = () => {
         show={proposalShow}
         onHide={handleCloseProposal}
         backdrop="static"
-        centered
-        size="xl"
-        keyboard={false}
+        style={mystyles.addModal}
+        dialogClassName="filter-dialog"
+        animation={false}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Add Proposal</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+        <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={mystyles.addHeading}>Add Proposal</div>
+                    </div>
+                    <div><img onClick={handleCloseProposal} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
           {
             <ProposalForm
               setRed={setred}
@@ -1273,7 +1281,6 @@ const Dashboard = () => {
               apiCall={setCall}
             />
           }
-        </Modal.Body>
       </Modal>
 
       {/* Add Project Form Modal */}

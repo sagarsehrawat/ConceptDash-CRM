@@ -9,6 +9,7 @@ import {
   GET_PROJECT_CATEGORIES,
   UPDATE_PROJECT,
   GET_CITIES,
+  PRIMARY_COLOR
 } from "../Constants/Constants";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -431,7 +432,7 @@ function UpdateProjectForm(props) {
             <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
               Cancel
             </Button>
-            <Button style={{backgroundColor:'#6519E1'}} type="submit">
+            <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
               Update project
             </Button>
             </div>
