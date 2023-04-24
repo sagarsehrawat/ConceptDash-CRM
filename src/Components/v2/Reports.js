@@ -113,7 +113,7 @@ function Reports(props) {
             marginTop: '36px'
           }
     }
-    const [radio, setradio] = useState("3");
+    const [radio, setradio] = useState("2");
     const radioChange = (e) => {
     setradio(e.target.id.toString());
   };
@@ -306,6 +306,7 @@ hr.map(e => {
               type="radio"
               name="group1"
               id="2"
+              defaultChecked
               label="Projects"
               style={{marginRight:'45px'}}
             />
@@ -315,7 +316,7 @@ hr.map(e => {
               type="radio"
               name="group1"
               id="3"
-              defaultChecked
+              
               label="Proposals"
               style={{marginRight:'45px'}}
             />

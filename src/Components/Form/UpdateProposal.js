@@ -15,6 +15,7 @@ import {
   UPDATE_PROPOSAL,
   PRIMARY_COLOR,
   GET_PROJECT_CATEGORIES,
+  GET_MANAGERS,
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import Select from "react-select";
@@ -137,6 +138,7 @@ function UpdateProposal(props) {
     const { name, value } = e.target;
     if (name === "dept") {
       setdept(value);
+      getProjectCategories(value)
     }
     if (name === "projectCat") {
       setcat(value);
@@ -205,6 +207,18 @@ function UpdateProposal(props) {
   const [companies, setcompanies] = useState([]);
   const [employees, setemployees] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
+  const getProjectCategories = async(e)=>{
+    await axios
+        .get(HOST + GET_PROJECT_CATEGORIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth"), id: e },
+        })
+        .then((res) => {
+          setprojectDepts(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
   useEffect(() => {
     setisLoading(true)
     const call = async () => {
@@ -231,7 +245,7 @@ function UpdateProposal(props) {
         });
 
       await axios
-        .get(HOST + GET_EMPLOYEENAMES, {
+        .get(HOST + GET_MANAGERS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
@@ -252,16 +266,7 @@ function UpdateProposal(props) {
           console.log(err);
         });
 
-      await axios
-        .get(HOST + GET_PROJECT_CATEGORIES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
-        })
-        .then((res) => {
-          setprojectDepts(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+     
       setisLoading(false)
     };
     call();

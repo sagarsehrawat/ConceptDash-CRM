@@ -43,6 +43,7 @@ import Reports from "./Reports";
 import AuthenticationContext from "../../Context/AuthContext";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
+import './Tasks.css'
 
 function Tasks(props) {
   const { isCollapsed } = props;
@@ -50,7 +51,7 @@ function Tasks(props) {
   const [apiCall, setCall] = useState(0);
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
-  const [details, setdetails] = useState([false, false, false, false, false, false])
+  const [details, setdetails] = useState([true, true, true, true, true, true])
   const [apiCall2, setCall2] = useState(0);
   const [task, settask] = useState(true);
 
@@ -154,6 +155,7 @@ function Tasks(props) {
       border: "1px solid #EBE9F1",
       borderRadius: "6px",
       cursor: "pointer",
+      fontSize: '14px'
     },
     dp1Text: {
       marginLeft: "5px",
@@ -227,8 +229,8 @@ function Tasks(props) {
     filterSubSubContainer: {
       display: "flex",
       flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
+      // alignItems: "center",
+      // justifyContent: "center",
       padding: "4px",
       gap: "10px",
       width: "120px",
@@ -557,6 +559,10 @@ function Tasks(props) {
   const [deleteID, setdeleteID] = useState('');
   const [idx, setidx] = useState('');
   const [updateTask, setupdateTask] = useState([]);
+  const handleEmployeeChange =(e)=>{
+    seteid(e.target.value);
+    setCall(apiCall+1);
+  }
   return (
     <div>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
@@ -689,29 +695,41 @@ function Tasks(props) {
                     </Button>
 
                     {privileges.includes('View Employee Tasks') ? (
-                      <div
+                      // <div
+                      //   className="d-flex flex-row"
+                      //   style={{
+                      //     ...styles.dropdown1,
+                      //     backgroundColor:"white",
+                      //   }}
+                      //   // onClick={openFilterModal}
+                      // >
+                        //  <img src={person} />
+                        //  <p style={styles.dp1Text}>
+                        //   My Tasks
+                        //   {filterSize() > 0 ? `/ ${filterSize()}` : ""}
+                        // </p>
+                        // {filterSize() > 0 ? (
+                        //   <></>
+                        // ) : (
+                        //   <FontAwesomeIcon
+                        //     icon={faChevronDown}
+                        //     color="#70757A"
+                        //   />
+                        // )} 
+                        <Form.Select 
                         className="d-flex flex-row"
                         style={{
                           ...styles.dropdown1,
-                          backgroundColor:
-                            filterSize() > 0 ? "#DBDBF4" : "white",
+                          backgroundColor:"white",
                         }}
-                        onClick={openFilterModal}
-                      >
-                        <img src={person} />
-                        <p style={styles.dp1Text}>
-                          My Tasks
-                          {filterSize() > 0 ? `/ ${filterSize()}` : ""}
-                        </p>
-                        {filterSize() > 0 ? (
-                          <></>
-                        ) : (
-                          <FontAwesomeIcon
-                            icon={faChevronDown}
-                            color="#70757A"
-                          />
-                        )}
-                      </div>
+                        onChange={handleEmployeeChange}
+                        >
+                          <option>Select Employee</option>
+                          {employees.map(e => (
+                            <option selected={e.Employee_ID===eid} value={e.Employee_ID}>{e.Full_Name===localStorage.getItem('employeeName')?'My Tasks':e.Full_Name}</option>
+                          ))}
+                        </Form.Select>
+                      // </div>
                     ) : (
                       <></>
                     )}
@@ -1031,7 +1049,7 @@ function Tasks(props) {
                       </div>
                     </Modal>
                   </div>
-                  <button style={styles.addButton} onClick={handleShow}>
+                  <button className="addButton" onClick={handleShow}>
                     <p style={styles.addButtonText}>+ Add New Task</p>
                   </button>
                 </div>

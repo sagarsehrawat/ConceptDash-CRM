@@ -9,7 +9,8 @@ import {
   GET_PROJECT_CATEGORIES,
   UPDATE_PROJECT,
   GET_CITIES,
-  PRIMARY_COLOR
+  PRIMARY_COLOR,
+  GET_MANAGERS
 } from "../Constants/Constants";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -77,7 +78,7 @@ function UpdateProjectForm(props) {
   useEffect(() => {
     const call = async () => {
       await axios
-        .get(HOST + GET_EMPLOYEENAMES, {
+        .get(HOST + GET_MANAGERS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
@@ -92,16 +93,6 @@ function UpdateProjectForm(props) {
         })
         .then((res) => {
           setdepts(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      await axios
-        .get(HOST + GET_PROJECT_CATEGORIES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
-        })
-        .then((res) => {
-          setcategories(res.data.res);
         })
         .catch((err) => {
           console.log(err);
@@ -143,6 +134,7 @@ function UpdateProjectForm(props) {
     }
     if (name === "dept") {
       setdept(value);
+      getProjectCategories(value)
     }
     if (name === "notes") {
       setnotes(value);
@@ -172,6 +164,18 @@ function UpdateProjectForm(props) {
     newForm[name] = value;
     setform(newForm);
   };
+  const getProjectCategories = async(e)=>{
+    await axios
+        .get(HOST + GET_PROJECT_CATEGORIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth"), id: e },
+        })
+        .then((res) => {
+          setcategories(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
   const handleSubmit = (e) => {
     setisLoading(true);
     e.preventDefault();

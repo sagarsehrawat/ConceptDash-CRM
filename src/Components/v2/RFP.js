@@ -22,7 +22,7 @@ import tIcon from '../../Images/taskIcon.svg'
 const RFP = (props) => {
     const { isCollapsed } = props
     const { privileges, setPrivileges } = useContext(AuthenticationContext)
-    console.log(privileges.includes("Add RFP"))
+    
     const [apiCall, setCall] = useState(0);
     const [green, setgreen] = useState(false);
     const [red, setred] = useState(false);
@@ -542,7 +542,7 @@ const RFP = (props) => {
             width: "780px",
             height: 'fit-content',
             left: "28vw",
-            marginTop: "10vh",
+            marginTop: "8vh",
             background: "#FFFFFF",
             boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
             borderRadius: "12px",

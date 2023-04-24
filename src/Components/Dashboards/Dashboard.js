@@ -104,6 +104,10 @@ const Dashboard = () => {
   const handleCloseProject = () => setprojectShow(false);
   const handleShowProject = () => setprojectShow(true);
 
+  const [showProfile, setshowProfile] = useState(false);
+  const handleCloseProfile = () => setshowProfile(false);
+  const handleShowProfile = () => setshowProfile(true);
+
   const mystyles = {
     topNavbar: {
       height: "56px",
@@ -341,6 +345,17 @@ const Dashboard = () => {
       lineHeight: "28px",
       color: "#0A0A0A"
     }
+    ,dpModal: {
+      position: "absolute",
+      width: "232px",
+      height: 'fit-content',
+      left: "83vw",
+      right: "1vw",
+      marginTop: "6.8vh",
+      background: "#FFFFFF",
+      boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+      // borderRadius: "12px",
+    },
   };
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
@@ -489,7 +504,7 @@ const Dashboard = () => {
           {/* <Nav.Link className="">
             <img src={notificationIcon} alt="Notification Icon" />
           </Nav.Link> */}
-          <Nav.Link className="">
+          <Nav.Link onClick={handleShowProfile}>
             <div
               style={mystyles.accountLabel}
               className="d-flex flex-row align-items-center"
@@ -500,6 +515,16 @@ const Dashboard = () => {
               </p>
             </div>
           </Nav.Link>
+          <Modal
+          show={showProfile}
+          onHide={handleCloseProfile}
+          // backdrop="static"
+          style={mystyles.dpModal}
+          dialogClassName="filter-dialog"
+          animation={false}
+          >
+            Hello
+          </Modal>
         </Navbar>
       </div>
       <div style={{ display: "flex", height: "100%", overflowY: "none" }}>

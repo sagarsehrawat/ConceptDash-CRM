@@ -13,7 +13,8 @@ import {
   GET_EMPLOYEENAMES,
   GET_BUDGET_NAMES,
   ADD_RFP,
-  PRIMARY_COLOR
+  PRIMARY_COLOR,
+  GET_MANAGERS
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import AddCity from "./AddCity";
@@ -70,6 +71,7 @@ function RFPform(props) {
     rfpNumber: "",
     // amount: "",
     client: "",
+    files: null
   });
   const [radio, setradio] = useState(false);
   const handleRadio = (e) => {
@@ -82,6 +84,17 @@ function RFPform(props) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     const newForm = form;
+    if(name==='files') {
+      
+      newForm[name] = e.target.files;
+      setform(newForm)
+      return;
+      // console.log(e.target.name, e.target.value, e.target.files[0])
+    }
+    if(name==='dept') {
+      getProjectCategories(value)
+    }
+    
     newForm[name] = value;
     setform(newForm);
   };
@@ -89,6 +102,18 @@ function RFPform(props) {
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   const [budgets, setbudgets] = useState([]);
+  const getProjectCategories = async(e)=>{
+    await axios
+        .get(HOST + GET_PROJECT_CATEGORIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth"), id: e },
+        })
+        .then((res) => {
+          setprojectDepts(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
   useEffect(() => {
     setisLoading(true);
     const call = async () => {
@@ -115,17 +140,7 @@ function RFPform(props) {
         });
 
       await axios
-        .get(HOST + GET_PROJECT_CATEGORIES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
-        })
-        .then((res) => {
-          setprojectDepts(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      await axios
-        .get(HOST + GET_EMPLOYEENAMES, {
+        .get(HOST + GET_MANAGERS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
@@ -149,27 +164,32 @@ function RFPform(props) {
     call();
   }, [apiCallCity]);
   const handleSubmit = (e) => {
-    setisLoading(true);
     e.preventDefault();
+    setisLoading(true);
     setIsSubmit(true);
+  
+    const formData = new FormData();
+    formData.append('departmentId', radio ? deptid : form.dept);
+    formData.append('projectCatId', radio ? pCategoryid : form.projectCat);
+    formData.append('projectManagerId', form.managerName);
+    formData.append('projectName', radio ? pName : form.projectName);
+    formData.append('startDate', form.startDate);
+    formData.append('submissionDate', form.submissionDate);
+    formData.append('rfpNumber', form.rfpNumber);
+    formData.append('source', form.source);
+    formData.append('client', form.client);
+  
+    for (let i = 0; i < form.files.length; i++) {
+      formData.append('files', form.files[i]);
+    }
+  
     axios
-      .post(
-        HOST + ADD_RFP,
-        {
-          departmentId: radio ? deptid : form.dept,
-          projectCatId: radio ? pCategoryid : form.projectCat,
-          projectManagerId: form.managerName,
-          projectName: radio ? pName : form.projectName,
-          // bidDate: form.bidDate,
-          startDate: form.startDate,
-          submissionDate: form.submissionDate,
-          rfpNumber: form.rfpNumber,
-          source: form.source,
-          // amount: radio ? amount : form.amount,
-          client: form.client,
+      .post(HOST + ADD_RFP, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          auth: 'Rose ' + localStorage.getItem('auth'),
         },
-        { headers: { auth: "Rose " + localStorage.getItem("auth") } }
-      )
+      })
       .then((res) => {
         setisLoading(false);
         if (res.data.success) {
@@ -186,6 +206,7 @@ function RFPform(props) {
         setRed(true);
       });
   };
+  
   const [budgetData, setbudgetData] = useState([]);
   const [pName, setpName] = useState("");
   const [dept, setdept] = useState("");
@@ -400,7 +421,6 @@ function RFPform(props) {
                     <Form.Control
                 style={{...styles.nameInput, width:'360px'}}
                       name="rfpNumber"
-                      type="number"
                       onChange={handleChange}
                       required
                     />
@@ -408,7 +428,7 @@ function RFPform(props) {
                   <Form.Group style={{width:'380px'}}>
                 <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Source</Form.Label>
                     <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} name="source" onChange={handleChange}>
-                      <option>Select Source</option>
+                      <option value=''>Select Source</option>
                       <option value="Construct Connect">Construct Connect</option>
                       <option value="Bids and Tenders">Bids and Tenders</option>
                       <option value="Biddingo">Biddingo</option>
@@ -424,6 +444,18 @@ function RFPform(props) {
                       required
                     />
                   </Form.Group> */}
+                </Row>
+                <Row>
+                <Form.Group style={{width:'380px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Relevent Files</Form.Label>
+                    <Form.Control
+                      style={{...styles.nameInput, width:'360px'}}
+                      name="files"
+                      onChange={handleChange}
+                      type="file"
+                      multiple
+                    />
+                  </Form.Group>
                 </Row>
 
                 {/* <Row className="mb-4">
@@ -558,7 +590,6 @@ function RFPform(props) {
                         <Form.Control
                         style={{...styles.nameInput, width:'360px'}}
                           name="rfpNumber"
-                          type="number"
                           onChange={handleChange}
                         />
                       </Form.Group>

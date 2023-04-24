@@ -15,7 +15,8 @@ import {
   ADD_PROPOSAL,
   GET_RFP_ID,
   GET_PROJECT_CATEGORIES,
-  PRIMARY_COLOR
+  PRIMARY_COLOR,
+  GET_MANAGERS
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import Select from "react-select";
@@ -91,6 +92,9 @@ function ProposalForm(props) {
   const [companies, setcompanies] = useState([]);
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if(name==='dept') {
+      getProjectCategories(value)
+    }
     const newForm = form;
     newForm[name] = value;
     setform(newForm);
@@ -99,6 +103,18 @@ function ProposalForm(props) {
   const [depts, setdepts] = useState([]);
   const [rfps, setrfps] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
+  const getProjectCategories = async(e)=>{
+    await axios
+        .get(HOST + GET_PROJECT_CATEGORIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth"), id: e },
+        })
+        .then((res) => {
+          setprojectDepts(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
   useEffect(() => {
     setisLoading(true);
     const call = async () => {
@@ -125,7 +141,7 @@ function ProposalForm(props) {
         });
 
       await axios
-        .get(HOST + GET_EMPLOYEENAMES, {
+        .get(HOST + GET_MANAGERS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
@@ -156,16 +172,7 @@ function ProposalForm(props) {
         .catch((err) => {
           console.log(err);
         });
-      await axios
-        .get(HOST + GET_PROJECT_CATEGORIES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
-        })
-        .then((res) => {
-          setprojectDepts(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      
       setisLoading(false);
     };
     call();

@@ -177,4 +177,4 @@ export const GET_PAGE_REPORT = '/api/get/page/reports'
 //Google APIs
 export const GET_GOOGLE_DRIVE_URL = '/google-api/get/fileLink'
 
-export const PRIMARY_COLOR = '#6519E1'
+export const PRIMARY_COLOR = '#8361FE'

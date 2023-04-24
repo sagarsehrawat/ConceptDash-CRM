@@ -1,0 +1,50 @@
+
+
+
+.addButton:hover {
+    box-sizing:border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+    width: 151px;
+    height: 40px;
+    background: linear-gradient(90.33deg, #6519E1 22.6%, rgba(101, 25, 225, 0.858205) 49.12%, rgba(101, 25, 225, 0.685567) 81.4%, rgba(101, 25, 225, 0.576297) 108.5%, rgba(139, 110, 188, 0.48) 134.69%);
+    border: 1px solid #6519E1;
+    box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25);
+    border-radius: 5px;
+  }
+
+  .addButton:active {
+    box-sizing:border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+    width: 151px;
+    height: 40px;
+    background: #400C96;
+    border: 1px solid #6519E1;
+    box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25);
+    border-radius: 5px;
+  }
+
+  .addButton {
+    box-sizing:border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+    width: 151px;
+    height: 40px;
+    background:#8361FE;
+    border: 1px solid #6519E1;
+    box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25);
+    border-radius: 5px;
+  }

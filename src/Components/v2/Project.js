@@ -602,6 +602,30 @@ const Project = (props) => {
     useEffect(() => {
         setIsLoading2([true, true, true, true, true, false])
         const call = async () => {
+            await axios
+                .get(HOST + PROJECT_CHART, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    chart: "Status",
+                },
+                })
+                .then((res) => {
+                    const arr = res.data.res;
+                    let p = projectCount;
+                    let sum = 0;
+                    arr.map((e) => {
+                    //   if (e.Status === null) p[] = e.Count;
+                      if (e.Status === "Ongoing") p['Ongoing'] = e.Count;
+                      if (e.Status === "Not Started Yet") p[3] = e.Count;
+                      if (e.Status === "Completed") p['Completed'] = e.Count;
+                      sum+=e.Count;
+                    });
+                    p['Total'] = sum
+                    setprojectCount(p);
+                })
+                .catch((err) => {
+                console.error("Error fetching chart data: ", err);
+                });
             // await axios
             //     .get(HOST + GET_PROPOSAL_COUNT, {
             //         headers: {
@@ -670,30 +694,7 @@ const Project = (props) => {
                     console.log(err);
                 });
 
-            await axios
-                .get(HOST + PROJECT_CHART, {
-                headers: {
-                    auth: "Rose " + localStorage.getItem("auth"),
-                    chart: "Status",
-                },
-                })
-                .then((res) => {
-                    const arr = res.data.res;
-                    let p = projectCount;
-                    let sum = 0;
-                    arr.map((e) => {
-                    //   if (e.Status === null) p[] = e.Count;
-                      if (e.Status === "Ongoing") p['Ongoing'] = e.Count;
-                      if (e.Status === "Not Started Yet") p[3] = e.Count;
-                      if (e.Status === "Completed") p['Completed'] = e.Count;
-                      sum+=e.Count;
-                    });
-                    p['Total'] = sum
-                    setprojectCount(p);
-                })
-                .catch((err) => {
-                console.error("Error fetching chart data: ", err);
-                });
+            
         }
         call()
     }, [])

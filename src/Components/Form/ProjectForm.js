@@ -9,7 +9,8 @@ import {
   GET_PROJECT_CATEGORIES,
   ADD_PROJECT,
   GET_CITIES,
-  PRIMARY_COLOR
+  PRIMARY_COLOR,
+  GET_MANAGERS
 } from "../Constants/Constants";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -64,7 +65,7 @@ function ProjectForm(props) {
     setisLoading(true);
     const call = async () => {
       await axios
-        .get(HOST + GET_EMPLOYEENAMES, {
+        .get(HOST + GET_MANAGERS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
@@ -93,20 +94,12 @@ function ProjectForm(props) {
         .catch((err) => {
           console.log(err);
         });
-      await axios
-        .get(HOST + GET_PROJECT_CATEGORIES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
-        })
-        .then((res) => {
-          setcategories(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      
       setisLoading(false);
     };
     call();
   }, [apiCallCity]);
+  
   const [form, setform] = useState({
     projectName: "",
     dueDate: "",
@@ -123,10 +116,25 @@ function ProjectForm(props) {
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if(name==='dept') {
+      getProjectCategories(value)
+    }
     const newForm = form;
     newForm[name] = value;
     setform(newForm);
   };
+  const getProjectCategories = async(e)=>{
+    await axios
+        .get(HOST + GET_PROJECT_CATEGORIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth"), id: e },
+        })
+        .then((res) => {
+          setcategories(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
   const date = new Date();
   let day = date.getDate();
   let month = date.getMonth() + 1;

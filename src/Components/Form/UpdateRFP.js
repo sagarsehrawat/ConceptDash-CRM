@@ -12,7 +12,8 @@ import {
   GET_PROJECT_CATEGORIES,
   GET_EMPLOYEENAMES,
   UPDATE_RFP,
-  PRIMARY_COLOR
+  PRIMARY_COLOR,
+  GET_MANAGERS
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
@@ -70,19 +71,9 @@ function UpdateRFP(props) {
         .catch((err) => {
           console.log(err);
         });
-      await axios
-        .get(HOST + GET_PROJECT_CATEGORIES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
-        })
-        .then((res) => {
-          setprojectDepts(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
 
       await axios
-        .get(HOST + GET_EMPLOYEENAMES, {
+        .get(HOST + GET_MANAGERS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
@@ -131,6 +122,7 @@ function UpdateRFP(props) {
     console.log(value);
     if (name === "dept") {
       setdept(value);
+      getProjectCategories(value)
     }
     if (name === "projectCat") {
       setprojectCat(value);
@@ -163,6 +155,18 @@ function UpdateRFP(props) {
     newForm[name] = value;
     setform(newForm);
   };
+  const getProjectCategories = async(e)=>{
+    await axios
+        .get(HOST + GET_PROJECT_CATEGORIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth"), id: e },
+        })
+        .then((res) => {
+          setprojectDepts(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
   const handleSubmit = (e) => {
     setisLoading(true);
     e.preventDefault();
