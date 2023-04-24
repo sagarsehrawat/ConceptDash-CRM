@@ -71,7 +71,8 @@ function RFPform(props) {
     rfpNumber: "",
     // amount: "",
     client: "",
-    files: null
+    files: null,
+    source: ''
   });
   const [radio, setradio] = useState(false);
   const handleRadio = (e) => {
@@ -85,11 +86,9 @@ function RFPform(props) {
     const { name, value } = e.target;
     const newForm = form;
     if(name==='files') {
-      
       newForm[name] = e.target.files;
       setform(newForm)
       return;
-      // console.log(e.target.name, e.target.value, e.target.files[0])
     }
     if(name==='dept') {
       getProjectCategories(value)
@@ -318,7 +317,7 @@ function RFPform(props) {
                   </Form.Group>
                   <Form.Group style={{width:'380px'}}>
                 <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Category</Form.Label>
-                    <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="projectCat" required>
+                    <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="projectCat">
                       <option value="">Select Project Category</option>
                       {projectDepts.length > 0
                         ? projectDepts.map((e) => (
@@ -422,7 +421,7 @@ function RFPform(props) {
                 style={{...styles.nameInput, width:'360px'}}
                       name="rfpNumber"
                       onChange={handleChange}
-                      required
+                      
                     />
                   </Form.Group>
                   <Form.Group style={{width:'380px'}}>
