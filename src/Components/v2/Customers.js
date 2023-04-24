@@ -15,6 +15,7 @@ import {
   GET_PROJECT_CATEGORIES,
   GET_RFP_COUNT,
   HOST,
+  PRIMARY_COLOR,
 } from "../Constants/Constants";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -103,7 +104,7 @@ function Customers(props) {
       gap: "8px",
       width: "187px",
       height: "40px",
-      background: "#6519E1",
+      background: PRIMARY_COLOR,
       border: "1px solid #6519E1",
       boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
       borderRadius: "5px",
@@ -187,7 +188,7 @@ function Customers(props) {
       fontWeight: 500,
       fontSize: "18px",
       lineHeight: "28px",
-      // color: "#6519E1"
+      // color: PRIMARY_COLOR
     },
     view: {
       width: "119px",

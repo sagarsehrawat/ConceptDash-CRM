@@ -12,7 +12,7 @@ import Delete from '../../Images/Delete.svg'
 import editD from '../../Images/edit-disabled.svg'
 import cross from '../../Images/cross.svg'
 import axios from 'axios'
-import { DELETE_PROJECT, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_PROJECTS, GET_PROJECT_CATEGORIES, HOST, PROJECT_CHART } from '../Constants/Constants'
+import {PRIMARY_COLOR,  DELETE_PROJECT, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_PROJECTS, GET_PROJECT_CATEGORIES, HOST, PROJECT_CHART } from '../Constants/Constants'
 import moment from 'moment'
 import AddProject from '../Form/AddProject'
 import UpdateProjectForm from '../Form/UpdateProjectForm'
@@ -109,7 +109,7 @@ const Project = (props) => {
             gap: "8px",
             width: "177px",
             height: "40px",
-            background: "#6519E1",
+            background: PRIMARY_COLOR,
             border: "1px solid #6519E1",
             boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
             borderRadius: "5px",
@@ -325,7 +325,7 @@ const Project = (props) => {
             gap: "10px",
             width: "56px",
             height: "28px",
-            background: "#6519E1",
+            background: PRIMARY_COLOR,
             border: "1px solid #6519E1",
             boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
             borderRadius: "6px",
@@ -481,7 +481,7 @@ const Project = (props) => {
             fontSize: "14px",
             lineHeight: "20px",
             textAlign: "center",
-            color: "#6519E1",
+            color: PRIMARY_COLOR,
             margin: "0px"
         },
         page: {
@@ -517,7 +517,7 @@ const Project = (props) => {
             fontWeight: 500,
             fontSize: "24px",
             lineHeight: "36px",
-            color: "#6519E1",
+            color: PRIMARY_COLOR,
             display: "inline-block"
         },
         floatingContainerText2: {
@@ -602,6 +602,30 @@ const Project = (props) => {
     useEffect(() => {
         setIsLoading2([true, true, true, true, true, false])
         const call = async () => {
+            await axios
+                .get(HOST + PROJECT_CHART, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    chart: "Status",
+                },
+                })
+                .then((res) => {
+                    const arr = res.data.res;
+                    let p = projectCount;
+                    let sum = 0;
+                    arr.map((e) => {
+                    //   if (e.Status === null) p[] = e.Count;
+                      if (e.Status === "Ongoing") p['Ongoing'] = e.Count;
+                      if (e.Status === "Not Started Yet") p[3] = e.Count;
+                      if (e.Status === "Completed") p['Completed'] = e.Count;
+                      sum+=e.Count;
+                    });
+                    p['Total'] = sum
+                    setprojectCount(p);
+                })
+                .catch((err) => {
+                console.error("Error fetching chart data: ", err);
+                });
             // await axios
             //     .get(HOST + GET_PROPOSAL_COUNT, {
             //         headers: {
@@ -670,30 +694,7 @@ const Project = (props) => {
                     console.log(err);
                 });
 
-            await axios
-                .get(HOST + PROJECT_CHART, {
-                headers: {
-                    auth: "Rose " + localStorage.getItem("auth"),
-                    chart: "Status",
-                },
-                })
-                .then((res) => {
-                    const arr = res.data.res;
-                    let p = projectCount;
-                    let sum = 0;
-                    arr.map((e) => {
-                    //   if (e.Status === null) p[] = e.Count;
-                      if (e.Status === "Ongoing") p['Ongoing'] = e.Count;
-                      if (e.Status === "Not Started Yet") p[3] = e.Count;
-                      if (e.Status === "Completed") p['Completed'] = e.Count;
-                      sum+=e.Count;
-                    });
-                    p['Total'] = sum
-                    setprojectCount(p);
-                })
-                .catch((err) => {
-                console.error("Error fetching chart data: ", err);
-                });
+            
         }
         call()
     }, [])
@@ -940,8 +941,8 @@ const Project = (props) => {
                         <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
                             <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
                             <div className='d-flex align-items-center'>
-                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => {setfilter({ dept: [], cat: [], city: [], manager: [] }); setprevFilter({ dept: [], cat: [], city: [], manager: [] }); setCall(apiCall+1); setfilterModal(false);}}>Clear All</Button>
-                                <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeFilterModal} />
+                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => {setfilter({ dept: [], cat: [], city: [], manager: [] }); setprevFilter({ dept: [], cat: [], city: [], manager: [] }); setCall(apiCall+1); setfilterModal(false);}}>Clear All</Button>
+                                <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={closeFilterModal} />
                             </div>
                         </div>
                         <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "20px", marginRight: "20px" }}>
@@ -1001,15 +1002,15 @@ const Project = (props) => {
                             <div className='d-flex flex-row justify-content-between align-items-center'>
                                 <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
                                 <div className='d-flex align-items-center'>
-                                    <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: "#6519E1", marginRight: "32px" }} disabled={filter.cat.length === 0 && filter.dept.length === 0 && filter.source.length === 0 && filter.city.length === 0 && filter.manager.length === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [] })}>Clear All</Button>
-                                    <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color="#6519E1" onClick={closeFilterModal} />
+                                    <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }} disabled={filter.cat.length === 0 && filter.dept.length === 0 && filter.source.length === 0 && filter.city.length === 0 && filter.manager.length === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [] })}>Clear All</Button>
+                                    <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={closeFilterModal} />
                                 </div>
                             </div>
                             <div className='d-flex flex-row justify-content-between'>
                                 <p style={styles.whereText}>WHERE</p>
                             </div>
                             <div className='d-flex flex-row justify-content-start'>
-                                <FontAwesomeIcon icon={faPlus} color="#6519E1" />
+                                <FontAwesomeIcon icon={faPlus} color={PRIMARY_COLOR} />
                             </div>
                             <div className='d-flex flex-row justify-content-between'>
                                 <Button style={styles.filterButton2} onClick={(e) => setfilter2('Basic')}>Go to Basic Filters</Button>
@@ -1318,7 +1319,7 @@ const Project = (props) => {
                 </Button> : <></>}
                 <div style={{ ...styles.floatingContainerLine, marginLeft: "10px" }}></div>
                 <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "40px" }}>
-                    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color="#6519E1" onClick={(e) => setselectedProjects([])} />
+                    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={(e) => setselectedProjects([])} />
                 </div>
             </div>
 

@@ -16,6 +16,7 @@ import {
   GET_PROPOSAL_STATUS,
   GET_PROPOSAL_MANAGER,
   GET_PROPOSAL_CITY,
+  PRIMARY_COLOR
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import pinnedActive from "../../Images/Pin icon_Active.svg";
@@ -64,7 +65,7 @@ const styles = {
     fontWeight: 500,
     fontSize: "14px",
     lineHeight: "20px",
-    color: "#6519E1",
+    color: PRIMARY_COLOR,
   },
   trendingContainer2: {
     padding: "4px 8px",

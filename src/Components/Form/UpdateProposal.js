@@ -13,12 +13,31 @@ import {
   GET_EMPLOYEENAMES,
   GET_COMPANY_NAMES,
   UPDATE_PROPOSAL,
+  PRIMARY_COLOR,
   GET_PROJECT_CATEGORIES,
+  GET_MANAGERS,
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import Select from "react-select";
 import LoadingSpinner from "../Loader/Loader";
-
+const styles = {
+  nameHeading: {
+    height: "20px",
+    fontFamily: "'Roboto'",
+    fontStyle: "normal",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: "#70757A"
+  },
+  nameInput: {
+    width: "740px",
+    height: "32px",
+    border: "1px solid #EBE9F1",
+    borderRadius: "6px",
+    padding:6
+  }
+}
 function UpdateProposal(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props;
   const [isSubmit, setIsSubmit] = useState(false);
@@ -119,6 +138,7 @@ function UpdateProposal(props) {
     const { name, value } = e.target;
     if (name === "dept") {
       setdept(value);
+      getProjectCategories(value)
     }
     if (name === "projectCat") {
       setcat(value);
@@ -187,6 +207,18 @@ function UpdateProposal(props) {
   const [companies, setcompanies] = useState([]);
   const [employees, setemployees] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
+  const getProjectCategories = async(e)=>{
+    await axios
+        .get(HOST + GET_PROJECT_CATEGORIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth"), id: e },
+        })
+        .then((res) => {
+          setprojectDepts(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
   useEffect(() => {
     setisLoading(true)
     const call = async () => {
@@ -213,7 +245,7 @@ function UpdateProposal(props) {
         });
 
       await axios
-        .get(HOST + GET_EMPLOYEENAMES, {
+        .get(HOST + GET_MANAGERS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
@@ -234,16 +266,7 @@ function UpdateProposal(props) {
           console.log(err);
         });
 
-      await axios
-        .get(HOST + GET_PROJECT_CATEGORIES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
-        })
-        .then((res) => {
-          setprojectDepts(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+     
       setisLoading(false)
     };
     call();
@@ -326,12 +349,44 @@ function UpdateProposal(props) {
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div>
-          <Form className="form-main">
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Department</Form.Label>
+        <div style={{ marginLeft:'27px', marginTop:'20px', marginBottom:'20px'}}>
+          <Form className="form-main" onSubmit={handleSubmit} style={{marginTop:'0px', marginLeft:'0px', marginRight:'0px'}}>
+            <Row>
+            <Form.Group as={Col}>
+            <Form.Label style={styles.nameHeading}>Project Name</Form.Label>
+                <Form.Control
+              style={styles.nameInput}
+                  value={pName}
+                  name="projectName"
+                  type="text"
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group as={Col} controlId="formGridCity">
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>City</Form.Label>
                 <Form.Select
+                style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}}
+                  onChange={handleChange}
+                  name="city"
+                >
+                  <option value="">Select City</option>
+                  {cities.length > 0
+                    ? cities.map((e) => (
+                      <option value={e.City_ID} selected={e.City === citi}>
+                        {e.City}
+                      </option>
+                    ))
+                    : ""}
+                </Form.Select>
+              </Form.Group>
+            </Row>
+            <Row>
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Department</Form.Label>
+                <Form.Select
+                style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
                   onChange={handleChange}
                   name="dept"
                 >
@@ -348,9 +403,10 @@ function UpdateProposal(props) {
                     : ""}
                 </Form.Select>
               </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Project Category</Form.Label>
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Category</Form.Label>
                 <Form.Select
+                style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
                   onChange={handleChange}
                   name="projectCat"
                 >
@@ -369,10 +425,11 @@ function UpdateProposal(props) {
               </Form.Group>
             </Row>
 
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Status</Form.Label>
+            <Row>
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Status</Form.Label>
                 <Form.Select
+                style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
                   defaultValue={props.row.Status}
                   name="status"
                   onChange={handleChange}
@@ -382,9 +439,10 @@ function UpdateProposal(props) {
                   <option value="Lost">Lost</option>
                 </Form.Select>
               </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Project Manager</Form.Label>
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Manager</Form.Label>
                 <Form.Select
+                style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
                   name="managerName"
                   onChange={handleChange}
                   required
@@ -404,38 +462,33 @@ function UpdateProposal(props) {
                   )}
                 </Form.Select>
               </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Project Name</Form.Label>
-                <Form.Control
-                  value={pName}
-                  name="projectName"
-                  type="text"
-                  onChange={handleChange}
-                />
-              </Form.Group>
+             
             </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Question Deadline</Form.Label>
+            <Row>
+              <Form.Group style={{width:'253px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Question Deadline</Form.Label>
                 <Form.Control
+                        style={{...styles.nameInput, width:'233px'}}
                   value={qDeadline}
                   name="qDeadline"
                   onChange={handleChange}
                   type="date"
                 />
               </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Closing Deadline</Form.Label>
+              <Form.Group style={{width:'253px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Closing Deadline</Form.Label>
                 <Form.Control
+                        style={{...styles.nameInput, width:'234px'}}
                   value={cDeadline}
                   name="cDeadline"
                   onChange={handleChange}
                   type="date"
                 />
               </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Result Date</Form.Label>
+              <Form.Group style={{width:'253px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Result Date</Form.Label>
                 <Form.Control
+                        style={{...styles.nameInput, width:'233px'}}
                   value={rDate}
                   name="resultDate"
                   onChange={handleChange}
@@ -444,27 +497,10 @@ function UpdateProposal(props) {
               </Form.Group>
             </Row>
 
-            <Row className="mb-4">
-              <Form.Group as={Col} controlId="formGridCity">
-                <Form.Label>City</Form.Label>
-                <Form.Select
-                  onChange={handleChange}
-                  name="city"
-                >
-                  <option value="">Select City</option>
-                  {cities.length > 0
-                    ? cities.map((e) => (
-                      <option value={e.City_ID} selected={e.City === citi}>
-                        {e.City}
-                      </option>
-                    ))
-                    : ""}
-                </Form.Select>
-              </Form.Group>
-            </Row>
-            <Row className="mb-4">
-              <Form.Group as={Col}>
-                <Form.Label>Team Members</Form.Label>
+            
+            <Row>
+              <Form.Group style={{width:'755px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Team Members</Form.Label>
                 <Select
                   isMulti
                   defaultValue={members}
@@ -479,19 +515,21 @@ function UpdateProposal(props) {
             </Row>
             {status === "Lost"
               ? <>
-                <Row className="mb-4">
-                  <Form.Group as={Col}>
-                    <Form.Label>Design Price</Form.Label>
+                <Row>
+                  <Form.Group style={{width:'380px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Design Price</Form.Label>
                     <Form.Control
+                    style={{...styles.nameInput, width:'360px'}}
                       value={dPrice}
                       name="dPrice"
                       type="number"
                       onChange={handleChange}
                     />
                   </Form.Group>
-                  <Form.Group as={Col}>
-                    <Form.Label>Provisional Items</Form.Label>
+                  <Form.Group style={{width:'380px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Provisional Items</Form.Label>
                     <Form.Control
+                    style={{...styles.nameInput, width:'360px'}}
                       value={provisionalItems}
                       name="provisionalItems"
                       type="text"
@@ -500,10 +538,11 @@ function UpdateProposal(props) {
                     />
                   </Form.Group>
                 </Row>
-                <Row className="mb-4">
-                  <Form.Group as={Col}>
-                    <Form.Label>Admin Price</Form.Label>
+                <Row>
+                  <Form.Group style={{width:'253px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Admin Price</Form.Label>
                     <Form.Control
+                    style={{...styles.nameInput, width:'233px'}}
                       value={adminPrice}
                       name="adminPrice"
                       type="number"
@@ -511,9 +550,10 @@ function UpdateProposal(props) {
                       onChange={handleChange}
                     />
                   </Form.Group>
-                  <Form.Group as={Col}>
-                    <Form.Label>Consultant Price</Form.Label>
+                  <Form.Group style={{width:'253px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Consultant Price</Form.Label>
                     <Form.Control
+                    style={{...styles.nameInput, width:'233px'}}
                       value={consultantPrice}
                       name="consultantPrice"
                       type="number"
@@ -521,9 +561,10 @@ function UpdateProposal(props) {
                       onChange={handleChange}
                     />
                   </Form.Group>
-                  <Form.Group as={Col}>
-                    <Form.Label>Total Bid</Form.Label>
+                  <Form.Group style={{width:'253px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Total Bid</Form.Label>
                     <Form.Control
+                    style={{...styles.nameInput, width:'233px'}}
                       value={totalBid}
                       name="totalBid"
                       type="number"
@@ -532,9 +573,9 @@ function UpdateProposal(props) {
                     />
                   </Form.Group>
                 </Row>
-                <Row className="mb-4">
-                  <Form.Group as={Col}>
-                    <Form.Label>Plan Takers</Form.Label>
+                <Row>
+                  <Form.Group style={{width:'250px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Plan Takers</Form.Label>
                     <Select
                       isMulti
                       defaultValue={planTakersComapnies}
@@ -544,8 +585,8 @@ function UpdateProposal(props) {
                       placeholder="Plan Takers"
                     ></Select>
                   </Form.Group>
-                  <Form.Group as={Col}>
-                    <Form.Label>Bidders</Form.Label>
+                  <Form.Group style={{width:'250px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Bidders</Form.Label>
                     <Select
                       isMulti
                       defaultValue={bidderComapnies}
@@ -555,8 +596,8 @@ function UpdateProposal(props) {
                       placeholder="Bidders"
                     ></Select>
                   </Form.Group>
-                  <Form.Group as={Col}>
-                    <Form.Label>Bidder Price</Form.Label>
+                  <Form.Group style={{width:'250px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Bidder Price</Form.Label>
                     <Form.Control
                       value={bidderPrice}
                       name="bidderPrice"
@@ -566,10 +607,11 @@ function UpdateProposal(props) {
                     />
                   </Form.Group>
                 </Row>
-                <Row className="mb-4">
-                  <Form.Group as={Col}>
-                    <Form.Label>Winning Price</Form.Label>
+                <Row>
+                  <Form.Group style={{width:'380px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Winning Price</Form.Label>
                     <Form.Control
+                    style={{...styles.nameInput, width:'360px'}}
                       value={winningPrice}
                       name="winningPrice"
                       type="number"
@@ -577,9 +619,10 @@ function UpdateProposal(props) {
                       onChange={handleChange}
                     />
                   </Form.Group>
-                  <Form.Group as={Col}>
-                    <Form.Label>Winning Bider</Form.Label>
+                  <Form.Group style={{width:'380px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Winning Bider</Form.Label>
                     <Form.Select
+                    style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
                       value={winningBidder}
                       onChange={handleChange}
                       name="winningBidder"
@@ -593,15 +636,14 @@ function UpdateProposal(props) {
                 </Row>
               </>
               : <></>}
-            <Button
-              className="submit-btn"
-              variant="primary"
-              type="submit"
-              style={{}}
-              onClick={handleSubmit}
-            >
-              Submit
+            <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
+            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+              Cancel
             </Button>
+            <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
+              Update Proposal
+            </Button>
+            </div>
           </Form>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>

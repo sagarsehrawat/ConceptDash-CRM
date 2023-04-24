@@ -14,6 +14,8 @@ import edit from "../../Images/Editor.svg";
 import del from "../../Images/Delete.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from 'moment'
+import cross from '../../Images/cross.svg'
+import tIcon from '../../Images/taskIcon.svg'
 import {
   faArrowDown,
   faArrowsUpDown,
@@ -32,7 +34,7 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button, Form, Modal } from "react-bootstrap";
-import { DELETE_TASK, GET_EMPLOYEENAMES, GET_PAGE_TASKS, HOST, UPDATE_TASK_STATUS } from "../Constants/Constants";
+import { DELETE_TASK, GET_EMPLOYEENAMES, GET_PAGE_TASKS, HOST, UPDATE_TASK_STATUS, PRIMARY_COLOR } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import AddTask from "../Form/AddTask";
 import UpdateTask from "../Form/UpdateTask";
@@ -41,6 +43,7 @@ import Reports from "./Reports";
 import AuthenticationContext from "../../Context/AuthContext";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
+import './Tasks.css'
 
 function Tasks(props) {
   const { isCollapsed } = props;
@@ -48,7 +51,7 @@ function Tasks(props) {
   const [apiCall, setCall] = useState(0);
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
-  const [details, setdetails] = useState([false, false, false, false, false, false])
+  const [details, setdetails] = useState([true, true, true, true, true, true])
   const [apiCall2, setCall2] = useState(0);
   const [task, settask] = useState(true);
 
@@ -118,7 +121,7 @@ function Tasks(props) {
       gap: "8px",
       width: "151px",
       height: "40px",
-      background: "#6519E1",
+      background: PRIMARY_COLOR,
       border: "1px solid #6519E1",
       boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
       borderRadius: "5px",
@@ -152,6 +155,7 @@ function Tasks(props) {
       border: "1px solid #EBE9F1",
       borderRadius: "6px",
       cursor: "pointer",
+      fontSize: '14px'
     },
     dp1Text: {
       marginLeft: "5px",
@@ -225,8 +229,8 @@ function Tasks(props) {
     filterSubSubContainer: {
       display: "flex",
       flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
+      // alignItems: "center",
+      // justifyContent: "center",
       padding: "4px",
       gap: "10px",
       width: "120px",
@@ -252,7 +256,7 @@ function Tasks(props) {
       gap: "10px",
       width: "65px",
       height: "28px",
-      background: "#6519E1",
+      background: PRIMARY_COLOR,
       border: "1px solid #6519E1",
       boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
       borderRadius: "6px",
@@ -270,7 +274,7 @@ function Tasks(props) {
       gap: "10px",
       width: "56px",
       height: "28px",
-      background: "#6519E1",
+      background: PRIMARY_COLOR,
       border: "1px solid #6519E1",
       boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
       borderRadius: "6px",
@@ -336,6 +340,28 @@ function Tasks(props) {
       boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
       borderRadius: "6px",
     },
+    addModal: {
+      position: "absolute",
+      width: "780px",
+      height: 'fit-content',
+      left: "28vw",
+      marginTop: "10vh",
+      background: "#FFFFFF",
+      boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+      borderRadius: "12px",
+  },
+  addHeading: {
+      width: "auto",
+      height: "28px",
+      marginLeft: "8px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 500,
+      fontSize: "18px",
+      lineHeight: "28px",
+      color: "#0A0A0A",
+      // marginTop:'12px'
+  }
   };
 
   //Add Form Modal
@@ -533,6 +559,10 @@ function Tasks(props) {
   const [deleteID, setdeleteID] = useState('');
   const [idx, setidx] = useState('');
   const [updateTask, setupdateTask] = useState([]);
+  const handleEmployeeChange =(e)=>{
+    seteid(e.target.value);
+    setCall(apiCall+1);
+  }
   return (
     <div>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
@@ -555,7 +585,7 @@ function Tasks(props) {
                 aria-label=""
                 TabIndicatorProps={{
                   style: {
-                    backgroundColor: "#6519E1",
+                    backgroundColor: PRIMARY_COLOR,
                   },
                 }}
                 sx={{
@@ -567,7 +597,7 @@ function Tasks(props) {
               >
                 <Tab
                   style={{
-                    color: value1 == 1 ? "#6519E1" : "#70757A",
+                    color: value1 == 1 ? PRIMARY_COLOR : "#70757A",
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "center",
@@ -585,7 +615,7 @@ function Tasks(props) {
                 />
                 {/* <Tab
                   style={{
-                    color: value1 == 2 ? "#6519E1" : "#70757A",
+                    color: value1 == 2 ? PRIMARY_COLOR : "#70757A",
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "center",
@@ -603,7 +633,7 @@ function Tasks(props) {
                 /> */}
                 <Tab
                   style={{
-                    color: value1 == 3 ? "#6519E1" : "#70757A",
+                    color: value1 == 3 ? PRIMARY_COLOR : "#70757A",
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "center",
@@ -621,7 +651,7 @@ function Tasks(props) {
                 />
                 <Tab
                   style={{
-                    color: value1 == 4 ? "#6519E1" : "#70757A",
+                    color: value1 == 4 ? PRIMARY_COLOR : "#70757A",
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "center",
@@ -665,29 +695,41 @@ function Tasks(props) {
                     </Button>
 
                     {privileges.includes('View Employee Tasks') ? (
-                      <div
+                      // <div
+                      //   className="d-flex flex-row"
+                      //   style={{
+                      //     ...styles.dropdown1,
+                      //     backgroundColor:"white",
+                      //   }}
+                      //   // onClick={openFilterModal}
+                      // >
+                        //  <img src={person} />
+                        //  <p style={styles.dp1Text}>
+                        //   My Tasks
+                        //   {filterSize() > 0 ? `/ ${filterSize()}` : ""}
+                        // </p>
+                        // {filterSize() > 0 ? (
+                        //   <></>
+                        // ) : (
+                        //   <FontAwesomeIcon
+                        //     icon={faChevronDown}
+                        //     color="#70757A"
+                        //   />
+                        // )} 
+                        <Form.Select 
                         className="d-flex flex-row"
                         style={{
                           ...styles.dropdown1,
-                          backgroundColor:
-                            filterSize() > 0 ? "#DBDBF4" : "white",
+                          backgroundColor:"white",
                         }}
-                        onClick={openFilterModal}
-                      >
-                        <img src={person} />
-                        <p style={styles.dp1Text}>
-                          My Tasks
-                          {filterSize() > 0 ? `/ ${filterSize()}` : ""}
-                        </p>
-                        {filterSize() > 0 ? (
-                          <></>
-                        ) : (
-                          <FontAwesomeIcon
-                            icon={faChevronDown}
-                            color="#70757A"
-                          />
-                        )}
-                      </div>
+                        onChange={handleEmployeeChange}
+                        >
+                          <option>Select Employee</option>
+                          {employees.map(e => (
+                            <option selected={e.Employee_ID===eid} value={e.Employee_ID}>{e.Full_Name===localStorage.getItem('employeeName')?'My Tasks':e.Full_Name}</option>
+                          ))}
+                        </Form.Select>
+                      // </div>
                     ) : (
                       <></>
                     )}
@@ -804,7 +846,7 @@ function Tasks(props) {
                                 fontSize: "14px",
                                 backgroundColor: "white",
                                 border: "none",
-                                color: "#6519E1",
+                                color: PRIMARY_COLOR,
                                 marginRight: "32px",
                               }}
                               disabled={filterSize1() === 0}
@@ -822,7 +864,7 @@ function Tasks(props) {
                             <FontAwesomeIcon
                               icon={faX}
                               style={{ height: "9px", cursor: "pointer" }}
-                              color="#6519E1"
+                              color = {PRIMARY_COLOR}
                               onClick={closeFilterModal1}
                             />
                           </div>
@@ -1007,7 +1049,7 @@ function Tasks(props) {
                       </div>
                     </Modal>
                   </div>
-                  <button style={styles.addButton} onClick={handleShow}>
+                  <button className="addButton" onClick={handleShow}>
                     <p style={styles.addButtonText}>+ Add New Task</p>
                   </button>
                 </div>
@@ -1090,7 +1132,7 @@ function Tasks(props) {
                                           fontSize: "14px",
                                           backgroundColor: "white",
                                           border: "none",
-                                          color: "#6519E1",
+                                          color: PRIMARY_COLOR,
                                           marginRight: "65px",
                                           marginTop: "8px",
                                           marginLeft: "8px",
@@ -1102,7 +1144,7 @@ function Tasks(props) {
                                       <FontAwesomeIcon
                                         icon={faX}
                                         style={{ height: "9px", cursor: "pointer" }}
-                                        color="#6519E1"
+                                        color={PRIMARY_COLOR}
                                         onClick={closestatusModal}
                                       />
                                     </div>
@@ -1236,7 +1278,7 @@ function Tasks(props) {
                                           fontSize: "14px",
                                           backgroundColor: "white",
                                           border: "none",
-                                          color: "#6519E1",
+                                          color: PRIMARY_COLOR,
                                           marginRight: "65px",
                                           marginTop: "8px",
                                           marginLeft: "8px",
@@ -1248,7 +1290,7 @@ function Tasks(props) {
                                       <FontAwesomeIcon
                                         icon={faX}
                                         style={{ height: "9px", cursor: "pointer" }}
-                                        color="#6519E1"
+                                        color={PRIMARY_COLOR}
                                         onClick={closestatusModal}
                                       />
                                     </div>
@@ -1382,7 +1424,7 @@ function Tasks(props) {
                                           fontSize: "14px",
                                           backgroundColor: "white",
                                           border: "none",
-                                          color: "#6519E1",
+                                          color: PRIMARY_COLOR,
                                           marginRight: "65px",
                                           marginTop: "8px",
                                           marginLeft: "8px",
@@ -1394,7 +1436,7 @@ function Tasks(props) {
                                       <FontAwesomeIcon
                                         icon={faX}
                                         style={{ height: "9px", cursor: "pointer" }}
-                                        color="#6519E1"
+                                        color={PRIMARY_COLOR}
                                         onClick={closestatusModal}
                                       />
                                     </div>
@@ -1528,7 +1570,7 @@ function Tasks(props) {
                                           fontSize: "14px",
                                           backgroundColor: "white",
                                           border: "none",
-                                          color: "#6519E1",
+                                          color: PRIMARY_COLOR,
                                           marginRight: "65px",
                                           marginTop: "8px",
                                           marginLeft: "8px",
@@ -1540,7 +1582,7 @@ function Tasks(props) {
                                       <FontAwesomeIcon
                                         icon={faX}
                                         style={{ height: "9px", cursor: "pointer" }}
-                                        color="#6519E1"
+                                        color={PRIMARY_COLOR}
                                         onClick={closestatusModal}
                                       />
                                     </div>
@@ -1674,7 +1716,7 @@ function Tasks(props) {
                                           fontSize: "14px",
                                           backgroundColor: "white",
                                           border: "none",
-                                          color: "#6519E1",
+                                          color: PRIMARY_COLOR,
                                           marginRight: "65px",
                                           marginTop: "8px",
                                           marginLeft: "8px",
@@ -1686,7 +1728,7 @@ function Tasks(props) {
                                       <FontAwesomeIcon
                                         icon={faX}
                                         style={{ height: "9px", cursor: "pointer" }}
-                                        color="#6519E1"
+                                        color={PRIMARY_COLOR}
                                         onClick={closestatusModal}
                                       />
                                     </div>
@@ -1821,7 +1863,7 @@ function Tasks(props) {
                                           fontSize: "14px",
                                           backgroundColor: "white",
                                           border: "none",
-                                          color: "#6519E1",
+                                          color: PRIMARY_COLOR,
                                           marginRight: "65px",
                                           marginTop: "8px",
                                           marginLeft: "8px",
@@ -1833,7 +1875,7 @@ function Tasks(props) {
                                       <FontAwesomeIcon
                                         icon={faX}
                                         style={{ height: "9px", cursor: "pointer" }}
-                                        color="#6519E1"
+                                        color={PRIMARY_COLOR}
                                         onClick={closestatusModal}
                                       />
                                     </div>
@@ -1934,53 +1976,61 @@ function Tasks(props) {
         </Box>
       </div>
       <Modal
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        centered
-        size="xl"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Task</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {
-            <AddTask
-              setRed={setred}
-              setGreen={setgreen}
-              closeModal={handleClose}
-              api={apiCall}
-              apiCall={setCall}
-            />
-          }
-        </Modal.Body>
-      </Modal>
+                show={show}
+                onHide={handleClose}
+                backdrop="static"
+                style={styles.addModal}
+                dialogClassName="filter-dialog"
+                animation={false}
+            >
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={styles.addHeading}>Add New Task</div>
+                    </div>
+                    <div><img onClick={handleClose} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
+                {
+                        <AddTask
+                        setRed={setred}
+                        setGreen={setgreen}
+                        closeModal={handleClose}
+                        api={apiCall}
+                        apiCall={setCall}
+                      />
+                    }
+                
+            </Modal>
 
-      <Modal
-        show={showUpdate}
-        onHide={handleCloseUpdate}
-        backdrop="static"
-        centered
-        size="xl"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Update Task</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {
-            <UpdateTask
-              updateTask={updateTask}
-              setgreen={setgreen}
-              setred={setred}
-              closeModal={handleCloseUpdate}
-              api={apiCall2}
-              apiCall={setCall2}
-            />
-          }
-        </Modal.Body>
-      </Modal>
+            <Modal
+                show={showUpdate}
+                onHide={handleCloseUpdate}
+                backdrop="static"
+                style={styles.addModal}
+                dialogClassName="filter-dialog"
+                animation={false}
+            >
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={styles.addHeading}>Update Task</div>
+                    </div>
+                    <div><img onClick={handleCloseUpdate} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
+                {
+                        <UpdateTask
+                          updateTask={updateTask}
+                          setgreen={setgreen}
+                          setred={setred}
+                          closeModal={handleCloseUpdate}
+                          api={apiCall2}
+                          apiCall={setCall2}
+                      />
+                    }
+                
+            </Modal>
+
+      
       {/* Delete Modal */}
       <Modal
         show={showDelete}

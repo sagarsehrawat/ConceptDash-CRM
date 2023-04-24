@@ -13,6 +13,8 @@ import {
   GET_EMPLOYEENAMES,
   GET_BUDGET_NAMES,
   ADD_RFP,
+  PRIMARY_COLOR,
+  GET_MANAGERS
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import AddCity from "./AddCity";
@@ -22,6 +24,26 @@ import RedAlert from "../Loader/RedAlert";
 import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import AuthContext from '../../Context/AuthContext'
+import plus from '../../Images/plus.svg'
+
+const styles = {
+  nameHeading: {
+    height: "20px",
+    fontFamily: "'Roboto'",
+    fontStyle: "normal",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: "#70757A"
+  },
+  nameInput: {
+    width: "740px",
+    height: "32px",
+    border: "1px solid #EBE9F1",
+    borderRadius: "6px",
+    padding:6
+  }
+}
 
 function RFPform(props) {
   
@@ -48,7 +70,9 @@ function RFPform(props) {
     submissionDate: "",
     rfpNumber: "",
     // amount: "",
-    city: "",
+    client: "",
+    files: null,
+    source: ''
   });
   const [radio, setradio] = useState(false);
   const handleRadio = (e) => {
@@ -61,6 +85,15 @@ function RFPform(props) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     const newForm = form;
+    if(name==='files') {
+      newForm[name] = e.target.files;
+      setform(newForm)
+      return;
+    }
+    if(name==='dept') {
+      getProjectCategories(value)
+    }
+    
     newForm[name] = value;
     setform(newForm);
   };
@@ -68,6 +101,18 @@ function RFPform(props) {
   const [depts, setdepts] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   const [budgets, setbudgets] = useState([]);
+  const getProjectCategories = async(e)=>{
+    await axios
+        .get(HOST + GET_PROJECT_CATEGORIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth"), id: e },
+        })
+        .then((res) => {
+          setprojectDepts(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
   useEffect(() => {
     setisLoading(true);
     const call = async () => {
@@ -94,17 +139,7 @@ function RFPform(props) {
         });
 
       await axios
-        .get(HOST + GET_PROJECT_CATEGORIES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
-        })
-        .then((res) => {
-          setprojectDepts(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      await axios
-        .get(HOST + GET_EMPLOYEENAMES, {
+        .get(HOST + GET_MANAGERS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
@@ -128,27 +163,32 @@ function RFPform(props) {
     call();
   }, [apiCallCity]);
   const handleSubmit = (e) => {
-    setisLoading(true);
     e.preventDefault();
+    setisLoading(true);
     setIsSubmit(true);
+  
+    const formData = new FormData();
+    formData.append('departmentId', radio ? deptid : form.dept);
+    formData.append('projectCatId', radio ? pCategoryid : form.projectCat);
+    formData.append('projectManagerId', form.managerName);
+    formData.append('projectName', radio ? pName : form.projectName);
+    formData.append('startDate', form.startDate);
+    formData.append('submissionDate', form.submissionDate);
+    formData.append('rfpNumber', form.rfpNumber);
+    formData.append('source', form.source);
+    formData.append('client', form.client);
+  
+    for (let i = 0; i < form.files.length; i++) {
+      formData.append('files', form.files[i]);
+    }
+  
     axios
-      .post(
-        HOST + ADD_RFP,
-        {
-          departmentId: radio ? deptid : form.dept,
-          projectCatId: radio ? pCategoryid : form.projectCat,
-          projectManagerId: form.managerName,
-          projectName: radio ? pName : form.projectName,
-          // bidDate: form.bidDate,
-          startDate: form.startDate,
-          submissionDate: form.submissionDate,
-          rfpNumber: form.rfpNumber,
-          source: form.source,
-          // amount: radio ? amount : form.amount,
-          cityId: radio ? cityid : form.city,
+      .post(HOST + ADD_RFP, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          auth: 'Rose ' + localStorage.getItem('auth'),
         },
-        { headers: { auth: "Rose " + localStorage.getItem("auth") } }
-      )
+      })
       .then((res) => {
         setisLoading(false);
         if (res.data.success) {
@@ -165,6 +205,7 @@ function RFPform(props) {
         setRed(true);
       });
   };
+  
   const [budgetData, setbudgetData] = useState([]);
   const [pName, setpName] = useState("");
   const [dept, setdept] = useState("");
@@ -172,7 +213,7 @@ function RFPform(props) {
   const [pCategory, setpCategory] = useState("");
   const [pCategoryid, setpCategoryid] = useState("");
   const [cityid, setcityid] = useState("");
-  const [city, setcity] = useState("");
+  // const [city, setcity] = useState("");
   // const [amount, setamount] = useState("");
   const [source, setsource] = useState("");
   const handleChange1 = async (e) => {
@@ -190,8 +231,8 @@ function RFPform(props) {
         setdeptid(res.data.res[0].Department_ID);
         setpCategory(res.data.res[0].Project_Category);
         setpCategoryid(res.data.res[0].Project_Cat_ID);
-        setcity(res.data.res[0].City);
-        setcityid(res.data.res[0].City_ID);
+        // setcity(res.data.res[0].City);
+        // setcityid(res.data.res[0].City_ID);
         // setamount(res.data.res[0].Budget_Amount);
         setsource(res.data.res[0].Source);
       })
@@ -211,17 +252,18 @@ function RFPform(props) {
   const handleCloseCategoryForm = () => setShowCategoryForm(false);
   const handleShowCategoryForm = () => setShowCategoryForm(true);
   return (
-    <>
+    <div style={{ marginLeft:'27px', marginTop:'20px', marginBottom:'20px'}}>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
       {red === true ? <RedAlert setRed={setred} /> : <></>}
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div>
-          <Form className="form-main" onSubmit={handleSubmit}>
-            <Row className="mb-4">
+        <>
+          <Form className="form-main" onSubmit={handleSubmit} style={{marginTop:'0px', marginLeft:'0px', marginRight:'0px'}}>
+            <Row>
               <Form.Group as={Col}>
-                <Form.Select onChange={handleRadio}>
+                <Form.Label style={styles.nameHeading}>Choose Label</Form.Label>
+                <Form.Select style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}} onChange={handleRadio}>
                   <option value="yes">Create New RFP</option>
                   <option value="no">Import From Budgets</option>
                 </Form.Select>
@@ -229,34 +271,40 @@ function RFPform(props) {
             </Row>
             {!radio ? (
               <div>
-                <Row className="mb-4">
+                <Row>
+                  <Form.Group as={Col}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Name</Form.Label>
+                    <Form.Control
+                      style={styles.nameInput}
+                      name="projectName"
+                      type="text"
+                      onChange={handleChange}
+                      required
+                    />
+                  </Form.Group>
+                </Row>
+                <Row>
                   <Form.Group as={Col} controlId="formGridCity">
-                    <Form.Select onChange={handleChange} name="city" required>
-                      <option value="">Select City</option>
+                    <Form.Label style={{...styles.nameHeading,width:'740px', marginTop:'24px'}}>
+                      <div className="d-flex flex-row justify-content-between align-items-center">
+                        <div>Client</div>
+                        {/* {privileges.includes('Add City')? <div style={{background:'#EBE9F1',borderRadius:'10px', width:'20px', textAlign:'center', cursor:'pointer'}} onClick={handleShowCityForm}><img alt="Add New City" src={plus} /></div> :<></>} */}
+                      </div>
+                    </Form.Label>
+                    <Form.Control style={{...styles.nameInput}} onChange={handleChange} name="client"/>
+                      {/* <option value="">Select City</option>
                       {cities
                         ? cities.map((e) => (
                             <option value={e.City_ID}>{e.City}</option>
                           ))
                         : ""}
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group as={Col}>
-                    <Button
-                      style={{
-                        width: "100%",
-                        backgroundColor: "grey",
-                        border: "none",
-                      }}
-                      onClick={handleShowCityForm}
-                      disabled={!privileges.includes("Add City")}
-                    >
-                      Add City
-                    </Button>
+                    </Form.Select> */}
                   </Form.Group>
                 </Row>
-                <Row className="mb-4">
-                  <Form.Group as={Col}>
-                    <Form.Select onChange={handleChange} name="dept" required>
+                <Row>
+                <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Department</Form.Label>
+                    <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="dept" required>
                       <option value="">Select Department</option>
                       {depts.length > 0
                         ? depts.map((e) => (
@@ -267,6 +315,22 @@ function RFPform(props) {
                         : ""}
                     </Form.Select>
                   </Form.Group>
+                  <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Category</Form.Label>
+                    <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="projectCat">
+                      <option value="">Select Project Category</option>
+                      {projectDepts.length > 0
+                        ? projectDepts.map((e) => (
+                            <option value={e.Project_Cat_ID}>
+                              {e.Project_Category}
+                            </option>
+                          ))
+                        : ""}
+                    </Form.Select>
+                  </Form.Group>
+                </Row>
+                {/* <Row className="mb-4">
+                  
                   <Form.Group as={Col}>
                     <Button
                       style={{
@@ -282,18 +346,7 @@ function RFPform(props) {
                   </Form.Group>
                 </Row>
                 <Row className="mb-4">
-                  <Form.Group as={Col}>
-                    <Form.Select onChange={handleChange} name="projectCat" required>
-                      <option value="">Select Project Category</option>
-                      {projectDepts.length > 0
-                        ? projectDepts.map((e) => (
-                            <option value={e.Project_Cat_ID}>
-                              {e.Project_Category}
-                            </option>
-                          ))
-                        : ""}
-                    </Form.Select>
-                  </Form.Group>
+                  
                   <Form.Group as={Col}>
                     <Button
                       style={{
@@ -307,14 +360,16 @@ function RFPform(props) {
                       Add Project Category
                     </Button>
                   </Form.Group>
-                </Row>
+                </Row> */}
 
-                <Row className="mb-4">
+                <Row>
                   <Form.Group as={Col}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Manager</Form.Label>
                     <Form.Select
                       name="managerName"
                       onChange={handleChange}
                       required
+                      style={{...styles.nameInput,fontSize:'14px', color:'#70757A'}}
                     >
                       <option value="">Select Project Manager</option>
                       {employees.length !== 0 ? (
@@ -330,18 +385,7 @@ function RFPform(props) {
                   </Form.Group>
                 </Row>
 
-                <Row className="mb-4">
-                  <Form.Group as={Col}>
-                    <Form.Label>Project Name</Form.Label>
-                    <Form.Control
-                      name="projectName"
-                      type="text"
-                      onChange={handleChange}
-                      required
-                    />
-                  </Form.Group>
-                </Row>
-                <Row className="mb-4">
+                <Row>
                   {/* <Form.Group as={Col}>
                     <Form.Label>Bid Date</Form.Label>
                     <Form.Control
@@ -350,17 +394,19 @@ function RFPform(props) {
                       type="date"
                     />
                   </Form.Group> */}
-                  <Form.Group as={Col}>
-                    <Form.Label>Question Date</Form.Label>
+                  <Form.Group style={{width:'380px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Question Date</Form.Label>
                     <Form.Control
+                style={{...styles.nameInput, width:'360px'}}
                       name="startDate"
                       onChange={handleChange}
                       type="date"
                     />
                   </Form.Group>
-                  <Form.Group as={Col}>
-                    <Form.Label>Submission Date</Form.Label>
+                  <Form.Group style={{width:'380px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Submission Date</Form.Label>
                     <Form.Control
+                style={{...styles.nameInput, width:'360px'}}
                       name="submissionDate"
                       onChange={handleChange}
                       type="date"
@@ -368,15 +414,25 @@ function RFPform(props) {
                   </Form.Group>
                 </Row>
 
-                <Row className="mb-4">
-                  <Form.Group as={Col}>
-                    <Form.Label>RFP Number</Form.Label>
+                <Row>
+                  <Form.Group style={{width:'380px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>RFP Number</Form.Label>
                     <Form.Control
+                style={{...styles.nameInput, width:'360px'}}
                       name="rfpNumber"
-                      type="number"
                       onChange={handleChange}
-                      required
+                      
                     />
+                  </Form.Group>
+                  <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Source</Form.Label>
+                    <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} name="source" onChange={handleChange}>
+                      <option value=''>Select Source</option>
+                      <option value="Construct Connect">Construct Connect</option>
+                      <option value="Bids and Tenders">Bids and Tenders</option>
+                      <option value="Biddingo">Biddingo</option>
+                      <option value="Merx">Merx</option>
+                    </Form.Select>
                   </Form.Group>
                   {/* <Form.Group as={Col}>
                     <Form.Label>Amount</Form.Label>
@@ -388,8 +444,20 @@ function RFPform(props) {
                     />
                   </Form.Group> */}
                 </Row>
+                <Row>
+                <Form.Group style={{width:'380px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Relevent Files</Form.Label>
+                    <Form.Control
+                      style={{...styles.nameInput, width:'360px'}}
+                      name="files"
+                      onChange={handleChange}
+                      type="file"
+                      multiple
+                    />
+                  </Form.Group>
+                </Row>
 
-                <Row className="mb-4">
+                {/* <Row className="mb-4">
                   <Form.Group as={Col}>
                     <Form.Select name="source" onChange={handleChange}>
                       <option>Select Source</option>
@@ -399,12 +467,15 @@ function RFPform(props) {
                       <option value="Merx">Merx</option>
                     </Form.Select>
                   </Form.Group>
-                </Row>
+                </Row> */}
               </div>
             ) : (
               <div>
+                <Row>
+                  <Form.Group as={Col}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Select Project</Form.Label>
                 <Form.Select
-                  style={{ marginBottom: "4vh" }}
+                style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}}
                   onChange={handleChange1}
                 >
                   {budgets.length !== 0 ? (
@@ -416,31 +487,54 @@ function RFPform(props) {
                   ) : (
                     <option value="">None</option>
                   )}
-                </Form.Select>
+                </Form.Select></Form.Group>
+                </Row>
+                
                 {budgetData.length > 0 ? (
                   <div>
-                    <Row className="mb-4">
+                    <Row>
                       <Form.Group as={Col}>
-                        <Form.Label>Department</Form.Label>
-                        <Form.Control value={dept} />
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Name</Form.Label>
+                        <Form.Control
+                style={styles.nameInput}
+                          value={pName}
+                          name="projectName"
+                          type="text"
+                          onChange={handleChange}
+                        />
                       </Form.Group>
-                      <Form.Group as={Col}>
-                        <Form.Label>Project Category</Form.Label>
-                        <Form.Control value={pCategory} />
+                    </Row>
+                    <Row>
+                      <Form.Group as={Col} controlId="formGridCity">
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Client</Form.Label>
+                        <Form.Control style={styles.nameInput} name='client' />
+                      </Form.Group>
+                    </Row>
+                    <Row>
+                      <Form.Group style={{width:'380px'}}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Department</Form.Label>
+                        <Form.Control style={{...styles.nameInput, width:'360px'}} value={dept} />
+                      </Form.Group>
+                      <Form.Group style={{width:'380px'}}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Category</Form.Label>
+                        <Form.Control style={{...styles.nameInput, width:'360px'}} value={pCategory} />
                       </Form.Group>
                     </Row>
 
-                    <Row className="mb-4">
-                      <Form.Group as={Col}>
-                        <Form.Select name="action" onChange={handleChange}>
+                    <Row>
+                      <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Action</Form.Label>
+                        <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} name="action" onChange={handleChange}>
                           <option value="">Select Action</option>
                           <option value="Go">Go</option>
                           <option value="NoGo">NoGo</option>
                           <option value="Review">Review</option>
                         </Form.Select>
                       </Form.Group>
-                      <Form.Group as={Col}>
+                      <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Manager</Form.Label>
                         <Form.Select
+                        style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
                           name="managerName"
                           onChange={handleChange}
                           required
@@ -458,18 +552,8 @@ function RFPform(props) {
                         </Form.Select>
                       </Form.Group>
                     </Row>
-                    <Row className="mb-4">
-                      <Form.Group as={Col}>
-                        <Form.Label>Project Name</Form.Label>
-                        <Form.Control
-                          value={pName}
-                          name="projectName"
-                          type="text"
-                          onChange={handleChange}
-                        />
-                      </Form.Group>
-                    </Row>
-                    <Row className="mb-4">
+                    
+                    <Row>
                       {/* <Form.Group as={Col}>
                         <Form.Label>Bid Date</Form.Label>
                         <Form.Control
@@ -478,17 +562,19 @@ function RFPform(props) {
                           type="date"
                         />
                       </Form.Group> */}
-                      <Form.Group as={Col}>
-                        <Form.Label>Question Date</Form.Label>
+                      <Form.Group style={{width:'380px'}}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Question Date</Form.Label>
                         <Form.Control
+                        style={{...styles.nameInput, width:'360px'}}
                           name="startDate"
                           onChange={handleChange}
                           type="date"
                         />
                       </Form.Group>
-                      <Form.Group as={Col}>
-                        <Form.Label>Submission Date</Form.Label>
+                      <Form.Group style={{width:'380px'}}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Submission Date</Form.Label>
                         <Form.Control
+                        style={{...styles.nameInput, width:'360px'}}
                           name="submissionDate"
                           onChange={handleChange}
                           type="date"
@@ -496,36 +582,23 @@ function RFPform(props) {
                       </Form.Group>
                     </Row>
 
-                    <Row className="mb-4">
-                      <Form.Group as={Col} controlId="formGridCity">
-                        <Form.Label>City</Form.Label>
-                        <Form.Control value={city} />
-                      </Form.Group>
-                    </Row>
-                    <Row className="mb-4">
-                      <Form.Group as={Col}>
-                        <Form.Label>RFP Number</Form.Label>
+                    
+                    <Row>
+                      <Form.Group style={{width:'380px'}}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>RFP Number</Form.Label>
                         <Form.Control
+                        style={{...styles.nameInput, width:'360px'}}
                           name="rfpNumber"
-                          type="number"
                           onChange={handleChange}
                         />
                       </Form.Group>
-                      {/* <Form.Group as={Col}>
-                        <Form.Label>Amount</Form.Label>
-                        <Form.Control
-                          value={amount}
-                          name="amount"
-                          onChange={handleChange}
-                        />
-                      </Form.Group> */}
-                    </Row>
-                    <Row className="mb-4">
-                      <Form.Group as={Col}>
+                      <Form.Group style={{width:'380px'}}>
+                        <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Source</Form.Label>
                         <Form.Select
                           defaultValue={source}
                           name="source"
                           onChange={handleChange}
+                          style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
                         >
                           <option>Select Source</option>
                           <option value="Construct Connect">
@@ -536,6 +609,14 @@ function RFPform(props) {
                           <option value="Merx">Merx</option>
                         </Form.Select>
                       </Form.Group>
+                      {/* <Form.Group as={Col}>
+                        <Form.Label>Amount</Form.Label>
+                        <Form.Control
+                          value={amount}
+                          name="amount"
+                          onChange={handleChange}
+                        />
+                      </Form.Group> */}
                     </Row>
                   </div>
                 ) : (
@@ -544,9 +625,14 @@ function RFPform(props) {
               </div>
             )}
 
-            <Button className="submit-btn" variant="primary" type="submit">
-              Submit
+<div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
+            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+              Cancel
             </Button>
+            <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
+              Add New RFP
+            </Button>
+            </div>
           </Form>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -622,9 +708,9 @@ function RFPform(props) {
               }
             </Modal.Body>
           </Modal>
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 }
 

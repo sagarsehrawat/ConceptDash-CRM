@@ -13,6 +13,7 @@ import {
   GET_PROJECT_CATEGORIES,
   GET_RFP_COUNT,
   HOST,
+  PRIMARY_COLOR,
 } from "../Constants/Constants";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -140,7 +141,7 @@ function Employee(props) {
       gap: "8px",
       width: "187px",
       height: "40px",
-      background: "#6519E1",
+      background: PRIMARY_COLOR,
       border: "1px solid #6519E1",
       boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
       borderRadius: "5px",
@@ -224,7 +225,7 @@ function Employee(props) {
       fontWeight: 500,
       fontSize: "18px",
       lineHeight: "28px",
-      // color: "#6519E1"
+      // color: PRIMARY_COLOR
     },
     cards: {
       width: "23%",
@@ -860,7 +861,7 @@ function Employee(props) {
       gap: "10px",
       width: "56px",
       height: "28px",
-      background: "#6519E1",
+      background: PRIMARY_COLOR,
       border: "1px solid #6519E1",
       boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
       borderRadius: "6px",
@@ -1132,7 +1133,7 @@ function Employee(props) {
                     fontSize: "14px",
                     backgroundColor: "white",
                     border: "none",
-                    color: "#6519E1",
+                    color: PRIMARY_COLOR,
                     marginRight: "32px",
                   }}
                   disabled={filterSize() === 0}
@@ -1143,7 +1144,7 @@ function Employee(props) {
                 <FontAwesomeIcon
                   icon={faX}
                   style={{ height: "9px", cursor: "pointer" }}
-                  color="#6519E1"
+                  color={PRIMARY_COLOR}
                   onClick={closeFilterModal}
                 />
               </div>
@@ -1477,7 +1478,7 @@ function Employee(props) {
                                         aria-label=""
                                         TabIndicatorProps={{
                                           style: {
-                                            backgroundColor: "#6519E1",
+                                            backgroundColor: PRIMARY_COLOR,
                                           },
                                         }}
                                         sx={{
@@ -1489,7 +1490,7 @@ function Employee(props) {
                                           style={{
                                             color:
                                               value1 == 1
-                                                ? "#6519E1"
+                                                ? PRIMARY_COLOR
                                                 : "#70757A",
                                           }}
                                           sx={{ fontSize: 10 }}
@@ -1500,7 +1501,7 @@ function Employee(props) {
                                           style={{
                                             color:
                                               value1 == 2
-                                                ? "#6519E1"
+                                                ? PRIMARY_COLOR
                                                 : "#70757A",
                                           }}
                                           sx={{ fontSize: 10 }}
@@ -1511,7 +1512,7 @@ function Employee(props) {
                                           style={{
                                             color:
                                               value1 == 3
-                                                ? "#6519E1"
+                                                ? PRIMARY_COLOR
                                                 : "#70757A",
                                           }}
                                           sx={{ fontSize: 10 }}
@@ -2135,7 +2136,7 @@ function Employee(props) {
                                         aria-label=""
                                         TabIndicatorProps={{
                                           style: {
-                                            backgroundColor: "#6519E1",
+                                            backgroundColor: PRIMARY_COLOR,
                                           },
                                         }}
                                         sx={{
@@ -2147,7 +2148,7 @@ function Employee(props) {
                                           style={{
                                             color:
                                               value1 == 1
-                                                ? "#6519E1"
+                                                ? PRIMARY_COLOR
                                                 : "#70757A",
                                           }}
                                           sx={{ fontSize: 10 }}
@@ -2158,7 +2159,7 @@ function Employee(props) {
                                           style={{
                                             color:
                                               value1 == 2
-                                                ? "#6519E1"
+                                                ? PRIMARY_COLOR
                                                 : "#70757A",
                                           }}
                                           sx={{ fontSize: 10 }}
@@ -2169,7 +2170,7 @@ function Employee(props) {
                                           style={{
                                             color:
                                               value1 == 3
-                                                ? "#6519E1"
+                                                ? PRIMARY_COLOR
                                                 : "#70757A",
                                           }}
                                           sx={{ fontSize: 10 }}

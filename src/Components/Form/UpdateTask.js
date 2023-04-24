@@ -6,10 +6,27 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useNavigate, useLocation } from "react-router-dom";
-import { HOST, GET_EMPLOYEENAMES, UPDATE_TASK } from "../Constants/Constants";
+import { HOST, GET_EMPLOYEENAMES, UPDATE_TASK, PRIMARY_COLOR } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
-
+const styles = {
+  nameHeading: {
+    height: "20px",
+    fontFamily: "'Roboto'",
+    fontStyle: "normal",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: "#70757A"
+  },
+  nameInput: {
+    width: "740px",
+    height: "32px",
+    border: "1px solid #EBE9F1",
+    borderRadius: "6px",
+    padding:6
+  }
+}
 function UpdateTask(props) {
   const [isSubmit, setIsSubmit] = useState(false);
   const [employees, setemployees] = useState([]);
@@ -27,7 +44,6 @@ function UpdateTask(props) {
     startDate: updateTask.Start_Date??updateTask.Start_Date,
     dueDate: updateTask.Due_Date??updateTask.Due_Date,
   });
-
   const [isLoading, setisLoading] = useState(false)
   const [title, settitle] = useState(updateTask.Title)
   const [review, setreview] = useState(updateTask.Reviewed_By)
@@ -146,12 +162,13 @@ function UpdateTask(props) {
   // let due = `${value2.getFullYear()}-${dueMonth}-${dueDay}`;
   return (
     isLoading?<LoadingSpinner/>:
-    <div>
-      <Form className="form-main" onSubmit={handleSubmit}>
-      <Row className="mb-4">
+    <div style={{ marginLeft:'27px', marginTop:'20px', marginBottom:'20px'}}>
+      <Form className="form-main" onSubmit={handleSubmit} style={{marginTop:'0px', marginLeft:'0px', marginRight:'0px'}}>
+      <Row>
       <Form.Group as={Col}>
-            <Form.Label>Project Name</Form.Label>
+            <Form.Label style={styles.nameHeading}>Project Name</Form.Label>
             <Form.Control
+                style={styles.nameInput}
               placeholder="Task Name"
               value={updateTask.Project_Name}
               onChange={handleChange}
@@ -162,10 +179,11 @@ function UpdateTask(props) {
         {/* <Row className="mb-4">
           {evaluateOptions()}
         </Row> */}
-        <Row className="mb-4">
+        <Row>
           <Form.Group as={Col}>
-            <Form.Label>Enter Task Name</Form.Label>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Enter Task Name</Form.Label>
             <Form.Control
+                style={styles.nameInput}
               name="title"
               value={title}
               placeholder="Task Name"
@@ -175,10 +193,11 @@ function UpdateTask(props) {
           </Form.Group>
           
         </Row>
-        <Row className="mb-4">
+        <Row>
           <Form.Group as={Col}>
-            <Form.Label>Task Description</Form.Label>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Task Description</Form.Label>
             <Form.Control
+                style={styles.nameInput}
               name="description"
               as="textarea"
               value={descrip}
@@ -193,16 +212,17 @@ function UpdateTask(props) {
           borderColor: '#EBE9F1',
           height: '1px',
         }}/>
-        <Row className="mb-4">
-          <Form.Label>Task Information</Form.Label>
+        <Row>
+          <Form.Label style={{...styles.nameHeading}}>Task Information</Form.Label>
         </Row>
-        <Row className="mb-4">
-          <Form.Group as={Col}>
-            <Form.Label>Task Owner</Form.Label>
+        <Row>
+          <Form.Group style={{width:'253px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'20px'}}>Task Owner</Form.Label>
             <Form.Select
               name="assignedTo"
               onChange={handleChange}
               required
+              style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}}
             >
               <option>Owner</option>
               {employees.length !== 0 ? (
@@ -214,12 +234,13 @@ function UpdateTask(props) {
               )}
             </Form.Select>
           </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Reviewd By</Form.Label>
+          <Form.Group style={{width:'253px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'20px'}}>Reviewd By</Form.Label>
             <Form.Select
               name="reviewedBy"
               onChange={handleChange}
               required
+              style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
             >
               <option>Reviewer</option>
               {employees.length !== 0 ? (
@@ -231,12 +252,14 @@ function UpdateTask(props) {
               )}
             </Form.Select>
           </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Task Priority</Form.Label>
+          <Form.Group style={{width:'253px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'20px'}}>Task Priority</Form.Label>
             <Form.Select
               name="priority"
               required
               onChange={handleChange}
+              defaultValue={priority}
+              style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}}
             >
               <option>Choose Priority</option>
               <option selected={priority===1} value="1">Super urgent</option>
@@ -246,38 +269,40 @@ function UpdateTask(props) {
             </Form.Select>
           </Form.Group>
         </Row>
-        <Row className="mb-4">
-        <Form.Group as={Col}>
-            <Form.Label>Start Date</Form.Label>
+        <Row>
+        <Form.Group style={{width:'253px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Start Date</Form.Label>
             <Form.Control
               name="startDate"
               type="date"
               value={sDate?sDate.substring(0, 10):''}
               onChange={handleChange}
               required
+              style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
             />
           </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Due Date</Form.Label>
+          <Form.Group style={{width:'253px'}}>
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Due Date</Form.Label>
             <Form.Control
               name="dueDate"
               type="date"
               value={dDate?dDate.substring(0, 10):''}
               onChange={handleChange}
               required
+              style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
             />
           </Form.Group>
         </Row>
         
        
-        <Button
-          className="submit-btn"
-          variant="primary"
-          type="submit"
-          // onClick={handleSubmit}
-        >
-          Submit
-        </Button>
+        <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
+            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+              Cancel
+            </Button>
+            <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
+              Update Task
+            </Button>
+            </div>
       </Form>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

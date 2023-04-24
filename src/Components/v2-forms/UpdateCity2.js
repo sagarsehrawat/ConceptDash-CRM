@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
-import { HOST, UPDATE_BUDGET_CITY2 } from '../Constants/Constants'
+import { HOST, UPDATE_BUDGET_CITY2, PRIMARY_COLOR } from '../Constants/Constants'
 import LoadingSpinner from '../Loader/Loader'
 
 const UpdateCity2 = (props) => {
@@ -119,7 +119,7 @@ const UpdateCity2 = (props) => {
                     </Row>
 
                     <Row className='justify-content-end mx-2 my-4'>
-                        <button style={{ background: "#6519E1", boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)", borderRadius: "5px", color: "#FBFBFB", width: "75px", height: "36px" }} onClick={handleSubmit}>Save</button>
+                        <button style={{ background: PRIMARY_COLOR, boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)", borderRadius: "5px", color: "#FBFBFB", width: "75px", height: "36px" }} onClick={handleSubmit}>Save</button>
                     </Row>
                 </>
             }

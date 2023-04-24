@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { style } from "@mui/system";
 import axios from "axios";
 import filter from "../../Images/Filter.svg";
-import { HOST, GET_PAGE_REPORT } from "../Constants/Constants";
+import { HOST, GET_PAGE_REPORT, PRIMARY_COLOR } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 
 function Reports(props) {
@@ -113,7 +113,7 @@ function Reports(props) {
             marginTop: '36px'
           }
     }
-    const [radio, setradio] = useState("3");
+    const [radio, setradio] = useState("2");
     const radioChange = (e) => {
     setradio(e.target.id.toString());
   };
@@ -306,6 +306,7 @@ hr.map(e => {
               type="radio"
               name="group1"
               id="2"
+              defaultChecked
               label="Projects"
               style={{marginRight:'45px'}}
             />
@@ -315,7 +316,7 @@ hr.map(e => {
               type="radio"
               name="group1"
               id="3"
-              defaultChecked
+              
               label="Proposals"
               style={{marginRight:'45px'}}
             />
@@ -334,7 +335,7 @@ hr.map(e => {
       </div>
       {/* Table Header */}
       <div style={styles.tableHeader} className='d-flex flex-row justify-content-start align-items-center'>
-        {/* <FontAwesomeIcon icon={faChevronLeft} color="#6519E1" style={{ cursor: "pointer", marginRight: "18px" }} /> */}
+        {/* <FontAwesomeIcon icon={faChevronLeft} color=PRIMARY_COLOR style={{ cursor: "pointer", marginRight: "18px" }} /> */}
         <div style={{width:'172px', marginRight:'12px', marginTop:'16px'}}>
             <p style={styles.fromText}>From</p>
             <div><Form.Control style={{height:'36px'}} type="date" onChange={dateChange1} /></div>
@@ -347,10 +348,10 @@ hr.map(e => {
             Filter
 
         </div>
-        {/* <FontAwesomeIcon icon={faCalendarDays} color="#6519E1" style={{ marginRight: "10px" }} />
+        {/* <FontAwesomeIcon icon={faCalendarDays} color=PRIMARY_COLOR style={{ marginRight: "10px" }} />
         <div style={{ width: "0px", height: "22px", border: "1px solid #EBE9F1", marginRight: "8px" }}></div>
         <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", marginRight: "16px" }}>nb</p>
-        <FontAwesomeIcon icon={faChevronRight} color="#6519E1" style={{ cursor: "pointer", marginRight: "18px" }}  /> */}
+        <FontAwesomeIcon icon={faChevronRight} color=PRIMARY_COLOR style={{ cursor: "pointer", marginRight: "18px" }}  /> */}
       </div>
       <div style={{ borderBottom: "1px solid #EBE9F1", height: "548px", overflow: "auto", position: "relative", marginTop:'32px', width:'100%' }}>
                 <table style={styles.table} className='rfp-table'>

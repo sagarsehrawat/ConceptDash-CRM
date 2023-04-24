@@ -8,7 +8,7 @@ import pinnedInactive from "../../Images/Pin icon.svg";
 import cross from "../../Images/cross.svg";
 import BudgetCharts from "./BudgetCharts";
 import axios from "axios";
-import { HOST, PROJECT_CHART, GET_ADMIN_TASKS } from "../Constants/Constants";
+import { HOST, PROJECT_CHART, GET_ADMIN_TASKS, PRIMARY_COLOR } from "../Constants/Constants";
 import deadlineImage from "../../Images/Vector.png";
 import Time from "../../Images/Time.png";
 import RFPCharts from "./RFPCharts";
@@ -249,7 +249,7 @@ const Home = (props) => {
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "100%",
-      color: "#6519E1",
+      color: PRIMARY_COLOR,
       cursor: "pointer",
       textAlign: 'center'
     },
@@ -264,7 +264,7 @@ const Home = (props) => {
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "100%",
-      color: "#6519E1",
+      color: PRIMARY_COLOR,
       cursor: "pointer",
       textAlign: 'center'
     },
@@ -283,7 +283,7 @@ const Home = (props) => {
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "100%",
-      color: "#6519E1",
+      color: PRIMARY_COLOR,
     },
     rect1: {
       width: "3px",
