@@ -191,6 +191,7 @@ function RFPform(props) {
       })
       .then((res) => {
         setisLoading(false);
+        console.log(res);
         if (res.data.success) {
           closeModal();
           setGreen(true);
