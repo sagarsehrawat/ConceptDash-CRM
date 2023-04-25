@@ -71,7 +71,7 @@ function RFPform(props) {
     rfpNumber: "",
     // amount: "",
     client: "",
-    files: null,
+    files: [],
     source: ''
   });
   const [radio, setradio] = useState(false);
