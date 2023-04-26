@@ -184,8 +184,8 @@ function RFPform(props) {
   
     axios
       .post(HOST + ADD_RFP, formData, {
-        maxContentLength: 50 * 1024 * 1024, // 100MB
-        maxBodyLength: 50 * 1024 * 1024, // 100MB
+        maxContentLength: 10 * 1024 * 1024, // 10MB
+        maxBodyLength: 10 * 1024 * 1024, // 10MB
         headers: {
           'Content-Type': 'multipart/form-data',
           auth: 'Rose ' + localStorage.getItem('auth'),
@@ -449,7 +449,7 @@ function RFPform(props) {
                 </Row>
                 <Row>
                 <Form.Group style={{width:'380px'}}>
-                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Relevent Files</Form.Label>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Relevent Files(Upto 10mb each file)</Form.Label>
                     <Form.Control
                       style={{...styles.nameInput, width:'360px'}}
                       name="files"
