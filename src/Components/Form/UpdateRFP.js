@@ -313,7 +313,7 @@ function UpdateRFP(props) {
             >
               <option value="">Select Action</option>
               <option value="NoGo">NoGo</option>
-              <option value="Review">Review</option>
+              <option value="Go">Go</option>
             </Form.Select>
           </Form.Group>
           

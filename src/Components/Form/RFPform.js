@@ -71,7 +71,8 @@ function RFPform(props) {
     rfpNumber: "",
     // amount: "",
     client: "",
-    files: null
+    files: [],
+    source: ''
   });
   const [radio, setradio] = useState(false);
   const handleRadio = (e) => {
@@ -85,11 +86,9 @@ function RFPform(props) {
     const { name, value } = e.target;
     const newForm = form;
     if(name==='files') {
-      
       newForm[name] = e.target.files;
       setform(newForm)
       return;
-      // console.log(e.target.name, e.target.value, e.target.files[0])
     }
     if(name==='dept') {
       getProjectCategories(value)
@@ -192,6 +191,7 @@ function RFPform(props) {
       })
       .then((res) => {
         setisLoading(false);
+        console.log(res);
         if (res.data.success) {
           closeModal();
           setGreen(true);
@@ -422,7 +422,7 @@ function RFPform(props) {
                 style={{...styles.nameInput, width:'360px'}}
                       name="rfpNumber"
                       onChange={handleChange}
-                      required
+                      
                     />
                   </Form.Group>
                   <Form.Group style={{width:'380px'}}>

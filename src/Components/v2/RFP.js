@@ -1249,7 +1249,7 @@ const RFP = (props) => {
                                 <td style={{ ...styles.tableCell, minWidth: "250px" }}>{e.Department}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Project_Category}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Manager_Name}</td>
-                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>{e.Action}</td>
+                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>{e.Action ?? "Review"}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "180px" }}>{e.RFP_Number}</td>
                             </tr>
                         ))}
