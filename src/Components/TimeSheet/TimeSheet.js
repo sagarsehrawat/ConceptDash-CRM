@@ -10,6 +10,8 @@ import GreenAlert from '../Loader/GreenAlert'
 import RedAlert from '../Loader/RedAlert'
 import { Modal } from 'react-bootstrap'
 import AddTask from '../Form/AddTask'
+import cross from '../../Images/cross.svg'
+import tIcon from '../../Images/taskIcon.svg'
 
 const TimeSheet = (props) => {
   const { isCollapsed } = props
@@ -161,7 +163,29 @@ const TimeSheet = (props) => {
       boxShadow: "none",
       outline: "none",
       }
-    }
+    },
+    addModal: {
+      position: "absolute",
+      width: "780px",
+      height: 'fit-content',
+      left: "28vw",
+      marginTop: "10vh",
+      background: "#FFFFFF",
+      boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+      borderRadius: "12px",
+  },
+  addHeading: {
+      width: "auto",
+      height: "28px",
+      marginLeft: "8px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 500,
+      fontSize: "18px",
+      lineHeight: "28px",
+      color: "#0A0A0A",
+      // marginTop:'12px'
+  }
   }
 
   useEffect(() => {
@@ -951,24 +975,26 @@ const TimeSheet = (props) => {
         show={show}
         onHide={handleClose}
         backdrop="static"
-        centered
-        size="xl"
-        keyboard={false}
+        style={styles.addModal}
+        dialogClassName="filter-dialog"
+        animation={false}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Task</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {
-            <AddTask
-              setRed={setred}
-              setGreen={setgreen}
-              closeModal={handleClose}
-              api={apiCall}
-              apiCall={setCall}
-            />
-          }
-        </Modal.Body>
+        <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={styles.addHeading}>Add New Task</div>
+                    </div>
+                    <div><img onClick={handleClose} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
+                {
+                        <AddTask
+                        setRed={setred}
+                        setGreen={setgreen}
+                        closeModal={handleClose}
+                        api={apiCall}
+                        apiCall={setCall}
+                      />
+                    }
       </Modal>
     </>
   )

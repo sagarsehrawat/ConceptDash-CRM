@@ -189,7 +189,7 @@ function AddTask(props) {
       return (
         <Form.Group as={Col}>
           <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Choose Project</Form.Label>
-          <Form.Select style={styles.nameInput} onChange={handleID}>
+          <Form.Select style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}} onChange={handleID}>
             <option>Select Project</option>
             {projects?projects.map((e)=>(
               <option value={e.Project_ID}>{e.Project_Name}</option>
@@ -201,7 +201,7 @@ function AddTask(props) {
       return (
         <Form.Group as={Col}>
           <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Choose Proposal</Form.Label>
-          <Form.Select style={styles.nameInput} onChange={handleID}>
+          <Form.Select style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}} onChange={handleID}>
             <option>Select Proposal</option>
             {proposals?proposals.map((e)=>(
               <option value={e.Proposal_ID}>{e.Project_Name}</option>
@@ -213,7 +213,7 @@ function AddTask(props) {
       return (
         <Form.Group as={Col}>
           <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Choose RFP</Form.Label>
-          <Form.Select style={styles.nameInput} onChange={handleID}>
+          <Form.Select style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}} onChange={handleID}>
             <option>Select RFP</option>
             {rfp?rfp.map((e)=>(
               <option value={e.RFP_ID}>{e.Project_Name}</option>

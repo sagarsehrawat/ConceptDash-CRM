@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import TableScrollbar from 'react-table-scrollbar';
-import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST, PRIMARY_COLOR } from '../Constants/Constants';
+import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_GOOGLE_DRIVE_URL, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST, PRIMARY_COLOR } from '../Constants/Constants';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowsUpDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faCross, faDownload, faEdit, faFilter, faMagnifyingGlass, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -16,6 +16,7 @@ import { RadioButtonComponent } from '@syncfusion/ej2-react-buttons';
 import filterIcon from '../../Images/Filter.svg'
 import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
+import open from '../../Images/openinDrive.svg'
 
 
 
@@ -75,8 +76,40 @@ const RFP = (props) => {
     const [showUpdate, setShowUpdate] = useState(false);
     const handleCloseUpdate = () => setShowUpdate(false);
     const handleShowUpdate = () => setShowUpdate(true);
-
+    const [IsLoading3, setIsLoading3] = useState(false);
+    const openDriveLink = (e, projectFolderId) => {
+        e.preventDefault();
+        setIsLoading3(true)
+        axios
+          .get(
+            HOST + GET_GOOGLE_DRIVE_URL,
+            { headers: { auth: "Rose " + localStorage.getItem("auth"), id: projectFolderId, } }
+          )
+          .then((res) => {
+            const url = res.data.res
+            if(url && url!=="")window.open(url, '_blank');
+            setIsLoading3(false)
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     const styles = {
+        openInDrive: {
+            width: "92px",
+            height: "16px",
+            left: "0px",
+            top: "20px",
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 400,
+            fontSize: "12px",
+            lineHeight: "16px",
+            color: "#3692EF",
+            display: 'flex',
+            flexDirection: 'row',
+            cursor: 'pointer'
+        },
         headerContainer: {
             marginTop: "30px",
             marginLeft: "32px",
@@ -1196,7 +1229,12 @@ const RFP = (props) => {
                                             checked={selectedRfps.includes(e.RFP_ID)}
                                             readOnly={true}
                                             onClick={(eve) => { if (eve.target.checked) { setselectedRfps(prev => [...prev, e.RFP_ID]) } else { setselectedRfps(prev => prev.filter(ele => ele !== e.RFP_ID)) } }}
-                                        /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
+                                        />
+                                        <div style={{display:'flex', flexDirection:'column'}}>
+                                        <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</div>
+                                        <div style={styles.openInDrive} onClick={(e) => openDriveLink(e, e.Folder_ID)}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>
+                                        </div>
+                                        
                                     </div>
                                 </td>
                                 <td style={{ ...styles.tableCell, minWidth: "150px" }}>{e.Client}</td>

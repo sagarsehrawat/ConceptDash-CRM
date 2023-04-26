@@ -12,6 +12,8 @@ import {
   MDBIcon,
 } from "mdb-react-ui-kit";
 import { Button } from "react-bootstrap";
+import leftSide from '../../Images/Left side.svg'
+import leftSideBig from '../../Images/Left sideBig.svg'
 // import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 // import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -27,9 +29,9 @@ const styles = {
   },
   rightPart: {
     position: "absolute",
-    width: "50vw",
+    width: "52vw",
     height: "100vh",
-    left: "50vw",
+    left: "48vw",
     top: "0px",
     background: "#F8FAFB",
   },
@@ -46,7 +48,7 @@ const styles = {
     position: "absolute",
     width: "20vw",
     height: "3vh",
-    left: "14vw",
+    left: "15vw",
     top: "37vh",
     fontFamily: "'Roboto'",
     fontStyle: "normal",
@@ -59,7 +61,7 @@ const styles = {
     position: "absolute",
     width: "22vw",
     height: "5vh",
-    left: "14vw",
+    left: "15vw",
     top: "42vh",
     fontFamily: "'Roboto'",
     fontStyle: "normal",
@@ -79,7 +81,7 @@ const styles = {
     position: "absolute",
     width: "22vw",
     height: "5vh",
-    left: "14vw",
+    left: "15vw",
     top: "65vh",
     background: PRIMARY_COLOR,
     border: "1px solid #6519E1",
@@ -104,6 +106,7 @@ const styles = {
 };
 
 const Login = () => {
+  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
   const { privileges, setPrivileges } = useContext(AuthContext);
   useEffect(() => {
@@ -132,7 +135,7 @@ const Login = () => {
     e.preventDefault();
     handleSubmit(e);
   };
-
+  console.log(viewportWidth)
   const handleSubmit = async (e) => {
     e.preventDefault();
     await axios
@@ -205,7 +208,8 @@ const Login = () => {
         </div>
       </div> */}
       <div style={styles.leftPart}>
-        <div style={styles.leftUpper}></div>
+        {/* <div style={styles.leftUpper}></div> */}
+        {viewportWidth>1500?<img src={leftSideBig}/>:<img src={leftSide}/>}
       </div>
       <div style={styles.rightPart}>
         <div style={styles.welcomeHeading}>Welcome Back!</div>
