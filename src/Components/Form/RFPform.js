@@ -318,7 +318,7 @@ function RFPform(props) {
                   </Form.Group>
                   <Form.Group style={{width:'380px'}}>
                 <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Category</Form.Label>
-                    <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="projectCat" required>
+                    <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="projectCat">
                       <option value="">Select Project Category</option>
                       {projectDepts.length > 0
                         ? projectDepts.map((e) => (
