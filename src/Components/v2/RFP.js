@@ -1232,7 +1232,7 @@ const RFP = (props) => {
                                         />
                                         <div style={{display:'flex', flexDirection:'column'}}>
                                         <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</div>
-                                        <div style={styles.openInDrive} onClick={(e) => openDriveLink(e, e.Folder_ID)}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>
+                                        <div style={styles.openInDrive} onClick={(f) => openDriveLink(f, e.Folder_ID)}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>
                                         </div>
                                         
                                     </div>
