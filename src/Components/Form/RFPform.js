@@ -184,6 +184,8 @@ function RFPform(props) {
   
     axios
       .post(HOST + ADD_RFP, formData, {
+        maxContentLength: 50 * 1024 * 1024, // 100MB
+        maxBodyLength: 50 * 1024 * 1024, // 100MB
         headers: {
           'Content-Type': 'multipart/form-data',
           auth: 'Rose ' + localStorage.getItem('auth'),
