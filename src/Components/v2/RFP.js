@@ -711,8 +711,9 @@ const RFP = (props) => {
             )
             .then((res) => {
                 handleCloseDelete();
+                console.log(res)
                 if (res.data.success) {
-                    selectedRfps([])
+                    setselectedRfps([])
                     setgreen(true)
                     setCall(apiCall + 1);
                 } else {
