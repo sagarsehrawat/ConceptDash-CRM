@@ -84,7 +84,7 @@ const styles = {
     left: "15vw",
     top: "65vh",
     background: PRIMARY_COLOR,
-    border: "1px solid #6519E1",
+    // border: "1px solid #6519E1",
     boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
     borderRadius: "8px"
   },
@@ -218,7 +218,7 @@ const Login = () => {
         </div>
         <MDBContainer style={{textAlign: 'center',marginTop:'49vh', width: '24vw'}} >
           <MDBInput
-          style={{height:'5vh', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A'}}
+          style={{height:'5vh', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A', borderRadius:'8px'}}
             wrapperClass="mb-4"
             // label="Username"
             placeholder="Username"
@@ -227,7 +227,7 @@ const Login = () => {
             onChange={(e) => { setusername(e.target.value) }}
           />
           <MDBInput
-          style={{height:'5vh', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A'}}
+          style={{height:'5vh', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A', borderRadius:'8px'}}
           wrapperClass="mb-4"
             placeholder="Password"
             // label='Password'
