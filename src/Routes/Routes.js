@@ -7,7 +7,7 @@ import {
 import ProtectedRoutes from './ProtectedRoutes';
 import Login from '../Components/Login/Login'
 import Dashboard from '../Components/Dashboards/Dashboard';
-import NewUser from '../Components/Login/NewUser';
+// import NewUser from '../Components/Login/NewUser';
 
 const AllRoutes = () => {
     return (
