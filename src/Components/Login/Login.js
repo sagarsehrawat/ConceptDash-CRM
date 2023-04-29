@@ -7,105 +7,27 @@ import AuthContext from "../../Context/AuthContext";
 import {
   MDBContainer,
   MDBInput,
-  MDBCheckbox,
-  MDBBtn,
-  MDBIcon,
 } from "mdb-react-ui-kit";
 import { Button } from "react-bootstrap";
 import leftSide from '../../Images/Left side.svg'
 import leftSideBig from '../../Images/Left sideBig.svg'
+import { Modal } from "react-bootstrap";
 // import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 // import "@fortawesome/fontawesome-free/css/all.min.css";
+import deadline from '../../Images/Vector.png'
+import cross from '../../Images/cross1.svg'
+import SmallerLoader from "../Loader/SmallerLoader";
 
-const styles = {
-  leftPart: {
-    position: "absolute",
-    width: "50vw",
-    height: "100vh",
-    left: "0px",
-    top: "0px",
-    background: "#F3F5F9",
-    boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
-  },
-  rightPart: {
-    position: "absolute",
-    width: "52vw",
-    height: "100vh",
-    left: "48vw",
-    top: "0px",
-    background: "#F8FAFB",
-  },
-  leftUpper: {
-    position: "absolute",
-    width: "40vw",
-    height: "40vw",
-    left: "-25vw",
-    top: "-34.7vh",
-    background: "#E0D8EC",
-    transform: "rotate(-45deg)",
-  },
-  welcomeHeading: {
-    position: "absolute",
-    width: "20vw",
-    height: "3vh",
-    left: "15vw",
-    top: "37vh",
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 600,
-    fontSize: "24px",
-    lineHeight: "36px",
-    color: "#0A0A0A",
-  },
-  welcomeText: {
-    position: "absolute",
-    width: "22vw",
-    height: "5vh",
-    left: "15vw",
-    top: "42vh",
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 400,
-    fontSize: "14px",
-    lineHeight: "20px",
-    color: "#A3A3A3",
-  },
-  button: {
-    boxSizing: "border-box",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: "12px 64px",
-    gap: "10px",
-    position: "absolute",
-    width: "22vw",
-    height: "5vh",
-    left: "15vw",
-    top: "65vh",
-    background: PRIMARY_COLOR,
-    // border: "1px solid #6519E1",
-    boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
-    borderRadius: "8px"
-  },
-  loginText: {
-    marginTop: '8px',
-    width: "35px",
-    height: "20px",
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 500,
-    fontSize: "14px",
-    lineHeight: "20px",
-    color: "#FBFBFB",
-    flex: "none",
-    order: 0,
-    flexGrow: 0,
-    cursor: 'pointer'
-  }
-};
+
 
 const Login = () => {
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [show1, setShow1] = useState(false);
+  const handleClose1 = () => setShow1(false);
+  const handleShow1 = () => setShow1(true);
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
   const { privileges, setPrivileges } = useContext(AuthContext);
@@ -135,16 +57,17 @@ const Login = () => {
     e.preventDefault();
     handleSubmit(e);
   };
-  console.log(viewportWidth)
+  const [isLoading, setisLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setisLoading(true);
     await axios
       .post(HOST + LOGIN, { username: username, password: password })
       .then((res) => {
         if (res.data.error === "Email or Password is Incorrect") {
-          alert("Incorrect Username or Password");
+          handleShow()
         } else {
-          if (!res.data.success) alert("Something Went Wrong...");
+          handleShow1()
         }
         window.localStorage.setItem("auth", res.data.auth);
         localStorage.setItem("department", res.data.user.department);
@@ -177,14 +100,24 @@ const Login = () => {
               default:
                 break;
             }
+            
+            setisLoading(false);
           })
           .catch((err) => {
             console.log(err);
+            setisLoading(false);
           });
       })
       .catch((err) => {
         console.log(err);
+        setisLoading(false);
+        if(err.response.data.error==='Email or Password is Incorrect') {
+          handleShow();
+        } else {
+          handleShow1()
+        }
       });
+      setisLoading(false);
   };
   return (
     <>
@@ -207,40 +140,86 @@ const Login = () => {
           </form>
         </div>
       </div> */}
-      <div style={styles.leftPart}>
+      <div className='leftPart'>
         {/* <div style={styles.leftUpper}></div> */}
         {viewportWidth>1500?<img src={leftSideBig}/>:<img src={leftSide}/>}
       </div>
-      <div style={styles.rightPart}>
-        <div style={styles.welcomeHeading}>Welcome Back!</div>
-        <div style={styles.welcomeText}>
+      <div className="rightPart">
+        <Modal
+          show={show}
+          onHide={handleClose}
+          // backdrop="static"
+          className="incorrectModal"
+          dialogClassName="filter-dialog"
+          backdropClassName="filter-backdrop"
+          animation={false}
+        >
+          <div style={{backgroundColor:'#E84C3D'}}>
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{width: '260px',marginTop: '17px', marginLeft: '17px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={deadline} />
+                        <div className="addHeading">Wrong Credentials</div>
+                    </div>
+                    <div><img onClick={handleClose} style={{marginRight:'35px', marginTop:'1px'}} src={cross} /></div>
+                </div>
+                <div className="invalidText">
+                  Invalid username or password.
+                </div>
+          </div>
+        </Modal>
+        <Modal
+          show={show1}
+          onHide={handleClose1}
+          // backdrop="static"
+          className="incorrectModal"
+          dialogClassName="filter-dialog"
+          backdropClassName="filter-backdrop"
+          animation={false}
+        >
+          <div style={{backgroundColor:'#E84C3D'}}>
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{width: '260px',marginTop: '17px', marginLeft: '17px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={deadline} />
+                        <div className="addHeading">Network Error</div>
+                    </div>
+                    <div><img onClick={handleClose1} style={{marginRight:'35px', marginTop:'1px'}} src={cross} /></div>
+                </div>
+                <div className="invalidText">
+                  Something went wrong.
+                </div>
+          </div>
+        </Modal>
+        <div className="welcomeHeading">Welcome Back!</div>
+        <div className="welcomeText">
           Welcome back to taskforce! Enter your credentials to login
         </div>
-        <MDBContainer style={{textAlign: 'center',marginTop:'49vh', width: '24vw'}} >
+        <MDBContainer style={{textAlign: 'center',marginTop:'47vh', width: '24vw'}} >
           <MDBInput
           style={{height:'5vh', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A', borderRadius:'8px'}}
-            wrapperClass="mb-4"
+            wrapperClass="mb-5"
             // label="Username"
             placeholder="Username"
-            id="form1"
+            id='typeText'
             type="text"
             onChange={(e) => { setusername(e.target.value) }}
           />
           <MDBInput
           style={{height:'5vh', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A', borderRadius:'8px'}}
-          wrapperClass="mb-4"
+          wrapperClass="mb-2"
             placeholder="Password"
             // label='Password'
-            id="form2"
+            // id="form2"
             type="password"
+            id='typePassword'
             onChange={(e) => { setpassword(e.target.value) }}
           />
         </MDBContainer>
         {/* <div style={styles.button}> */}
+        <div className="forgot">Forgot Password?</div>
           {/* <div onClick={onLogin} style={styles.loginText}>Login</div> */}
-          <Button onClick={onLogin} style={styles.button}>
-            <p style={styles.loginText}>Login</p>
-          </Button>
+          <button onClick={onLogin} className='button' disabled={isLoading}>
+            <p className="loginText">Login</p>
+          </button>
         {/* </div> */}
       </div>
     </>

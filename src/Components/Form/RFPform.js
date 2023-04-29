@@ -27,7 +27,6 @@ import AuthContext from '../../Context/AuthContext'
 import plus from '../../Images/plus.svg'
 
 
-
 const styles = {
   nameHeading: {
     height: "20px",
@@ -186,15 +185,17 @@ function RFPform(props) {
 
     axios
       .post(HOST + ADD_RFP, formData, {
-        maxContentLength: 500 * 1024 * 1024, // 100MB
-        maxBodyLength: 500 * 1024 * 1024, // 100MB
+        maxContentLength: 100 * 1024 * 1024, // 100MB
+        maxBodyLength: 100 * 1024 * 1024, // 100MB
         headers: {
           'Content-Type': 'multipart/form-data',
           auth: 'Rose ' + localStorage.getItem('auth'),
         },
+        timeout: 1800000,
       })
       .then((res) => {
         setisLoading(false);
+        console.log(res)
         if (res.data.success) {
           closeModal();
           setGreen(true);
@@ -452,7 +453,7 @@ function RFPform(props) {
                 </Row>
                 <Row>
                   <Form.Group style={{ width: '380px' }}>
-                    <Form.Label style={{ ...styles.nameHeading, marginTop: '24px' }}>Relevent Files(Upto 10mb each file)</Form.Label>
+                    <Form.Label style={{ ...styles.nameHeading, marginTop: '24px' }}>Relevent Files(Upto 500mb each file)</Form.Label>
                     <Form.Control
                       style={{ ...styles.nameInput, width: '360px' }}
                       name="files"

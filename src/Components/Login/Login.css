@@ -48,6 +48,215 @@
   background-color: white;
 }
 
+.leftPart {
+    position: "absolute";
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    background: #F3F5F9;
+    box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.08);
+  }
+
+.rightPart {
+    position: absolute;
+    width: 52vw;
+    height: 100vh;
+    left: 48vw;
+    top: 0px;
+    background: #F8FAFB;
+  }
+  .leftUpper {
+    position: absolute;
+    width: 40vw;
+    height: 40vw;
+    left: -25vw;
+    top: -34.7vh;
+    background: #E0D8EC;
+    transform: rotate(-45deg);
+  }
+
+.welcomeHeading {
+    position: absolute;
+    width: 20vw;
+    height: 3.5vh;
+    left: 15vw;
+    top: 34vh;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 36px;
+    background: linear-gradient(90.44deg, #4776E6 0.28%, #8E54E9 99.79%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
+  .welcomeText {
+    position: absolute;
+    width: 22vw;
+    height: 5vh;
+    left: 15vw;
+    top: 39vh;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #A3A3A3;
+  }
+  .button {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 64px;
+    gap: 10px;
+    /* position: absolute; */
+    width: 22vw;
+    height: 5vh;
+    margin-left: 15vw;
+    margin-top: 20px;
+    background: #8361FE;
+    border: 1px solid #6519E1;
+    box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25);
+    border-radius: 8px;
+  }
+  .button:hover {
+    box-sizing:border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+    width: 22vw;
+    height: 5vh;
+    background: linear-gradient(90.33deg, #6519E1 22.6%, rgba(101, 25, 225, 0.858205) 49.12%, rgba(101, 25, 225, 0.685567) 81.4%, rgba(101, 25, 225, 0.576297) 108.5%, rgba(139, 110, 188, 0.48) 134.69%);
+    /* border: 1px solid #6519E1; */
+    box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25);
+    border-radius: 8px;
+  }
+
+  .button:active {
+    box-sizing:border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+    width: 22vw;
+    height: 5vh;
+    background: #400C96;
+    /* border: 1px solid #6519E1; */
+    box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25);
+    border-radius: 8px;
+  }
+  .button:disabled {
+    box-sizing:border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+    width: 22vw;
+    height: 5vh;
+    background: #A3A3A3;
+    border: 1px solid #A3A3A3;
+    /* box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25); */
+    border-radius: 8px;
+  }
+  .loginText {
+    width: 35px;
+    height: 20px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #FBFBFB;
+    flex:none;
+    order: 0;
+    flex-grow: 0;
+    cursor: pointer;
+  }
+
+.forgot{
+  margin-left: 51vh;
+  margin-top: 0;
+  width: 115px;
+  height: 20px;
+  left: 408px;
+  top: 516px;
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  /* identical to box height, or 143% */
+
+  /* Mob/Primary colour */
+  color: #8361FE;
+  cursor: pointer;
+}
+
+.incorrectModal{
+  /* padding: 20px; */
+  box-sizing: border-box;
+
+/* position: absolute; */
+width: 260px;
+height: fit-content;
+margin-left: 75vw;
+margin-top: 10vh;
+
+background: #E84C3D;
+border: 1px solid #E84C3D;
+box-shadow: 0px 5px 4px rgba(232, 76, 61, 0.25);
+border-radius: 12px;
+
+}
+
+.addHeading{
+  /* position: absolute; */
+width: 116px;
+height: 20px;
+margin-left: 8px;
+top: 16px;
+
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+
+color: #FBFBFB;
+
+}
+
+.invalidText{
+width: 191px;
+height: 20px;
+margin-left: 18px;
+margin-top: 10px;
+margin-bottom: 16px;
+
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+
+color: #FBFBFB;
+}
+
 @media screen and (max-width : 898px) {
   .home {
 
