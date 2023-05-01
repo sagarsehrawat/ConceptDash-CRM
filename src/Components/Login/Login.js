@@ -66,9 +66,7 @@ const Login = () => {
       .then((res) => {
         if (res.data.error === "Email or Password is Incorrect") {
           handleShow()
-        } else {
-          handleShow1()
-        }
+        } 
         window.localStorage.setItem("auth", res.data.auth);
         localStorage.setItem("department", res.data.user.department);
         localStorage.setItem("emailWork", res.data.user.emailWork);
