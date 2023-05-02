@@ -213,7 +213,7 @@ const Login = () => {
           />
         </MDBContainer>
         {/* <div style={styles.button}> */}
-        <div className="forgot">Forgot Password?</div>
+        <div className="forgot" onClick={()=>navigate('/forgotPassword')}>Forgot Password?</div>
           {/* <div onClick={onLogin} style={styles.loginText}>Login</div> */}
           <button onClick={onLogin} className='button' disabled={isLoading}>
             <p className="loginText">Login</p>

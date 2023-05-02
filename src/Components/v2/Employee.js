@@ -64,6 +64,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import filterIcon from "../../Images/Filter.svg";
 import EmployeeForm from '../Form/EmployeeForm'
 import UpdateEmployeeForm from '../Form/UpdateEmployeeForm'
+import PreHireEmployeeForm from "../Form/PreHireEmployeeForm";
 
 function Employee(props) {
   const { isCollapsed } = props;
@@ -1253,7 +1254,7 @@ function Employee(props) {
       {grid ? (
         <div
           class="text-center"
-          style={{ marginLeft: "32px", marginRight: "32px" }}
+          style={{ marginLeft: "32px", marginRight: "32px", height:'70vh', overflowX:'auto' }}
         >
           <div
             class="
@@ -2908,7 +2909,7 @@ function Employee(props) {
                     <div><img onClick={handleClose} style={{marginRight:'25px',float: 'right'}} src={cross} /></div>
                 </div>
                     {
-                        <EmployeeForm
+                        <PreHireEmployeeForm
                             setRed={setred}
                             setGreen={setgreen}
                             closeModal={handleClose}

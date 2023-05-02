@@ -68,6 +68,9 @@ function BudgetsForm(props) {
     if (name === "budgetYear") {
       setyear(value);
     }
+    if(name==='dept') {
+      getProjectCategories(value)
+    }
     const newForm = form;
     newForm[name] = value;
     setform(newForm);
@@ -100,9 +103,14 @@ function BudgetsForm(props) {
           console.log(err);
         });
 
-      await axios
+      setisLoading(false);
+    };
+    call();
+  }, [apiCallCity]);
+  const getProjectCategories = async(e)=>{
+    await axios
         .get(HOST + GET_PROJECT_CATEGORIES, {
-          headers: { auth: "Rose " + localStorage.getItem("auth") },
+          headers: { auth: "Rose " + localStorage.getItem("auth"), id: e },
         })
         .then((res) => {
           setprojectDepts(res.data.res);
@@ -110,10 +118,7 @@ function BudgetsForm(props) {
         .catch((err) => {
           console.log(err);
         });
-      setisLoading(false);
-    };
-    call();
-  }, [apiCallCity]);
+  }
   const handleSubmit = (e) => {
     setisLoading(true);
     e.preventDefault();
@@ -228,7 +233,12 @@ function BudgetsForm(props) {
 
             <Row>
               <Form.Group style={{width:'380px'}}>
-                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Department</Form.Label>
+              <Form.Label style={{...styles.nameHeading,width:'380px', marginTop:'24px'}}>
+                  <div className="d-flex flex-row justify-content-between align-items-center">
+                    <div>Department</div>
+                    <div style={{background:'#EBE9F1',borderRadius:'10px', width:'20px', textAlign:'center', cursor:'pointer'}} onClick={handleShowDeptForm}><img alt="Add New Dept" src={plus} /></div>
+                  </div>
+                </Form.Label>
                 <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="dept" required>
                   <option value="">Select Department</option>
                   {depts.length > 0
@@ -239,7 +249,12 @@ function BudgetsForm(props) {
                 </Form.Select>
               </Form.Group>
               <Form.Group style={{width:'380px'}}>
-                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Category</Form.Label>
+              <Form.Label style={{...styles.nameHeading,width:'380px', marginTop:'24px'}}>
+                  <div className="d-flex flex-row justify-content-between align-items-center">
+                    <div>Project Category</div>
+                    <div style={{background:'#EBE9F1',borderRadius:'10px', width:'20px', textAlign:'center', cursor:'pointer'}} onClick={handleShowCategoryForm}><img alt="Add New Cat" src={plus} /></div>
+                  </div>
+                </Form.Label>
                 <Form.Select style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="projectCat" required>
                   <option value="">Select Project Category</option>
                   {projectDepts.length > 0

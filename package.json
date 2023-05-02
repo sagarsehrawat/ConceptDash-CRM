@@ -56,6 +56,7 @@
     "react-loader-spinner": "^5.3.4",
     "react-minimal-pie-chart": "^8.3.0",
     "react-multiselect-dropdown-bootstrap": "^1.1.0",
+    "react-otp-input": "^3.0.2",
     "react-pro-sidebar": "^1.0.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",

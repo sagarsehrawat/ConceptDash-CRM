@@ -1,5 +1,5 @@
-export const HOST = 'https://crm-api.conceptdash.ca'
-// export const HOST = 'http://localhost:8080'
+// export const HOST = 'https://crm-api.conceptdash.ca'
+export const HOST = 'http://localhost:8080'
 
 // get apis
 export const GET_ALL_USERS = '/api/get/customers'
@@ -90,7 +90,7 @@ export const ADD_ASSET = '/api/add/asset'
 export const ADD_BUDGET = '/api/add/budget'
 export const ADD_COMPANY = '/api/add/company'
 export const ADD_CONTACT = '/api/add/contact'
-export const ADD_EMPLOYEE = '/api/add/employee'
+export const ADD_EMPLOYEE = '/api/add/employee/prehire'
 export const ADD_JOB_TITLE = '/api/add/jobTitle'
 export const ADD_ORDER = '/api/add/order'
 export const ADD_PROJECT = '/api/add/project'
@@ -120,6 +120,12 @@ export const DELETE_CONTACT = '/api/delete/customer/id'
 export const DELETE_COMPANY = '/api/delete/company/id'
 export const DELETE_TASK = '/api/delete/task/id'
 export const DELETE_TRANSACTION = '/api/delete/expenseTransaction/id'
+
+
+
+export const FORGOT_PASSWORD = '/api/forgot/password'
+export const VERIFY_OTP = '/api/verify/otp'
+export const CHANGE_PASSWORD = '/api/update/password'
 
 
 
