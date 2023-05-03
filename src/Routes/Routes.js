@@ -11,6 +11,7 @@ import NewUser from '../Components/Login/NewUser';
 import ForgotPassword from '../Components/Login/ForgotPassword';
 import EnterOtp from '../Components/Login/EnterOtp';
 import ResetPassword from '../Components/Login/ResetPassword';
+import PasswordChanged from '../Components/Login/PasswordChanged';
 
 const AllRoutes = () => {
     return (
@@ -18,6 +19,7 @@ const AllRoutes = () => {
             <Router>
                 <Routes>
                     <Route exact path='/' element={<Login />} />
+                    <Route exact path='/passwordChanged' element={<PasswordChanged />} />
                     <Route exact path='/forgotPassword' element={<ForgotPassword />} />
                     <Route exact path='/otp' element={<EnterOtp />} />
                     <Route exact path='/resetPassword' element={<ResetPassword />} />

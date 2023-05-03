@@ -1,13 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Login.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from "axios";
 import { CHANGE_PASSWORD, GET_EMPLOYEE_PRIVILEGES, HOST, LOGIN, PRIMARY_COLOR } from "../Constants/Constants";
 import AuthContext from "../../Context/AuthContext";
 import {
-  MDBContainer,
-  MDBInput,
+    MDBContainer,
+    MDBInput,
 } from "mdb-react-ui-kit";
 import { Button } from "react-bootstrap";
 import leftSide from '../../Images/Left side.svg'
@@ -18,6 +17,7 @@ import { Modal } from "react-bootstrap";
 import deadline from '../../Images/Vector.png'
 import cross from '../../Images/cross1.svg'
 import SmallerLoader from "../Loader/SmallerLoader";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeDropper } from '@fortawesome/free-solid-svg-icons';
 
 function ResetPassword() {
@@ -71,7 +71,7 @@ function ResetPassword() {
         .post(HOST + CHANGE_PASSWORD, { password: password, id: location.state.id })
         .then((res) => {
           if(res.data.success) {
-            navigate('/')
+            navigate('/passwordChanged')
           }
         })
         .catch((err) => {
@@ -83,11 +83,15 @@ function ResetPassword() {
     };
     return (
       <>
-        <div className='leftPart'>
-          {/* <div style={styles.leftUpper}></div> */}
-          {viewportWidth>1500?<img src={leftSideBig}/>:<img src={leftSide}/>}
-        </div>
-        <div className="rightPart">
+        {viewportWidth>1500?
+      <div className='leftPartBig'>
+        <img src={leftSideBig}/>
+      </div>:
+      <div className='leftPart'>
+        <img src={leftSide}/>
+      </div>
+    }
+      <div className={viewportWidth<1500?"rightPart":"rightPartBig"}>
           <Modal
             show={show}
             onHide={handleClose}

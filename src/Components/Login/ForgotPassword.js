@@ -78,11 +78,15 @@ function ForgotPassword() {
             </form>
           </div>
         </div> */}
-        <div className='leftPart'>
-          {/* <div style={styles.leftUpper}></div> */}
-          {viewportWidth>1500?<img src={leftSideBig}/>:<img src={leftSide}/>}
-        </div>
-        <div className="rightPart">
+        {viewportWidth>1500?
+      <div className='leftPartBig'>
+        <img src={leftSideBig}/>
+      </div>:
+      <div className='leftPart'>
+        <img src={leftSide}/>
+      </div>
+    }
+      <div className={viewportWidth<1500?"rightPart":"rightPartBig"}>
           <Modal
             show={show}
             onHide={handleClose}

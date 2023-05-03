@@ -17,6 +17,8 @@ import { Modal } from "react-bootstrap";
 import deadline from '../../Images/Vector.png'
 import cross from '../../Images/cross1.svg'
 import SmallerLoader from "../Loader/SmallerLoader";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -24,7 +26,11 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const [showPassword, setShowPassword] = useState(false);
+  
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
   const handleShow1 = () => setShow1(true);
@@ -138,11 +144,15 @@ const Login = () => {
           </form>
         </div>
       </div> */}
+      {viewportWidth>1500?
+      <div className='leftPartBig'>
+        <img src={leftSideBig}/>
+      </div>:
       <div className='leftPart'>
-        {/* <div style={styles.leftUpper}></div> */}
-        {viewportWidth>1500?<img src={leftSideBig}/>:<img src={leftSide}/>}
+        <img src={leftSide}/>
       </div>
-      <div className="rightPart">
+    }
+      <div className={viewportWidth<1500?"rightPart":"rightPartBig"}>
         <Modal
           show={show}
           onHide={handleClose}
@@ -193,24 +203,22 @@ const Login = () => {
         </div>
         <MDBContainer style={{textAlign: 'center',marginTop:'47vh', width: '24vw'}} >
           <MDBInput
-          style={{height:'5vh', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A', borderRadius:'8px'}}
+            style={{height:'5vh', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A', borderRadius:'8px'}}
             wrapperClass="mb-5"
-            // label="Username"
             placeholder="Username"
             id='typeText'
             type="text"
             onChange={(e) => { setusername(e.target.value) }}
           />
           <MDBInput
-          style={{height:'5vh', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A', borderRadius:'8px'}}
-          wrapperClass="mb-2"
+            style={{height:'5vh', fontSize: '14px', fontFamily: 'Roboto', lineHeight: '20px', fontWeight: '400', color: '#0A0A0A', borderRadius:'8px'}}
+            wrapperClass="mb-2"
             placeholder="Password"
-            // label='Password'
-            // id="form2"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             id='typePassword'
             onChange={(e) => { setpassword(e.target.value) }}
           />
+          {/* {showPassword?<FontAwesomeIcon icon={faEyeSlash} style={{ height: "12px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={handleTogglePassword} />:<FontAwesomeIcon icon={faEye} style={{ height: "12px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={handleTogglePassword} />} */}
         </MDBContainer>
         {/* <div style={styles.button}> */}
         <div className="forgot" onClick={()=>navigate('/forgotPassword')}>Forgot Password?</div>

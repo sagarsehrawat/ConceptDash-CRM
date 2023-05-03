@@ -116,11 +116,15 @@ function NewUser() {
             </form>
           </div>
         </div> */}
-        <div className='leftPart'>
-          {/* <div style={styles.leftUpper}></div> */}
-          {viewportWidth>1500?<img src={leftSideBig}/>:<img src={leftSide}/>}
-        </div>
-        <div className="rightPart">
+        {viewportWidth>1500?
+      <div className='leftPartBig'>
+        <img src={leftSideBig}/>
+      </div>:
+      <div className='leftPart'>
+        <img src={leftSide}/>
+      </div>
+    }
+      <div className={viewportWidth<1500?"rightPart":"rightPartBig"}>
           <div className="welcomeHeading">Welcome To TaskForce!</div>
           <div className="welcomeText">
           We're excited to have you onboard. Create your credentials to login.
