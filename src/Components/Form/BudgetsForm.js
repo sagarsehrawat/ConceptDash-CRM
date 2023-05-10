@@ -14,10 +14,10 @@ import {
   PRIMARY_COLOR
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
-import AddCity from "./AddCity";
 import LoadingSpinner from "../Loader/Loader";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
+import AddCity from "./AddCity";
 import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import plus from '../../Images/plus.svg'

@@ -12,6 +12,9 @@ import ForgotPassword from '../Components/Login/ForgotPassword';
 import EnterOtp from '../Components/Login/EnterOtp';
 import ResetPassword from '../Components/Login/ResetPassword';
 import PasswordChanged from '../Components/Login/PasswordChanged';
+import LinkExpired from '../Components/Login/LinkExpired';
+import TokenRegenerated from '../Components/Login/TokenRegenerated';
+import Error404 from '../Components/Login/Error404';
 
 const AllRoutes = () => {
     return (
@@ -23,6 +26,10 @@ const AllRoutes = () => {
                     <Route exact path='/forgotPassword' element={<ForgotPassword />} />
                     <Route exact path='/otp' element={<EnterOtp />} />
                     <Route exact path='/resetPassword' element={<ResetPassword />} />
+                    <Route exact path='/set/credentials' element={<NewUser />} />
+                    <Route exact path='/link/expired' element={<LinkExpired />} />
+                    <Route exact path='/regenerated/token' element={<TokenRegenerated />} />
+                    <Route exact path='/404' element={<Error404 />} />
 
                     {/*******************Protected Routes******** */}
                     <Route path='/' element={<ProtectedRoutes />} >

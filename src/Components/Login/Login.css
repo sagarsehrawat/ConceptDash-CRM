@@ -316,3 +316,138 @@ text-align: center;
 /* Dark grey */
 color: #70757A;
 }
+.logo{
+  position: absolute;
+  width: 193px;
+  height: 59px;
+  left: 5vw;
+  top: 5vh;
+}
+.linkExpired{
+  position: absolute;
+  /* width: 138px; */
+  height: 36px;
+  left: calc(50% - 138px/2 + 20px);
+  top: 296px;
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 36px;
+  /* identical to box height, or 150% */
+  text-align: center;
+  color: #0A0A0A;
+
+}
+.expiredText{
+  position: absolute;
+  width: 561px;
+  height: 120px;
+  left: calc(52% - 561px/2 + 0.5px);
+  top: 344px;
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  /* or 143% */
+  text-align: center;
+
+  /* Dark grey */
+  color: #70757A;
+
+}
+.expiredButton{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 64px;
+  gap: 10px;
+
+  position: absolute;
+  width: 320px;
+  height: 44px;
+  left: calc(52% - 320px/2);
+  top: 496px;
+
+  /* Mob/Primary colour */
+  background: #8361FE;
+  /* Dashboard Menu selection shadow */
+  box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25);
+  border-radius: 8px;
+}
+.expiredButton:hover {
+  
+  background: linear-gradient(90.33deg, #6519E1 22.6%, rgba(101, 25, 225, 0.858205) 49.12%, rgba(101, 25, 225, 0.685567) 81.4%, rgba(101, 25, 225, 0.576297) 108.5%, rgba(139, 110, 188, 0.48) 134.69%);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 64px;
+  gap: 10px;
+
+  position: absolute;
+  width: 320px;
+  height: 44px;
+  left: calc(52% - 320px/2);
+  top: 496px;
+
+  /* Mob/Primary colour */
+  /* Dashboard Menu selection shadow */
+  box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25);
+  border-radius: 8px;
+}
+
+.expiredButton:active {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 64px;
+  gap: 10px;
+
+  position: absolute;
+  width: 320px;
+  height: 44px;
+  left: calc(52% - 320px/2);
+  top: 496px;
+
+  /* Mob/Primary colour */
+  background: #8361FE;
+  /* Dashboard Menu selection shadow */
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25);
+}
+.expiredButton:disabled {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 64px;
+  gap: 10px;
+
+  position: absolute;
+  width: 320px;
+  height: 44px;
+  left: calc(52% - 320px/2);
+  top: 496px;
+
+  /* Mob/Primary colour */
+  /* Dashboard Menu selection shadow */
+  box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25);
+  border-radius: 8px;
+  background: #A3A3A3;
+  border: 1px solid #A3A3A3;
+  /* box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25); */
+}
+.bgRight{
+  position: absolute;
+left: 71vw;
+top: 40vh;
+
+/* opacity: 0.12; */
+/* transform: rotate(-138.58deg); */
+}

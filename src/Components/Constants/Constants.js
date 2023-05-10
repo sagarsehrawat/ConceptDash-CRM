@@ -1,5 +1,5 @@
-export const HOST = 'https://crm-api.conceptdash.ca'
-// export const HOST = 'http://localhost:8080'
+// export const HOST = 'https://crm-api.conceptdash.ca'
+export const HOST = 'http://localhost:8080'
 
 // get apis
 export const GET_ALL_USERS = '/api/get/customers'
@@ -79,6 +79,13 @@ export const GET_PROPOSAL_STATUS = '/api/get/proposal/status'
 export const GET_PROPOSAL_MANAGER = '/api/get/proposal/managers'
 
 export const DOWNLOAD_BUDGET_DESIGN = '/api/get/file/budgets'
+
+
+export const GET_NOTIFICATIONS = '/api/get/notification'
+export const DELETE_NOTIFICATIONS = '/api/delete/notification'
+export const VERIFY_TOKEN = '/api/verify/token'
+export const SET_CREDENTIALS = '/api/add/credentials'
+export const REGENERATE_TOKEN = '/api/regenerate/token'
 
 
 

@@ -26,7 +26,6 @@ import AddCategory from "./AddCategory";
 import AuthContext from '../../Context/AuthContext'
 import plus from '../../Images/plus.svg'
 
-
 const styles = {
   nameHeading: {
     height: "20px",
