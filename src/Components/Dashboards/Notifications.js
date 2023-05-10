@@ -25,9 +25,7 @@ function Notifications(props) {
             },
           })
           .then((res) => {
-            console.log(res.data.res)
             let arr = res.data.res.Items;
-            console.log((new Date()).getDate())
             let aaj = [];
             let kal = [];
             let purane = [];
@@ -75,6 +73,7 @@ function Notifications(props) {
         }
       }
       const handleNotifClick = (e) =>{
+        console.log(e)
         if(e==='Task') {
             setnav(2);
         }
@@ -145,13 +144,13 @@ function Notifications(props) {
         {today.length>0 && <div className='heading sub-heading'>Today</div>}
             {today.length>0 && today.map((e)=>{
                 return (
-                    <div className='card-main'>
+                    <div className='card-main' onClick={(eve) => handleNotifClick(e.type)} >
                         <img
                             src={ellipse}
                             style={{ width: "56px", height: "56px", marginRight:'19px' }}
                             alt="Employee"
                         />
-                        <div onClick={handleNotifClick(e.type)} className='content' style={{flexDirection:'column'}}>
+                        <div className='content' style={{flexDirection:'column'}}>
                             <div className='message'>{e.message}</div>
                             <div className='time'>{getTimeDifference(e.timestamp)}</div>
                         </div>
