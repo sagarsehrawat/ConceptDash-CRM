@@ -144,13 +144,13 @@ function Notifications(props) {
         {today.length>0 && <div className='heading sub-heading'>Today</div>}
             {today.length>0 && today.map((e)=>{
                 return (
-                    <div className='card-main' onClick={(eve) => handleNotifClick(e.type)} >
+                    <div className='card-main' >
                         <img
                             src={ellipse}
                             style={{ width: "56px", height: "56px", marginRight:'19px' }}
                             alt="Employee"
                         />
-                        <div className='content' style={{flexDirection:'column'}}>
+                        <div onClick={(eve) => handleNotifClick(e.type)} className='content' style={{flexDirection:'column'}}>
                             <div className='message'>{e.message}</div>
                             <div className='time'>{getTimeDifference(e.timestamp)}</div>
                         </div>
