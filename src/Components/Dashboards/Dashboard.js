@@ -68,6 +68,7 @@ import cross from '../../Images/cross.svg'
 import ProjectForm from "../Form/ProjectForm";
 import Privileges from '../Update/Privileges.js'
 import { GET_EMPLOYEE_PRIVILEGES, HOST, PRIMARY_COLOR } from "../Constants/Constants";
+import PMSelector from "../v2/PMSelector";
 
 
 const Dashboard = () => {
@@ -397,7 +398,8 @@ const Dashboard = () => {
     if (nav === 2) return <Tasks isCollapsed={isCollapsed} />;
     if (nav === 3) return <BudgetCities isCollapsed={isCollapsed} />;
     if (nav === 4) return <RFP isCollapsed={isCollapsed} />
-    if (nav === 5) return <Proposal isCollapsed={isCollapsed} />
+    // if (nav === 5) return <Proposal isCollapsed={isCollapsed} />
+    if (nav === 5) return <PMSelector isCollapsed={isCollapsed} />
     if (nav === 6) return <Project isCollapsed={isCollapsed} />
     if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
     if (nav === 8) return <TestDemo />;
