@@ -80,9 +80,10 @@ function Notifications(props) {
         if(e==='Project Manager Project') {
             setnav(6);
         }
-        if(e==='Project Manager RFP') {
+        if(e==='Project Manager RFP' || e==='Add RFP') {
             setnav(4);
         }
+
       }
       console.log(all)
       const deleteAllNotifications = async (e) =>{

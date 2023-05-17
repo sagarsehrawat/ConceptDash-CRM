@@ -78,6 +78,7 @@ import Notifications from "./Notifications";
 import AddCity from "../Form/AddCity";
 import AddDepartment from "../Form/AddDepartment";
 import AddCategory from "../Form/AddCategory";
+import Profile from "../v2/Profile";
 
 
 const Dashboard = () => {
@@ -487,6 +488,7 @@ const Dashboard = () => {
     if (nav === 11) return <Customers isCollapsed={isCollapsed} />;
     if (nav === 12) return <Privileges />;
     if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
+    if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
   };
 
   const [show, setShow] = useState(false);
@@ -651,7 +653,7 @@ const Dashboard = () => {
                 </div>
               </div>
               <div style={mystyles.seperator}></div>
-              <div style={{display:'flex', flexDirection:'row', marginTop:'16px', cursor:'pointer'}}>
+              <div onClick={(e) => { setnav(15); handleCloseProfile() }} style={{display:'flex', flexDirection:'row', marginTop:'16px', cursor:'pointer'}}>
                     <img src={account} width={22} height={22} style={{marginRight:'10px'}}/>
                     <div style={mystyles.buttonText}>Account Settings</div>
               </div>
