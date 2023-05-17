@@ -43,7 +43,12 @@ import proposalsInactive from "../../Images/Proposals.svg";
 import rfpActive from "../../Images/RFP_Active.svg";
 import rfpInactive from "../../Images/RFP.svg";
 import T from "../../Images/T.svg";
+import ellipse from "../../Images/Ellipse.png";
 import askforce from "../../Images/ASKFORCE.svg";
+import account from "../../Images/accountSettings.svg";
+import team from "../../Images/teamManagement.svg";
+import adminSettings from "../../Images/adminSettings.svg";
+import logout from "../../Images/logout.svg";
 import ExpenseUpdate from "../Update/ExpenseUpdate";
 import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
@@ -69,6 +74,11 @@ import ProjectForm from "../Form/ProjectForm";
 import Privileges from '../Update/Privileges.js'
 import { GET_EMPLOYEE_PRIVILEGES, HOST, PRIMARY_COLOR } from "../Constants/Constants";
 import PMSelector from "../v2/PMSelector";
+import Notifications from "./Notifications";
+import AddCity from "../Form/AddCity";
+import AddDepartment from "../Form/AddDepartment";
+import AddCategory from "../Form/AddCategory";
+import Profile from "../v2/Profile";
 
 
 const Dashboard = () => {
@@ -95,7 +105,7 @@ const Dashboard = () => {
   const handleCloseRFP = () => setrfpShow(false);
   const handleShowRFP = () => setrfpShow(true);
 
-  //Add RFP Form Modal
+  //Add Proposal Form Modal
   const [proposalShow, setproposalShow] = useState(false);
   const handleCloseProposal = () => setproposalShow(false);
   const handleShowProposal = () => setproposalShow(true);
@@ -109,6 +119,22 @@ const Dashboard = () => {
   const handleCloseProfile = () => setshowProfile(false);
   const handleShowProfile = () => setshowProfile(true);
 
+  const [notifShow, setnotifShow] = useState(false);
+  const handleCloseNotif = () => setnotifShow(false);
+  const handleShowNotif = () => setnotifShow(true);
+
+  const [showCityForm, setShowCityForm] = useState(false);
+  const handleCloseCityForm = () => setShowCityForm(false);
+  const handleShowCityForm = () => setShowCityForm(true);
+
+  const [showDeptForm, setShowDeptForm] = useState(false);
+  const handleCloseDeptForm = () => setShowDeptForm(false);
+  const handleShowDeptForm = () => setShowDeptForm(true);
+
+  const [showCategoryForm, setShowCategoryForm] = useState(false);
+  const handleCloseCategoryForm = () => setShowCategoryForm(false);
+  const handleShowCategoryForm = () => setShowCategoryForm(true);
+
   const mystyles = {
     topNavbar: {
       height: "56px",
@@ -119,6 +145,51 @@ const Dashboard = () => {
       width: "100vw",
       marginBottom: "0px",
       gap: "20px"
+    },
+    buttonText: {
+      height: "14px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      lineHeight: "100%",
+      color: "#0A0A0A",
+      opacity: 0.7,
+      marginTop:'4px'
+    },
+    seperator: {
+      // position: "absolute",
+      marginTop:'12px',
+      width: "14vw",
+      height: "0px",
+      left: "12px",
+      top: "66px",
+      border: "1px solid #EBE9F1"
+    },
+    name:{
+      height: "14px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      lineHeight: "100%",
+      color: "#0A0A0A",
+      opacity: 0.7,
+      marginBottom:'4px'
+    },
+    email: {
+      height: "16px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "12px",
+      lineHeight: "16px",
+      color: "#70757A",
+      opacity: 0.75
+    },
+    header:{
+      display: 'flex',
+      flexDirection:'row'
     },
     plusIcon: {
       height: "32px",
@@ -149,7 +220,7 @@ const Dashboard = () => {
       borderRadius: "60px",
     },
     accLabel: {
-      width: "41px",
+      // width: "41px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 400,
@@ -226,6 +297,16 @@ const Dashboard = () => {
         zIndex: "1000",
         cursor: "pointer",
       }
+    },
+    notifModal: {
+      position: "absolute",
+      width: "25vw",
+      height: "90vh",
+      left: "75vw",
+      top: "56px",
+      background: "#FFFFFF",
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.12)",
+      borderRadius: "24px 0px 0px 24px"
     },
     sidebarMenu: {
       padding: "8px 12px",
@@ -348,14 +429,14 @@ const Dashboard = () => {
     }
     ,dpModal: {
       position: "absolute",
-      width: "232px",
+      width: "15.69vw",
       height: 'fit-content',
       left: "83vw",
       right: "1vw",
       marginTop: "6.8vh",
       background: "#FFFFFF",
       boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
-      // borderRadius: "12px",
+      borderRadius: "12px",
     },
   };
 
@@ -408,6 +489,7 @@ const Dashboard = () => {
     if (nav === 11) return <Customers isCollapsed={isCollapsed} />;
     if (nav === 12) return <Privileges />;
     if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
+    if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
   };
 
   const [show, setShow] = useState(false);
@@ -428,7 +510,8 @@ const Dashboard = () => {
             style={mystyles.plusIcon}
           />} id="basic-nav-dropdown"
             className="plus-dropdown"
-            align="end">
+            align="end"
+            >
             <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 0 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(0)} onMouseLeave={() => setplusDropdown(null)} onClick={handleShowTask}>
               <img
                 src={plusDropdown === 0 ? tasksInactive : tasksActive}
@@ -461,6 +544,30 @@ const Dashboard = () => {
               />
               Add New Project
             </NavDropdown.Item>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 4 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(4)} onMouseLeave={() => setplusDropdown(null)} onClick={handleShowDeptForm}>
+              <img
+                src={plusDropdown === 4 ? projectsInactive : projectsActive}
+                alt="Dashboard Icon"
+                style={mystyles.plusDropdownItemIcon}
+              />
+              Add New Department
+            </NavDropdown.Item>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 5 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(5)} onMouseLeave={() => setplusDropdown(null)} onClick={handleShowCategoryForm}>
+              <img
+                src={plusDropdown === 5 ? projectsInactive : projectsActive}
+                alt="Dashboard Icon"
+                style={mystyles.plusDropdownItemIcon}
+              />
+              Add Project Category
+            </NavDropdown.Item>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 6 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(6)} onMouseLeave={() => setplusDropdown(null)} onClick={handleShowCityForm}>
+              <img
+                src={plusDropdown === 6 ? projectsInactive : projectsActive}
+                alt="Dashboard Icon"
+                style={mystyles.plusDropdownItemIcon}
+              />
+              Add New City
+            </NavDropdown.Item>
             {/* <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 4 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(4)} onMouseLeave={() => setplusDropdown(null)}>
               <img
                 src={plusDropdown === 4 ? employeeInactive : employeeActive}
@@ -478,7 +585,7 @@ const Dashboard = () => {
               Add New Contact
             </NavDropdown.Item> */}
           </NavDropdown>
-          <NavDropdown
+          {/* <NavDropdown
             title={
               <img src={settingsIcon} alt="Settings Icon" />
             }
@@ -494,7 +601,7 @@ const Dashboard = () => {
               Privileges
             </NavDropdown.Item>
               <NavDropdown.Divider /> </> : <></>}
-            <NavDropdown.Item
+            <NavDropdown.Item 
               onClick={() => {
                 navigate("/");
                 localStorage.clear();
@@ -502,10 +609,23 @@ const Dashboard = () => {
             >
               Log Out
             </NavDropdown.Item>
-          </NavDropdown>
-          {/* <Nav.Link className="">
+          </NavDropdown> */}
+          <Nav.Link className="" onClick={handleShowNotif}>
             <img src={notificationIcon} alt="Notification Icon" />
-          </Nav.Link> */}
+          </Nav.Link>
+          <Modal
+            show={notifShow}
+            onHide={handleCloseNotif}
+            style={mystyles.notifModal}
+            dialogClassName="filter-dialog"
+            backdropClassName="filter-backdrop"
+            animation={false}
+          >
+            <div style={{paddingBottom:'24px', marginTop:'24px'}}>
+
+            <Notifications setnav={setnav}/> 
+            </div>
+          </Modal>
           <Nav.Link onClick={handleShowProfile}>
             <div
               style={mystyles.accountLabel}
@@ -513,19 +633,45 @@ const Dashboard = () => {
             >
               <FontAwesomeIcon icon={faCircleUser} style={mystyles.plusIcon} />
               <p style={mystyles.accLabel}>
-                {localStorage.getItem("department")}
+                {localStorage.getItem("employeeName")}
               </p>
             </div>
           </Nav.Link>
           <Modal
           show={showProfile}
           onHide={handleCloseProfile}
-          // backdrop="static"
+          backdropClassName="filter-backdrop"
           style={mystyles.dpModal}
           dialogClassName="filter-dialog"
           animation={false}
           >
-            Hello
+            <div style={{padding:'12px', width:'15.69vw'}}>
+              <div style={mystyles.header}>
+                <img src={ellipse} width={42} height={42} style={{marginRight:'8px'}} />
+                <div style={{flexDirection:'column', marginTop:'4px'}}>
+                    <div style={mystyles.name}>{localStorage.getItem('employeeName')}</div>
+                    <div style={mystyles.email}>{localStorage.getItem('emailWork')}</div>
+                </div>
+              </div>
+              <div style={mystyles.seperator}></div>
+              <div onClick={(e) => { setnav(15); handleCloseProfile() }} style={{display:'flex', flexDirection:'row', marginTop:'16px', cursor:'pointer'}}>
+                    <img src={account} width={22} height={22} style={{marginRight:'10px'}}/>
+                    <div style={mystyles.buttonText}>Account Settings</div>
+              </div>
+              {privileges.includes('View Employee Privileges')?<div onClick={(e) => {e.preventDefault();setnav(12);}} style={{display:'flex', flexDirection:'row', marginTop:'16px', cursor:'pointer'}}>
+                    <img src={team} width={22} height={22} style={{marginRight:'10px'}}/>
+                    <div style={mystyles.buttonText}>Team Management</div>
+              </div>:<></>}
+              {localStorage.getItem('department')==='Admin'?<div style={{display:'flex', flexDirection:'row', marginTop:'16px', cursor:'pointer'}}>
+                    <img src={adminSettings} width={22} height={22} style={{marginRight:'10px'}}/>
+                    <div style={mystyles.buttonText}>Admin Settings</div>
+              </div>:<></>}
+              <div style={{...mystyles.seperator, marginTop:'15px'}}></div>
+              <div onClick={() => {navigate("/");localStorage.clear();}} style={{display:'flex', flexDirection:'row', marginTop:'16px', cursor:'pointer'}}>
+                    <img src={logout} width={22} height={22} style={{marginRight:'10px'}}/>
+                    <div style={mystyles.buttonText}>Logout</div>
+              </div>
+            </div>
           </Modal>
         </Navbar>
       </div>
@@ -1337,6 +1483,68 @@ const Dashboard = () => {
         }
 
       </Modal>
+      <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={showCityForm}
+            onHide={handleCloseCityForm}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add City</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {
+                <AddCity
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseCityForm}
+                />
+              }
+            </Modal.Body>
+          </Modal>
+
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={showDeptForm}
+            onHide={handleCloseDeptForm}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add Department</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {
+                <AddDepartment
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseDeptForm}
+                />
+              }
+            </Modal.Body>
+          </Modal>
+
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={showCategoryForm}
+            onHide={handleCloseCategoryForm}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add Project Category</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {
+                <AddCategory
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleCloseCategoryForm}
+                />
+              }
+            </Modal.Body>
+          </Modal>
     </>
   );
 };

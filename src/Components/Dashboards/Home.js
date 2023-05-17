@@ -19,6 +19,7 @@ import {
   Inject,
   ViewsDirective,
   ViewDirective,
+  Day,
 } from "@syncfusion/ej2-react-schedule";
 import { Internationalization, extend } from "@syncfusion/ej2-base";
 import { gapi } from "gapi-script";
@@ -479,6 +480,13 @@ const Home = (props) => {
       </div>
     );
   }
+  function onEventRendered(args) {
+    // console.log(((new Date(args.data.StartTime)).getDate()===(new Date()).getDate()))
+    // const element = ((new Date(args.data.StartTime)).getDate()===(new Date()).getDate());
+    // if (element) {
+    //   element.innerText = 'Today';
+    // }
+  }
   const [chartComponent, setchartComponent] = useState("0");
   const [year, setyear] = useState("0");
   const [month, setmonth] = useState(new Date().getMonth().toString());
@@ -745,6 +753,7 @@ console.log(sideTasks[0]);
                 eventClick={handleEventClick}
                 showHeaderBar={false}
                 style={{border: 'none'}}
+                eventRendered={onEventRendered}
               >
                 <ViewsDirective>
                   <ViewDirective
@@ -753,7 +762,7 @@ console.log(sideTasks[0]);
                     allowVirtualScrolling={false}
                   />
                 </ViewsDirective>
-                <Inject services={[Agenda]} />
+                <Inject services={[Agenda, Day]} />
               </ScheduleComponent>
             )}
             <div style={styles.calendarBottom} onClick={()=>setnav(8)}>View Calendar</div>

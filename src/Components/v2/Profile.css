@@ -1,0 +1,46 @@
+.profilePhotoUC {
+    box-sizing: border-box;
+    position: absolute;
+    left: 20em;
+    top: 9em;
+}
+.profilePhotoC {
+    box-sizing: border-box;
+    position: absolute;
+    left: 8em;
+    top: 9em;
+}
+.profileTextC{
+    position: absolute;
+    height: 28px;
+    left: 18em;
+    top: 10em;
+
+    /* Heading 2 18pt */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 28px;
+    /* identical to box height, or 156% */
+
+    color: #0A0A0A;
+
+}
+.profileTextUC{
+    position: absolute;
+    height: 28px;
+    left: 27em;
+    top: 10em;
+
+    /* Heading 2 18pt */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 28px;
+    /* identical to box height, or 156% */
+
+    color: #0A0A0A;
+
+}

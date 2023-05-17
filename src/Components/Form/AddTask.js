@@ -60,6 +60,7 @@ function AddTask(props) {
   let due_date = due ? due.substring(0, 10) : "";
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(value)
     const newForm = {...form};
     if(name==='assignedTo'){
       newForm['assignedTo'] = value[0]
