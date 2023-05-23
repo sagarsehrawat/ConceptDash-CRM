@@ -195,4 +195,10 @@ export const GET_PAGE_REPORT = '/api/get/page/reports'
 //Google APIs
 export const GET_GOOGLE_DRIVE_URL = '/google-api/get/fileLink'
 
+
+// Proposal APIs
+export const GET_PROPOSAL = (proposalId) => `/proposal/get-proposal/${proposalId}`
+export const GET_PROJECT_CATEGORY_DEPARTMENT = '/proposal/get-project-category-department'
+export const CREATE_PROPOSAL = '/proposal/create-proposal'
+
 export const PRIMARY_COLOR = '#8361FE'
