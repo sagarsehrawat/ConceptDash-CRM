@@ -79,6 +79,7 @@ import AddCity from "../Form/AddCity";
 import AddDepartment from "../Form/AddDepartment";
 import AddCategory from "../Form/AddCategory";
 import Profile from "../v2/Profile";
+import Announcements from "../v2/Announcements";
 
 
 const Dashboard = () => {
@@ -489,6 +490,7 @@ const Dashboard = () => {
     if (nav === 12) return <Privileges />;
     if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
     if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
+    if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
   };
 
   const [show, setShow] = useState(false);
@@ -1327,6 +1329,36 @@ const Dashboard = () => {
                     Contacts
                   </p>
                 </div> : <></>}
+                <div
+                  style={
+                    nav === 11
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(16)}
+                >
+                  <div
+                    style={
+                      nav === 16
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
+                    }
+                  >
+                    <img
+                      src={nav === 16 ? contactsActive : contactsInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                  <p
+                    style={
+                      nav === 16
+                        ? mystyles.sidebarMenuItemTextActive
+                        : mystyles.sidebarMenuItemText
+                    }
+                  >
+                    Announcements
+                  </p>
+                </div>
                 {/* <div
                   style={
                     nav === 12
