@@ -1,0 +1,142 @@
+.left-area{
+    width: 40%;
+    /* background-color: red; */
+    padding: 32px;
+}
+.formHeading{
+    height: 28px;
+
+    /* Heading 2 18pt */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 28px;
+    /* identical to box height, or 156% */
+
+    color: #0A0A0A;
+
+}
+.formHeading-2{
+    height: 28px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+
+    /* Heading 2 18pt */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 28px;
+    /* identical to box height, or 156% */
+
+    color: #0A0A0A;
+
+}
+.formLabel-1{
+
+    height: 20px;
+    margin-top: 20px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    /* identical to box height, or 143% */
+
+    /* Dark grey */
+    color: #70757A;
+
+}
+.formLabel-2{
+
+    height: 20px;
+    margin-top: 16px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    /* identical to box height, or 143% */
+
+    /* Dark grey */
+    color: #70757A;
+
+}
+.input-container {
+    position: relative;
+  }
+  /* .input-container .react-emoji */
+  
+  /* .custom-emoji-input { */
+    /* Your input styles here */
+  /* } */
+  
+  .input-container .react-emoji-picker {
+    position: absolute;
+    top: 11%; /* Adjust this value as needed */
+    left: 0;
+  }
+  .input-container .react-emoji-picker--wrapper {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 435px;
+    width: 352px;
+    overflow: hidden;
+    z-index: 10;
+    top: 100%;
+  }
+  .input-container .react-input-emoji--container{
+    margin-left: 0px;
+  }
+  .bodyInput{
+    width: 100%;
+    border: none;
+    border: 1px solid #EBE9F1;
+border-radius: 6px;
+margin-top: 4px;
+  }
+  .urlInput{
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 8px;
+    gap: 10px;
+
+    /* position: absolute; */
+    width: 100%;
+    height: 36px;
+    /* left: 32px;
+    top: 415px; */
+
+    background: #FFFFFF;
+    /* Outline color */
+    border: 1px solid #EBE9F1;
+    border-radius: 6px;
+    margin-top: 4px;
+  }
+  .attachmentText{
+    /* position: absolute;
+    width: 290px; */
+    height: 20px;
+    /* left: 32px;
+    top: 503px; */
+    margin-top: 8px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    /* identical to box height, or 143% */
+
+    /* Dark grey */
+    color: #70757A;
+
+  }
