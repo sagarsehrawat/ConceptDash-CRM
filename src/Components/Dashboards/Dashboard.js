@@ -85,7 +85,7 @@ import Announcements from "../v2/Announcements";
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();
   const navigate = useNavigate();
-  const [nav, setnav] = useState(0);
+  const [nav, setnav] = useState(5);
   const [plusDropdown, setplusDropdown] = useState(null);
   const [city, setcity] = useState({});
   const [project, setproject] = useState({});
