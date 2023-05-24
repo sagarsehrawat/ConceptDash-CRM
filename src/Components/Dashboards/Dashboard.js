@@ -7,6 +7,7 @@ import {
   faCircleUser,
   faChevronRight,
   faChevronLeft,
+  faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
@@ -48,6 +49,7 @@ import askforce from "../../Images/ASKFORCE.svg";
 import account from "../../Images/accountSettings.svg";
 import team from "../../Images/teamManagement.svg";
 import adminSettings from "../../Images/adminSettings.svg";
+// import { faArrowDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faEdit, faMagnifyingGlass, faPlug, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons'
 import logout from "../../Images/logout.svg";
 import ExpenseUpdate from "../Update/ExpenseUpdate";
 import CompanyUpdate from "../Update/CompanyUpdate";
@@ -480,7 +482,7 @@ const Dashboard = () => {
     if (nav === 2) return <Tasks isCollapsed={isCollapsed} />;
     if (nav === 3) return <BudgetCities isCollapsed={isCollapsed} />;
     if (nav === 4) return <RFP isCollapsed={isCollapsed} />
-    // if (nav === 5) return <Proposal isCollapsed={isCollapsed} />
+    if (nav === 17) return <Proposal isCollapsed={isCollapsed} />
     if (nav === 5) return <PMSelector isCollapsed={isCollapsed} />
     if (nav === 6) return <Project isCollapsed={isCollapsed} />
     if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
@@ -498,7 +500,7 @@ const Dashboard = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const [prop, setprop] = useState(false)
   return (
     <>
       <div>
@@ -1121,24 +1123,89 @@ const Dashboard = () => {
                   </p>
                 </div> : <></>}
                 {privileges.includes('View Proposal') ? <div
-                  style={
-                    nav === 5
+                  style={{...
+                    prop
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
-                      : mystyles.sidebarMenuItem
-                  }
-                  onClick={(e) => setnav(5)}
+                      : mystyles.sidebarMenuItem, backgroundColor:prop?'#F0F0F1':'#ffffff', boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)"
+                  }}
+                  onClick={()=>{setprop(!prop)}}
                 >
                   <div
                     style={
-                      nav === 5
-                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
-                        : mystyles.sidebarMenuItemIcon.nonCollapsed
+                      // nav === 5
+                      //   ? 
+                        // mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        // : 
+                        mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
                     <img
-                      src={nav === 5 ? proposalsActive : proposalsInactive}
+                      src={/* nav === 5 ? proposalsActive :  */proposalsInactive}
                       alt="Dashboard Icon"
                     />
+                  </div>
+                  <p
+                    style={
+                      // nav === 5
+                      //   ?
+                        //  mystyles.sidebarMenuItemTextActive
+                        // :
+                         mystyles.sidebarMenuItemText
+                    }
+                  >
+                    Proposals
+                  </p>
+                  <div style={{marginLeft:'4em'}}>{prop?<FontAwesomeIcon icon={faChevronDown} />:<FontAwesomeIcon icon={faChevronRight} />}</div>
+                </div> : <></>}
+                {prop?<div
+                  style={{...
+                    nav === 17
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem, backgroundColor:nav===17?PRIMARY_COLOR:'#F0F0F1'
+                  }}
+                  onClick={(e) => setnav(17)}
+                >
+                  <div
+                    style={{...
+                      nav === 17
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)", backgroundColor: nav===17?PRIMARY_COLOR:'#F0F0F1'
+                    }}
+                  >
+                    {/* <img
+                      src={nav === 17 ? proposalsActive : proposalsInactive}
+                      alt="Dashboard Icon"
+                    /> */}
+                  </div>
+                  <p
+                    style={
+                      nav === 17
+                        ? mystyles.sidebarMenuItemTextActive
+                        : mystyles.sidebarMenuItemText
+                    }
+                  >
+                    Proposals Table
+                  </p>
+                </div>:<></>}
+               {prop? <div
+                  style={{...
+                    nav === 5
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem, backgroundColor:nav===5?PRIMARY_COLOR:'#F0F0F1'
+                  }}
+                  onClick={(e) => setnav(5)}
+                >
+                  <div
+                    style={{...
+                      nav === 5
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)",backgroundColor: nav===5?PRIMARY_COLOR:'#F0F0F1'
+                    }}
+                  >
+                    {/* <img
+                      src={nav === 5 ? proposalsActive : proposalsInactive}
+                      alt="Dashboard Icon"
+                    /> */}
                   </div>
                   <p
                     style={
@@ -1147,9 +1214,9 @@ const Dashboard = () => {
                         : mystyles.sidebarMenuItemText
                     }
                   >
-                    Proposals
+                    PM Selector
                   </p>
-                </div> : <></>}
+                </div>:<></>}
                 {privileges.includes('View Project') ? <div
                   style={
                     nav === 6
@@ -1332,7 +1399,7 @@ const Dashboard = () => {
                 </div> : <></>}
                 <div
                   style={
-                    nav === 11
+                    nav === 16
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
                   }
