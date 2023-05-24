@@ -14,65 +14,24 @@ import {
 } from "../Constants/Constants";
 import axios from "axios";
 import Designations from "../../utils/Designations";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 const animatedComponents = makeAnimated();
 
 const ColorButton = styled(Button)({
   boxShadow: "none",
+  textTransform: "capitalize",
   backgroundColor: PRIMARY_COLOR,
   marginTop: "2rem",
   fontSize: "14px",
+  marginTop: "32px",
   "&:hover": {
     boxShadow: "none",
     backgroundColor: PRIMARY_COLOR,
     opacity: 0.8,
   },
 });
-
-const styles = {
-  pmSelectorText: {
-    fontStyle: "normal",
-    fontWeight: 500,
-    fontSize: "18px",
-    lineHeight: "28px",
-    color: "#0A0A0A",
-  },
-  fadedText(marginTop, marginBottom) {
-    return {
-      marginTop: `${marginTop}`,
-      marginBottom: `${marginBottom}`,
-      fontStyle: "normal",
-      fontWeight: 500,
-      fontSize: "14px",
-      lineHeight: "20px",
-      color: "#70757A",
-    };
-  },
-  rateInputContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    border: "0.6px solid #BEBEC0",
-    borderRadius: "6px",
-    padding: "0.5rem",
-  },
-  rateInput: {
-    border: "0px solid",
-    outline: "none",
-  },
-  keywordsContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  keywordContainer: {
-    display: "flex",
-    alignItems: "center",
-  },
-  keywordInput: {
-    marginLeft: "10px",
-  },
-  keyword: {},
-};
 
 const keywordsData = [
   "Aborist",
@@ -81,14 +40,6 @@ const keywordsData = [
   "Survey",
   "Geotechnical",
   "Landscaping",
-];
-
-const options = [
-  { value: 1, label: 1 },
-  { value: 2, label: 2 },
-  { value: 3, label: 3 },
-  { value: 4, label: 4 },
-  { value: 5, label: 5 },
 ];
 
 const PMSelector = (props) => {
@@ -116,12 +67,21 @@ const PMSelector = (props) => {
     (async () => {
       try {
         setIsLoading(true);
-        const responses = await Promise.all([
-          axios.get(HOST + GET_PROPOSAL("*")),
-          axios.get(HOST + GET_PROJECT_CATEGORY_DEPARTMENT),
-        ]);
-        setAllProposals(responses[0].data);
-        setAllProjectCategoriesDepartments(responses[1].data);
+        let { data: data1 } = await axios.get(
+          HOST + GET_PROJECT_CATEGORY_DEPARTMENT,
+          {
+            headers: {
+              auth: "Rose " + localStorage.getItem("auth"),
+            },
+          }
+        );
+        setAllProjectCategoriesDepartments(data1.data);
+        let { data: data2 } = await axios.get(HOST + GET_PROPOSAL("*"), {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+          },
+        });
+        setAllProposals(data2.data);
       } catch (err) {
         console.log(err);
       } finally {
@@ -200,10 +160,18 @@ const PMSelector = (props) => {
   async function generateProposal() {
     setIsLoading(true);
     try {
-      const { data } = await axios.post(HOST + CREATE_PROPOSAL, {
-        payload: employeesFrequency,
-        keywords,
-      });
+      const { data } = await axios.post(
+        HOST + CREATE_PROPOSAL,
+        {
+          payload: employeesFrequency,
+          keywords,
+        },
+        {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+          },
+        }
+      );
       setGeneratedProposals([{ ...data }]);
     } catch (err) {
       console.log(err);
@@ -212,86 +180,200 @@ const PMSelector = (props) => {
     }
   }
 
+  const pmSelectorStyles = {
+    gridContainer: {
+      display: "grid",
+      gridTemplateColumns: "repeat(3, 1fr)",
+    },
+    container: {
+      gridColumn: "1/3",
+    },
+    pmSelectorText: {
+      fontFamily: "Roboto",
+      fontStyle: "normal",
+      fontWeight: 500,
+      fontSize: "18px",
+      lineHeight: "28px",
+      color: "#0A0A0A",
+    },
+    projectCatText: {
+      marginTop: "1rem",
+      marginBottom: "0.3rem",
+      fontFamily: "Roboto",
+      fontStyle: "normal",
+      fontWeight: 500,
+      fontSize: "14px",
+      lineHeight: "20px",
+      color: "#70757A",
+    },
+    rateText: {
+      marginTop: "20px",
+      marginBottom: "12px",
+      fontFamily: "Roboto",
+      fontStyle: "normal",
+      fontWeight: 500,
+      fontSize: "14px",
+      lineHeight: "20px",
+      color: "#70757A",
+    },
+    rateInputContainer: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      border: "0.6px solid #BEBEC0",
+      borderRadius: "6px",
+      padding: "0.5rem",
+    },
+    rateInput: {
+      border: "0px solid",
+      outline: "none",
+      background: "none",
+    },
+    chooseKeywordText: {
+      marginTop: "32px",
+      marginBottom: "12px",
+      fontFamily: "Roboto",
+      fontStyle: "normal",
+      fontWeight: 500,
+      fontSize: "14px",
+      lineHeight: "20px",
+      color: "#70757A",
+    },
+    innerGridContainer: {
+      display: "flex",
+      justifyContent: "space-between",
+    },
+    keywordText: {
+      fontFamily: "Roboto",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      lineHeight: "20px",
+      color: "#0A0A0A",
+      marginLeft: "0.5rem",
+      marginTop: "0.3rem",
+    },
+  };
+
   return (
-    <div className="p-5">
-      <p style={styles.pmSelectorText}>Project Manager Selector</p>
-      <p style={styles.fadedText("1.5rem", "0.5rem")}>Project Category</p>
-      <Select
-        options={allProjectCategoriesDepartments}
-        getOptionLabel={(option) => option.projectCategory}
-        getOptionValue={(option) => option.projectCategory}
-        isDisabled={isLoading}
-        onChange={handleSelectChange}
-        components={animatedComponents}
-        className="react-select-container"
-        classNamePrefix="react-select"
-        isMulti={true}
-        autoFocus
-      />
-      <p style={styles.fadedText("1rem", "0.5rem")}>Rate of the Project</p>
-      <Grid container spacing={2} alignItems="center">
-        <Grid item xs>
-          <Slider
-            aria-labelledby="input-slider"
-            value={Number(rate)}
-            onChange={(e) => setRate(Number(e.target.value))}
-            min={0}
-            max={200}
-            valueLabelDisplay="auto"
-            sx={{
-              color: PRIMARY_COLOR,
-            }}
+    <div style={{ padding: "1.5rem 2rem" }}>
+      <div style={pmSelectorStyles.gridContainer}>
+        <div style={pmSelectorStyles.container}>
+          <p style={pmSelectorStyles.pmSelectorText}>
+            Project Manager Selector
+          </p>
+          <p style={pmSelectorStyles.projectCatText}>Project Category</p>
+          <Select
+            options={allProjectCategoriesDepartments}
+            getOptionLabel={(option) => option.projectCategory}
+            getOptionValue={(option) => option.projectCategory}
+            isDisabled={isLoading}
+            onChange={handleSelectChange}
+            components={animatedComponents}
+            className="react-select-container"
+            classNamePrefix="react-select"
+            isMulti={true}
+            autoFocus
           />
-        </Grid>
-        <Grid item>
-          <div style={styles.rateInputContainer}>
-            <input
-              value={rate}
-              onChange={(e) => {
-                let num = Number(e.target.value);
-                if (num < 0) setRate(0);
-                else if (num > 200) setRate(200);
-                else setRate(num);
-              }}
-              type="number"
-              style={styles.rateInput}
-            />
-            <p>$</p>
+          <CategoryDepartment
+            value={value}
+            text="Related Department"
+            title1="Project Category"
+            title2="Department"
+            q1="projectCategory"
+            q2="department"
+          />
+          <CategoryDepartment
+            value={employeesFrequency}
+            text="Related Employees"
+            title1="Employees"
+            title2="Role"
+            q1="employeeName"
+            q2="designation"
+          />
+          <div style={{ marginTop: "20px", border: "1px solid #EBE9F1" }} />
+          <p style={pmSelectorStyles.rateText}>Rate of the Project</p>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs>
+              <Slider
+                aria-labelledby="input-slider"
+                value={Number(rate)}
+                onChange={(e) => setRate(Number(e.target.value))}
+                min={0}
+                max={50000}
+                valueLabelDisplay="auto"
+                sx={{
+                  color: PRIMARY_COLOR,
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <div style={pmSelectorStyles.rateInputContainer}>
+                <input
+                  value={rate}
+                  onChange={(e) => {
+                    let num = Number(e.target.value);
+                    if (num < 0) setRate(0);
+                    else if (num > 50000) setRate(50000);
+                    else setRate(num);
+                  }}
+                  type="number"
+                  style={pmSelectorStyles.rateInput}
+                />
+                <p>$</p>
+              </div>
+            </Grid>
+          </Grid>
+          <p style={pmSelectorStyles.chooseKeywordText}>Choose Keywords</p>
+          <div>
+            <div style={pmSelectorStyles.innerGridContainer}>
+              {keywordsData.map((keyword, index) => (
+                <div
+                  key={`${keyword}-${index}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    // style={styles.keywordInput}
+                    checked={keywords[keyword]}
+                    onChange={(e) =>
+                      setKeywords((prev) => ({
+                        ...prev,
+                        [keyword]: keywords[keyword] ? false : true,
+                      }))
+                    }
+                  />
+                  <p style={pmSelectorStyles.keywordText}>{keyword}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </Grid>
-      </Grid>
-      <p style={styles.fadedText("1.5rem", "0.5rem")}>Choose key words</p>
-      <div style={styles.keywordsContainer}>
-        {keywordsData.map((keyword, index) => (
-          <div key={`${keyword}-${index}`} style={styles.keywordContainer}>
-            <input
-              type="checkbox"
-              style={styles.keywordInput}
-              checked={keywords[keyword]}
-              onChange={(e) =>
-                setKeywords((prev) => ({
-                  ...prev,
-                  [keyword]: keywords[keyword] ? false : true,
-                }))
-              }
-            />
-            <p style={styles.fadedText("0px", "0px")}>{keyword}</p>
-          </div>
-        ))}
+          <ColorButton
+            variant="contained"
+            size="large"
+            onClick={generateProposal}
+            disabled={isLoading}
+          >
+            {isLoading ? "Loading..." : "Generate Proposal"}
+          </ColorButton>
+        </div>
       </div>
-      <ColorButton
-        variant="contained"
-        size="large"
-        onClick={generateProposal}
-        disabled={isLoading}
-      >
-        Generate Proposal
-      </ColorButton>
-      <ShowProposals title="Generated Proposal" details={generatedProposals} />
-      <ShowProposals
+      {generatedProposals && generatedProposals.length > 0 && (
+        <div style={{ marginTop: "20px", border: "1px solid #EBE9F1" }} />
+      )}
+      <Proposals
+        title="Generated Proposal"
+        details={generatedProposals}
+        isHighLighted={true}
+      />
+      <Proposals
         title="Recommended Proposal"
         details={recProposals}
-        isShowPercentage
+        isHighLighted={false}
       />
     </div>
   );
@@ -299,35 +381,98 @@ const PMSelector = (props) => {
 
 export default PMSelector;
 
-const proposalStyles = {
-  title: {
+const catDepStyles = {
+  relatedDepText: {
+    marginTop: "12px",
+    fontFamily: "Roboto",
+    fontStyle: "normal",
     fontWeight: 500,
-    fontSize: "16px",
-    lineHeight: "24px",
-    color: "#0A0A0A",
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: "#70757A",
   },
   container: {
-    marginTop: "1rem",
-    marginBottom: "0.5rem",
+    marginTop: "4px",
   },
-  cardContainer: {
+  gridContainer(props) {
+    return {
+      display: "grid",
+      gridTemplateColumns: "repeat(2, 1fr)",
+      padding: "8px 16px",
+      ...props,
+    };
+  },
+};
+
+function CategoryDepartment({ value, text, title1, title2, q1, q2 }) {
+  if (value && value.length)
+    return (
+      <div style={{ marginTop: "12px" }}>
+        <p style={catDepStyles.relatedDepText}>{text}</p>
+        <div style={catDepStyles.container}>
+          <div
+            style={catDepStyles.gridContainer({
+              border: "1px solid #EBE9F1",
+              borderRadius: "6px 6px 0px 0px",
+              background: "#FBFBFB",
+            })}
+          >
+            <p>{title1}</p>
+            <p>{title2}</p>
+          </div>
+          {value?.map((e, index) => (
+            <div
+              style={catDepStyles.gridContainer({
+                background: "#FFFFFF",
+                borderWidth: "0px 1px 1px 1px",
+                borderStyle: "solid",
+                borderColor: "#EBE9F1",
+                ...(index === value.length - 1 && {
+                  borderRadius: "0px 0px 6px 6px",
+                }),
+              })}
+            >
+              <p>{e?.[q1]}</p>
+              <p>{e?.[q2]}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  else return null;
+}
+
+const proposalsStyles = {
+  container: {
+    marginTop: "32px",
+  },
+  title: {
+    fontFamily: "Roboto",
+    fontStyle: "normal",
+    fontWeight: 500,
+    fontSize: "18px",
+    lineHeight: "28px",
+    color: "#0A0A0A",
+  },
+  proposalContainer: {
+    marginTop: "10px",
     display: "grid",
-    gridTemplateColumns: "auto auto",
+    gridTemplateColumns: "repeat(3, 1fr)",
     gap: "1rem",
   },
 };
 
-function ShowProposals({ title, details, isShowPercentage }) {
+function Proposals({ title, details, isHighLighted }) {
   if (details && details.length) {
     return (
-      <div style={proposalStyles.container}>
-        <p style={proposalStyles.title}>{title}</p>
-        <div style={proposalStyles.cardContainer}>
+      <div style={proposalsStyles.container}>
+        <p style={proposalsStyles.title}>{title}</p>
+        <div style={proposalsStyles.proposalContainer}>
           {details.map((proposal, index) => (
             <Card
               key={index.toString()}
               proposal={proposal}
-              isShowPercentage={isShowPercentage}
+              isHighLighted={isHighLighted}
             />
           ))}
         </div>
@@ -339,24 +484,63 @@ function ShowProposals({ title, details, isShowPercentage }) {
 const cardStyles = {
   container: {
     display: "flex",
+    alignItems: "center",
     backgroundColor: "white",
     boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
     borderRadius: "12px",
-    flexDirection: "column",
     padding: "1rem",
+  },
+  matchText: {
+    fontFamily: "Roboto",
+    fontStyle: "normal",
+    fontWeight: 400,
+    fontSize: "12px",
+    lineHeight: "16px",
+    color: "#70757A",
+    marginTop: "0.5rem",
+  },
+  proposalLink: {
+    fontFamily: "Roboto",
+    fontStyle: "normal",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: "#0A0A0A",
   },
 };
 
-const Card = ({ proposal, isShowPercentage }) => {
+const Card = ({ proposal, isHighLighted }) => {
   return (
-    <div style={cardStyles.container}>
-      <p>Proposal Link</p>
-      <a href={proposal.proposalLink} target="_blank">
-        {proposal.proposalLink}
-      </a>
-      {isShowPercentage && (
-        <p>Percentage Match - {proposal.percentageMatch} %</p>
-      )}
+    <div
+      style={{
+        ...cardStyles.container,
+        ...(isHighLighted && { background: "rgba(193, 190, 229, 0.45)" }),
+      }}
+    >
+      <div>
+        <div style={{ height: "42px", width: "42px" }}>
+          <CircularProgressbar
+            value={proposal.percentageMatch ? proposal.percentageMatch : 100}
+            text={
+              proposal.percentageMatch ? `${proposal.percentageMatch}%` : "100%"
+            }
+            styles={buildStyles({
+              // rotation: 0.25,
+              pathTransitionDuration: 0.5,
+              pathColor: PRIMARY_COLOR,
+              textColor: PRIMARY_COLOR,
+              backgroundColor: "#fff",
+            })}
+          />
+        </div>
+        <p style={cardStyles.matchText}>Match</p>
+      </div>
+      <div style={{ marginLeft: "1rem" }}>
+        <p style={cardStyles.proposalLink}>Proposal Link</p>
+        <a href={proposal.proposalLink} target="_blank">
+          Click Here
+        </a>
+      </div>
     </div>
   );
 };
