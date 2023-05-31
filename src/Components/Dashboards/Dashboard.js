@@ -72,9 +72,10 @@ import RFPform from "../Form/RFPform";
 import ProposalForm from "../Form/ProposalForm";
 import projectForm from '../../Images/projectForm.svg'
 import cross from '../../Images/cross.svg'
+import announcement from '../../Images/announcement.svg'
 import ProjectForm from "../Form/ProjectForm";
 import Privileges from '../Update/Privileges.js'
-import { GET_EMPLOYEE_PRIVILEGES, HOST, PRIMARY_COLOR } from "../Constants/Constants";
+import { GET_EMPLOYEE_PRIVILEGES, GET_NOTIFICATIONS, HOST, PRIMARY_COLOR } from "../Constants/Constants";
 import PMSelector from "../v2/PMSelector";
 import Notifications from "./Notifications";
 import AddCity from "../Form/AddCity";
@@ -444,6 +445,7 @@ const Dashboard = () => {
   };
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+  const [notifCounts, setnotifCounts] = useState(0);
 
   useEffect(() => {
     axios
@@ -460,6 +462,20 @@ const Dashboard = () => {
         });
         localStorage.setItem("privileges", JSON.stringify(arr));
         setPrivileges(arr);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+      axios
+      .get(HOST + GET_NOTIFICATIONS, {
+        headers: {
+          auth: "Rose " + localStorage.getItem("auth"),
+              id: localStorage.getItem("employeeId"),
+        },
+      })
+      .then((res) => {
+        setnotifCounts(res.data.res.Items.length)
       })
       .catch((err) => {
         console.log(err);
@@ -614,8 +630,9 @@ const Dashboard = () => {
               Log Out
             </NavDropdown.Item>
           </NavDropdown> */}
-          <Nav.Link className="" onClick={handleShowNotif}>
+          <Nav.Link className="" onClick={handleShowNotif} style={{position:'relative', display:'inline-block'}}>
             <img src={notificationIcon} alt="Notification Icon" />
+            {notifCounts!==0?<span style={{backgroundColor:'#F67052', color:'white', borderRadius:'50px', width:'16px',heigth:'16px', fontSize:'11px', textAlign:'center', position:'absolute', top:'-3px', right:'1px'}}>{notifCounts}</span>:<></>}
           </Nav.Link>
           <Modal
             show={notifShow}
@@ -941,6 +958,27 @@ const Dashboard = () => {
                     />
                   </div>
                 </div> : <></>}
+                <div
+                  style={
+                    nav === 16
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(16)}
+                >
+                  <div
+                    style={
+                      nav === 16
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 16 ? announcement : announcement}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div>
                 {/* <div
                   style={
                     nav === 12
@@ -1126,7 +1164,7 @@ const Dashboard = () => {
                   style={{...
                     prop
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
-                      : mystyles.sidebarMenuItem, backgroundColor:prop?'#F0F0F1':'#ffffff', boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)"
+                      : mystyles.sidebarMenuItem, backgroundColor:prop?'#F0F0F1':'#fbfbfb', boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)"
                   }}
                   onClick={()=>{setprop(!prop)}}
                 >
@@ -1413,7 +1451,7 @@ const Dashboard = () => {
                     }
                   >
                     <img
-                      src={nav === 16 ? contactsActive : contactsInactive}
+                      src={nav === 16 ? announcement : announcement}
                       alt="Dashboard Icon"
                     />
                   </div>

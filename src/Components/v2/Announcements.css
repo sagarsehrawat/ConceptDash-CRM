@@ -100,6 +100,7 @@
     border: 1px solid #EBE9F1;
 border-radius: 6px;
 margin-top: 4px;
+padding: 6px;
   }
   .urlInput{
     box-sizing: border-box;
@@ -187,6 +188,29 @@ margin-top: 4px;
     /* Mob/Primary colour */
     background: #8361FE;
     border: 1px solid #8361fe;
+    /* Dashboard Menu selection shadow */
+    /* box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25); */
+    border-radius: 5px;
+    float: right;
+  }
+  .announceBtn:disabled{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+    margin-top: 40px;
+
+    /* position: absolute; */
+    /* width: 114px; */
+    height: 40px;
+    /* left: 353px;
+    top: 595px; */
+
+    /* Mob/Primary colour */
+    background: grey;
+    border: 1px solid grey;
     /* Dashboard Menu selection shadow */
     /* box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25); */
     border-radius: 5px;

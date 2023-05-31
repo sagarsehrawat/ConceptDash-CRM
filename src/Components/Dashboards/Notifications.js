@@ -85,7 +85,6 @@ function Notifications(props) {
         }
 
       }
-      console.log(all)
       const deleteAllNotifications = async (e) =>{
         setisLoading(true);
         await axios
@@ -108,7 +107,6 @@ function Notifications(props) {
       }
       const deleteOneNotification = async (e, time) =>{
         setisLoading(true);
-        console.log(e, time)
         let arr = [];
         arr.push(e)
         await axios
@@ -148,14 +146,14 @@ function Notifications(props) {
                     <div className='card-main' >
                         <img
                             src={ellipse}
-                            style={{ width: "56px", height: "56px", marginRight:'19px' }}
+                            style={{ width: "56px", height: "56px", marginRight:'10px' }}
                             alt="Employee"
                         />
                         <div onClick={(eve) => handleNotifClick(e.type)} className='content' style={{flexDirection:'column'}}>
                             <div className='message'>{e.message}</div>
                             <div className='time'>{getTimeDifference(e.timestamp)}</div>
                         </div>
-                        <img style={{marginBottom:'25px', marginLeft:'5px', cursor:'pointer'}} src={cross} onClick={()=>deleteOneNotification(e.notification_id, 'today')} />
+                        <img style={{marginBottom:'26px', marginLeft:'19px', cursor:'pointer'}} src={cross} onClick={()=>deleteOneNotification(e.notification_id, 'today')} />
                     </div>
                 )
             })}
@@ -167,14 +165,14 @@ function Notifications(props) {
                     <div className='card-main'>
                         <img
                             src={ellipse}
-                            style={{ width: "56px", height: "56px", marginRight:'19px' }}
+                            style={{ width: "56px", height: "56px", marginRight:'10px' }}
                             alt="Employee"
                         />
                         <div className='content' style={{flexDirection:'column'}}>
                             <div className='message'>{e.message}</div>
                             <div className='time'>{getTimeDifference(e.timestamp)}</div>
                         </div>
-                        <img style={{marginBottom:'25px', marginLeft:'5px', cursor:'pointer'}} src={cross} onClick={()=>deleteOneNotification(e.notification_id, 'yesterday')} />
+                        <img style={{marginBottom:'26px', marginLeft:'19px', cursor:'pointer'}} src={cross} onClick={()=>deleteOneNotification(e.notification_id, 'yesterday')} />
                     </div>
                 )
             })}
@@ -186,14 +184,14 @@ function Notifications(props) {
                     <div className='card-main'>
                         <img
                             src={ellipse}
-                            style={{ width: "56px", height: "56px", marginRight:'19px' }}
+                            style={{ width: "56px", height: "56px", marginRight:'10px' }}
                             alt="Employee"
                         />
                         <div className='content' style={{flexDirection:'column'}}>
                             <div className='message'>{e.message}</div>
                             <div className='time'>{getTimeDifference(e.timestamp)}</div>
                         </div>
-                        <img style={{marginBottom:'25px', marginLeft:'5px', cursor:'pointer'}} src={cross} onClick={()=>deleteOneNotification(e.notification_id, 'older')} />
+                        <img style={{marginBottom:'26px', marginLeft:'19px', cursor:'pointer'}} src={cross} onClick={()=>deleteOneNotification(e.notification_id, 'older')} />
                     </div>
                 )
             })}

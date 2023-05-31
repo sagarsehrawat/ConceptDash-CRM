@@ -113,7 +113,8 @@ function UpdateTask(props) {
           assignedTo: assignto,
           assignedBy: updateTask.Assigned_By?updateTask.Assigned_By:localStorage.getItem('employeeId'),
           reviewedBy: review,
-          priority: priority
+          priority: priority,
+          status: updateTask.Status
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
