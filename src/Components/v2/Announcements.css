@@ -3,6 +3,7 @@
     /* background-color: #ffffff; */
     padding: 32px;
     /* position: static; */
+    background-color:#ffffff;
     
 }
 .formHeading{
@@ -145,10 +146,10 @@ padding: 6px;
   }
   .right-area{
     width: 60%;
-    /* background-color:#ffffff; */
     padding: 32px;
     overflow-y: auto;
     height: 100vh;
+    background-color: #f8fafb;
     
     /* overflow: hidden; */
   }
