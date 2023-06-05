@@ -210,7 +210,7 @@ function Announcements(props) {
                   <img src={ellipse} height={48} width={48}/>
                   <div style={{flexDirection:'column', marginLeft:'8px'}}>
                     <div className='annName'>{e.addedBy}</div>
-                    {/* <div className='annDesignation'>Software Engineer</div> */}
+                    {/* <div className='annDesignation'>{localStorage.getItem('employeeName')==='Sagar Sehrawat'?'Leader':'Slave'}</div> */}
                     <div className='annTime'>{getTimeDifference(e.timestamp)}</div>
                   </div>
                   {/* <div className='annAbout'><img src={dots} /></div> */}

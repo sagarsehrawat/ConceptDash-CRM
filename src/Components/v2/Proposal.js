@@ -383,7 +383,9 @@ const Proposal = (props) => {
         tableCell: {
             height: "58px",
             borderBottom: "1px solid #EBE9F1",
-            padding: "12px 32px",
+            paddingTop: "12px",
+            paddingBottom: "12px",
+            paddingLeft: '32px',
             gap: "10px",
             fontFamily: "'Roboto'",
             fontStyle: "normal",
@@ -596,6 +598,17 @@ const Proposal = (props) => {
             lineHeight: "28px",
             color: "#0A0A0A",
             // marginTop:'12px'
+        },
+        type: {
+            height: "20px",
+            left: "60px",
+            top: "20px",
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 400,
+            fontSize: "13px",
+            lineHeight: "20px",
+            color: "#70757A"
         }
     }
 
@@ -803,6 +816,7 @@ const Proposal = (props) => {
                         }
                     }
                     closeStatusModal()
+                    setCall(apiCall+1)
                     setselectedProposals([])
                     setgreen(true)
                 } else {
@@ -846,22 +860,22 @@ const Proposal = (props) => {
     const sortModalLeft = (idx) => {
         if (isCollapsed) {
             if (idx === 0) return `${90}px`
-            if (idx === 1) return `${374 - scrolled}px`
-            if (idx === 2) return `${479 - scrolled}px`
-            if (idx === 3) return `${590 - scrolled}px`
-            if (idx === 4) return `${738 - scrolled}px`
-            if (idx === 5) return `${914 - scrolled}px`
+            if (idx === 1) return `${234 - scrolled}px`
+            if (idx === 2) return `${449 - scrolled}px`
+            if (idx === 3) return `${630 - scrolled}px`
+            if (idx === 4) return `${798 - scrolled}px`
+            if (idx === 5) return `${964 - scrolled}px`
             if (idx === 6) return `${1091 - scrolled}px`
-            if (idx === 7) return `${1219 - scrolled}px`
+            if (idx === 7) return `${1300 - scrolled}px`
         } else {
             if (idx === 0) return `${250}px`
-            if (idx === 1) return `${507 - scrolled}px`
-            if (idx === 2) return `${599 - scrolled}px`
-            if (idx === 3) return `${699 - scrolled}px`
-            if (idx === 4) return `${841 - scrolled}px`
-            if (idx === 5) return `${1000 - scrolled}px`
+            if (idx === 1) return `${377 - scrolled}px`
+            if (idx === 2) return `${569 - scrolled}px`
+            if (idx === 3) return `${729 - scrolled}px`
+            if (idx === 4) return `${901 - scrolled}px`
+            if (idx === 5) return `${1060 - scrolled}px`
             if (idx === 6) return `${1158 - scrolled}px`
-            if (idx === 7) return `${1233 - scrolled}px`
+            if (idx === 7) return `${1310 - scrolled}px`
         }
     }
 
@@ -887,6 +901,9 @@ const Proposal = (props) => {
         }
     }
 
+    const totalBidCalculator = (a, b, c, d)=>{
+        return (a+b+c+d);
+    }
     return (
         <>
             {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
@@ -1043,7 +1060,7 @@ const Proposal = (props) => {
                             </div>
                         </div>}
                 </Modal>
-                <button style={{ ...styles.filterButton, width: "136px", display: selectedProposals.length > 0 ? "flex" : "none", visibility: selectedProposals.length > 0 ? "visible" : "hidden" }} onClick={openStatusModal}><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Update Status</p><FontAwesomeIcon icon={faChevronDown} color="#70757A" /></button>
+                <button style={{ ...styles.filterButton, width: "136px", display: selectedProposals.length > 0 ? "flex" : "none", visibility: selectedProposals.length > 0 ? "visible" : "hidden" }} onClick={openStatusModal}><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Update Result</p><FontAwesomeIcon icon={faChevronDown} color="#70757A" /></button>
                 <Modal
                     show={statusModal}
                     onHide={closeStatusModal}
@@ -1054,7 +1071,7 @@ const Proposal = (props) => {
                 >
                     <div style={{ width: "296px", height: "fit-content", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px" }}>
                         <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Sort By</p>
+                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Update</p>
                             <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={closeStatusModal} />
                         </div>
                         <div className='d-flex flex-column' style={{ marginLeft: "20px", gap: "8px" }}>
@@ -1092,38 +1109,14 @@ const Proposal = (props) => {
                 <table style={styles.table} className='rfp-table'>
                     <thead style={styles.tableHeader}>
                         <tr>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "260px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "150px", borderBottom: "1px solid #EBE9F1", marginLeft: '50px', textAlign:'center' }} className='fixed-header'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(0)}>
-                                    Proposal Name&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                    City&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
                                     show={sortModal === 0}
                                     onHide={handleCloseSort}
                                     style={{ ...styles.sortModal, left: sortModalLeft(0) }}
-                                    dialogClassName="filter-dialog"
-                                    backdropClassName="filter-backdrop"
-                                    animation={false}
-                                >
-                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Name"); setCall(apiCall + 1); handleCloseSort() }}>
-                                            <FontAwesomeIcon icon={faArrowUp} />
-                                            <p style={styles.sortText}>Sort Ascending</p>
-                                        </div>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Name DESC"); setCall(apiCall + 1); handleCloseSort() }}>
-                                            <FontAwesomeIcon icon={faArrowDown} />
-                                            <p style={styles.sortText}>Sort Descending</p>
-                                        </div>
-                                    </div>
-                                </Modal>
-                            </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "90px" }} className='fixed-header2'>
-                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(1)}>
-                                    City&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
-                                </div>
-                                <Modal
-                                    show={sortModal === 1}
-                                    onHide={handleCloseSort}
-                                    style={{ ...styles.sortModal, left: sortModalLeft(1) }}
                                     dialogClassName="filter-dialog"
                                     backdropClassName="filter-backdrop"
                                     animation={false}
@@ -1140,7 +1133,31 @@ const Proposal = (props) => {
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "100px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "200px",marginLeft: '50px' }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(1)}>
+                                    Project Name&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 1}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(1) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Name"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Name DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+                            {/* <th scope="col" style={{ ...styles.tableHeading, width: "100px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(2)}>
                                     Status&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
@@ -1163,15 +1180,15 @@ const Proposal = (props) => {
                                         </div>
                                     </div>
                                 </Modal>
-                            </th>
+                            </th> */}
                             <th scope="col" style={{ ...styles.tableHeading, width: "140px" }} className='fixed-header2'>
-                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(3)}>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(2)}>
                                     Department&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
-                                    show={sortModal === 3}
+                                    show={sortModal === 2}
                                     onHide={handleCloseSort}
-                                    style={{ ...styles.sortModal, left: sortModalLeft(3) }}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(2) }}
                                     dialogClassName="filter-dialog"
                                     backdropClassName="filter-backdrop"
                                     animation={false}
@@ -1188,24 +1205,24 @@ const Proposal = (props) => {
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
-                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(4)}>
-                                    Project Manager&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                            <th scope="col" style={{ ...styles.tableHeading, width: "169px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(3)}>
+                                    Question Deadline&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
-                                    show={sortModal === 4}
+                                    show={sortModal === 3}
                                     onHide={handleCloseSort}
-                                    style={{ ...styles.sortModal, left: sortModalLeft(4) }}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(3) }}
                                     dialogClassName="filter-dialog"
                                     backdropClassName="filter-backdrop"
                                     animation={false}
                                 >
                                     <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Manager_Name"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Question_Deadline"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowUp} />
                                             <p style={styles.sortText}>Sort Ascending</p>
                                         </div>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Manager_Name DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Question_Deadline DESC"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowDown} />
                                             <p style={styles.sortText}>Sort Descending</p>
                                         </div>
@@ -1213,13 +1230,13 @@ const Proposal = (props) => {
                                 </Modal>
                             </th>
                             <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
-                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(5)}>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(4)}>
                                     Closing Deadline&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
-                                    show={sortModal === 5}
+                                    show={sortModal === 4}
                                     onHide={handleCloseSort}
-                                    style={{ ...styles.sortModal, left: sortModalLeft(5) }}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(4) }}
                                     dialogClassName="filter-dialog"
                                     backdropClassName="filter-backdrop"
                                     animation={false}
@@ -1236,33 +1253,38 @@ const Proposal = (props) => {
                                     </div>
                                 </Modal>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>
-                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(6)}>
-                                    Bid Price&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                            <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(5)}>
+                                    Project Manager&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
-                                    show={sortModal === 6}
+                                    show={sortModal === 5}
                                     onHide={handleCloseSort}
-                                    style={{ ...styles.sortModal, left: sortModalLeft(6) }}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(5) }}
                                     dialogClassName="filter-dialog"
                                     backdropClassName="filter-backdrop"
                                     animation={false}
                                 >
                                     <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Bidder_Price"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Manager_Name"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowUp} />
                                             <p style={styles.sortText}>Sort Ascending</p>
                                         </div>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Bidder_price DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Manager_Name DESC"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowDown} />
                                             <p style={styles.sortText}>Sort Descending</p>
                                         </div>
                                     </div>
                                 </Modal>
                             </th>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "130px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(6)}>
+                                    Total Bid Price{/* &nbsp;&nbsp;<FontAwesomeIcon icon={faSort} /> */}
+                                </div>
+                            </th>
                             <th scope="col" style={{ ...styles.tableHeading, width: "180px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(7)}>
-                                    Winning Bid Price&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                    Result&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
                                     show={sortModal === 7}
@@ -1273,11 +1295,11 @@ const Proposal = (props) => {
                                     animation={false}
                                 >
                                     <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Winning_Price"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Result"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowUp} />
                                             <p style={styles.sortText}>Sort Ascending</p>
                                         </div>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Winning_Price DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Result DESC"); setCall(apiCall + 1); handleCloseSort() }}>
                                             <FontAwesomeIcon icon={faArrowDown} />
                                             <p style={styles.sortText}>Sort Descending</p>
                                         </div>
@@ -1305,13 +1327,23 @@ const Proposal = (props) => {
                                                     checked={selectedProposals.includes(e.Proposal_ID)}
                                                     readOnly={true}
                                                     onClick={(eve) => { if (eve.target.checked) { setselectedProposals(prev => [...prev, e.Proposal_ID]) } else { setselectedProposals(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
-                                                /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
+                                                />
+                                                <div style={{flexDirection:'column'}}>
+                                                <p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.City}</p>
+                                                <p style={styles.type}>{e.Municipality_Type?e.Municipality_Type:'-'}</p></div>
                                             </div>
                                         </td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.City}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
+                                            <p>{e.Project_Name}</p>
+                                            <p style={styles.type}>Status: <span style={{color:'#FD9568'}}>{e.Status}</span></p>
+                                        </td>
+                                        {/* <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td> */}
                                         <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Department}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{formatDate(e.Question_Deadline) === ""
+                                                ? <></>
+                                                : <div style={{...styles.dateContainer, border:'0.5px solid #5079E1'}}>
+                                                    <p style={{...styles.date, color:'#5079E1'}}>{formatDate(e.Question_Deadline)}</p>
+                                                </div>}</td>
                                         <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
                                             {formatDate(e.Closing_Deadline) === ""
                                                 ? <></>
@@ -1319,31 +1351,50 @@ const Proposal = (props) => {
                                                     <p style={styles.date}>{formatDate(e.Closing_Deadline)}</p>
                                                 </div>}
                                         </td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Bidder_Price)}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{addComma(e.Winning_Price)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}><b>{addComma(totalBidCalculator(e.Design_Price, e.Contract_Admin_Price, e.Provisional_Items, e.Sub_Consultant_Price))}</b></td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Result)}</td>
                                     </tr>
                                     <tr id={e.Proposal_ID} style={{ ...styles.tableRow, display: proposalDetails.includes(e.Proposal_ID) ? "table-row" : "none", visibility: proposalDetails.includes(e.Proposal_ID) ? "visible" : "hidden" }}>
                                         <td colSpan={8} style={{ borderBottom: "1px solid #EBE9F1" }}>
-                                            <div className='d-flex flex-row justify-content-between align-items-start' style={{ marginLeft: "64px", marginRight: "32px", marginBottom: "12px", padding: "12px 24px", gap: "62px", height: "95px", background: "#F7F7F9", borderRadius: "12px", marginTop: "12px" }}>
+                                            <div className='d-flex flex-row justify-content-between align-items-start' style={{ marginLeft: "64px", marginRight: "72px", padding: "12px 24px", gap: "62px", height: "95px", background: "#F7F7F9", borderRadius: "12px", marginTop: "12px", borderBottomLeftRadius:'0px', borderBottomRightRadius:'0px' }}>
+                                                <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Team</p>
+                                                    <p style={styles.tableRow2Subheading}>{e.Team}</p>
+                                                </div>
+                                                <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Winning Price ($)</p>
+                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Winning_Price)}</p>
+                                                </div>
+                                                <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Winning Bidders</p>
+                                                    <p style={styles.tableRow2Subheading}>{e.Winning_Bidder ?? "-"}</p>
+                                                </div>
+                                                <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Debriefing</p>
+                                                    <p style={styles.tableRow2Subheading}>{e.Debriefing}</p>
+                                                </div>
+                                            </div>
+                                            <div className='d-flex flex-row justify-content-between align-items-start' style={{ marginLeft: "64px", marginRight: "72px", marginBottom: "12px", padding: "12px 24px", gap: "62px", height: "95px", background: "#F7F7F9", borderRadius: "12px", borderTopLeftRadius:'0px', borderTopRightRadius:'0px' }}>
                                                 <div className='d-flex flex-column '>
                                                     <p style={styles.tableRow2Heading}>Design Price ($)</p>
                                                     <p style={styles.tableRow2Subheading}>{addComma(e.Design_Price)}</p>
-                                                </div>
-                                                <div className='d-flex flex-column '>
-                                                    <p style={styles.tableRow2Heading}>Contract Admin Price ($)</p>
-                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Contract_Admin_Price)}</p>
                                                 </div>
                                                 <div className='d-flex flex-column '>
                                                     <p style={styles.tableRow2Heading}>Provisional Item Price ($)</p>
                                                     <p style={styles.tableRow2Subheading}>{addComma(e.Provisional_Items)}</p>
                                                 </div>
                                                 <div className='d-flex flex-column '>
+                                                    <p style={styles.tableRow2Heading}>Contract Admin Price ($)</p>
+                                                    <p style={styles.tableRow2Subheading}>{addComma(e.Contract_Admin_Price)}</p>
+                                                </div>
+                                                <div className='d-flex flex-column '>
                                                     <p style={styles.tableRow2Heading}>Sub Consultant Price ($)</p>
                                                     <p style={styles.tableRow2Subheading}>{addComma(e.Sub_Consultant_Price)}</p>
                                                 </div>
                                                 <div className='d-flex flex-column '>
-                                                    <p style={styles.tableRow2Heading}>Winning Bidders</p>
-                                                    <p style={styles.tableRow2Subheading}>{e.Winning_Bidder ?? "-"}</p>
+                                                    <p style={styles.tableRow2Heading}>Total Bid Price ($)</p>
+                                                    <p style={styles.tableRow2Subheading}>{addComma(totalBidCalculator(e.Design_Price, e.Contract_Admin_Price, e.Provisional_Items, e.Sub_Consultant_Price))}</p>
                                                 </div>
                                             </div>
                                         </td>

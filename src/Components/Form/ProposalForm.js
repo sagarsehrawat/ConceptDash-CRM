@@ -63,23 +63,20 @@ function ProposalForm(props) {
     dept: "",
     projectCat: "",
     status: "",
+    result: "",
     managerName: "",
     projectName: "",
     qDeadline: "",
     cDeadline: "",
-    resultDate: "",
     city: "",
     team: "",
     dPrice: "",
     provisionalItems: "",
     adminPrice: "",
     consultantPrice: "",
-    totalBid: "",
-    planTakers: "",
-    bidders: "",
-    bidderPrice: "",
     winningPrice: "",
     winningBidder: "",
+    debriefing: "",
   });
   const [radio, setradio] = useState(false);
   const handleRadio = (e) => {
@@ -188,20 +185,17 @@ function ProposalForm(props) {
           departmentId: radio ? deptid : form.dept,
           projectCatId: radio ? catId : form.projectCat,
           status: form.status,
+          result: form.result,
+          debriefing: form.debriefing,
           projectManagerId: radio ? managerId : form.managerName,
           projectName: radio ? pName : form.projectName,
           questionDeadline: form.qDeadline,
           closingDeadline: form.cDeadline,
-          resultDate: form.resultDate,
           team: DisplayValue ? DisplayValue.toString() : "",
           designPrice: form.dPrice,
           provisionalItems: form.provisionalItems,
           contractAdminPrice: form.adminPrice,
           subConsultantPrice: form.consultantPrice,
-          totalBid: form.totalBid,
-          planTakers: DisplayValue1 ? DisplayValue1.toString() : "",
-          bidders: DisplayValue2 ? DisplayValue2.toString() : "",
-          bidderPrice: form.bidderPrice,
           winningPrice: form.winningPrice,
           winningBidderId: form.winningBidder,
           cityId: form.city,
@@ -463,17 +457,36 @@ function ProposalForm(props) {
                       type="date"
                     />
                   </Form.Group>
-                  <Form.Group style={{width:'253px'}}>
-                    <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Result Date</Form.Label>
-                    <Form.Control
-                    style={{...styles.nameInput, width:'233px'}}
-                      name="resultDate"
-                      onChange={handleChange}
-                      type="date"
-                    />
-                  </Form.Group>
                 </Row>
 
+                <Row>
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Status</Form.Label>
+                <Form.Select
+                style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
+                  onChange={handleChange}
+                  name="status"
+                >
+                  <option>Select Status</option>
+                  <option value='Submitted'>Submitted</option>
+                  <option value='Not Submitted'>Not Submitted</option>
+                  
+                </Form.Select>
+              </Form.Group>
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Debriefing</Form.Label>
+                <Form.Select
+                style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
+                  onChange={handleChange}
+                  name="debriefing"
+                >
+                  <option>Select Debriefing</option>
+                  <option value='Yes'>Yes</option>
+                  <option value='No'>No</option>
+                  
+                </Form.Select>
+              </Form.Group>
+            </Row>
                 <Row>
                   <Form.Group style={{width:'755px'}}>
               <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Team Members</Form.Label>
@@ -731,7 +744,7 @@ function ProposalForm(props) {
                           type="date"
                         />
                       </Form.Group>
-                      <Form.Group style={{width:'253px'}}>
+                      {/* <Form.Group style={{width:'253px'}}>
                         <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Result Date</Form.Label>
                         <Form.Control
                         
@@ -740,10 +753,8 @@ function ProposalForm(props) {
                           onChange={handleChange}
                           type="date"
                         />
-                      </Form.Group>
-                    </Row>
-
-                    <Row>
+                      </Form.Group> */}
+                    
                   <Form.Group style={{width:'755px'}}>
               <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Team Members</Form.Label>
                     <Select
@@ -757,6 +768,34 @@ function ProposalForm(props) {
                     </Select>
                   </Form.Group>
                 </Row>
+                <Row>
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Status</Form.Label>
+                <Form.Select
+                style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
+                  onChange={handleChange}
+                  name="status"
+                >
+                  <option>Select Status</option>
+                  <option value='Submitted'>Submitted</option>
+                  <option value='Not Submitted'>Not Submitted</option>
+                  
+                </Form.Select>
+              </Form.Group>
+              <Form.Group style={{width:'380px'}}>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Debriefing</Form.Label>
+                <Form.Select
+                style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
+                  onChange={handleChange}
+                  name="debriefing"
+                >
+                  <option>Select Debriefing</option>
+                  <option value='Yes'>Yes</option>
+                  <option value='No'>No</option>
+                  
+                </Form.Select>
+              </Form.Group>
+            </Row>
                     {/* <Row className="mb-4">
                       <Form.Group as={Col}>
                         <Form.Label>Team</Form.Label>

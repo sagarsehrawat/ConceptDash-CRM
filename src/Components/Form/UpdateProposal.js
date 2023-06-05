@@ -51,7 +51,7 @@ function UpdateProposal(props) {
 
   const [dept, setdept] = useState(props.row.Department_ID);
   const [cat, setcat] = useState(props.row.Project_Cat_ID);
-  const [status, setstatus] = useState(props.row.Status ?? "");
+  const [status, setstatus] = useState(props.row.Result ?? "");
   const [manager, setmanager] = useState(props.row.Project_Manager_ID);
   const [pName, setpName] = useState(props.row.Project_Name);
   const [qDeadline, setqDeadline] = useState(
@@ -64,9 +64,6 @@ function UpdateProposal(props) {
       ? props.row.Closing_Deadline.substring(0, 10)
       : ""
   );
-  const [rDate, setrDate] = useState(
-    props.row.Result_Date ? props.row.Result_Date.substring(0, 10) : ""
-  );
   const [city, setcity] = useState(props.row.City_ID);
   const [dPrice, setdPrice] = useState(props.row.Design_Price);
   const [provisionalItems, setprovisionalItems] = useState(
@@ -76,13 +73,9 @@ function UpdateProposal(props) {
   const [consultantPrice, setconsultantPrice] = useState(
     props.row.Sub_Consultant_Price
   );
-  const [totalBid, settotalBid] = useState(props.row.Total_Bid);
-  const [planTakers, setplanTakers] = useState(props.row.Plan_Takers);
-  const [bidders, setbidders] = useState(props.row.Bidders);
-  const [bidderPrice, setbidderPrice] = useState(props.row.Bidder_Price);
   const [winningPrice, setwinningPrice] = useState(props.row.Winning_Price);
   const [winningBidder, setwinningBidder] = useState(
-    props.row.Winning_Bidder_ID
+    props.row.Winning_Bidder
   );
   const [team, setteam] = useState(props.row.Team);
   let teamData = team ? team.split(",") : "";
@@ -94,43 +87,21 @@ function UpdateProposal(props) {
         value: e,
       });
     });
-  let planTaker = planTakers ? planTakers.split(",") : "";
-  let bidder = bidders ? bidders.split(",") : "";
-  let planTakersComapnies = [];
-  planTaker &&
-    planTaker.map((e) => {
-      planTakersComapnies.push({
-        label: e,
-        value: e,
-      });
-    });
-  let bidderComapnies = [];
-  bidder &&
-    bidder.map((e) => {
-      bidderComapnies.push({
-        label: e,
-        value: e,
-      });
-    });
+  
   const [form, setform] = useState({
     dept: dept ?? "",
     projectCat: cat ?? "",
-    status: status ?? "",
+    result: status ?? "",
     managerName: manager ?? "",
     projectName: pName ?? "",
     qDeadline: qDeadline ?? "",
     cDeadline: cDeadline ?? "",
-    resultDate: rDate ?? "",
     city: city ?? "",
     team: team ?? "",
     dPrice: dPrice ?? "",
     provisionalItems: provisionalItems ?? "",
     adminPrice: adminPrice ?? "",
     consultantPrice: consultantPrice ?? "",
-    totalBid: totalBid ?? "",
-    planTakers: planTakers ?? "",
-    bidders: bidders ?? "",
-    bidderPrice: bidderPrice ?? "",
     winningPrice: winningPrice ?? "",
     winningBidder: winningBidder ?? "",
   });
@@ -143,7 +114,7 @@ function UpdateProposal(props) {
     if (name === "projectCat") {
       setcat(value);
     }
-    if (name === "status") {
+    if (name === "result") {
       setstatus(value);
     }
     if (name === "managerName") {
@@ -157,9 +128,6 @@ function UpdateProposal(props) {
     }
     if (name === "cDeadline") {
       setcDeadline(value);
-    }
-    if (name === "resultDate") {
-      setrDate(value);
     }
     if (name === "city") {
       setcity(value);
@@ -178,18 +146,6 @@ function UpdateProposal(props) {
     }
     if (name === "consultantPrice") {
       setconsultantPrice(value);
-    }
-    if (name === "totalBid") {
-      settotalBid(value);
-    }
-    if (name === "planTakers") {
-      setplanTakers(value);
-    }
-    if (name === "bidders") {
-      setbidders(value);
-    }
-    if (name === "bidderPrice") {
-      setbidderPrice(value);
     }
     if (name === "winningPrice") {
       setwinningPrice(value);
@@ -281,21 +237,16 @@ function UpdateProposal(props) {
         {
           departmentId: form.dept,
           projectCatId: form.projectCat,
-          status: form.status,
+          result: form.result,
           projectManagerId: form.managerName,
           projectName: form.projectName,
           questionDeadline: form.qDeadline,
           closingDeadline: form.cDeadline,
-          resultDate: form.resultDate,
           team: DisplayValue ? DisplayValue.toString() : team,
           designPrice: form.dPrice,
           provisionalItems: form.provisionalItems,
           contractAdminPrice: form.adminPrice,
           subConsultantPrice: form.consultantPrice,
-          totalBid: form.totalBid,
-          planTakers: DisplayValue1 ? DisplayValue1.toString() : planTakers,
-          bidders: DisplayValue1 ? DisplayValue1.toString() : bidders,
-          bidderPrice: form.bidderPrice,
           winningPrice: form.winningPrice,
           winningBidderId: form.winningBidder,
           cityId: form.city,
@@ -427,14 +378,14 @@ function UpdateProposal(props) {
 
             <Row>
               <Form.Group style={{width:'380px'}}>
-                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Status</Form.Label>
+                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Result</Form.Label>
                 <Form.Select
                 style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
-                  defaultValue={props.row.Status}
-                  name="status"
+                  defaultValue={props.row.Result}
+                  name="result"
                   onChange={handleChange}
                 >
-                  <option value="">Select Status</option>
+                  <option value="">Select Result</option>
                   <option value="Won">Won</option>
                   <option value="Lost">Lost</option>
                 </Form.Select>
@@ -481,16 +432,6 @@ function UpdateProposal(props) {
                         style={{...styles.nameInput, width:'234px'}}
                   value={cDeadline}
                   name="cDeadline"
-                  onChange={handleChange}
-                  type="date"
-                />
-              </Form.Group>
-              <Form.Group style={{width:'253px'}}>
-                <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Result Date</Form.Label>
-                <Form.Control
-                        style={{...styles.nameInput, width:'233px'}}
-                  value={rDate}
-                  name="resultDate"
                   onChange={handleChange}
                   type="date"
                 />
@@ -561,7 +502,7 @@ function UpdateProposal(props) {
                       onChange={handleChange}
                     />
                   </Form.Group>
-                  <Form.Group style={{width:'253px'}}>
+                  {/* <Form.Group style={{width:'253px'}}>
                     <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Total Bid</Form.Label>
                     <Form.Control
                     style={{...styles.nameInput, width:'233px'}}
@@ -571,9 +512,9 @@ function UpdateProposal(props) {
                       placeholder="Total Bid"
                       onChange={handleChange}
                     />
-                  </Form.Group>
+                  </Form.Group> */}
                 </Row>
-                <Row>
+                {/* <Row>
                   <Form.Group style={{width:'250px'}}>
                     <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Plan Takers</Form.Label>
                     <Select
@@ -606,7 +547,7 @@ function UpdateProposal(props) {
                       onChange={handleChange}
                     />
                   </Form.Group>
-                </Row>
+                </Row> */}
                 <Row>
                   <Form.Group style={{width:'380px'}}>
                     <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Winning Price</Form.Label>
@@ -621,17 +562,13 @@ function UpdateProposal(props) {
                   </Form.Group>
                   <Form.Group style={{width:'380px'}}>
                     <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Winning Bider</Form.Label>
-                    <Form.Select
-                    style={{...styles.nameInput, width:'360px', fontSize:'14px', color:'#70757A'}}
+                    <Form.Control
+                    style={{...styles.nameInput, width:'360px'}}
                       value={winningBidder}
-                      onChange={handleChange}
                       name="winningBidder"
-                    >
-                      <option value="">Select Winning Bidder</option>
-                      {companies.map((option) => (
-                        <option value={option.ID}>{option.Name}</option>
-                      ))}
-                    </Form.Select>
+                      placeholder="Winning Bidder"
+                      onChange={handleChange}
+                    />
                   </Form.Group>
                 </Row>
               </>
