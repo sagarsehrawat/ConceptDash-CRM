@@ -12,11 +12,12 @@ import Delete from '../../Images/Delete.svg'
 import editD from '../../Images/edit-disabled.svg'
 import cross from '../../Images/cross.svg'
 import axios from 'axios'
-import {PRIMARY_COLOR,  DELETE_PROJECT, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_PROJECTS, GET_PROJECT_CATEGORIES, HOST, PROJECT_CHART } from '../Constants/Constants'
+import { PRIMARY_COLOR, DELETE_PROJECT, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGE_PROJECTS, GET_PROJECT_CATEGORIES, HOST, PROJECT_CHART, GET_GOOGLE_DRIVE_URL } from '../Constants/Constants'
 import moment from 'moment'
 import AddProject from '../Form/AddProject'
 import UpdateProjectForm from '../Form/UpdateProjectForm'
 import ProjectForm from '../Form/ProjectForm'
+import open from '../../Images/openinDrive.svg'
 
 const Project = (props) => {
     const { isCollapsed } = props
@@ -28,7 +29,7 @@ const Project = (props) => {
     const [projects, setprojects] = useState([])
     const [projectDetails, setprojectDetails] = useState([])
     const [selectedProjects, setselectedProjects] = useState([])
-    
+
     const [cities, setcities] = useState([]);
     const [depts, setdepts] = useState([]);
     const [projectCats, setprojectCats] = useState([]);
@@ -47,6 +48,7 @@ const Project = (props) => {
     const [prevFilter, setprevFilter] = useState({ dept: [], cat: [], city: [], manager: [] });
     const [filter2, setfilter2] = useState('Basic')
     const [status, setstatus] = useState(null)
+    const [IsLoading3, setIsLoading3] = useState(false);
     const [advancedFilter, setadvancedFilter] = useState([['', 'IS', '']])
 
     //Add Form Modal
@@ -56,7 +58,7 @@ const Project = (props) => {
 
     //Filter Modal
     const [filterModal, setfilterModal] = useState(false);
-    const closeFilterModal = () => {setfilter(prevFilter); setfilterModal(false)};
+    const closeFilterModal = () => { setfilter(prevFilter); setfilterModal(false) };
     const openFilterModal = () => setfilterModal(true);
 
     //Status Modal
@@ -82,6 +84,21 @@ const Project = (props) => {
     const handleShowUpdate = () => setShowUpdate(true);
 
     const styles = {
+        openInDrive: {
+            width: "92px",
+            height: "16px",
+            left: "0px",
+            top: "20px",
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 400,
+            fontSize: "12px",
+            lineHeight: "16px",
+            color: "#3692EF",
+            display: 'flex',
+            flexDirection: 'row',
+            cursor: 'pointer'
+        },
         headerContainer: {
             marginTop: "30px",
             marginLeft: "32px",
@@ -604,27 +621,27 @@ const Project = (props) => {
         const call = async () => {
             await axios
                 .get(HOST + PROJECT_CHART, {
-                headers: {
-                    auth: "Rose " + localStorage.getItem("auth"),
-                    chart: "Status",
-                },
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                        chart: "Status",
+                    },
                 })
                 .then((res) => {
                     const arr = res.data.res;
                     let p = projectCount;
                     let sum = 0;
                     arr.map((e) => {
-                    //   if (e.Status === null) p[] = e.Count;
-                      if (e.Status === "Ongoing") p['Ongoing'] = e.Count;
-                      if (e.Status === "Not Started Yet") p[3] = e.Count;
-                      if (e.Status === "Completed") p['Completed'] = e.Count;
-                      sum+=e.Count;
+                        //   if (e.Status === null) p[] = e.Count;
+                        if (e.Status === "Ongoing") p['Ongoing'] = e.Count;
+                        if (e.Status === "Not Started Yet") p[3] = e.Count;
+                        if (e.Status === "Completed") p['Completed'] = e.Count;
+                        sum += e.Count;
                     });
                     p['Total'] = sum
                     setprojectCount(p);
                 })
                 .catch((err) => {
-                console.error("Error fetching chart data: ", err);
+                    console.error("Error fetching chart data: ", err);
                 });
             // await axios
             //     .get(HOST + GET_PROPOSAL_COUNT, {
@@ -694,7 +711,7 @@ const Project = (props) => {
                     console.log(err);
                 });
 
-            
+
         }
         call()
     }, [])
@@ -852,6 +869,24 @@ const Project = (props) => {
             if (idx === 8) return `${1242 - scrolled}px`
         }
     }
+    
+    const openDriveLink = (e, projectFolderId) => {
+        e.preventDefault();
+        setIsLoading3(true)
+        axios
+            .get(
+                HOST + GET_GOOGLE_DRIVE_URL,
+                { headers: { auth: "Rose " + localStorage.getItem("auth"), id: projectFolderId, } }
+            )
+            .then((res) => {
+                const url = res.data.res
+                if (url && url !== "") window.open(url, '_blank');
+                setIsLoading3(false)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
     const statusComponent = (status) => {
         if (status === null || status === "Not Started Yet") {
@@ -941,7 +976,7 @@ const Project = (props) => {
                         <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
                             <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
                             <div className='d-flex align-items-center'>
-                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => {setfilter({ dept: [], cat: [], city: [], manager: [] }); setprevFilter({ dept: [], cat: [], city: [], manager: [] }); setCall(apiCall+1); setfilterModal(false);}}>Clear All</Button>
+                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => { setfilter({ dept: [], cat: [], city: [], manager: [] }); setprevFilter({ dept: [], cat: [], city: [], manager: [] }); setCall(apiCall + 1); setfilterModal(false); }}>Clear All</Button>
                                 <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={closeFilterModal} />
                             </div>
                         </div>
@@ -1028,6 +1063,31 @@ const Project = (props) => {
                             <th scope="col" style={{ ...styles.tableHeading, width: "260px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(0)}>
                                     Project Name&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                                </div>
+                                <Modal
+                                    show={sortModal === 0}
+                                    onHide={handleCloseSort}
+                                    style={{ ...styles.sortModal, left: sortModalLeft(0) }}
+                                    dialogClassName="filter-dialog"
+                                    backdropClassName="filter-backdrop"
+                                    animation={false}
+                                >
+                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Name"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowUp} />
+                                            <p style={styles.sortText}>Sort Ascending</p>
+                                        </div>
+                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Project_Name DESC"); setCall(apiCall + 1); handleCloseSort() }}>
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                            <p style={styles.sortText}>Sort Descending</p>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </th>
+
+                            <th scope="col" style={{ ...styles.tableHeading, width: "160px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(0)}>
+                                    Project Code&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
                                 <Modal
                                     show={sortModal === 0}
@@ -1146,7 +1206,7 @@ const Project = (props) => {
                                 </Modal>
                             </th>
                             {isCollapsed ? <th scope="col" style={{ ...styles.tableHeading, width: "160px" }} className='fixed-header2'>
-                                <div style={{ padding: "4px 8px", display: "inline"}} className=''>
+                                <div style={{ padding: "4px 8px", display: "inline" }} className=''>
                                     Team
                                 </div>
                             </th> : <></>}
@@ -1243,9 +1303,14 @@ const Project = (props) => {
                                                     checked={selectedProjects.includes(e.Project_Id)}
                                                     readOnly={true}
                                                     onClick={(eve) => { if (eve.target.checked) { setselectedProjects(prev => [...prev, e.Project_Id]) } else { setselectedProjects(prev => prev.filter(ele => ele !== e.Project_Id)) } }}
-                                                /><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
+                                                />
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</div>
+                                                    {e.Folder_ID!=null ? <div style={styles.openInDrive} onClick={(f) => openDriveLink(f, e.Folder_ID)}>Open in Drive&nbsp;&nbsp;<img src={open} /></div> : <></>}
+                                                </div>
                                             </div>
                                         </td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.Project_Code}</td>
                                         <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.City}</td>
                                         <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td>
                                         <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.dept}</td>
@@ -1307,15 +1372,15 @@ const Project = (props) => {
                 <p style={styles.floatinContainerText}>{selectedProjects.length}</p>
                 <p style={styles.floatingContainerText2}>Items Selected</p>
                 <div style={{ ...styles.floatingContainerLine, marginLeft: "-23px" }}></div>
-                {privileges.includes("Delete Project") ? <div style={{ marginBottom: '15px',display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "50px", cursor: "pointer" }} onClick={(e) => handleShowDelete()}>
+                {privileges.includes("Delete Project") ? <div style={{ marginBottom: '15px', display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "50px", cursor: "pointer" }} onClick={(e) => handleShowDelete()}>
                     {/* <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} /> */}
                     <img src={Delete} />
                     <p style={styles.floatingContainerIconText}>Delete</p>
                 </div> : <></>}
-                {privileges.includes('Update Project') ? <Button style={{ marginBottom: '15px',display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }} disabled={selectedProjects.length !== 1} onClick={handleUpdate}>
+                {privileges.includes('Update Project') ? <Button style={{ marginBottom: '15px', display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }} disabled={selectedProjects.length !== 1} onClick={handleUpdate}>
                     {/* <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" /> */}
                     <img src={editD} />
-                    {selectedProjects.length !== 1?<p style={{...styles.floatingContainerIconText, color:'#70757A'}}>Edit</p>:<p style={styles.floatingContainerIconText}>Edit</p>}
+                    {selectedProjects.length !== 1 ? <p style={{ ...styles.floatingContainerIconText, color: '#70757A' }}>Edit</p> : <p style={styles.floatingContainerIconText}>Edit</p>}
                 </Button> : <></>}
                 <div style={{ ...styles.floatingContainerLine, marginLeft: "10px" }}></div>
                 <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "40px" }}>
@@ -1333,23 +1398,23 @@ const Project = (props) => {
                 dialogClassName="filter-dialog"
                 animation={false}
             >
-                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{ marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection: 'row' }}>
                     <div className='d-flex flex-row'>
                         <img src={projectForm} />
                         <div style={styles.addHeading}>Creating new project</div>
                     </div>
-                    <div><img onClick={handleClose} style={{marginRight:'25px',float: 'right'}} src={cross} /></div>
+                    <div><img onClick={handleClose} style={{ marginRight: '25px', float: 'right' }} src={cross} /></div>
                 </div>
                 {
-                        <ProjectForm
-                            setRed={setred}
-                            setGreen={setgreen}
-                            closeModal={handleClose}
-                            api={apiCall}
-                            apiCall={setCall}
-                        />
-                    }
-                
+                    <ProjectForm
+                        setRed={setred}
+                        setGreen={setgreen}
+                        closeModal={handleClose}
+                        api={apiCall}
+                        apiCall={setCall}
+                    />
+                }
+
             </Modal>
 
             {/* Update Modal */}
@@ -1361,25 +1426,25 @@ const Project = (props) => {
                 dialogClassName="filter-dialog"
                 animation={false}
             >
-                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{ marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection: 'row' }}>
                     <div className='d-flex flex-row'>
                         <img src={projectForm} />
                         <div style={styles.addHeading}>Update project</div>
                     </div>
-                    <div><img onClick={handleCloseUpdate} style={{marginRight:'25px',float: 'right'}} src={cross} /></div>
+                    <div><img onClick={handleCloseUpdate} style={{ marginRight: '25px', float: 'right' }} src={cross} /></div>
                 </div>
-                
-                    {
-                        <UpdateProjectForm
-                            row={rowData}
-                            setRed={setred}
-                            setGreen={setgreen}
-                            closeModal={handleCloseUpdate}
-                            api={apiCall}
-                            apiCall={setCall}
-                        />
-                    }
-                
+
+                {
+                    <UpdateProjectForm
+                        row={rowData}
+                        setRed={setred}
+                        setGreen={setgreen}
+                        closeModal={handleCloseUpdate}
+                        api={apiCall}
+                        apiCall={setCall}
+                    />
+                }
+
             </Modal>
 
             {/* Delete Modal */}
