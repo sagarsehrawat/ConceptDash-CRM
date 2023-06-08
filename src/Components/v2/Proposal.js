@@ -580,8 +580,8 @@ const Proposal = (props) => {
         addModal: {
             position: "absolute",
             width: "780px",
-            height: 'fit-content',
-            left: "28vw",
+            height: '730px',
+            left: "26vw",
             marginTop: "10vh",
             background: "#FFFFFF",
             boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
@@ -702,6 +702,7 @@ const Proposal = (props) => {
                     },
                 })
                 .then((res) => {
+                    console.log(res.data.res)
                     setproposals(res.data.res);
                     setpages(res.data.totalPages)
                     setIsLoading(false);
@@ -1018,14 +1019,14 @@ const Proposal = (props) => {
                                     )
                                 })}
                             </div>
-                            <div style={styles.filterSubcontainer} className='filter-container'>
+                            {/* <div style={styles.filterSubcontainer} className='filter-container'>
                                 <p style={styles.filterSubheading}>Project Category {filter.cat.length === 0 ? "" : `/${filter.cat.length}`}</p>
                                 {isLoading2[3] ? <LoadingSpinner /> : projectCats.map(e => {
                                     return (
                                         <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.cat.includes(e.Project_Cat_ID) ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('cat', e.Project_Cat_ID)}><p style={styles.filterBodyText}>{e.Project_Category}</p></div>
                                     )
                                 })}
-                            </div>
+                            </div> */}
                             <div style={styles.filterSubcontainer} className='filter-container'>
                                 <p style={styles.filterSubheading}>Project Managers {filter.manager.length === 0 ? "" : `/${filter.manager.length}`}</p>
                                 {isLoading2[4] ? <LoadingSpinner /> : employees.map(e => {
@@ -1282,7 +1283,7 @@ const Proposal = (props) => {
                                     Total Bid Price{/* &nbsp;&nbsp;<FontAwesomeIcon icon={faSort} /> */}
                                 </div>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "180px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "130px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(7)}>
                                     Result&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
@@ -1447,13 +1448,14 @@ const Proposal = (props) => {
                 dialogClassName="filter-dialog"
                 animation={false}
             >
-                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row', position:'sticky'}}>
                     <div className='d-flex flex-row'>
                         <img src={tIcon} />
                         <div style={styles.addHeading}>Add Proposal</div>
                     </div>
                     <div><img onClick={handleClose} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
                 </div>
+                <div style={{height:'685px', overflowY:'auto', overflowX:'hidden'}}>
                     {
                         <ProposalForm
                             setRed={setred}
@@ -1462,7 +1464,7 @@ const Proposal = (props) => {
                             api={apiCall}
                             apiCall={setCall}
                         />
-                    }
+                    }</div>
             </Modal>
 
             {/* Update Modal */}
@@ -1470,7 +1472,7 @@ const Proposal = (props) => {
                 show={showUpdate}
                 onHide={handleCloseUpdate}
                 backdrop="static"
-                style={styles.addModal}
+                style={{...styles.addModal, height:'fit-content'}}
                 dialogClassName="filter-dialog"
                 animation={false}
             >
@@ -1481,6 +1483,7 @@ const Proposal = (props) => {
                     </div>
                     <div><img onClick={handleCloseUpdate} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
                 </div>
+                {/* <div style={{height:'685px', overflowY:'auto', overflowX:'hidden'}}> */}
                     {
                         <UpdateProposal
                             row={rowData}
@@ -1491,6 +1494,7 @@ const Proposal = (props) => {
                             apiCall={setCall}
                         />
                     }
+                    {/* </div> */}
             </Modal>
 
             {/* Delete Modal */}
@@ -1505,8 +1509,8 @@ const Proposal = (props) => {
                     <Modal.Title>Confirm Deletion</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p style={{ textAlign: "center" }}>
-                        <b>Delete the selected RFP!!</b>
+                    <p style={{ textAlign: "center", marginBottom:'20px' }}>
+                        <b>Delete the selected Proposal!!</b>
                     </p>
                     <div className="d-flex flex-row justify-content-between">
 

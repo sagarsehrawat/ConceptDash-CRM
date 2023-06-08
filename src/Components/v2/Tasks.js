@@ -669,7 +669,7 @@ function Tasks(props) {
                 />
               </TabList>
             </Box>
-            <TabPanel value="1">
+            <TabPanel value="1" style={{padding:'0px'}}>
               <div
                 style={{
                   width: "100%",
@@ -1962,12 +1962,12 @@ function Tasks(props) {
                 Board
               </div>
             </TabPanel> */}
-            <TabPanel value="3">
+            <TabPanel value="3" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left', }}>
                 <TimeSheet />
               </div>
             </TabPanel>
-            <TabPanel value="4">
+            <TabPanel value="4" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left', marginTop: '20px' }}>
                 <Reports isCollapsed={isCollapsed} />
               </div>

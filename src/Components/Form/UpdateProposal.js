@@ -162,6 +162,7 @@ function UpdateProposal(props) {
   const [depts, setdepts] = useState([]);
   const [companies, setcompanies] = useState([]);
   const [employees, setemployees] = useState([]);
+  const [teamMembers, setteamMembers] = useState([]);
   const [projectDepts, setprojectDepts] = useState([]);
   const getProjectCategories = async(e)=>{
     await axios
@@ -222,6 +223,17 @@ function UpdateProposal(props) {
           console.log(err);
         });
 
+      await axios
+        .get(HOST + GET_EMPLOYEENAMES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setteamMembers(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
      
       setisLoading(false)
     };
@@ -273,7 +285,7 @@ function UpdateProposal(props) {
   const [isLoading, setisLoading] = useState(false);
 
   let attendees = [];
-  employees.map((e) => {
+  teamMembers.map((e) => {
     attendees.push({
       label: e.Full_Name,
       value: e.Full_Name,
