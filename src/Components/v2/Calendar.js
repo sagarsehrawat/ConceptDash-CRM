@@ -11,25 +11,25 @@ import { Button, Form, Modal } from 'react-bootstrap'
 import moment from 'moment'
 import { gapi } from 'gapi-script'
 import axios from 'axios'
-import { ADD_TIMESHEET, GET_EMPLOYEENAMES, HOST , PRIMARY_COLOR} from '../Constants/Constants'
+import { ADD_CALENDAR_MEET, ADD_TIMESHEET, GET_CALENDAR, GET_EMPLOYEENAMES, HOST, PRIMARY_COLOR } from '../Constants/Constants'
 import Select from 'react-virtualized-select';
 import ReactSelect from 'react-select'
 
 const Calendar = () => {
     const [isLoading, setisLoading] = useState(false)
     const [events, setEvents] = useState(null);
-    const SCOPES = "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar";
     const [red, setred] = useState(false);
     const [green, setgreen] = useState(false);
     const [view, setview] = useState('Day');
-    const [modalStyles, setmodalStyles] = useState({left: 0, top: 0});
+    const [modalStyles, setmodalStyles] = useState({ left: 0, top: 0 });
     const [employees, setemployees] = useState([]);
-    const [date, setdate] = useState(moment());
+    let now = moment()
+    now = now.startOf('day')
+    const [date, setdate] = useState(now);
     const [times, settimes] = useState(['12:00 AM', '12:15 AM', '12:30 AM', '12:45 AM', '01:00 AM', '01:15 AM', '01:30 AM', '01:45 AM', '02:00 AM', '02:15 AM', '02:30 AM', '02:45 AM', '03:00 AM', '03:15 AM', '03:30 AM', '03:45 AM', '04:00 AM', '04:15 AM', '04:30 AM', '04:45 AM', '05:00 AM', '05:15 AM', '05:30 AM', '05:45 AM', '06:00 AM', '06:15 AM', '06:30 AM', '06:45 AM', '07:00 AM', '07:15 AM', '07:30 AM', '07:45 AM', '08:00 AM', '08:15 AM', '08:30 AM', '08:45 AM', '09:00 AM', '09:15 AM', '09:30 AM', '09:45 AM', '10:00 AM', '10:15 AM', '10:30 AM', '10:45 AM', '11:00 AM', '11:15 AM', '11:30 AM', '11:45 AM', '12:00 PM', '12:15 PM', '12:30 PM', '12:45 PM', '01:00 PM', '01:15 PM', '01:30 PM', '01:45 PM', '02:00 PM', '02:15 PM', '02:30 PM', '02:45 PM', '03:00 PM', '03:15 PM', '03:30 PM', '03:45 PM', '04:00 PM', '04:15 PM', '04:30 PM', '04:45 PM', '05:00 PM', '05:15 PM', '05:30 PM', '05:45 PM', '06:00 PM', '06:15 PM', '06:30 PM', '06:45 PM', '07:00 PM', '07:15 PM', '07:30 PM', '07:45 PM', '08:00 PM', '08:15 PM', '08:30 PM', '08:45 PM', '09:00 PM', '09:15 PM', '09:30 PM', '09:45 PM', '10:00 PM', '10:15 PM', '10:30 PM', '10:45 PM', '11:00 PM', '11:15 PM', '11:30 PM', '11:45 PM'])
     const [form, setform] = useState({
         title: "",
-        project: "",
-        employees: "",
+        employees: [],
         startTime: "",
         endTime: "",
         timeZone: "",
@@ -37,7 +37,6 @@ const Calendar = () => {
         date: moment()
     })
     const scheduleRef = useRef(null);
-    const calendarID = "primary";
 
     //Add Event Modal
     const [show, setShow] = useState(false);
@@ -233,6 +232,38 @@ const Calendar = () => {
     }
 
     useEffect(() => {
+        setisLoading(true)
+        const call = async () => {
+            await axios
+                .get(HOST + GET_CALENDAR, {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                        email: localStorage.getItem('emailWork'),
+                        start: view === 'Day' ? date.clone().utc().format() : date.clone().startOf('week').utc().format(),
+                        end: view === 'Day' ? date.clone().add(1, 'day').utc().format() : date.clone().endOf('week').utc().format()
+                    },
+                })
+                .then((res) => {
+                    const arr = res.data.res.map((item) => ({
+                        Id: item.id,
+                        Subject: item.subject,
+                        StartTime: moment.utc(item.start.dateTime).toDate(),
+                        EndTime: moment.utc(item.end.dateTime).toDate(),
+                        meetingLink: item.isOnlineMeeting ? item.onlineMeeting.joinUrl : "",
+                        isAllDay: false,
+                    }));
+                    setEvents(arr);
+                    setisLoading(false)
+                })
+                .catch((err) => {
+                    console.error("Error fetching chart data: ", err);
+                });
+        }
+        call()
+    }, [date, view])
+
+
+    useEffect(() => {
         const call = async () => {
             await axios
                 .get(HOST + GET_EMPLOYEENAMES, {
@@ -247,107 +278,7 @@ const Calendar = () => {
                 });
         };
         call();
-        const script = document.createElement("script");
-        script.async = true;
-        script.defer = true;
-        script.src = "https://apis.google.com/js/api.js";
-
-        document.body.appendChild(script);
-
-        const handleScriptLoad = () => {
-            if (window.gapi) {
-                window.gapi.load("client:auth2", initClient);
-                script.removeEventListener("load", handleScriptLoad);
-            }
-        };
-
-        script.addEventListener("load", handleScriptLoad);
-
-        return () => {
-            script.removeEventListener("load", handleScriptLoad);
-        };
     }, []);
-
-    const openSignInPopup = async () => {
-        localStorage.removeItem("access_token");
-        await window.gapi.auth2.authorize(
-            {
-                client_id:
-                    "52169325708-ujav1fof3lgebds8reurj0e74ua0tsgo.apps.googleusercontent.com",
-                scope: SCOPES,
-            },
-            (res) => {
-                if (res) {
-                    if (res.access_token)
-                        localStorage.setItem("access_token", res.access_token);
-
-                    // Load calendar events after authentication
-                    window.gapi.client.load("calendar", "v3", listUpcomingEvents);
-                }
-            }
-        );
-    };
-
-    const initClient = async () => {
-        setisLoading(true);
-        if (!localStorage.getItem("access_token")) {
-            await openSignInPopup();
-        } else {
-            // Get events if access token is found without sign in popup
-            fetch(
-                `https://www.googleapis.com/calendar/v3/calendars/primary/events?key=AIzaSyCD_8FIN6MsCjNbFY7GxOWxwDm7kmn-tX4&orderBy=startTime&singleEvents=true`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                    },
-                }
-            )
-                .then((res) => {
-                    // Check if unauthorized status code is return open sign in popup
-                    if (res.status !== 401) {
-                        return res.json();
-                    } else {
-                        openSignInPopup();
-                    }
-                })
-                .then((data) => {
-                    if (data?.items) {
-                        setEvents(formatEvents(data.items));
-                        setisLoading(false);
-                    }
-                });
-        }
-    };
-
-    const listUpcomingEvents = () => {
-        window.gapi.client.calendar.events
-            .list({
-                calendarId: "primary",
-                showDeleted: true,
-                singleEvents: true,
-                timeMax: "2024-09-29T10:00:00+05:30",
-                timeMin: "2021-10-26T13:00:00+05:30",
-                maxResults: 500,
-            })
-            .then(function (response) {
-                let events = response.result.items;
-                if (events.length > 0) {
-                    setEvents(formatEvents(events));
-                }
-                setisLoading(false);
-            });
-    };
-
-    const formatEvents = (list) => {
-        return list.map((item) => ({
-            Id: item.id,
-            Subject: item.summary,
-            StartTime: new Date(item.start.dateTime) || new Date(item.start.date),
-            EndTime: new Date(item.end.dateTime) || new Date(item.end.date),
-            meetingLink: item.hangoutLink,
-            isAllDay: false,
-        }));
-    };
 
     const appointmentTemplate = (props) => {
         const diff = moment(props.EndTime.toString()).diff(moment(props.StartTime.toString())) / 60000;
@@ -377,86 +308,38 @@ const Calendar = () => {
         }
     }
 
-    const makeid = (length) => {
-        var result = "";
-        var characters =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        var charactersLength = characters.length;
-        for (var i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-    }
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        var d = new Date();
-        var offset = d.getTimezoneOffset();
-        var hours = Math.floor(Math.abs(offset) / 60);
-        var minutes = Math.abs(offset) % 60;
-        if (minutes === 0) {
-            minutes = "00";
-        }
-        var sign = offset > 0 ? "-" : "+";
-        let offset1 = `${sign}0${hours}:${minutes}`;
-        const id = makeid(20)
-        console.log(moment(form.startTime).format('YYYY-MM-DD'))
-        gapi.load('client', () => {
-            gapi.client
-                .request({
-                    path: `https://www.googleapis.com/calendar/v3/calendars/${calendarID}/events?conferenceDataVersion=1`,
-                    method: "POST",
-                    body: {
-                        conferenceDataVersion: 1,
-                        summary: `${form.title}`,
-                        description: form.description,
-                        start: {
-                            dateTime: `${moment(form.date).format('YYYY-MM-DD')}T${moment(form.startTime, 'hh:mm A').format('HH:mm')}:00${offset1}`,
-                        },
-                        end: {
-                            dateTime: `${moment(form.date).format('YYYY-MM-DD')}T${moment(form.endTime, 'hh:mm A').format('HH:mm')}:00${offset1}`,
-                        },
-                        attendees: form.employees.map((email) => ({
-                            email: email.trim(),
-                        })),
-                        conferenceData: {
-                            createRequest: {
-                                conferenceSolutionKey: {
-                                    type: "hangoutsMeet",
-                                },
-                                requestId: id,
-                            },
-                        },
-                        reminders: {
-                            useDefault: true,
-                        },
-                    },
-                    headers: {
-                        "Content-type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                    },
-                })
-                .then(
-                    (response) => {
-                        setgreen(true)
-                        handleClose()
-                        scheduleRef.current.addEvent({
-                            Id: response.result.id,
-                            Subject: response.result.summary,
-                            StartTime: new Date(response.result.start.dateTime) || new Date(response.result.start.date),
-                            EndTime: new Date(response.result.end.dateTime) || new Date(response.result.end.date),
-                            meetingLink: response.result.hangoutLink,
-                            isAllDay: false,
-                        })
-                        return [true, response];
-                    },
-                    function (err) {
-                        setred(true)
-                        console.log(err);
-                        return [false, err];
-                    }
-                );
-        })
+        setisLoading(true)
+        await axios.post(
+            HOST + ADD_CALENDAR_MEET,
+            {
+                ...form,
+                attendees: [{name: "Amala Sebestian", email: 'amalas@conceptdash.ca'}],
+                start: form.startTime.utc().format(),
+                end: form.endTime.utc().format(),
+                email: localStorage.getItem('emailWork')
+            },
+            { headers: { 'auth': 'Rose ' + localStorage.getItem('auth') } })
+            .then((res) => {
+                if (res.data.success === true) {
+                    handleClose()
+                    setEvents(prev => [...prev,
+                        {Id: res.data.res.id,
+                        Subject: res.data.res.subject,
+                        StartTime: moment.utc(res.data.res.start.dateTime).toDate(),
+                        EndTime: moment.utc(res.data.res.start.dateTime).toDate(),
+                        meetingLink: res.data.res.isOnlineMeeting ? res.data.res.onlineMeeting.joinUrl : "",
+                        isAllDay: false,}
+                    ])
+                }
+                else setred(true)
+                setisLoading(false)
+            })
+            .catch((err) => {
+                setred(true)
+                console.log(err)
+            })
     }
 
     const handleChange = (e) => {
@@ -464,7 +347,7 @@ const Calendar = () => {
             setform(prev => {
                 return {
                     ...prev,
-                    'employees': e.map(x => x.value)
+                    'employees': e.map(x => ({ name: x.label, email: x.value }))
                 }
             })
         } else {
@@ -478,14 +361,17 @@ const Calendar = () => {
     }
 
     const handleEventClick = (e) => {
-        const googleMeetLink = e.event.meetingLink;
-        window.open(googleMeetLink, "_blank");
+        e.cancel = true;
+        if (e.event.meetingLink !=="") {
+            const googleMeetLink = e.event.meetingLink;
+            window.open(googleMeetLink, "_blank");
+        }
     };
 
     const handleMouseDown = (e) => {
         const left = Math.min(e.clientX, window.innerWidth - 667);
         const top = Math.min(e.clientY, window.innerHeight - 460);
-        setmodalStyles({left: left, top: top})
+        setmodalStyles({ left: left, top: top })
     }
 
     return (
@@ -499,17 +385,17 @@ const Calendar = () => {
                     <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "18px", lineHeight: "28px", color: "#0A0A0A", margin: "0px", marginRight: "28px", marginLeft: "20px" }}>Calendar</p>
                     <button style={styles.todayButton} onClick={(e) => {
                         document.querySelector(".e-schedule-toolbar-container > div > div > div.e-toolbar-right > div.e-today > button").click()
-                        setdate(moment())
+                        setdate(moment().startOf('day'))
                     }}>Today</button>
                     <FontAwesomeIcon icon={faChevronLeft} color={primaryColour} style={{ marginRight: "24px", cursor: "pointer" }} onClick={(e) => {
                         document.querySelector(".e-schedule-toolbar-container > div > div > div > div.e-prev > button").click()
-                        view==='Day' ? setdate(date.clone().subtract(1, 'day')) : setdate(date.clone().subtract(1, 'week'))
+                        view === 'Day' ? setdate(date.clone().subtract(1, 'day')) : setdate(date.clone().subtract(1, 'week'))
                     }} />
                     <FontAwesomeIcon icon={faChevronRight} color={primaryColour} style={{ marginRight: "12px", cursor: "pointer" }} onClick={(e) => {
                         document.querySelector(".e-schedule-toolbar-container > div > div > div > div.e-next > button").click()
-                        view==='Day' ? setdate(date.clone().add(1, 'day')) : setdate(date.clone().add(1, 'week'))
+                        view === 'Day' ? setdate(date.clone().add(1, 'day')) : setdate(date.clone().add(1, 'week'))
                     }} />
-                    <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", margin: "0px" }}>{view==='Day' ? date.format('MMMM D, YYYY') : date.clone().startOf('week').format('MMMM D') + "-" + date.clone().endOf('week').format('D, YYYY')}</p>
+                    <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", lineHeight: "20px", color: "#0A0A0A", margin: "0px" }}>{view === 'Day' ? date.clone().local().format('MMMM D, YYYY') : date.clone().startOf('week').format('MMMM D') + "-" + date.clone().endOf('week').format('D, YYYY')}</p>
                 </div>
 
                 {/* Day Dropdown */}
@@ -530,7 +416,7 @@ const Calendar = () => {
 
                 {/* Left Continaer */}
                 <div className='d-flex flex-column gap-5' style={styles.leftContianer}>
-                    <button style={styles.newEventButton} onClick={e => {setmodalStyles({left: "800px", top: "300px"}); handleShow()}}>Create New Event</button>
+                    <button style={styles.newEventButton} onClick={e => { setmodalStyles({ left: "800px", top: "300px" }); handleShow() }}>Create New Event</button>
                 </div>
 
                 {/* Right Container */}
@@ -586,8 +472,8 @@ const Calendar = () => {
                                             project: "",
                                             employees: "",
                                             date: e.startTime,
-                                            startTime: moment(e.startTime).format('hh:mm A').toString(),
-                                            endTime: moment(e.endTime).format('hh:mm A').toString(),
+                                            startTime: moment(e.startTime),
+                                            endTime: moment(e.endTime),
                                             timeZone: "",
                                             description: "",
                                         })
@@ -626,7 +512,7 @@ const Calendar = () => {
                     <div className='d-flex flex-row' style={{ marginLeft: "24px", marginTop: "16px" }}>
                         <div className='d-flex flex-column justify-content-between'>
                             <div className='d-flex flex-row justify-content-between gap-0' style={{ width: "206px", marginBottom: "12px" }}>
-                                <Form.Select name='startTime' style={styles.timeDropdown} defaultValue={form.startTime} onChange={handleChange}>
+                                <Form.Select name='startTime' style={styles.timeDropdown} defaultValue={moment(form.startTime).format('hh:mm A').toString()} onChange={handleChange}>
                                     {times.map(e => {
                                         return (
                                             <option label={e}>{e}</option>
@@ -634,7 +520,7 @@ const Calendar = () => {
                                     })}
                                 </Form.Select>
                                 <p>-</p>
-                                <Form.Select name='endTime' style={styles.timeDropdown} defaultValue={form.endTime} onChange={handleChange}>
+                                <Form.Select name='endTime' style={styles.timeDropdown} defaultValue={moment(form.endTime).format('hh:mm A').toString()} onChange={handleChange}>
                                     {times.map(e => {
                                         return (
                                             <option label={e}>{e}</option>
@@ -650,11 +536,11 @@ const Calendar = () => {
                         <div className='d-flex flex-column justify-content-between'>
                             <div className='d-flex flex-row justify-content-between gap-0' style={{ width: "206px", marginBottom: "12px" }}>
                                 <div style={styles.timeDropdown}>
-                                    {convertTime(moment('2023-03-25 ' + form.startTime))}
+                                    {convertTime(moment(form.startTime))}
                                 </div>
                                 <p>-</p>
                                 <div style={styles.timeDropdown}>
-                                    {convertTime(moment('2023-03-25 ' + form.endTime))}
+                                    {convertTime(moment(form.endTime))}
                                 </div>
                             </div>
                             <div style={{ ...styles.timeDropdown, width: "205px" }} >

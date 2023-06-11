@@ -8,7 +8,7 @@ import pinnedInactive from "../../Images/Pin icon.svg";
 import cross from "../../Images/cross.svg";
 import BudgetCharts from "./BudgetCharts";
 import axios from "axios";
-import { HOST, PROJECT_CHART, GET_ADMIN_TASKS, PRIMARY_COLOR } from "../Constants/Constants";
+import { HOST, PROJECT_CHART, GET_ADMIN_TASKS, PRIMARY_COLOR, GET_CALENDAR } from "../Constants/Constants";
 import deadlineImage from "../../Images/Vector.png";
 import Time from "../../Images/Time.png";
 import RFPCharts from "./RFPCharts";
@@ -357,112 +357,19 @@ const Home = (props) => {
       fontFamily: "Roboto",
     },
   };
-  const SCOPES =
-    "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar";
 
   const [events, setEvents] = useState(null);
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.async = true;
-    script.defer = true;
-    script.src = "https://apis.google.com/js/api.js";
 
-    document.body.appendChild(script);
-
-    const handleScriptLoad = () => {
-      if (window.gapi) {
-        window.gapi.load("client:auth2", initClient);
-        script.removeEventListener("load", handleScriptLoad);
-      }
-    };
-
-    script.addEventListener("load", handleScriptLoad);
-
-    return () => {
-      script.removeEventListener("load", handleScriptLoad);
-    };
-  }, []);
-  const openSignInPopup = async () => {
-    localStorage.removeItem("access_token");
-    await window.gapi.auth2.authorize(
-      {
-        client_id:
-          "52169325708-ujav1fof3lgebds8reurj0e74ua0tsgo.apps.googleusercontent.com",
-        scope: SCOPES,
-      },
-      (res) => {
-        if (res) {
-          if (res.access_token)
-            localStorage.setItem("access_token", res.access_token);
-
-          // Load calendar events after authentication
-          window.gapi.client.load("calendar", "v3", listUpcomingEvents);
-        }
-      }
-    );
-  };
   const [isLoadingCal, setisLoadingCal] = useState(false);
-  const initClient = async () => {
-    setisLoadingCal(true);
-    if (!localStorage.getItem("access_token")) {
-      await openSignInPopup();
-    } else {
-      // Get events if access token is found without sign in popup
-      fetch(
-        `https://www.googleapis.com/calendar/v3/calendars/primary/events?key=AIzaSyCD_8FIN6MsCjNbFY7GxOWxwDm7kmn-tX4&orderBy=startTime&singleEvents=true`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      )
-        .then((res) => {
-          // Check if unauthorized status code is return open sign in popup
-          if (res.status !== 401) {
-            return res.json();
-          } else {
-            openSignInPopup();
-          }
-        })
-        .then((data) => {
-          if (data?.items) {
-            setEvents(formatEvents(data.items));
-            setisLoadingCal(false);
-          }
-        });
-    }
-  };
-  const listUpcomingEvents = () => {
-    window.gapi.client.calendar.events
-      .list({
-        calendarId: "primary",
-        showDeleted: true,
-        singleEvents: true,
-        timeMax: "2024-09-29T10:00:00+05:30",
-        timeMin: "2021-10-26T13:00:00+05:30",
-        maxResults: 500,
-      })
-      .then(function (response) {
-        let events = response.result.items;
-        if (events.length > 0) {
-          setEvents(formatEvents(events));
-        }
-        setisLoadingCal(false);
-      });
-  };
-  const formatEvents = (list) => {
-    return list.map((item) => ({
-      Id: item.id,
-      Subject: item.summary,
-      StartTime: new Date(item.start.dateTime) || new Date(item.start.date),
-      EndTime: new Date(item.end.dateTime) || new Date(item.end.date),
-      meetingLink: item.hangoutLink,
-      isAllDay: false,
-    }));
-  };
+
   const handleEventClick = (e) => {
-    const googleMeetLink = e.event.meetingLink;
-    window.open(googleMeetLink, "_blank");
+    e.cancel = true;
+    if (e.event.meetingLink !=="") {
+      const googleMeetLink = e.event.meetingLink;
+      window.open(googleMeetLink, "_blank");
+    }
+
+    e.domEvent.stopPropagation()
   };
 
   const instance = new Internationalization();
@@ -471,7 +378,7 @@ const Home = (props) => {
   }
   function eventTemplate(props) {
     return (
-      <div className="template-wrap" style={{width:'100%'}}>
+      <div className="template-wrap" style={{ width: '100%' }}>
         <div className="subject">{props.Subject}</div>
         <div className="time">
           Time: {getTimeString(props.StartTime)} -{" "}
@@ -480,13 +387,7 @@ const Home = (props) => {
       </div>
     );
   }
-  function onEventRendered(args) {
-    // console.log(((new Date(args.data.StartTime)).getDate()===(new Date()).getDate()))
-    // const element = ((new Date(args.data.StartTime)).getDate()===(new Date()).getDate());
-    // if (element) {
-    //   element.innerText = 'Today';
-    // }
-  }
+
   const [chartComponent, setchartComponent] = useState("0");
   const [year, setyear] = useState("0");
   const [month, setmonth] = useState(new Date().getMonth().toString());
@@ -496,24 +397,47 @@ const Home = (props) => {
     if (chartComponent === "0") return <BudgetCharts year={year} />;
     if (chartComponent === "1") return <RFPCharts month={month} />;
     if (chartComponent === "2") return <ProposalCharts month={month} />;
-    if (chartComponent === "3") return <ProjectCharts month={month}/>;
-  };
-
-  const proposalCharts = () => {
-    return <></>;
-  };
-
-  const projectCharts = () => {
-    return <></>;
+    if (chartComponent === "3") return <ProjectCharts month={month} />;
   };
 
   const [isLoadingTasks, setisLoadingTasks] = useState(false);
-  
-  const [sideTasks, setsideTasks] = useState([]);
 
+  const [sideTasks, setsideTasks] = useState([]);
+  console.log(events)
   useEffect(() => {
     setisLoadingTasks(true);
+    setisLoadingCal(true);
     const call = async () => {
+      const now = new Date();
+      now.setHours(0, 0, 0, 0)
+      const start = now.toISOString()
+      now.setDate(now.getDate() + 3)
+      const end = now.toISOString()
+      await axios
+        .get(HOST + GET_CALENDAR, {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            email: localStorage.getItem('emailWork'),
+            start: start,
+            end: end
+          },
+        })
+        .then((res) => {
+          const arr = res.data.res.map((item) => ({
+            Id: item.id,
+            Subject: item.subject,
+            StartTime: moment.utc(item.start.dateTime).toDate(),
+            EndTime: moment.utc(item.end.dateTime).toDate(),
+            meetingLink: item.isOnlineMeeting ? item.onlineMeeting.joinUrl : "",
+            isAllDay: false,
+          }));
+          setEvents(arr);
+          setisLoadingCal(false)
+        })
+        .catch((err) => {
+          console.error("Error fetching chart data: ", err);
+        });
+
       await axios
         .get(HOST + PROJECT_CHART, {
           headers: {
@@ -546,16 +470,17 @@ const Home = (props) => {
         .then((res) => {
           let arr = res.data.res;
           let sidetasks = []
-          if(res.data.res.length!==0) {
-            for(let i=0;i<arr.length;i++) {
+          if (res.data.res.length !== 0) {
+            for (let i = 0; i < arr.length; i++) {
               let title = arr[i].Title
               let dDate = formatDate(arr[i].Due_Date)
-              sidetasks.push({title, dDate})
+              sidetasks.push({ title, dDate })
             }
             setsideTasks(sidetasks);
             setisLoadingTasks(false);
           } else {
-          setisLoadingTasks(false);}
+            setisLoadingTasks(false);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -568,8 +493,14 @@ const Home = (props) => {
     if (date === "" || date === null || date === undefined) return "";
     const formattedDate = moment(date)
     return formattedDate.format('MMM D')
-}
-console.log(sideTasks[0]);
+  }
+  function onEventRendered(args) {
+    // console.log(((new Date(args.data.StartTime)).getDate()===(new Date()).getDate()))
+    // const element = ((new Date(args.data.StartTime)).getDate()===(new Date()).getDate());
+    // if (element) {
+    //   element.innerText = 'Today';
+    // }
+  }
   return (
     <>
       <div style={{ display: "flex", flexDirection: "row" }}>
@@ -577,9 +508,9 @@ console.log(sideTasks[0]);
           <div style={styles.projectOverviewBox}>
             <p style={styles.projectOverviewHeading}>Projects Overview</p>
             <div
-              className="row justify-content-between" style={{margin: "20px"}}
+              className="row justify-content-between" style={{ margin: "20px" }}
             >
-              <div style={{...styles.projectOverviewContainers, marginLeft: "0px"}} className='col p-0'>
+              <div style={{ ...styles.projectOverviewContainers, marginLeft: "0px" }} className='col p-0'>
                 <p style={styles.projectOverviewSubheading}>Ongoing Projects</p>
                 <p style={styles.projectOverviewNumber}>{projects[0]}</p>
               </div>
@@ -591,7 +522,7 @@ console.log(sideTasks[0]);
                 <p style={styles.projectOverviewSubheading}>Completed Projects</p>
                 <p style={styles.projectOverviewNumber}>{projects[2]}</p>
               </div>
-              <div style={{...styles.projectOverviewContainers, marginRight: "0px"}} className='col p-0'>
+              <div style={{ ...styles.projectOverviewContainers, marginRight: "0px" }} className='col p-0'>
                 <p style={styles.projectOverviewSubheading}>Total Projects</p>
                 <p style={styles.projectOverviewNumber}>
                   {projects[0] + projects[1] + projects[2] + projects[3]}
@@ -680,7 +611,7 @@ console.log(sideTasks[0]);
             {handleChartsComponent()}
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", paddingRight:'20px' }}>
+        <div style={{ display: "flex", flexDirection: "column", paddingRight: '20px' }}>
           <div style={styles.deadlines}>
             <div style={{ display: "flex", flexDirection: "row" }}>
               <img
@@ -703,41 +634,41 @@ console.log(sideTasks[0]);
               <LoadingSpinner />
             ) : (
               <>
-                {sideTasks[0]?<div style={{display: 'flex', flexDirection: 'row', marginTop: '5px', marginLeft: '16px', paddingRight:'20px'}}>
+                {sideTasks[0] ? <div style={{ display: 'flex', flexDirection: 'row', marginTop: '5px', marginLeft: '16px', paddingRight: '20px' }}>
                   <div style={styles.rect1}></div>
                   <div style={styles.task1}>
-                    {sideTasks[0]?sideTasks[0].title:"--"}
+                    {sideTasks[0] ? sideTasks[0].title : "--"}
                     <div>
                       <img src={Time} alt="Time Icon" />
-                      <span> {sideTasks[0]?sideTasks[0].dDate:"--"} </span>
+                      <span> {sideTasks[0] ? sideTasks[0].dDate : "--"} </span>
                     </div>
                   </div>
-                </div>:<></>}
-                {sideTasks[1]?<div style={{display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px', paddingRight:'20px'}}>
+                </div> : <></>}
+                {sideTasks[1] ? <div style={{ display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px', paddingRight: '20px' }}>
                   <span style={styles.rect2}></span>
                   <div style={styles.task2}>
-                    {sideTasks[1]?sideTasks[1].title:"--"}
+                    {sideTasks[1] ? sideTasks[1].title : "--"}
 
                     <div>
                       <img src={Time} alt="Time Icon" />
-                      <span> {sideTasks[1]?sideTasks[1].dDate:"--"} </span>
+                      <span> {sideTasks[1] ? sideTasks[1].dDate : "--"} </span>
                     </div>
                   </div>
-                </div>:<></>}
-                {sideTasks[2]?<div style={{display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px', paddingRight:'20px'}}>
+                </div> : <></>}
+                {sideTasks[2] ? <div style={{ display: 'flex', flexDirection: 'row', marginTop: '14px', marginLeft: '16px', paddingRight: '20px' }}>
                   <span style={styles.rect3}></span>
                   <div style={styles.task3}>
-                    {sideTasks[2]?sideTasks[2].title:"--"}
+                    {sideTasks[2] ? sideTasks[2].title : "--"}
 
                     <div>
                       <img src={Time} alt="Time Icon" />
-                      <span> {sideTasks[2]?sideTasks[2].dDate:"--"} </span>
+                      <span> {sideTasks[2] ? sideTasks[2].dDate : "--"} </span>
                     </div>
                   </div>
-                </div>:<></>}
+                </div> : <></>}
               </>
             )}
-            <div style={styles.tasksBottom} onClick={()=>setnav(2)}>View All</div>
+            <div style={styles.tasksBottom} onClick={() => setnav(2)}>View All</div>
           </div>
           <div style={styles.calendar}>
             <p style={styles.calendarHeading}>Calendar Upcoming</p>
@@ -752,8 +683,8 @@ console.log(sideTasks[0]);
                 agendaDaysCount={3}
                 eventClick={handleEventClick}
                 showHeaderBar={false}
-                style={{border: 'none'}}
-                eventRendered={onEventRendered}
+                style={{ border: 'none' }}
+                onEventRendered={onEventRendered}
               >
                 <ViewsDirective>
                   <ViewDirective
@@ -765,7 +696,7 @@ console.log(sideTasks[0]);
                 <Inject services={[Agenda, Day]} />
               </ScheduleComponent>
             )}
-            <div style={styles.calendarBottom} onClick={()=>setnav(8)}>View Calendar</div>
+            <div style={styles.calendarBottom} onClick={() => setnav(8)}>View Calendar</div>
           </div>
         </div>
       </div>

@@ -1,7 +1,8 @@
-export const HOST = 'https://crm-api.conceptdash.ca'
-// export const HOST = 'http://localhost:8080'
+// export const HOST = 'https://crm-api.conceptdash.ca'
+export const HOST = 'http://localhost:8080'
 
 // get apis
+export const GET_CALENDAR = '/microsoft/get/calendar'
 export const GET_ALL_USERS = '/api/get/customers'
 export const GET_ALL_SHIPPERS = '/api/get/shippers'
 export const LOGISTICS_DASHBOARD = '/api/getDashboard/logistics'
@@ -97,6 +98,7 @@ export const LIKE_ANNOUNCEMENT = '/api/update/like/announcement'
 
 
 // add apis
+export const ADD_CALENDAR_MEET = '/microsoft/add/calendar-meeting'
 export const ADD_NEW_USER = '/api/addNewUser'
 export const ADD_NEW_SHIPPER = '/api/addNewShipper'
 export const ADD_TASK = '/api/add/task'
