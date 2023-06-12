@@ -575,7 +575,7 @@ const RFP = (props) => {
             width: "780px",
             height: 'fit-content',
             left: "28vw",
-            marginTop: "8vh",
+            marginTop: "4vh",
             background: "#FFFFFF",
             boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
             borderRadius: "12px",

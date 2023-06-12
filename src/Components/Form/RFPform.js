@@ -72,7 +72,8 @@ function RFPform(props) {
     // amount: "",
     client: "",
     files: [],
-    source: ''
+    source: '',
+    city: ''
   });
   const [radio, setradio] = useState(false);
   const handleRadio = (e) => {
@@ -177,6 +178,7 @@ function RFPform(props) {
     formData.append('rfpNumber', form.rfpNumber);
     formData.append('source', form.source);
     formData.append('client', form.client);
+    formData.append('cityId', form.city);
 
     for (let i = 0; i < form.files.length; i++) {
       formData.append('files', form.files[i]);
@@ -217,7 +219,7 @@ function RFPform(props) {
   const [pCategory, setpCategory] = useState("");
   const [pCategoryid, setpCategoryid] = useState("");
   const [cityid, setcityid] = useState("");
-  // const [city, setcity] = useState("");
+  const [city, setcity] = useState("");
   // const [amount, setamount] = useState("");
   const [source, setsource] = useState("");
   const handleChange1 = async (e) => {
@@ -235,8 +237,8 @@ function RFPform(props) {
         setdeptid(res.data.res[0].Department_ID);
         setpCategory(res.data.res[0].Project_Category);
         setpCategoryid(res.data.res[0].Project_Cat_ID);
-        // setcity(res.data.res[0].City);
-        // setcityid(res.data.res[0].City_ID);
+        setcity(res.data.res[0].City);
+        setcityid(res.data.res[0].City_ID);
         // setamount(res.data.res[0].Budget_Amount);
         setsource(res.data.res[0].Source);
       })
@@ -285,6 +287,25 @@ function RFPform(props) {
                       onChange={handleChange}
                     // required
                     />
+                  </Form.Group>
+                </Row>
+                <Row>
+                  <Form.Group as={Col} controlId="formGridCity">
+                    <Form.Label style={{ ...styles.nameHeading, width: '740px', marginTop: '24px' }}>
+                      <div className="d-flex flex-row justify-content-between align-items-center">
+                        <div>City</div>
+                        {privileges.includes('Add City')? <div style={{background:'#EBE9F1',borderRadius:'10px', width:'20px', textAlign:'center', cursor:'pointer'}} onClick={handleShowCityForm}><img alt="Add New City" src={plus} /></div> :<></>}
+                      </div>
+                    </Form.Label>
+                    {/* <Form.Control style={{ ...styles.nameInput }} onChange={handleChange} name="client" /> */}
+                    <Form.Select style={{ ...styles.nameInput, fontSize: '14px', color: '#70757A' }} onChange={handleChange} name="city">
+                    <option value="">Select City</option>
+                      {cities
+                        ? cities.map((e) => (
+                            <option value={e.City_ID}>{e.City}</option>
+                          ))
+                        : ""}
+                    </Form.Select>
                   </Form.Group>
                 </Row>
                 <Row>

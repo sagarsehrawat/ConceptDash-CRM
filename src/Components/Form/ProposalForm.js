@@ -239,7 +239,7 @@ function ProposalForm(props) {
           subConsultantPrice: form.consultantPrice,
           winningPrice: form.winningPrice,
           winningBidderId: form.winningBidder,
-          cityId: form.city,
+          cityId: radio ? cityid: form.city,
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
@@ -265,8 +265,8 @@ function ProposalForm(props) {
   const [deptid, setdeptid] = useState("");
   const [catId, setcatId] = useState("");
   const [catid, setcatid] = useState("");
-  // const [cityid, setcityid] = useState("");
-  // const [city, setcity] = useState("");
+  const [cityid, setcityid] = useState("");
+  const [city, setcity] = useState("");
   const [managerId, setmanagerId] = useState("");
   const [manager, setmanager] = useState("");
 
@@ -286,8 +286,8 @@ function ProposalForm(props) {
         setcatid(res.data.res[0].Project_Category);
         setcatId(res.data.res[0].Project_Cat_ID);
         setdeptid(res.data.res[0].Department_ID);
-        // setcity(res.data.res[0].City);
-        // setcityid(res.data.res[0].City_ID);
+        setcity(res.data.res[0].City);
+        setcityid(res.data.res[0].City_ID);
         setmanager(res.data.res[0].Manager_Name);
         setmanagerId(res.data.res[0].Project_Manager_ID);
       })
@@ -716,7 +716,7 @@ function ProposalForm(props) {
                 </Form.Select></Form.Group>
                 </Row>
                 
-                {rfpData ? (
+                {rfpData.length>0 ? (
                   <div>
                     <Row>
                     <Form.Group as={Col}>
@@ -893,6 +893,59 @@ function ProposalForm(props) {
                 </Form.Select>
               </Form.Group>
             </Row>
+            <p style={styles.footer}>Bidding Details</p>
+                <Row>
+                  <Form.Group style={{width:'253px'}}>
+                  <Form.Label style={{...styles.nameHeading, marginTop:'8px'}}>Design Price <span><b>($)</b></span></Form.Label>
+                    <Form.Control
+                    style={{...styles.nameInput, width:'233px'}}
+                      name="dPrice"
+                      type="number"
+                      onChange={handleChange}
+                      required
+                    />
+                  </Form.Group>
+                  <Form.Group style={{width:'253px'}}>
+                  <Form.Label style={{...styles.nameHeading, marginTop:'8px'}}>Provisional Item Price <span><b>($)</b></span></Form.Label>
+                    <Form.Control
+                    style={{...styles.nameInput, width:'233px'}}
+                      name="provisionalItems"
+                      type="number"
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                </Row>
+                 <Row>
+                  <Form.Group style={{width:'253px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'8px'}}>Contract Admin Price <span><b>($)</b></span></Form.Label>
+                    <Form.Control
+                    style={{...styles.nameInput, width:'233px'}}
+                      name="adminPrice"
+                      type="number"
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                  <Form.Group style={{width:'253px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'8px'}}>Sub Consultant Price <span><b>($)</b></span></Form.Label>
+                    <Form.Control
+                    style={{...styles.nameInput, width:'233px'}}
+                      name="consultantPrice"
+                      type="number"
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                </Row>
+                <Row>
+                <Form.Group style={{width:'253px'}}>
+                    <Form.Label style={{...styles.nameHeading, marginTop:'8px', color: '#70757A'}}>Total Bid <span><b>($)</b></span></Form.Label>
+                    <Form.Control
+                    style={{...styles.nameInput, width:'233px'}}
+                      type="number"
+                      disabled
+                      value={totalBidCalculator(Number(design), Number(prov), Number(admin), Number(cons))}
+                    />
+                  </Form.Group>
+                </Row>
                     {/* <Row className="mb-4">
                       <Form.Group as={Col}>
                         <Form.Label>Team</Form.Label>

@@ -42,7 +42,7 @@ function UpdateRFP(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // const [cities, setcities] = useState([]);
+  const [cities, setcities] = useState([]);
   const [depts, setdepts] = useState([]);
   const [employees, setemployees] = useState([]);
 
@@ -50,16 +50,16 @@ function UpdateRFP(props) {
   useEffect(() => {
     setisLoading(true);
     const call = async () => {
-      // await axios
-      //   .get(HOST + GET_CITIES, {
-      //     headers: { auth: "Rose " + localStorage.getItem("auth") },
-      //   })
-      //   .then((res) => {
-      //     setcities(res.data.res);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+      await axios
+        .get(HOST + GET_CITIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setcities(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
       await axios
         .get(HOST + GET_DEPARTMENTS, {
@@ -89,7 +89,7 @@ function UpdateRFP(props) {
   const depart = props.row.Department;
   const projectCategory = props.row.Project_Category;
   const pro_manager = props.row.Manager_Name;
-  // const citi = props.row.City;
+  const citi = props.row.City;
   const [action, setaction] = useState(props.row.Action);
   const [dept, setdept] = useState(props.row.Department_ID);
   const [projectCat, setprojectCat] = useState(props.row.Project_Cat_ID);
@@ -103,6 +103,7 @@ function UpdateRFP(props) {
     props.row.Submission_Date ? props.row.Submission_Date.substring(0, 10) : ""
   );
   const [client, setclient] = useState(props.row.Client);
+  const [city, setcity] = useState(props.row.City_ID);
   const [rfpnum, setrfpnum] = useState(props.row.RFP_Number);
   const [source, setsource] = useState(props.row.Source);
   const [form, setform] = useState({
@@ -116,10 +117,10 @@ function UpdateRFP(props) {
     rfpNumber: rfpnum??"",
     client: client??"",
     source: source??"",
+    city: city??"",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(value);
     if (name === "dept") {
       setdept(value);
       getProjectCategories(value)
@@ -150,6 +151,9 @@ function UpdateRFP(props) {
     }
     if (name === "source") {
       setsource(value);
+    }
+    if (name === "city") {
+      setcity(value);
     }
     const newForm = form;
     newForm[name] = value;
@@ -184,6 +188,7 @@ function UpdateRFP(props) {
           submissionDate: form.submissionDate,
           rfpNumber: form.rfpNumber,
           client: form.client,
+          cityId: form.city,
           source: form.source,
           id: props.row.RFP_ID,
           employeeId: localStorage.getItem("employeeId"),
@@ -238,6 +243,21 @@ function UpdateRFP(props) {
                   ))
                 : ""}
             </Form.Select> */}
+          </Form.Group>
+        </Row>
+        <Row>
+          <Form.Group as={Col} controlId="formGridCity">
+            <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>City</Form.Label>
+            <Form.Select style={{ ...styles.nameInput, fontSize: '14px', color: '#70757A' }} onChange={handleChange} name="city">
+              <option>Select City</option>
+              {cities.length > 0
+                ? cities.map((e) => (
+                    <option value={e.City_ID} selected={e.City === citi}>
+                      {e.City}
+                    </option>
+                  ))
+                : ""}
+            </Form.Select>
           </Form.Group>
         </Row>
         <Row>
