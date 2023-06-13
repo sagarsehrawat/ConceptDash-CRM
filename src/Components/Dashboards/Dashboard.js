@@ -45,6 +45,7 @@ import rfpActive from "../../Images/RFP_Active.svg";
 import rfpInactive from "../../Images/RFP.svg";
 import T from "../../Images/T.svg";
 import ellipse from "../../Images/Ellipse.png";
+import dp from "../../Images/noprofile.jpeg";
 import askforce from "../../Images/ASKFORCE.svg";
 import account from "../../Images/accountSettings.svg";
 import team from "../../Images/teamManagement.svg";
@@ -668,7 +669,7 @@ const Dashboard = () => {
           >
             <div style={{padding:'12px', width:'15.69vw'}}>
               <div style={mystyles.header}>
-                <img src={ellipse} width={42} height={42} style={{marginRight:'8px'}} />
+                <img src={dp} width={42} height={42} style={{marginRight:'8px'}} />
                 <div style={{flexDirection:'column', marginTop:'4px'}}>
                     <div style={mystyles.name}>{localStorage.getItem('employeeName')}</div>
                     <div style={mystyles.email}>{localStorage.getItem('emailWork')}</div>

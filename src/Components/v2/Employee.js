@@ -44,6 +44,7 @@ import AuthenticationContext from "../../Context/AuthContext";
 import UpdateRFP from "../Form/UpdateRFP";
 import { RadioButtonComponent } from "@syncfusion/ej2-react-buttons";
 import ellipse from "../../Images/Ellipse.png";
+import dp from "../../Images/noprofile.jpeg";
 import emailIcon from "../../Images/email.svg";
 import phoneIcon from "../../Images/phone.svg";
 import locationIcon from "../../Images/location.svg";
@@ -1011,7 +1012,7 @@ function Employee(props) {
   // empModal ? element.style.background = '#0A0A0A' : element.style.background = '#F8FAFB'
   // empModal ? element.style.opacity = 0.25 : element.style.opacity = 1
   const formatLocation = (state, country) => {
-    if ((!state && !country) || state.trim() === "" || country.trim() === "")
+    if ((!state && !country) /* || state.trim() === "" || country.trim() === "" */)
       return "";
     if (!state) return country;
     if (!country) return state;
@@ -1277,7 +1278,7 @@ function Employee(props) {
                             onClick={() => cardClick(e)}
                           >
                             <div style={styles.deptHeading}>{e.Department}</div>
-                            <img src={ellipse} style={styles.image} />
+                            <img src={dp} style={styles.image} />
                             <div style={styles.name}>
                               {e.First_Name} {e.Last_Name}
                             </div>
@@ -1340,7 +1341,7 @@ function Employee(props) {
                                   >
                                     <img
                                       style={styles.modalImage}
-                                      src={ellipse}
+                                      src={dp}
                                     />
                                     <div style={styles.modalName}>
                                       {modalData.First_Name}{" "}
@@ -1935,7 +1936,7 @@ function Employee(props) {
                             onClick={() => cardClick(e)}
                           >
                             <div style={styles.deptHeading}>{e.Department}</div>
-                            <img src={ellipse} style={styles.image} />
+                            <img src={dp} style={styles.image} />
                             <div style={styles.name}>
                               {e.First_Name} {e.Last_Name}
                             </div>
@@ -1998,7 +1999,7 @@ function Employee(props) {
                                   >
                                     <img
                                       style={styles.modalImage}
-                                      src={ellipse}
+                                      src={dp}
                                     />
                                     <div style={styles.modalName}>
                                       {modalData.First_Name}{" "}
@@ -2708,7 +2709,7 @@ function Employee(props) {
                                 style={{ gap: "8px" }}
                               >
                                 <img
-                                  src={ellipse}
+                                  src={dp}
                                   style={{ width: "42px", height: "42px" }}
                                   alt="Employee"
                                 />
@@ -2821,7 +2822,7 @@ function Employee(props) {
                                 style={{ gap: "8px" }}
                               >
                                 <img
-                                  src={ellipse}
+                                  src={dp}
                                   style={{ width: "42px", height: "42px" }}
                                   alt="Employee"
                                 />

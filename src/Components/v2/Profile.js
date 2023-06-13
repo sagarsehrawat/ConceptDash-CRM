@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import bgFrame from '../../Images/bgFrame.png'
 import profile from '../../Images/profile.svg'
+import dp from '../../Images/noprofile.jpeg'
 import edit from '../../Images/edit.svg'
 import { EMPLOYEE_DETAILS, HOST, UPDATE_EMPLOYEE_PROFILE } from '../Constants/Constants';
 import LoadingSpinner from '../Loader/Loader';
@@ -116,7 +117,7 @@ function Profile(props) {
     <div>
         <div>
             <img height={160} width='100%' src={bgFrame} />
-            <div className={isCollapsed?'profilePhotoC':'profilePhotoUC'}><img src={profile}/></div>
+            <div className={isCollapsed?'profilePhotoC':'profilePhotoUC'}><img style={{border: '4px solid white', borderRadius:'100%'}} width={180} src={dp}/></div>
             {editProfile?<div>
                 <div className={isCollapsed?'profileTextCedit':'profileTextUCedit'}>My Profile</div>
                 <div className={isCollapsed?'editTextC':'editTextUC'}>Update your photo and personal details here</div>
