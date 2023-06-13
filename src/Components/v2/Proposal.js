@@ -6,7 +6,7 @@ import moment from 'moment'
 import React, { useState, useContext, useEffect, useRef } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import AuthenticationContext from '../../Context/AuthContext'
-import {PRIMARY_COLOR, DELETE_PROPOSAL, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGES_PROPOSALS, GET_PAGE_PROPOSALS, GET_PROJECT_CATEGORIES, GET_PROPOSAL_COUNT, HOST, UPDATE_STATUS_PROPOSAL } from '../Constants/Constants'
+import {PRIMARY_COLOR, DELETE_PROPOSAL, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_PAGES_PROPOSALS, GET_PAGE_PROPOSALS, GET_PROJECT_CATEGORIES, GET_PROPOSAL_COUNT, HOST, UPDATE_STATUS_PROPOSAL, GET_GOOGLE_DRIVE_URL } from '../Constants/Constants'
 import GreenAlert from '../Loader/GreenAlert'
 import LoadingSpinner from '../Loader/Loader'
 import RedAlert from '../Loader/RedAlert'
@@ -16,6 +16,7 @@ import UpdateProposal from '../Form/UpdateProposal'
 import filterIcon from '../../Images/Filter.svg'
 import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
+import open from '../../Images/openinDrive.svg'
 
 const Proposal = (props) => {
     const { isCollapsed } = props
@@ -80,7 +81,24 @@ const Proposal = (props) => {
     const handleCloseUpdate = () => setShowUpdate(false);
     const handleShowUpdate = () => setShowUpdate(true);
 
+    const [IsLoading3, setIsLoading3] = useState(false);
+
     const styles = {
+        openInDrive: {
+            width: "92px",
+            height: "16px",
+            left: "0px",
+            top: "20px",
+            fontFamily: "'Roboto'",
+            fontStyle: "normal",
+            fontWeight: 400,
+            fontSize: "12px",
+            lineHeight: "16px",
+            color: "#3692EF",
+            display: 'flex',
+            flexDirection: 'row',
+            cursor: 'pointer'
+        },
         headerContainer: {
             marginTop: "30px",
             marginLeft: "32px",
@@ -714,6 +732,24 @@ const Proposal = (props) => {
         call()
     }, [apiCall])
 
+    const openDriveLink = (e, projectFolderId) => {
+        e.preventDefault();
+        setIsLoading3(true)
+        axios
+            .get(
+                HOST + GET_GOOGLE_DRIVE_URL,
+                { headers: { auth: "Rose " + localStorage.getItem("auth"), id: projectFolderId, } }
+            )
+            .then((res) => {
+                const url = res.data.res
+                if (url && url !== "") window.open(url, '_blank');
+                setIsLoading3(false)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     const handlePage = async (page) => {
         setIsLoading(true);
         setcurrPage(page);
@@ -1335,8 +1371,11 @@ const Proposal = (props) => {
                                             </div>
                                         </td>
                                         <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
-                                            <p>{e.Project_Name}</p>
-                                            <p style={styles.type}>Status: <span style={{color:'#FD9568'}}>{e.Status}</span></p>
+                                            <p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Project_Name}</p>
+                                            <div className='d-flex flex-row justify-content-start align-items-center'>
+                                            <p style={styles.type}>Status: <span style={{color:'#FD9568'}}>{e.Status}</span></p>&nbsp;&nbsp;
+                                            {e.Folder_ID!==null ? <div style={styles.openInDrive} onClick={(f) => openDriveLink(f, e.Folder_ID)}>Open in Drive&nbsp;<img src={open} /></div> : <></>}
+                                            </div>
                                         </td>
                                         {/* <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td> */}
                                         <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Department}</td>

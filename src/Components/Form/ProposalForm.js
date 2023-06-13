@@ -90,12 +90,15 @@ function ProposalForm(props) {
     winningBidder: "",
     debriefing: "",
   });
+  const [rfpId, setrfpId] = useState(null);
   const [radio, setradio] = useState(false);
   const handleRadio = (e) => {
     if (e.target.value === "yes") {
       setradio(false);
+      setrfpId(0)
     } else if (e.target.value === "no") {
       setradio(true);
+      setrfpId(0)
     }
   };
   const [companies, setcompanies] = useState([]);
@@ -240,6 +243,7 @@ function ProposalForm(props) {
           winningPrice: form.winningPrice,
           winningBidderId: form.winningBidder,
           cityId: radio ? cityid: form.city,
+          rfpId : rfpId
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
@@ -271,6 +275,7 @@ function ProposalForm(props) {
   const [manager, setmanager] = useState("");
 
   const handleChange1 = async (e) => {
+    setrfpId(e.target.value)
     await axios
       .get(HOST + GET_RFP_ID, {
         headers: {
