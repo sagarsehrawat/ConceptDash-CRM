@@ -29,7 +29,7 @@ const TimeSheet = (props) => {
     Finance: []
   });
   const [prevHours, setprevHours] = useState(null);
-  const [details, setdetails] = useState([false, false, false, false, false, false])
+  const [details, setdetails] = useState([true, true, true, true, true, true])
   const [date, setdate] = useState(moment());
 
   const [employees, setemployees] = useState([]);
@@ -157,7 +157,7 @@ const TimeSheet = (props) => {
       width: "30px",
       display: "inline",
       background: "white",
-      padding: "0px",
+      padding: "12px 0px",
       ':focus' : {
         border: "none",
       boxShadow: "none",
@@ -401,8 +401,8 @@ const TimeSheet = (props) => {
                 {hours.Projects.length === 0 ? <></> :
                   <>
                     <tr>
-                      <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [!prev[0], ...prev.slice(1)])} >
-                        <FontAwesomeIcon icon={details[0] ? faChevronRight : faChevronDown} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                      <td colSpan={9} style={{ background: "#DBDBF4", height: "40px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [!prev[0], ...prev.slice(1)])} >
+                        <FontAwesomeIcon icon={details[0] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                         Projects
                       </td>
                     </tr>
@@ -495,8 +495,8 @@ const TimeSheet = (props) => {
                 {hours.Proposals.length === 0 ? <></> :
                   <>
                     <tr>
-                      <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], !prev[1], ...prev.slice(2)])} >
-                        <FontAwesomeIcon icon={details[1] ? faChevronRight : faChevronDown} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                      <td colSpan={9} style={{ background: "#DBDBF4", height: "40px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], !prev[1], ...prev.slice(2)])} >
+                        <FontAwesomeIcon icon={details[1] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                         Proposals
                       </td>
                     </tr>
@@ -589,8 +589,8 @@ const TimeSheet = (props) => {
                 {hours.RFP.length === 0 ? <></> :
                   <>
                     <tr>
-                      <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [...prev.slice(0, 3), !prev[3], ...prev.slice(4, 6)])} >
-                        <FontAwesomeIcon icon={details[3] ? faChevronRight : faChevronDown} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                      <td colSpan={9} style={{ background: "#DBDBF4", height: "40px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [...prev.slice(0, 3), !prev[3], ...prev.slice(4, 6)])} >
+                        <FontAwesomeIcon icon={details[3] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                         RFP
                       </td>
                     </tr>
@@ -682,8 +682,8 @@ const TimeSheet = (props) => {
                 {hours.General.length === 0 ? <></> :
                   <>
                     <tr>
-                      <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [...prev.slice(0, 2), !prev[2], ...prev.slice(3, 6)])} >
-                        <FontAwesomeIcon icon={details[2] ? faChevronRight : faChevronDown} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                      <td colSpan={9} style={{ background: "#DBDBF4", height: "40px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [...prev.slice(0, 2), !prev[2], ...prev.slice(3, 6)])} >
+                        <FontAwesomeIcon icon={details[2] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                         General
                       </td>
                     </tr>
@@ -695,7 +695,7 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input className='no-focus'
                             placeholder='0:00 hr'
-                            style={{ ...styles.input, width: hours.General[idx][0] !== "" ? "15px" : "50px" }}
+                            style={{ ...styles.input, width: hours.General[idx][0] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][0]}
                             onChange={(eve) => handleChange("General", idx, 0, eve, e[9], date.clone().startOf('isoWeek').format('YYYY-MM-DD'))}
@@ -705,7 +705,7 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input className='no-focus'
                             placeholder='0:00 hr'
-                            style={{ ...styles.input, width: hours.General[idx][1] !== "" ? "15px" : "50px" }}
+                            style={{ ...styles.input, width: hours.General[idx][1] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][1]}
                             onChange={(eve) => handleChange("General", idx, 1, eve, e[9], date.clone().startOf('isoWeek').add(1, 'days').format('YYYY-MM-DD'))}
@@ -715,7 +715,7 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input className='no-focus'
                             placeholder='0:00 hr'
-                            style={{ ...styles.input, width: hours.General[idx][2] !== "" ? "15px" : "50px" }}
+                            style={{ ...styles.input, width: hours.General[idx][2] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][2]}
                             onChange={(eve) => handleChange("General", idx, 2, eve, e[9], date.clone().startOf('isoWeek').add(2, 'days').format('YYYY-MM-DD'))}
@@ -725,7 +725,7 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input className='no-focus'
                             placeholder='0:00 hr'
-                            style={{ ...styles.input, width: hours.General[idx][3] !== "" ? "15px" : "50px" }}
+                            style={{ ...styles.input, width: hours.General[idx][3] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][3]}
                             onChange={(eve) => handleChange("General", idx, 3, eve, e[9], date.clone().startOf('isoWeek').add(3, 'days').format('YYYY-MM-DD'))}
@@ -735,7 +735,7 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input className='no-focus'
                             placeholder='0:00 hr'
-                            style={{ ...styles.input, width: hours.General[idx][4] !== "" ? "15px" : "50px" }}
+                            style={{ ...styles.input, width: hours.General[idx][4] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][4]}
                             onChange={(eve) => handleChange("General", idx, 4, eve, e[9], date.clone().startOf('isoWeek').add(4, 'days').format('YYYY-MM-DD'))}
@@ -745,7 +745,7 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input className='no-focus'
                             placeholder='0:00 hr'
-                            style={{ ...styles.input, width: hours.General[idx][5] !== "" ? "15px" : "50px" }}
+                            style={{ ...styles.input, width: hours.General[idx][5] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][5]}
                             onChange={(eve) => handleChange("General", idx, 5, eve, e[9], date.clone().startOf('isoWeek').add(5, 'days').format('YYYY-MM-DD'))}
@@ -755,7 +755,7 @@ const TimeSheet = (props) => {
                         <td style={styles.cell}>
                           <input className='no-focus'
                             placeholder='0:00 hr'
-                            style={{ ...styles.input, width: hours.General[idx][6] !== "" ? "15px" : "50px" }}
+                            style={{ ...styles.input, width: hours.General[idx][6] !== "" ? "30px" : "50px" }}
                             disabled={employeeId !== localStorage.getItem('employeeId') || date.isBefore(moment().startOf('isoWeek'))}
                             value={hours.General[idx][6]}
                             onChange={(eve) => handleChange("General", idx, 6, eve, e[9], date.clone().startOf('isoWeek').add(6, 'days').format('YYYY-MM-DD'))}
@@ -773,8 +773,8 @@ const TimeSheet = (props) => {
                 {hours.HR.length === 0 ? <></> :
                   <>
                     <tr>
-                      <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [...prev.slice(0, 4), !prev[4], ...prev.slice(5, 6)])} >
-                        <FontAwesomeIcon icon={details[4] ? faChevronRight : faChevronDown} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                      <td colSpan={9} style={{ background: "#DBDBF4", height: "40px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [...prev.slice(0, 4), !prev[4], ...prev.slice(5, 6)])} >
+                        <FontAwesomeIcon icon={details[4] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                         HR
                       </td>
                     </tr>
@@ -864,8 +864,8 @@ const TimeSheet = (props) => {
                 {hours.Finance.length === 0 ? <></> :
                   <>
                     <tr>
-                      <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [...prev.slice(0, 5), !prev[5]])} >
-                        <FontAwesomeIcon icon={details[5] ? faChevronRight : faChevronDown} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
+                      <td colSpan={9} style={{ background: "#DBDBF4", height: "40px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [...prev.slice(0, 5), !prev[5]])} >
+                        <FontAwesomeIcon icon={details[5] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                         Finance
                       </td>
                     </tr>

@@ -702,7 +702,7 @@ const Proposal = (props) => {
                 });
         }
         call()
-    }, [])
+    }, [apiCall])
 
     useEffect(() => {
         setIsLoading(true);
@@ -720,7 +720,6 @@ const Proposal = (props) => {
                     },
                 })
                 .then((res) => {
-                    console.log(res.data.res)
                     setproposals(res.data.res);
                     setpages(res.data.totalPages)
                     setIsLoading(false);

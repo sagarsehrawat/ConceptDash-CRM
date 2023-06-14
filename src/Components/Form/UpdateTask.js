@@ -25,6 +25,12 @@ const styles = {
     border: "1px solid #EBE9F1",
     borderRadius: "6px",
     padding:6
+  },
+  nameInput1: {
+    width: "740px",
+    border: "1px solid #EBE9F1",
+    borderRadius: "6px",
+    padding:6
   }
 }
 function UpdateTask(props) {
@@ -198,11 +204,11 @@ function UpdateTask(props) {
           <Form.Group as={Col}>
             <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Task Description</Form.Label>
             <Form.Control
-                style={styles.nameInput}
+                style={styles.nameInput1}
               name="description"
               as="textarea"
               value={descrip}
-              rows={2}
+              rows={3}
               onChange={handleChange}
             />
           </Form.Group>
@@ -263,9 +269,9 @@ function UpdateTask(props) {
               style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}}
             >
               <option>Choose Priority</option>
-              <option selected={priority===1} value="1">Super urgent</option>
-              <option selected={priority===2} value="2">Urgent</option>
-              <option selected={priority===3} value="3">Moderate</option>
+              <option selected={priority===1} value="1">Critical</option>
+              <option selected={priority===2} value="2">High</option>
+              <option selected={priority===3} value="3">Medium</option>
               <option selected={priority===4} value="4">Low</option>
             </Form.Select>
           </Form.Group>

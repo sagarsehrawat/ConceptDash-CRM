@@ -440,7 +440,9 @@ const Project = (props) => {
             width: "90px",
             height: "24px",
             background: "#FFF4EF",
-            borderRadius: "24px"
+            borderRadius: "24px",
+            paddingTop:'2px',
+            paddingBottom:'2px',
         },
         status: {
             fontFamily: "'Roboto'",

@@ -305,7 +305,7 @@ function Tasks(props) {
       color: "#70757A",
       borderBottom: "1px solid #EBE9F1",
       verticalAlign: "middle",
-      textAlign: "center",
+      textAlign: "left",
     },
     tableBody: {
       background: "#FFFFFF",
@@ -320,7 +320,7 @@ function Tasks(props) {
     cell: {
       height: "44px",
       float: "center",
-      textAlign: "center",
+      textAlign: "left",
       // borderBottom: "1px solid #EBE9F1",
       // borderRight: "1px solid #EBE9F1",
       fontFamily: "'Roboto'",
@@ -850,14 +850,16 @@ function Tasks(props) {
                                 marginRight: "32px",
                               }}
                               disabled={filterSize1() === 0}
-                              onClick={(e) =>
+                              onClick={(e) =>{
                                 setreturnData({
                                   employee: [],
                                   assignedBy: [],
                                   status: [],
                                   priority: [],
-                                })
-                              }
+                                });
+                                setCall(apiCall + 1);
+                              closeFilterModal1();
+                              }}
                             >
                               Clear All
                             </Button>
@@ -989,7 +991,7 @@ function Tasks(props) {
                               }}
                               onClick={() => handleFilter("priority", 1)}
                             >
-                              <p style={styles.filterBodyText}>Super Urgent</p>
+                              <p style={styles.filterBodyText}>Critical</p>
                             </div>
                             <div
                               style={{
@@ -1000,7 +1002,7 @@ function Tasks(props) {
                               }}
                               onClick={() => handleFilter("priority", 2)}
                             >
-                              <p style={styles.filterBodyText}>Urgent</p>
+                              <p style={styles.filterBodyText}>High</p>
                             </div>
                             <div
                               style={{
@@ -1061,7 +1063,7 @@ function Tasks(props) {
                         <th scope="col" style={{ ...styles.tableHeading, width: "26vw", borderBottom: "1px solid #EBE9F1", textAlign: "left", paddingLeft: "32px" }} className='fixed-header'>Tasks</th>
                         <th scope="col" style={{ ...styles.tableHeading, width: isCollapsed ? '9vw' : '8vw' }} className='fixed-header2'>Start Date</th>
                         <th scope="col" style={{ ...styles.tableHeading, width: isCollapsed ? '10vw' : '8vw' }} className='fixed-header2'>Due Date</th>
-                        <th scope="col" style={{ ...styles.tableHeading, width: isCollapsed ? '10vw' : '8vw' }} className='fixed-header2'>Assigned By</th>
+                        <th scope="col" style={{ ...styles.tableHeading, width: isCollapsed ? '10vw' : '8vw', textAlign:'left' }} className='fixed-header2'>Assigned By</th>
                         <th scope="col" style={{ ...styles.tableHeading, width: isCollapsed ? '10vw' : '8vw' }} className='fixed-header2'>Priority</th>
                         <th scope="col" style={{ ...styles.tableHeading, width: isCollapsed ? '10vw' : '8vw' }} className='fixed-header2'>Status</th>
                         <th scope="col" style={{ ...styles.tableHeading, width: isCollapsed ? '10vw' : '9vw' }} className='fixed-header2'>Reviewed By</th>
@@ -1079,7 +1081,7 @@ function Tasks(props) {
                           {projects.length === 0 ? <></> :
                             <>
                               <tr>
-                                <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [!prev[0], ...prev.slice(1)])} >
+                                <td colSpan={9} style={{ background: "#DBDBF4", height: "40px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [!prev[0], ...prev.slice(1)])} >
                                   <FontAwesomeIcon icon={details[0] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                                   Projects
                                 </td>
@@ -1097,22 +1099,22 @@ function Tasks(props) {
                                   <td style={styles.cell}>
                                     {formatDate(e.Due_Date)}
                                   </td>
-                                  <td style={styles.cell}>
+                                  <td style={{...styles.cell, textAlign:'left'}}>
                                     {e.Assigner}
                                   </td>
-                                  <td style={styles.cell} align='center'>
+                                  <td style={{...styles.cell}}>
                                     {e.Priority === 1
-                                      ? <div style={{ width: '78px', height: '20px', background: '#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2.1vw' }}><p style={{ ...styles.priorityText, color: "#8B0000" }}>Critical</p></div> :
-                                      e.Priority === 2 ? <div style={{ width: '49px', height: '20px', background: '#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#D93838" }}>High</p></div> :
-                                        e.Priority === 3 ? <div style={{ width: '68px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.2vw' : '2.3vw' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>Medium</p></div>
-                                          : <div style={{ width: '47px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Low</p></div>
+                                      ? <div style={{ textAlign:'center',width: '78px', height: '20px', background: '#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#8B0000" }}>Critical</p></div> :
+                                      e.Priority === 2 ? <div style={{  textAlign:'center',width: '49px', height: '20px', background: '#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#D93838" }}>High</p></div> :
+                                        e.Priority === 3 ? <div style={{ textAlign:'center', width: '68px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px'}}><p style={{ ...styles.priorityText, color: "#FD9568" }}>Medium</p></div>
+                                          : <div style={{  textAlign:'center',width: '47px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Low</p></div>
                                     }
                                   </td>
                                   <td style={{ ...styles.cell, cursor: 'pointer' }} onClick={() => { setcurrStatus(e.Status); setid(e.Task_ID); openstatusModal(); }}>
                                     {e.Status === 0
-                                      ? <div style={{ width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2.1vw' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
-                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2vw' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
-                                        <div style={{ width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.2vw' : '2.3vw' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
+                                      ? <div style={{ textAlign:'center',width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
+                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px'}}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
+                                        <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
                                     }
                                   </td>
                                   <Modal
@@ -1225,7 +1227,7 @@ function Tasks(props) {
                           {proposals.length === 0 ? <></> :
                             <>
                               <tr>
-                                <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], !prev[1], ...prev.slice(2)])} >
+                                <td colSpan={9} style={{ background: "#DBDBF4", height: "40px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], !prev[1], ...prev.slice(2)])} >
                                   <FontAwesomeIcon icon={details[1] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                                   Proposals
                                 </td>
@@ -1243,22 +1245,22 @@ function Tasks(props) {
                                   <td style={styles.cell}>
                                     {formatDate(e.Due_Date)}
                                   </td>
-                                  <td style={styles.cell}>
+                                  <td style={{...styles.cell, textAlign:'left'}}>
                                     {e.Assigner}
                                   </td>
                                   <td style={styles.cell} align='center'>
                                     {e.Priority === 1
-                                      ? <div style={{ width: '78px', height: '20px', background: '#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2.1vw' }}><p style={{ ...styles.priorityText, color: "#8B0000" }}>Critical</p></div> :
-                                      e.Priority === 2 ? <div style={{ width: '49px', height: '20px', background: '#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#D93838" }}>High</p></div> :
-                                        e.Priority === 3 ? <div style={{ width: '68px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.2vw' : '2.3vw' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>Medium</p></div>
-                                          : <div style={{ width: '47px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Low</p></div>
+                                      ? <div style={{textAlign:'center', width: '78px', height: '20px', background: '#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#8B0000" }}>Critical</p></div> :
+                                      e.Priority === 2 ? <div style={{ textAlign:'center',width: '49px', height: '20px', background: '#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px'}}><p style={{ ...styles.priorityText, color: "#D93838" }}>High</p></div> :
+                                        e.Priority === 3 ? <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>Medium</p></div>
+                                          : <div style={{ textAlign:'center',width: '47px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Low</p></div>
                                     }
                                   </td>
                                   <td style={{ ...styles.cell, cursor: 'pointer' }} onClick={() => { setcurrStatus(e.Status); setid(e.Task_ID); openstatusModal(); }}>
                                     {e.Status === 0
-                                      ? <div style={{ width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2.1vw' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
-                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
-                                        <div style={{ width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.2vw' : '2.3vw' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
+                                      ? <div style={{ textAlign:'center',width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
+                                      e.Status === 1 ? <div style={{ textAlign:'center',width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px'}}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
+                                        <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
                                     }
                                   </td>
                                   <Modal
@@ -1371,7 +1373,7 @@ function Tasks(props) {
                           {rfps.length === 0 ? <></> :
                             <>
                               <tr>
-                                <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], prev[1], !prev[2], ...prev.slice(3)])} >
+                                <td colSpan={9} style={{ background: "#DBDBF4", height: "40px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], prev[1], !prev[2], ...prev.slice(3)])} >
                                   <FontAwesomeIcon icon={details[2] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                                   RFPs
                                 </td>
@@ -1389,22 +1391,22 @@ function Tasks(props) {
                                   <td style={styles.cell}>
                                     {formatDate(e.Due_Date)}
                                   </td>
-                                  <td style={styles.cell}>
+                                  <td style={{...styles.cell, textAlign:'left'}}>
                                     {e.Assigner}
                                   </td>
-                                  <td style={styles.cell} align='center'>
+                                  <td style={styles.cell} >
                                     {e.Priority === 1
-                                      ? <div style={{ width: '78px', height: '20px', background: '#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2.1vw' }}><p style={{ ...styles.priorityText, color: "#8B0000" }}>Critical</p></div> :
-                                      e.Priority === 2 ? <div style={{ width: '49px', height: '20px', background: '#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#D93838" }}>High</p></div> :
-                                        e.Priority === 3 ? <div style={{ width: '68px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.2vw' : '2.3vw' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>Medium</p></div>
-                                          : <div style={{ width: '47px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Low</p></div>
+                                      ? <div style={{ textAlign:'center',width: '78px', height: '20px', background: '#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#8B0000" }}>Critical</p></div> :
+                                      e.Priority === 2 ? <div style={{ textAlign:'center',width: '49px', height: '20px', background: '#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px'}}><p style={{ ...styles.priorityText, color: "#D93838" }}>High</p></div> :
+                                        e.Priority === 3 ? <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>Medium</p></div>
+                                          : <div style={{textAlign:'center', width: '47px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Low</p></div>
                                     }
                                   </td>
                                   <td style={{ ...styles.cell, cursor: 'pointer' }} onClick={() => { setcurrStatus(e.Status); setid(e.Task_ID); openstatusModal(); }}>
                                     {e.Status === 0
-                                      ? <div style={{ width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2.1vw' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
-                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
-                                        <div style={{ width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.2vw' : '2.3vw' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
+                                      ? <div style={{ textAlign:'center',width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
+                                      e.Status === 1 ? <div style={{ textAlign:'center',width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
+                                        <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
                                     }
                                   </td>
                                   <Modal
@@ -1517,7 +1519,7 @@ function Tasks(props) {
                           {general.length === 0 ? <></> :
                             <>
                               <tr>
-                                <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], prev[1], prev[2], !prev[3], ...prev.slice(4)])} >
+                                <td colSpan={9} style={{ background: "#DBDBF4", height: "40px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], prev[1], prev[2], !prev[3], ...prev.slice(4)])} >
                                   <FontAwesomeIcon icon={details[3] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                                   General
                                 </td>
@@ -1535,22 +1537,22 @@ function Tasks(props) {
                                   <td style={styles.cell}>
                                     {formatDate(e.Due_Date)}
                                   </td>
-                                  <td style={styles.cell}>
+                                  <td style={{...styles.cell, textAlign:'left'}}>
                                     {e.Assigner}
                                   </td>
-                                  <td style={styles.cell} align='center'>
+                                  <td style={styles.cell}>
                                     {e.Priority === 1
-                                      ? <div style={{ width: '78px', height: '20px', background: '#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2.1vw' }}><p style={{ ...styles.priorityText, color: "#8B0000" }}>Critical</p></div> :
-                                      e.Priority === 2 ? <div style={{ width: '49px', height: '20px', background: '#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#D93838" }}>High</p></div> :
-                                        e.Priority === 3 ? <div style={{ width: '68px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.2vw' : '2.3vw' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>Medium</p></div>
-                                          : <div style={{ width: '47px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Low</p></div>
+                                      ? <div style={{ textAlign:'center',width: '78px', height: '20px', background: '#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#8B0000" }}>Critical</p></div> :
+                                      e.Priority === 2 ? <div style={{ textAlign:'center',width: '49px', height: '20px', background: '#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#D93838" }}>High</p></div> :
+                                        e.Priority === 3 ? <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>Medium</p></div>
+                                          : <div style={{ textAlign:'center',width: '47px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px'}}><p style={{ ...styles.priorityText, color: "#559776" }}>Low</p></div>
                                     }
                                   </td>
                                   <td style={{ ...styles.cell, cursor: 'pointer' }} onClick={() => { setcurrStatus(e.Status); setid(e.Task_ID); openstatusModal(); }}>
                                     {e.Status === 0
-                                      ? <div style={{ width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2.1vw' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
-                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
-                                        <div style={{ width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.2vw' : '2.3vw' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
+                                      ? <div style={{ textAlign:'center',width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
+                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
+                                        <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
                                     }
                                   </td>
                                   <Modal
@@ -1663,7 +1665,7 @@ function Tasks(props) {
                           {finance.length === 0 ? <></> :
                             <>
                               <tr>
-                                <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], prev[1], prev[2], prev[3], !prev[4], ...prev.slice(5)])} >
+                                <td colSpan={9} style={{ background: "#DBDBF4", height: "40px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], prev[1], prev[2], prev[3], !prev[4], ...prev.slice(5)])} >
                                   <FontAwesomeIcon icon={details[4] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                                   Finance
                                 </td>
@@ -1681,22 +1683,22 @@ function Tasks(props) {
                                   <td style={styles.cell}>
                                     {formatDate(e.Due_Date)}
                                   </td>
-                                  <td style={styles.cell}>
+                                  <td style={{...styles.cell, textAlign:'left'}}>
                                     {e.Assigner}
                                   </td>
-                                  <td style={styles.cell} align='center'>
+                                  <td style={styles.cell}>
                                     {e.Priority === 1
-                                      ? <div style={{ width: '78px', height: '20px', background: '#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2.1vw' }}><p style={{ ...styles.priorityText, color: "#8B0000" }}>Critical</p></div> :
-                                      e.Priority === 2 ? <div style={{ width: '49px', height: '20px', background: '#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#D93838" }}>High</p></div> :
-                                        e.Priority === 3 ? <div style={{ width: '68px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.2vw' : '2.3vw' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>Medium</p></div>
-                                          : <div style={{ width: '47px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Low</p></div>
+                                      ? <div style={{ textAlign:'center',width: '78px', height: '20px', background: '#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#8B0000" }}>Critical</p></div> :
+                                      e.Priority === 2 ? <div style={{ textAlign:'center',width: '49px', height: '20px', background: '#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#D93838" }}>High</p></div> :
+                                        e.Priority === 3 ? <div style={{textAlign:'center', width: '68px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>Medium</p></div>
+                                          : <div style={{ textAlign:'center',width: '47px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Low</p></div>
                                     }
                                   </td>
                                   <td style={{ ...styles.cell, cursor: 'pointer' }} onClick={() => { setcurrStatus(e.Status); setid(e.Task_ID); openstatusModal(); }}>
                                     {e.Status === 0
-                                      ? <div style={{ width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2.1vw' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
-                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
-                                        <div style={{ width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.2vw' : '2.3vw' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
+                                      ? <div style={{ textAlign:'center',width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
+                                      e.Status === 1 ? <div style={{ textAlign:'center',width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
+                                        <div style={{textAlign:'center', width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
                                     }
                                   </td>
                                   <Modal
@@ -1810,7 +1812,7 @@ function Tasks(props) {
                           {hr.length === 0 ? <></> :
                             <>
                               <tr>
-                                <td colSpan={9} style={{ background: "#DBDBF4", height: "32px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], prev[1], prev[2], prev[3], prev[4], !prev[5], ...prev.slice(6)])} >
+                                <td colSpan={9} style={{ background: "#DBDBF4", height: "40px", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A", cursor: "pointer" }} onClick={(e) => setdetails(prev => [prev[0], prev[1], prev[2], prev[3], prev[4], !prev[5], ...prev.slice(6)])} >
                                   <FontAwesomeIcon icon={details[5] ? faChevronDown : faChevronRight} color="#70757A" style={{ marginLeft: "36px", marginRight: "8px" }} />
                                   HR
                                 </td>
@@ -1828,22 +1830,22 @@ function Tasks(props) {
                                   <td style={styles.cell}>
                                     {formatDate(e.Due_Date)}
                                   </td>
-                                  <td style={styles.cell}>
+                                  <td style={{...styles.cell, textAlign:'left'}}>
                                     {e.Assigner}
                                   </td>
-                                  <td style={styles.cell} align='center'>
+                                  <td style={styles.cell}>
                                     {e.Priority === 1
-                                      ? <div style={{ width: '78px', height: '20px', background: '#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2.1vw' }}><p style={{ ...styles.priorityText, color: "#8B0000" }}>Critical</p></div> :
-                                      e.Priority === 2 ? <div style={{ width: '49px', height: '20px', background: '#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#D93838" }}>High</p></div> :
-                                        e.Priority === 3 ? <div style={{ width: '68px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.2vw' : '2.3vw' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>Medium</p></div>
-                                          : <div style={{ width: '47px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Low</p></div>
+                                      ? <div style={{ textAlign:'center',width: '78px', height: '20px', background: '#FFCCCB', border: '0.4px solid #8B0000', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#8B0000" }}>Critical</p></div> :
+                                      e.Priority === 2 ? <div style={{ textAlign:'center',width: '49px', height: '20px', background: '#FFF1F1', border: '0.4px solid #D93838', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#D93838" }}>High</p></div> :
+                                        e.Priority === 3 ? <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px'}}><p style={{ ...styles.priorityText, color: "#FD9568" }}>Medium</p></div>
+                                          : <div style={{ textAlign:'center',width: '47px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Low</p></div>
                                     }
                                   </td>
                                   <td style={{ ...styles.cell, cursor: 'pointer' }} onClick={() => { setcurrStatus(e.Status); setid(e.Task_ID); openstatusModal(); }}>
                                     {e.Status === 0
-                                      ? <div style={{ width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3vw' : '2.1vw' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
-                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.4vw' : '2.5vw' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
-                                        <div style={{ width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px', marginLeft: isCollapsed ? '3.2vw' : '2.3vw' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
+                                      ? <div style={{ textAlign:'center',width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
+                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
+                                        <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
                                     }
                                   </td>
                                   <Modal

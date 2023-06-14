@@ -26,6 +26,12 @@ const styles = {
     border: "1px solid #EBE9F1",
     borderRadius: "6px",
     padding:6
+  },
+  nameInput1: {
+    width: "740px",
+    border: "1px solid #EBE9F1",
+    borderRadius: "6px",
+    padding:6
   }
 }
 function AddTask(props) {
@@ -60,11 +66,11 @@ function AddTask(props) {
   let due_date = due ? due.substring(0, 10) : "";
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(value)
+    console.log(value.split(',')[1])
     const newForm = {...form};
     if(name==='assignedTo'){
-      newForm['assignedTo'] = value[0]
-      newForm['assignedToName'] = value.slice(2)
+      newForm['assignedTo'] = value.split(',')[0]
+      newForm['assignedToName'] = value.split(',')[1]
     }else{
       newForm[name] = value;
     }
@@ -294,10 +300,10 @@ function AddTask(props) {
           <Form.Group as={Col}>
             <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Task Description</Form.Label>
             <Form.Control
-                style={styles.nameInput}
+              style={styles.nameInput1}
               name="description"
               as="textarea"
-              rows={2}
+              rows={3}
               onChange={handleChange}
             />
           </Form.Group>
@@ -357,9 +363,9 @@ function AddTask(props) {
               style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}}
             >
               <option>Choose Priority</option>
-              <option value="1">Super urgent</option>
-              <option value="2">Urgent</option>
-              <option value="3">Moderate</option>
+              <option value="1">Critical</option>
+              <option value="2">High</option>
+              <option value="3">Medium</option>
               <option value="4">Low</option>
             </Form.Select>
           </Form.Group>
