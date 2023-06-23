@@ -84,6 +84,7 @@ import AddDepartment from "../Form/AddDepartment";
 import AddCategory from "../Form/AddCategory";
 import Profile from "../v2/Profile";
 import Announcements from "../v2/Announcements";
+import AddBudgetCity from "../Form/AddBudgetCity";
 
 
 const Dashboard = () => {
@@ -139,6 +140,11 @@ const Dashboard = () => {
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const handleCloseCategoryForm = () => setShowCategoryForm(false);
   const handleShowCategoryForm = () => setShowCategoryForm(true);
+
+   //Add budget city Modal
+   const [cityform, setcityform] = useState(false);
+   const handleclosecityform = () => setcityform(false);
+   const handleopencityform = () => setcityform(true);
 
   const mystyles = {
     topNavbar: {
@@ -589,14 +595,14 @@ const Dashboard = () => {
               />
               Add New City
             </NavDropdown.Item>
-            {/* <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 4 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(4)} onMouseLeave={() => setplusDropdown(null)}>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 7 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(7)} onMouseLeave={() => setplusDropdown(null)} onClick={handleopencityform}>
               <img
-                src={plusDropdown === 4 ? employeeInactive : employeeActive}
+                src={plusDropdown === 7 ? employeeInactive : employeeActive}
                 alt="Dashboard Icon"
                 style={mystyles.plusDropdownItemIcon}
               />
-              Add New Employee
-            </NavDropdown.Item> */}
+              Add New Budget City
+            </NavDropdown.Item>
             {/* <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 5 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={(e) => setplusDropdown(5)} onMouseLeave={(e) => setplusDropdown(null)}>
               <img
                 src={plusDropdown === 5 ? contactsInactive : contactsActive}
@@ -1679,6 +1685,26 @@ const Dashboard = () => {
                   setRed={setred}
                   setGreen={setgreen}
                   closeModal={handleCloseCategoryForm}
+                />
+              }
+            </Modal.Body>
+          </Modal>
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={cityform}
+            onHide={handleclosecityform}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add New Budget City</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            {
+                <AddBudgetCity
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleclosecityform}
                 />
               }
             </Modal.Body>
