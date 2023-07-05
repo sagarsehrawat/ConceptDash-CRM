@@ -199,7 +199,7 @@ function AddTask(props) {
           <Form.Select style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}} onChange={handleID}>
             <option>Select Project</option>
             {projects?projects.map((e)=>(
-              <option value={e.Project_ID}>{e.Project_Name}</option>
+              <option value={e.Project_Id}>{e.Project_Name}</option>
             )):<></>}
           </Form.Select>
         </Form.Group>
