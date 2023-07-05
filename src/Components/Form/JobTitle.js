@@ -4,17 +4,33 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import { HOST, ADD_JOB_TITLE } from '../Constants/Constants';
+import { HOST, ADD_JOB_TITLE, GET_DEPARTMENTS } from '../Constants/Constants';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from 'react-router-dom';
 function JobTitle() {
     const [isSubmit, setIsSubmit] = useState(false);
+    const [departments, setdepartments] = useState([]);
     const [form, setform] = useState({
       'jobTitle':"",
       'department':"",
       'hourlyRate':"",
       'multiplier':"",
     })
+    useEffect(() => {
+      const call = async () => {
+        await axios
+          .get(HOST + GET_DEPARTMENTS, {
+            headers: { auth: "Rose " + localStorage.getItem("auth") },
+          })
+          .then((res) => {
+            setdepartments(res.data.res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+      call();
+    }, []);
     const navigate = useNavigate()
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -36,36 +52,7 @@ function JobTitle() {
               console.log(err)
           })
       };
-      const departments=[
-        {
-          value: "Admin",
-          label: "Admin"
-        },
-        {
-          value: "Engineer",
-          label: "Engineer"
-        },
-        {
-          value: "Manager",
-          label: "Manager"
-        },
-        {
-          value: "Sales",
-          label: "Sales"
-        },
-        {
-          value: "Logistics",
-          label: "Logistics"
-        },
-        {
-          value: "Supplier",
-          label: "Supplier"
-        },
-        {
-          value: "IT",
-          label: "IT"
-        },
-      ]
+      
   return (
     <div>
   <Form className='form-main'>
@@ -77,8 +64,8 @@ function JobTitle() {
           <Form.Select name='department' type="text" onChange={handleChange} /* onChange={handleChange} */ required>
             <option value="">Select Department</option>
             {departments.map((option) => (
-            <option value={option.value}>
-              {option.label}
+            <option value={option.Department_ID}>
+              {option.Department}
             </option>
         ))}
           </Form.Select>
