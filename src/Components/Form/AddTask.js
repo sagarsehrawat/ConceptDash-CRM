@@ -55,18 +55,16 @@ function AddTask(props) {
     startDate: "",
     dueDate: "",
   });
-  let date = new Date();
-  let month;
-  if (date.getMonth() < 9) {
-    month = `0${date.getMonth() + 1}`;
-  } else {
-    month = date.getMonth() + 1;
-  }
-  let entry_date = `${date.getFullYear()}-${month}-${date.getDate()}`;
+const currentDate = new Date();
+const year = currentDate.getFullYear();
+const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+const day = String(currentDate.getDate()).padStart(2, '0');
+
+const formattedDate = `${year}-${month}-${day}`;
   let due_date = due ? due.substring(0, 10) : "";
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(value.split(',')[1])
+    console.log(value)
     const newForm = {...form};
     if(name==='assignedTo'){
       newForm['assignedTo'] = value.split(',')[0]
@@ -76,7 +74,6 @@ function AddTask(props) {
     }
     setform(newForm);
   };
-
   const [employees, setemployees] = useState([]);
   const [projects, setprojects] = useState([]);
   const [proposals, setproposals] = useState([]);
@@ -128,6 +125,7 @@ function AddTask(props) {
     };
     call();
   }, []);
+  let oldDate = (new Date(formattedDate))>=(new Date(form.startDate))?true:false;
   const handleSubmit = (e) => {
     setisLoading(true);
     e.preventDefault();
@@ -150,6 +148,7 @@ function AddTask(props) {
           dueDate: form.dueDate,
           assignedBy: localStorage.getItem("employeeId"),
           reviewedBy: form.reviewedBy,
+          status: oldDate?1:0
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
