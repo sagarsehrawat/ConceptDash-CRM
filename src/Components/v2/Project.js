@@ -617,7 +617,7 @@ const Project = (props) => {
             color: "#0A0A0A"
         }
     }
-    const [projectCount, setprojectCount] = useState({ Total: 0, Percent: 0, Ongoing: 0, Completed: 0 })
+    const [projectCount, setprojectCount] = useState({ Total: 0, Percent: 0, Ongoing: 0, Completed: 0, Month: 0 })
     useEffect(() => {
         setIsLoading2([true, true, true, true, true, false])
         const call = async () => {
@@ -633,7 +633,7 @@ const Project = (props) => {
                     let p = projectCount;
                     let sum = 0;
                     arr.map((e) => {
-                        //   if (e.Status === null) p[] = e.Count;
+                        if (e.Status === null) p['Month'] = e.Count;
                         if (e.Status === "Ongoing") p['Ongoing'] = e.Count;
                         if (e.Status === "Not Started Yet") p[3] = e.Count;
                         if (e.Status === "Completed") p['Completed'] = e.Count;
@@ -645,25 +645,6 @@ const Project = (props) => {
                 .catch((err) => {
                     console.error("Error fetching chart data: ", err);
                 });
-            // await axios
-            //     .get(HOST + GET_PROPOSAL_COUNT, {
-            //         headers: {
-            //             auth: "Rose " + localStorage.getItem("auth"),
-            //         },
-            //     })
-            //     .then((res) => {
-            //         let obj = proposalCount
-            //         obj.Total = res.data.res[0].Total
-            //         obj.Month = res.data.res[0].Month
-            //         obj.Percent = res.data.res[0].Percent ?? 0
-            //         obj.Won = res.data.res[0].Won
-            //         obj.Lost = res.data.res[0].Lost
-            //         setproposalCount(obj)
-            //         setIsLoading2(prev => [false, ...prev.slice(1, 6)])
-            //     })
-            //     .catch((err) => {
-            //         console.log(err);
-            //     });
 
             await axios
                 .get(HOST + GET_CITIES, {
@@ -927,7 +908,7 @@ const Project = (props) => {
                     <p style={styles.topContainerHeading}>New Projects</p>
                     <div className=''>
                         <p style={styles.topContainerSubheading}>{projectCount.Month}</p>
-                        {projectCount.Percent >= 0
+                        {/* {projectCount.Percent >= 0
                             ? <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
                                 <FontAwesomeIcon icon={faArrowUp} color="#34A853" />
                                 <p style={styles.percent}>{projectCount.Percent}% increase</p>
@@ -936,7 +917,7 @@ const Project = (props) => {
                                 <FontAwesomeIcon icon={faArrowDown} color="#FE3766" />
                                 <p style={{ ...styles.percent, color: "#FE3766" }}>{projectCount.Percent}% decrease</p>
                             </div>
-                        }
+                        } */}
                     </div>
                 </div>
                 <div style={styles.topContainer}>
