@@ -85,6 +85,7 @@ import AddCategory from "../Form/AddCategory";
 import Profile from "../v2/Profile";
 import Announcements from "../v2/Announcements";
 import AddBudgetCity from "../Form/AddBudgetCity";
+import TTMTable from "../v2/TTMTable";
 
 
 const Dashboard = () => {
@@ -517,6 +518,7 @@ const Dashboard = () => {
     if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
     if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
+    if (nav === 18) return <TTMTable  isCollapsed={isCollapsed}/>
   };
 
   const [show, setShow] = useState(false);
@@ -1472,6 +1474,36 @@ const Dashboard = () => {
                     Announcements
                   </p>
                 </div>
+                {/* <div
+                  style={
+                    nav === 18
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(18)}
+                >
+                  <div
+                    style={
+                      nav === 18
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
+                    }
+                  >
+                    <img
+                      src={nav === 18 ? announcement : announcement}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                  <p
+                    style={
+                      nav === 18
+                        ? mystyles.sidebarMenuItemTextActive
+                        : mystyles.sidebarMenuItemText
+                    }
+                  >
+                    TTM
+                  </p>
+                </div> */}
                 {/* <div
                   style={
                     nav === 12

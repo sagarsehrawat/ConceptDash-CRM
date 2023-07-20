@@ -402,7 +402,7 @@ function ProposalForm(props) {
                       name="projectName"
                       type="text"
                       onChange={handleChange}
-                      required
+                      //required
                     />
                   </Form.Group>
                 </Row>
@@ -414,7 +414,7 @@ function ProposalForm(props) {
                         {privileges.includes('Add City')? <div style={{background:'#EBE9F1',borderRadius:'10px', width:'20px', textAlign:'center', cursor:'pointer'}} onClick={handleShowCityForm}><img alt="Add New City" src={plus} /></div> :<></>}
                       </div>
                     </Form.Label>
-                    <Form.Select style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="city" required>
+                    <Form.Select style={{...styles.nameInput, fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="city" >
                       <option value="">Select City</option>
                       {cities.length > 0
                         ? cities.map((e) => (
@@ -462,7 +462,7 @@ function ProposalForm(props) {
                 <Row>
                 <Form.Group style={{width:'253px'}}>
                 <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Department</Form.Label>
-                    <Form.Select style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="dept" required>
+                    <Form.Select style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}} onChange={handleChange} name="dept" >
                       <option value="">Select Department</option>
                       {depts.length > 0
                         ? depts.map((e) => (
@@ -479,7 +479,6 @@ function ProposalForm(props) {
                     style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}}
                       name="managerName"
                       onChange={handleChange}
-                      required
                     >
                       <option value="">Select Project Manager</option>
                       {employees.length !== 0 ? (
@@ -499,7 +498,6 @@ function ProposalForm(props) {
                     style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
                       onChange={handleChange}
                       name="projectCat"
-                      required
                     >
                       <option value="">Select Project Category</option>
                       {projectDepts.length > 0
@@ -600,7 +598,6 @@ function ProposalForm(props) {
                       name="dPrice"
                       type="number"
                       onChange={handleChange}
-                      required
                     />
                   </Form.Group>
                   <Form.Group style={{width:'253px'}}>
@@ -733,7 +730,6 @@ function ProposalForm(props) {
                           type="text"
                           placeholder="Project Name"
                           onChange={handleChange}
-                          required
                         />
                       </Form.Group>
                     </Row>
@@ -809,7 +805,6 @@ function ProposalForm(props) {
                         style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}}
                           name="managerName"
                           onChange={handleChange}
-                          required
                         >
                           <option value="">Select Employee</option>
                           {employees.length !== 0 ? (
@@ -907,7 +902,6 @@ function ProposalForm(props) {
                       name="dPrice"
                       type="number"
                       onChange={handleChange}
-                      required
                     />
                   </Form.Group>
                   <Form.Group style={{width:'253px'}}>
