@@ -17,6 +17,8 @@ import AuthenticationContext from "../../Context/AuthContext";
 import tIcon from '../../Images/taskIcon.svg'
 import { Sidebar, Menu, MenuItem, useProSidebar, SubMenu } from "react-pro-sidebar";
 import { primaryColour } from "../Constants/styles";
+import campaignActive from "../Constants/images/campaign-active.svg"
+import campaignInactive from "../Constants/images/campaign-inactive.svg"
 import dashboardActive from "../../Images/Dashboard Active state.svg";
 import dashboardInactive from "../../Images/Dashboard icon inactive.svg";
 import pinnedActive from "../../Images/Pin icon_Active.svg";
@@ -84,6 +86,9 @@ import AddDepartment from "../Form/AddDepartment";
 import AddCategory from "../Form/AddCategory";
 import Profile from "../v2/Profile";
 import Announcements from "../v2/Announcements";
+import Campaign from "../v3/campaign/Campaign";
+import AllCampaign from "../v3/campaign/AllCampaign";
+import CampaignRoot from "../v3/campaign/CampaignRoot";
 
 
 const Dashboard = () => {
@@ -511,6 +516,8 @@ const Dashboard = () => {
     if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
     if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
+    if(nav === 18)return <CampaignRoot isCollapsed={isCollapsed} />
+    // if(nav === 19)return <AllCampaign />
   };
 
   const [show, setShow] = useState(false);
@@ -518,6 +525,7 @@ const Dashboard = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [prop, setprop] = useState(false)
+  const [prop1, setprop1] = useState(false)
   return (
     <>
       <div>
@@ -896,6 +904,30 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
+
+
+                <div
+                  style={
+                    nav === 18
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(18)}
+                >
+                  <div
+                    style={
+                      nav === 18
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 18 ? campaignActive : campaignInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div> 
+
                 {/* <div
                   style={
                     nav === 9
@@ -1346,6 +1378,39 @@ const Dashboard = () => {
                     Calendar
                   </p>
                 </div>
+
+
+                <div
+                  style={
+                    nav === 18
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(18)}
+                >
+                  <div
+                    style={
+                      nav === 18
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
+                    }
+                  >
+                    <img
+                      src={nav === 18 ? campaignActive : campaignInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                  <p
+                    style={
+                      nav === 18
+                        ? mystyles.sidebarMenuItemTextActive
+                        : mystyles.sidebarMenuItemText
+                    }
+                  >
+                    Campaign
+                  </p>
+                </div>
+
                 {/* <div
                   style={
                     nav === 9
