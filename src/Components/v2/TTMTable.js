@@ -1,5 +1,5 @@
 import React from 'react'
-import './TTMTable.css'
+// import './TTMTable.css'
 
 function TTMTable() {
   const style = {
@@ -19,6 +19,14 @@ function TTMTable() {
       }
     }
   }
+  let tasks = ['Task1', 'Task2', 'task3', 'Task4', 'Task5']
+  let tasksData = [
+    [1, 2, 3, 4, 5, 6, 7, 2, 3, 5, 3, 6, 9],
+    [1, 2, 3, 4, 5, 6, 7, 2, 3, 5, 3, 6, 9],
+    [1, 2, 3, 4, 5, 6, 7, 2, 3, 5, 3, 6, 9],
+    [1, 2, 3, 4, 5, 6, 7, 2, 3, 5, 3, 6, 9],
+    [1, 2, 3, 4, 5, 6, 7, 2, 3, 5, 3, 6, 9]
+  ];
   return (
     <div>
      <div className='pageHeader'>
@@ -111,98 +119,74 @@ function TTMTable() {
             }}>Phase Name - I</p></td>
           </tr>
           <tr>
-            <td style={{paddingLeft:'32px'}} /* className='normals' */>Task Name - 1</td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
-            <td /* className='specials' */>
-              <input
-                className='no-focus'
-                style={style.input}
-                value='3hr'
-              />
-            </td>
+            <td style={{paddingLeft:'32px'}} /* className='normals' */>{tasks[0]}</td>
+            {tasksData[0].map((e)=>{
+              return (
+                <td /* className='specials' */>
+                  <input
+                    className='no-focus'
+                    style={style.input}
+                    value={e}
+                  />
+                </td>
+              )
+            })}
+          </tr>
+          <tr>
+            <td style={{paddingLeft:'32px'}} /* className='normals' */>{tasks[1]}</td>
+            {tasksData[1].map((e)=>{
+              return (
+                <td /* className='specials' */>
+                  <input
+                    className='no-focus'
+                    style={style.input}
+                    value={e}
+                  />
+                </td>
+              )
+            })}
+          </tr>
+          <tr>
+            <td style={{paddingLeft:'32px'}} /* className='normals' */>{tasks[2]}</td>
+            {tasksData[2].map((e)=>{
+              return (
+                <td /* className='specials' */>
+                  <input
+                    className='no-focus'
+                    style={style.input}
+                    value={e}
+                  />
+                </td>
+              )
+            })}
+          </tr>
+          <tr>
+            <td style={{paddingLeft:'32px'}} /* className='normals' */>{tasks[3]}</td>
+            {tasksData[3].map((e)=>{
+              return (
+                <td /* className='specials' */>
+                  <input
+                    className='no-focus'
+                    style={style.input}
+                    value={e}
+                  />
+                </td>
+              )
+            })}
+          </tr>
+          <tr>
+            <td style={{paddingLeft:'32px'}} /* className='normals' */>{tasks[4]}</td>
+            {tasksData[4].map((e)=>{
+              return (
+                <td /* className='specials' */>
+                  <input
+                    className='no-focus'
+                    style={style.input}
+                    value={e}
+                  />
+                </td>
+              )
+            })}
           </tr>
         </tbody>
       </table>
