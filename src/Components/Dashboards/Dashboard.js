@@ -145,7 +145,7 @@ const Dashboard = () => {
    const [cityform, setcityform] = useState(false);
    const handleclosecityform = () => setcityform(false);
    const handleopencityform = () => setcityform(true);
-
+   
   const mystyles = {
     topNavbar: {
       height: "56px",
@@ -453,6 +453,8 @@ const Dashboard = () => {
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const [notifCounts, setnotifCounts] = useState(0);
+ 
+    
 
   useEffect(() => {
     axios
@@ -526,6 +528,7 @@ const Dashboard = () => {
   const [prop, setprop] = useState(false)
   return (
     <>
+      
       <div>
         <Navbar
           className="d-flex justify-content-end"

@@ -1,11 +1,11 @@
 import { faCloudArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Button, Dropdown, Form } from "react-bootstrap";
+import { Button, Dropdown, Form, Modal } from "react-bootstrap";
 import { primaryColour } from "../Constants/styles";
 import pinnedActive from "../../Images/Pin icon_Active.svg";
 import pinnedInactive from "../../Images/Pin icon.svg";
-import cross from "../../Images/cross.svg";
+import arrow from '../../Images/Celebrations/arrow.svg'
 import BudgetCharts from "./BudgetCharts";
 import axios from "axios";
 import { HOST, PROJECT_CHART, GET_ADMIN_TASKS, PRIMARY_COLOR } from "../Constants/Constants";
@@ -26,11 +26,67 @@ import { gapi } from "gapi-script";
 import ProjectCharts from "./ProjectCharts";
 import ProposalCharts from "./ProposalCharts";
 import moment from 'moment';
-
+import Celebrations from "./Celebrations";
+import groupicon from '../../Images/Celebrations/groupicon.svg'
 const Home = (props) => {
   const { setnav } = props;
   const { isCollapsed, viewportWidth } = props;
+  const [ishovered,setishovered]=useState(false)
   const styles = {
+  
+    celebrations: {
+      width: "100%",
+      height: "96px",
+      left: "1180px",
+      marginTop: "16px",
+      background:ishovered?"linear-gradient(134deg, #FAD3E1 0%, rgba(244, 231, 220, 0.89) 23.11%, rgba(240, 244, 216, 0.81) 39.69%, rgba(245, 214, 154, 0.29) 78.22%, rgba(178, 231, 243, 0.00) 100%)":"linear-gradient(134deg, #EFE2F6 0%, rgba(216, 236, 244, 0.81) 39.69%, rgba(239, 226, 246, 0.00) 100%)",
+     filter: "drop-shadow(0px 4px 25px rgba(0, 0, 0, 0.08))",
+      borderRadius: "12px",
+      "&:hover":{
+        background: "black"
+      },
+    },
+    notifModal: {
+      position: "absolute",
+      width: "30vw",
+      height: "90vh",
+      left: "73vw",
+      top: "56px",
+      background: "#FFFFFF",
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.12)",
+      borderRadius: "24px 0px 0px 24px"
+    },
+    celebrationHeading: {
+      width: "102px",
+      height: "28px",
+      marginLeft: "16px",
+      marginTop: "12px",
+      marginBottom: "10px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 500,
+      fontSize: "18px",
+      lineHeight: "28px",
+      color: "#0A0A0A",
+    },
+    celebrationsCross: {
+      // marginLeft: '113.6px',
+      // marginTop: '12.6px',
+      marginRight: '12.6px',
+     
+    },
+    celebrationBottom: {
+      width: "50%",
+      // height: "14px",
+      // left: "2px",
+      // top: "100px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      lineHeight: "16px",
+      color: "#0A0A0A",
+    },
     contentArea: {
       width: `${viewportWidth - 280 - (isCollapsed ? 68 : 228)}px`,
       height: `${window.innerHeight - 56}px`,
@@ -155,16 +211,7 @@ const Home = (props) => {
       boxShadow: "0px 5px 4px rgba(232, 76, 61, 0.25)",
       borderRadius: "12px",
     },
-    celebrations: {
-      width: "100%",
-      height: "96px",
-      left: "1180px",
-      marginTop: "16px",
-      background:
-        "linear-gradient(102.69deg, #EFE2F7 1.6%, rgba(216, 236, 244, 0.807866) 39.1%, rgba(239, 226, 247, 0) 96.08%)",
-      filter: "drop-shadow(0px 4px 25px rgba(0, 0, 0, 0.08))",
-      borderRadius: "12px",
-    },
+    
     tasks: {
       boxSizing: "border-box",
       width: "100%",
@@ -184,18 +231,6 @@ const Home = (props) => {
       background: "#FFFFFF",
       border: "1px solid #EBE9F1",
       borderRadius: "12px",
-    },
-    celebrationHeading: {
-      width: "102px",
-      height: "28px",
-      marginLeft: "16px",
-      marginTop: "12px",
-      fontFamily: "'Roboto'",
-      fontStyle: "normal",
-      fontWeight: 500,
-      fontSize: "18px",
-      lineHeight: "28px",
-      color: "#0A0A0A",
     },
     tasksHeading: {
       width: "127px",
@@ -269,23 +304,6 @@ const Home = (props) => {
       cursor: "pointer",
       textAlign: 'center'
     },
-    celebrationsCross: {
-      // marginLeft: '113.6px',
-      marginTop: '12.6px',
-      marginRight: '12.6px',
-    },
-    celebrationBottom: {
-      width: "52px",
-      height: "14px",
-      left: "105px",
-      top: "100px",
-      fontFamily: "'Roboto'",
-      fontStyle: "normal",
-      fontWeight: 400,
-      fontSize: "14px",
-      lineHeight: "100%",
-      color: PRIMARY_COLOR,
-    },
     rect1: {
       width: "3px",
       height: "46px",
@@ -356,6 +374,16 @@ const Home = (props) => {
       fontSize: "13px",
       fontFamily: "Roboto",
     },
+    celetext:{
+     paddingTop: "10px",
+      width: "50%",
+      color: "#0A0A0A",
+      fontFamily: "Roboto",
+       fontSize: "12px",
+      fontStyle: "normal",
+     fontWeight: "400",
+     lineHeight: "16px"
+    },
   };
   const SCOPES =
     "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar";
@@ -402,6 +430,11 @@ const Home = (props) => {
     );
   };
   const [isLoadingCal, setisLoadingCal] = useState(false);
+  // celebrations
+  const [celeShow, setceleShow] = useState(false);
+  const handleCloseCele = () => setceleShow(false);
+  const handleShowCele = () => setceleShow(true);
+
   const initClient = async () => {
     setisLoadingCal(true);
     if (!localStorage.getItem("access_token")) {
@@ -691,12 +724,33 @@ console.log(sideTasks[0]);
               <div style={styles.deadlineHeading}>Deadlines Approaching!</div>
             </div>
           </div>
-          <div style={styles.celebrations}>
-            <div className="d-flex justify-content-between align-items-center" style={{ display: "flex", flexDirection: "row" }}>
+            <button style={{border:"none"}}>  
+          <div onClick={handleShowCele}  style={styles.celebrations} onMouseEnter={() => setishovered(true)} onMouseLeave={() => setishovered(false)}>
+            <div className="d-flex justify-content-between align-items-center " style={{ display: "flex", flexDirection: "row" }}>
               <div style={styles.celebrationHeading}>Celebrations</div>
-              <img src={cross} style={styles.celebrationsCross} />
+              <img src={arrow} style={styles.celebrationsCross} alt='crossimg' />
+            </div>
+            <div className="d-flex justify-content-evenly align-items-center">
+                <img src={groupicon} style={{marginLeft:"0px"}}alt=""/>
+                <div style={styles.celebrationBottom}>
+              Colleague's special day: Share in the joy! 🥳
+                </div>
             </div>
           </div>
+          </button>
+          <Modal
+            show={celeShow}
+            onHide={handleCloseCele}
+            style={styles.notifModal}
+            dialogClassName="filter-dialog"
+            backdropClassName="filter-backdrop"
+            animation={false}
+          >
+            <div style={{paddingBottom:'24px', marginTop:'24px'}}>
+
+            <Celebrations setnav={setnav}/> 
+            </div>
+          </Modal>
           <div style={styles.tasks}>
             <div style={styles.tasksHeading}>Tasks Assigned</div>
             {isLoadingTasks ? (
