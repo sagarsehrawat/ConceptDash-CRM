@@ -460,9 +460,9 @@ const Dashboard = () => {
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const [notifCounts, setnotifCounts] = useState(0);
  
-  const [showwish,setshowwish] = useState(true);
+  const [showwish,setshowwish] = useState(false);
   const handleclosewish = () => setshowwish(false);
-  const handleopenwish = () => setshowwish(true);
+
   const [wish,setwish]=useState("");
 
   useEffect(() => {
