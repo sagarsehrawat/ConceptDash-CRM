@@ -76,7 +76,7 @@ import cross from '../../Images/cross.svg'
 import announcement from '../../Images/announcement.svg'
 import ProjectForm from "../Form/ProjectForm";
 import Privileges from '../Update/Privileges.js'
-import { GET_EMPLOYEE_PRIVILEGES, GET_NOTIFICATIONS, HOST, PRIMARY_COLOR } from "../Constants/Constants";
+import { GET_EMPLOYEE_PRIVILEGES, GET_NOTIFICATIONS, HOST, PRIMARY_COLOR,GET_PAGE_EMPLOYEES } from "../Constants/Constants";
 import PMSelector from "../v2/PMSelector";
 import Notifications from "./Notifications";
 import AddCity from "../Form/AddCity";
@@ -85,6 +85,7 @@ import AddCategory from "../Form/AddCategory";
 import Profile from "../v2/Profile";
 import Announcements from "../v2/Announcements";
 import AddBudgetCity from "../Form/AddBudgetCity";
+import Wishes from "./Wishes";
 
 
 const Dashboard = () => {
@@ -146,6 +147,7 @@ const Dashboard = () => {
    const handleclosecityform = () => setcityform(false);
    const handleopencityform = () => setcityform(true);
    
+
   const mystyles = {
     topNavbar: {
       height: "56px",
@@ -449,12 +451,19 @@ const Dashboard = () => {
       boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
       borderRadius: "12px",
     },
+    wishmodal:{
+       backgroundColor:"rgba(215, 216, 254)",
+       right: "60px"
+    }
   };
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const [notifCounts, setnotifCounts] = useState(0);
  
-    
+  const [showwish,setshowwish] = useState(true);
+  const handleclosewish = () => setshowwish(false);
+  const handleopenwish = () => setshowwish(true);
+  const [wish,setwish]=useState("Work Anniversary");
 
   useEffect(() => {
     axios
@@ -499,7 +508,39 @@ const Dashboard = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
+   let id= +localStorage.getItem('employeeId');
+   console.log(id)
+   
+     if(new Date().getMonth==2 && new Date().getDate()===1)
+        setshowwish(true)
+  useEffect(() => {
+  axios.get(HOST + GET_PAGE_EMPLOYEES, {
+          headers: {
+             auth: "Rose " + localStorage.getItem("auth"),
+             filter: JSON.stringify({}),
+             sort: [], 
+          },
+        })
+        .then((res) => {
+                let empdata={} 
+                console.log('here')    
+                empdata=res.data.res
+               empdata=res.data.res.filter(each=> each.Employee_ID===id)
+               let bday=new Date(empdata[0].Birthday)
+               console.log(empdata);
+               let anniversary=new Date(empdata[0].Joining_Date)
+                // if(bday.getMonth()===new Date().getMonth() && bday.getDate()===new Date().getDate()){
+                //    setwish("Birthday")
+                //    setshowwish(true)
+                // }
+                 if(anniversary.getMonth()===new Date().getMonth() && anniversary.getDate()===new Date().getDate()){
+                  setwish("Work Anniversary")
+                  setshowwish(true)
+                 }
+              }).catch((err) => {
+                  console.log("error"+err);
+                });
+              },[])
 
   const handleDash = (e) => {
     if (nav === 0) { return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth} setnav={setnav} />; }
@@ -528,7 +569,10 @@ const Dashboard = () => {
   const [prop, setprop] = useState(false)
   return (
     <>
-      
+           
+        <Modal show={showwish} onHide={handleclosewish} style={mystyles.wishmodal}>
+           <Wishes val={wish}/>
+        </Modal>
       <div>
         <Navbar
           className="d-flex justify-content-end"

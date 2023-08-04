@@ -1,0 +1,56 @@
+.main{
+       position: absolute;
+       top:-100px;
+       right: -100px;
+       display: flex;
+       align-items: center;
+       flex-direction: column;
+      justify-content: center; 
+      background-color: rgba(215, 216, 254);
+      width: 700px;
+   
+    }
+
+.heading-main{
+    color: #6F49FE;
+   text-align: center;
+   font-family: Margarine;
+   font-size: 44px;
+   font-style: normal;
+   font-weight: 400;
+   /* line-height: 56px; */
+   margin-bottom: 40px;
+}
+.para{
+    color: #6D5AB3;
+text-align: center;
+font-family: Inter;
+font-size: 15px;
+font-style: normal;
+font-weight: 400;
+line-height: 20px;
+margin-bottom: 20px;
+line-height: 25px;
+}
+ .bday-img{
+  width: 350px;
+  height: 350px;
+  flex-shrink: 0;
+ }   
+   .cd-img{
+    width: 828.02px;
+    height: 553.131px;
+    flex-shrink: 0;
+    margin-left: 100px;
+   }
+ .foot{
+  color: #6F49FE;
+text-align: center;
+font-family: 'Margarine', cursive;
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: 30px; /* 166.667% */
+margin-top: 20px;
+/* margin-bottom: 50px; */
+ }
