@@ -511,7 +511,7 @@ const Dashboard = () => {
    let id= +localStorage.getItem('employeeId');
    console.log(id)
    
-     if(new Date().getMonth==2 && new Date().getDate()===1)
+     if(new Date().getMonth===2 && new Date().getDate()===1)
         setshowwish(true)
   useEffect(() => {
   axios.get(HOST + GET_PAGE_EMPLOYEES, {
@@ -529,10 +529,10 @@ const Dashboard = () => {
                let bday=new Date(empdata[0].Birthday)
                console.log(empdata);
                let anniversary=new Date(empdata[0].Joining_Date)
-                // if(bday.getMonth()===new Date().getMonth() && bday.getDate()===new Date().getDate()){
-                //    setwish("Birthday")
-                //    setshowwish(true)
-                // }
+                if(bday.getMonth()===new Date().getMonth() && bday.getDate()===new Date().getDate()){
+                   setwish("Birthday")
+                   setshowwish(true)
+                }
                  if(anniversary.getMonth()===new Date().getMonth() && anniversary.getDate()===new Date().getDate()){
                   setwish("Work Anniversary")
                   setshowwish(true)
