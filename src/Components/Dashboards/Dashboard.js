@@ -463,7 +463,7 @@ const Dashboard = () => {
   const [showwish,setshowwish] = useState(true);
   const handleclosewish = () => setshowwish(false);
   const handleopenwish = () => setshowwish(true);
-  const [wish,setwish]=useState("Work Anniversary");
+  const [wish,setwish]=useState("");
 
   useEffect(() => {
     axios
