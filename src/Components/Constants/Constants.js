@@ -2,6 +2,7 @@ export const HOST = 'https://crm-api.conceptdash.ca'
 // export const HOST = 'http://localhost:8080'
 
 // get apis
+export const GET_CELEBRATIONS='/api/get/celebrations'
 export const GET_ALL_USERS = '/api/get/customers'
 export const GET_ALL_SHIPPERS = '/api/get/shippers'
 export const LOGISTICS_DASHBOARD = '/api/getDashboard/logistics'
