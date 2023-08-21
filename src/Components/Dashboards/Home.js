@@ -48,9 +48,9 @@ const Home = (props) => {
     },
     notifModal: {
       position: "absolute",
-      width: "30vw",
+      width: "37vw",
       height: "90vh",
-      left: "73vw",
+      left: "63vw",
       top: "56px",
       background: "#FFFFFF",
       boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.12)",
@@ -70,16 +70,12 @@ const Home = (props) => {
       color: "#0A0A0A",
     },
     celebrationsCross: {
-      // marginLeft: '113.6px',
-      // marginTop: '12.6px',
+     
       marginRight: '12.6px',
      
     },
     celebrationBottom: {
       width: "50%",
-      // height: "14px",
-      // left: "2px",
-      // top: "100px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 400,
@@ -277,7 +273,6 @@ const Home = (props) => {
     calendarBottom: {
       width: "100%",
       height: "14px",
-      // marginLeft: "85px",
       marginTop: "6px",
       marginBottom: "10px",
       fontFamily: "'Roboto'",

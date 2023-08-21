@@ -1,24 +1,17 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 import axios from 'axios';
-import {  GET_PAGE_EMPLOYEES, HOST} from '../Constants/Constants';
-// import celebrationActive from "../../Images/Celebrations_Active.svg";
-// import celebrationInactive from "../../Images/Celebrations.svg";
+import {  GET_CELEBRATIONS, HOST} from '../Constants/Constants';
 import cross from "../../Images/cross.svg";
 import './Celebrations.css';
 import bdaydefault from '../../Images/Celebrations/bdaydefault.svg'
 import anniversarydefault from '../../Images/Celebrations/anniversarydefault.svg'
 import cddefault from '../../Images/Celebrations/cdanniversary.svg'
 import LoadingSpinner from '../Loader/Loader';
-import Events from 'material-ui/utils/events';
-import { OilBarrelSharp } from '@mui/icons-material';
 export default function Celebrations(props){
      
-    const [data,setData] = useState()
-    const [sort, setsort] = useState([]);
-    const [returnData, setreturnData] = useState({});
     const [isloading,setisloading]=useState(true);
-
+    const [data,setData] = useState(null)
     const [today,settoday] = useState([]);
     const [upcoming, setupcoming] = useState([]);
 
@@ -40,11 +33,11 @@ export default function Celebrations(props){
     useEffect(() => {
       const call = async () => {
        await axios
-          .get(HOST + GET_PAGE_EMPLOYEES, {
+          .get(HOST + GET_CELEBRATIONS, {
             headers: {
               auth: "Rose " + localStorage.getItem("auth"),
-              filter: JSON.stringify(returnData),
-              sort: sort,
+              filter: JSON.stringify({}),
+              sort: [],
             },
           })
           .then((res) => {
@@ -56,8 +49,7 @@ export default function Celebrations(props){
                         ele.JoiningDate=each.Joining_Date ? new Date(each.Joining_Date) : null
                          return ele
                   })
-                  setData(empdata)
-                  console.log(empdata)
+              
                   let todaysevents=empdata?.map((each)=>{
                       let obj={};
                       obj.name=each.name;
@@ -71,37 +63,46 @@ export default function Celebrations(props){
                      }
                          else obj.msg=null
                      return obj;
-                  })      
+                  })  
+                  todaysevents = todaysevents?.filter((each)=> each.msg!==null)
+                   if(new Date().getDate()===1 && new Date().getMonth()===2)
+                     todaysevents.push({
+                        name: "Concept Dash",
+                        msg:" is celebrating anniversary today.",
+                        pic:cddefault
+                     })
+                   settoday(todaysevents)    
                  let obj
-                  let upcomingevents=empdata.map((each)=>{
+                  let upcomingevents=empdata?.map((each)=>{
                        obj={}
                       obj.name=each.name;
                       obj.Birthday=each.Birthday;
-                      obj.bday=each.Birthday ? differenceindates(each.Birthday) : null;
+                      obj.bday=each.Birthday? differenceindates(each.Birthday) : null;
                       obj.anni=each.JoiningDate? differenceindates(each.JoiningDate) : null;
                        return obj
                    })
-                   upcomingevents=upcomingevents.filter((each)=> (each.bday && each.bday<=30) || (each.anni &&each.anni<=30))
+                   upcomingevents=upcomingevents?.filter((each)=> (each.bday!==null && each.bday<=30 && each.bday!==0) || (each.anni!==null &&each.anni<=30 && each.anni<=30 && each.anni!==0))
+                  
                    upcomingevents=upcomingevents?.map((each)=>{
                        obj={}
                        obj.name=each.name
-                       if((each.bday>25 && each.bday<=30) && each.anni>25 && each.bday<=30){
+                       if( (each.bday!==null && each.bday>25 && each.bday<=30) && (each.anni!==null && each.anni>25 && each.anni<=30) ){
                            obj.pic=bdaydefault
                           obj.msg=" is celebrating birthday and work anniversary in a month."
                        }
-                       else if(each.bday>25 && each.bday<=30){
+                       else if(each.bday!==null && each.bday>25 && each.bday<=30){
                         obj.pic=bdaydefault
                        obj.msg=" is celebrating birthday in a month.";
                        }
-                      else if(each.bday<25) {
+                      else if(each.bday!==null && each.bday<=25) {
                         obj.pic=bdaydefault
                        obj.msg=" is celebrating birthday in "+each.bday+" days.";
                       }
-                      else  if(each.anni>25 && each.bday<=30) {
+                      else  if(each.anni!==null && each.anni>25 && each.anni<=30) {
                         obj.pic=anniversarydefault
-                       obj.msg=" is celebrating work anniversary in a days.";
+                       obj.msg=" is celebrating work anniversary in a month.";
                       }
-                       else if(each.anni<25){
+                       else if(each.anni!==null && each.anni<=25){
                         obj.pic=anniversarydefault
                        obj.msg=" is celebrating work anniversary in "+each.anni+" days.";
                        }
@@ -122,16 +123,9 @@ export default function Celebrations(props){
                           pic: cddefault
                         })  
                      }
-                   console.log(upcomingevents) 
+                 
                    setupcoming(upcomingevents)
-                   todaysevents = todaysevents?.filter((each)=> each.msg!==null)
-                   if(new Date().getDate()===1 && new Date().getMonth()===2)
-                     todaysevents.push({
-                        name: "Concept Dash",
-                        msg:" is celebrating anniversary today.",
-                        pic:cddefault
-                     })
-                   settoday(todaysevents)
+  
                   setisloading(false)
           }).catch((err) => {
             console.log("error"+err);
@@ -146,16 +140,18 @@ export default function Celebrations(props){
         </div>
         :
             <div style={{height:'90vh', overflowY:'auto'}}>
-            <div className='d-flex flex-row justify-content-between align-items-center header'>
-                <div className='heading'>Celebrations</div>
+            <div className='d-flex flex-row justify-content-between align-items-center header set-width'>
+      
+                <div className='heading-celebrations'>Celebrations</div>
                 <div className='clearButton' onClick={clearallcele}>Clear All</div>
             </div>
             { today.length===0 && upcoming.length===0?<div style={{marginLeft:'100px', fontSize:'2rem'}}>No Celebrations</div>:<></>}
             <div className='today'>
-              {today && today.length>0 && <div className='heading sub-heading'>Today</div>}
+              {today && today.length>0 && <div className='heading-celebrations sub-heading'>Today</div>}
             {today && today.length>0 && today.map((e)=>{
                 return (
-                    <div className='todays-content' >
+                    <div className='card-main set-width' style={{backgroundColor:'rgba(219, 219, 244, 0.65)'}}>
+                      <div style={{display:"flex", flexDirection:"row"}}>
                       <img
                             src={e.pic}
                             style={{ width: "56px", height: "56px", marginRight:'10px' }}
@@ -165,31 +161,34 @@ export default function Celebrations(props){
                             <div className='message'><b>{e.name}</b>{e.msg}</div>
                             {new Date().getHours()!==0 && <div className='time'>{new Date().getHours()} hours ago</div>}
                         </div>
+                        </div>
                          <img style={{cursor:'pointer'}} src={cross} onClick={()=>settoday(today.filter((each)=>each!==e))} alt=""/>
                     </div>
                 )
             })}
         </div>
         <div className='upcoming'>
-        {upcoming && upcoming.length>0 && <div className='heading sub-heading'>Upcoming</div>}
+        {upcoming && upcoming.length>0 && <div className='heading-celebrations sub-heading'>Upcoming</div>}
             {upcoming && upcoming.length>0 && upcoming.map((e)=>{
                 return (
-                    <div className='card-main'>
+                    <div className='card-main set-width'>
+                       <div style={{display:"flex", flexDirection:"row"}}>
                      <img
                      src={e.pic}
                      style={{ width: "56px", height: "56px", marginRight:'10px' }}
                      alt="Employee"
                       />
-                        <div className='content' style={{flexDirection:'column'}}>
+                        <div style={{flexDirection:'column'}}>
                             <div className='message'><b>{e.name}</b> {e.msg}</div>
-                             <div className='time'>{e.msg.slice(e.msg.indexOf("in "))}</div> 
+                             <div className='time'>{e.msg?.slice(e.msg.indexOf("in "))}</div> 
+                        </div>
                         </div>
                         <img style={{cursor:'pointer'}} src={cross} alt="" onClick={()=>setupcoming(upcoming.filter((each)=>each!==e))} /> 
                     </div>
                 )
             })}
         </div>
-            </div>
+           </div>
           )
 
 }

@@ -1,8 +1,9 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import './Wishes.css'
 import bdaypicture from '../../Images/Celebrations/Groupbdaypicture.svg'
 import cdanniversary from '../../Images/Celebrations/Company celebrationcdanniversary1.svg'
-import cross from '../../Images/Celebrations/Frame 427319531wishcross.svg'
+import Confetti from './Confetti'
+import './Wishes.css'
 const Wishes = (props) => {
     let name=localStorage.getItem('employeeName')
     let val="Happy "+props.val+" "+name.split(' ')[0]
@@ -23,15 +24,18 @@ const Wishes = (props) => {
 }
 
   return (
-    <div className='main'> 
-           
-           <div className='heading-main'>{val} !</div>
-           <div className='para'>{content}</div>
-           <img src={pic} className={piccss} alt=""/>
-           { c===0 && <div className='foot'>Here’s your virtual {props.val} cake 😁</div>}
-           </div>
+      <div>
+         <div className='main'> 
+         <Confetti />
+           <div className='wishes-content'>
+            <div className='heading-main'>{val} !</div>
+         <div className='para'>{content}</div>
+          <img src={pic} className={piccss} alt=""/>
+        { c===0 && <div className='foot'>Here’s your virtual {props.val} cake 😁</div>}
+     </div>
+     </div>
+    </div>
 
-     
   )
 }
 

@@ -9,7 +9,7 @@ import {
   faChevronLeft,
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect, useRef, useCallback, useMemo } from "react";
 import axios from "axios";
 import { Dropdown, Modal, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -76,7 +76,7 @@ import cross from '../../Images/cross.svg'
 import announcement from '../../Images/announcement.svg'
 import ProjectForm from "../Form/ProjectForm";
 import Privileges from '../Update/Privileges.js'
-import { GET_EMPLOYEE_PRIVILEGES, GET_NOTIFICATIONS, HOST, PRIMARY_COLOR,GET_PAGE_EMPLOYEES } from "../Constants/Constants";
+import { GET_EMPLOYEE_PRIVILEGES, GET_NOTIFICATIONS, HOST, PRIMARY_COLOR, GET_CELEBRATIONS } from "../Constants/Constants";
 import PMSelector from "../v2/PMSelector";
 import Notifications from "./Notifications";
 import AddCity from "../Form/AddCity";
@@ -86,7 +86,7 @@ import Profile from "../v2/Profile";
 import Announcements from "../v2/Announcements";
 import AddBudgetCity from "../Form/AddBudgetCity";
 import Wishes from "./Wishes";
-
+import crossbtn from '../../Images/Celebrations/cross_wishes.svg'
 
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();
@@ -454,6 +454,13 @@ const Dashboard = () => {
     wishmodal:{
        backgroundColor:"rgba(215, 216, 254)",
        right: "60px"
+    },
+    crossbtn:{
+      height: "34px",
+      width: "34px",
+      position: "fixed",
+      top: "-75px",
+      right: "-300px",
     }
   };
 
@@ -463,8 +470,10 @@ const Dashboard = () => {
   const [showwish,setshowwish] = useState(false);
   const handleclosewish = () => setshowwish(false);
 
-  const [wish,setwish]=useState("");
 
+  const [wish,setwish]=useState("");
+ 
+     
   useEffect(() => {
     axios
       .get(HOST + GET_EMPLOYEE_PRIVILEGES, {
@@ -509,12 +518,11 @@ const Dashboard = () => {
     };
   }, []);
    let id= +localStorage.getItem('employeeId');
-   console.log(id)
    
-     if(new Date().getMonth===2 && new Date().getDate()===1)
-        setshowwish(true)
-  useEffect(() => {
-  axios.get(HOST + GET_PAGE_EMPLOYEES, {
+  
+    useEffect(() => {
+      const getuserdata = async() => {   
+     await axios.get(HOST + GET_CELEBRATIONS, {
           headers: {
              auth: "Rose " + localStorage.getItem("auth"),
              filter: JSON.stringify({}),
@@ -522,25 +530,27 @@ const Dashboard = () => {
           },
         })
         .then((res) => {
-                let empdata={} 
-                console.log('here')    
+                let empdata={}
                 empdata=res.data.res
                empdata=res.data.res.filter(each=> each.Employee_ID===id)
-               let bday=new Date(empdata[0].Birthday)
-               console.log(empdata);
-               let anniversary=new Date(empdata[0].Joining_Date)
+                let bday=new Date(empdata.Birthday)
+                let anniversary=new Date(empdata.Joining_Date)
+                if(new Date().getMonth()===2 && new Date().getDate()===1)
+                setshowwish(true);
                 if(bday.getMonth()===new Date().getMonth() && bday.getDate()===new Date().getDate()){
-                   setwish("Birthday")
-                   setshowwish(true)
-                }
-                 if(anniversary.getMonth()===new Date().getMonth() && anniversary.getDate()===new Date().getDate()){
-                  setwish("Work Anniversary")
+                  setwish("Birthday")
                   setshowwish(true)
-                 }
+                }
+              if(anniversary.getMonth()===new Date().getMonth() && anniversary.getDate()===new Date().getDate()){
+              setwish("Work Anniversary")
+              setshowwish(true)
+             }
               }).catch((err) => {
                   console.log("error"+err);
                 });
-              },[])
+              }
+              getuserdata()
+            },[]) 
 
   const handleDash = (e) => {
     if (nav === 0) { return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth} setnav={setnav} />; }
@@ -563,16 +573,44 @@ const Dashboard = () => {
   };
 
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [prop, setprop] = useState(false)
-  return (
+  const[checkwish,setcheckwish] = useState(false)
+  const currentdate= new Date()
+  //  function shouldrender(){
+  //    let returnval=false;
+  //    const lastdate=new Date(localStorage.getItem('lastshown'));
+  //    console.log(lastdate)
+  //     if(lastdate==null) {
+  //       returnval=true;
+  //     }
+  //     if(currentdate.getDate()!==lastdate.getDate() && currentdate.getMonth()!==lastdate.getMonth()){
+  //       returnval=true;
+        
+  //     }
+  //     return returnval;
+  //   }  
+  //   useEffect(()=>{
+  //      if(checkwish===false){
+  //      console.log("inside useEffect")
+  //        let stored=localStorage.getItem('lastshown')
+  //       let storeddate=new Date(stored)
+  //        if(storeddate!==null) localStorage.setItem('lastshown',currentdate)
+  //      if(storeddate.getDate()!==currentdate.getDate() && storeddate.getMonth()!==currentdate.getMonth())
+  //     localStorage.setItem('lastshown',currentdate)
+  //     setcheckwish(true);
+  //      }
+  //    },[])
+
+   return (
     <>
-           
+       
         <Modal show={showwish} onHide={handleclosewish} style={mystyles.wishmodal}>
+        <img src={crossbtn} alt="" className="crossbtn" onClick={handleclosewish} />
            <Wishes val={wish}/>
         </Modal>
+    
       <div>
         <Navbar
           className="d-flex justify-content-end"
