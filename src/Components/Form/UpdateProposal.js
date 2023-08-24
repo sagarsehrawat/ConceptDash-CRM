@@ -447,7 +447,6 @@ function UpdateProposal(props) {
                 style={{...styles.nameInput, width:'233px', fontSize:'14px', color:'#70757A'}}
                   name="managerName"
                   onChange={handleChange}
-                  required
                 >
                   <option value="">Select Project Manager</option>
                   {employees.length !== 0 ? (

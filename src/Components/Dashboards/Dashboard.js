@@ -9,7 +9,7 @@ import {
   faChevronLeft,
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect, useRef, useCallback, useMemo } from "react";
 import axios from "axios";
 import { Dropdown, Modal, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -78,7 +78,7 @@ import cross from '../../Images/cross.svg'
 import announcement from '../../Images/announcement.svg'
 import ProjectForm from "../Form/ProjectForm";
 import Privileges from '../Update/Privileges.js'
-import { GET_EMPLOYEE_PRIVILEGES, GET_NOTIFICATIONS, HOST, PRIMARY_COLOR } from "../Constants/Constants";
+import { GET_EMPLOYEE_PRIVILEGES, GET_NOTIFICATIONS, HOST, PRIMARY_COLOR, GET_CELEBRATIONS } from "../Constants/Constants";
 import PMSelector from "../v2/PMSelector";
 import Notifications from "./Notifications";
 import AddCity from "../Form/AddCity";
@@ -86,6 +86,10 @@ import AddDepartment from "../Form/AddDepartment";
 import AddCategory from "../Form/AddCategory";
 import Profile from "../v2/Profile";
 import Announcements from "../v2/Announcements";
+import AddBudgetCity from "../Form/AddBudgetCity";
+import Wishes from "./Wishes";
+import crossbtn from '../../Images/Celebrations/cross_wishes.svg'
+import TTMTable from "../v2/TTMTable";
 import Campaign from "../v3/campaign/Campaign";
 import AllCampaign from "../v3/campaign/AllCampaign";
 import CampaignRoot from "../v3/campaign/CampaignRoot";
@@ -144,6 +148,12 @@ const Dashboard = () => {
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const handleCloseCategoryForm = () => setShowCategoryForm(false);
   const handleShowCategoryForm = () => setShowCategoryForm(true);
+
+   //Add budget city Modal
+   const [cityform, setcityform] = useState(false);
+   const handleclosecityform = () => setcityform(false);
+   const handleopencityform = () => setcityform(true);
+   
 
   const mystyles = {
     topNavbar: {
@@ -448,11 +458,29 @@ const Dashboard = () => {
       boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
       borderRadius: "12px",
     },
+    wishmodal:{
+       backgroundColor:"rgba(215, 216, 254)",
+       right: "60px"
+    },
+    crossbtn:{
+      height: "34px",
+      width: "34px",
+      position: "fixed",
+      top: "-75px",
+      right: "-300px",
+    }
   };
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const [notifCounts, setnotifCounts] = useState(0);
+ 
+  const [showwish,setshowwish] = useState(false);
+  const handleclosewish = () => setshowwish(false);
 
+
+  const [wish,setwish]=useState("");
+ 
+     
   useEffect(() => {
     axios
       .get(HOST + GET_EMPLOYEE_PRIVILEGES, {
@@ -496,7 +524,40 @@ const Dashboard = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
+   let id= +localStorage.getItem('employeeId');
+   
+  
+    useEffect(() => {
+      const getuserdata = async() => {   
+     await axios.get(HOST + GET_CELEBRATIONS, {
+          headers: {
+             auth: "Rose " + localStorage.getItem("auth"),
+             filter: JSON.stringify({}),
+             sort: [], 
+          },
+        })
+        .then((res) => {
+                let empdata={}
+                empdata=res.data.res
+               empdata=res.data.res.filter(each=> each.Employee_ID===id)
+                let bday=new Date(empdata.Birthday)
+                let anniversary=new Date(empdata.Joining_Date)
+                if(new Date().getMonth()===2 && new Date().getDate()===1)
+                setshowwish(true);
+                if(7===new Date().getMonth() && 21===new Date().getDate()){
+                  setwish("Birthday")
+                  setshowwish(true)
+                }
+              if(anniversary.getMonth()===new Date().getMonth() && anniversary.getDate()===new Date().getDate()){
+              setwish("Work Anniversary")
+              setshowwish(true)
+             }
+              }).catch((err) => {
+                  console.log("error"+err);
+                });
+              }
+              getuserdata()
+            },[]) 
 
   const handleDash = (e) => {
     if (nav === 0) { return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth} setnav={setnav} />; }
@@ -518,16 +579,48 @@ const Dashboard = () => {
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
     if(nav === 18)return <CampaignRoot isCollapsed={isCollapsed} />
     // if(nav === 19)return <AllCampaign />
+    if (nav === 18) return <TTMTable  isCollapsed={isCollapsed}/>
   };
 
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [prop, setprop] = useState(false)
-  const [prop1, setprop1] = useState(false)
-  return (
+  const[checkwish,setcheckwish] = useState(false)
+  const currentdate= new Date()
+  //  function shouldrender(){
+  //    let returnval=false;
+  //    const lastdate=new Date(localStorage.getItem('lastshown'));
+  //    console.log(lastdate)
+  //     if(lastdate==null) {
+  //       returnval=true;
+  //     }
+  //     if(currentdate.getDate()!==lastdate.getDate() && currentdate.getMonth()!==lastdate.getMonth()){
+  //       returnval=true;
+        
+  //     }
+  //     return returnval;
+  //   }  
+  //   useEffect(()=>{
+  //      if(checkwish===false){
+  //      console.log("inside useEffect")
+  //        let stored=localStorage.getItem('lastshown')
+  //       let storeddate=new Date(stored)
+  //        if(storeddate!==null) localStorage.setItem('lastshown',currentdate)
+  //      if(storeddate.getDate()!==currentdate.getDate() && storeddate.getMonth()!==currentdate.getMonth())
+  //     localStorage.setItem('lastshown',currentdate)
+  //     setcheckwish(true);
+  //      }
+  //    },[])
+
+   return (
     <>
+       
+        <Modal show={showwish} onHide={handleclosewish} style={mystyles.wishmodal}>
+        <img src={crossbtn} alt="" className="crossbtn" onClick={handleclosewish} />
+           <Wishes val={wish}/>
+        </Modal>
+    
       <div>
         <Navbar
           className="d-flex justify-content-end"
@@ -597,14 +690,14 @@ const Dashboard = () => {
               />
               Add New City
             </NavDropdown.Item>
-            {/* <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 4 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(4)} onMouseLeave={() => setplusDropdown(null)}>
+            <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 7 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={() => setplusDropdown(7)} onMouseLeave={() => setplusDropdown(null)} onClick={handleopencityform}>
               <img
-                src={plusDropdown === 4 ? employeeInactive : employeeActive}
+                src={plusDropdown === 7 ? employeeInactive : employeeActive}
                 alt="Dashboard Icon"
                 style={mystyles.plusDropdownItemIcon}
               />
-              Add New Employee
-            </NavDropdown.Item> */}
+              Add New Budget City
+            </NavDropdown.Item>
             {/* <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 5 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={(e) => setplusDropdown(5)} onMouseLeave={(e) => setplusDropdown(null)}>
               <img
                 src={plusDropdown === 5 ? contactsInactive : contactsActive}
@@ -1533,6 +1626,36 @@ const Dashboard = () => {
                 </div>
                 {/* <div
                   style={
+                    nav === 18
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(18)}
+                >
+                  <div
+                    style={
+                      nav === 18
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed
+                    }
+                  >
+                    <img
+                      src={nav === 18 ? announcement : announcement}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                  <p
+                    style={
+                      nav === 18
+                        ? mystyles.sidebarMenuItemTextActive
+                        : mystyles.sidebarMenuItemText
+                    }
+                  >
+                    TTM
+                  </p>
+                </div> */}
+                {/* <div
+                  style={
                     nav === 12
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
                       : mystyles.sidebarMenuItem
@@ -1744,6 +1867,26 @@ const Dashboard = () => {
                   setRed={setred}
                   setGreen={setgreen}
                   closeModal={handleCloseCategoryForm}
+                />
+              }
+            </Modal.Body>
+          </Modal>
+          <Modal
+            backdrop="static"
+            size="lg"
+            keyboard={false}
+            show={cityform}
+            onHide={handleclosecityform}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Add New Budget City</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            {
+                <AddBudgetCity
+                  setRed={setred}
+                  setGreen={setgreen}
+                  closeModal={handleclosecityform}
                 />
               }
             </Modal.Body>

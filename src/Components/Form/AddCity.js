@@ -17,7 +17,6 @@ function AddCity(props) {
     city: "",
     province: "",
     country: "",
-    capitalBudget: "",
     population: "",
     municipalityType: "",
     municipalityStatus: "",
@@ -41,7 +40,6 @@ function AddCity(props) {
           city: form.city,
           province: form.province,
           country: form.country,
-          budget: form.capitalBudget,
           population: form.population,
           municipalityType: form.municipalityType,
           municipalityStatus: form.municipalityStatus,
@@ -63,7 +61,7 @@ function AddCity(props) {
       })
       .catch((err) => {
         console.log(err);
-        setRed(true);
+        // setRed(true);
       });
   };
   const [show, setShow] = useState(false);
@@ -91,9 +89,9 @@ function AddCity(props) {
           </Form.Group>
         </Row>
         <Row className="mb-4">
-          <Form.Group as={Col}>
+          {/* <Form.Group as={Col}>
             <Form.Control placeholder="Capital Budget" name="capitalBudget" onChange={handleChange} />
-          </Form.Group>
+          </Form.Group> */}
           <Form.Group as={Col}>
             <Form.Control placeholder="Population(2021)" name="population" onChange={handleChange} />
           </Form.Group>

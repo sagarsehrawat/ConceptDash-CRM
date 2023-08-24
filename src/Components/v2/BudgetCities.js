@@ -1,4 +1,4 @@
-import { faArrowLeft, faArrowRight, faChevronDown, faEdit, faMagnifyingGlass, faPencil, faTrash, faX } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faArrowRight, faChevronDown, faEdit, faMagnifyingGlass, faPencil, faTrash, faX, faCirclePlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
@@ -58,6 +58,8 @@ const BudgetCities = (props) => {
     const [filterModal, setfilterModal] = useState(false);
     const closeFilterModal = () => {setfilter(prevFilter); setfilterModal(false)};
     const openFilterModal = () => setfilterModal(true);
+
+   
 
     //Add Form Modal
     const [show, setShow] = useState(false);
@@ -651,7 +653,7 @@ const BudgetCities = (props) => {
                     <p style={styles.heading2}>Cities</p>
 
                     {/* Filter and Other Buttons */}
-                    <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
+                    <div className='d-flex flex-row justify-content-between' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px", marginRight:'32px' }}>
                         <input
                             style={{ ...styles.searchInputContainer, borderRadius: "6px" }}
                             type="text"
@@ -659,7 +661,6 @@ const BudgetCities = (props) => {
                             onChange={(e) => setValue(e.target.value)}
                             placeholder="Search"
                         />
-
                     </div>
 
                     {/* Table */}
@@ -699,7 +700,7 @@ const BudgetCities = (props) => {
                                             <td style={{ ...styles.tableCell, color: "#70757A" }}><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Remarks}</p></td>
                                             <td style={{ ...styles.tableCell }}>
                                                 <div className='d-flex flex-row'>
-                                                    <FontAwesomeIcon icon={faPencil} style={{ cursor: "pointer", marginRight: "23px" }} color="#70757A" height="18px" onClick={(eve) => { setidx(idx); handleShowUpdate() }} />
+                                                    <FontAwesomeIcon icon={faPencil} style={{ cursor: "pointer", marginRight: "23px" }} color="#70757A" height="18px" onClick={(eve) => { setidx(idx); handleShowUpdate(); }} />
                                                     <FontAwesomeIcon icon={faArrowRight} style={{ cursor: "pointer" }} color="#70757A" height="18px" onClick={(eve) => { setidx(idx); setcity(e); setbudget(false); setCall2(apiCall2 + 1) }} />
                                                 </div>
                                             </td>
@@ -1037,6 +1038,8 @@ const BudgetCities = (props) => {
                             }
                     </Modal>
 
+
+                    
                     {/* Delete Modal */}
                     <Modal
                         show={showDelete}

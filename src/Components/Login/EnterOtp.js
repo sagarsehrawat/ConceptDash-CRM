@@ -92,7 +92,7 @@ function EnterOtp() {
       })
       .then((res) => {
         console.log(res.data.res)
-        if(!res.data.res) {
+        if(!res.data.success) {
             handleShow()
         } else {
             navigate('/resetPassword', {state:{id: location.state.id}})

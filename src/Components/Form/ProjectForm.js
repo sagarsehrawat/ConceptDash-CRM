@@ -52,6 +52,7 @@ function ProjectForm(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props;
   const [isSubmit, setIsSubmit] = useState(false);
   const [employees, setemployees] = useState([]);
+  const [employees1, setemployees1] = useState([]);
   const [depts, setdepts] = useState([]);
   const [show, setShow] = useState(false);
 
@@ -64,6 +65,16 @@ function ProjectForm(props) {
   useEffect(() => {
     setisLoading(true);
     const call = async () => {
+      await axios
+        .get(HOST + GET_EMPLOYEENAMES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setemployees1(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       await axios
         .get(HOST + GET_MANAGERS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
@@ -182,7 +193,7 @@ function ProjectForm(props) {
       });
   };
   let attendees = [];
-  employees.map((e) => {
+  employees1.map((e) => {
     attendees.push({
       label: e.Full_Name,
       value: e.Full_Name,

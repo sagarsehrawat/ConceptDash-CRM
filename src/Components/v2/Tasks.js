@@ -1111,9 +1111,9 @@ function Tasks(props) {
                                     }
                                   </td>
                                   <td style={{ ...styles.cell, cursor: 'pointer' }} onClick={() => { setcurrStatus(e.Status); setid(e.Task_ID); openstatusModal(); }}>
-                                    {e.Status === 0
+                                  {e.Status === 0
                                       ? <div style={{ textAlign:'center',width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
-                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px'}}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
+                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', textAlign:'center'}}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
                                         <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
                                     }
                                   </td>
@@ -1257,9 +1257,9 @@ function Tasks(props) {
                                     }
                                   </td>
                                   <td style={{ ...styles.cell, cursor: 'pointer' }} onClick={() => { setcurrStatus(e.Status); setid(e.Task_ID); openstatusModal(); }}>
-                                    {e.Status === 0
+                                  {e.Status === 0
                                       ? <div style={{ textAlign:'center',width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
-                                      e.Status === 1 ? <div style={{ textAlign:'center',width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px'}}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
+                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', textAlign:'center'}}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
                                         <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
                                     }
                                   </td>
@@ -1403,9 +1403,9 @@ function Tasks(props) {
                                     }
                                   </td>
                                   <td style={{ ...styles.cell, cursor: 'pointer' }} onClick={() => { setcurrStatus(e.Status); setid(e.Task_ID); openstatusModal(); }}>
-                                    {e.Status === 0
+                                  {e.Status === 0
                                       ? <div style={{ textAlign:'center',width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
-                                      e.Status === 1 ? <div style={{ textAlign:'center',width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
+                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', textAlign:'center'}}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
                                         <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
                                     }
                                   </td>
@@ -1549,9 +1549,9 @@ function Tasks(props) {
                                     }
                                   </td>
                                   <td style={{ ...styles.cell, cursor: 'pointer' }} onClick={() => { setcurrStatus(e.Status); setid(e.Task_ID); openstatusModal(); }}>
-                                    {e.Status === 0
+                                  {e.Status === 0
                                       ? <div style={{ textAlign:'center',width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
-                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
+                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', textAlign:'center'}}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
                                         <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
                                     }
                                   </td>
@@ -1695,10 +1695,10 @@ function Tasks(props) {
                                     }
                                   </td>
                                   <td style={{ ...styles.cell, cursor: 'pointer' }} onClick={() => { setcurrStatus(e.Status); setid(e.Task_ID); openstatusModal(); }}>
-                                    {e.Status === 0
+                                  {e.Status === 0
                                       ? <div style={{ textAlign:'center',width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
-                                      e.Status === 1 ? <div style={{ textAlign:'center',width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
-                                        <div style={{textAlign:'center', width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
+                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', textAlign:'center'}}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
+                                        <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
                                     }
                                   </td>
                                   <Modal
@@ -1842,9 +1842,9 @@ function Tasks(props) {
                                     }
                                   </td>
                                   <td style={{ ...styles.cell, cursor: 'pointer' }} onClick={() => { setcurrStatus(e.Status); setid(e.Task_ID); openstatusModal(); }}>
-                                    {e.Status === 0
+                                  {e.Status === 0
                                       ? <div style={{ textAlign:'center',width: '85px', height: '20px', background: '#E4EEFE', border: '0.4px solid #5079E1', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#5079E1" }}>Not Started</p></div> :
-                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
+                                      e.Status === 1 ? <div style={{ width: '78px', height: '20px', background: '#FFF4EF', border: '0.4px solid #FD9568', borderRadius: '24px', padding: '2px', textAlign:'center'}}><p style={{ ...styles.priorityText, color: "#FD9568" }}>In Progress</p></div> :
                                         <div style={{ textAlign:'center',width: '68px', height: '20px', background: '#E4FEF1', border: '0.4px solid #559776', borderRadius: '24px', padding: '2px' }}><p style={{ ...styles.priorityText, color: "#559776" }}>Completed</p></div>
                                     }
                                   </td>
