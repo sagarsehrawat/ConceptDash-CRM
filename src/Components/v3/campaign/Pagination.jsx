@@ -1,8 +1,8 @@
 import React from "react";
 import usePagination from "@mui/material/usePagination";
 import { styled } from "@mui/material/styles";
-import leftIcon from "../../Constants/images/left.svg";
-import rightIcon from "../../Constants/images/right.svg";
+import leftIcon from "../../../Images/left.svg";
+import rightIcon from "../../../Images/right1.svg";
 
 const List = styled("ul")({
   listStyle: "none",

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Button } from "@mui/material";
-import SendCampaignSVG from "../../Constants/images/send-campaign.svg";
-import closeBtn from "../../Constants/images/close-button-campaign-modal.svg";
+import SendCampaignSVG from "../../../Images/send-campaign.svg";
+import closeBtn from "../../../Images/close-button-campaign-modal.svg";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { CREATE_CAMPAIGN, HOST, PRIMARY_COLOR } from "../../Constants/Constants";

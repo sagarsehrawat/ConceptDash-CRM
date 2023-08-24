@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import backArrow from "../../Constants/images/back-arrow.svg";
-import account from "../../Constants/images/account.svg";
-import clock from "../../Constants/images/clock.svg";
-import tag from "../../Constants/images/tag.svg";
+import backArrow from "../../../Images/back-arrow.svg";
+import account from "../../../Images/account.svg";
+import clock from "../../../Images/clock.svg";
+import tag from "../../../Images/tag.svg";
 import axios from "axios";
 import {
   GET_CAMPAIGN_CONTACT,

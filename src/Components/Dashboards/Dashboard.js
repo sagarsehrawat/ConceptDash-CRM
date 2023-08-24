@@ -17,8 +17,8 @@ import AuthenticationContext from "../../Context/AuthContext";
 import tIcon from '../../Images/taskIcon.svg'
 import { Sidebar, Menu, MenuItem, useProSidebar, SubMenu } from "react-pro-sidebar";
 import { primaryColour } from "../Constants/styles";
-import campaignActive from "../Constants/images/campaign-active.svg"
-import campaignInactive from "../Constants/images/campaign-inactive.svg"
+import campaignActive from "../../Images/campaign-active.svg"
+import campaignInactive from "../../Images/campaign-inactive.svg"
 import dashboardActive from "../../Images/Dashboard Active state.svg";
 import dashboardInactive from "../../Images/Dashboard icon inactive.svg";
 import pinnedActive from "../../Images/Pin icon_Active.svg";

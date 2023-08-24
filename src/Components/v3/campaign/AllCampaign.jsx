@@ -1,7 +1,7 @@
 import "./all-campaign.css";
 import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import createNewCampaign from "../../Constants/images/create-new-campaign.svg";
+import createNewCampaign from "../../../Images/create-new-campaign.svg";
 import {
   GET_ALL_CAMPAIGNS,
   HOST,
