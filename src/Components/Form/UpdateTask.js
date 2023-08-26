@@ -36,9 +36,8 @@ const styles = {
 function UpdateTask(props) {
   const [isSubmit, setIsSubmit] = useState(false);
   const [employees, setemployees] = useState([]);
-  const [show, setShow] = useState(false);
   const { setgreen, closeModal, api, apiCall, setred, updateTask } = props;
-  console.log(updateTask)
+  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [form, setform] = useState({

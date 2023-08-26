@@ -31,34 +31,30 @@
     align-items: center;
 }
 .tableFixHead {
-    overflow: auto;
-    /* height: 300px; */
+    overflow-y: auto;
+    height: 78vh;
+    /* height: 10em; */
     /* width:600px; */
   }
   
-  .tableFixHead table {
+  .tableFixHead .table {
     border-collapse: collapse;
     width: 100%;
   }
   
-  .tableFixHead th,
-  .tableFixHead td {
-    /* padding: 8px var(--32-pad, 32px); */
-  }
-  th{
+  .th{
     width: 28vw;
     text-align: center;
     font-weight: normal;
     border: none;
+    position: sticky;
   }
-  td{
-    /* width: 120px; */
+  .td{
     text-align: center;
     border: none;
   }
   
   .normals{
-
     color: var(--dark-grey, #70757A);
     text-align: center;
     font-size: 14px;
@@ -67,7 +63,24 @@
     font-weight: 500;
     line-height: 20px;
   }
-  td:first-child, th:first-child {
+  .th:first-child{
+    position:sticky;
+    left:0;
+    /* top: 0; */
+    z-index:4;
+    text-align: left;
+    background-color:#F7F7F9;
+    padding-left: 32px;
+  }
+  
+  .tr > .td{
+    position: sticky;
+    top: 0;
+    bottom: 0;
+    background-color: #F7F7F9;
+    z-index: 0;
+  }
+  .td:first-child{
     position:sticky;
     left:0;
     z-index:1;
@@ -75,13 +88,14 @@
     background-color:white;
     padding-left: 32px;
   }
+ 
   /* td:nth-child(1),th:nth-child(2)  { 
   position:sticky;
     left:0;
     z-index:1;
     background-color:white;
     } */
-  td:first-child , th:first-child{
+  .td:first-child{
     position: sticky;
     top: 0;
     background: #F7F7F9;
@@ -91,9 +105,6 @@
     border-left: 1px solid #EBE9F1;
     background: #F7F7F9;
   }
-  th:first-child {
-    z-index:3
-    }
     .specials{
         color: var(--black-text, #0A0A0A);
         text-align: center;
@@ -134,3 +145,27 @@
         /* box-shadow: none; */
         outline: none;
       }
+      .form-select {
+        background-color: transparent;
+        color: var(--black-text, #0A0A0A);
+        text-align: center;
+        font-size: 13px;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 20px;
+      }
+      .form-select:active {
+        border: none;
+      }
+      .empty{
+        width: fit-content;
+        position: sticky;
+        left: 0;
+        padding-left: 24px;
+      }
+      /* .totals{
+        position: absolute;
+        z-index: 10;
+        bottom: 0;
+      } */

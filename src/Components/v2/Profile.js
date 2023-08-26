@@ -36,6 +36,7 @@ function Profile(props) {
           .then((res) => {
             let arr = res.data.res
             setdetails(arr);
+            console.log(arr)
             setFirstName(res.data.res[0].First_Name?res.data.res[0].First_Name:'')
             setLastName(res.data.res[0].Last_Name?res.data.res[0].Last_Name:'')
             setbday(res.data.res[0].Birthday?res.data.res[0].Birthday.substring(0, 10):'')
@@ -65,6 +66,7 @@ function Profile(props) {
         }
         if(name==='bDay') {
             setbday(value);
+            console.log(value)
         }
         if(name==='pEmail') {
             setpEmail(value);
