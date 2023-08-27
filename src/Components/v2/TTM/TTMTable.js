@@ -5,6 +5,9 @@ import Form from "react-bootstrap/Form";
 import axios from 'axios';
 import { HOST, GET_EMPLOYEENAMES } from '../../Constants/Constants';
 import LoadingSpinner from '../../Loader/Loader'
+import moment from 'moment';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function TTMTable() {
   const [show, setShow] = useState(false);
@@ -182,6 +185,36 @@ function TTMTable() {
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
       [5, 6, 7, 8, 9, 6, 7, 8, 9, 10, 11, 12, 13],
     ]);
+
+    const hrsArray = [];
+
+const calculateEndDate=(startDate, duration)=> {
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + duration);
+    return endDate;
+}
+
+editingData.forEach(project => {
+    project.subtasks.forEach(subtask => {
+        const row = [];
+        
+        // Add the visibility value as the first column (0 or 1)
+        row.push(subtask.visibility ? 1 : 0);
+        
+        // Add start date and end date as the second and third columns
+        row.push(subtask.StartDate);
+        const endDate = calculateEndDate(subtask.StartDate, subtask.Duration);
+        row.push(endDate);
+        
+        // Add the hours data
+        subtask.hrs.forEach(hour => row.push(hour));
+        
+        hrsArray.push(row);
+    });
+});
+const hrsMapped = hrsArray.map(e=>e.slice(3))
+console.log(hrsArray.map(e=>e.slice(3)))
+
     
     const [totalHrs, settotalHrs] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     
@@ -246,7 +279,11 @@ function TTMTable() {
       }
       return totalSum;
     }
-    console.log(editingData)
+    const formatDate = (date) => {
+      if (date === "" || date === null || date === undefined) return "";
+      const formattedDate = moment(date)
+      return formattedDate.format('D MMM, YYYY')
+  }
 
   return (
     isLoading?<LoadingSpinner/>:
@@ -267,6 +304,7 @@ function TTMTable() {
         <thead>
           <tr>
             <th className='normals th'>Project Department</th>
+            <th className='normals th' colSpan={3}>Timelines</th>
             <th className='normals th' colSpan={3}>Project Management</th>
             <th className='normals th' colSpan={2}>Design</th>
             <th className='normals th' colSpan={3}>Design Team</th>
@@ -278,6 +316,9 @@ function TTMTable() {
         <tbody>
           <tr>
             <td className='normals td'>Designation</td>
+            <td className='normals td' rowSpan={3} style={{paddingTop:'10vh'}}>Start Date</td>
+            <td className='normals td' rowSpan={3} style={{paddingTop:'10vh'}}>End Date</td>
+            <td className='normals td' rowSpan={3} style={{paddingTop:'10vh'}}>Duration</td>
             <td className='normals td'>Project Manager</td>
             <td className='normals td'>Project Director</td>
             <td className='normals td'>Qa/QC lead and Risk Manager</td>
@@ -339,7 +380,7 @@ function TTMTable() {
           {editingData?editingData.map((e)=>{
             return(
               <>
-              <tr><td colSpan={span+1} bgcolor='#E4FEF1'
+              <tr><td colSpan={span+4} bgcolor='#E4FEF1'
                 style={{
                   height: '38px',
                   textAlign:'left',
@@ -361,7 +402,26 @@ function TTMTable() {
                     {task.visibility?
                     <tr>
                       <td style={{paddingLeft:'32px'}} className='td'>{task.TaskName}</td>
-                      {task.hrs.map((e, idx)=>{
+                      <td style={{paddingLeft:'12px', width:'fit-content'}} className='td no-focus'><DatePicker selected={task.StartDate} /></td>
+                      <td style={{paddingLeft:'32px'}} className='td'>{formatDate(task.StartDate)}</td>
+                      <td style={{paddingLeft:'32px'}} className='td'>{task.Duration}</td>
+                      {hrsMapped.map((e)=>{
+                        // console.log(e)
+                        {e.map((f)=>{
+                          console.log(f)
+                          // return(
+                          //   <td  > 
+                          //   <input
+                          //     className='no-focus' placeholder='0'
+                          //     style={style.input}
+                          //     value={f?f:''}
+                          //     // onChange={(eve)=>handleHRchange(0, idx, eve)}
+                          //   />
+                          // </td>
+                          // )
+                        })}
+                      })}
+                      {/* {hrsArray.map((e, idx)=>{
                         return (
                           <td  > 
                             <input
@@ -372,7 +432,7 @@ function TTMTable() {
                             />
                       </td>
                         )
-                      })}
+                      })} */}
                     </tr>:<></>}</>
                   )
                 })}
@@ -395,1104 +455,6 @@ function TTMTable() {
               </>
             )
           }):<></>}
-          {/* <tr><td colSpan={span+1} bgcolor='#E4FEF1'
-           style={{
-            height: '38px',
-            textAlign:'left',
-            color:' var(--black-text, #0A0A0A)',
-            fontSize: '13px',
-            fontFamily: 'Roboto',
-            fontStyle: 'normal',
-            fontWeight: '500',
-            lineHeight: '20px',
-            backgroundColor: '#E4FEF1',
-          }}>
-            <div className='empty' style={{
-              paddingLeft:'24px'
-            }}>Project Initiation </div></td>
-          </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Project Initiation meeting</td>
-                {taskData[0].map((e, idx)=>{
-                  return (
-                    <td  > 
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(0, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Background data collection and Field review</td>
-                {taskData[1].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(1, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Public and Stakeholder Consultation</td>
-                {taskData[2].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(2, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Review meeting with City/Municipality/Town/County</td>
-                {taskData[3].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(3, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              {stageOneTask.includes('1')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Obtaining necessary permits</td>
-                {taskData[4].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(4, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('2')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Pre-design Site visit</td>
-                {taskData[5].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(5, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('3')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Preliminary Survey</td>
-                {taskData[6].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(6, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('4')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Traffic Count</td>
-                {taskData[7].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(7, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('5')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Identification of Problem/ Opportunity</td>
-                {taskData[8].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(8, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              <tr><td colSpan={span+1} bgcolor='#FFF'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:'var(--dark-grey, #70757A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                lineHeight: '20px',
-                backgroundColor: '#FFF',
-              }}>
-                <p className='empty' onClick={handleShow} style={{
-                  paddingLeft:'24px', cursor:'pointer'
-                }}>Add Task +</p></td>
-              </tr>
-              <tr><td colSpan={span+1} bgcolor='#E4FEF1'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:' var(--black-text, #0A0A0A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '500',
-                lineHeight: '20px',
-                backgroundColor: '#E4FEF1',
-              }}>
-                <p className='empty' style={{
-                  paddingLeft:'24px'
-                }}>Environmental Assessment (Project Dependent)</p></td>
-              </tr>
-              {stageOneTask.includes('6')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Development of Alternative Solutions</td>
-                {taskData[9].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(9, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('7')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Development of Alternative Design concepts for preferred solution</td>
-                {taskData[10].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(10, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('8')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Environmental Study Report (ESR)</td>
-                {taskData[11].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(11, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('9')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Public Information Centre</td>
-                {taskData[12].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(12, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              <tr><td colSpan={span+1} bgcolor='#FFF'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:'var(--dark-grey, #70757A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                lineHeight: '20px',
-                backgroundColor: '#FFF',
-                position: 'sticky'
-              }}>
-                <p className='empty' onClick={handleShowStage2} style={{
-                  paddingLeft:'24px', cursor:'pointer'
-                }}>Add Task +</p></td>
-              </tr>
-              <tr><td colSpan={span+1} bgcolor='#E4FEF1'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:' var(--black-text, #0A0A0A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '500',
-                lineHeight: '20px',
-                backgroundColor: '#E4FEF1',
-              }}>
-                <p className='empty' style={{
-                  paddingLeft:'24px'
-                }}>Site Investigations (Project Dependent)</p></td>
-              </tr>
-              {stageOneTask.includes('10')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Topographic Survey</td>
-                {taskData[13].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(13, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('11')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Legal Survey</td>
-                {taskData[14].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(14, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('12')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Geotechnical Investigation</td>
-                {taskData[15].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(15, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('13')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>SUE Investigation</td>
-                {taskData[16].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(16, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('14')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>CCTV Inspection</td>
-                {taskData[17].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(17, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('15')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Hydrogeological Investigation</td>
-                {taskData[18].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(18, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('16')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Environmental Assessment</td>
-                {taskData[19].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(19, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              <tr><td colSpan={span+1} bgcolor='#FFF'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:'var(--dark-grey, #70757A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                lineHeight: '20px',
-                backgroundColor: '#FFF',
-              }}>
-                <p className='empty' onClick={handleShowStage3} style={{
-                  paddingLeft:'24px', cursor:'pointer'
-                }}>Add Task +</p></td>
-              </tr>
-
-              <tr><td colSpan={span+1} bgcolor='#E4FEF1'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:' var(--black-text, #0A0A0A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '500',
-                lineHeight: '20px',
-                backgroundColor: '#E4FEF1',
-              }}>
-                <p className='empty' style={{
-                  paddingLeft:'24px'
-                }}>Preliminary Design </p></td>
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Preliminary Design (30%)</td>
-                {taskData[20].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(20, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Preliminary Design - Submission and Review</td>
-                {taskData[21].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(21, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Traffic Control Plan and Construction Staging</td>
-                {taskData[22].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(22, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Review meeting with City/Municipality/Town/County</td>
-                {taskData[23].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(23, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              {stageOneTask.includes('17')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Coordination meeting with relevant authorities</td>
-                {taskData[24].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(24, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('18')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Public Information Centre</td>
-                {taskData[25].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(25, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              <tr><td colSpan={span+1} bgcolor='#FFF'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:'var(--dark-grey, #70757A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                lineHeight: '20px',
-                backgroundColor: '#FFF',
-              }}>
-                <p className='empty' onClick={handleShowStage4} style={{
-                  paddingLeft:'24px', cursor:'pointer'
-                }}>Add Task +</p></td>
-              </tr>
-
-              <tr><td colSpan={span+1} bgcolor='#E4FEF1'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:' var(--black-text, #0A0A0A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '500',
-                lineHeight: '20px',
-                backgroundColor: '#E4FEF1',
-              }}>
-                <p className='empty' style={{
-                  paddingLeft:'24px'
-                }}>Detailed Design (60%)</p></td>
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Detailed Design (60%)</td>
-                {taskData[26].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(26, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Preliminary Design - Submission and Review</td>
-                {taskData[27].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(27, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              {stageOneTask.includes('19')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Streetlight Design</td>
-                {taskData[28].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(28, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('20')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Streetscaaping and Landscaping</td>
-                {taskData[29].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(29, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('21')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Property Acquisition Plan</td>
-                {taskData[30].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(30, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('22')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Soil Management Plan</td>
-                {taskData[31].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(31, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('23')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Traffic Control Plan and Construction Staging</td>
-                {taskData[32].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(32, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              <tr><td colSpan={span+1} bgcolor='#FFF'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:'var(--dark-grey, #70757A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                lineHeight: '20px',
-                backgroundColor: '#FFF',
-              }}>
-                <p className='empty' onClick={handleShowStage5} style={{
-                  paddingLeft:'24px', cursor:'pointer'
-                }}>Add Task +</p></td>
-              </tr>
-
-              <tr><td colSpan={span+1} bgcolor='#E4FEF1'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:' var(--black-text, #0A0A0A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '500',
-                lineHeight: '20px',
-                backgroundColor: '#E4FEF1',
-              }}>
-                <p className='empty' style={{
-                  paddingLeft:'24px'
-                }}>Detailed Design (90%)</p></td>
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Detailed Design (90%)</td>
-                {taskData[33].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(33, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Detailed Design (90%) - Submission and Review</td>
-                {taskData[34].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(34, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Traffic Control Plan and Construction Staging</td>
-                {taskData[35].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(35, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Agency and Regulatory Approvals</td>
-                {taskData[36].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(36, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Review meeting with City/Municipality/Town/County</td>
-                {taskData[37].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(37, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Coordination with affected landowners and stakeholder</td>
-                {taskData[38].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(38, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Finalization of Traffic Management Plan</td>
-                {taskData[39].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(39, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr><td colSpan={span+1} bgcolor='#E4FEF1'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:' var(--black-text, #0A0A0A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '500',
-                lineHeight: '20px',
-                backgroundColor: '#E4FEF1',
-              }}>
-                <p className='empty' style={{
-                  paddingLeft:'24px'
-                }}>Final Design</p></td>
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>FInal Design - Submission and Review</td>
-                {taskData[40].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(40, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Preparationa nd Submission of Final Engineering drawings</td>
-                {taskData[41].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(41, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              {stageOneTask.includes('24')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Draft Quantitiy Take-off and Cost Estimation</td>
-                {taskData[42].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(42, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              <tr><td colSpan={span+1} bgcolor='#FFF'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:'var(--dark-grey, #70757A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                lineHeight: '20px',
-                backgroundColor: '#FFF',
-              }}>
-                <p className='empty' onClick={handleShowStage6} style={{
-                  paddingLeft:'24px', cursor:'pointer'
-                }}>Add Task +</p></td>
-              </tr>
-
-              <tr><td colSpan={span+1} bgcolor='#E4FEF1'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:' var(--black-text, #0A0A0A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '500',
-                lineHeight: '20px',
-                backgroundColor: '#E4FEF1',
-              }}>
-                <p className='empty' style={{
-                  paddingLeft:'24px'
-                }}>Tender</p></td>
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Preparation and submission of detailed cost estimate and tender documents</td>
-                {taskData[43].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(43, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Review of tender submissions and provide recommendation letter for the award of the tender/construction contract</td>
-                {taskData[44].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(44, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-
-              <tr><td colSpan={span+1} bgcolor='#E4FEF1'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:' var(--black-text, #0A0A0A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '500',
-                lineHeight: '20px',
-                backgroundColor: '#E4FEF1',
-              }}>
-                <p className='empty' style={{
-                  paddingLeft:'24px'
-                }}>Contract Administration and Inscpection Services</p></td>
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Pre-construction meeting</td>
-                {taskData[45].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(45, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Contract Administration</td>
-                {taskData[46].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(46, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Construction Inspection</td>
-                {taskData[47].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(47, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>As-built drawings</td>
-                {taskData[48].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(48, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              {stageOneTask.includes('25')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Completion and Warranty site inspections</td>
-                {taskData[49].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(49, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              {stageOneTask.includes('26')?<tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Maintenance Period Support</td>
-                {taskData[50].map((e, idx)=>{
-                  return (
-                    <td  >
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(50, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>:<></>}
-              <tr><td colSpan={span+1} bgcolor='#FFF'
-              style={{
-                height: '38px',
-                textAlign:'left',
-                color:'var(--dark-grey, #70757A)',
-                fontSize: '13px',
-                fontFamily: 'Roboto',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                lineHeight: '20px',
-                backgroundColor: '#FFF',
-              }}>
-                <p className='empty' onClick={handleShowStage7} style={{
-                  paddingLeft:'24px', cursor:'pointer'
-                }}>Add Task +</p></td>
-              </tr>
-              
-              <tr className='tr'>
-                <td className='td' style={{paddingLeft:'32px', zIndex:'9', backgroundColor:'#DBDBF4', border:'1px solid #f7f7f9'}} >Total Hours</td>
-                {totalHrs.map((e, idx)=>{
-                  return (
-                    <td className='td' style={{backgroundColor:'#DBDBF4', border:'1px solid #f7f7f9', zIndex:'5'}}>
-                      <p
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                      >{e}</p>
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr className='tr'>
-                <td className='td' style={{paddingLeft:'32px', zIndex:'8', backgroundColor:'#DBDBF4', border:'1px solid #f7f7f9'}} >Total Fees</td>
-                {totalHrs.map((e, idx)=>{
-                  return (
-                    <td className='td' style={{backgroundColor:'#DBDBF4', border:'1px solid #f7f7f9', zIndex:'4'}}>
-                      <p
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                      >{e*taskData[52][idx]}</p>
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr className='tr'>
-                <td className='td' style={{paddingLeft:'32px', zIndex:'7', backgroundColor:'#DBDBF4', border:'1px solid #f7f7f9'}} >Time Percentage</td>
-                {totalHrs.map((e, idx)=>{
-                  return (
-                    <td className='td' style={{backgroundColor:'#DBDBF4', border:'1px solid #f7f7f9', zIndex:'3'}}>
-                      <p
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                      >{((e/calcTotal())*100).toPrecision(3)} %</p>
-                    </td>
-                  )
-                })}
-              </tr> */}
-              {/* <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Total Hours</td>
-                {taskData[50].map((e, idx)=>{
-                  return (
-                    <td>
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(50, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-              <tr>
-                <td style={{paddingLeft:'32px'}} className='td'>Total Hours</td>
-                {taskData[50].map((e, idx)=>{
-                  return (
-                    <td>
-                      <input
-                        className='no-focus' placeholder='0'
-                        style={style.input}
-                        value={e?e:''}
-                        onChange={(eve)=>handleHRchange(50, idx, eve)}
-                      />
-                    </td>
-                  )
-                })}
-              </tr> */}
-
         </tbody>
       </table>
       </div>
