@@ -186,34 +186,13 @@ function TTMTable() {
       [5, 6, 7, 8, 9, 6, 7, 8, 9, 10, 11, 12, 13],
     ]);
 
-    const hrsArray = [];
-
+    
 const calculateEndDate=(startDate, duration)=> {
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + duration);
     return endDate;
 }
 
-editingData.forEach(project => {
-    project.subtasks.forEach(subtask => {
-        const row = [];
-        
-        // Add the visibility value as the first column (0 or 1)
-        row.push(subtask.visibility ? 1 : 0);
-        
-        // Add start date and end date as the second and third columns
-        row.push(subtask.StartDate);
-        const endDate = calculateEndDate(subtask.StartDate, subtask.Duration);
-        row.push(endDate);
-        
-        // Add the hours data
-        subtask.hrs.forEach(hour => row.push(hour));
-        
-        hrsArray.push(row);
-    });
-});
-const hrsMapped = hrsArray.map(e=>e.slice(3))
-console.log(hrsArray.map(e=>e.slice(3)))
 
     
     const [totalHrs, settotalHrs] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
@@ -221,14 +200,14 @@ console.log(hrsArray.map(e=>e.slice(3)))
     const totals = ()=>{
 
     
-    taskData.map((e)=>{
-      let updatedData = [...totalHrs];
-      for(let i=0;i<13;i++) {
-        let val = e[i]+totalHrs[i];
-        updatedData[i] = val;
-      }
-      settotalHrs(updatedData)
-    })
+    // taskData.map((e)=>{
+    //   let updatedData = [...totalHrs];
+    //   for(let i=0;i<13;i++) {
+    //     let val = e[i]+totalHrs[i];
+    //     updatedData[i] = val;
+    //   }
+    //   settotalHrs(updatedData)
+    // })
 }
     const [prevTasks, setprevTasks] = useState(null);
     const [toChangei, settoChangei] = useState();
@@ -250,12 +229,12 @@ console.log(hrsArray.map(e=>e.slice(3)))
         console.log(1);
       }, 3000);
     }
-    const handleHRchange = (a, b, c) =>{
-        let value = c.target.value;
-        let h = {...taskData}
-        handleChangeTotals(value, h[a][b], b);
-        h[a][b]=value;
-        settaskData(h);
+    const handleHRchange = (a, b, c, d) =>{
+        let value = d.target.value;
+        let h = [...editingData]
+        // handleChangeTotals(value, h[a][b], b);
+        h[a].subtasks[b].hrs[c]=value;
+        seteditingData(h);
     }
     const handleChangeTotals=(newvalue, oldvalue, col)=>{
       let updated = [...totalHrs];
@@ -403,23 +382,19 @@ console.log(hrsArray.map(e=>e.slice(3)))
                     <tr>
                       <td style={{paddingLeft:'32px'}} className='td'>{task.TaskName}</td>
                       <td style={{paddingLeft:'12px', width:'fit-content'}} className='td no-focus'><DatePicker selected={task.StartDate} /></td>
-                      <td style={{paddingLeft:'32px'}} className='td'>{formatDate(task.StartDate)}</td>
-                      <td style={{paddingLeft:'32px'}} className='td'>{task.Duration}</td>
-                      {hrsMapped.map((e)=>{
-                        // console.log(e)
-                        {e.map((f)=>{
-                          console.log(f)
-                          // return(
-                          //   <td  > 
-                          //   <input
-                          //     className='no-focus' placeholder='0'
-                          //     style={style.input}
-                          //     value={f?f:''}
-                          //     // onChange={(eve)=>handleHRchange(0, idx, eve)}
-                          //   />
-                          // </td>
-                          // )
-                        })}
+                      <td style={{paddingLeft:'12px', width:'fit-content'}} className='td no-focus'><DatePicker selected={calculateEndDate(task.StartDate, task.Duration)} /></td>
+                      <td style={{paddingLeft:'32px'}} className='td'>{task.Duration===0?1:task.Duration}</td>
+                      {task.hrs.map((h, idx)=>{
+                        return (
+                          <td  > 
+                            <input
+                              className='no-focus' placeholder='0'
+                              style={style.input}
+                              value={h?h:''}
+                              onChange={(eve)=>handleHRchange(e.parentID, task.childID ,idx, eve)}
+                            />
+                          </td>
+                        )
                       })}
                       {/* {hrsArray.map((e, idx)=>{
                         return (
