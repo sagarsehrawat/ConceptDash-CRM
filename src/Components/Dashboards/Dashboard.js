@@ -90,6 +90,7 @@ import crossbtn from '../../Images/Celebrations/cross_wishes.svg'
 import TTMTable from "../v2/TTMTable";
 
 
+
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();
   const navigate = useNavigate();
@@ -455,11 +456,12 @@ const Dashboard = () => {
     },
     wishmodal:{
        backgroundColor:"rgba(215, 216, 254)",
-       right: "60px"
+       width: "100% !important",
+       height: "100% !important",
     },
     crossbtn:{
-      height: "34px",
-      width: "34px",
+      width: "44px",
+      height: "44px", 
       position: "fixed",
       top: "-75px",
       right: "-300px",
@@ -518,10 +520,7 @@ const Dashboard = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
-   let id= +localStorage.getItem('employeeId');
-   
-  
+  }, []); 
     useEffect(() => {
       const getuserdata = async() => {   
      await axios.get(HOST + GET_CELEBRATIONS, {
@@ -533,13 +532,14 @@ const Dashboard = () => {
         })
         .then((res) => {
                 let empdata={}
+                let id= +localStorage.getItem('employeeId')
                 empdata=res.data.res
                empdata=res.data.res.filter(each=> each.Employee_ID===id)
-                let bday=new Date(empdata.Birthday)
-                let anniversary=new Date(empdata.Joining_Date)
+                let bday=new Date(empdata[0].Birthday)
+                let anniversary=new Date(empdata[0].Joining_Date)
                 if(new Date().getMonth()===2 && new Date().getDate()===1)
                 setshowwish(true);
-                if(7===new Date().getMonth() && 21===new Date().getDate()){
+                if(bday.getMonth()===new Date().getMonth() && bday.getDate()===new Date().getDate()){
                   setwish("Birthday")
                   setshowwish(true)
                 }

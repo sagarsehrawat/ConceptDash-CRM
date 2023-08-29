@@ -79,9 +79,11 @@ const Home = (props) => {
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 400,
-      fontSize: "14px",
+      fontSize: "11px",
       lineHeight: "16px",
       color: "#0A0A0A",
+      textAlign: "left",
+       
     },
     contentArea: {
       width: `${viewportWidth - 280 - (isCollapsed ? 68 : 228)}px`,
@@ -708,7 +710,7 @@ console.log(sideTasks[0]);
             {handleChartsComponent()}
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", paddingRight:'20px' }}>
+        <div style={{ display: "flex", flexDirection: "column", paddingRight:'20px', width:'278px' }}>
           <div style={styles.deadlines}>
             <div style={{ display: "flex", flexDirection: "row" }}>
               <img
