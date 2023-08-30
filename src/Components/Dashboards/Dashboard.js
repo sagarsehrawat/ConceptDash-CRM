@@ -85,7 +85,7 @@ import AddCategory from "../Form/AddCategory";
 import Profile from "../v2/Profile";
 import Announcements from "../v2/Announcements";
 import AddBudgetCity from "../Form/AddBudgetCity";
-import Wishes from "./Wishes";
+import Wishes from "../v2/Updated_Module/Wishes";
 import crossbtn from '../../Images/Celebrations/cross_wishes.svg'
 import TTMTable from "../v2/TTMTable";
 
@@ -581,30 +581,30 @@ const Dashboard = () => {
   const [prop, setprop] = useState(false)
   const[checkwish,setcheckwish] = useState(false)
   const currentdate= new Date()
-  //  function shouldrender(){
-  //    let returnval=false;
-  //    const lastdate=new Date(localStorage.getItem('lastshown'));
-  //    console.log(lastdate)
-  //     if(lastdate==null) {
-  //       returnval=true;
-  //     }
-  //     if(currentdate.getDate()!==lastdate.getDate() && currentdate.getMonth()!==lastdate.getMonth()){
-  //       returnval=true;
+   function shouldrender(){
+     let returnval=false;
+     const lastdate=new Date(localStorage.getItem('lastshown'));
+     console.log(lastdate)
+      if(lastdate==null) {
+        returnval=true;
+      }
+      if(currentdate.getDate()!==lastdate.getDate() && currentdate.getMonth()!==lastdate.getMonth()){
+        returnval=true;
         
-  //     }
-  //     return returnval;
-  //   }  
-  //   useEffect(()=>{
-  //      if(checkwish===false){
-  //      console.log("inside useEffect")
-  //        let stored=localStorage.getItem('lastshown')
-  //       let storeddate=new Date(stored)
-  //        if(storeddate!==null) localStorage.setItem('lastshown',currentdate)
-  //      if(storeddate.getDate()!==currentdate.getDate() && storeddate.getMonth()!==currentdate.getMonth())
-  //     localStorage.setItem('lastshown',currentdate)
-  //     setcheckwish(true);
-  //      }
-  //    },[])
+      }
+      return returnval;
+    }  
+    useEffect(()=>{
+       if(checkwish===false){
+       console.log("inside useEffect")
+         let stored=localStorage.getItem('lastshown')
+        let storeddate=new Date(stored)
+         if(storeddate!==null) localStorage.setItem('lastshown',currentdate)
+       if(storeddate.getDate()!==currentdate.getDate() && storeddate.getMonth()!==currentdate.getMonth())
+      localStorage.setItem('lastshown',currentdate)
+      setcheckwish(true);
+       }
+     },[])
 
    return (
     <>

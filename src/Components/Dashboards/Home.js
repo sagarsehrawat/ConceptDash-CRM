@@ -26,7 +26,7 @@ import { gapi } from "gapi-script";
 import ProjectCharts from "./ProjectCharts";
 import ProposalCharts from "./ProposalCharts";
 import moment from 'moment';
-import Celebrations from "./Celebrations";
+import Celebrations from "../v2/Updated_Module/Celebrations";
 import groupicon from '../../Images/Celebrations/groupicon.svg'
 const Home = (props) => {
   const { setnav } = props;

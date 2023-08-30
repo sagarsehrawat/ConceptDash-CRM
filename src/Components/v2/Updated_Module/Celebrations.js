@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 import axios from 'axios';
-import {  GET_CELEBRATIONS, HOST} from '../Constants/Constants';
-import cross from "../../Images/cross.svg";
+import {  GET_CELEBRATIONS, HOST} from '../../Constants/Constants';
+import cross from "../../../Images/cross.svg";
 import './Celebrations.css';
-import bdaydefault from '../../Images/Celebrations/bdaydefault.svg'
-import anniversarydefault from '../../Images/Celebrations/anniversarydefault.svg'
-import cddefault from '../../Images/Celebrations/cdanniversary.svg'
-import LoadingSpinner from '../Loader/Loader';
+import bdaydefault from '../../../Images/Celebrations/bdaydefault.svg'
+import anniversarydefault from '../../../Images/Celebrations/anniversarydefault.svg'
+import cddefault from '../../../Images/Celebrations/cdanniversary.svg'
+import LoadingSpinner from '../../Loader/Loader';
 export default function Celebrations(props){
      
     const [isloading,setisloading]=useState(true);

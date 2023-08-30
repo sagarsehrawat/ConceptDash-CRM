@@ -1,7 +1,7 @@
 import React,{useEffect} from 'react'
 import './Wishes.css'
-import bdaypicture from '../../Images/Celebrations/Groupbdaypicture.svg'
-import cdanniversary from '../../Images/Celebrations/Company celebrationcdanniversary1.svg'
+import bdaypicture from '../../../Images/Celebrations/Groupbdaypicture.svg'
+import cdanniversary from '../../../Images/Celebrations/Company celebrationcdanniversary1.svg'
 import Confetti from './Confetti'
 import './Wishes.css'
 const Wishes = (props) => {
