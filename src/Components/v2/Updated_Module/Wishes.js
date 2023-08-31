@@ -1,7 +1,7 @@
 import React,{useEffect} from 'react'
 import './Wishes.css'
-import bdaypicture from '../../Images/Celebrations/Groupbdaypicture.svg'
-import cdanniversary from '../../Images/Celebrations/Company celebrationcdanniversary1.svg'
+import bdaypicture from '../../../Images/Celebrations/Groupbdaypicture.svg'
+import cdanniversary from '../../../Images/Celebrations/Company celebrationcdanniversary1.svg'
 import Confetti from './Confetti'
 import './Wishes.css'
 const Wishes = (props) => {
@@ -25,10 +25,11 @@ const Wishes = (props) => {
 
   return (
       <div>
-         <div className='main'> 
-         <Confetti />
-           <div className='wishes-content'>
-            <div className='heading-main'>{val} !</div>
+          {/* <Confetti /> */}
+         <div className='main'>
+         <Confetti /> 
+          <div className='wishes-content'>
+          <div className='heading-main'>{val} !</div>
          <div className='para'>{content}</div>
           <img src={pic} className={piccss} alt=""/>
         { c===0 && <div className='foot'>Here’s your virtual {props.val} cake 😁</div>}

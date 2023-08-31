@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 import axios from 'axios';
-import {  GET_CELEBRATIONS, HOST} from '../Constants/Constants';
-import cross from "../../Images/cross.svg";
+import {  GET_CELEBRATIONS, HOST} from '../../Constants/Constants';
+import cross from "../../../Images/cross.svg";
 import './Celebrations.css';
-import bdaydefault from '../../Images/Celebrations/bdaydefault.svg'
-import anniversarydefault from '../../Images/Celebrations/anniversarydefault.svg'
-import cddefault from '../../Images/Celebrations/cdanniversary.svg'
-import LoadingSpinner from '../Loader/Loader';
+import bdaydefault from '../../../Images/Celebrations/bdaydefault.svg'
+import anniversarydefault from '../../../Images/Celebrations/anniversarydefault.svg'
+import cddefault from '../../../Images/Celebrations/cdanniversary.svg'
+import LoadingSpinner from '../../Loader/Loader';
 export default function Celebrations(props){
      
     const [isloading,setisloading]=useState(true);
@@ -22,7 +22,7 @@ export default function Celebrations(props){
       bday.setFullYear(tday.getFullYear());
       if (tday > bday)
       bday.setFullYear(tday.getFullYear() + 1);
-     let diff= Math.floor((bday - tday) / (1000*60*60*24)) 
+     let diff= (Math.floor((bday - tday) / (1000*60*60*24)))+1
     return diff
     }
   const clearallcele = ()=>{
@@ -49,15 +49,15 @@ export default function Celebrations(props){
                         ele.JoiningDate=each.Joining_Date ? new Date(each.Joining_Date) : null
                          return ele
                   })
-              
                   let todaysevents=empdata?.map((each)=>{
                       let obj={};
                       obj.name=each.name;
-                      if(each.JoiningDate!==null && each.JoiningDate.getMonth()===new Date().getMonth() &&each.JoiningDate.getDate()===new Date().getDate()){
+                  
+                      if(each.JoiningDate!==null && each.JoiningDate.getMonth()===new Date().getMonth() && each.JoiningDate.getDate()===new Date().getDate()){
                       obj.msg=" is celebrating work anniversary today.";
                       obj.pic= anniversarydefault
                       }
-                     else if(each.Birthday!==null && each.Birthday.getMonth()===new Date().getMonth() &&each.Birthday.getDate()===new Date().getDate()){
+                     else if(each.Birthday!==null && each.Birthday.getMonth()===new Date().getMonth() && each.Birthday.getDate()===new Date().getDate()){
                       obj.pic=bdaydefault 
                        obj.msg=" is celebrating birthday today."
                      }
@@ -82,7 +82,6 @@ export default function Celebrations(props){
                        return obj
                    })
                    upcomingevents=upcomingevents?.filter((each)=> (each.bday!==null && each.bday<=30 && each.bday!==0) || (each.anni!==null &&each.anni<=30 && each.anni<=30 && each.anni!==0))
-                  
                    upcomingevents=upcomingevents?.map((each)=>{
                        obj={}
                        obj.name=each.name
@@ -94,6 +93,10 @@ export default function Celebrations(props){
                         obj.pic=bdaydefault
                        obj.msg=" is celebrating birthday in a month.";
                        }
+                       else if(each.bday!==null && each.bday===1){
+                        obj.pic=bdaydefault
+                        obj.msg=" is celebrating birthday tomorrow."
+                       }
                       else if(each.bday!==null && each.bday<=25) {
                         obj.pic=bdaydefault
                        obj.msg=" is celebrating birthday in "+each.bday+" days.";
@@ -102,6 +105,10 @@ export default function Celebrations(props){
                         obj.pic=anniversarydefault
                        obj.msg=" is celebrating work anniversary in a month.";
                       }
+                      else if(each.anni!==null && each.anni===1){
+                        obj.pic=anniversarydefault
+                        obj.msg=" is celebrating work anniversary tomorrow."
+                       }
                        else if(each.anni!==null && each.anni<=25){
                         obj.pic=anniversarydefault
                        obj.msg=" is celebrating work anniversary in "+each.anni+" days.";

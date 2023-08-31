@@ -85,9 +85,10 @@ import AddCategory from "../Form/AddCategory";
 import Profile from "../v2/Profile";
 import Announcements from "../v2/Announcements";
 import AddBudgetCity from "../Form/AddBudgetCity";
-import Wishes from "./Wishes";
+import Wishes from "../v2/Updated_Module/Wishes";
 import crossbtn from '../../Images/Celebrations/cross_wishes.svg'
 import TTMTable from "../v2/TTMTable";
+
 
 
 const Dashboard = () => {
@@ -455,11 +456,12 @@ const Dashboard = () => {
     },
     wishmodal:{
        backgroundColor:"rgba(215, 216, 254)",
-       right: "60px"
+       width: "100% !important",
+       height: "100% !important",
     },
     crossbtn:{
-      height: "34px",
-      width: "34px",
+      width: "44px",
+      height: "44px", 
       position: "fixed",
       top: "-75px",
       right: "-300px",
@@ -518,10 +520,7 @@ const Dashboard = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
-   let id= +localStorage.getItem('employeeId');
-   
-  
+  }, []); 
     useEffect(() => {
       const getuserdata = async() => {   
      await axios.get(HOST + GET_CELEBRATIONS, {
@@ -533,13 +532,14 @@ const Dashboard = () => {
         })
         .then((res) => {
                 let empdata={}
+                let id= +localStorage.getItem('employeeId')
                 empdata=res.data.res
                empdata=res.data.res.filter(each=> each.Employee_ID===id)
-                let bday=new Date(empdata.Birthday)
-                let anniversary=new Date(empdata.Joining_Date)
+                let bday=new Date(empdata[0].Birthday)
+                let anniversary=new Date(empdata[0].Joining_Date)
                 if(new Date().getMonth()===2 && new Date().getDate()===1)
                 setshowwish(true);
-                if(7===new Date().getMonth() && 21===new Date().getDate()){
+                if(bday.getMonth()===new Date().getMonth() && bday.getDate()===new Date().getDate()){
                   setwish("Birthday")
                   setshowwish(true)
                 }
@@ -581,30 +581,30 @@ const Dashboard = () => {
   const [prop, setprop] = useState(false)
   const[checkwish,setcheckwish] = useState(false)
   const currentdate= new Date()
-  //  function shouldrender(){
-  //    let returnval=false;
-  //    const lastdate=new Date(localStorage.getItem('lastshown'));
-  //    console.log(lastdate)
-  //     if(lastdate==null) {
-  //       returnval=true;
-  //     }
-  //     if(currentdate.getDate()!==lastdate.getDate() && currentdate.getMonth()!==lastdate.getMonth()){
-  //       returnval=true;
+   function shouldrender(){
+     let returnval=false;
+     const lastdate=new Date(localStorage.getItem('lastshown'));
+     console.log(lastdate)
+      if(lastdate==null) {
+        returnval=true;
+      }
+      if(currentdate.getDate()!==lastdate.getDate() && currentdate.getMonth()!==lastdate.getMonth()){
+        returnval=true;
         
-  //     }
-  //     return returnval;
-  //   }  
-  //   useEffect(()=>{
-  //      if(checkwish===false){
-  //      console.log("inside useEffect")
-  //        let stored=localStorage.getItem('lastshown')
-  //       let storeddate=new Date(stored)
-  //        if(storeddate!==null) localStorage.setItem('lastshown',currentdate)
-  //      if(storeddate.getDate()!==currentdate.getDate() && storeddate.getMonth()!==currentdate.getMonth())
-  //     localStorage.setItem('lastshown',currentdate)
-  //     setcheckwish(true);
-  //      }
-  //    },[])
+      }
+      return returnval;
+    }  
+    useEffect(()=>{
+       if(checkwish===false){
+       console.log("inside useEffect")
+         let stored=localStorage.getItem('lastshown')
+        let storeddate=new Date(stored)
+         if(storeddate!==null) localStorage.setItem('lastshown',currentdate)
+       if(storeddate.getDate()!==currentdate.getDate() && storeddate.getMonth()!==currentdate.getMonth())
+      localStorage.setItem('lastshown',currentdate)
+      setcheckwish(true);
+       }
+     },[])
 
    return (
     <>

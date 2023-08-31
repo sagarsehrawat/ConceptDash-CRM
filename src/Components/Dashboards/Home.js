@@ -26,7 +26,7 @@ import { gapi } from "gapi-script";
 import ProjectCharts from "./ProjectCharts";
 import ProposalCharts from "./ProposalCharts";
 import moment from 'moment';
-import Celebrations from "./Celebrations";
+import Celebrations from "../v2/Updated_Module/Celebrations";
 import groupicon from '../../Images/Celebrations/groupicon.svg'
 const Home = (props) => {
   const { setnav } = props;
@@ -79,9 +79,11 @@ const Home = (props) => {
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 400,
-      fontSize: "14px",
+      fontSize: "11px",
       lineHeight: "16px",
       color: "#0A0A0A",
+      textAlign: "left",
+       
     },
     contentArea: {
       width: `${viewportWidth - 280 - (isCollapsed ? 68 : 228)}px`,
@@ -708,7 +710,7 @@ console.log(sideTasks[0]);
             {handleChartsComponent()}
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", paddingRight:'20px' }}>
+        <div style={{ display: "flex", flexDirection: "column", paddingRight:'20px', width:'278px' }}>
           <div style={styles.deadlines}>
             <div style={{ display: "flex", flexDirection: "row" }}>
               <img
