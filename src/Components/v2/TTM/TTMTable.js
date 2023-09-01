@@ -3,13 +3,15 @@ import './TTMTable.css'
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from 'axios';
-import { HOST, GET_EMPLOYEENAMES } from '../../Constants/Constants';
+import { HOST, GET_EMPLOYEENAMES, GET_TTM, UPDATE_TTM } from '../../Constants/Constants';
 import LoadingSpinner from '../../Loader/Loader'
 import moment from 'moment';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Button } from 'react-bootstrap';
 
 function TTMTable() {
+  const [change, setchange] = useState(false)
   const [show, setShow] = useState(false);
   const handleCloseStage1 = () => setShow(false);
   const handleShowStage1 = () => setShow(true);
@@ -30,9 +32,9 @@ function TTMTable() {
   const handleCloseStage5 = () => setShowStage5(false);
   const handleShowStage5 = () => setShowStage5(true);
 
-  const [showStage6, setShowStage6] = useState(false);
-  const handleCloseStage6 = () => setShowStage6(false);
-  const handleShowStage6 = () => setShowStage6(true);
+  const [showStage9, setShowStage9] = useState(false);
+  const handleCloseStage9 = () => setShowStage9(false);
+  const handleShowStage9 = () => setShowStage9(true);
 
   const [showStage7, setShowStage7] = useState(false);
   const handleCloseStage7 = () => setShowStage7(false);
@@ -41,11 +43,31 @@ function TTMTable() {
   const [employees, setemployees] = useState([]);
   const [a, seta] = useState(0);
   const [isLoading, setisLoading] = useState(false);
+  const [editingData, seteditingData] = useState([])
+  const [emps, setemps] = useState([])
+  const [rate, setrate] = useState([])
   
   useEffect(() => {
     setisLoading(true);
-    const call = async () => {
+    const call = async() => {
       await axios
+        .get(HOST + GET_TTM, {
+          headers: { auth: "Rose " + localStorage.getItem("auth"), proposalId:"78" }
+        })
+        .then((res) => {
+          let data = JSON.parse(res.data.res[0].Data)
+          let empIDs = JSON.parse(res.data.res[0].Employee_Info)[0]
+          let hrRates = JSON.parse(res.data.res[0].Employee_Info)[1]
+          setemps(empIDs)
+          setrate(hrRates)
+          seteditingData(data)
+          // seteditingData(JSON.parse(res.data.res[0].Data))
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+       await axios
         .get(HOST + GET_EMPLOYEENAMES, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
@@ -55,6 +77,7 @@ function TTMTable() {
         .catch((err) => {
           console.log(err);
         });
+        
         totals()
       setisLoading(false);
     };
@@ -78,114 +101,8 @@ function TTMTable() {
       }
     }
   }
-  const [editingData, seteditingData] = useState([
-    {
-        TaskID: 1, parentID: 0,
-        TaskName: 'Project initiation',
-        StartDate: new Date('04/02/2023'),
-        EndDate: new Date('04/21/2023'),
-        subtasks: [
-            {
-                TaskID: 2, TaskName: 'Project Initiation meeting', StartDate: new Date('04/02/2019'), Duration: 0,
-                Progress: 30, resources: [1], info: 'Measure the total property area alloted for construction',
-                hrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: true, childID: 0
-            },
-            {
-                TaskID: 3, TaskName: 'Background data collection and Field review', StartDate: new Date('04/02/2019'), Duration: 4, Predecessor: '2',
-                resources: [2, 3, 5], info: 'Obtain an engineered soil test of lot where construction is planned.' +
-                    'From an engineer or company specializing in soil testing',
-                    hrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: true, childID: 1
-            },
-            { TaskID: 4, TaskName: 'Public and Stakeholder Consultation', StartDate: new Date('04/02/2019'), Duration: 0, Predecessor: '3', Progress: 30,
-            hrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: true, childID: 2 },
-            { TaskID: 5, TaskName: 'Review meeting with City/Municipality/Town/County', StartDate: new Date('04/02/2019'), Duration: 0, Predecessor: '3', Progress: 30,
-            hrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: true, childID: 3 },
-            { TaskID: 6, TaskName: 'Obtaining necessary permits', StartDate: new Date('04/02/2019'), Duration: 0, Predecessor: '3', Progress: 30,
-            hrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: false, childID: 4 },
-            { TaskID: 7, TaskName: 'Pre-design Site visit', StartDate: new Date('04/02/2019'), Duration: 0, Predecessor: '3', Progress: 30,
-            hrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: false, childID: 5 },
-            { TaskID: 8, TaskName: 'Preliminary Survey', StartDate: new Date('04/02/2019'), Duration: 0, Predecessor: '3', Progress: 30,
-            hrs: [1, 9, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: false, childID: 6 },
-            { TaskID: 4, TaskName: 'Traffic Count', StartDate: new Date('04/02/2019'), Duration: 0, Predecessor: '3', Progress: 30,
-            hrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: false, childID: 7 },
-            { TaskID: 10, TaskName: 'Identification of Problem/ Opportunity', StartDate: new Date('04/02/2019'), Duration: 0, Predecessor: '3', Progress: 30,
-            hrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: false, childID: 8 },
-        ]
-    },
-    {
-      TaskID: 11, parentID: 1,
-      TaskName: 'Environmental Assessment (Project Dependent)',
-      StartDate: new Date('04/02/2023'),
-      EndDate: new Date('04/21/2023'),
-      subtasks: [
-          { TaskID: 4, TaskName: 'Development of Alternative Solutions', StartDate: new Date('04/02/2019'), Duration: 0, Predecessor: '3', Progress: 30,
-          hrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: false, childID: 0 },
-          { TaskID: 4, TaskName: 'Development of Alternative Design concepts for preferred solution', StartDate: new Date('04/02/2019'), Duration: 0, Predecessor: '3', Progress: 30,
-          hrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: false, childID: 1 },
-          { TaskID: 4, TaskName: 'Environmental Study Report (ESR)', StartDate: new Date('04/02/2019'), Duration: 0, Predecessor: '3', Progress: 30,
-          hrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: false, childID: 2 },
-          { TaskID: 4, TaskName: 'Public Information Centre', StartDate: new Date('04/02/2019'), Duration: 0, Predecessor: '3', Progress: 30,
-          hrs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], visibility: false, childID: 3 },
-      ]
-  }
-  ])
+  
   // console.log(editingData[0].subtasks[0].visibility)
-    const [taskData, settaskData] = useState([
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-      [5, 6, 7, 8, 9, 6, 7, 8, 9, 10, 11, 12, 13],
-    ]);
-
     
 const calculateEndDate=(startDate, duration)=> {
     const endDate = new Date(startDate);
@@ -199,41 +116,35 @@ const calculateEndDate=(startDate, duration)=> {
     
     const totals = ()=>{
 
-    
-    // taskData.map((e)=>{
-    //   let updatedData = [...totalHrs];
-    //   for(let i=0;i<13;i++) {
-    //     let val = e[i]+totalHrs[i];
-    //     updatedData[i] = val;
-    //   }
-    //   settotalHrs(updatedData)
-    // })
+    {editingData.map((e)=>{
+      {e.subtasks.map((f)=>{
+        {f.visibility??f.hrs.map((g)=>{
+          console.log(1)
+        })}
+      })}
+    })}
 }
-    const [prevTasks, setprevTasks] = useState(null);
-    const [toChangei, settoChangei] = useState();
-    const [toChangeidx, settoChangeidx] = useState();
-    const [stageOneTask, setStageOneTask] = useState([]);
     const handleAddTaskStage1 = async (e, pId)=>{
       setisLoading(true);
-      // let d = {...editingData};
       let val = e.target.value;
       let prevVal = editingData[pId].subtasks[val].visibility;
-
       editingData[pId].subtasks[val].visibility = !prevVal;
-      // seteditingData(d);
       handleCloseStage1()
+      handleCloseStage2()
+      handleCloseStage3()
+      handleCloseStage4()
+      handleCloseStage5()
+      handleCloseStage7()
+      handleCloseStage9()
+      setchange(true);
       setisLoading(false);
-    }
-    const call = ()=>{
-      setTimeout(() => {
-        console.log(1);
-      }, 3000);
     }
     const handleHRchange = (a, b, c, d) =>{
         let value = d.target.value;
         let h = [...editingData]
-        // handleChangeTotals(value, h[a][b], b);
+        handleChangeTotals(value, h[a].subtasks[b].hrs[c], c);
         h[a].subtasks[b].hrs[c]=value;
+        setchange(true)
         seteditingData(h);
     }
     const handleChangeTotals=(newvalue, oldvalue, col)=>{
@@ -246,11 +157,19 @@ const calculateEndDate=(startDate, duration)=> {
     }
     const handleChangeEmployee = (a, b) =>{
       let value = a.target.value;
-      let h = {...taskData}
-      h[51][b]=value;
-      settaskData(h);
+      let h = [...emps]
+      h[b]=parseInt(value);
+      setchange(true)
+      setemps(h);
   }
-    let span = taskData[0].length;
+  const handleChangeRate = (a, b) =>{
+    let value = a.target.value;
+    let h = [...rate]
+    h[b]=parseInt(value);
+    setchange(true)
+    setrate(h);
+}
+    let span = 13;
     const calcTotal = () =>{
       let totalSum = 0;
       for(let i=0;i<totalHrs.length;i++) {
@@ -263,12 +182,68 @@ const calculateEndDate=(startDate, duration)=> {
       const formattedDate = moment(date)
       return formattedDate.format('D MMM, YYYY')
   }
+  const getDurationInDays=(startDate, endDate)=> {
+    const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const durationInMilliseconds = Math.abs(end - start);
+    const durationInDays = Math.round(durationInMilliseconds / oneDay);
+    return durationInDays;
+  }
+  const handleDatesChange = (e, time, p, c)=>{
+    let h = [...editingData]
+    if(time==="start") {
+      h[p].subtasks[c].StartDate = e;
+    } else if(time==="end") {
+      const endDate = new Date(e);
+      let val = getDurationInDays(h[p].subtasks[c].StartDate, endDate);
+      h[p].subtasks[c].Duration = val;
+    }
+    setchange(true)
+    seteditingData(h)
+  }
 
+  const functionArray = [
+    handleShowStage1,
+    handleShowStage2,
+    handleShowStage3,
+    handleShowStage4,
+    handleShowStage5,
+    handleShowStage7,
+    handleShowStage9,
+  ];
+  const handleSubmit = async(e) =>{
+    e.preventDefault();
+        setisLoading(true);
+        await axios
+            .post(
+                HOST + UPDATE_TTM,
+                {
+                    data: JSON.stringify(editingData),
+                    employeeInfo: JSON.stringify([emps, rate])
+                },
+                { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+            )
+            .then((res) => {
+                console.log(res)
+                if(res.data.success) {
+                    // setsubmitLoading(false)
+                    seta(a+1);
+                }
+                // seteditProfile(false);
+                setisLoading(false)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+  }
   return (
     isLoading?<LoadingSpinner/>:
     <div>
-     <div className='pageHeader'>
-      TTM : Name of the Proposal/Project   
+     <div className='d-flex flex-row justify-content-between'>
+      <div className='pageHeader'>TTM : Name of the Proposal/Project</div>
+      {change?<Button variant='success' onClick={handleSubmit} style={{marginRight:'2vw', height:'8vh'}}>Save Changes</Button>:<></>}
      </div> 
 
       {/* Table Header */}
@@ -314,7 +289,7 @@ const calculateEndDate=(startDate, duration)=> {
           </tr>
           <tr className='tr'>
             <td style={{zIndex:'6'}} className='normals td'>People</td>
-            {taskData[51].map((e, idx)=>{
+            {emps.map((e, idx)=>{
               return (
                 <td className='specials td'>
                   <Form.Group>
@@ -342,19 +317,18 @@ const calculateEndDate=(startDate, duration)=> {
           </tr>
           <tr>
             <td className='normals td'>Rate Per Hour</td>
-            <td className='specials td'>$ 0.00</td>
-            <td className='specials td'>$ 0.00</td>
-            <td className='specials td'>$ 0.00</td>
-            <td className='specials td'>$ 0.00</td>
-            <td className='specials td'>$ 0.00</td>
-            <td className='specials td'>$ 0.00</td>
-            <td className='specials td'>$ 0.00</td>
-            <td className='specials td'>$ 0.00</td>
-            <td className='specials td'>$ 0.00</td>
-            <td className='specials td'>$ 0.00</td>
-            <td className='specials td'>$ 0.00</td>
-            <td className='specials td'>$ 0.00</td>
-            <td className='specials td'>$ 0.00</td>
+            {rate.map((e, idx)=>{
+              return(
+                <td className='specials td'>
+                  <input
+                      className='no-focus' placeholder='$ 0'
+                      style={style.input}
+                      value={e?e:''}
+                      onChange={(eve)=>handleChangeRate(eve, idx)}
+                  />
+                </td>
+              )
+            })}
           </tr>
           {editingData?editingData.map((e)=>{
             return(
@@ -381,8 +355,8 @@ const calculateEndDate=(startDate, duration)=> {
                     {task.visibility?
                     <tr>
                       <td style={{paddingLeft:'32px'}} className='td'>{task.TaskName}</td>
-                      <td style={{paddingLeft:'12px', width:'fit-content'}} className='td no-focus'><DatePicker selected={task.StartDate} /></td>
-                      <td style={{paddingLeft:'12px', width:'fit-content'}} className='td no-focus'><DatePicker selected={calculateEndDate(task.StartDate, task.Duration)} /></td>
+                      <td style={{paddingLeft:'12px', width:'fit-content'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "start", e.parentID, task.childID)} selected={new Date(task.StartDate)} /></td>
+                      <td style={{paddingLeft:'12px', width:'fit-content'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "end", e.parentID, task.childID)} selected={calculateEndDate(new Date(task.StartDate), task.Duration)} /></td>
                       <td style={{paddingLeft:'32px'}} className='td'>{task.Duration===0?1:task.Duration}</td>
                       {task.hrs.map((h, idx)=>{
                         return (
@@ -396,22 +370,10 @@ const calculateEndDate=(startDate, duration)=> {
                           </td>
                         )
                       })}
-                      {/* {hrsArray.map((e, idx)=>{
-                        return (
-                          <td  > 
-                            <input
-                              className='no-focus' placeholder='0'
-                              style={style.input}
-                              value={e?e:''}
-                              onChange={(eve)=>handleHRchange(0, idx, eve)}
-                            />
-                      </td>
-                        )
-                      })} */}
                     </tr>:<></>}</>
                   )
                 })}
-                <tr><td colSpan={span+1} bgcolor='#FFF'
+                {e.parentID===5||e.parentID===7?<></>:<tr><td colSpan={span+1} bgcolor='#FFF'
                 style={{
                   height: '38px',
                   textAlign:'left',
@@ -423,13 +385,24 @@ const calculateEndDate=(startDate, duration)=> {
                   lineHeight: '20px',
                   backgroundColor: '#FFF',
                 }}>
-                  <p className='empty' onClick={handleShowStage1} style={{
+                  <p className='empty' onClick={() => functionArray[e.parentID]()} style={{
                     paddingLeft:'24px', cursor:'pointer'
                   }}>Add Task +</p></td>
-                </tr>
+                </tr>}
               </>
             )
           }):<></>}
+          {/* <tr className='tr'>
+            <td className='td'>Totals</td>
+            <td className='td'>20</td>
+            <td className='td'>20</td>
+            <td className='td'>20</td>
+            {totalHrs.map((e)=>{
+              return(
+                <td className='td' style={{zIndex:'6'}}>{e}</td>
+              )
+            })}
+          </tr> */}
         </tbody>
       </table>
       </div>
@@ -454,12 +427,12 @@ const calculateEndDate=(startDate, duration)=> {
           <Modal.Title>Select Task (Environmental Assessment (Project Dependent))</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Select onChange={handleAddTaskStage1}>
+          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 1)}}>
             <option>Select Task</option>
-            {stageOneTask.includes('6')?<></>:<option value='6'>Development of Alternative Solutions</option>}
-            {stageOneTask.includes('7')?<></>:<option value='7'>Development of Alternative Design concepts for preferred solution</option>}
-            {stageOneTask.includes('8')?<></>:<option value='8'>Environmental Study Report (ESR)</option>}
-            {stageOneTask.includes('9')?<></>:<option value='9'>Public Information Centre</option>}
+            <option value='0'>Development of Alternative Solutions</option>
+            <option value='1'>Development of Alternative Design concepts for preferred solution</option>
+            <option value='2'>Environmental Study Report (ESR)</option>
+            <option value='3'>Public Information Centre</option>
           </Form.Select>
         </Modal.Body>
       </Modal>
@@ -469,15 +442,15 @@ const calculateEndDate=(startDate, duration)=> {
           <Modal.Title>Select Task (Site Investigations (Project Dependent))</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Select onChange={handleAddTaskStage1}>
+          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 2)}}>
             <option>Select Task</option>
-            {stageOneTask.includes('10')?<></>:<option value='10'>Topographic Survey</option>}
-            {stageOneTask.includes('11')?<></>:<option value='11'>Legal Survey</option>}
-            {stageOneTask.includes('12')?<></>:<option value='12'>Geotechnical Investigation</option>}
-            {stageOneTask.includes('13')?<></>:<option value='13'>SUE Investigation</option>}
-            {stageOneTask.includes('14')?<></>:<option value='14'>CCTV Inspection</option>}
-            {stageOneTask.includes('15')?<></>:<option value='15'>Hydrogeological Investigation</option>}
-            {stageOneTask.includes('16')?<></>:<option value='16'>Environmental Assessment</option>}
+            <option value='0'>Topographic Survey</option>
+            <option value='1'>Legal Survey</option>
+            <option value='2'>Geotechnical Investigation</option>
+            <option value='3'>SUE Investigation</option>
+            <option value='4'>CCTV Inspection</option>
+            <option value='5'>Hydrogeological Investigation</option>
+            <option value='6'>Environmental Assessment</option>
           </Form.Select>
         </Modal.Body>
       </Modal>
@@ -487,10 +460,10 @@ const calculateEndDate=(startDate, duration)=> {
           <Modal.Title>Select Task (Preliminary Design )</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Select onChange={handleAddTaskStage1}>
+          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 3)}}>
             <option>Select Task</option>
-            {stageOneTask.includes('17')?<></>:<option value='17'>Coordination meeting with relevant authorities</option>}
-            {stageOneTask.includes('18')?<></>:<option value='18'>Public Information Centre</option>}
+            <option value='4'>Coordination meeting with relevant authorities</option>
+            <option value='5'>Public Information Centre</option>
           </Form.Select>
         </Modal.Body>
       </Modal>
@@ -500,38 +473,38 @@ const calculateEndDate=(startDate, duration)=> {
           <Modal.Title>Select Task (Detailed Design (60%))</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Select onChange={handleAddTaskStage1}>
+          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 4)}}>
             <option>Select Task</option>
-            {stageOneTask.includes('19')?<></>:<option value='19'>Streetlight Design</option>}
-            {stageOneTask.includes('20')?<></>:<option value='20'>Streetscaaping and Landscaping</option>}
-            {stageOneTask.includes('21')?<></>:<option value='21'>Property Acquisition Plan</option>}
-            {stageOneTask.includes('22')?<></>:<option value='22'>Soil Management Plan</option>}
-            {stageOneTask.includes('23')?<></>:<option value='23'>Traffic Control Plan and Construction Staging</option>}
-          </Form.Select>
-        </Modal.Body>
-      </Modal>
-
-      <Modal show={showStage6} onHide={handleCloseStage6}>
-        <Modal.Header closeButton>
-          <Modal.Title>Select Task (Final Design)</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Select onChange={handleAddTaskStage1}>
-            <option>Select Task</option>
-            {stageOneTask.includes('24')?<></>:<option value='24'>Draft Quantitiy Take-off and Cost Estimation</option>}
+            <option value='2'>Streetlight Design</option>
+            <option value='3'>Streetscaaping and Landscaping</option>
+            <option value='4'>Property Acquisition Plan</option>
+            <option value='5'>Soil Management Plan</option>
+            <option value='6'>Traffic Control Plan and Construction Staging</option>
           </Form.Select>
         </Modal.Body>
       </Modal>
 
       <Modal show={showStage7} onHide={handleCloseStage7}>
         <Modal.Header closeButton>
+          <Modal.Title>Select Task (Final Design)</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 6)}}>
+            <option>Select Task</option>
+            <option value='2'>Draft Quantitiy Take-off and Cost Estimation</option>
+          </Form.Select>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={showStage9} onHide={handleCloseStage9}>
+        <Modal.Header closeButton>
           <Modal.Title>Select Task (Contract Administration and Inscpection Services)</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Select onChange={handleAddTaskStage1}>
+          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 8)}}>
             <option>Select Task</option>
-            {stageOneTask.includes('25')?<></>:<option value='25'>Completion and Warranty site inspections</option>}
-            {stageOneTask.includes('26')?<></>:<option value='26'>Maintenance Period Support</option>}
+            <option value='4'>Completion and Warranty site inspections</option>
+            <option value='5'>Maintenance Period Support</option>
           </Form.Select>
         </Modal.Body>
       </Modal>

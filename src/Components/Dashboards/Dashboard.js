@@ -86,6 +86,8 @@ import Profile from "../v2/Profile";
 import Announcements from "../v2/Announcements";
 import AddBudgetCity from "../Form/AddBudgetCity";
 import TTMTable from "../v2/TTM/TTMTable";
+import Timeline from "../v2/TTM/Timeline";
+import TTMMain from "../v2/TTM/TTMMain";
 
 
 const Dashboard = () => {
@@ -518,7 +520,7 @@ const Dashboard = () => {
     if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
     if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
-    if (nav === 18) return <TTMTable  isCollapsed={isCollapsed}/>
+    if (nav === 18) return <TTMMain isCollapsed={isCollapsed}/>
   };
 
   const [show, setShow] = useState(false);
