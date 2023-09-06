@@ -18,6 +18,7 @@ import AddProject from '../Form/AddProject'
 import UpdateProjectForm from '../Form/UpdateProjectForm'
 import ProjectForm from '../Form/ProjectForm'
 import open from '../../Images/openinDrive.svg'
+import SearchBar from '../../components/ui/SearchBar/SearchBar'
 
 const Project = (props) => {
     const { isCollapsed } = props
@@ -957,14 +958,12 @@ const Project = (props) => {
 
             {/* Filters and Other Dropdowns */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
-                <input
-                    style={styles.searchInputContainer}
-                    type="text"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    placeholder="Search"
+                <SearchBar 
+                    placeholder={'Projects'}
+                    searchFunc={[value, setValue]} 
+                    style={{'margin-right': '12px'}}
+                    apiFunc={[apiCall, setCall]}
                 />
-                <button style={styles.searchButton} onClick={(e) => setCall(apiCall + 1)}><FontAwesomeIcon icon={faMagnifyingGlass} color="#000000" /></button>
                 <button style={{ ...styles.filterButton, backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }} onClick={openFilterModal}><img src={filterIcon} alt="Filter Icon" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>{filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}</button>
                 <Modal
                     show={filterModal}

@@ -23,6 +23,7 @@ import UpdateCity1 from '../v2-forms/UpdateCity1'
 import UpdateCity2 from '../v2-forms/UpdateCity2'
 import tIcon from '../../Images/taskIcon.svg'
 import cross from '../../Images/cross.svg'
+import SearchBar from '../../components/ui/SearchBar/SearchBar'
 
 const BudgetCities = (props) => {
     const { isCollapsed } = props
@@ -654,13 +655,10 @@ const BudgetCities = (props) => {
 
                     {/* Filter and Other Buttons */}
                     <div className='d-flex flex-row justify-content-between' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px", marginRight:'32px' }}>
-                        <input
-                            style={{ ...styles.searchInputContainer, borderRadius: "6px" }}
-                            type="text"
-                            value={value}
-                            onChange={(e) => setValue(e.target.value)}
-                            placeholder="Search"
-                        />
+                        <SearchBar 
+                        
+                        placeholder={'Budgets'}
+                        searchFunc={[value, setValue]}/>
                     </div>
 
                     {/* Table */}
