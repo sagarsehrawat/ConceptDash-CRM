@@ -23,6 +23,7 @@ import UpdateCity1 from '../v2-forms/UpdateCity1'
 import UpdateCity2 from '../v2-forms/UpdateCity2'
 import tIcon from '../../Images/taskIcon.svg'
 import cross from '../../Images/cross.svg'
+import SearchBar from '../../components/ui/SearchBar/SearchBar'
 
 const BudgetCities = (props) => {
     const { isCollapsed } = props
@@ -654,13 +655,10 @@ const BudgetCities = (props) => {
 
                     {/* Filter and Other Buttons */}
                     <div className='d-flex flex-row justify-content-between' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px", marginRight:'32px' }}>
-                        <input
-                            style={{ ...styles.searchInputContainer, borderRadius: "6px" }}
-                            type="text"
-                            value={value}
-                            onChange={(e) => setValue(e.target.value)}
-                            placeholder="Search"
-                        />
+                        <SearchBar 
+                        
+                        placeholder={'Cities'}
+                        searchFunc={[value, setValue]}/>
                     </div>
 
                     {/* Table */}
@@ -814,14 +812,12 @@ const BudgetCities = (props) => {
                     {/* Filter and Other Buttons */}
                     <div className='d-flex flex-row justify-content-between' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px", marginRight: "32px" }}>
                         <div className='d-flex flex-row justify-content-start'>
-                            <input
-                                style={{ ...styles.searchInputContainer }}
-                                type="text"
-                                value={value2}
-                                onChange={(e) => setValue2(e.target.value)}
-                                placeholder="Search"
+                        <SearchBar 
+                                placeholder={'Budgets'}
+                                searchFunc={[value2, setValue2]} 
+                                style={{'margin-right': '12px'}}
+                                apiFunc={[apiCall2, setCall2]}
                             />
-                            <Button style={styles.searchButton} onClick={(e) => setCall2(apiCall2 + 1)}><FontAwesomeIcon icon={faMagnifyingGlass} color="#000000" /></Button>
                             <Button style={{ ...styles.filterButton, backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }} onClick={openFilterModal}><img src={filterIcon} alt="Filter Icon" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>{filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}</Button>
                             <Modal
                                 show={filterModal}
