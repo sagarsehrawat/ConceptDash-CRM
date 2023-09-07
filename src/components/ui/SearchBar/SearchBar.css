@@ -1,11 +1,18 @@
+.searchbar-container{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .searchbar{
     display: flex;
-    width: 224px;
-    padding: 6px 12px 6px 12px;
+    width: 188px;
+    padding: 6px 12px 6px 0px;
     align-items: center;
     gap: 4px;
-    border-radius: 10px;
+    border-radius: 0px 10px 10px 0px;
     border: 1px solid #EBEDF8;
+    border-left: 0px;
     background: #FFF;
     color: #1C1B20;
     font-family: Roboto;
@@ -18,4 +25,18 @@
 .searchbar:focus{
     border: 0.6px solid #8361FE;
     background: #FFF;
+    border-left: 0px;
 }
+
+.searchbar-icon{
+    background: #FFF;
+    padding: 8px 4px 8px 12px;
+    border-radius: 10px 0px 0px 10px;
+    border: 1px solid #EBEDF8;
+    border-right: 0px;
+}
+
+.searchbar-icon-focus {
+    border: 0.6px solid #8361FE;
+    border-right: 0px;
+  }
