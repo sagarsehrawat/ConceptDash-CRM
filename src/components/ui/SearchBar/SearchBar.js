@@ -4,8 +4,14 @@ import "./SearchBar.css";
 import MagnifyingGlass from '../../../assets/icons/Magnifying_Glass.svg'
 
 const SearchBar = (props) => {
-  const { placeholder, searchFunc, apiFunc, style } = props;
-  const [search, setSearch] = searchFunc;
+  const { placeholder, searchFunc, apiFunc, style, variant } = props;
+  let [search, setSearch] = searchFunc;
+  const [s, setS] = useState('')
+  
+  if(search===null){
+    search = s;
+    setSearch = setS;
+  }
   const [api, setApi] = apiFunc;
 
   const [isFocused, setIsFocused] = useState(false);
@@ -49,15 +55,28 @@ const SearchBar = (props) => {
 };
 
 SearchBar.propTypes = {
+   /**
+   * Placeholder for the SearchBar
+   */
   placeholder: PropTypes.string,
+   /**
+   * useState variable for the accessing the SearchBar Value
+   */
   searchFunc: PropTypes.array.isRequired,
+   /**
+   * useState Variable for Backend Searching
+   */
   apiFunc: PropTypes.array,
+   /**
+   * Any Custom Styles for SearchBar
+   */
   style: PropTypes.object,
 };
 
 SearchBar.defaultProps = {
   placeholder: "",
   apiFunc: [null, null],
+  searchFunc: [null, null],
   style: {},
 };
 

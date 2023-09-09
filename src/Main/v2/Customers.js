@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import TableScrollbar from "react-table-scrollbar";
 import {
   DELETE_RFP,
   GET_CITIES,
