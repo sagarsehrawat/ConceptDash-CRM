@@ -5,16 +5,16 @@ import {
     Route
 } from "react-router-dom";
 import ProtectedRoutes from './ProtectedRoutes';
-import Login from '../Components/Login/Login'
-import Dashboard from '../Components/Dashboards/Dashboard';
-import NewUser from '../Components/Login/NewUser';
-import ForgotPassword from '../Components/Login/ForgotPassword';
-import EnterOtp from '../Components/Login/EnterOtp';
-import ResetPassword from '../Components/Login/ResetPassword';
-import PasswordChanged from '../Components/Login/PasswordChanged';
-import LinkExpired from '../Components/Login/LinkExpired';
-import TokenRegenerated from '../Components/Login/TokenRegenerated';
-import Error404 from '../Components/Login/Error404';
+import Login from '../Main/Login/Login'
+import Dashboard from '../Main/Dashboards/Dashboard';
+import NewUser from '../Main/Login/NewUser';
+import ForgotPassword from '../Main/Login/ForgotPassword';
+import EnterOtp from '../Main/Login/EnterOtp';
+import ResetPassword from '../Main/Login/ResetPassword';
+import PasswordChanged from '../Main/Login/PasswordChanged';
+import LinkExpired from '../Main/Login/LinkExpired';
+import TokenRegenerated from '../Main/Login/TokenRegenerated';
+import Error404 from '../Main/Login/Error404';
 
 const AllRoutes = () => {
     return (

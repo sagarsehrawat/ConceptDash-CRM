@@ -26,7 +26,6 @@ function Timeline(props) {
                 setemps(empRates)
                 seteditingData(data)
                 setvisible(visibleColumns)
-              // seteditingData(JSON.parse(res.data.res[0].Data))
             })
             .catch((err) => {
               console.log(err);
@@ -36,9 +35,6 @@ function Timeline(props) {
         };
         call();
       }, []);
-      useEffect(() => {
-          console.log(editingData)
-    }, [a])
     
 
     const handleSubmit = async(e) =>{
