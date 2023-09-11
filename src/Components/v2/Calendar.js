@@ -12,7 +12,6 @@ import moment from 'moment'
 import { gapi } from 'gapi-script'
 import axios from 'axios'
 import { ADD_TIMESHEET, GET_EMPLOYEENAMES, HOST , PRIMARY_COLOR} from '../Constants/Constants'
-import Select from 'react-virtualized-select';
 import ReactSelect from 'react-select'
 
 const Calendar = () => {

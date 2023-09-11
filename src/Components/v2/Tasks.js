@@ -321,8 +321,6 @@ function Tasks(props) {
       height: "44px",
       float: "center",
       textAlign: "left",
-      // borderBottom: "1px solid #EBE9F1",
-      // borderRight: "1px solid #EBE9F1",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 400,

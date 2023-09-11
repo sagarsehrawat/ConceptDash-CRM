@@ -1,10 +1,5 @@
-import { faCloudArrowDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Button, Dropdown, Form } from "react-bootstrap";
-import { primaryColour } from "../Constants/styles";
-import pinnedActive from "../../Images/Pin icon_Active.svg";
-import pinnedInactive from "../../Images/Pin icon.svg";
+import { Form } from "react-bootstrap";
 import cross from "../../Images/cross.svg";
 import BudgetCharts from "./BudgetCharts";
 import axios from "axios";
@@ -622,14 +617,6 @@ console.log(sideTasks[0]);
               </option>
             </Form.Select>
             <div className="d-flex flex-row">
-              {/* <Button style={styles.exportButton}>
-                <FontAwesomeIcon
-                  icon={faCloudArrowDown}
-                  style={styles.exportButtonIcon}
-                  color={primaryColour}
-                />
-                <p style={styles.exportButtonText}>Export</p>
-              </Button> */}
               {chartComponent === "1" || chartComponent === "3" || chartComponent === "2" ? (
                 <Form.Select
                   style={styles.headerDropdown3}

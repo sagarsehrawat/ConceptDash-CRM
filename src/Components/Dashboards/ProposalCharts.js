@@ -694,59 +694,6 @@ function ProposalCharts(props) {
         
       </div>
       <div className="d-flex flex-row justify-content-evenly">
-        {/* <div style={styles.largeContainer}>
-          <div
-          className="d-flex flex-row justify-content-between"
-            style={{
-              marginLeft: "16px",
-              marginRight: "16px",
-              display: "flex",
-              flexDirection: "row",
-            }}
-          >
-            <div style={styles.largeContainerHeading}>Hours Worked</div>
-            
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "end",
-                float: "right",
-                width: "20px",
-                marginTop: "16px",
-              }}
-            >
-              <img src={pinnedActive} alt="Dashboard Icon" />
-            </div>
-          </div>
-          {isLoadingChart1 ? (
-            <LoadingSpinner />
-          ) : (
-            <>
-                <div style={{ display: "flex", flexDirection: "row" }}>
-                  <div
-                    style={{
-                      marginLeft: "50px",
-                      width: "65%",
-                      marginTop: "30px",
-                    }}
-                  >
-                    <Bar
-                      options={projectOverViewOptions}
-                      data={data}
-                      height={155}
-                    />
-                  </div>
-                  <div>
-                    <div style={styles.projectName}>General Proposals</div>
-                    <div style={styles.hoursWorkedHeading}>
-                      Total Worked Hours
-                    </div>
-                    <div style={styles.hoursWorked}>{sum} Hrs</div>
-                  </div>
-                </div>
-            </>
-          )}
-        </div> */}
       </div>
       <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "16px", marginRight: "16px" }}>
 

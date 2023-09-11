@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import TableScrollbar from 'react-table-scrollbar';
 import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_GOOGLE_DRIVE_URL, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST, PRIMARY_COLOR } from '../Constants/Constants';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

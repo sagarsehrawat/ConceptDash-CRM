@@ -1,49 +1,25 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import TableScrollbar from "react-table-scrollbar";
 import {
-  DELETE_RFP,
-  GET_CITIES,
   GET_DEPARTMENTS,
-  GET_EMPLOYEENAMES,
-  GET_EMPLOYEE_COUNT,
   GET_JOB_TITLES,
   GET_PAGE_EMPLOYEES,
-  GET_PAGE_RFPS,
-  GET_PROJECT_CATEGORIES,
-  GET_RFP_COUNT,
   HOST,
   PRIMARY_COLOR,
 } from "../Constants/Constants";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowDown,
-  faArrowsUpDown,
-  faArrowUp,
   faChevronDown,
-  faChevronLeft,
-  faChevronRight,
-  faCross,
-  faDownload,
-  faEdit,
-  faFilter,
   faMagnifyingGlass,
-  faPlus,
-  faTrash,
   faX,
-  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button, Form, Modal } from "react-bootstrap";
 import projectForm from '../../Images/projectForm.svg'
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import LoadingSpinner from "../Loader/Loader";
-import RFPform from "../Form/RFPform";
 import AuthenticationContext from "../../Context/AuthContext";
-import UpdateRFP from "../Form/UpdateRFP";
-import { RadioButtonComponent } from "@syncfusion/ej2-react-buttons";
-import ellipse from "../../Images/Ellipse.png";
 import dp from "../../Images/noprofile.jpeg";
 import emailIcon from "../../Images/email.svg";
 import phoneIcon from "../../Images/phone.svg";
@@ -63,7 +39,6 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import filterIcon from "../../Images/Filter.svg";
-import EmployeeForm from '../Form/EmployeeForm'
 import UpdateEmployeeForm from '../Form/UpdateEmployeeForm'
 import PreHireEmployeeForm from "../Form/PreHireEmployeeForm";
 
@@ -1221,7 +1196,6 @@ function Employee(props) {
               </div>
             </div>
             <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
-                            {/* <Button style={styles.filterButton2} onClick={(e) => setfilter2('Advanced')}>Go to Advanced Filters</Button> */}
                             <Button style={styles.filterButton3} onClick={(e) => { setCall(apiCall + 1); closeFilterModal(); }}>Filter</Button>
                         </div>
           </div>
@@ -1361,7 +1335,6 @@ function Employee(props) {
                                 >
                                   <div
                                     style={styles.modalPart1}
-                                    // class="row justify-content-evenly"
                                   >
                                     <div
                                       style={{
@@ -1510,17 +1483,6 @@ function Employee(props) {
                                           label="Personal Details"
                                           value="2"
                                         />
-                                        {/* <Tab
-                                          style={{
-                                            color:
-                                              value1 == 3
-                                                ? PRIMARY_COLOR
-                                                : "#70757A",
-                                          }}
-                                          sx={{ fontSize: 10 }}
-                                          label="Task List"
-                                          value="3"
-                                        /> */}
                                       </TabList>
                                     </Box>
                                     <TabPanel value="1">
@@ -2698,12 +2660,6 @@ function Employee(props) {
                               className="d-flex flex-row align-items-center"
                               style={{ gap: "20px" }}
                             >
-                              {/* <Form.Check
-                              inline
-                              type="checkbox"
-                              checked={selectedEmployees.includes(e.Employee_ID)}
-                              onClick={(eve) => { console.log(e.Employee_ID); if (eve.target.checked) { setselectedEmployees(prev => [...prev, e.Employee_ID]) } else { setselectedEmployees(prev => prev.filter(ele => ele !== e.Employee_ID)) } }}
-                            /> */}
                               <div
                                 className="d-flex flex-row justify-content-center align-items-center"
                                 style={{ gap: "8px" }}
@@ -2810,13 +2766,6 @@ function Employee(props) {
                               className="d-flex flex-row align-items-center"
                               style={{ gap: "20px" }}
                             >
-                              {/* <Form.Check
-                            inline
-                            type="checkbox"
-                            checked={selectedEmployees.includes(e.Employee_ID)}
-                            readOnly={true}
-                            onClick={(eve) => { if (eve.target.checked) { setselectedEmployees(prev => [...prev, e.Employee_ID]) } else { setselectedEmployees(prev => prev.filter(ele => ele !== e.Employee_ID)) } }}
-                          /> */}
                               <div
                                 className="d-flex flex-row justify-content-center align-items-center"
                                 style={{ gap: "8px" }}

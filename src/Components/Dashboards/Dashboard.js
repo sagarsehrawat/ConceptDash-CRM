@@ -11,32 +11,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Dropdown, Modal, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import {  Modal, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import AuthenticationContext from "../../Context/AuthContext";
 import tIcon from '../../Images/taskIcon.svg'
-import { Sidebar, Menu, MenuItem, useProSidebar, SubMenu } from "react-pro-sidebar";
-import { primaryColour } from "../Constants/styles";
+import { Sidebar, useProSidebar } from "react-pro-sidebar";
 import dashboardActive from "../../Images/Dashboard Active state.svg";
 import dashboardInactive from "../../Images/Dashboard icon inactive.svg";
-import pinnedActive from "../../Images/Pin icon_Active.svg";
-import pinnedInactive from "../../Images/Pin icon.svg";
 import tasksActive from "../../Images/My tasks_Active.svg";
 import tasksInactive from "../../Images/My tasks.svg";
 import budgetsActive from "../../Images/Budget_Active.svg";
 import budgetsInactive from "../../Images/Budget.svg";
 import calendarActive from "../../Images/Calendar_Active.svg";
 import calendarInactive from "../../Images/Calendar.svg";
-import celebrationActive from "../../Images/Celebrations_Active.svg";
-import celebrationInactive from "../../Images/Celebrations.svg";
 import companiesActive from "../../Images/Companies_Active.svg";
 import companiesInactive from "../../Images/Companies.svg";
 import contactsActive from "../../Images/Contacts_Active.svg";
 import contactsInactive from "../../Images/Contacts.svg";
 import employeeActive from "../../Images/Employee_Active.svg";
 import employeeInactive from "../../Images/Employee.svg";
-import expenseActive from "../../Images/Expense_Active.svg";
-import expenseInactive from "../../Images/Expense.svg";
 import projectsActive from "../../Images/Projects_Active.svg";
 import projectsInactive from "../../Images/Projects.svg";
 import proposalsActive from "../../Images/Proposals_Active.svg";
@@ -44,26 +37,23 @@ import proposalsInactive from "../../Images/Proposals.svg";
 import rfpActive from "../../Images/RFP_Active.svg";
 import rfpInactive from "../../Images/RFP.svg";
 import T from "../../Images/T.svg";
-import ellipse from "../../Images/Ellipse.png";
 import dp from "../../Images/noprofile.jpeg";
 import askforce from "../../Images/ASKFORCE.svg";
 import account from "../../Images/accountSettings.svg";
 import team from "../../Images/teamManagement.svg";
 import adminSettings from "../../Images/adminSettings.svg";
-// import { faArrowDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faEdit, faMagnifyingGlass, faPlug, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons'
 import logout from "../../Images/logout.svg";
-import ExpenseUpdate from "../Update/ExpenseUpdate";
-import CompanyUpdate from "../Update/CompanyUpdate";
+// import ExpenseUpdate from "../Update/ExpenseUpdate";
+// import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
 import RFP from "../v2/RFP";
 import TestDemo from "../v2/Calendar.js";
 import Proposal from "../v2/Proposal";
 import Employee from "../v2/Employee";
-import settingsIcon from '../../Images/Settings icon.svg'
 import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../v2/Customers";
 import Project from "../v2/Project";
-import ProjectDetail from "../Update/ProjectDetail";
+// import ProjectDetail from "../Update/ProjectDetail";
 import BudgetCities from "../v2/BudgetCities";
 import Tasks from "../v2/Tasks";
 import AddTask from "../Form/AddTask";
@@ -85,8 +75,6 @@ import AddCategory from "../Form/AddCategory";
 import Profile from "../v2/Profile";
 import Announcements from "../v2/Announcements";
 import AddBudgetCity from "../Form/AddBudgetCity";
-import TTMTable from "../v2/TTM/TTMTable";
-import Timeline from "../v2/TTM/Timeline";
 import TTMMain from "../v2/TTM/TTMMain";
 
 
@@ -513,11 +501,11 @@ const Dashboard = () => {
     if (nav === 6) return <Project isCollapsed={isCollapsed} />
     if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
     if (nav === 8) return <TestDemo />;
-    if (nav === 9) return <ExpenseUpdate />;
-    if (nav === 10) return <CompanyUpdate />;
+    // if (nav === 9) return <ExpenseUpdate />;
+    // if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <Customers isCollapsed={isCollapsed} />;
     if (nav === 12) return <Privileges />;
-    if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
+    // if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
     if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
     if (nav === 18) return <TTMMain isCollapsed={isCollapsed}/>
@@ -607,40 +595,7 @@ const Dashboard = () => {
               />
               Add New Budget City
             </NavDropdown.Item>
-            {/* <NavDropdown.Item classname='nav-dropdown' style={{ ...mystyles.plusDropdownItem, backgroundColor: plusDropdown === 5 ? "rgba(101, 25, 225, 0.1)" : "#FFFFFF" }} onMouseEnter={(e) => setplusDropdown(5)} onMouseLeave={(e) => setplusDropdown(null)}>
-              <img
-                src={plusDropdown === 5 ? contactsInactive : contactsActive}
-                alt="Dashboard Icon"
-                style={mystyles.plusDropdownItemIcon}
-              />
-              Add New Contact
-            </NavDropdown.Item> */}
           </NavDropdown>
-          {/* <NavDropdown
-            title={
-              <img src={settingsIcon} alt="Settings Icon" />
-            }
-            id="collasible-nav-dropdown"
-            align="end"
-          >
-            {privileges.includes('View Employee Privileges') ? <><NavDropdown.Item
-              onClick={(e) => {
-                e.preventDefault();
-                setnav(12);
-              }}
-            >
-              Privileges
-            </NavDropdown.Item>
-              <NavDropdown.Divider /> </> : <></>}
-            <NavDropdown.Item 
-              onClick={() => {
-                navigate("/");
-                localStorage.clear();
-              }}
-            >
-              Log Out
-            </NavDropdown.Item>
-          </NavDropdown> */}
           <Nav.Link className="" onClick={handleShowNotif} style={{position:'relative', display:'inline-block'}}>
             <img src={notificationIcon} alt="Notification Icon" />
             {notifCounts!==0?<span style={{backgroundColor:'#F67052', color:'white', borderRadius:'50px', width:'16px',heigth:'16px', fontSize:'11px', textAlign:'center', position:'absolute', top:'-3px', right:'1px'}}>{notifCounts}</span>:<></>}
@@ -738,27 +693,6 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-                {/* <div
-                  style={
-                    nav === 1
-                      ? mystyles.sidebarMenuItemActive.collapsed
-                      : mystyles.sidebarMenuItem
-                  }
-                  onClick={(e) => setnav(1)}
-                >
-                  <div
-                    style={
-                      nav === 1
-                        ? mystyles.sidebarMenuItemIconActive.collapsed
-                        : mystyles.sidebarMenuItemIcon.collapsed
-                    }
-                  >
-                    <img
-                      src={nav === 1 ? pinnedActive : pinnedInactive}
-                      alt="Dashboard Icon"
-                    />
-                  </div>
-                </div> */}
                 <div
                   style={
                     nav === 2
@@ -906,27 +840,6 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-                {/* <div
-                  style={
-                    nav === 9
-                      ? mystyles.sidebarMenuItemActive.collapsed
-                      : mystyles.sidebarMenuItem
-                  }
-                  onClick={(e) => setnav(9)}
-                >
-                  <div
-                    style={
-                      nav === 9
-                        ? mystyles.sidebarMenuItemIconActive.collapsed
-                        : mystyles.sidebarMenuItemIcon.collapsed
-                    }
-                  >
-                    <img
-                      src={nav === 9 ? expenseActive : expenseInactive}
-                      alt="Dashboard Icon"
-                    />
-                  </div>
-                </div> */}
                 {privileges.includes('View Companies') ? <div
                   style={
                     nav === 10
@@ -990,27 +903,6 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-                {/* <div
-                  style={
-                    nav === 12
-                      ? mystyles.sidebarMenuItemActive.collapsed
-                      : mystyles.sidebarMenuItem
-                  }
-                  onClick={(e) => setnav(12)}
-                >
-                  <div
-                    style={
-                      nav === 12
-                        ? mystyles.sidebarMenuItemIconActive.collapsed
-                        : mystyles.sidebarMenuItemIcon.collapsed
-                    }
-                  >
-                    <img
-                      src={nav === 12 ? celebrationActive : celebrationInactive}
-                      alt="Dashboard Icon"
-                    />
-                  </div>
-                </div> */}
               </div>
             </>
             : <>
@@ -1050,37 +942,6 @@ const Dashboard = () => {
                     Dashboard
                   </p>
                 </div>
-
-                {/* <div
-                  style={
-                    nav === 1
-                      ? mystyles.sidebarMenuItemActive.nonCollapsed
-                      : mystyles.sidebarMenuItem
-                  }
-                  onClick={(e) => setnav(1)}
-                >
-                  <div
-                    style={
-                      nav === 1
-                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
-                        : mystyles.sidebarMenuItemIcon.nonCollapsed
-                    }
-                  >
-                    <img
-                      src={nav === 1 ? pinnedActive : pinnedInactive}
-                      alt="Dashboard Icon"
-                    />
-                  </div>
-                  <p
-                    style={
-                      nav === 1
-                        ? mystyles.sidebarMenuItemTextActive
-                        : mystyles.sidebarMenuItemText
-                    }
-                  >
-                    Pinned
-                  </p>
-                </div> */}
                 <div
                   style={
                     nav === 2
@@ -1181,10 +1042,6 @@ const Dashboard = () => {
                 >
                   <div
                     style={
-                      // nav === 5
-                      //   ? 
-                        // mystyles.sidebarMenuItemIconActive.nonCollapsed
-                        // : 
                         mystyles.sidebarMenuItemIcon.nonCollapsed
                     }
                   >
@@ -1195,10 +1052,6 @@ const Dashboard = () => {
                   </div>
                   <p
                     style={
-                      // nav === 5
-                      //   ?
-                        //  mystyles.sidebarMenuItemTextActive
-                        // :
                          mystyles.sidebarMenuItemText
                     }
                   >
@@ -1221,10 +1074,6 @@ const Dashboard = () => {
                         : mystyles.sidebarMenuItemIcon.nonCollapsed, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)", backgroundColor: nav===17?PRIMARY_COLOR:'#F0F0F1'
                     }}
                   >
-                    {/* <img
-                      src={nav === 17 ? proposalsActive : proposalsInactive}
-                      alt="Dashboard Icon"
-                    /> */}
                   </div>
                   <p
                     style={
@@ -1356,36 +1205,6 @@ const Dashboard = () => {
                     Calendar
                   </p>
                 </div>
-                {/* <div
-                  style={
-                    nav === 9
-                      ? mystyles.sidebarMenuItemActive.nonCollapsed
-                      : mystyles.sidebarMenuItem
-                  }
-                  onClick={(e) => setnav(9)}
-                >
-                  <div
-                    style={
-                      nav === 9
-                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
-                        : mystyles.sidebarMenuItemIcon.nonCollapsed
-                    }
-                  >
-                    <img
-                      src={nav === 9 ? expenseActive : expenseInactive}
-                      alt="Dashboard Icon"
-                    />
-                  </div>
-                  <p
-                    style={
-                      nav === 9
-                        ? mystyles.sidebarMenuItemTextActive
-                        : mystyles.sidebarMenuItemText
-                    }
-                  >
-                    Expenses
-                  </p>
-                </div> */}
                 {privileges.includes('View Companies') ? <div
                   style={
                     nav === 10
@@ -1476,66 +1295,6 @@ const Dashboard = () => {
                     Announcements
                   </p>
                 </div>
-                {/* <div
-                  style={
-                    nav === 18
-                      ? mystyles.sidebarMenuItemActive.nonCollapsed
-                      : mystyles.sidebarMenuItem
-                  }
-                  onClick={(e) => setnav(18)}
-                >
-                  <div
-                    style={
-                      nav === 18
-                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
-                        : mystyles.sidebarMenuItemIcon.nonCollapsed
-                    }
-                  >
-                    <img
-                      src={nav === 18 ? announcement : announcement}
-                      alt="Dashboard Icon"
-                    />
-                  </div>
-                  <p
-                    style={
-                      nav === 18
-                        ? mystyles.sidebarMenuItemTextActive
-                        : mystyles.sidebarMenuItemText
-                    }
-                  >
-                    TTM
-                  </p>
-                </div> */}
-                {/* <div
-                  style={
-                    nav === 12
-                      ? mystyles.sidebarMenuItemActive.nonCollapsed
-                      : mystyles.sidebarMenuItem
-                  }
-                  onClick={(e) => setnav(12)}
-                >
-                  <div
-                    style={
-                      nav === 12
-                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
-                        : mystyles.sidebarMenuItemIcon.nonCollapsed
-                    }
-                  >
-                    <img
-                      src={nav === 12 ? celebrationActive : celebrationInactive}
-                      alt="Dashboard Icon"
-                    />
-                  </div>
-                  <p
-                    style={
-                      nav === 12
-                        ? mystyles.sidebarMenuItemTextActive
-                        : mystyles.sidebarMenuItemText
-                    }
-                  >
-                    Celebrations
-                  </p>
-                </div> */}
               </div>
             </>}
         </Sidebar>
