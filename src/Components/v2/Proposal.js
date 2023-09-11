@@ -17,8 +17,12 @@ import filterIcon from '../../Images/Filter.svg'
 import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
+import Timeline from './TTM/Timeline'
+import { useNavigate } from "react-router-dom";
+import TTMMain from './TTM/TTMMain'
 
 const Proposal = (props) => {
+    const navigate = useNavigate();
     const { isCollapsed } = props
     const { privileges, setPrivileges } = useContext(AuthenticationContext)
     const [apiCall, setCall] = useState(0);
@@ -940,8 +944,17 @@ const Proposal = (props) => {
     const totalBidCalculator = (a, b, c, d)=>{
         return (a+b+c+d);
     }
+    const [showTTM, setshowTTM] = useState(false);
+    const [propName, setpropName] = useState("");
+    const [propID, setpropID] = useState();
+    const handleTTM=(a, b)=>{
+        setpropName(b);
+        setpropID(a);
+        setshowTTM(true);
+    }
+
     return (
-        <>
+        !showTTM?<>
             {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
             {red === true ? <RedAlert setRed={setred} /> : <></>}
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
@@ -1193,30 +1206,11 @@ const Proposal = (props) => {
                                     </div>
                                 </Modal>
                             </th>
-                            {/* <th scope="col" style={{ ...styles.tableHeading, width: "100px" }} className='fixed-header2'>
-                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(2)}>
-                                    Status&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
+                            <th scope="col" style={{ ...styles.tableHeading, width: "100px" }} className='fixed-header2'>
+                                <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover'>
+                                    TTM
                                 </div>
-                                <Modal
-                                    show={sortModal === 2}
-                                    onHide={handleCloseSort}
-                                    style={{ ...styles.sortModal, left: sortModalLeft(2) }}
-                                    dialogClassName="filter-dialog"
-                                    backdropClassName="filter-backdrop"
-                                    animation={false}
-                                >
-                                    <div style={{ ...styles.sortContainer }} className='d-flex flex-column justify-content-between'>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Status"); setCall(apiCall + 1); handleCloseSort() }}>
-                                            <FontAwesomeIcon icon={faArrowUp} />
-                                            <p style={styles.sortText}>Sort Ascending</p>
-                                        </div>
-                                        <div className='d-flex flex-row justify-content-around hover' style={{ padding: "4px", cursor: "pointer" }} onClick={(e) => { setsort("Status DESC"); setCall(apiCall + 1); handleCloseSort() }}>
-                                            <FontAwesomeIcon icon={faArrowDown} />
-                                            <p style={styles.sortText}>Sort Descending</p>
-                                        </div>
-                                    </div>
-                                </Modal>
-                            </th> */}
+                            </th>
                             <th scope="col" style={{ ...styles.tableHeading, width: "140px" }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(2)}>
                                     Department&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
@@ -1374,9 +1368,10 @@ const Proposal = (props) => {
                                             <div className='d-flex flex-row justify-content-start align-items-center'>
                                             <p style={styles.type}>Status: <span style={{color:'#FD9568'}}>{e.Status}</span></p>&nbsp;&nbsp;
                                             {e.Folder_ID!==null ? <div style={styles.openInDrive} onClick={(f) => openDriveLink(f, e.Folder_ID)}>Open in Drive&nbsp;<img src={open} /></div> : <></>}
+                                            {/* <div style={styles.openInDrive} onClick={()=>handleTTM(e.Proposal_ID, e.Project_Name)}>View TTM </div> */}
                                             </div>
                                         </td>
-                                        {/* <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td> */}
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}><div style={{color:"#3692EF", fontSize:'13px', cursor:'pointer'}} onClick={()=>handleTTM(e.Proposal_ID, e.Project_Name)}>TTM&nbsp;<img src={open}/></div></td>
                                         <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Department}</td>
                                         <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{formatDate(e.Question_Deadline) === ""
                                                 ? <></>
@@ -1565,7 +1560,10 @@ const Proposal = (props) => {
                     </div>
                 </Modal.Body>
             </Modal>
-        </>
+
+
+        </>:
+        <TTMMain setshowTTM={setshowTTM} Name={propName} Id={propID}/>
     )
 }
 

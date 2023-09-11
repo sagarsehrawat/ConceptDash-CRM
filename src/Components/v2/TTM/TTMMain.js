@@ -9,14 +9,18 @@ import timesheet from "../../../Images/Timesheet.svg";
 import TTMTable from './TTMTable';
 import Timeline from './Timeline';
 import { PRIMARY_COLOR } from "../../Constants/Constants";
+import { faArrowLeft} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-function TTMMain() {
-    const [value1, setValue1] = useState("2");
+function TTMMain(props) {
+    const {setshowTTM, Name, Id} = props
+    const [value1, setValue1] = useState("1");
   const handleChange = (event, newValue) => {
     setValue1(newValue);
   };
   return (
       <div style={{ marginTop: "8px" }}>
+        <FontAwesomeIcon icon={faArrowLeft} color="#70757A" style={{ borderRadius:'20px', padding:'5px', backgroundColor:'#DBDBF4', border:'1px solid #DBDBF4', marginLeft: "16px", cursor: "pointer" }} onClick={()=>setshowTTM(false)}/>
         <Box
           sx={{
             width: "100%",
@@ -84,12 +88,12 @@ function TTMMain() {
             </Box>
             <TabPanel value="1">
               <div style={{ width: '100%', float: 'left', marginLeft: '5px', marginTop: '20px' }}>
-                <TTMTable/>
+                <TTMTable Name={Name} Id={Id}/>
               </div>
             </TabPanel>
             <TabPanel value="2" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left', }}>
-                <Timeline />
+                <Timeline Name={Name} Id={Id}/>
               </div>
             </TabPanel>
             
