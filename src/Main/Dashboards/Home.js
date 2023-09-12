@@ -1,6 +1,12 @@
+import { faCloudArrowDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Form } from "react-bootstrap";
-import cross from "../../Images/cross.svg";
+import { Button, Dropdown, Form, Modal } from "react-bootstrap";
+import { primaryColour } from "../Constants/styles";
+import pinnedActive from "../../Images/Pin icon_Active.svg";
+import pinnedInactive from "../../Images/Pin icon.svg";
+import arrow from '../../Images/Celebrations/arrow.svg'
+
 import BudgetCharts from "./BudgetCharts";
 import axios from "axios";
 import { HOST, PROJECT_CHART, GET_ADMIN_TASKS, PRIMARY_COLOR } from "../Constants/Constants";
@@ -26,7 +32,7 @@ import groupicon from '../../Images/Celebrations/groupicon.svg'
 const Home = (props) => {
   const { setnav } = props;
   const { isCollapsed, viewportWidth } = props;
-  const [ishovered, setishovered] = useState()
+  const [ishovered, setishovered] = useState(false)
   const styles = {
   
     celebrations: {
@@ -324,16 +330,14 @@ const Home = (props) => {
       marginRight: '12.6px',
     },
     celebrationBottom: {
-      width: "52px",
-      height: "14px",
-      left: "105px",
-      top: "100px",
+      width: "50%",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 400,
-      fontSize: "14px",
-      lineHeight: "100%",
-      color: PRIMARY_COLOR,
+      fontSize: "11px",
+      lineHeight: "16px",
+      color: "#0A0A0A",
+      textAlign: "left",
     },
     rect1: {
       width: "3px",
@@ -451,6 +455,10 @@ const Home = (props) => {
     );
   };
   const [isLoadingCal, setisLoadingCal] = useState(false);
+    // celebrations
+    const [celeShow, setceleShow] = useState(false);
+    const handleCloseCele = () => setceleShow(false);
+    const handleShowCele = () => setceleShow(true);
   const initClient = async () => {
     setisLoadingCal(true);
     if (!localStorage.getItem("access_token")) {
@@ -732,12 +740,33 @@ console.log(sideTasks[0]);
               <div style={styles.deadlineHeading}>Deadlines Approaching!</div>
             </div>
           </div>
-          <div style={styles.celebrations}>
-            <div className="d-flex justify-content-between align-items-center" style={{ display: "flex", flexDirection: "row" }}>
+          <button style={{border:"none"}}>  
+          <div onClick={handleShowCele}  style={styles.celebrations} onMouseEnter={() => setishovered(true)} onMouseLeave={() => setishovered(false)}>
+            <div className="d-flex justify-content-between align-items-center " style={{ display: "flex", flexDirection: "row" }}>
               <div style={styles.celebrationHeading}>Celebrations</div>
-              <img src={cross} style={styles.celebrationsCross} />
+              <img src={arrow} style={styles.celebrationsCross} alt='crossimg' />
+            </div>
+            <div className="d-flex justify-content-evenly align-items-center">
+                <img src={groupicon} style={{marginLeft:"0px"}}alt=""/>
+                <div style={styles.celebrationBottom}>
+              Colleague's special day: Share in the joy! 🥳
+                </div>
             </div>
           </div>
+          </button>
+          <Modal
+            show={celeShow}
+            onHide={handleCloseCele}
+            style={styles.notifModal}
+            dialogClassName="filter-dialog"
+            backdropClassName="filter-backdrop"
+            animation={false}
+          >
+            <div style={{paddingBottom:'24px', marginTop:'24px'}}>
+
+            <Celebrations setnav={setnav}/> 
+            </div>
+          </Modal>
           <div style={styles.tasks}>
             <div style={styles.tasksHeading}>Tasks Assigned</div>
             {isLoadingTasks ? (
