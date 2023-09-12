@@ -261,7 +261,7 @@ body>div.fade.modal.show>div {
 input:focus {
   outline: none !important;
   box-shadow: none !important;
-  border: 1px solid #6519E1 !important;
+  /* border: 1px solid #6519E1; */
 }
 
 .no-focus:focus{

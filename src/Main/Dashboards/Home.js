@@ -21,11 +21,64 @@ import { gapi } from "gapi-script";
 import ProjectCharts from "./ProjectCharts";
 import ProposalCharts from "./ProposalCharts";
 import moment from 'moment';
-
+import Celebrations from "../v2/Updated_Module/Celebrations";
+import groupicon from '../../Images/Celebrations/groupicon.svg'
 const Home = (props) => {
   const { setnav } = props;
   const { isCollapsed, viewportWidth } = props;
   const styles = {
+  
+    celebrations: {
+      width: "100%",
+      height: "96px",
+      left: "1180px",
+      marginTop: "16px",
+      background:ishovered?"linear-gradient(134deg, #FAD3E1 0%, rgba(244, 231, 220, 0.89) 23.11%, rgba(240, 244, 216, 0.81) 39.69%, rgba(245, 214, 154, 0.29) 78.22%, rgba(178, 231, 243, 0.00) 100%)":"linear-gradient(134deg, #EFE2F6 0%, rgba(216, 236, 244, 0.81) 39.69%, rgba(239, 226, 246, 0.00) 100%)",
+     filter: "drop-shadow(0px 4px 25px rgba(0, 0, 0, 0.08))",
+      borderRadius: "12px",
+      "&:hover":{
+        background: "black"
+      },
+    },
+    notifModal: {
+      position: "absolute",
+      width: "37vw",
+      height: "90vh",
+      left: "63vw",
+      top: "56px",
+      background: "#FFFFFF",
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.12)",
+      borderRadius: "24px 0px 0px 24px"
+    },
+    celebrationHeading: {
+      width: "102px",
+      height: "28px",
+      marginLeft: "16px",
+      marginTop: "12px",
+      marginBottom: "10px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 500,
+      fontSize: "18px",
+      lineHeight: "28px",
+      color: "#0A0A0A",
+    },
+    celebrationsCross: {
+     
+      marginRight: '12.6px',
+     
+    },
+    celebrationBottom: {
+      width: "50%",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "11px",
+      lineHeight: "16px",
+      color: "#0A0A0A",
+      textAlign: "left",
+       
+    },
     contentArea: {
       width: `${viewportWidth - 280 - (isCollapsed ? 68 : 228)}px`,
       height: `${window.innerHeight - 56}px`,
@@ -667,7 +720,7 @@ console.log(sideTasks[0]);
             {handleChartsComponent()}
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", paddingRight:'20px' }}>
+        <div style={{ display: "flex", flexDirection: "column", paddingRight:'20px', width:'278px' }}>
           <div style={styles.deadlines}>
             <div style={{ display: "flex", flexDirection: "row" }}>
               <img

@@ -77,7 +77,6 @@ import Announcements from "../v2/Announcements";
 import AddBudgetCity from "../Form/AddBudgetCity";
 import TTMMain from "../v2/TTM/TTMMain";
 
-
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();
   const navigate = useNavigate();
@@ -440,6 +439,18 @@ const Dashboard = () => {
       boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
       borderRadius: "12px",
     },
+    wishmodal:{
+       backgroundColor:"rgba(215, 216, 254)",
+       width: "100% !important",
+       height: "100% !important",
+    },
+    crossbtn:{
+      width: "44px",
+      height: "44px", 
+      position: "fixed",
+      top: "-75px",
+      right: "-300px",
+    }
   };
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
@@ -487,8 +498,39 @@ const Dashboard = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
-
+  }, []); 
+    useEffect(() => {
+      const getuserdata = async() => {   
+     await axios.get(HOST + GET_CELEBRATIONS, {
+          headers: {
+             auth: "Rose " + localStorage.getItem("auth"),
+             filter: JSON.stringify({}),
+             sort: [], 
+          },
+        })
+        .then((res) => {
+                let empdata={}
+                let id= +localStorage.getItem('employeeId')
+                empdata=res.data.res
+               empdata=res.data.res.filter(each=> each.Employee_ID===id)
+                let bday=new Date(empdata[0].Birthday)
+                let anniversary=new Date(empdata[0].Joining_Date)
+                if(new Date().getMonth()===2 && new Date().getDate()===1)
+                setshowwish(true);
+                if(bday.getMonth()===new Date().getMonth() && bday.getDate()===new Date().getDate()){
+                  setwish("Birthday")
+                  setshowwish(true)
+                }
+              if(anniversary.getMonth()===new Date().getMonth() && anniversary.getDate()===new Date().getDate()){
+              setwish("Work Anniversary")
+              setshowwish(true)
+             }
+              }).catch((err) => {
+                  console.log("error"+err);
+                });
+              }
+              getuserdata()
+            },[]) 
 
   const handleDash = (e) => {
     if (nav === 0) { return <Home isCollapsed={isCollapsed} viewportWidth={viewportWidth} setnav={setnav} />; }
@@ -516,7 +558,34 @@ const Dashboard = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [prop, setprop] = useState(false)
-  return (
+  const[checkwish,setcheckwish] = useState(false)
+  const currentdate= new Date()
+   function shouldrender(){
+     let returnval=false;
+     const lastdate=new Date(localStorage.getItem('lastshown'));
+     console.log(lastdate)
+      if(lastdate==null) {
+        returnval=true;
+      }
+      if(currentdate.getDate()!==lastdate.getDate() && currentdate.getMonth()!==lastdate.getMonth()){
+        returnval=true;
+        
+      }
+      return returnval;
+    }  
+    useEffect(()=>{
+       if(checkwish===false){
+       console.log("inside useEffect")
+         let stored=localStorage.getItem('lastshown')
+        let storeddate=new Date(stored)
+         if(storeddate!==null) localStorage.setItem('lastshown',currentdate)
+       if(storeddate.getDate()!==currentdate.getDate() && storeddate.getMonth()!==currentdate.getMonth())
+      localStorage.setItem('lastshown',currentdate)
+      setcheckwish(true);
+       }
+     },[])
+
+   return (
     <>
       <div>
         <Navbar
