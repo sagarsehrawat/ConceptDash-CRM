@@ -66,7 +66,7 @@ import cross from '../../Images/cross.svg'
 import announcement from '../../Images/announcement.svg'
 import ProjectForm from "../Form/ProjectForm";
 import Privileges from '../Update/Privileges.js'
-import { GET_EMPLOYEE_PRIVILEGES, GET_NOTIFICATIONS, HOST, PRIMARY_COLOR } from "../Constants/Constants";
+import { GET_CELEBRATIONS, GET_EMPLOYEE_PRIVILEGES, GET_NOTIFICATIONS, HOST, PRIMARY_COLOR } from "../Constants/Constants";
 import PMSelector from "../v2/PMSelector";
 import Notifications from "./Notifications";
 import AddCity from "../Form/AddCity";
@@ -455,6 +455,8 @@ const Dashboard = () => {
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const [notifCounts, setnotifCounts] = useState(0);
+  const [wish, setwish] = useState();
+  const [showwish, setshowwish] = useState();
 
   useEffect(() => {
     axios

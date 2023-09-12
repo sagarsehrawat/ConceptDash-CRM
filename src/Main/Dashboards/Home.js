@@ -26,6 +26,7 @@ import groupicon from '../../Images/Celebrations/groupicon.svg'
 const Home = (props) => {
   const { setnav } = props;
   const { isCollapsed, viewportWidth } = props;
+  const [ishovered, setishovered] = useState()
   const styles = {
   
     celebrations: {
