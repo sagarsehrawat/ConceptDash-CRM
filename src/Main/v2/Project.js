@@ -19,6 +19,7 @@ import UpdateProjectForm from '../Form/UpdateProjectForm'
 import ProjectForm from '../Form/ProjectForm'
 import open from '../../Images/openinDrive.svg'
 import SearchBar from '../../components/ui/SearchBar/SearchBar'
+import Chip from '../../components/ui/Chip/Chip'
 
 const Project = (props) => {
     const { isCollapsed } = props
@@ -892,6 +893,7 @@ const Project = (props) => {
     }
 
     const statusComponent = (status) => {
+        return <Chip label={'In Progress'} canUpdate={true} tableRef={tableRef}/>
         if (status === null || status === "Not Started Yet") {
             return (
                 <div style={{ ...styles.statusContainer, background: "#FFF4EF", border: "0.4px solid #FD9568" }} className='d-flex justify-content-center'>
@@ -1061,7 +1063,7 @@ const Project = (props) => {
                 <table style={styles.table} className='rfp-table'>
                     <thead style={styles.tableHeader}>
                         <tr>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "260px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "260px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(0)}>
                                     Project Name&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
@@ -1086,7 +1088,7 @@ const Project = (props) => {
                                 </Modal>
                             </th>
 
-                            <th scope="col" style={{ ...styles.tableHeading, width: "160px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "160px", borderBottom: "1px solid #EBE9F1", }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(0)}>
                                     Project Code&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
@@ -1294,8 +1296,8 @@ const Project = (props) => {
                             </tr>
                             : projects && projects.map(e => (
                                 <>
-                                    <tr style={{ ...styles.tableRow, backgroundColor: selectedProjects.includes(e.Project_Id) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.Project_Id}>
-                                        <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedProjects.includes(e.Project_Id) ? "#F5F3FE" : "white", borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>
+                                    <tr style={{ ...styles.tableRow, backgroundColor: selectedProjects.includes(e.Project_Id) ? "#F5F3FE" : "white" }} className='' id={e.Project_Id}>
+                                        <td className='' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedProjects.includes(e.Project_Id) ? "#F5F3FE" : "white", borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>
                                             <div className='d-flex flex-row align-items-center' style={{ gap: "12px" }}>
                                                 {projectDetails.includes(e.Project_Id) ? <FontAwesomeIcon icon={faChevronDown} onClick={(eve) => setprojectDetails(prev => prev.filter(ele => ele !== e.Project_Id))} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faChevronRight} onClick={(eve) => setprojectDetails(prev => [...prev, e.Project_Id])} style={{ cursor: "pointer" }} />}
                                                 <Form.Check
