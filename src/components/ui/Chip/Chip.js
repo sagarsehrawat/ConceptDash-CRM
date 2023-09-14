@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import "./Chip.css";
 
+// Array of Available Options
 const values = ['Completed', 'In Progress', 'Not Started']
+
+// Class list for Chips
 const classes = {
   'Completed' : 'completed-chip',
   'In Progress' : 'in-progress-chip',
@@ -10,11 +13,11 @@ const classes = {
 }
 
 const Chip = (props) => {
-  const { label, tableRef, options, onUpdate } = props;
+  const { label, tableRef, options, onUpdate, id } = props;
 
   // const [chip, setChip] = useState(value)
   const [value, setValue] = useState(label)
-  const [chipClass, setChipClass] = useState(getClass(label));
+  const [chipClass, setChipClass] = useState(classes[label]);
   const [isVisible, setisVisible] = useState(false);
 
   const chipRef = useRef(null);
@@ -36,11 +39,6 @@ const Chip = (props) => {
   };
   useOnClickOutside(chipRef, () => setisVisible(false));
 
-  // Get the class of the chip with color and background
-  function getClass(val) {
-    return classes[val];
-  }
-
   //  Handle Opening and Closing of Modal
   const handleModal = () => {
     if (onUpdate) setisVisible(!isVisible);
@@ -56,9 +54,9 @@ const Chip = (props) => {
   const handleClick = (e, option) => {
     e.preventDefault();
     setValue(option);
-    setChipClass(getClass(option));
+    setChipClass(classes[option]);
     setisVisible(false);
-    onUpdate()
+    onUpdate(id, option)
   };
 
   return (
@@ -81,7 +79,7 @@ const Chip = (props) => {
                     className="chip-modal-item"
                     onClick={(e) => handleClick(e, option)}
                   >
-                    <div className={`chip ${getClass(option)}`}>{option}</div>
+                    <div className={`chip ${classes[option]}`}>{option}</div>
                   </div>
                 ))}
               </div>
@@ -114,10 +112,15 @@ Chip.propTypes = {
    * Function on what to do when updating with the modal 
    */
   onUpdate: PropTypes.func,
+  /**
+   * ID of the row to be updated in Table
+   */
+  id: PropTypes.number,
 };
 
 Chip.defaultProps = {
   tableRef: null,
+  onUpdate: null
 };
 
 export default Chip;
