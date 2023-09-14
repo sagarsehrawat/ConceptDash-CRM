@@ -2,13 +2,19 @@ import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import "./Chip.css";
 
-const Chip = (props) => {
-  const { valueFunc, canUpdate, tableRef, options } = props;
+const values = ['Completed', 'In Progress', 'Not Started']
+const classes = {
+  'Completed' : 'completed-chip',
+  'In Progress' : 'in-progress-chip',
+  'Not Started' : 'not-started-chip'
+}
 
-  const [value, setValue] = valueFunc;
+const Chip = (props) => {
+  const { label, tableRef, options, onUpdate } = props;
 
   // const [chip, setChip] = useState(value)
-  const [chipClass, setChipClass] = useState(getClass(value));
+  const [value, setValue] = useState(label)
+  const [chipClass, setChipClass] = useState(getClass(label));
   const [isVisible, setisVisible] = useState(false);
 
   const chipRef = useRef(null);
@@ -32,17 +38,16 @@ const Chip = (props) => {
 
   // Get the class of the chip with color and background
   function getClass(val) {
-    if (val === "Completed") return "completed-chip";
-    if (val === "In Progress") return "in-progress-chip";
-    if (val === "Not Started") return "not-started-chip";
+    return classes[val];
   }
 
+  //  Handle Opening and Closing of Modal
   const handleModal = () => {
-    if (canUpdate) setisVisible(!isVisible);
+    if (onUpdate) setisVisible(!isVisible);
   };
 
   // Handle the table scrolling i.e. block it when modal is open and run it when modal is closed
-  if (canUpdate && tableRef) {
+  if (onUpdate && tableRef) {
     if (isVisible) tableRef.current.style.overflowY = "hidden";
     else tableRef.current.style.overflowY = "auto";
   }
@@ -50,11 +55,10 @@ const Chip = (props) => {
   // Handle Click on the update modal
   const handleClick = (e, option) => {
     e.preventDefault();
-    if (setValue !== null) {
-      setValue(option);
-      setChipClass(getClass(option));
-    }
+    setValue(option);
+    setChipClass(getClass(option));
     setisVisible(false);
+    onUpdate()
   };
 
   return (
@@ -63,13 +67,14 @@ const Chip = (props) => {
         <div
           className={`chip ${chipClass}`}
           onClick={handleModal}
-          ref={chipRef}
         >
           {value}
         </div>
-        {canUpdate ? (
+        {onUpdate ? (
           isVisible ? (
-            <div className="chip-modal">
+            <div 
+            className="chip-modal" 
+            ref={chipRef}>
               <div className="chip-modal-container">
                 {options.map((option) => (
                   <div
@@ -94,9 +99,9 @@ const Chip = (props) => {
 
 Chip.propTypes = {
   /**
-   * Value for the Chip
+   * Label for the Chip
    */
-  valueFunc: PropTypes.array.isRequired,
+  label: PropTypes.oneOf(values).isRequired,
   /**
    * Options for the update modal of the chip
    */
@@ -106,13 +111,12 @@ Chip.propTypes = {
    */
   tableRef: PropTypes.func,
   /**
-   * Boolean for whether to show the modal for updation
+   * Function on what to do when updating with the modal 
    */
-  canUpdate: PropTypes.bool,
+  onUpdate: PropTypes.func,
 };
 
 Chip.defaultProps = {
-  canUpdate: false,
   tableRef: null,
 };
 

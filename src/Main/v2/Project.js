@@ -635,9 +635,8 @@ const Project = (props) => {
                     let p = projectCount;
                     let sum = 0;
                     arr.map((e) => {
-                        //   if (e.Status === null) p[] = e.Count;
-                        if (e.Status === "Ongoing") p['Ongoing'] = e.Count;
-                        if (e.Status === "Not Started Yet") p[3] = e.Count;
+                        if (e.Status === "In Progress") p['Ongoing'] = e.Count;
+                        if (e.Status === "Not Started") p[3] = e.Count;
                         if (e.Status === "Completed") p['Completed'] = e.Count;
                         sum += e.Count;
                     });
@@ -647,25 +646,6 @@ const Project = (props) => {
                 .catch((err) => {
                     console.error("Error fetching chart data: ", err);
                 });
-            // await axios
-            //     .get(HOST + GET_PROPOSAL_COUNT, {
-            //         headers: {
-            //             auth: "Rose " + localStorage.getItem("auth"),
-            //         },
-            //     })
-            //     .then((res) => {
-            //         let obj = proposalCount
-            //         obj.Total = res.data.res[0].Total
-            //         obj.Month = res.data.res[0].Month
-            //         obj.Percent = res.data.res[0].Percent ?? 0
-            //         obj.Won = res.data.res[0].Won
-            //         obj.Lost = res.data.res[0].Lost
-            //         setproposalCount(obj)
-            //         setIsLoading2(prev => [false, ...prev.slice(1, 6)])
-            //     })
-            //     .catch((err) => {
-            //         console.log(err);
-            //     });
 
             await axios
                 .get(HOST + GET_CITIES, {
@@ -890,31 +870,6 @@ const Project = (props) => {
             .catch((err) => {
                 console.log(err);
             });
-    }
-
-    const [first, setfirst] = useState('In Progress')
-
-    const statusComponent = (status) => {
-        return <Chip valueFunc={[first, setfirst]} canUpdate={true} tableRef={tableRef} options={['Not Started', 'In Progress', 'Completed']}/>
-        if (status === null || status === "Not Started Yet") {
-            return (
-                <div style={{ ...styles.statusContainer, background: "#FFF4EF", border: "0.4px solid #FD9568" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#FD9568" }}>Not Started</p>
-                </div>
-            )
-        } else if (status === "Ongoing") {
-            return (
-                <div style={{ ...styles.statusContainer, background: "#E4FEF1", border: "0.4px solid #559776", }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#559776" }}>Ongoing</p>
-                </div>
-            )
-        } else if (status === "Completed") {
-            return (
-                <div style={{ ...styles.statusContainer, background: "#E4EEFE", border: "0.4px solid #5079E1" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#5079E1" }}>Completed</p>
-                </div>
-            )
-        }
     }
 
     return (
@@ -1317,7 +1272,13 @@ const Project = (props) => {
                                         </td>
                                         <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.Project_Code}</td>
                                         <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.City}</td>
-                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Status)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}><Chip 
+                                                                                                                                                                    label={e.Status} 
+                                                                                                                                                                    id={e.Project_Id}
+                                                                                                                                                                    tableRef={tableRef} 
+                                                                                                                                                                    onUpdate={() => {}}
+                                                                                                                                                                    options={['Not Started', 'In Progress', 'Completed']}
+                                                                                                                                                                    /></td>
                                         <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.dept}</td>
                                         <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
                                         {isCollapsed ? <td style={{ ...styles.tableCell, borderBottom: projectDetails.includes(e.Project_Id) ? "none" : "1px solid #EBE9F1" }}>{e.Team_Members}</td> : <></>}
