@@ -892,8 +892,10 @@ const Project = (props) => {
             });
     }
 
+    const [first, setfirst] = useState('In Progress')
+
     const statusComponent = (status) => {
-        return <Chip label={'In Progress'} canUpdate={true} tableRef={tableRef}/>
+        return <Chip valueFunc={[first, setfirst]} canUpdate={true} tableRef={tableRef} options={['Not Started', 'In Progress', 'Completed']}/>
         if (status === null || status === "Not Started Yet") {
             return (
                 <div style={{ ...styles.statusContainer, background: "#FFF4EF", border: "0.4px solid #FD9568" }} className='d-flex justify-content-center'>
