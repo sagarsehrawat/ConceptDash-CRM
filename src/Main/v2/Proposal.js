@@ -10,7 +10,6 @@ import {PRIMARY_COLOR, DELETE_PROPOSAL, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYE
 import GreenAlert from '../Loader/GreenAlert'
 import LoadingSpinner from '../Loader/Loader'
 import RedAlert from '../Loader/RedAlert'
-import TableScrollbar from 'react-table-scrollbar';
 import ProposalForm from '../Form/ProposalForm'
 import UpdateProposal from '../Form/UpdateProposal'
 import filterIcon from '../../Images/Filter.svg'
