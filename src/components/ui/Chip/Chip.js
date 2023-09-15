@@ -51,12 +51,21 @@ const Chip = (props) => {
   }
 
   // Handle Click on the update modal
-  const handleClick = (e, option) => {
+  const handleClick = async (e, option) => {
     e.preventDefault();
+    const prev = value;
     setValue(option);
     setChipClass(classes[option]);
     setisVisible(false);
-    onUpdate(id, option)
+
+    try{
+      const response = await onUpdate(id, option)
+
+      if(response.success === false) throw response.data.error
+    } catch(e) {
+      setValue(prev);
+      setChipClass(classes[prev]);
+    }
   };
 
   return (
