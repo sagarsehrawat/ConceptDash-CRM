@@ -12,7 +12,8 @@
 /build
 
 #storybook
-/storybook-static
+storybook-static
+.storybook
 
 # misc
 .DS_Store
