@@ -17,6 +17,7 @@ import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
 import SearchBar from '../../components/ui/SearchBar/SearchBar'
+import Chip from '../../components/ui/Chip/Chip'
 
 const Proposal = (props) => {
     const { isCollapsed } = props
@@ -823,47 +824,6 @@ const Proposal = (props) => {
         handleShowUpdate();
     };
 
-    const handleStatusUpdate = async (e) => {
-        e.preventDefault();
-
-        await axios
-            .post(
-                HOST + UPDATE_STATUS_PROPOSAL,
-                {
-                    ids: JSON.stringify(selectedProposals),
-                    status: status
-                },
-                { headers: { auth: "Rose " + localStorage.getItem("auth") } }
-            )
-            .then((res) => {
-                if (res.data.success) {
-                    for (let i = 0; i < proposals.length; i++) {
-                        if (selectedProposals.includes(proposals[i].Proposal_ID)) {
-                            const st1 = proposals[i].Status
-                            proposals[i].Status = (status === '' ? null : status)
-                            if (st1 !== proposals[i].Status) {
-                                if (st1 === null) {
-                                    if (proposals[i].Status !== null) proposalCount[proposals[i].Status]++;
-                                } else {
-                                    proposalCount[st1]--;
-                                    if (proposals[i].Status !== null) proposalCount[proposals[i].Status]++;
-                                }
-                            }
-                        }
-                    }
-                    closeStatusModal()
-                    setCall(apiCall+1)
-                    setselectedProposals([])
-                    setgreen(true)
-                } else {
-                    setred(true)
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-
     const formatDate = (date) => {
         if (date === "" || date === null || date === undefined) return "";
         const formattedDate = moment(date)
@@ -915,27 +875,37 @@ const Proposal = (props) => {
         }
     }
 
-    const statusComponent = (status) => {
-        if (status === null) {
-            return (
-                <div style={{ ...styles.statusContainer, border: "1px solid #FD9568" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#FD9568" }}>Pending</p>
-                </div>
-            )
-        } else if (status === "Lost") {
-            return (
-                <div style={{ ...styles.statusContainer, border: "1px solid #FE3766" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#FE3766" }}>Lost</p>
-                </div>
-            )
-        } else if (status === "Won") {
-            return (
-                <div style={{ ...styles.statusContainer, background: "#E4FEF1", border: "1px solid #34A853" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#34A853" }}>Won</p>
-                </div>
-            )
+    const handleStatusUpdate = async (proposalId, status) => {
+        const response = await axios.post(
+          HOST + UPDATE_STATUS_PROPOSAL,
+          {
+            proposalId,
+            status,
+          },
+          {
+            headers: { auth: "Rose " + localStorage.getItem("auth") },
+          }
+        );
+
+        if (response.data.success) {
+            for (let i = 0; i < proposals.length; i++) {
+                if (selectedProposals.includes(proposals[i].Proposal_ID)) {
+                    const st1 = proposals[i].Status
+                    proposals[i].Status = (status === '' ? null : status)
+                    if (st1 !== proposals[i].Status) {
+                        if (st1 === null) {
+                            if (proposals[i].Status !== null) proposalCount[proposals[i].Status]++;
+                        } else {
+                            proposalCount[st1]--;
+                            if (proposals[i].Status !== null) proposalCount[proposals[i].Status]++;
+                        }
+                    }
+                }
+            }
         }
-    }
+    
+        return response;
+      };
 
     const totalBidCalculator = (a, b, c, d)=>{
         return (a+b+c+d);
@@ -1143,7 +1113,7 @@ const Proposal = (props) => {
                 <table style={styles.table} className='rfp-table'>
                     <thead style={styles.tableHeader}>
                         <tr>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "150px", borderBottom: "1px solid #EBE9F1", marginLeft: '50px', textAlign:'center' }} className='fixed-header'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "150px", borderBottom: "1px solid #EBE9F1", marginLeft: '50px', textAlign:'center' }} className='fixed-header2'>
                                 <div style={{ padding: "4px 8px", display: "inline", cursor: "pointer" }} className='hover' onClick={(e) => handleShowSort(0)}>
                                     City&nbsp;&nbsp;<FontAwesomeIcon icon={faSort} />
                                 </div>
@@ -1351,7 +1321,7 @@ const Proposal = (props) => {
                             </tr>
                             : proposals && proposals.map(e => (
                                 <>
-                                    <tr style={{ ...styles.tableRow, backgroundColor: selectedProposals.includes(e.Proposal_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.Proposal_ID}>
+                                    <tr style={{ ...styles.tableRow, backgroundColor: selectedProposals.includes(e.Proposal_ID) ? "#F5F3FE" : "white" }} className='' id={e.Proposal_ID}>
                                         <td className='fixed-col' style={{ ...styles.tableCell, padding: "12px 24px", fontWeight: "500", backgroundColor: selectedProposals.includes(e.Proposal_ID) ? "#F5F3FE" : "white", borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>
                                             <div className='d-flex flex-row align-items-center' style={{ gap: "12px" }}>
                                                 {proposalDetails.includes(e.Proposal_ID) ? <FontAwesomeIcon icon={faChevronDown} onClick={(eve) => setproposalDetails(prev => prev.filter(ele => ele !== e.Proposal_ID))} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faChevronRight} onClick={(eve) => setproposalDetails(prev => [...prev, e.Proposal_ID])} style={{ cursor: "pointer" }} />}
@@ -1390,7 +1360,13 @@ const Proposal = (props) => {
                                         </td>
                                         <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
                                         <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}><b>{addComma(totalBidCalculator(e.Design_Price, e.Contract_Admin_Price, e.Provisional_Items, e.Sub_Consultant_Price))}</b></td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{statusComponent(e.Result)}</td>
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}><Chip
+                        label={e.Result}
+                        id={e.Proposal_ID}
+                        tableRef={tableRef}
+                        onUpdate={handleStatusUpdate}
+                        options={["Lost", "Pending", "Won"]}
+                      /></td>
                                     </tr>
                                     <tr id={e.Proposal_ID} style={{ ...styles.tableRow, display: proposalDetails.includes(e.Proposal_ID) ? "table-row" : "none", visibility: proposalDetails.includes(e.Proposal_ID) ? "visible" : "hidden" }}>
                                         <td colSpan={8} style={{ borderBottom: "1px solid #EBE9F1" }}>

@@ -314,9 +314,9 @@ function AddProject(props) {
               <Form.Group as={Col}>
                 <Form.Select name="projectStage" onChange={handleChange}>
                   <option value="">Project Stage</option>
-                  <option value="Not Started Yet">Not Started Yet</option>
+                  <option value="Not Started">Not Started</option>
                   <option value="Completed">Completed</option>
-                  <option value="Ongoing">Ongoing</option>
+                  <option value="In Progress">In Progress</option>
                 </Form.Select>
               </Form.Group>
             </Row>

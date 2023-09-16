@@ -1,5 +1,5 @@
-export const HOST = 'https://crm-api.conceptdash.ca'
-// export const HOST = 'http://localhost:8080'
+// export const HOST = 'https://crm-api.conceptdash.ca'
+export const HOST = 'http://localhost:8080'
 
 // get apis
 export const GET_CELEBRATIONS='/api/get/celebrations'
@@ -147,6 +147,7 @@ export const CHANGE_PASSWORD = '/api/update/password'
 
 // update apis
 export const UPDATE_BUDGET = '/api/update/budget'
+export const UPDATE_BUDGET_CITY_STATUS = '/api/update/budget/status'
 export const UPDATE_BUDGET_CITY1 = '/api/update/budgetCity1'
 export const UPDATE_BUDGET_CITY2 = '/api/update/budgetCity2'
 export const UPDATE_COMPANY = '/api/update/company'
@@ -158,6 +159,7 @@ export const UPDATE_PROJECT_STATUS = '/api/update/project/status'
 export const UPDATE_PROPOSAL = '/api/update/proposal'
 export const UPDATE_STATUS_PROPOSAL = '/api/update/proposal/status'
 export const UPDATE_RFP = '/api/update/rfp'
+export const UPDATE_RFP_STATUS = '/api/update/rfp/status'
 export const UPDATE_TASK = '/api/update/task'
 export const UPDATE_PROJECT_TASK_5 = '/api/update/projectTask5'
 export const UPDATE_PROJECT_TASK_4 = '/api/update/projectTask4'

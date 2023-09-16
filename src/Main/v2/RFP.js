@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_GOOGLE_DRIVE_URL, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST, PRIMARY_COLOR } from '../Constants/Constants';
+import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_GOOGLE_DRIVE_URL, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST, PRIMARY_COLOR, UPDATE_RFP_STATUS } from '../Constants/Constants';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowsUpDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faCross, faDownload, faEdit, faFilter, faMagnifyingGlass, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -17,6 +17,7 @@ import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
 import SearchBar from '../../components/ui/SearchBar/SearchBar';
+import Chip from '../../components/ui/Chip/Chip';
 
 
 
@@ -790,6 +791,21 @@ const RFP = (props) => {
         setscrolled(tableRef.current.scrollLeft)
     }
 
+    const handleStatusUpdate = async (rfpId, status) => {
+        const response = await axios.post(
+          HOST + UPDATE_RFP_STATUS,
+          {
+            rfpId,
+            status,
+          },
+          {
+            headers: { auth: "Rose " + localStorage.getItem("auth") },
+          }
+        );
+    
+        return response;
+      };
+
     const sortModalLeft = (idx) => {
         if (isCollapsed) {
             if (idx === 0) return `${100}px`
@@ -821,31 +837,6 @@ const RFP = (props) => {
             <option value="2">Two</option>
             <option value="3">Three</option>
         </Form.Select >
-
-
-    const filterInput2 = (idx) => {
-        if (advancedFilter[idx][0] === '') {
-            return (
-                <Form.Select style={styles.filterInput1}>
-                    <option>Condition</option>
-                    <option>Choose Column First</option>
-                </Form.Select >
-            )
-        }
-
-        return (
-            <Form.Select style={styles.filterInput1}>
-                <option>Column</option>
-                <option value="1">is</option>
-                <option value="IS">is not</option>
-                <option value="3">Three</option>
-            </Form.Select >
-        )
-    }
-
-    const filterInput3 = (idx) => {
-
-    }
 
     return (
         <>
@@ -1218,7 +1209,7 @@ const RFP = (props) => {
                     </thead>
                     <tbody style={styles.tableBody}>
                         {isLoading ? <div style={{ height: "408px", width: "1937px", background: "white" }}><LoadingSpinner /></div> : rfps && rfps.map(e => (
-                            <tr style={{ ...styles.tableRow, backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
+                            <tr style={{ ...styles.tableRow, backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }} className='' id={e.RFP_ID}>
                                 <td className='fixed-col' style={{ ...styles.tableCell, fontWeight: "500", minWidth: "", borderRight: "1px solid #EBE9F1", backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }}>
                                     <div className='d-flex flex-row align-items-center'>
                                         <Form.Check
@@ -1248,7 +1239,13 @@ const RFP = (props) => {
                                 <td style={{ ...styles.tableCell, minWidth: "250px" }}>{e.Department}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Project_Category}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Manager_Name}</td>
-                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>{e.Action ?? "Review"}</td>
+                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>                      <Chip
+                        label={e.Action}
+                        id={e.RFP_ID}
+                        tableRef={tableRef}
+                        onUpdate={handleStatusUpdate}
+                        options={["No Go", "Review", "Go"]}
+                      /></td>
                                 <td style={{ ...styles.tableCell, minWidth: "180px" }}>{e.RFP_Number}</td>
                             </tr>
                         ))}
