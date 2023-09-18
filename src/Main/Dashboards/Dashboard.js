@@ -9,7 +9,7 @@ import {
   faChevronLeft,
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect, useRef, lazy, Suspense } from "react";
 import axios from "axios";
 import {  Modal, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -76,6 +76,8 @@ import Profile from "../v2/Profile";
 import Announcements from "../v2/Announcements";
 import AddBudgetCity from "../Form/AddBudgetCity";
 import TTMMain from "../v2/TTM/TTMMain";
+import LoadingSpinner from "../Loader/Loader";
+const TTM = lazy(() => import("../v2/TTM/TTMMain"))
 
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();
@@ -552,7 +554,7 @@ const Dashboard = () => {
     // if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
     if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
-    if (nav === 18) return <TTMMain isCollapsed={isCollapsed}/>
+    if (nav === 18) return <Suspense fallback={<LoadingSpinner />}><TTM /></Suspense>
   };
 
   const [show, setShow] = useState(false);
