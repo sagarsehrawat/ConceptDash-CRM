@@ -86,7 +86,7 @@ const Chip = (props) => {
       <div className="chip-container">
         <div
           className={`chip ${chipClass}`}
-          style={{"cursor" : onUpdate ? "pointer" : "auto"}}
+          style={{"cursor" : onUpdate ? "pointer" : "default"}}
           onClick={handleModal}
         >
           {value}
@@ -126,7 +126,7 @@ Chip.propTypes = {
   /**
    * Options for the update modal of the chip
    */
-  options: PropTypes.array.isRequired,
+  options: PropTypes.array,
   /**
    * useRef variable for the table which can stop the scrolling of the table
    */
@@ -143,7 +143,8 @@ Chip.propTypes = {
 
 Chip.defaultProps = {
   tableRef: null,
-  onUpdate: null
+  onUpdate: null,
+  options: []
 };
 
 export default Chip;
