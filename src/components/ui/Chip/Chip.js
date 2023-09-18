@@ -10,7 +10,7 @@ const classes = {
   'Completed' : 'completed-chip',
   'In Progress' : 'in-progress-chip',
   'Not Started' : 'not-started-chip',
-  'Critical' : 'crtical-chip',
+  'Critical' : 'critical-chip',
   'High' : 'high-chip',
   'Medium' : 'medium-chip',
   'Low' : 'low-chip',

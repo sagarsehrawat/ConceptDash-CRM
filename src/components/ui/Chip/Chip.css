@@ -21,7 +21,7 @@
     position: absolute;
     z-index: 2;
     margin-top: 8px;
-    margin-left: -18px;
+    margin-left: -15px;
 }
 
 .chip-modal-container{
@@ -39,7 +39,7 @@
 
 .chip-modal-item{
     display: flex;
-    width: 128px;
+    width: fit-content;
     height: 32px;
     padding: 6px 12px;
     flex-direction: column;
