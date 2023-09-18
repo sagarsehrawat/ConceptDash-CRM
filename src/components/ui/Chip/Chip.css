@@ -21,7 +21,7 @@
     position: absolute;
     z-index: 2;
     margin-top: 8px;
-    margin-left: -18px;
+    margin-left: -15px;
 }
 
 .chip-modal-container{
@@ -39,7 +39,7 @@
 
 .chip-modal-item{
     display: flex;
-    width: 128px;
+    width: fit-content;
     height: 32px;
     padding: 6px 12px;
     flex-direction: column;
@@ -57,12 +57,27 @@
     color: #5079E1;
 }
 
-.in-progress-chip{
-    background: #EFFEFA;
-    color: #13A579;
-}
-
 .not-started-chip{
     background: #FEF5E7;
     color: #C6720E;
+}
+
+.critical-chip{
+    background: #FBE1E1;
+    color: #8B0000;
+}
+
+.high-chip, .not-found-chip, .lost-chip, .nogo-chip{
+    background: #FFF1F1;
+    color: #D93838;
+}
+
+.medium-chip, .draft-budget-chip, .pending-chip, .review-chip{
+    background: #FFF4EF;
+    color: #FD9568;
+}
+
+.in-progress-chip, .low-chip, .done-chip, .won-chip, .go-chip{
+    background: #EFFEFA;
+    color: #13A579;
 }

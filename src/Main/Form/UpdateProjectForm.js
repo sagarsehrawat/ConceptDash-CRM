@@ -302,9 +302,9 @@ function UpdateProjectForm(props) {
               onChange={handleChange}
             >
               <option value="">Status</option>
-              <option value="Not Started Yet">Not Started Yet</option>
+              <option value="Not Started">Not Started</option>
               <option value="Completed">Completed</option>
-              <option value="Ongoing">Ongoing</option>
+              <option value="In Progress">In Progress</option>
             </Form.Select>
           </Form.Group>
           <Form.Group style={{width:'253px'}} controlId="formGridCity">

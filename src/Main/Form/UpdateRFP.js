@@ -331,7 +331,7 @@ function UpdateRFP(props) {
               onChange={handleChange}
             >
               <option value="">Select Action</option>
-              <option value="NoGo">NoGo</option>
+              <option value="No Go">No Go</option>
               <option value="Go">Go</option>
             </Form.Select>
           </Form.Group>
