@@ -147,6 +147,7 @@ export const CHANGE_PASSWORD = '/api/update/password'
 
 // update apis
 export const UPDATE_BUDGET = '/api/update/budget'
+export const UPDATE_BUDGET_CITY_STATUS = '/api/update/budget/status'
 export const UPDATE_BUDGET_CITY1 = '/api/update/budgetCity1'
 export const UPDATE_BUDGET_CITY2 = '/api/update/budgetCity2'
 export const UPDATE_COMPANY = '/api/update/company'
@@ -158,12 +159,14 @@ export const UPDATE_PROJECT_STATUS = '/api/update/project/status'
 export const UPDATE_PROPOSAL = '/api/update/proposal'
 export const UPDATE_STATUS_PROPOSAL = '/api/update/proposal/status'
 export const UPDATE_RFP = '/api/update/rfp'
+export const UPDATE_RFP_STATUS = '/api/update/rfp/status'
 export const UPDATE_TASK = '/api/update/task'
 export const UPDATE_PROJECT_TASK_5 = '/api/update/projectTask5'
 export const UPDATE_PROJECT_TASK_4 = '/api/update/projectTask4'
 export const UPDATE_PRIVILEGE = '/api/update/privileges'
 export const UPDATE_EXPENSE_TRANSACTION = '/api/update/expenseTransaction'
-export const UPDATE_TASK_STATUS = '/api/update/status/task'
+export const UPDATE_TASK_STATUS = '/api/update/task/status'
+export const UPDATE_TASK_PRIORITY = '/api/update/task/priority'
 
 //Chart APIs
 export const COUNTS = '/api/get/counts'

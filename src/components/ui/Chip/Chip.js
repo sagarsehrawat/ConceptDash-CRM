@@ -3,13 +3,26 @@ import PropTypes from "prop-types";
 import "./Chip.css";
 
 // Array of Available Options
-const values = ['Completed', 'In Progress', 'Not Started']
+const values = ['Completed', 'In Progress', 'Not Started', 'Critical', 'High', 'Medium', 'Low', 'Done', 'Not Found', 'Draft Budget', 'Won', 'Pending', 'Lost', 'Go', 'No Go', 'Review']
 
 // Class list for Chips
 const classes = {
   'Completed' : 'completed-chip',
   'In Progress' : 'in-progress-chip',
-  'Not Started' : 'not-started-chip'
+  'Not Started' : 'not-started-chip',
+  'Critical' : 'critical-chip',
+  'High' : 'high-chip',
+  'Medium' : 'medium-chip',
+  'Low' : 'low-chip',
+  'Done' : 'done-chip',
+  'Not Found' : 'not-found-chip',
+  'Draft Budget' : 'draft-budget-chip',
+  'Won' : 'won-chip',
+  'Pending' : 'pending-chip',
+  'Lost' : 'lost-chip',
+  'Go' : 'go-chip',
+  'No Go' : 'nogo-chip',
+  'Review' : 'review-chip'
 }
 
 const Chip = (props) => {
@@ -45,7 +58,7 @@ const Chip = (props) => {
   };
 
   // Handle the table scrolling i.e. block it when modal is open and run it when modal is closed
-  if (onUpdate && tableRef) {
+  if (onUpdate!==null && tableRef!==null) {
     if (isVisible) tableRef.current.style.overflowY = "hidden";
     else tableRef.current.style.overflowY = "auto";
   }
@@ -73,6 +86,7 @@ const Chip = (props) => {
       <div className="chip-container">
         <div
           className={`chip ${chipClass}`}
+          style={{"cursor" : onUpdate ? "pointer" : "default"}}
           onClick={handleModal}
         >
           {value}
@@ -112,7 +126,7 @@ Chip.propTypes = {
   /**
    * Options for the update modal of the chip
    */
-  options: PropTypes.array.isRequired,
+  options: PropTypes.array,
   /**
    * useRef variable for the table which can stop the scrolling of the table
    */
@@ -129,7 +143,8 @@ Chip.propTypes = {
 
 Chip.defaultProps = {
   tableRef: null,
-  onUpdate: null
+  onUpdate: null,
+  options: []
 };
 
 export default Chip;
