@@ -17,6 +17,7 @@ import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
 import SearchBar from '../../components/ui/SearchBar/SearchBar'
+import Button1 from '../../components/ui/Button/Button'
 
 const Proposal = (props) => {
     const { isCollapsed } = props
@@ -48,11 +49,14 @@ const Proposal = (props) => {
     const [filter2, setfilter2] = useState('Basic')
     const [status, setstatus] = useState(null)
     const [advancedFilter, setadvancedFilter] = useState([['', 'IS', '']])
+    const iconPath = require('../../Images/allProjects.png');
 
     //Add Form Modal
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = () => {
+        console.log('handleShowCalled');
+        setShow(true);}
 
     //Filter Modal
     const [filterModal, setfilterModal] = useState(false);
@@ -938,15 +942,17 @@ const Proposal = (props) => {
     }
 
     const totalBidCalculator = (a, b, c, d)=>{
-        return (a+b+c+d);
+        return (a+b+c+d); 
     }
     return (
         <>
-            {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+            {green === true ? <GreenAlert setGreen={setgreen} /> :  <></>}
             {red === true ? <RedAlert setRed={setred} /> : <></>}
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
                 <p style={styles.heading}>Proposals</p>
-                <button style={styles.addButton} disabled={!privileges.includes('Add Proposal')} onClick={handleShow}><p style={styles.addButtonText} >+ Add New proposal</p></button>
+                {/* <button style={styles.addButton} disabled={!privileges.includes('Add Proposal')} onClick={handleShow}><p style={styles.addButtonText} >+ Add New proposal</p></button> */}
+                <Button1 icon={iconPath} label="Add New Proposal" handleClick={handleShow} disabled={false} secondary={false} smallBtn={true} />
+                
             </div>
 
             {/* Header Cards */}
