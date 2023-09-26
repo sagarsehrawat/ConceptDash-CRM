@@ -62,7 +62,7 @@ import Employee from "../v2/Employee";
 import settingsIcon from '../../Images/Settings icon.svg'
 import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../v2/Customers";
-import Project from "../v2/Project";
+// import Project from "../v2/Project";
 import ProjectDetail from "../Update/ProjectDetail";
 import BudgetCities from "../v2/BudgetCities";
 import Tasks from "../v2/Tasks";
@@ -88,7 +88,7 @@ import AddBudgetCity from "../Form/AddBudgetCity";
 import Wishes from "../v2/Updated_Module/Wishes";
 import crossbtn from '../../Images/Celebrations/cross_wishes.svg'
 import TTMTable from "../v2/TTMTable";
-
+import Project from '../../pages/projects/index'
 
 
 const Dashboard = () => {
