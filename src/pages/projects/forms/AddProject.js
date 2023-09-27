@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Modal, ModalBody } from 'react-bootstrap'
 import './AddProject.css'
 import headerIcon from '../../../Images/Projects.svg';
@@ -15,6 +15,10 @@ const AddProject = (props) => {
             left: '50vw',
           },
     }
+
+    const [form, setForm] = useState({
+        projectType: "Independent Project"
+    })
   return (
     <>
         {/* <div className={`modal project-modal ${true ? 'visible' : 'hidden'}`}>
@@ -42,7 +46,15 @@ const AddProject = (props) => {
                     </div>
 
                     <div className='d-flex flex-row justify-contents-center align-items-center'>
-                    
+                        <div className={`project-type ${form.projectType==='Independent Project' ? 'project-type-active' : 'project-type-inactive'}`} onClick={(e) => {}}>
+                            Independent Project
+                        </div>
+                        <div className={`project-type ${form.projectType==='Roster Project' ? 'project-type-active' : 'project-type-inactive'}`} onClick={(e) => {}}>
+                            Roster Project
+                        </div>
+                        <div className={`project-type ${form.projectType==='Child Project' ? 'project-type-active' : 'project-type-inactive'}`} onClick={(e) => {}}>
+                            Child Project
+                        </div>
                     </div>
                 </div>
             </ModalBody>
