@@ -684,12 +684,6 @@ const ProjectsTable = (props) => {
             color: "#0A0A0A",
           },
         };
-        // const [projectCount, setprojectCount] = useState({
-        //   Total: 0,
-        //   Percent: 0,
-        //   Ongoing: 0,
-        //   Completed: 0,
-        // });
 
         const newProjects = useSelector(selectNewProjects)
         const ongoingProjects = useSelector(selectOngoingProjects)
