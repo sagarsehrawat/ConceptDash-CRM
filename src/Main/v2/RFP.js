@@ -791,12 +791,12 @@ const RFP = (props) => {
         setscrolled(tableRef.current.scrollLeft)
     }
 
-    const handleStatusUpdate = async (rfpId, status) => {
+    const handleStatusUpdate = async (rfpId, action) => {
         const response = await axios.post(
           HOST + UPDATE_RFP_STATUS,
           {
             rfpId,
-            status,
+            action,
           },
           {
             headers: { auth: "Rose " + localStorage.getItem("auth") },
