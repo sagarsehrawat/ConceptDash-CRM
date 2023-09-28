@@ -42,6 +42,10 @@ function TTMTable(props) {
   const handleCloseStage7 = () => setShowStage7(false);
   const handleShowStage7 = () => setShowStage7(true);
 
+  const [openAddTask, setopenAddTask] = useState(false);
+  const handleOpenAddTask = () => setopenAddTask(true);
+  const handleCloseAddTask = () => setopenAddTask(false);
+
   const [a, seta] = useState(0);
   const [isLoading, setisLoading] = useState(false);
   const [editingData, seteditingData] = useState([])
@@ -382,8 +386,12 @@ const calculateEndDate=(startDate, duration)=> {
     settotalHrs(totalHr);
   }
 
-  const ceilValue =(a)=>{
-    return a.ceilValue();
+  const handleDurationChange = (p, c, e) =>{
+    let value = e.target.value;
+    let h = [...editingData];
+    h[p].subtasks[c].Duration = parseInt(value?value:0);
+    setchange(true)
+    seteditingData(h)
   }
   return (
     isLoading?<LoadingSpinner/>:
@@ -391,7 +399,7 @@ const calculateEndDate=(startDate, duration)=> {
      <div className='d-flex flex-row justify-content-between'>
       <div className='pageHeader'>TTM : {Name}</div>
       {change?<button style={styles.addButton}  onClick={handleSubmit}><p style={styles.addButtonText} >Save Changes</p></button>:<></>}
-      {/* <Button variant='success' onClick={handleSubmit} style={{marginRight:'2vw', height:'8vh'}}>Save Changes</Button> */}
+      <Button variant='success' onClick={handleOpenAddTask} style={{marginRight:'2vw', height:'8vh'}}>Add Task</Button>
      </div>
 
       {/* Table Header */}
@@ -509,106 +517,107 @@ const calculateEndDate=(startDate, duration)=> {
                   </div>
                   </td>
                   <Modal
-                                    show={statusModal}
-                                    onHide={closestatusModal}
-                                    style={styles.statusModal}
-                                    dialogClassName="filter-dialog"
-                                    backdropClassName="filter-backdrop"
-                                    animation={false}
-                                  >
-                                    <div className="d-flex flex-row align-items-center">
-                                      <div
-                                        style={{
-                                          fontFamily: "'Roboto'",
-                                          fontStyle: "normal",
-                                          fontWeight: 400,
-                                          fontSize: "14px",
-                                          backgroundColor: "white",
-                                          border: "none",
-                                          color: PRIMARY_COLOR,
-                                          marginRight: "65px",
-                                          marginTop: "8px",
-                                          marginLeft: "8px",
-                                          marginBottom: "8px",
-                                        }}
-                                      >
-                                        Update Status
-                                      </div>
-                                      <FontAwesomeIcon
-                                        icon={faX}
-                                        style={{ height: "9px", cursor: "pointer" }}
-                                        color={PRIMARY_COLOR}
-                                        onClick={closestatusModal}
-                                      />
-                                    </div>
-                                    <div
-                                      style={styles.filterSubcontainer}
-                                      className="filter-container"
-                                    >
-                                      <p style={styles.filterSubheading}>
-                                        &nbsp;</p>
+                    show={statusModal}
+                    onHide={closestatusModal}
+                    style={styles.statusModal}
+                    dialogClassName="filter-dialog"
+                    backdropClassName="filter-backdrop"
+                    animation={false}
+                  >
+                    <div className="d-flex flex-row align-items-center">
+                      <div
+                        style={{
+                          fontFamily: "'Roboto'",
+                          fontStyle: "normal",
+                          fontWeight: 400,
+                          fontSize: "14px",
+                          backgroundColor: "white",
+                          border: "none",
+                          color: PRIMARY_COLOR,
+                          marginRight: "65px",
+                          marginTop: "8px",
+                          marginLeft: "8px",
+                          marginBottom: "8px",
+                        }}
+                      >
+                        Update Status
+                      </div>
+                      <FontAwesomeIcon
+                        icon={faX}
+                        style={{ height: "9px", cursor: "pointer" }}
+                        color={PRIMARY_COLOR}
+                        onClick={closestatusModal}
+                      />
+                    </div>
+                    <div
+                      style={styles.filterSubcontainer}
+                      className="filter-container"
+                    >
+                      <p style={styles.filterSubheading}>
+                        &nbsp;</p>
 
-                                      <div
-                                        style={{
-                                          ...styles.filterSubSubContainer,
-                                          backgroundColor: currStatus === 0
-                                            ? "#DBDBF4"
-                                            : "#F7F7F9",
-                                        }}
-                                        onClick={() =>
-                                          setcurrStatus(0)
-                                        }
-                                      >
-                                        <p style={styles.filterBodyText}>
-                                          Not Started
-                                        </p>
-                                      </div>
-                                      <div
-                                        style={{
-                                          ...styles.filterSubSubContainer,
-                                          backgroundColor: currStatus === 1
-                                            ? "#DBDBF4"
-                                            : "#F7F7F9",
-                                        }}
-                                        onClick={() =>
-                                          setcurrStatus(1)
-                                        }
-                                      >
-                                        <p style={styles.filterBodyText}>
-                                          Ongoing
-                                        </p>
-                                      </div>
-                                      <div
-                                        style={{
-                                          ...styles.filterSubSubContainer,
-                                          backgroundColor: currStatus === 2
-                                            ? "#DBDBF4"
-                                            : "#F7F7F9",
-                                        }}
-                                        onClick={() =>
-                                          setcurrStatus(2)
-                                        }
-                                      >
-                                        <p style={styles.filterBodyText}>
-                                          Completed
-                                        </p>
-                                      </div>
-                                      <Button
-                                        style={styles.updateButtonStatus}
-                                        onClick={updateStatus}
-                                      >
-                                        Update
-                                      </Button>
-                                    </div>
+                      <div
+                        style={{
+                          ...styles.filterSubSubContainer,
+                          backgroundColor: currStatus === 0
+                            ? "#DBDBF4"
+                            : "#F7F7F9",
+                        }}
+                        onClick={() =>
+                          setcurrStatus(0)
+                        }
+                      >
+                        <p style={styles.filterBodyText}>
+                          Not Started
+                        </p>
+                      </div>
+                      <div
+                        style={{
+                          ...styles.filterSubSubContainer,
+                          backgroundColor: currStatus === 1
+                            ? "#DBDBF4"
+                            : "#F7F7F9",
+                        }}
+                        onClick={() =>
+                          setcurrStatus(1)
+                        }
+                      >
+                        <p style={styles.filterBodyText}>
+                          Ongoing
+                        </p>
+                      </div>
+                      <div
+                        style={{
+                          ...styles.filterSubSubContainer,
+                          backgroundColor: currStatus === 2
+                            ? "#DBDBF4"
+                            : "#F7F7F9",
+                        }}
+                        onClick={() =>
+                          setcurrStatus(2)
+                        }
+                      >
+                        <p style={styles.filterBodyText}>
+                          Completed
+                        </p>
+                      </div>
+                      <Button
+                        style={styles.updateButtonStatus}
+                        onClick={updateStatus}
+                      >
+                        Update
+                      </Button>
+                    </div>
 
-                                  </Modal>
+                  </Modal>
                 </tr>
                 {e.subtasks.map((task)=>{
                   return(
                     <>
                     {task.visibility?
                     <tr>
-                      <td style={{paddingLeft:'32px'}} className='td'>{task.TaskName}</td>
+                      <td style={{paddingLeft:'32px'}} className='td'
+                      >{task.TaskName}</td>
                       <td style={{}} className='td'><div style={{cursor:'pointer'}} onClick={()=>{setcurrStatus(e.status);setid([e.parentID, task.childId]);openstatusModal()}}>
                       {task.status === 0 && task.Progress<100
                         ? <div style={{  textAlign:'center', height: '20px', background: '#E4EEFE', border: '0.4px solid #E4EEFE', borderRadius: '24px', paddingLeft: '6px', paddingRight:'6px' }}>Not Started</div> :
@@ -617,7 +626,14 @@ const calculateEndDate=(startDate, duration)=> {
                       }</div></td>
                       <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "start", e.parentID, task.childId)} selected={new Date(task.StartDate)} /></td>
                       <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "end", e.parentID, task.childId)} selected={calculateEndDate(new Date(task.StartDate), task.Duration)} /></td>
-                      <td style={{paddingLeft:'32px', textAlign:'center'}} className='td'>{task.Duration===0?1:Math.ceil(task.Duration)}</td>
+                      <td style={{paddingLeft:'32px', textAlign:'center'}} className='td'>
+                        <input
+                          className='no-focus' placeholder='0'
+                          style={style.input}
+                          value={Math.ceil(task.Duration)}
+                          onChange={(eve)=>handleDurationChange(e.parentID, task.childId , eve)}
+                        />
+                      </td>
                       {task.hrs.map((h, idx)=>{
                         return (
                           visible[idx] === 0? <></> :(<td  > 
@@ -647,7 +663,7 @@ const calculateEndDate=(startDate, duration)=> {
                 }}>
                   <p className='empty' onClick={() => functionArray[e.parentID]()} style={{
                     paddingLeft:'24px', cursor:'pointer'
-                  }}>Add Task +</p></td>
+                  }}>Add/Remove Task +</p></td>
                 </tr>}
               </>
             )
@@ -790,6 +806,20 @@ const calculateEndDate=(startDate, duration)=> {
             <option>Select Task</option>
             <option value='4'>Completion and Warranty site inspections</option>
             <option value='5'>Maintenance Period Support</option>
+          </Form.Select>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={openAddTask} onHide={handleCloseAddTask}>
+        <Modal.Header closeButton>
+          <Modal.Title>Select Task (Contract Administration and Inscpection Services)</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Select onChange={(e)=>{console.log(e.target.value)}}>
+            <option>Select Milestone</option>
+            {editingData.map((e, idx)=>{
+              return (<option value={idx}>{e.TaskName}</option>)
+            })}
           </Form.Select>
         </Modal.Body>
       </Modal>
