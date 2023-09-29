@@ -51,6 +51,7 @@ function TTMTable(props) {
   const [editingData, seteditingData] = useState([])
   const [emps, setemps] = useState([])
   const [rate, setrate] = useState([])
+  const [designations, setdesignations] = useState([])
 
   const [roadWayDesignersColspan, setRoadWayDesignersColspan] = useState(1)
   const [watermainColspan, setWatermainColspan] = useState(1)
@@ -96,10 +97,12 @@ function TTMTable(props) {
           let empIDs = JSON.parse(res.data.res[0].Employee_Info)[0]
           let hrRates = JSON.parse(res.data.res[0].Employee_Info)[1]
           let visibleColumns = JSON.parse(res.data.res[0].Visible_Columns);
+          let desigs = JSON.parse(res.data.res[0].Designations);
           setemps(empIDs)
           setrate(hrRates)
           seteditingData(data)
           setvisible(visibleColumns)
+          setdesignations(desigs)
           if(visibleColumns[6])setRoadWayDesignersColspan(2);
           if(visibleColumns[8])setWatermainColspan(2);
           if(visibleColumns[11])setTransportationColspan(2);
