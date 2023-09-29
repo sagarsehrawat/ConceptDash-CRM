@@ -38,7 +38,6 @@ function UpdateTask(props) {
   const [employees, setemployees] = useState([]);
   const [show, setShow] = useState(false);
   const { setgreen, closeModal, api, apiCall, setred, updateTask } = props;
-  console.log(updateTask)
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [form, setform] = useState({
@@ -101,6 +100,7 @@ function UpdateTask(props) {
     };
     call();
   }, []);
+  
   const handleSubmit = (e) => {
     setisLoading(true);
     e.preventDefault();
@@ -120,7 +120,7 @@ function UpdateTask(props) {
           assignedBy: updateTask.Assigned_By?updateTask.Assigned_By:localStorage.getItem('employeeId'),
           reviewedBy: review,
           priority: priority,
-          status: updateTask.Status
+          status: updateTask.Status===0?1:updateTask.Status
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
