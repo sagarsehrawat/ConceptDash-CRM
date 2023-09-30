@@ -9,7 +9,7 @@
     bottom: 0;
 }
 .project-modal-container{
-    display: inline-flex;
+    display: flex;
     padding: 54px 48px;
     flex-direction: column;
     align-items: flex-start;
@@ -35,4 +35,38 @@
     border-radius: 100px;
     background: #FFF;
     box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.12);
+}
+
+.project-type{
+    display: flex;
+    flex: 1;
+    min-width: 176px;
+    padding: 10px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: var(--8-pad, 8px);
+    border: 1px solid #EBEDF8;
+    background: #FFF;
+    cursor: pointer;
+
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+    color: #3D424F;
+}
+
+.project-type-active{
+    border: 1px solid #EBEDF8;
+    background: #EFF1FA;
+    color: #8361FE;
+}
+
+.type-right{
+    border-radius: 0px 24px 24px 0px;
+}
+
+.type-left{
+    border-radius: 24px 0px 0px 24px;
 }

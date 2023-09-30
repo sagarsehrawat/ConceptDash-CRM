@@ -19,16 +19,20 @@ const AddProject = (props) => {
     const [form, setForm] = useState({
         projectType: "Independent Project"
     })
+
+    const handleForm = (e, key, value) => {
+        e.preventDefault();
+ 
+        setForm((prev) => {
+            return {
+                ...prev,
+                [key]: value
+            }
+        })
+    }
+
   return (
     <>
-        {/* <div className={`modal project-modal ${true ? 'visible' : 'hidden'}`}>
-        <div className='project-modal-container'>
-                <div className='d-flex align-items-center'>
-                    <img src={headerIcon} />
-                    <p className='heading-2'>Create New Project</p>
-                </div>
-            </div>
-        </div> */}
         <Modal
             show={props.show}
             onHide={props.onHide}
@@ -45,20 +49,23 @@ const AddProject = (props) => {
                         <p className='heading-2'>Create New Project</p>
                     </div>
 
-                    <div className='d-flex flex-row justify-contents-center align-items-center'>
-                        <div className={`project-type ${form.projectType==='Independent Project' ? 'project-type-active' : 'project-type-inactive'}`} onClick={(e) => {}}>
+                    <div className='d-flex justify-contents-center align-items-center'>
+                        <div className={`project-type type-left ${form.projectType==='Independent Project' ? 'project-type-active' : ''}`} onClick={(e) => {handleForm(e, 'projectType', 'Independent Project')}}>
                             Independent Project
                         </div>
-                        <div className={`project-type ${form.projectType==='Roster Project' ? 'project-type-active' : 'project-type-inactive'}`} onClick={(e) => {}}>
+                        <div className={`project-type ${form.projectType==='Roster Project' ? 'project-type-active' : ''}`} onClick={(e) => {handleForm(e, 'projectType', 'Roster Project')}}>
                             Roster Project
                         </div>
-                        <div className={`project-type ${form.projectType==='Child Project' ? 'project-type-active' : 'project-type-inactive'}`} onClick={(e) => {}}>
+                        <div className={`project-type type-right ${form.projectType==='Child Project' ? 'project-type-active' : ''}`} onClick={(e) => {handleForm(e, 'projectType', 'Child Project')}}>
                             Child Project
                         </div>
                     </div>
+
+                    <div>
+                        
+                    </div>
                 </div>
             </ModalBody>
-
         </Modal>
     </>
   )
