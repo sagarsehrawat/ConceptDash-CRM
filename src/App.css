@@ -23,6 +23,18 @@
   line-height: 28px; /* 155.556% */
 }
 
+.w-100{
+  width: 100%;
+}
+
+.gap-8{
+  gap: 8px;
+}
+
+.gap-12{
+  gap: 12px;
+}
+
 .modal-body{
   padding: 0px !important;
 }
