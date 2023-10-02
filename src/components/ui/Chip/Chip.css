@@ -1,0 +1,83 @@
+.chip{
+    display: inline-flex;
+    padding: 4px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: max-content;
+
+    text-align: center;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+}
+
+.chip-modal{
+    position: absolute;
+    z-index: 2;
+    margin-top: 8px;
+    margin-left: -15px;
+}
+
+.chip-modal-container{
+    display: flex;
+    padding: 10px 0px;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: var(--8-pad, 8px);
+    border: 1px solid #EBEDF8;
+    background: #FFF;
+    box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.08), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+    height: auto;
+    width: auto;
+}
+
+.chip-modal-item{
+    display: flex;
+    width: fit-content;
+    height: 32px;
+    padding: 6px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.chip-modal-item:hover{
+    background: #F7F8F8;
+}
+
+.completed-chip{
+    background: #E4EEFE;
+    color: #5079E1;
+}
+
+.not-started-chip{
+    background: #FEF5E7;
+    color: #C6720E;
+}
+
+.critical-chip{
+    background: #FBE1E1;
+    color: #8B0000;
+}
+
+.high-chip, .not-found-chip, .lost-chip, .nogo-chip{
+    background: #FFF1F1;
+    color: #D93838;
+}
+
+.medium-chip, .draft-budget-chip, .pending-chip, .review-chip{
+    background: #FFF4EF;
+    color: #FD9568;
+}
+
+.in-progress-chip, .low-chip, .done-chip, .won-chip, .go-chip{
+    background: #EFFEFA;
+    color: #13A579;
+}

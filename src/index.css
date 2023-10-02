@@ -25,7 +25,7 @@ th {
   position: sticky;
   left: 0;
   top: 0;
-  z-index: 3;
+  z-index: 4;
   background-color: #F7F7F9;
 }
 
@@ -33,7 +33,7 @@ th {
   position: sticky;
   left: 0;
   top: 0;
-  z-index: 2;
+  z-index: 3;
   background-color: #F7F7F9;
 }
 
@@ -261,7 +261,7 @@ body>div.fade.modal.show>div {
 input:focus {
   outline: none !important;
   box-shadow: none !important;
-  border: 1px solid #6519E1 !important;
+  /* border: 1px solid #6519E1; */
 }
 
 .no-focus:focus{
