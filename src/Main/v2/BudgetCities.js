@@ -663,7 +663,7 @@ const BudgetCities = (props) => {
                                         <LoadingSpinner />
                                     </td>
                                 </tr> : cities && cities.map((e, idx) => {
-                                    if (e.City.toLowerCase().startsWith(value.toLowerCase())) {
+                                    if (e.City?.toLowerCase().startsWith(value?.toLowerCase())) {
                                         return (<tr style={{ ...styles.tableRow }} className='' id={e.City_Budget_ID}>
                                             <td className='' style={{ ...styles.tableCell, fontWeight: "500" }}>
                                                 <div className='d-flex flex-column justify-content-start'>
