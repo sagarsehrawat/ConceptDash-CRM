@@ -24,6 +24,7 @@ import RedAlert from "../Loader/RedAlert";
 import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import AuthContext from '../../Context/AuthContext'
+import TFButton from "../../components/ui/Button/Button";
 
 const styles = {
   nameHeading: {
@@ -452,12 +453,14 @@ function ProjectForm(props) {
             </Row> */}
 
             <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
-            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+            {/* <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
               Cancel
-            </Button>
-            <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
+            </Button> */}
+            <TFButton label="Cancel" variant="secondary" handleClick={closeModal} customStyles={{marginRight: '20px'}} size="small"/>
+            {/* <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
               Create New project
-            </Button>
+            </Button> */}
+            <TFButton label="Create New Project" type="submit" size="small"/>
             </div>
             
           </Form>

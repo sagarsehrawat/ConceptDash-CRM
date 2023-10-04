@@ -20,6 +20,7 @@ import LoadingSpinner from "../Loader/Loader";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import AuthContext from "../../Context/AuthContext";
+import TFButton from "../../components/ui/Button/Button";
 
 function EmployeeForm(props) {
   const { privileges, setPrivileges } = useContext(AuthContext);
@@ -666,14 +667,15 @@ function EmployeeForm(props) {
                 required
               />
             </Form.Group>
-            <Button
+            {/* <Button
               className="submit-btn"
               variant="primary"
               type="submit"
               style={{ marginTop: "4vh", width: "10vw" }}
             >
               Submit
-            </Button>
+            </Button> */}
+            <TFButton label="Submit" type="submit" size="small"/>
           </Form>
 
           <Modal show={show} onHide={handleClose}>

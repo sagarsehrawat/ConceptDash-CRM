@@ -17,8 +17,9 @@ import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
 import SearchBar from '../../components/ui/SearchBar/SearchBar'
-import Button1 from '../../components/ui/Button/Button'
+import TFButton from '../../components/ui/Button/Button'
 import Chip from '../../components/ui/Chip/Chip'
+import iconPath from '../../Images/addPlus.svg'
 
 const Proposal = (props) => {
     const { isCollapsed } = props
@@ -50,7 +51,7 @@ const Proposal = (props) => {
     const [filter2, setfilter2] = useState('Basic')
     const [status, setstatus] = useState(null)
     const [advancedFilter, setadvancedFilter] = useState([['', 'IS', '']])
-    const iconPath = require('../../Images/allProjects.png');
+    
 
     //Add Form Modal
     const [show, setShow] = useState(false);
@@ -921,7 +922,7 @@ const Proposal = (props) => {
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
                 <p style={styles.heading}>Proposals</p>
                 {/* <button style={styles.addButton} disabled={!privileges.includes('Add Proposal')} onClick={handleShow}><p style={styles.addButtonText} >+ Add New proposal</p></button> */}
-                <Button1 icon={iconPath} label="Add New Proposal" handleClick={handleShow} disabled={false} secondary={false} smallBtn={true} />
+                <TFButton icon={iconPath} label="Add New Proposal" handleClick={handleShow} disabled={!privileges.includes('Add Proposal')}/>
                 
             </div>
 

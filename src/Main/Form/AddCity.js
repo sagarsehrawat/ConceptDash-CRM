@@ -8,6 +8,7 @@ import { HOST, ADD_CITY } from "../Constants/Constants";
 import Row from "react-bootstrap/Row";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
+import TFButton from "../../components/ui/Button/Button";
 
 function AddCity(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props;
@@ -127,13 +128,14 @@ function AddCity(props) {
           </Form.Group>
         </Row>
 
-        <Button
+        {/* <Button
           className="submit-btn"
           variant="primary"
           type="submit"
         >
           Submit
-        </Button>
+        </Button> */}
+        <TFButton label="Submit" type="submit" size="small"/>
       </Form>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

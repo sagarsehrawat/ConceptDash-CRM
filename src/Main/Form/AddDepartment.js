@@ -12,6 +12,7 @@ import {
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
+import TFButton from "../../components/ui/Button/Button";
 
 function AddDepartment(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props;
@@ -100,13 +101,14 @@ function AddDepartment(props) {
         </Row>
 
 
-        <Button
+        {/* <Button
           className="submit-btn"
           variant="primary"
           type="submit"
         >
           Submit
-        </Button>
+        </Button> */}
+        <TFButton label="Submit" type="submit" size="small"/>
       </Form>
     </div>
   );

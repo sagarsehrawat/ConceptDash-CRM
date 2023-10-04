@@ -16,6 +16,7 @@ import {
 import Modal from "react-bootstrap/Modal";
 import JobTitle from "./JobTitle";
 import LoadingSpinner from "../Loader/Loader";
+import TFButton from "../../components/ui/Button/Button";
 
 function UpdateEmployeeForm(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props;
@@ -914,14 +915,15 @@ function UpdateEmployeeForm(props) {
               />
             </Form.Group>
           </Row>
-          <Button
+          {/* <Button
             className="submit-btn"
             variant="primary"
             type="submit"
             style={{ marginTop: "4vh", width: "10vw" }}
           >
             Submit
-          </Button>
+          </Button> */}
+          <TFButton customStyles={{marginTop: '4vh', width: '10vw'}} label="Submit" type="submit" size="small"/>
         </Form>
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>

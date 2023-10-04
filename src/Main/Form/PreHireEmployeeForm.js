@@ -22,6 +22,7 @@ import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import AuthContext from "../../Context/AuthContext";
 import plus from '../../Images/plus.svg'
+import TFButton from "../../components/ui/Button/Button";
 const styles = {
     nameHeading: {
       height: "20px",
@@ -377,12 +378,14 @@ function PreHireEmployeeForm(props) {
               </Form.Group>
               </Row>
               <div className="d-flex d-row justify-content-end" style={{ marginTop: '44px', marginRight: '20px' }}>
-              <Button onClick={closeModal} style={{ color: '#70757A', backgroundColor: '#FFFFFF', borderColor: '#70757A', marginRight: '20px' }}>
+              {/* <Button onClick={closeModal} style={{ color: '#70757A', backgroundColor: '#FFFFFF', borderColor: '#70757A', marginRight: '20px' }}>
                 Cancel
-              </Button>
-              <Button style={{ backgroundColor: PRIMARY_COLOR }} type="submit">
+              </Button> */}
+              <TFButton label="Cancel" variant="secondary" handleClick={closeModal} customStyles={{marginRight: '20px'}} size="small"/>
+              {/* <Button style={{ backgroundColor: PRIMARY_COLOR }} type="submit">
                 Add Employee
-              </Button>
+              </Button> */}
+              <TFButton label="Add Employee" type="submit" size="small"/>
             </div>
             </Form>
             </div>)}

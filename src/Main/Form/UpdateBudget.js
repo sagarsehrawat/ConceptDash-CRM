@@ -15,6 +15,7 @@ import {
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
+import TFButton from "../../components/ui/Button/Button";
 const styles = {
   nameHeading: {
     height: "20px",
@@ -323,12 +324,14 @@ function UpdateBudget(props) {
         </Row>
 
         <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
-            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+            {/* <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
               Cancel
             </Button>
             <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
               Update Budget
-            </Button>
+            </Button> */}
+            <TFButton label="Cancel" variant="secondary" handleClick={closeModal} customStyles={{marginRight: '20px'}} size="small"/>
+              <TFButton label="Update Budget" type="submit" size="small"/>
             </div>
       </Form>
       <Modal show={show} onHide={handleClose}>
