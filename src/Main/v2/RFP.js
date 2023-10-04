@@ -17,8 +17,8 @@ import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
 import SearchBar from '../../components/ui/SearchBar/SearchBar';
-import Chip from '../../components/ui/Chip/Chip';
 import TFButton from '../../components/ui/Button/Button';
+import Chip from '../../components/ui/Chip/Chip';
 import iconPath from '../../Images/addPlus.svg'
 
 
@@ -793,12 +793,12 @@ const RFP = (props) => {
         setscrolled(tableRef.current.scrollLeft)
     }
 
-    const handleStatusUpdate = async (rfpId, status) => {
+    const handleStatusUpdate = async (rfpId, action) => {
         const response = await axios.post(
           HOST + UPDATE_RFP_STATUS,
           {
             rfpId,
-            status,
+            action,
           },
           {
             headers: { auth: "Rose " + localStorage.getItem("auth") },

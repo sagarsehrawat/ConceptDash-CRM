@@ -149,7 +149,7 @@ const formattedDate = `${year}-${month}-${day}`;
           dueDate: form.dueDate,
           assignedBy: localStorage.getItem("employeeId"),
           reviewedBy: form.reviewedBy,
-          status: oldDate?1:0
+          status: oldDate?2:1
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )

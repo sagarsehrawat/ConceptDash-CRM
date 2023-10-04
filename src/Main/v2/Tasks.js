@@ -45,8 +45,8 @@ import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import './Tasks.css'
 import Chip from "../../components/ui/Chip/Chip";
-import TFButton from "../../components/ui/Button/Button";
 import iconPath from '../../Images/addPlus.svg'
+import TFButton from "../../components/ui/Button/Button";
 
 function Tasks(props) {
   const { isCollapsed } = props;
