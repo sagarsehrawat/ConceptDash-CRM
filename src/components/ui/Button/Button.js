@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from "prop-types";
 import './Button.css'
-import { text } from '@fortawesome/fontawesome-svg-core';
 
 const  TFButton = (props) => {
     const {icon, label, disabled, variant, handleClick, size, customStyles} = props;
