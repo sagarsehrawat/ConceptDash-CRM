@@ -16,7 +16,7 @@ import {
 import Modal from "react-bootstrap/Modal";
 import JobTitle from "./JobTitle";
 import LoadingSpinner from "../Loader/Loader";
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 function UpdateEmployeeForm(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props;
@@ -923,7 +923,7 @@ function UpdateEmployeeForm(props) {
           >
             Submit
           </Button> */}
-          <TFButton customStyles={{marginTop: '4vh', width: '10vw'}} label="Submit" type="submit" size="small"/>
+          <TFButton style={{marginTop: '4vh', width: '10vw'}} label="Submit" type="submit" size="small"/>
         </Form>
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>

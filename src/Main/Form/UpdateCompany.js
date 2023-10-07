@@ -8,7 +8,7 @@ import Row from "react-bootstrap/Row";
 import { HOST, UPDATE_COMPANY, GET_CITIES } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 function UpdateCompany(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props

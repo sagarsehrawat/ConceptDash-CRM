@@ -45,8 +45,8 @@ import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import './Tasks.css'
 import Chip from "../../components/ui/Chip/Chip";
-import iconPath from '../../Images/addPlus.svg'
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from '../../components/ui/TFButton/TFButton'
+import plusIcon from '../../assets/icons/Plus.svg'
 
 function Tasks(props) {
   const { isCollapsed } = props;
@@ -1082,7 +1082,7 @@ function Tasks(props) {
                   {/* <button className="addButton" onClick={handleShow}>
                     <p style={styles.addButtonText}>+ Add New Task</p>
                   </button> */}
-                  <TFButton icon={iconPath} label="Add New Task" handleClick={handleShow} />
+                  <TFButton icon={plusIcon} label="Add New Task" handleClick={handleShow} />
                 </div>
                 {/* Table */}
                 <div style={{ borderBottom: "1px solid #EBE9F1", height: "548px", overflow: "auto", position: "relative", marginTop: '32px', width: '100%' }}>

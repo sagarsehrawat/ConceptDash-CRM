@@ -21,7 +21,7 @@ import AddCity from "./AddCity";
 import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import plus from '../../Images/plus.svg'
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 const styles = {
   nameHeading: {
     height: "20px",
@@ -363,7 +363,7 @@ function BudgetsForm(props) {
             {/* <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
               Cancel
             </Button> */}
-            <TFButton customStyles={{marginRight: '20px'}}  variant="secondary" label="Cancel" handleClick={closeModal} size="small" />
+            <TFButton style={{marginRight: '20px'}}  variant="secondary" label="Cancel" handleClick={closeModal} size="small" />
             {/* <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
               Add New Budget
             </Button> */}

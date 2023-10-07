@@ -17,9 +17,9 @@ import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
 import SearchBar from '../../components/ui/SearchBar/SearchBar';
-import TFButton from '../../components/ui/Button/Button';
+import TFButton from '../../components/ui/TFButton/TFButton';
 import Chip from '../../components/ui/Chip/Chip';
-import iconPath from '../../Images/addPlus.svg'
+import plusIcon from '../../assets/icons/Plus.svg'
 
 
 
@@ -848,7 +848,7 @@ const RFP = (props) => {
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
                 <p style={styles.heading}>RFPs (Request For Proposals)</p>
                 {/* <button style={styles.addButton} disabled={!privileges.includes("Add RFP")} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button> */}
-                <TFButton icon={iconPath} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={handleShow} />
+                <TFButton icon={plusIcon} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={handleShow} />
             </div>
 
             {/* Header Cards */}

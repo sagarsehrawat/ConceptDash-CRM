@@ -19,7 +19,7 @@ import cross from '../../Images/cross1.svg'
 import SmallerLoader from "../Loader/SmallerLoader";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 
 
@@ -227,7 +227,7 @@ const Login = () => {
           {/* <button onClick={onLogin} className='button' disabled={isLoading}>
             <p className="loginText">Login</p>
           </button> */}
-          <TFButton label="Login" customStyles={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center',padding: '12px 64px', width: '22vw', height: '5vh', marginLeft:'15vw', marginTop: '20px' }}  handleClick={onLogin} disabled={isLoading}/>
+          <TFButton label="Login" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center',padding: '12px 64px', width: '22vw', height: '5vh', marginLeft:'15vw', marginTop: '20px' }}  handleClick={onLogin} disabled={isLoading}/>
         {/* </div> */}
       </div>
     </>

@@ -25,8 +25,8 @@ import tIcon from '../../Images/taskIcon.svg'
 import cross from '../../Images/cross.svg'
 import SearchBar from '../../components/ui/SearchBar/SearchBar'
 import Chip from '../../components/ui/Chip/Chip'
-import TFButton from '../../components/ui/Button/Button'
-import iconPath from '../../Images/addPlus.svg'
+import TFButton from '../../components/ui/TFButton/TFButton'
+import plusIcon from '../../assets/icons/Plus.svg'
 
 const BudgetCities = (props) => {
     const { isCollapsed } = props
@@ -884,7 +884,7 @@ const BudgetCities = (props) => {
                                     },
                                 ]} />
                         </div>
-                        <TFButton icon={iconPath} label="Add New Budget" handleClick={handleShow}/>
+                        <TFButton icon={plusIcon} label="Add New Budget" handleClick={handleShow}/>
                     </div>
 
                     {/* Table */}

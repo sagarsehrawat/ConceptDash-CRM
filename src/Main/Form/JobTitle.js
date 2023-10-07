@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import { HOST, ADD_JOB_TITLE, GET_DEPARTMENTS } from '../Constants/Constants';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from 'react-router-dom';
-import TFButton from '../../components/ui/Button/Button';
+import TFButton from "../../components/ui/TFButton/TFButton";
 function JobTitle() {
     const [isSubmit, setIsSubmit] = useState(false);
     const [departments, setdepartments] = useState([]);

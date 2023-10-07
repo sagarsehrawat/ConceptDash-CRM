@@ -8,7 +8,7 @@ import Row from "react-bootstrap/Row";
 import { HOST, GET_EMPLOYEENAMES, ADD_TASK, GET_PROJECT_NAMES, GET_RFP_NAMES, GET_PROPOSALS_NAMES, PRIMARY_COLOR } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 
 const styles = {
@@ -399,7 +399,7 @@ const formattedDate = `${year}-${month}-${day}`;
             {/* <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
               Cancel
             </Button> */}
-            <TFButton variant="secondary" label="Cancel" customStyles={{marginRight: '20px'}} handleClick={closeModal} size="small"/>
+            <TFButton variant="secondary" label="Cancel" style={{marginRight: '20px'}} handleClick={closeModal} size="small"/>
             {/* <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
               Add New Task
             </Button> */}

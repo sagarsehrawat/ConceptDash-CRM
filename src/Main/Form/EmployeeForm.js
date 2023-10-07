@@ -20,7 +20,7 @@ import LoadingSpinner from "../Loader/Loader";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import AuthContext from "../../Context/AuthContext";
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 function EmployeeForm(props) {
   const { privileges, setPrivileges } = useContext(AuthContext);

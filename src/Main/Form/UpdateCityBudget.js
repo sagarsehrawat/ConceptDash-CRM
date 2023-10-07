@@ -8,7 +8,7 @@ import Row from "react-bootstrap/Row";
 import { HOST, UPDATE_BUDGET, UPDATE_CITY_BUDGET } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 function UpdateCityBudget(props) {
   const [isSubmit, setIsSubmit] = useState(false);
