@@ -1,4 +1,4 @@
-export const HOST = 'https://crm-api.conceptdash.ca'
+export const HOST = 'http://tf-api.conceptdash.ca'
 // export const HOST = 'http://localhost:8080'
 
 // get apis

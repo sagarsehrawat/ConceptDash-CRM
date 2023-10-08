@@ -37,6 +37,8 @@ export const projectSlice = createSlice({
                 case 'TOTAL_PROJECTS':
                     state.totalProjects += 1;
                     break;
+                default:
+                    break;
             }
         },
         decrement: (state, action) => {
@@ -54,6 +56,8 @@ export const projectSlice = createSlice({
                 case 'TOTAL_PROJECTS':
                     state.totalProjects -= 1;
                     break;
+                default:
+                        break;
             }
         },
         addProject: (state, action) => {

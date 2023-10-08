@@ -84,7 +84,7 @@ const ChildProject = ({ form, handleForm }) => {
 
       {/* Project Details */}
       <div className="d-flex flex-column justify-contents-center w-100">
-        <p className="project-header">Add Project Details</p>
+        <p className="project-header">Add Child Project Details</p>
         <p className="project-subheader">
           Add Project Details to finish adding the project
         </p>
