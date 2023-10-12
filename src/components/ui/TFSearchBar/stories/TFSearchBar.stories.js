@@ -1,4 +1,4 @@
-import SearchBar from "../SearchBar";
+import SearchBar from "../TFSearchBar";
 
 export default {
   title: 'Components/SearchBar',

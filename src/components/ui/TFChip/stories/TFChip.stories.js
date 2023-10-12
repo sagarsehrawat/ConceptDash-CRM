@@ -1,4 +1,4 @@
-import Chip from "../Chip";
+import Chip from "../TFChip";
 
 export default {
   title: 'Components/Chip',

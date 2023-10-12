@@ -1,4 +1,4 @@
-import Button from "../Button";
+import Button from "../TFButton";
 
 export default {
   title: 'Components/Button',

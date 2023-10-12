@@ -69,7 +69,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "deploy-storybook": "storybook-to-aws-s3 —aws-profile=storybook-developer --bucket-path=tf-storybook.conceptdash.ca"
   },
   "eslintConfig": {
     "extends": [
@@ -99,6 +100,7 @@
     "@storybook/preset-create-react-app": "^7.4.0",
     "@storybook/react": "^7.4.0",
     "@storybook/react-webpack5": "^7.4.0",
+    "@storybook/storybook-deployer": "^2.8.16",
     "@storybook/testing-library": "^0.2.0",
     "@types/react-bootstrap-table2-toolkit": "^2.1.7",
     "babel-plugin-named-exports-order": "^0.0.2",
