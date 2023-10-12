@@ -16,12 +16,11 @@ import filterIcon from '../../Images/Filter.svg'
 import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
-import TFSearchBar from '../../components/ui/TFSearchBar/TFSearchBar';
-import TFButton from '../../components/ui/TFButton/TFButton';
-import TFChip from '../../components/ui/TFChip/TFChip';
-import plusIcon from '../../assets/icons/Plus.svg'
-
-
+import SearchBar from '../../components/ui/SearchBar/SearchBar';
+import TFButton from '../../components/ui/Button/Button';
+import Chip from '../../components/ui/Chip/Chip';
+import iconPath from '../../Images/addPlus.svg'
+import DateChip from '../../components/ui/DateChip/DateChip';
 
 const RFP = (props) => {
     const { isCollapsed } = props
@@ -1236,9 +1235,21 @@ const RFP = (props) => {
                                 <td style={{ ...styles.tableCell, minWidth: "180px" }}>
                                     {formatDate(e.Submission_Date) === ""
                                         ? <></>
-                                        : <div style={styles.dateContainer}>
-                                            <p style={styles.date}>{formatDate(e.Submission_Date)}</p>
-                                        </div>}
+                                        : 
+                                        <>
+                                        {/* <div style={styles.dateContainer} >
+                                            <p style={styles.date}>{formatDate(e.Submission_Date)}</p>                                        
+                                            </div>
+                                         */}
+                                         <DateChip 
+                                         date={formatDate(e.Submission_Date)} 
+                                         tableRef={tableRef} 
+                                         onUpdate={handleStatusUpdate} 
+                                         dateContainerStyles={styles.dateContainer} 
+                                         dateStyles={styles.date}
+                                         />
+                                        </>
+                                        }
                                 </td>
                                 <td style={{ ...styles.tableCell, minWidth: "250px" }}>{e.Department}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Project_Category}</td>
