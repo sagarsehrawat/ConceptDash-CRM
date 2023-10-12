@@ -44,7 +44,7 @@ import AuthenticationContext from "../../Context/AuthContext";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import './Tasks.css'
-import TFChip from "../../components/ui/Chip/TFChip";
+import TFChip from "../../components/ui/TFChip/TFChip";
 import TFButton from '../../components/ui/TFButton/TFButton'
 import plusIcon from '../../assets/icons/Plus.svg'
 

@@ -44,8 +44,8 @@ import AddProject from "../Form/AddProject";
 import UpdateProjectForm from "../Form/UpdateProjectForm";
 import ProjectForm from "../Form/ProjectForm";
 import open from "../../Images/openinDrive.svg";
-import TFSearchBar from "../../components/ui/SearchBar/TFSearchBar";
-import TFChip from "../../components/ui/Chip/TFChip";
+import TFSearchBar from "../../components/ui/TFSearchBar/TFSearchBar";
+import TFChip from "../../components/ui/TFChip/TFChip";
 import TFButton from "../../components/ui/TFButton/TFButton";
 import plusIcon from '../../assets/icons/Plus.svg'
 

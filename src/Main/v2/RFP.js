@@ -16,9 +16,9 @@ import filterIcon from '../../Images/Filter.svg'
 import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
-import TFSearchBar from '../../components/ui/SearchBar/TFSearchBar';
+import TFSearchBar from '../../components/ui/TFSearchBar/TFSearchBar';
 import TFButton from '../../components/ui/TFButton/TFButton';
-import TFChip from '../../components/ui/Chip/TFChip';
+import TFChip from '../../components/ui/TFChip/TFChip';
 import plusIcon from '../../assets/icons/Plus.svg'
 
 
