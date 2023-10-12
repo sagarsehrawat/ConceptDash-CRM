@@ -13,7 +13,7 @@ import {
 } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 function AddBudgetCity(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props;

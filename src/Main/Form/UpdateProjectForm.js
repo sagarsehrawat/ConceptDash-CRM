@@ -18,7 +18,7 @@ import Row from "react-bootstrap/Row";
 import Select from "react-select";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 const styles = {
   nameHeading: {
@@ -440,7 +440,7 @@ function UpdateProjectForm(props) {
             <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
               Update project
             </Button> */}
-            <TFButton label="Cancel" variant="secondary" handleClick={closeModal} customStyles={{marginRight: '20px'}} size="small"/>
+            <TFButton label="Cancel" variant="secondary" handleClick={closeModal} style={{marginRight: '20px'}} size="small"/>
               <TFButton label="Update Project" type="submit" size="small"/>
             </div>
         

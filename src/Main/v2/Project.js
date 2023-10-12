@@ -44,9 +44,10 @@ import AddProject from "../Form/AddProject";
 import UpdateProjectForm from "../Form/UpdateProjectForm";
 import ProjectForm from "../Form/ProjectForm";
 import open from "../../Images/openinDrive.svg";
-import SearchBar from "../../components/ui/SearchBar/SearchBar";
-import Chip from "../../components/ui/Chip/Chip";
-import TFButton from "../../components/ui/Button/Button";
+import TFSearchBar from "../../components/ui/TFSearchBar/TFSearchBar";
+import TFChip from "../../components/ui/TFChip/TFChip";
+import TFButton from "../../components/ui/TFButton/TFButton";
+import plusIcon from '../../assets/icons/Plus.svg'
 
 const Project = (props) => {
   const { isCollapsed } = props;
@@ -977,7 +978,7 @@ const Project = (props) => {
         >
           <p style={styles.addButtonText}>+ Add New Project</p>
         </button> */}
-        <TFButton label="+ Add New Project" disabled={!privileges.includes("Add Project")} handleClick={handleShow}/>
+        <TFButton icon={plusIcon} label="Add New Project" disabled={!privileges.includes("Add Project")} handleClick={handleShow}/>
       </div>
 
       {/* Header Cards */}
@@ -1031,7 +1032,7 @@ const Project = (props) => {
         className="d-flex flex-row"
         style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}
       >
-        <SearchBar
+        <TFSearchBar
           placeholder={"Projects"}
           searchFunc={[value, setValue]}
           style={{ "margin-right": "12px" }}
@@ -2070,7 +2071,7 @@ const Project = (props) => {
                           : "1px solid #EBE9F1",
                       }}
                     >
-                      <Chip
+                      <TFChip
                         label={e.Status}
                         id={e.Project_Id}
                         tableRef={tableRef}

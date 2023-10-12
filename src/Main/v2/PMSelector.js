@@ -16,7 +16,7 @@ import axios from "axios";
 import Designations from "../../utils/Designations";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from '../../components/ui/TFButton/TFButton'
 
 const animatedComponents = makeAnimated();
 

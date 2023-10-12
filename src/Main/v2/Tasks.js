@@ -44,9 +44,9 @@ import AuthenticationContext from "../../Context/AuthContext";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
 import './Tasks.css'
-import Chip from "../../components/ui/Chip/Chip";
-import iconPath from '../../Images/addPlus.svg'
-import TFButton from "../../components/ui/Button/Button";
+import TFChip from "../../components/ui/TFChip/TFChip";
+import TFButton from '../../components/ui/TFButton/TFButton'
+import plusIcon from '../../assets/icons/Plus.svg'
 
 function Tasks(props) {
   const { isCollapsed } = props;
@@ -579,16 +579,16 @@ function Tasks(props) {
   }
 
   const getPriority = (priority, id) => {
-    if(priority===1) return <Chip label="Critical" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
-    if(priority===2) return <Chip label="High" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
-    if(priority===3) return <Chip label="Medium" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
-    if(priority===4) return <Chip label="Low" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
+    if(priority===1) return <TFChip label="Critical" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
+    if(priority===2) return <TFChip label="High" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
+    if(priority===3) return <TFChip label="Medium" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
+    if(priority===4) return <TFChip label="Low" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
   }
 
   const getStatus = (status, id) => {
-    if(status===1) return <Chip label="Not Started" onUpdate={handleStatusUpdate} id={id} options={["Not Started", "In Progress", "Completed"]}/>
-    if(status===2) return <Chip label="In Progress" onUpdate={handleStatusUpdate} id={id} options={["Not Started", "In Progress", "Completed"]}/>
-    if(status===3) return <Chip label="Completed" onUpdate={handleStatusUpdate} id={id} options={["Not Started", "In Progress", "Completed"]}/>
+    if(status===1) return <TFChip label="Not Started" onUpdate={handleStatusUpdate} id={id} options={["Not Started", "In Progress", "Completed"]}/>
+    if(status===2) return <TFChip label="In Progress" onUpdate={handleStatusUpdate} id={id} options={["Not Started", "In Progress", "Completed"]}/>
+    if(status===3) return <TFChip label="Completed" onUpdate={handleStatusUpdate} id={id} options={["Not Started", "In Progress", "Completed"]}/>
   }
 
   return (
@@ -1082,7 +1082,7 @@ function Tasks(props) {
                   {/* <button className="addButton" onClick={handleShow}>
                     <p style={styles.addButtonText}>+ Add New Task</p>
                   </button> */}
-                  <TFButton icon={iconPath} label="Add New Task" handleClick={handleShow} />
+                  <TFButton icon={plusIcon} label="Add New Task" handleClick={handleShow} />
                 </div>
                 {/* Table */}
                 <div style={{ borderBottom: "1px solid #EBE9F1", height: "548px", overflow: "auto", position: "relative", marginTop: '32px', width: '100%' }}>

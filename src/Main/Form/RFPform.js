@@ -25,7 +25,7 @@ import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import AuthContext from '../../Context/AuthContext'
 import plus from '../../Images/plus.svg'
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 const styles = {
   nameHeading: {
@@ -660,7 +660,7 @@ function RFPform(props) {
               <Button style={{ backgroundColor: PRIMARY_COLOR }} type="submit">
                 Add New RFP
               </Button> */}
-              <TFButton label="Cancel" variant="secondary" handleClick={closeModal} customStyles={{marginRight: '20px'}} size="small"/>
+              <TFButton label="Cancel" variant="secondary" handleClick={closeModal} style={{marginRight: '20px'}} size="small"/>
               <TFButton label="Add New RFP" type="submit" size="small"/>
             </div>
           </Form>

@@ -65,8 +65,8 @@ import filterIcon from "../../Images/Filter.svg";
 import EmployeeForm from '../Form/EmployeeForm'
 import UpdateEmployeeForm from '../Form/UpdateEmployeeForm'
 import PreHireEmployeeForm from "../Form/PreHireEmployeeForm";
-import TFButton from '../../components/ui/Button/Button'
-import iconPath from '../../Images/addPlus.svg'
+import TFButton from '../../components/ui/TFButton/TFButton'
+import plusIcon from '../../assets/icons/Plus.svg'
 
 function Employee(props) {
   const { isCollapsed } = props;
@@ -1045,7 +1045,7 @@ function Employee(props) {
         style={styles.headerContainer}
       >
         <p style={styles.heading}>Employees</p>
-        <TFButton icon={iconPath} label = "Add New Employee" disabled={!privileges.includes('Add Employee')} handleClick={handleShow} />
+        <TFButton icon={plusIcon} label = "Add New Employee" disabled={!privileges.includes('Add Employee')} handleClick={handleShow} />
       </div>
       <div
         className="d-flex flex-row"

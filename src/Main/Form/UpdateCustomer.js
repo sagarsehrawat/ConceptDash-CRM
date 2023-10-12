@@ -16,7 +16,7 @@ import {
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import { Typeahead } from "react-bootstrap-typeahead";
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 function UpdateCustomer(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props

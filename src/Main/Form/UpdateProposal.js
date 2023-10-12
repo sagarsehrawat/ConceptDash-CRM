@@ -20,7 +20,7 @@ import {
 import Modal from "react-bootstrap/Modal";
 import Select from "react-select";
 import LoadingSpinner from "../Loader/Loader";
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 const styles = {
   nameHeading: {
     height: "20px",
@@ -655,7 +655,7 @@ function UpdateProposal(props) {
               Update Proposal
             </Button> */}
             
-            <TFButton label="Cancel" variant="secondary" handleClick={closeModal} customStyles={{marginRight: '20px'}} size="small"/>
+            <TFButton label="Cancel" variant="secondary" handleClick={closeModal} style={{marginRight: '20px'}} size="small"/>
               <TFButton label="Update Proposal" type="submit" size="small"/>
             </div>
           </Form>

@@ -847,7 +847,7 @@ const RFP = (props) => {
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
                 <p style={styles.heading}>RFPs (Request For Proposals)</p>
                 {/* <button style={styles.addButton} disabled={!privileges.includes("Add RFP")} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button> */}
-                <TFButton icon={iconPath} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={handleShow} />
+                <TFButton icon={plusIcon} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={handleShow} />
             </div>
 
             {/* Header Cards */}
@@ -878,7 +878,7 @@ const RFP = (props) => {
 
             {/* Filter and Other Buttons */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
-            <SearchBar 
+            <TFSearchBar 
                     placeholder={'RFPs'}
                     searchFunc={[value, setValue]} 
                     style={{'margin-right': '12px'}}
@@ -1254,7 +1254,7 @@ const RFP = (props) => {
                                 <td style={{ ...styles.tableCell, minWidth: "250px" }}>{e.Department}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Project_Category}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Manager_Name}</td>
-                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>                      <Chip
+                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>                      <TFChip
                         label={e.Action}
                         id={e.RFP_ID}
                         tableRef={tableRef}

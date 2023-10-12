@@ -22,7 +22,7 @@ import RedAlert from "../Loader/RedAlert";
 import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import AuthContext from "../../Context/AuthContext";
-import TFButton from "../../components/ui/Button/Button";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 const styles = {
   container: {
