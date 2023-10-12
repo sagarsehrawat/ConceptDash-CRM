@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import "./SearchBar.css";
+import "./TFSearchBar.css";
 import MagnifyingGlass from '../../../assets/icons/Magnifying_Glass.svg'
 
 const SearchBar = (props) => {

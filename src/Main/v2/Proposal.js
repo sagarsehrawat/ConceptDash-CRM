@@ -16,8 +16,8 @@ import filterIcon from '../../Images/Filter.svg'
 import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
-import SearchBar from '../../components/ui/SearchBar/SearchBar'
-import Chip from '../../components/ui/Chip/Chip'
+import TFSearchBar from '../../components/ui/SearchBar/TFSearchBar'
+import TFChip from '../../components/ui/Chip/TFChip'
 import TFButton from '../../components/ui/TFButton/TFButton'
 import plusIcon from '../../assets/icons/Plus.svg'
 
@@ -975,7 +975,7 @@ const Proposal = (props) => {
             
             {/* Filters and Other Dropdowns */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
-            <SearchBar 
+            <TFSearchBar 
                     placeholder={'Proposals'}
                     searchFunc={[value, setValue]} 
                     style={{'margin-right': '12px'}}
@@ -1367,7 +1367,7 @@ const Proposal = (props) => {
                                         </td>
                                         <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}>{e.Manager_Name}</td>
                                         <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}><b>{addComma(totalBidCalculator(e.Design_Price, e.Contract_Admin_Price, e.Provisional_Items, e.Sub_Consultant_Price))}</b></td>
-                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}><Chip
+                                        <td style={{ ...styles.tableCell, borderBottom: proposalDetails.includes(e.Proposal_ID) ? "none" : "1px solid #EBE9F1" }}><TFChip
                         label={e.Result}
                         id={e.Proposal_ID}
                         tableRef={tableRef}

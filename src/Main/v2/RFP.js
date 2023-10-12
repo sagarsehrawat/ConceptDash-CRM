@@ -16,9 +16,9 @@ import filterIcon from '../../Images/Filter.svg'
 import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
-import SearchBar from '../../components/ui/SearchBar/SearchBar';
+import TFSearchBar from '../../components/ui/SearchBar/TFSearchBar';
 import TFButton from '../../components/ui/TFButton/TFButton';
-import Chip from '../../components/ui/Chip/Chip';
+import TFChip from '../../components/ui/Chip/TFChip';
 import plusIcon from '../../assets/icons/Plus.svg'
 
 
@@ -879,7 +879,7 @@ const RFP = (props) => {
 
             {/* Filter and Other Buttons */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
-            <SearchBar 
+            <TFSearchBar 
                     placeholder={'RFPs'}
                     searchFunc={[value, setValue]} 
                     style={{'margin-right': '12px'}}
@@ -1243,7 +1243,7 @@ const RFP = (props) => {
                                 <td style={{ ...styles.tableCell, minWidth: "250px" }}>{e.Department}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Project_Category}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Manager_Name}</td>
-                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>                      <Chip
+                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>                      <TFChip
                         label={e.Action}
                         id={e.RFP_ID}
                         tableRef={tableRef}
