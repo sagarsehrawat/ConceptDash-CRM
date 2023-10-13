@@ -26,7 +26,7 @@ const TFTypeahead = ({ name, placeholder, value, onChange, options, required, re
           isVisible ? (
             <div className="typeahead-options-modal">
               {options.map((option) => {
-                if (typeof value === 'string' && option.label.toLowerCase().includes(value.toString().toLowerCase())) {
+                if (option.label.toLowerCase().includes(value.toString().toLowerCase())) {
                   return <div
                     className="typeahead-option"
                     onMouseDown={() => { 
