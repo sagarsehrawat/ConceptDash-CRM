@@ -25,9 +25,7 @@ const classes = {
   'Review' : 'review-chip'
 }
 
-const Chip = (props) => {
-  const { label, tableRef, options, onUpdate, id } = props;
-
+const Chip = ({ label, tableRef, options, onUpdate, id }) => {
   // const [chip, setChip] = useState(value)
   const [value, setValue] = useState(label)
   const [chipClass, setChipClass] = useState(classes[label]);
@@ -83,7 +81,7 @@ const Chip = (props) => {
 
   return (
     <>
-      <div className="chip-container">
+      <div>
         <div
           className={`chip ${chipClass}`}
           style={{"cursor" : onUpdate ? "pointer" : "default"}}

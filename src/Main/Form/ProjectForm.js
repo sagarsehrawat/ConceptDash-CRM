@@ -292,9 +292,9 @@ function ProjectForm(props) {
               <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Status</Form.Label>
                 <Form.Select style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}} name="status" onChange={handleChange}>
                   <option value="">Choose Status</option>
-                  <option value="Not Started Yet">Not Started Yet</option>
+                  <option value="Not Started">Not Started</option>
                   <option value="Completed">Completed</option>
-                  <option value="Ongoing">Ongoing</option>
+                  <option value="In Progress">In Progress</option>
                 </Form.Select>
               </Form.Group>
               <Form.Group style={{width:'253px'}} controlId="formGridCity">
