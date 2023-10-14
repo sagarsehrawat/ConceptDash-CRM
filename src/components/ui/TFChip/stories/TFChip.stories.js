@@ -5,6 +5,11 @@ export default {
   component: Chip,
   parameters: {
     layout: 'centered',
+    docs: {
+        description: {
+            component: 'The `Chip` component is a dynamic UI element designed to serve as a label or status indicator. It displays a labeled chip with a distinct visual style based on its content, making it ideal for a variety of use cases in data-driven applications.'
+        }
+    }
   },
   tags: ['autodocs'],
 };

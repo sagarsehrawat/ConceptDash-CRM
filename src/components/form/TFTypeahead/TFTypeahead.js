@@ -4,9 +4,18 @@ import "./TFTypeahead.css";
 
 const TFTypeahead = ({ name, placeholder, value, onChange, options, required, readOnly }) => {
   const [isVisible, setisVisible] = useState(false);
+  const [isValid, setIsValid] = useState(true);
   // TODO : Implement Asynchronous Functionality
   // TODO : Implement MultiSelect Functionality
-  console.log(value)
+
+  const handleBlur = () => {
+    if (options.every(option => option.label.toLowerCase() !== value.toLowerCase())) {
+      setIsValid(false);
+    } else {
+      setIsValid(true);
+    }
+    setisVisible(false);
+  };
   return (
     <>
       <div className='typeahead-wrapper'>
@@ -16,8 +25,12 @@ const TFTypeahead = ({ name, placeholder, value, onChange, options, required, re
           value={value}
           onChange={onChange}
           className='typeahead-input'
-          onFocus={(e) => setisVisible(true)}
-          onBlur={(e) => setisVisible(false)}
+          onFocus={(e) => {
+            setIsValid(false);
+            setisVisible(true)
+          }}
+          onBlur={handleBlur}
+          style={{borderColor: isValid ? 'red' : ''}}
           autoComplete='off'
           required={required}
           readOnly={readOnly}
@@ -29,10 +42,7 @@ const TFTypeahead = ({ name, placeholder, value, onChange, options, required, re
                 if (option.label.toLowerCase().includes(value.toString().toLowerCase())) {
                   return <div
                     className="typeahead-option"
-                    onMouseDown={() => { 
-                      console.log(name, option.value); 
-                      onChange({ target: { name: name, value: option.value } }); 
-                    }}
+                    onMouseDown={() => onChange({ target: { name: name, value: option.value } }) }
                     key={option.value}
                   >
                     {option.label}
