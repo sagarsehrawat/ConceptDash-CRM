@@ -30,22 +30,14 @@ export const Secondary = {
     }
 };
 
-export const Disabled = {
-    args: {
-        label: 'Disabled',
-        variant: ['primary','secondary'],
-        disabled: 'true'
-    }
-};
-
-export const Primary_Disabled = {
+export const PrimaryDisabled = {
     args: {
         label: 'Disabled',
         disabled: 'true'
     }
 };
 
-export const Secondary_Disabled = {
+export const SecondaryDisabled = {
     args: {
         label: 'Disabled',
         variant: 'secondary',
@@ -53,14 +45,14 @@ export const Secondary_Disabled = {
     }
 };
 
-export const Large_Button = {
+export const LargeButton = {
     args: {
         label: 'Large Button',
         size: 'large'
     }
 };
 
-export const Small_Button = {
+export const SmallButton = {
     args: {
         label: 'Small Button',
         size: 'small'

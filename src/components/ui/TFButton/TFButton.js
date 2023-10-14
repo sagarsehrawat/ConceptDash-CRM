@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import './TFButton.css'
 
 const  TFButton = ({icon, label, disabled, variant, handleClick, size, style}) => {
-  const buttonClassName = variant==='secondary' ? disabled? 'secondary-btn-disabled' : 'secondary-btn': disabled ? 'primary-btn-disabled': 'primary-btn';
+  const buttonClassName = variant === 'secondary' ? 'secondary-btn': 'primary-btn';
     
     if(icon!==""){
         style = {...style,padding: '8px 24px 8px 16px'};
