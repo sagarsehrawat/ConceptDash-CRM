@@ -25,6 +25,7 @@ import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import AuthContext from '../../Context/AuthContext'
 import plus from '../../Images/plus.svg'
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 const styles = {
   nameHeading: {
@@ -653,12 +654,14 @@ function RFPform(props) {
             )}
 
             <div className="d-flex d-row justify-content-end" style={{ marginTop: '44px', marginRight: '20px' }}>
-              <Button onClick={closeModal} style={{ color: '#70757A', backgroundColor: '#FFFFFF', borderColor: '#70757A', marginRight: '20px' }}>
+              {/* <Button onClick={closeModal} style={{ color: '#70757A', backgroundColor: '#FFFFFF', borderColor: '#70757A', marginRight: '20px' }}>
                 Cancel
               </Button>
               <Button style={{ backgroundColor: PRIMARY_COLOR }} type="submit">
                 Add New RFP
-              </Button>
+              </Button> */}
+              <TFButton label="Cancel" variant="secondary" handleClick={closeModal} style={{marginRight: '20px'}} size="small"/>
+              <TFButton label="Add New RFP" type="submit" size="small"/>
             </div>
           </Form>
           <Modal show={show} onHide={handleClose}>

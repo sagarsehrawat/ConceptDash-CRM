@@ -8,6 +8,7 @@ import Row from "react-bootstrap/Row";
 import { HOST, GET_DEPARTMENTS, ADD_CATEGORY } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 function AddCategory(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props;
@@ -98,9 +99,10 @@ function AddCategory(props) {
           </Form.Group>
         </Row>
 
-        <Button className="submit-btn" variant="primary" type="submit">
+        {/* <Button className="submit-btn" variant="primary" type="submit">
           Submit
-        </Button>
+        </Button> */}
+        <TFButton label="submit" type="submit" size="small"/>
       </Form>
     </div>
   );

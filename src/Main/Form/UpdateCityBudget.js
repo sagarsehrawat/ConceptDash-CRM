@@ -8,6 +8,7 @@ import Row from "react-bootstrap/Row";
 import { HOST, UPDATE_BUDGET, UPDATE_CITY_BUDGET } from "../Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 function UpdateCityBudget(props) {
   const [isSubmit, setIsSubmit] = useState(false);
@@ -143,9 +144,10 @@ function UpdateCityBudget(props) {
             </Row>
 
 
-            <Button className="submit-btn" variant="primary" type="submit">
+            {/* <Button className="submit-btn" variant="primary" type="submit">
               Submit
-            </Button>
+            </Button> */}
+            <TFButton label="Submit" type="submit" size="small"/>
           </Form>
 
         </div>

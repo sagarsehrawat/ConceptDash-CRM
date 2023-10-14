@@ -22,6 +22,7 @@ import RedAlert from "../Loader/RedAlert";
 import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import AuthContext from "../../Context/AuthContext";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 const styles = {
   container: {
@@ -392,9 +393,10 @@ function AddProject(props) {
                 />
               </Form.Group>
             </Row>
-            <Button className="submit-btn" variant="primary" type="submit">
+            {/* <Button className="submit-btn" variant="primary" type="submit">
               Submit
-            </Button>
+            </Button> */}
+            <TFButton label="Submit" type="submit"  size="small"/>
           </Form>
 
           <Modal

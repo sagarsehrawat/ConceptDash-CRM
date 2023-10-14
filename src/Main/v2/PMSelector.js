@@ -16,6 +16,7 @@ import axios from "axios";
 import Designations from "../../utils/Designations";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import TFButton from '../../components/ui/TFButton/TFButton'
 
 const animatedComponents = makeAnimated();
 
@@ -352,14 +353,15 @@ const PMSelector = (props) => {
               ))}
             </div>
           </div>
-          <ColorButton
+          {/* <ColorButton
             variant="contained"
             size="large"
             onClick={generateProposal}
             disabled={isLoading}
           >
             {isLoading ? "Loading..." : "Generate Proposal"}
-          </ColorButton>
+          </ColorButton> */}
+          <TFButton label={isLoading? "Loading": "Generate Proposal"} handleClick={generateProposal} disabled={isLoading} />
         </div>
       </div>
       {generatedProposals && generatedProposals.length > 0 && (

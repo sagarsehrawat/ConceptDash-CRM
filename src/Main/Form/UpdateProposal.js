@@ -20,6 +20,7 @@ import {
 import Modal from "react-bootstrap/Modal";
 import Select from "react-select";
 import LoadingSpinner from "../Loader/Loader";
+import TFButton from "../../components/ui/TFButton/TFButton";
 const styles = {
   nameHeading: {
     height: "20px",
@@ -647,12 +648,15 @@ function UpdateProposal(props) {
                   </Form.Group>
                 </Row>
             <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
-            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+            {/* <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
               Cancel
             </Button>
             <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
               Update Proposal
-            </Button>
+            </Button> */}
+            
+            <TFButton label="Cancel" variant="secondary" handleClick={closeModal} style={{marginRight: '20px'}} size="small"/>
+              <TFButton label="Update Proposal" type="submit" size="small"/>
             </div>
           </Form>
           <Modal show={show} onHide={handleClose}>

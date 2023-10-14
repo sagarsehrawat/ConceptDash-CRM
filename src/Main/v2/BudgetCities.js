@@ -23,8 +23,10 @@ import UpdateCity1 from '../v2-forms/UpdateCity1'
 import UpdateCity2 from '../v2-forms/UpdateCity2'
 import tIcon from '../../Images/taskIcon.svg'
 import cross from '../../Images/cross.svg'
-import SearchBar from '../../components/ui/SearchBar/SearchBar'
-import Chip from '../../components/ui/Chip/Chip'
+import TFSearchBar from '../../components/ui/TFSearchBar/TFSearchBar'
+import TFChip from '../../components/ui/TFChip/TFChip'
+import TFButton from '../../components/ui/TFButton/TFButton'
+import plusIcon from '../../assets/icons/Plus.svg'
 
 const BudgetCities = (props) => {
     const { isCollapsed } = props
@@ -634,7 +636,7 @@ const BudgetCities = (props) => {
 
                     {/* Filter and Other Buttons */}
                     <div className='d-flex flex-row justify-content-between' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px", marginRight:'32px' }}>
-                        <SearchBar 
+                        <TFSearchBar 
                         placeholder={'Cities'}
                         searchFunc={[value, setValue]}/>
                     </div>
@@ -663,7 +665,7 @@ const BudgetCities = (props) => {
                                         <LoadingSpinner />
                                     </td>
                                 </tr> : cities && cities.map((e, idx) => {
-                                    if (e.City.toLowerCase().startsWith(value.toLowerCase())) {
+                                    if (e.City?.toLowerCase().startsWith(value?.toLowerCase())) {
                                         return (<tr style={{ ...styles.tableRow }} className='' id={e.City_Budget_ID}>
                                             <td className='' style={{ ...styles.tableCell, fontWeight: "500" }}>
                                                 <div className='d-flex flex-column justify-content-start'>
@@ -674,13 +676,13 @@ const BudgetCities = (props) => {
                                             <td style={{ ...styles.tableCell }}>{e.Geographic_Area}</td>
                                             <td style={{ ...styles.tableCell }}>{e.Population_2021}</td>
                                             <td style={{ ...styles.tableCell, fontWeight: "600" }}>{addComma(e.Capital_Budget_23)}</td>
-                                            <td style={{ ...styles.tableCell }}><Chip
+                                            <td style={{ ...styles.tableCell }}><TFChip
                                                                                     label={e.Year_22}
                                                                                     id={e.City_Budget_ID}
                                                                                     tableRef={tableRef}
                                                                                     options={["Not Found", "Draft Budget", "Done"]}
                                                                                 /></td>
-                                            <td style={{ ...styles.tableCell }}><Chip
+                                            <td style={{ ...styles.tableCell }}><TFChip
                                                                                     label={e.Year_23}
                                                                                     id={e.City_Budget_ID}
                                                                                     tableRef={tableRef}
@@ -803,7 +805,7 @@ const BudgetCities = (props) => {
                     {/* Filter and Other Buttons */}
                     <div className='d-flex flex-row justify-content-between' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px", marginRight: "32px" }}>
                         <div className='d-flex flex-row justify-content-start'>
-                        <SearchBar 
+                        <TFSearchBar 
                                 placeholder={'Budgets'}
                                 searchFunc={[value2, setValue2]} 
                                 style={{'margin-right': '12px'}}
@@ -882,7 +884,7 @@ const BudgetCities = (props) => {
                                     },
                                 ]} />
                         </div>
-                        <button style={styles.addButton} onClick={handleShow}><p style={styles.addButtonText} >+ Add New Budget</p></button>
+                        <TFButton icon={plusIcon} label="Add New Budget" handleClick={handleShow}/>
                     </div>
 
                     {/* Table */}
