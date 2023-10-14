@@ -24,6 +24,7 @@ import RedAlert from "../Loader/RedAlert";
 import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import AuthContext from '../../Context/AuthContext'
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 const styles = {
   nameHeading: {
@@ -291,9 +292,9 @@ function ProjectForm(props) {
               <Form.Label style={{...styles.nameHeading, marginTop:'24px'}}>Project Status</Form.Label>
                 <Form.Select style={{...styles.nameInput, width:'234px', fontSize:'14px', color:'#70757A'}} name="status" onChange={handleChange}>
                   <option value="">Choose Status</option>
-                  <option value="Not Started Yet">Not Started Yet</option>
+                  <option value="Not Started">Not Started</option>
                   <option value="Completed">Completed</option>
-                  <option value="Ongoing">Ongoing</option>
+                  <option value="In Progress">In Progress</option>
                 </Form.Select>
               </Form.Group>
               <Form.Group style={{width:'253px'}} controlId="formGridCity">
@@ -452,12 +453,14 @@ function ProjectForm(props) {
             </Row> */}
 
             <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
-            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+            {/* <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
               Cancel
-            </Button>
-            <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
+            </Button> */}
+            <TFButton label="Cancel" variant="secondary" handleClick={closeModal} styles={{marginRight: '20px'}} size="small"/>
+            {/* <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
               Create New project
-            </Button>
+            </Button> */}
+            <TFButton label="Create New Project" type="submit" size="small"/>
             </div>
             
           </Form>

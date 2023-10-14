@@ -16,6 +16,7 @@ import {
 } from "../Constants/Constants";
 import LoadingSpinner from "../Loader/Loader";
 import { Typeahead } from "react-bootstrap-typeahead";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 function UpdateCustomer(props) {
   const { setGreen, closeModal, api, apiCall, setRed } = props
@@ -606,13 +607,14 @@ function UpdateCustomer(props) {
             />
           </Form.Group>
         </Row>
-        <Button
+        {/* <Button
           className="submit-btn"
           variant="primary"
           type="submit"
         >
           Submit
-        </Button>
+        </Button> */}
+        <TFButton label="Submit" type="submit" size="small"/>
       </Form>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

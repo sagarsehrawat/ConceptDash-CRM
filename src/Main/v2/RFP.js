@@ -16,10 +16,11 @@ import filterIcon from '../../Images/Filter.svg'
 import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
-import SearchBar from '../../components/ui/SearchBar/SearchBar';
-import Chip from '../../components/ui/Chip/Chip';
-
-
+import TFSearchBar from '../../components/ui/TFSearchBar/TFSearchBar';
+import TFButton from '../../components/ui/TFButton/TFButton';
+import TFChip from '../../components/ui/TFChip/TFChip';
+import plusIcon from '../../Images/addPlus.svg'
+import DateChip from '../../components/ui/DateChip/DateChip';
 
 const RFP = (props) => {
     const { isCollapsed } = props
@@ -803,6 +804,7 @@ const RFP = (props) => {
           }
         );
     
+        console.log(response);
         return response;
       };
 
@@ -844,7 +846,8 @@ const RFP = (props) => {
             {red === true ? <RedAlert setRed={setred} /> : <></>}
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
                 <p style={styles.heading}>RFPs (Request For Proposals)</p>
-                <button style={styles.addButton} disabled={!privileges.includes("Add RFP")} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button>
+                {/* <button style={styles.addButton} disabled={!privileges.includes("Add RFP")} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button> */}
+                <TFButton icon={plusIcon} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={handleShow} />
             </div>
 
             {/* Header Cards */}
@@ -875,7 +878,7 @@ const RFP = (props) => {
 
             {/* Filter and Other Buttons */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
-            <SearchBar 
+            <TFSearchBar 
                     placeholder={'RFPs'}
                     searchFunc={[value, setValue]} 
                     style={{'margin-right': '12px'}}
@@ -1232,14 +1235,26 @@ const RFP = (props) => {
                                 <td style={{ ...styles.tableCell, minWidth: "180px" }}>
                                     {formatDate(e.Submission_Date) === ""
                                         ? <></>
-                                        : <div style={styles.dateContainer}>
-                                            <p style={styles.date}>{formatDate(e.Submission_Date)}</p>
-                                        </div>}
+                                        : 
+                                        <>
+                                        {/* <div style={styles.dateContainer} >
+                                            <p style={styles.date}>{formatDate(e.Submission_Date)}</p>                                        
+                                            </div>
+                                         */}
+                                         <DateChip 
+                                         date={formatDate(e.Submission_Date)} 
+                                         tableRef={tableRef} 
+                                         onUpdate={handleStatusUpdate} 
+                                         dateContainerStyles={styles.dateContainer} 
+                                         dateStyles={styles.date}
+                                         />
+                                        </>
+                                        }
                                 </td>
                                 <td style={{ ...styles.tableCell, minWidth: "250px" }}>{e.Department}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Project_Category}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Manager_Name}</td>
-                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>                      <Chip
+                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>                      <TFChip
                         label={e.Action}
                         id={e.RFP_ID}
                         tableRef={tableRef}
