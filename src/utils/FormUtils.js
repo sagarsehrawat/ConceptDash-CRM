@@ -1,5 +1,4 @@
 const FormUtils = {
-
     typeInputForm: (setForm, key, value) => {
         setForm((prev) => {
             return {
