@@ -3,13 +3,18 @@ import './TTMTable.css'
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from 'axios';
-import { HOST, GET_EMPLOYEENAMES, GET_TTM, UPDATE_TTM, PRIMARY_COLOR } from '../../Constants/Constants';
-import LoadingSpinner from '../../Loader/Loader'
+import { HOST, GET_EMPLOYEENAMES, GET_TTM, UPDATE_TTM, PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
+import LoadingSpinner from '../../../../Main/Loader/Loader';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from '@fortawesome/free-solid-svg-icons';
+import options from '../../../../Images/options.svg'
+import tIcon from '../../../../Images/taskIcon.svg'
+import NewTaskorMilestone from '../forms/NewTaskorMilestone';
+import cross from '../../../../Images/cross.svg'
+import moment from 'moment';
 
 function TTMTable(props) {
   const {Name, Id} = props;
@@ -46,44 +51,26 @@ function TTMTable(props) {
   const handleOpenAddTask = () => setopenAddTask(true);
   const handleCloseAddTask = () => setopenAddTask(false);
 
+  const [openDesignTeam, setopenDesignTeam] = useState(false);
+  const handleOpenDesignTeam = () => setopenDesignTeam(true);
+  const handleCloseDesignTeam = () => setopenDesignTeam(false);
+
+  const [openContractAdmin, setopenContractAdmin] = useState(false);
+  const handleOpenContractAdmin = () => setopenContractAdmin(true);
+  const handleCloseContractAdmin = () => setopenContractAdmin(false);
+
+  const [openNewTaskMile, setopenNewTaskMile] = useState(false);
+  const handleOpenNewTaskMile = () => setopenNewTaskMile(true);
+  const handleCloseNewTaskMile = () => setopenNewTaskMile(false);
+
   const [a, seta] = useState(0);
   const [isLoading, setisLoading] = useState(false);
   const [editingData, seteditingData] = useState([])
   const [emps, setemps] = useState([])
   const [rate, setrate] = useState([])
   const [designations, setdesignations] = useState([])
-
-  const [roadWayDesignersColspan, setRoadWayDesignersColspan] = useState(1)
-  const [watermainColspan, setWatermainColspan] = useState(1)
-  const [transportationColspan, setTransportationColspan] = useState(1)
-  const [visible, setvisible] = useState([])
-  const toggleRoadwayColspan = () => {
-    setchange(true);
-    setRoadWayDesignersColspan(prevColspan => (prevColspan === 1 ? 2 : 1));
-    setvisible((prevState) => {
-      const updatedVisible = [...prevState]; // Create a copy of the current state
-      updatedVisible[6] = prevState[6] === 1 ? 0 : 1; // Toggle the 7th index
-      return updatedVisible; // Return the updated state
-    });
-  };
-  const toggleWatermainColspan = () => {
-    setchange(true);
-    setWatermainColspan(prevColspan => (prevColspan === 1 ? 2 : 1));
-    setvisible((prevState) => {
-      const updatedVisible = [...prevState]; // Create a copy of the current state
-      updatedVisible[8] = prevState[8] === 1 ? 0 : 1; // Toggle the 7th index
-      return updatedVisible; // Return the updated state
-    });
-  };
-  const toggleTransportationColspan = () => {
-    setchange(true);
-    setTransportationColspan(prevColspan => (prevColspan === 1 ? 2 : 1));
-    setvisible((prevState) => {
-      const updatedVisible = [...prevState]; // Create a copy of the current state
-      updatedVisible[11] = prevState[11] === 1 ? 0 : 1; // Toggle the 7th index
-      return updatedVisible; // Return the updated state
-    });
-  };
+  const [childArr, setchildArr] = useState([])
+  
   
   useEffect(() => {
     setisLoading(true);
@@ -96,17 +83,15 @@ function TTMTable(props) {
           let data = JSON.parse(res.data.res[0].Data)
           let empIDs = JSON.parse(res.data.res[0].Employee_Info)[0]
           let hrRates = JSON.parse(res.data.res[0].Employee_Info)[1]
-          let visibleColumns = JSON.parse(res.data.res[0].Visible_Columns);
           let desigs = JSON.parse(res.data.res[0].Designations);
+          console.log(JSON.parse(res.data.res[0].Data))
+          formChildArr(desigs)
           setemps(empIDs)
           setrate(hrRates)
           seteditingData(data)
-          setvisible(visibleColumns)
           setdesignations(desigs)
-          if(visibleColumns[6])setRoadWayDesignersColspan(2);
-          if(visibleColumns[8])setWatermainColspan(2);
-          if(visibleColumns[11])setTransportationColspan(2);
           calculateTotalHrs(data)
+          // calcTotalLabour(data)
         })
         .catch((err) => {
           console.log(err);
@@ -115,6 +100,16 @@ function TTMTable(props) {
     };
     call();
   }, [a]);
+  const formChildArr = (desigs) =>{
+    console.log(desigs)
+    let arr =[];
+          desigs.map((e)=>{
+            {e.children.map((f)=>{
+              arr.push(f);
+            })}
+          })
+          setchildArr(arr)
+  }
   const style = {
     input: {
       border: "none",
@@ -148,7 +143,22 @@ const calculateEndDate=(startDate, duration)=> {
 
 
     
-  const [totalHrs, settotalHrs] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const [totalHrs, settotalHrs] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  // const [totalLabour, settotalLabour] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+
+  const calcTotalLabour = (data)=>{
+    data.map((e)=>{
+      e.subtasks.map((h, idx)=>{
+        let sum = 0;
+        for(let i=0;i<h.hrs.length;i++) {
+          sum += h.hrs[i]*rate[i]
+        }
+        console.log(sum)
+      })
+    })
+  }
+  // console.log(totalLabour)
+  // console.log(rate)
 
   const handleAddTaskStage1 = async (e, pId)=>{
       setisLoading(true);
@@ -229,7 +239,7 @@ const calculateEndDate=(startDate, duration)=> {
                 {
                   data: JSON.stringify(editingData),
                   employeeInfo: JSON.stringify([emps, rate]),
-                  visibleColumns: JSON.stringify(visible),
+                  designations: JSON.stringify(designations),
                   proposalId: Id,
                 },
                 { headers: { auth: "Rose " + localStorage.getItem("auth") } }
@@ -328,7 +338,7 @@ const calculateEndDate=(startDate, duration)=> {
       padding: "8px 16px",
       gap: "8px",
       // width: "177px",
-      height: "40px",
+      height: "36px",
       background: PRIMARY_COLOR,
       border: "1px solid #6519E1",
       boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
@@ -346,7 +356,51 @@ const calculateEndDate=(startDate, duration)=> {
       margin: 0,
       flexGrow: 0
   },
+  addModal: {
+    position: "absolute",
+    width: "428px",
+    height: '355px',
+    left: "40%",
+    marginTop: "24vh",
+    background: "#FFFFFF",
+    boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+    borderRadius: "12px",
+  },
+  addHeading: {
+      // width: "auto",
+      height: "28px",
+      marginLeft: "8px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 500,
+      fontSize: "18px",
+      lineHeight: "28px",
+      color: "#0A0A0A",
+      // marginTop:'12px'
+  },
+  formHeadings: {
+    color: "var(--Black-text, #3D424F)",
+    fontFamily: "Roboto",
+    fontSize: "14px",
+    fontStyle: "normal",
+    fontWeight: "400",
+    lineHeight: "20px", /* 142857% */
+    height:'40px',
+    width:'176px',
+    padding: '10px var(--12-pad, 12px)',
+    textAlign:'center',
+    borderRadius: '0px 24px 24px 0px',
+    borderTop: '1px solid #EBEDF8',
+    borderRight: '1px solid #EBEDF8',
+    borderLeft: '1px solid #EBEDF8',
+    borderBottom: '1px solid #EBEDF8',
+    background: '#FFF',
   }
+
+  }
+
+  const [selectHeading, setselectHeading] = useState(0);
+
   const [currStatus, setcurrStatus] = useState('')
   const [id, setid] = useState([0, 0])
 
@@ -396,81 +450,215 @@ const calculateEndDate=(startDate, duration)=> {
     setchange(true)
     seteditingData(h)
   }
+  const [currHeading, setcurrHeading] = useState('')
+  const handleAddDesignation =(e)=>{
+    setchange(true);
+    let temp = [...designations];
+    if(!temp[currHeading].children.includes(e.target.value))temp[currHeading].children.push(e.target.value);
+    else {
+      const index = temp[currHeading].children.indexOf(e.target.value);
+      if (index > -1) { // only splice array when item is found
+        temp[currHeading].children.splice(index, 1); // 2nd parameter means remove one item only
+      }
+    }
+    let idx = 0
+    for(let i=0;i<=currHeading;i++) {
+      idx+=temp[i].children.length
+    }
+    let h = [...editingData]
+    h.map((f)=>{
+      f.subtasks.map((e)=>{
+        e.hrs.splice(idx-1, 0, 0);
+      })
+    })
+
+    let p = [...emps];
+    p.splice(idx-1, 0, '')
+
+    let r = [...rate]
+    r.splice(idx-1, 0, 0)
+
+    let hr = [...totalHrs]
+    hr.splice(idx-1, 0, 0);
+
+    setemps(p)
+    settotalHrs(hr)
+    setrate(r)
+    seteditingData(h);
+    setdesignations(temp);
+    formChildArr(temp);
+    handleCloseDesignTeam();
+    handleCloseContractAdmin();
+  }
+  const findWidth=(x)=>{
+    let width = 12*x;
+    return `${width}vw`
+  }
+  const removeDesignation = (idx) =>{
+    let arr = [...designations];
+    idx++;
+    let c=0;
+    let save;
+    for(let i=0;i<arr.length;i++) {
+      c+=arr[i].children.length;
+      if(c>=idx) {
+        save = i;
+        break;
+      }
+    }
+    let removeVal = idx-(c-arr[save].children.length);
+    arr[save].children.splice(removeVal-1, 1);
+    let p = [...emps];
+    p.splice(idx-1, 1)
+
+    let r = [...rate]
+    r.splice(idx-1, 1)
+
+    let h = [...editingData]
+    h.map((f)=>{
+      f.subtasks.map((e)=>{
+        e.hrs.splice(idx-1, 1);
+      })
+    })
+
+    let hr = [...totalHrs]
+    hr.splice(idx-1, 1);
+
+    setemps(p)
+    setrate(r)
+    seteditingData(h);
+    setdesignations(arr);
+    formChildArr(arr);
+    settotalHrs(hr)
+  }
+
+  const sumTaskHrs = (arr) =>{
+    let sum = 0;
+    arr.map((e)=>{
+      sum+=e;
+    })
+    return sum;
+  }
+
+  const [selectedMilestone, setseletedMilestone] = useState();
+
+  const findMilestoneStatus = (e) =>{
+    let notStarted = 0, inProgress = 0, completed = 0, len = 0;
+    e.map((task)=>{
+      if(task.visibility) {
+        len++;
+        if(task.status===0) notStarted++;
+        else if(task.status===1) inProgress++;
+        else if(task.status===2) completed++;
+      }
+    })
+    console.log(notStarted, inProgress, completed, len)
+    if(notStarted===len) return 0;
+    else if(completed===len) return 2;
+    else return 1;
+  }
+
+  const findStartDate = (e) =>{
+    if(e.length==0) return null;
+    let dates = [];
+    e.map((task)=>{
+      if(task.visibility)dates.push(task.StartDate)
+    })
+    if(dates.length===0) return null;
+    const datesList = dates.map(dateString => moment(dateString));
+    const minDate = moment.min(datesList);
+    return minDate.format("DD MMM YYYY")
+  }
+
+  const findEndDate = (e) =>{
+    if(e.length==0) return null;
+    let dates = [];
+    e.map((task)=>{
+      if(task.visibility) {
+        const date = moment(task.StartDate);
+        const newDate = date.add(task.Duration, 'days');
+        dates.push(newDate)
+      }
+    })
+    if(dates.length===0) return null;
+    const datesList = dates.map(dateString => moment(dateString));
+    const maxDate = moment.max(datesList);
+    return maxDate.format("DD MMM YYYY")
+  }
+
+  const calculateDuration = (a, b) =>{
+    if(!b || !a) return 0;
+    const aMoment = moment(a);
+    const bMoment = moment(b);
+    const duration = Math.abs(aMoment.diff(bMoment, "days"));
+    return duration;
+  }
+
   return (
     isLoading?<LoadingSpinner/>:
     <div>
-     <div className='d-flex flex-row justify-content-between'>
-      <div className='pageHeader'>TTM : {Name}</div>
-      {change?<button style={styles.addButton}  onClick={handleSubmit}><p style={styles.addButtonText} >Save Changes</p></button>:<></>}
-      <Button variant='success' onClick={handleOpenAddTask} style={{marginRight:'2vw', height:'8vh'}}>Add Task</Button>
-     </div>
+     {/* <div className='d-flex flex-row justify-content-between'> */}
+      {/* <div className='pageHeader'>TTM : {Name}</div> */}
+      {/* <Button variant='success' onClick={handleOpenAddTask} style={{marginRight:'2vw', height:'8vh'}}>Add Task</Button> */}
+     {/* </div> */}
 
       {/* Table Header */}
  
-      <div className='tableHeader'> 
+      <div className='tableHeader d-flex flex-row justify-content-between'> 
+      <div className='d-flex flex-row align-items-center'>
         <div className='tableHeaderText'>{Name}</div>
+        {change?<div className='unsaved-text'>You have some unsaved changes!</div>:<></>}
+      </div>
+        
+        {change?<button style={styles.addButton}  onClick={handleSubmit}><p style={styles.addButtonText} >Save Changes</p></button>:<></>}
       </div>
 
       {/* First four rows table */}
     <div className='tableFixHead'>
       <table className='table table-bordered'>
         <thead>
-          <tr>
-            <th className='normals th'>Project Department</th>
-            <th className='normals th' colSpan={4}>Timelines</th>
-            <th className='normals th' colSpan={3}>Project Management</th>
-            <th className='normals th' colSpan={2}>Design</th>
-            <th className='normals th' colSpan={1 + roadWayDesignersColspan + watermainColspan}>Design Team</th>
-            <th className='normals th' colSpan={transportationColspan}>Transportation, Traffic Engineering, Traffic control plans and Utility Coordination</th>
-            <th className='normals th' colSpan={2}>Bids and Tender Preparation Team</th>
-            <th className='normals th' colSpan={2}>Contract administration and Construction Inspection</th>
+          <tr style={{zIndex:'9'}}>
+            <th className='normals th' style={{verticalAlign:'middle'}}>Project Department</th>
+            <th className='normals th' style={{background:'white', verticalAlign:'middle'}} colSpan={4}>Timelines</th>
+            {designations.map((e, idx)=>{
+              return (
+                <>
+                {e.Designation=='Design Team'?<th style={{width: findWidth(e.children.length), background:'white', verticalAlign:'middle'}} className='normals th' colSpan={e.children.length}>Design Team   <img style={{cursor:'pointer'}} onClick={()=>{handleOpenDesignTeam();setcurrHeading(idx)}} src={options}/></th>:
+                e.Designation=='Transportation, Traffic Engineering, Traffic control plans and Utility Coordination'?<th style={{background:'white', verticalAlign:'middle'}} className='normals th' colSpan={e.children.length}>{e.Designation}</th>:
+                e.Designation=='Contract administration and Construction Inspection'?<th style={{width: findWidth(e.children.length), background:'white', verticalAlign:'middle'}} className='normals th' colSpan={e.children.length}>{e.Designation}  <img style={{cursor:'pointer'}} onClick={()=>{handleOpenContractAdmin();setcurrHeading(idx)}} src={options}/></th>:
+                <th style={{width: findWidth(e.children.length), background:'white', verticalAlign:'middle'}} className='normals th' colSpan={e.children.length}>{e.Designation}</th>
+                }
+              </>)
+            })}
+            <th style={{width:'12vw', background:'white', verticalAlign:'middle'}} className='normals th' colSpan={2}>Hrs</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td className='normals td'>Designation</td>
-            <td className='normals td' rowSpan={3} style={{paddingTop:'10vh'}}>Status</td>
-            <td className='normals td' rowSpan={3} style={{paddingTop:'10vh'}}>Start Date</td>
-            <td className='normals td' rowSpan={3} style={{paddingTop:'10vh'}}>End Date</td>
-            <td className='normals td' rowSpan={3} style={{paddingTop:'10vh'}}>Duration</td>
-            <td className='normals td'>Project Manager</td>
-            <td className='normals td'>Project Director</td>
-            <td className='normals td'>Qa/QC lead and Risk Manager</td>
-            <td className='normals td'>Technical Design Lead</td>
-            <td className='normals td'>Transportation Planning and Engineering Lead</td><td className='normals td' colSpan={roadWayDesignersColspan}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyItems: 'center'  }}>
-            Roadway Designers {'  '}
-              <span onClick={toggleRoadwayColspan} style={buttonStyle}>
-                {roadWayDesignersColspan === 1 ? '+' : '-'}
-              </span>
-            </div>
-            </td>
-            <td className='normals td' colSpan={watermainColspan}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyItems: 'center'  }}>
-            Watermain, Sanitary and Storm Sewer Designers {' '}
-              <span onClick={toggleWatermainColspan} style={buttonStyle}>
-                {watermainColspan === 1 ? '+' : '-'}
-              </span>
-            </div>
-            </td>
-            <td className='normals td'>Cad Technician</td> <td className='normals td' colSpan={transportationColspan}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyItems: 'center' }}>
-              Transportation, Traffic Engineering, Traffic control plans, and Utility Coordination {'  '}
-              <span onClick={toggleTransportationColspan} style={buttonStyle}>
-                {transportationColspan === 1 ? '+' : '-'}
-              </span>
-            </div>
-          </td>
-            <td className='normals td'>TakeOff Engineer</td>
-            <td className='normals td'>Junior Engineer</td>
-            <td className='normals td'>Contract Administrator</td>
-            <td className='normals td'>Site Inspector</td>
+            <td className='normals td' style={{verticalAlign:'middle'}}>Designation</td>
+            <td className='normals td' rowSpan={3} style={{verticalAlign:'middle', background:'white'}}>Status</td>
+            <td className='normals td' rowSpan={3} style={{verticalAlign:'middle', background:'white'}}>Start Date</td>
+            <td className='normals td' rowSpan={3} style={{verticalAlign:'middle', background:'white'}}>End Date</td>
+            <td className='normals td' rowSpan={3} style={{verticalAlign:'middle', background:'white'}}>Duration (Days)</td>
+            {childArr.map((e, idx)=>{
+              return(
+                <>
+                <td style={{background:'white', verticalAlign:'middle'}} className='normals td'>
+                  <p style={{display:'inline', width:'80%'}}>{e}  </p>
+                  <img onClick={()=>removeDesignation(idx)} style={{cursor:'pointer', display:'inline'}} src={options}/>
+                </td>
+                </>
+              
+              )
+            })}
+            <td className='normals td' rowSpan={3} style={{verticalAlign:'middle', background:'#DBDBF4'}}>Total Hrs</td>
+            <td className='normals td' rowSpan={3} style={{verticalAlign:'middle', background:'#DBDBF4'}}>Labour Fees($)</td>
           </tr>
           <tr className='tr'>
-            <td style={{zIndex:'6'}} className='normals td'>People</td>
+            <td style={{zIndex:'6', background:'white'}} className='normals td'>People</td>
             {emps.map((e, idx)=>{
               return (
-                visible[idx] === 0? <></> :(
+                (
                 <td className='specials td'>
                   <input
                     type="text"
@@ -488,21 +676,24 @@ const calculateEndDate=(startDate, duration)=> {
             <td className='normals td'>Rate Per Hour</td>
             {rate.map((e, idx)=>{
               return(
-                visible[idx] === 0? <></> :(<td className='specials td'>
-                  <input
-                      className='no-focus' placeholder='0'
-                      style={{...style.input, display:'inline'}}
-                      value={e?e:''}
-                      onChange={(eve)=>handleChangeRate(eve, idx)}
-                  />
-                </td>)
+                <td className='specials td' style={{background:'white'}}>
+
+                    {e?<p style={{ display: "inline" }}>$ </p>:''}
+                    <input
+                        className='no-focus' 
+                        placeholder='$ 0'
+                        style={{...style.input, width: e?"35px":'100%'}}
+                        value={e?e:''}
+                        onChange={(eve)=>handleChangeRate(eve, idx)}
+                    />
+                </td>
               )
             })}
           </tr>
           {editingData?editingData.map((e)=>{
             return(
               <>
-              <tr><td colSpan={span+4} bgcolor='#E4FEF1'
+              <tr><td bgcolor='#E4FEF1'
                 style={{
                   height: '38px',
                   textAlign:'left',
@@ -512,12 +703,25 @@ const calculateEndDate=(startDate, duration)=> {
                   fontStyle: 'normal',
                   fontWeight: '500',
                   lineHeight: '20px',
-                  // backgroundColor: '#E4FEF1',
+                  backgroundColor: 'white',
                 }}>
                   <div className='d-flex justify-content-start empty'>
                     <div>{e.TaskName}</div>
                     
                   </div>
+                  </td>
+                  <td style={{background:'white'}} className='td'><div>
+                      {findMilestoneStatus(e.subtasks)===0
+                        ? <div style={{  textAlign:'center', height: '20px', background: '#E4EEFE', border: '0.4px solid #E4EEFE', borderRadius: '24px', paddingLeft: '6px', paddingRight:'6px' }}>Not Started</div> :
+                        findMilestoneStatus(e.subtasks)===1 ? <div style={{  textAlign:'center', height: '20px', background: '#FFF4EF', border: '0.4px solid #FFF4EF', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Ongoing</div> :
+                        findMilestoneStatus(e.subtasks)===2 ? <div style={{  textAlign:'center', height: '20px', background: '#559776', border: '0.4px solid #559776', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Completed</div> :<></>
+                      }</div>
+                  </td>
+                  <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'>{findStartDate(e.subtasks)?findStartDate(e.subtasks):''}</td>
+                  <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'>{findEndDate(e.subtasks)?findEndDate(e.subtasks):''}</td>
+                  <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'>{calculateDuration(findStartDate(e.subtasks), findEndDate(e.subtasks))}</td>
+                  <td colSpan={childArr.length+2} style={{background:'white'}} className='td'>
+                    
                   </td>
                   <Modal
                     show={statusModal}
@@ -618,41 +822,44 @@ const calculateEndDate=(startDate, duration)=> {
                   return(
                     <>
                     {task.visibility?
-                    <tr>
+                    <tr className='' style={{backgroundColor:'cyan'}}>
                       <td style={{paddingLeft:'32px'}} className='td'
                       >{task.TaskName}</td>
-                      <td style={{}} className='td'><div style={{cursor:'pointer'}} onClick={()=>{setcurrStatus(e.status);setid([e.parentID, task.childId]);openstatusModal()}}>
+                      <td style={{background:'white'}} className='td'><div style={{cursor:'pointer'}} onClick={()=>{setcurrStatus(e.status);setid([e.parentID, task.childId]);openstatusModal()}}>
                       {task.status === 0 && task.Progress<100
                         ? <div style={{  textAlign:'center', height: '20px', background: '#E4EEFE', border: '0.4px solid #E4EEFE', borderRadius: '24px', paddingLeft: '6px', paddingRight:'6px' }}>Not Started</div> :
                           task.status === 1 && task.Progress<100 ? <div style={{  textAlign:'center', height: '20px', background: '#FFF4EF', border: '0.4px solid #FFF4EF', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Ongoing</div> :
                             task.status === 2||task.Progress===100 ? <div style={{  textAlign:'center', height: '20px', background: '#559776', border: '0.4px solid #559776', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Completed</div> :<></>
                       }</div></td>
-                      <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "start", e.parentID, task.childId)} selected={new Date(task.StartDate)} /></td>
-                      <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "end", e.parentID, task.childId)} selected={calculateEndDate(new Date(task.StartDate), task.Duration)} /></td>
-                      <td style={{paddingLeft:'32px', textAlign:'center'}} className='td'>
+                      <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "start", e.parentID, task.childId)} selected={new Date(task.StartDate)} /></td>
+                      <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "end", e.parentID, task.childId)} selected={calculateEndDate(new Date(task.StartDate), task.Duration)} /></td>
+                      <td style={{ textAlign:'center', background:'white'}} className='td'>
                         <input
                           className='no-focus' placeholder='0'
-                          style={style.input}
+                          style={{...style.input}}
                           value={Math.ceil(task.Duration)}
                           onChange={(eve)=>handleDurationChange(e.parentID, task.childId , eve)}
                         />
                       </td>
                       {task.hrs.map((h, idx)=>{
                         return (
-                          visible[idx] === 0? <></> :(<td  > 
+                          (<td  style={{background:'white'}}> 
                             <input
-                              className='no-focus' placeholder='0'
-                              style={style.input}
+                              className='no-focus' placeholder='0 hr'
+                              style={{...style.input, width: h?'50%':'100%', paddingLeft: h?'3.6vw':"0"}}
                               value={h?h:''}
                               onChange={(eve)=>handleHRchange(e.parentID, task.childId ,idx, eve)}
                             />
+                            {h ? <p style={{ display: "inline" }}> hr</p> : ""}
                           </td>)
                         )
                       })}
+                      <td style={{paddingLeft:'32px', zIndex:'6', background:'#DBDBF4'}} className='td'>{sumTaskHrs(task.hrs)} hr</td>
+                      <td style={{paddingLeft:'32px', zIndex:'6', background:'#DBDBF4'}} className='td'>{sumTaskHrs(task.hrs)}</td>
                     </tr>:<></>}</>
                   )
                 })}
-                {e.parentID===5||e.parentID===7?<></>:<tr><td colSpan={span+1} bgcolor='#FFF'
+                {<tr><td colSpan={childArr.length+7} bgcolor='#FFF'
                 style={{
                   height: '38px',
                   textAlign:'left',
@@ -664,7 +871,7 @@ const calculateEndDate=(startDate, duration)=> {
                   lineHeight: '20px',
                   backgroundColor: '#FFF',
                 }}>
-                  <p className='empty' onClick={() => functionArray[e.parentID]()} style={{
+                  <p className='empty' onClick={()=>{handleOpenNewTaskMile();setseletedMilestone(e.parentID)}} style={{
                     paddingLeft:'24px', cursor:'pointer'
                   }}>Add/Remove Task +</p></td>
                 </tr>}
@@ -679,7 +886,7 @@ const calculateEndDate=(startDate, duration)=> {
             <td className='td' style={{background:'#DBDBF4'}}></td>
             {totalHrs.map((e, idx)=>{
               return(
-                visible[idx] === 0? <></> :(<td className='td' style={{background:'#DBDBF4', zIndex:'2'}}>{e}</td>)
+                (<td className='td' style={{background:'#DBDBF4', zIndex:'2'}}>{e}</td>)
               )
             })}
           </tr>
@@ -691,7 +898,7 @@ const calculateEndDate=(startDate, duration)=> {
             <td className='td' style={{background:'#DBDBF4'}}></td>
             {totalHrs.map((e, idx)=>{
               return(
-                visible[idx] === 0? <></> :(<td className='td' style={{background:'#DBDBF4', zIndex:'1'}}>$ {(e*rate[idx]).toFixed(2)}</td>)
+                (<td className='td' style={{background:'#DBDBF4', zIndex:'1'}}>$ {(e*rate[idx]).toFixed(2)}</td>)
               )
             })}
           </tr>
@@ -703,14 +910,14 @@ const calculateEndDate=(startDate, duration)=> {
             <td className='td' style={{background:'#DBDBF4'}}></td>
             {totalHrs.map((e, idx)=>{
               return(
-                visible[idx] === 0? <></> :(<td className='td' style={{background:'#DBDBF4', zIndex:'0.5'}}>{hrSum>0?((e/hrSum)*100).toFixed(2):0}%</td>)
+                (<td className='td' style={{background:'#DBDBF4', zIndex:'0.5'}}>{hrSum>0?((e/hrSum)*100).toFixed(2):0}%</td>)
               )
             })}
           </tr>
         </tbody>
       </table>
       </div>
-      <Modal show={show} onHide={handleCloseStage1}>
+      {/* <Modal show={show} onHide={handleCloseStage1}>
         <Modal.Header closeButton>
           <Modal.Title>Select Task (Project Initiation Stage)</Modal.Title>
         </Modal.Header>
@@ -811,7 +1018,7 @@ const calculateEndDate=(startDate, duration)=> {
             <option value='5'>Maintenance Period Support</option>
           </Form.Select>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
 
       <Modal show={openAddTask} onHide={handleCloseAddTask}>
         <Modal.Header closeButton>
@@ -826,6 +1033,60 @@ const calculateEndDate=(startDate, duration)=> {
           </Form.Select>
         </Modal.Body>
       </Modal>
+
+      <Modal show={openDesignTeam} onHide={handleCloseDesignTeam}>
+        <Modal.Header closeButton>
+          <Modal.Title>Select Designation (Design Team)</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Select onChange={handleAddDesignation}>
+            <option>Select Designation</option>
+            <option value={'Electrical and Streetlight Designer'}>Electrical and Streetlight Designer</option>
+            <option value={'Landscape and Streetscape Architect'}>Landscape and Streetscape Architect</option>
+            <option value={'Structural Engineer'}>Structural Engineer</option>
+            <option value={'Stormwater Specialist'}>Stormwater Specialist</option>
+            <option value={'Senior Design Engineert'}>Senior Design Engineer</option>
+            <option value={'Environmental Planner'}>Environmental Planner</option>
+            <option value={'Traffic Signal Designer'}>Traffic Signal Designer</option>
+            
+          </Form.Select>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={openContractAdmin} onHide={handleCloseContractAdmin}>
+        <Modal.Header closeButton>
+          <Modal.Title>Select Designation(Contract Administration and Inscpection Services)</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Select onChange={handleAddDesignation}>
+            <option>Select Designation</option>
+            <option value={'Tree Arborist'}>Tree Arborist</option>
+            
+          </Form.Select>
+        </Modal.Body>
+      </Modal>
+
+
+      <Modal
+                show={openNewTaskMile}
+                onHide={handleCloseNewTaskMile}
+                // backdrop="static"
+                style={styles.addModal}
+                dialogClassName="filter-dialog"
+                animation={false}
+            >
+                <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row', width:'428px'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={styles.addHeading}>Add New Task</div>
+                    </div>
+                    <div><img onClick={handleCloseNewTaskMile} style={{marginRight:'36px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
+                <div style={{height:'306px'}}>
+                    {
+                        <NewTaskorMilestone selectedMilestone={selectedMilestone} data = {editingData} seteditingData={seteditingData} change={change} setchange={setchange} show={openNewTaskMile} setshow={handleCloseNewTaskMile} />
+                    }</div>
+            </Modal>
     </div>
   )
 }

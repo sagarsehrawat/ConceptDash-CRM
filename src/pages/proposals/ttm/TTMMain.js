@@ -6,9 +6,9 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import taskList from "../../../Images/TaskList.svg";
 import timesheet from "../../../Images/Timesheet.svg";
-import TTMTable from './TTMTable';
-import Timeline from './Timeline';
-import { PRIMARY_COLOR } from "../../Constants/Constants";
+import TTMTable from './tables/TTMTable';
+import Timeline from './tables/Timeline';
+import { PRIMARY_COLOR } from "../../../Main/Constants/Constants";
 import { faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -18,9 +18,24 @@ function TTMMain(props) {
   const handleChange = (event, newValue) => {
     setValue1(newValue);
   };
+  const styles={
+    heading: {
+      color: "var(--Black-text, #3D424F)",
+      fontFamily: "Roboto",
+      fontSize: "18px",
+      fontStyle: "normal",
+      fontWeight: 500,
+      lineHeight: "28px",
+      marginLeft:'12px'
+    }
+  }
   return (
       <div style={{ marginTop: "8px" }}>
-        <FontAwesomeIcon icon={faArrowLeft} color="#70757A" style={{ borderRadius:'20px', padding:'5px', backgroundColor:'#DBDBF4', border:'1px solid #DBDBF4', marginLeft: "16px", cursor: "pointer" }} onClick={()=>setshowTTM(false)}/>
+        <div style={{display:'flex', flexDirection:'row'}}>
+          
+          <FontAwesomeIcon icon={faArrowLeft} color="#70757A" style={{ borderRadius:'20px', padding:'5px', backgroundColor:'#DBDBF4', border:'1px solid #DBDBF4', marginLeft: "16px", cursor: "pointer" }} onClick={()=>setshowTTM(false)}/>
+          <div style={styles.heading}>TTM : {Name}</div>
+        </div>
         <Box
           sx={{
             width: "100%",

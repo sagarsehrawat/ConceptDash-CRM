@@ -48,7 +48,7 @@ import logout from "../../Images/logout.svg";
 import Home from "./Home";
 import RFP from "../v2/RFP";
 import TestDemo from "../v2/Calendar.js";
-import Proposal from "../v2/Proposal";
+import Proposal from "../../pages/proposals/index";
 import Employee from "../v2/Employee";
 import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../v2/Customers";
@@ -75,7 +75,7 @@ import AddCategory from "../Form/AddCategory";
 import Profile from "../v2/Profile";
 import Announcements from "../v2/Announcements";
 import AddBudgetCity from "../Form/AddBudgetCity";
-import TTMMain from "../v2/TTM/TTMMain";
+import TTMMain from "../../pages/proposals/ttm/TTMMain";
 
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();

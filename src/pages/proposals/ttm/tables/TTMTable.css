@@ -1,3 +1,4 @@
+@import url("https://cdn.syncfusion.com/ej2/material.css");
 .pageHeader{
     color: var(--black-text, #0A0A0A);
     /* Heading 2 18pt */
@@ -13,26 +14,28 @@
 
 .tableHeaderText{
     color: var(--black-text, #0A0A0A);
-    text-align: center;
+    /* text-align: center; */
     /* Heading 2 18pt */
     font-size: 18px;
     font-family: Roboto;
     font-style: normal;
     font-weight: 500;
     line-height: 28px;
+    /* float: left; */
 }
 
 .tableHeader{
     display: flex;
-    border: 1px solid #EBE9F1;
-    background: #DBDBF4;
+    border: 1px solid #EBEDF8;
+    background: #F8FAFB;
     height: 54px;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
+    padding-left: 32px;
 }
 .tableFixHead {
     overflow-y: auto;
-    height: 68vh;
+    height: 70vh;
     /* height: 10em; */
     /* width:600px; */
   }
@@ -48,10 +51,13 @@
     font-weight: normal;
     border: none;
     position: sticky;
+    background: white;
+    vertical-align: middle;
   }
   .td{
     text-align: center;
     border: none;
+    background-color: white;
   }
   
   .normals{
@@ -69,7 +75,7 @@
     /* top: 0; */
     z-index:4;
     text-align: left;
-    background-color:#F7F7F9;
+    background-color:#FFFFFF;
     padding-left: 32px;
   }
   
@@ -77,7 +83,7 @@
     position: sticky;
     top: 0;
     bottom: 0;
-    background-color: #F7F7F9;
+    background: #FFFFFF;
     z-index: 0;
   }
   .td:first-child{
@@ -98,12 +104,12 @@
   .td:first-child{
     position: sticky;
     top: 0;
-    background: #F7F7F9;
+    background: #FFFFFF;
     z-index:2;
-    border-top: 1px solid #EBE9F1;
-    border-bottom: 1px solid #EBE9F1;
-    border-left: 1px solid #EBE9F1;
-    background: #F7F7F9;
+    border-top: 1px solid #EBEDF8;
+    border-bottom: 1px solid #EBEDF8;
+    border-left: 1px solid #EBEDF8;
+    background: #FFFFFF;
   }
     .specials{
         color: var(--black-text, #0A0A0A);
@@ -113,6 +119,7 @@
         font-style: normal;
         font-weight: 500;
         line-height: 20px;
+        background-color: white;
     }
     .stages{
         width: 100%;
@@ -173,3 +180,12 @@
         width: 6vw;
         border: none;
       }
+.unsaved-text{
+  color: var(--Dark-grey, #70757A);
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+  margin-left: 24px;
+}

@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import './Timeline.css'
 import { GanttComponent, EditDialogFieldsDirective, DayMarkers, EditDialogFieldDirective, Inject, Edit, Selection, Toolbar, ColumnsDirective, ColumnDirective, EventMarkersDirective, EventMarkerDirective } from '@syncfusion/ej2-react-gantt';
-// import { editingData, editingResources } from './Data';
-import { GET_TTM, HOST, PRIMARY_COLOR, UPDATE_TTM } from '../../Constants/Constants';
-import LoadingSpinner from '../../Loader/Loader';
+import { GET_TTM, HOST, PRIMARY_COLOR, UPDATE_TTM } from '../../../../Main/Constants/Constants';
+import LoadingSpinner from '../../../../Main/Loader/Loader';
 import axios from 'axios';
 function Timeline(props) {
     const {Name, Id} = props;
   const [editingData, seteditingData] = useState([])
   const [isLoading, setisLoading] = useState(false)
-  const [visible, setvisible] = useState([])
   const [emps, setemps] = useState([])
+  const [desigs, setdesigs] = useState([])
   const [a, seta] = useState(0)
     useEffect(() => {
         setisLoading(true);
@@ -22,10 +20,10 @@ function Timeline(props) {
             .then((res) => {
                 let data = JSON.parse(res.data.res[0].Data)
                 let empRates = JSON.parse(res.data.res[0].Employee_Info)
-                let visibleColumns = JSON.parse(res.data.res[0].Visible_Columns);
+                let desigs = JSON.parse(res.data.res[0].Designations)
                 setemps(empRates)
                 seteditingData(data)
-                setvisible(visibleColumns)
+                setdesigs(desigs)
             })
             .catch((err) => {
               console.log(err);
@@ -46,7 +44,7 @@ function Timeline(props) {
                     {
                       data: JSON.stringify(editingData),
                       employeeInfo: JSON.stringify(emps),
-                      visibleColumns: JSON.stringify(visible),
+                      designations: JSON.stringify(desigs),
                       proposalId: Id,
                     },
                     { headers: { auth: "Rose " + localStorage.getItem("auth") } }
