@@ -985,7 +985,7 @@ const RFP = (props) => {
             </div>
 
             {/* Table */}
-            <div style={{ borderBottom: "1px solid #EBE9F1", height: "492px", overflow: "auto", position: "relative" }} ref={tableRef}>
+            <div style={{ borderBottom: "1px solid #EBE9F1", height: "492px", overflow: "auto", position: "relative"}} ref={tableRef}>
                 <table style={styles.table} className='rfp-table'>
                     <thead style={styles.tableHeader}>
                         <tr>

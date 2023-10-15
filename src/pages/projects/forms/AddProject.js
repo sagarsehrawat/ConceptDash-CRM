@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Modal, ModalBody } from 'react-bootstrap'
 import './AddProject.css'
 import headerIcon from '../../../Images/Projects.svg';
-import tick from '../../../assets/icons/tick.svg'
+import tick from '../../../assets/icons/Primary_Color_Tick.svg'
 import IndependentProject from './types/IndependentProject';
 import RosterProject from './types/RosterProject';
 import ChildProject from './types/ChildProject';
@@ -55,10 +55,22 @@ const AddProject = (props) => {
                 FormUtils.radioButtonForm(setForm, key, value);
                 resetForm(value)
                 break;
-            case 'designChecklist' || 'designInfo':
+            case 'designChecklist':
+                FormUtils.checkboxForm(setForm, key, value)
+                break;
+            case 'designInfo':
                 FormUtils.checkboxForm(setForm, key, value)
                 break;
             case 'department':
+                FormUtils.typeaheadForm(setForm, key, value);
+                break;
+            case 'projectCategory':
+                FormUtils.typeaheadForm(setForm, key, value);
+                break;
+            case 'projectManager':
+                FormUtils.typeaheadForm(setForm, key, value);
+                break;
+            case 'city':
                 FormUtils.typeaheadForm(setForm, key, value);
                 break;
             default:
@@ -119,10 +131,25 @@ const AddProject = (props) => {
                             {handleProjectType(form.projectType)}
                         </form>
 
-
-
-                        <div>
+                        <div className='w-100'>
                             <p className="heading-2">Project Milestone and Tasks</p>
+                            <div className='tasklist-wrapper'>
+                                <table className='tasklist-table w-100'>
+                                    <thead className='fixed-table-header'>
+                                        <tr>
+                                            <th className='tasklist-table-header fixed-column' style={{width: '256px'}}>Milestone/ Task</th>
+                                            <th className='tasklist-table-header' style={{width: '120px'}}>Due Date</th>
+                                            <th className='tasklist-table-header' style={{width: '110px'}}>Status</th>
+                                            <th className='tasklist-table-header' style={{width: '140px'}}>Assigned To</th>
+                                            <th className='tasklist-table-header' style={{width: '88px'}}>Priority</th>
+                                            <th className='tasklist-table-header' style={{width: '174px'}}>Progress</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </ModalBody>

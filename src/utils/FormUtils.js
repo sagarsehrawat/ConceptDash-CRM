@@ -35,13 +35,13 @@ const FormUtils = {
             const valueIndex = newForm[key].indexOf(value);
 
             if (valueIndex === -1) {
-                newForm[key].push(value);
+                newForm[key] = [...newForm[key], value];
             } else {
-                newForm[key].splice(valueIndex, 1);
+                newForm[key] = newForm[key].filter(item => item !== value);
             }
 
             return newForm;
-        })
+        });
     }
 };
 

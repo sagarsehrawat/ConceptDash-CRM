@@ -1,4 +1,4 @@
-.project-modal{
+.project-modal {
     position: absolute;
     width: 50vw;
     height: 100vh;
@@ -8,7 +8,8 @@
     right: 0;
     bottom: 0;
 }
-.project-modal-container{
+
+.project-modal-container {
     display: flex;
     padding: 54px 48px;
     flex-direction: column;
@@ -19,14 +20,14 @@
     height: 100%;
 }
 
-.project-modal-header{
+.project-modal-header {
     display: inline-flex;
     align-items: center;
     justify-content: start;
     gap: 8px;
 }
 
-.icon-container{
+.icon-container {
     display: flex;
     width: 32px;
     height: 32px;
@@ -38,7 +39,7 @@
     box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.12);
 }
 
-.project-type{
+.project-type {
     display: flex;
     flex: 1;
     min-width: 176px;
@@ -54,25 +55,26 @@
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 20px; /* 142.857% */
+    line-height: 20px;
+    /* 142.857% */
     color: #3D424F;
 }
 
-.project-type-active{
+.project-type-active {
     border: 1px solid #EBEDF8;
     background: #EFF1FA;
     color: #8361FE;
 }
 
-.type-right{
+.type-right {
     border-radius: 0px 24px 24px 0px;
 }
 
-.type-left{
+.type-left {
     border-radius: 24px 0px 0px 24px;
 }
 
-.project-label{
+.project-label {
     display: flex;
     min-width: 172px;
     padding: 6px var(--8-pad, 8px);
@@ -86,7 +88,7 @@
     line-height: 20px;
 }
 
-.project-header{
+.project-header {
     display: flex;
     padding: 6px var(--8-pad, 8px);
     justify-content: center;
@@ -98,20 +100,22 @@
     font-size: 22px;
     font-style: normal;
     font-weight: 700;
-    line-height: 32px; /* 145.455% */
+    line-height: 32px;
+    /* 145.455% */
 }
 
-.project-subheader{
+.project-subheader {
     color: var(--Dark-grey, #70757A);
     text-align: center;
     font-family: Roboto;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 20px; /* 142.857% */
+    line-height: 20px;
+    /* 142.857% */
 }
 
-.project-input{
+.project-input {
     border: none;
     outline: none;
     box-shadow: none;
@@ -120,29 +124,68 @@
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 20px; /* 142.857% */
+    line-height: 20px;
+    /* 142.857% */
 }
 
-.project-textarea, .project-textarea:focus{
+.project-textarea,
+.project-textarea:focus {
     border-radius: 6px;
     border: 1px solid var(--Outline-color, #EBE9F1) !important;
     height: 128px;
 }
 
-.project-checkbox-label{
+.project-checkbox-label {
     color: var(--Dark-grey, #70757A);
     font-family: Roboto;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 20px; /* 142.857% */
+    line-height: 20px;
+    /* 142.857% */
     text-align: center;
 }
-.project-name-input{
+
+.project-name-input {
     color: #1C1B20;
     font-family: Roboto;
     font-size: 20px;
     font-style: normal;
     font-weight: 500;
-    line-height: 30px; /* 150% */
+    line-height: 30px;
+}
+
+.tasklist-wrapper {
+    position: relative;
+    overflow-x: auto;
+}
+
+.tasklist-table {
+    border-collapse: separate;
+    border-spacing: 8px 0;
+    background: #F7F7F9;
+}
+
+.tasklist-table-header {
+    height: 20px;
+    padding: 4px var(--8-pad, 8px);
+    border-radius: 6px 0px 0px 0px;
+    background: #F7F7F9;
+    color: #728492;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+}
+
+.tasklist-table-header::before{
+    content: '';
+    display: block;
+    width: 8px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0px;
+    left: 0px;
 }
