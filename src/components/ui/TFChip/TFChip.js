@@ -56,10 +56,15 @@ const Chip = ({ label, tableRef, options, onUpdate, id }) => {
   };
 
   // Handle the table scrolling i.e. block it when modal is open and run it when modal is closed
-  if (onUpdate!==null && tableRef!==null) {
-    if (isVisible) tableRef.current.style.overflowY = "hidden";
-    else tableRef.current.style.overflowY = "auto";
-  }
+  useEffect(() => {
+    if (onUpdate && tableRef) {
+      if (isVisible) {
+        tableRef.current.style.overflowY = 'hidden';
+      } else {
+        tableRef.current.style.overflowY = 'auto';
+      }
+    }
+  }, [onUpdate, isVisible, tableRef]);
 
   // Handle Click on the update modal
   const handleClick = async (e, option) => {
@@ -72,7 +77,7 @@ const Chip = ({ label, tableRef, options, onUpdate, id }) => {
     try{
       const response = await onUpdate(id, option)
 
-      if(response.success === false) throw response.data.error
+      if(response.sucess === false) throw '';
     } catch(e) {
       setValue(prev);
       setChipClass(classes[prev]);
@@ -81,7 +86,7 @@ const Chip = ({ label, tableRef, options, onUpdate, id }) => {
 
   return (
     <>
-      <div>
+      <div className="chip-wrapper">
         <div
           className={`chip ${chipClass}`}
           style={{"cursor" : onUpdate ? "pointer" : "default"}}

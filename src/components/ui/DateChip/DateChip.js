@@ -121,6 +121,7 @@ DateChip.propTypes = {
 
 DateChip.defaultProps = {
   defaultDate: dayjs(),
+  tableRef: null
 };
 
 export default DateChip;

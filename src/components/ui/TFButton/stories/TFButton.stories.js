@@ -18,7 +18,7 @@ export const Primary = {
 
 export const IconPrimary = {
     args: {
-        icon: '../../Images/allProjects.png',
+        icon: '/assets/icons/Plus.svg',
         label: 'Button',
         variant: 'primary'
     }
