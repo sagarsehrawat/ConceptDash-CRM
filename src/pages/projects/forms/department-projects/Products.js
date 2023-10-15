@@ -1,5 +1,6 @@
 import React from "react";
-import Chip from "../../../../components/ui/Chip/Chip";
+import TFChip from "../../../../components/ui/TFChip/TFChip";
+import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead";
 
 const Products = ({ form, handleForm }) => {
   return (
@@ -12,31 +13,30 @@ const Products = ({ form, handleForm }) => {
           className="project-input project-name-input"
           placeholder="Project Name"
           value={form.projectName}
-          onChange={(e) => handleForm(e, e.target.name, e.target.value)}
+          onChange={(e) => handleForm(e.target.name, e.target.value)}
         />
 
         {/* City */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">City</p>
-          <select
-            name="city"
-            className="project-select"
-            placeholder="Select City"
-            value={form.city}
-            onChange={(e) => handleForm(e, e.target.name, e.target.value)}
-          >
-            <option value="">Select City</option>
-          </select>
+          <TFTypeahead
+            name='city'
+            placeholder='Choose City'
+            width='100%'
+            defaultValue={form.city}
+            onChange={handleForm}
+            options={[{ value: 1, label: 'Products' }, { value: 2, label: 'Transportation' }, { value: 1, label: 'Estimation' }]}
+          />
         </div>
 
         {/* Status */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Status</p>
-          <Chip
+          <TFChip
             label={form.status}
             options={["Not Started", "In Progress", "Completed"]}
             onUpdate={async (id, option) => {
-              handleForm(null, "status", option);
+              handleForm("status", option);
               return { success: true };
             }}
           />
@@ -58,7 +58,7 @@ const Products = ({ form, handleForm }) => {
               className="project-input"
               placeholder="0"
               value={form.projectValue}
-              onChange={(e) => handleForm(e, e.target.name, e.target.value)}
+              onChange={(e) => handleForm(e.target.name, e.target.value)}
             />
           </div>
         </div>
@@ -71,7 +71,7 @@ const Products = ({ form, handleForm }) => {
             name="dueDate"
             className="project-input"
             value={form.dueDate}
-            onChange={(e) => handleForm(e, e.target.name, e.target.value)}
+            onChange={(e) => handleForm(e.target.name, e.target.value)}
           />
         </div>
 
@@ -83,22 +83,21 @@ const Products = ({ form, handleForm }) => {
             name="followUpDate"
             className="project-input"
             value={form.followUpDate}
-            onChange={(e) => handleForm(e, e.target.name, e.target.value)}
+            onChange={(e) => handleForm(e.target.name, e.target.value)}
           />
         </div>
 
         {/* Project Manager */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Project Manager</p>
-          <select
-            name="projectManager"
-            className="project-select"
-            placeholder="Select Project Manager"
-            value={form.projectManager}
-            onChange={(e) => handleForm(e, e.target.name, e.target.value)}
-          >
-            <option value="">Choose Project Manager</option>
-          </select>
+          <TFTypeahead
+            name='projectManager'
+            placeholder='Choose Project Manager'
+            width='100%'
+            defaultValue={form.projectManager}
+            onChange={handleForm}
+            options={[]}
+          />
         </div>
 
         {/* Team Members */}
@@ -109,7 +108,7 @@ const Products = ({ form, handleForm }) => {
             className="project-select"
             placeholder="Select Team Members"
             value={form.teamMembers}
-            onChange={(e) => handleForm(e, e.target.name, e.target.value)}
+            onChange={(e) => handleForm(e.target.name, e.target.value)}
           >
             <option value="">Choose Team Members</option>
           </select>
@@ -118,11 +117,11 @@ const Products = ({ form, handleForm }) => {
         {/* Priority */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Priority</p>
-          <Chip
+          <TFChip
             label={form.priority}
             options={["Low", "Medium", "High", "Critical"]}
             onUpdate={async (id, option) => {
-              handleForm(null, "priority", option);
+              handleForm("priority", option);
               return { success: true };
             }}
           />
@@ -141,7 +140,7 @@ const Products = ({ form, handleForm }) => {
                 className="project-input-checkbox"
                 name="designChecklist"
                 checked={form.designChecklist.includes("Site Plan")}
-                onChange={(e) => handleForm(null, e.target.name, "Site Plan")}
+                onChange={(e) => handleForm(e.target.name, "Site Plan")}
               />
               <p className="project-checkbox-label">Site Plan</p>
             </div>
@@ -152,7 +151,7 @@ const Products = ({ form, handleForm }) => {
                 name="designChecklist"
                 checked={form.designChecklist.includes("Calculation Sheet")}
                 onChange={(e) =>
-                  handleForm(null, e.target.name, "Calculation Sheet")
+                  handleForm(e.target.name, "Calculation Sheet")
                 }
               />
               <p className="project-checkbox-label">Calculation Sheet</p>
@@ -164,7 +163,7 @@ const Products = ({ form, handleForm }) => {
                 name="designChecklist"
                 checked={form.designChecklist.includes("Number of Chamber")}
                 onChange={(e) =>
-                  handleForm(null, e.target.name, "Number of Chamber")
+                  handleForm(e.target.name, "Number of Chamber")
                 }
               />
               <p className="project-checkbox-label">Number of Chamber</p>
@@ -186,7 +185,7 @@ const Products = ({ form, handleForm }) => {
                 name="designInfo"
                 checked={form.designInfo.includes("Number of Layers")}
                 onChange={(e) =>
-                  handleForm(null, e.target.name, "Number of Layers")
+                  handleForm(e.target.name, "Number of Layers")
                 }
               />
               <p className="project-checkbox-label">Number of Layers</p>
@@ -197,7 +196,7 @@ const Products = ({ form, handleForm }) => {
                 className="project-input-checkbox"
                 name="designInfo"
                 checked={form.designInfo.includes("Linear")}
-                onChange={(e) => handleForm(null, e.target.name, "Linear")}
+                onChange={(e) => handleForm(e.target.name, "Linear")}
               />
               <p className="project-checkbox-label">Linear</p>
             </div>
@@ -207,7 +206,7 @@ const Products = ({ form, handleForm }) => {
                 className="project-input-checkbox"
                 name="designInfo"
                 checked={form.designInfo.includes("Stone")}
-                onChange={(e) => handleForm(null, e.target.name, "Stone")}
+                onChange={(e) => handleForm(e.target.name, "Stone")}
               />
               <p className="project-checkbox-label">Stone</p>
             </div>
@@ -218,7 +217,7 @@ const Products = ({ form, handleForm }) => {
                 name="designInfo"
                 checked={form.designInfo.includes("Treatment Row")}
                 onChange={(e) =>
-                  handleForm(null, e.target.name, "Treatment Row")
+                  handleForm(e.target.name, "Treatment Row")
                 }
               />
               <p className="project-checkbox-label">Treatment Row</p>
@@ -233,13 +232,9 @@ const Products = ({ form, handleForm }) => {
             name="projectDescription"
             className="project-textarea"
             value={form.projectDescription}
-            onChange={(e) => handleForm(e, e.target.name, e.target.value)}
+            onChange={(e) => handleForm(e.target.name, e.target.value)}
           />
         </div>
-      </div>
-
-      <div>
-        <p className="heading-2">Project Milestone and Tasks</p>
       </div>
     </>
   );

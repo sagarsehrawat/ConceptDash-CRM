@@ -87,7 +87,7 @@ const Home = (props) => {
     },
     contentArea: {
       width: `${viewportWidth - 280 - (isCollapsed ? 68 : 228)}px`,
-      height: `${window.innerHeight - 56}px`,
+      height: `100%`,
       background: "#F8FAFB",
       overflowY: "auto"
     },

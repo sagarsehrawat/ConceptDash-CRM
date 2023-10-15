@@ -1,5 +1,6 @@
 import React from "react";
-import Chip from "../../../../components/ui/Chip/Chip";
+import TFChip from "../../../../components/ui/TFChip/TFChip";
+import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead";
 
 const Transportation = ({ form, handleForm }) => {
   return (
@@ -12,31 +13,30 @@ const Transportation = ({ form, handleForm }) => {
           className="project-input project-name-input"
           placeholder="Project Name"
           value={form.projectName}
-          onChange={(e) => handleForm(e, e.target.name, e.target.value)}
+          onChange={(e) => handleForm(e.target.name, e.target.value)}
         />
 
         {/* City */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">City</p>
-          <select
-            name="city"
-            className="project-select"
-            placeholder="Select City"
-            value={form.city}
-            onChange={(e) => handleForm(e, e.target.name, e.target.value)}
-          >
-            <option value="">Select City</option>
-          </select>
+          <TFTypeahead
+            name='city'
+            placeholder='Choose City'
+            width='100%'
+            defaultValue={form.city}
+            onChange={handleForm}
+            options={[{ value: 1, label: 'Products' }, { value: 2, label: 'Transportation' }, { value: 1, label: 'Estimation' }]}
+          />
         </div>
 
         {/* Status */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Status</p>
-          <Chip
+          <TFChip
             label={form.status}
             options={["Not Started", "In Progress", "Completed"]}
             onUpdate={async (id, option) => {
-              handleForm(null, "status", option);
+              handleForm("status", option);
               return { success: true };
             }}
           />
@@ -58,7 +58,7 @@ const Transportation = ({ form, handleForm }) => {
               className="project-input"
               placeholder="0"
               value={form.projectValue}
-              onChange={(e) => handleForm(e, e.target.name, e.target.value)}
+              onChange={(e) => handleForm(e.target.name, e.target.value)}
             />
           </div>
         </div>
@@ -66,11 +66,11 @@ const Transportation = ({ form, handleForm }) => {
         {/* Client Response */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Client Response</p>
-          <Chip
+          <TFChip
             label={form.clientResponse}
             options={["Not Started", "In Progress", "Completed"]}
             onUpdate={async (id, option) => {
-              handleForm(null, "clientResponse", option);
+              handleForm("clientResponse", option);
               return { success: true };
             }}
           />
@@ -84,7 +84,7 @@ const Transportation = ({ form, handleForm }) => {
             name="dueDate"
             className="project-input"
             value={form.dueDate}
-            onChange={(e) => handleForm(e, e.target.name, e.target.value)}
+            onChange={(e) => handleForm(e.target.name, e.target.value)}
           />
         </div>
 
@@ -96,22 +96,21 @@ const Transportation = ({ form, handleForm }) => {
             name="followUpDate"
             className="project-input"
             value={form.followUpDate}
-            onChange={(e) => handleForm(e, e.target.name, e.target.value)}
+            onChange={(e) => handleForm(e.target.name, e.target.value)}
           />
         </div>
 
         {/* Project Manager */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Project Manager</p>
-          <select
-            name="projectManager"
-            className="project-select"
-            placeholder="Select Project Manager"
-            value={form.projectManager}
-            onChange={(e) => handleForm(e, e.target.name, e.target.value)}
-          >
-            <option value="">Choose Project Manager</option>
-          </select>
+          <TFTypeahead
+            name='projectManager'
+            placeholder='Choose Project Manager'
+            width='100%'
+            defaultValue={form.projectManager}
+            onChange={handleForm}
+            options={[]}
+          />
         </div>
 
         {/* Team Members */}
@@ -122,7 +121,7 @@ const Transportation = ({ form, handleForm }) => {
             className="project-select"
             placeholder="Select Team Members"
             value={form.teamMembers}
-            onChange={(e) => handleForm(e, e.target.name, e.target.value)}
+            onChange={(e) => handleForm(e.target.name, e.target.value)}
           >
             <option value="">Choose Team Members</option>
           </select>
@@ -135,13 +134,9 @@ const Transportation = ({ form, handleForm }) => {
             name="projectDescription"
             className="project-textarea"
             value={form.projectDescription}
-            onChange={(e) => handleForm(e, e.target.name, e.target.value)}
+            onChange={(e) => handleForm(e.target.name, e.target.value)}
           />
         </div>
-      </div>
-
-      <div>
-        <p className="heading-2">Project Milestone and Tasks</p>
       </div>
     </>
   );

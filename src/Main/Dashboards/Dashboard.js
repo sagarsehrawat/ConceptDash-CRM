@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useContext, useState, useEffect, useRef, useCallback, useMemo } from "react";
 import axios from "axios";
-import { Dropdown, Modal, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Dropdown, Modal, Nav, Navbar, NavbarBrand, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import AuthenticationContext from "../../Context/AuthContext";
 import tIcon from '../../Images/taskIcon.svg'
@@ -156,6 +156,7 @@ const Dashboard = () => {
       height: "56px",
       left: "0px",
       top: "0px",
+      position: 'fixed',
       backgroundColor: "#FAFBFB",
       borderBottom: "1px solid #EBE9F1",
       width: "100vw",
@@ -1625,9 +1626,11 @@ const Dashboard = () => {
         </Sidebar>
         <div
           style={{
+            marginTop: '56px',
             marginLeft: isCollapsed ? "68px" : "228px",
             backgroundColor: "#F8FAFB",
             height: `${window.innerHeight - 56}px`,
+            overflowY: 'auto',
             width: isCollapsed ? `${viewportWidth - 68}px` : `${viewportWidth - 228}px`
           }}
         >

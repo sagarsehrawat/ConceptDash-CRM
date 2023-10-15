@@ -74,7 +74,7 @@
 
 .project-label{
     display: flex;
-    width: 160px;
+    min-width: 172px;
     padding: 6px var(--8-pad, 8px);
     align-items: center;
     gap: var(--8-pad, 8px);
@@ -83,29 +83,7 @@
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
-    line-height: 20px; /* 142.857% */
-}
-
-.project-select{
-    border: none;
-    box-shadow: none;
-    outline: none;
-    padding: 8px;
-    padding-left: 0px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-image: none;
-    cursor: pointer;
-}
-
-.project-select-option{
-    color: var(--Black-text, #3D424F);
-    font-family: Roboto;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 20px; /* 142.857% */
+    line-height: 20px;
 }
 
 .project-header{
@@ -149,10 +127,6 @@
     border-radius: 6px;
     border: 1px solid var(--Outline-color, #EBE9F1) !important;
     height: 128px;
-}
-
-.project-input-checkbox{
-
 }
 
 .project-checkbox-label{

@@ -43,8 +43,8 @@ import {
   import UpdateProjectForm from "../../../Main/Form/UpdateProjectForm";
   import ProjectForm from "../../../Main/Form/ProjectForm";
   import open from "../../../Images/openinDrive.svg";
-  import SearchBar from "../../../components/ui/SearchBar/SearchBar";
-  import Chip from "../../../components/ui/Chip/Chip";
+  import TFSearchBar from "../../../components/ui/TFSearchBar/TFSearchBar";
+  import TFChip from "../../../components/ui/TFChip/TFChip";
 import AddProject from "../forms/AddProject";
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -1061,7 +1061,7 @@ const ProjectsTable = (props) => {
               className="d-flex flex-row"
               style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}
             >
-              <SearchBar
+              <TFSearchBar
                 placeholder={"Projects"}
                 searchFunc={[value, setValue]}
                 style={{ "margin-right": "12px" }}
@@ -1978,7 +1978,7 @@ const ProjectsTable = (props) => {
                                 : "1px solid #EBE9F1",
                             }}
                           >
-                            <Chip
+                            <TFChip
                               label={e.Status}
                               id={e.Project_Id}
                               tableRef={tableRef}
