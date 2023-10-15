@@ -11,7 +11,7 @@ import axios from 'axios'
 import {
     GET_BUDGET_CITY, GET_BUDGET_COUNT, GET_DEPARTMENTS, GET_PROJECT_CATEGORIES, HOST
     , GET_CITY_BUDGETS,
-    DELETE_BUDGET,PRIMARY_COLOR
+    DELETE_BUDGET,PRIMARY_COLOR, UPDATE_BUDGET_CITY_STATUS
 } from '../Constants/Constants'
 import ReactSelect from 'react-select'
 import UpdateCityBudget from '../Form/UpdateCityBudget'
@@ -23,7 +23,10 @@ import UpdateCity1 from '../v2-forms/UpdateCity1'
 import UpdateCity2 from '../v2-forms/UpdateCity2'
 import tIcon from '../../Images/taskIcon.svg'
 import cross from '../../Images/cross.svg'
-import SearchBar from '../../components/ui/SearchBar/SearchBar'
+import TFSearchBar from '../../components/ui/TFSearchBar/TFSearchBar'
+import TFChip from '../../components/ui/TFChip/TFChip'
+import TFButton from '../../components/ui/TFButton/TFButton'
+import plusIcon from '../../assets/icons/Plus.svg'
 
 const BudgetCities = (props) => {
     const { isCollapsed } = props
@@ -53,7 +56,7 @@ const BudgetCities = (props) => {
     const [prevFilter, setprevFilter] = useState({ dept: [], cat: [], budgetCategory: [] });
     const [year, setYear] = useState(new Date().getFullYear().toString());
 
-    const tableRef = useRef(0);
+    const tableRef = useRef(null);
 
     //Filter Modal
     const [filterModal, setfilterModal] = useState(false);
@@ -543,28 +546,6 @@ const BudgetCities = (props) => {
         return `$ ${n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
     }
 
-    const statusComponent = (status) => {
-        if (status === "Only Project Names") {
-            return (
-                <div style={{ ...styles.statusContainer, border: "1px solid #FD9568", width: "92px" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#FD9568" }}>Draft Budget</p>
-                </div>
-            )
-        } else if (status === "Not Found") {
-            return (
-                <div style={{ ...styles.statusContainer, border: "1px solid #FE3766", width: "80px" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#FE3766" }}>Not Found</p>
-                </div>
-            )
-        } else if (status === "Done") {
-            return (
-                <div style={{ ...styles.statusContainer, background: "#E4FEF1", border: "1px solid #34A853", width: "52px" }} className='d-flex justify-content-center'>
-                    <p style={{ ...styles.status, color: "#34A853" }}>Done</p>
-                </div>
-            )
-        }
-    }
-
     const [rowData, setrowData] = useState([]);
     const handleUpdate2 = (e) => {
         setrowData(e);
@@ -655,14 +636,16 @@ const BudgetCities = (props) => {
 
                     {/* Filter and Other Buttons */}
                     <div className='d-flex flex-row justify-content-between' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px", marginRight:'32px' }}>
-                        <SearchBar 
-                        
+                        <TFSearchBar 
                         placeholder={'Cities'}
                         searchFunc={[value, setValue]}/>
                     </div>
 
                     {/* Table */}
-                    <div style={{ borderBottom: "1px solid #EBE9F1", height: "542px", overflow: "auto", position: "relative" }} onScroll={(e) => tableRef.current = e.target.scrollTop} ref={tableRef}>
+                    <div style={{ borderBottom: "1px solid #EBE9F1", height: "542px", overflow: "auto", position: "relative" }} onScroll={(e) => {
+                        // tableRef.current = e.target.scrollTop
+                        console.log(e.target.scrollTop, tableRef.current)
+                        }} ref={tableRef}>
                         <table style={styles.table} className='rfp-table'>
                             <thead style={styles.tableHeader}>
                                 <tr>
@@ -682,9 +665,9 @@ const BudgetCities = (props) => {
                                         <LoadingSpinner />
                                     </td>
                                 </tr> : cities && cities.map((e, idx) => {
-                                    if (e.City.toLowerCase().startsWith(value.toLowerCase())) {
-                                        return (<tr style={{ ...styles.tableRow }} className='fixed-col' id={e.City_Budget_ID}>
-                                            <td className='fixed-col' style={{ ...styles.tableCell, fontWeight: "500" }}>
+                                    if (e.City?.toLowerCase().startsWith(value?.toLowerCase())) {
+                                        return (<tr style={{ ...styles.tableRow }} className='' id={e.City_Budget_ID}>
+                                            <td className='' style={{ ...styles.tableCell, fontWeight: "500" }}>
                                                 <div className='d-flex flex-column justify-content-start'>
                                                     <p style={{ WebkitLineClamp: "1", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.City}</p>
                                                     <p style={{ fontWeight: "400", color: "#70757A" }}>{e.Municipality_Type}</p>
@@ -693,8 +676,18 @@ const BudgetCities = (props) => {
                                             <td style={{ ...styles.tableCell }}>{e.Geographic_Area}</td>
                                             <td style={{ ...styles.tableCell }}>{e.Population_2021}</td>
                                             <td style={{ ...styles.tableCell, fontWeight: "600" }}>{addComma(e.Capital_Budget_23)}</td>
-                                            <td style={{ ...styles.tableCell }}>{statusComponent(e.Year_22)}</td>
-                                            <td style={{ ...styles.tableCell }}>{statusComponent(e.Year_23)}</td>
+                                            <td style={{ ...styles.tableCell }}><TFChip
+                                                                                    label={e.Year_22}
+                                                                                    id={e.City_Budget_ID}
+                                                                                    tableRef={tableRef}
+                                                                                    options={["Not Found", "Draft Budget", "Done"]}
+                                                                                /></td>
+                                            <td style={{ ...styles.tableCell }}><TFChip
+                                                                                    label={e.Year_23}
+                                                                                    id={e.City_Budget_ID}
+                                                                                    tableRef={tableRef}
+                                                                                    options={["Not Found", "Draft Budget", "Done"]}
+                                                                                /></td>
                                             <td style={{ ...styles.tableCell, color: "#70757A" }}><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Remarks}</p></td>
                                             <td style={{ ...styles.tableCell }}>
                                                 <div className='d-flex flex-row'>
@@ -812,7 +805,7 @@ const BudgetCities = (props) => {
                     {/* Filter and Other Buttons */}
                     <div className='d-flex flex-row justify-content-between' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px", marginRight: "32px" }}>
                         <div className='d-flex flex-row justify-content-start'>
-                        <SearchBar 
+                        <TFSearchBar 
                                 placeholder={'Budgets'}
                                 searchFunc={[value2, setValue2]} 
                                 style={{'margin-right': '12px'}}
@@ -891,7 +884,7 @@ const BudgetCities = (props) => {
                                     },
                                 ]} />
                         </div>
-                        <button style={styles.addButton} onClick={handleShow}><p style={styles.addButtonText} >+ Add New Budget</p></button>
+                        <TFButton icon={plusIcon} label="Add New Budget" handleClick={handleShow}/>
                     </div>
 
                     {/* Table */}

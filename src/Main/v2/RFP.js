@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_GOOGLE_DRIVE_URL, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST, PRIMARY_COLOR } from '../Constants/Constants';
+import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_GOOGLE_DRIVE_URL, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST, PRIMARY_COLOR, UPDATE_RFP_STATUS } from '../Constants/Constants';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowsUpDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faCross, faDownload, faEdit, faFilter, faMagnifyingGlass, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -16,9 +16,11 @@ import filterIcon from '../../Images/Filter.svg'
 import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 import open from '../../Images/openinDrive.svg'
-import SearchBar from '../../components/ui/SearchBar/SearchBar';
-
-
+import TFSearchBar from '../../components/ui/TFSearchBar/TFSearchBar';
+import TFButton from '../../components/ui/TFButton/TFButton';
+import TFChip from '../../components/ui/TFChip/TFChip';
+import plusIcon from '../../Images/addPlus.svg'
+import DateChip from '../../components/ui/DateChip/DateChip';
 
 const RFP = (props) => {
     const { isCollapsed } = props
@@ -790,6 +792,22 @@ const RFP = (props) => {
         setscrolled(tableRef.current.scrollLeft)
     }
 
+    const handleStatusUpdate = async (rfpId, action) => {
+        const response = await axios.post(
+          HOST + UPDATE_RFP_STATUS,
+          {
+            rfpId,
+            action,
+          },
+          {
+            headers: { auth: "Rose " + localStorage.getItem("auth") },
+          }
+        );
+    
+        console.log(response);
+        return response;
+      };
+
     const sortModalLeft = (idx) => {
         if (isCollapsed) {
             if (idx === 0) return `${100}px`
@@ -822,38 +840,14 @@ const RFP = (props) => {
             <option value="3">Three</option>
         </Form.Select >
 
-
-    const filterInput2 = (idx) => {
-        if (advancedFilter[idx][0] === '') {
-            return (
-                <Form.Select style={styles.filterInput1}>
-                    <option>Condition</option>
-                    <option>Choose Column First</option>
-                </Form.Select >
-            )
-        }
-
-        return (
-            <Form.Select style={styles.filterInput1}>
-                <option>Column</option>
-                <option value="1">is</option>
-                <option value="IS">is not</option>
-                <option value="3">Three</option>
-            </Form.Select >
-        )
-    }
-
-    const filterInput3 = (idx) => {
-
-    }
-
     return (
         <>
             {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
             {red === true ? <RedAlert setRed={setred} /> : <></>}
             <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
                 <p style={styles.heading}>RFPs (Request For Proposals)</p>
-                <button style={styles.addButton} disabled={!privileges.includes("Add RFP")} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button>
+                {/* <button style={styles.addButton} disabled={!privileges.includes("Add RFP")} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button> */}
+                <TFButton icon={plusIcon} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={handleShow} />
             </div>
 
             {/* Header Cards */}
@@ -884,7 +878,7 @@ const RFP = (props) => {
 
             {/* Filter and Other Buttons */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
-            <SearchBar 
+            <TFSearchBar 
                     placeholder={'RFPs'}
                     searchFunc={[value, setValue]} 
                     style={{'margin-right': '12px'}}
@@ -1218,7 +1212,7 @@ const RFP = (props) => {
                     </thead>
                     <tbody style={styles.tableBody}>
                         {isLoading ? <div style={{ height: "408px", width: "1937px", background: "white" }}><LoadingSpinner /></div> : rfps && rfps.map(e => (
-                            <tr style={{ ...styles.tableRow, backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }} className='fixed-col' id={e.RFP_ID}>
+                            <tr style={{ ...styles.tableRow, backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }} className='' id={e.RFP_ID}>
                                 <td className='fixed-col' style={{ ...styles.tableCell, fontWeight: "500", minWidth: "", borderRight: "1px solid #EBE9F1", backgroundColor: selectedRfps.includes(e.RFP_ID) ? "#F5F3FE" : "white" }}>
                                     <div className='d-flex flex-row align-items-center'>
                                         <Form.Check
@@ -1241,14 +1235,32 @@ const RFP = (props) => {
                                 <td style={{ ...styles.tableCell, minWidth: "180px" }}>
                                     {formatDate(e.Submission_Date) === ""
                                         ? <></>
-                                        : <div style={styles.dateContainer}>
-                                            <p style={styles.date}>{formatDate(e.Submission_Date)}</p>
-                                        </div>}
+                                        : 
+                                        <>
+                                        {/* <div style={styles.dateContainer} >
+                                            <p style={styles.date}>{formatDate(e.Submission_Date)}</p>                                        
+                                            </div>
+                                         */}
+                                         <DateChip 
+                                         date={formatDate(e.Submission_Date)} 
+                                         tableRef={tableRef} 
+                                         onUpdate={handleStatusUpdate} 
+                                         dateContainerStyles={styles.dateContainer} 
+                                         dateStyles={styles.date}
+                                         />
+                                        </>
+                                        }
                                 </td>
                                 <td style={{ ...styles.tableCell, minWidth: "250px" }}>{e.Department}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Project_Category}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Manager_Name}</td>
-                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>{e.Action ?? "Review"}</td>
+                                <td style={{ ...styles.tableCell, minWidth: "120px" }}>                      <TFChip
+                        label={e.Action}
+                        id={e.RFP_ID}
+                        tableRef={tableRef}
+                        onUpdate={handleStatusUpdate}
+                        options={["No Go", "Review", "Go"]}
+                      /></td>
                                 <td style={{ ...styles.tableCell, minWidth: "180px" }}>{e.RFP_Number}</td>
                             </tr>
                         ))}
