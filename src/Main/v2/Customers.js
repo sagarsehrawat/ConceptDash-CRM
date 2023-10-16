@@ -62,6 +62,8 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import InfiniteScroll from "react-infinite-scroll-component"
+import TFButton from '../../components/ui/TFButton/TFButton'
+import plusIcon from '../../assets/icons/Plus.svg'
 
 function Customers(props) {
   const { isCollapsed } = props;
@@ -543,9 +545,7 @@ function Customers(props) {
         style={styles.headerContainer}
       >
         <p style={styles.heading}>Customers</p>
-        <button style={styles.addButton} onClick={handleShow}>
-          <p style={styles.addButtonText}>+ Add New Customer</p>
-        </button>
+        <TFButton icon={plusIcon} label="Add New Customer" handleClick={handleShow}/>
       </div>
       <div
         className="d-flex flex-row"

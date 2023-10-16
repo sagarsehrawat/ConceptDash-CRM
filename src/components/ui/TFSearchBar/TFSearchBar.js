@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import "./SearchBar.css";
-import MagnifyingGlass from '../../../assets/icons/Magnifying_Glass.svg'
+import "./TFSearchBar.css";
+import TFIcon from "../TFIcon/TFIcon";
+import ICONS from "../../../constants/Icons";
 
 const SearchBar = (props) => {
   const { placeholder, searchFunc, apiFunc, style } = props;
-  const [search, setSearch] = searchFunc;
+  const [s, setS] = useState('')
+  let [search, setSearch] = searchFunc;
+  
+  if(search===null){
+    search = s;
+    setSearch = setS;
+  }
   const [api, setApi] = apiFunc;
 
   const [isFocused, setIsFocused] = useState(false);
@@ -33,7 +40,7 @@ const SearchBar = (props) => {
 
   return (
     <div className="searchbar-container">
-        <img className={`searchbar-icon ${isFocused ? 'searchbar-icon-focus' : ''}`} src={MagnifyingGlass} alt="Search Icon"/>
+        <TFIcon icon={ICONS.MAGNIFYING_GLASS_WHITE} className={`searchbar-icon ${isFocused ? 'searchbar-icon-focus' : ''}`} alt="Search Icon"/>
       <input
         className={`searchbar`}
         style={style}
@@ -49,15 +56,28 @@ const SearchBar = (props) => {
 };
 
 SearchBar.propTypes = {
+   /**
+   * Placeholder for the SearchBar
+   */
   placeholder: PropTypes.string,
+   /**
+   * useState variable for the accessing the SearchBar Value
+   */
   searchFunc: PropTypes.array.isRequired,
+   /**
+   * useState Variable for Backend Searching
+   */
   apiFunc: PropTypes.array,
+   /**
+   * Any Custom Styles for SearchBar
+   */
   style: PropTypes.object,
 };
 
 SearchBar.defaultProps = {
   placeholder: "",
   apiFunc: [null, null],
+  searchFunc: [null, null],
   style: {},
 };
 

@@ -18,6 +18,7 @@ import Row from "react-bootstrap/Row";
 import Select from "react-select";
 import Modal from "react-bootstrap/Modal";
 import LoadingSpinner from "../Loader/Loader";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 const styles = {
   nameHeading: {
@@ -302,9 +303,9 @@ function UpdateProjectForm(props) {
               onChange={handleChange}
             >
               <option value="">Status</option>
-              <option value="Not Started Yet">Not Started Yet</option>
+              <option value="Not Started">Not Started</option>
               <option value="Completed">Completed</option>
-              <option value="Ongoing">Ongoing</option>
+              <option value="In Progress">In Progress</option>
             </Form.Select>
           </Form.Group>
           <Form.Group style={{width:'253px'}} controlId="formGridCity">
@@ -433,12 +434,14 @@ function UpdateProjectForm(props) {
         
         
         <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px'}}>
-            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+            {/* <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
               Cancel
             </Button>
             <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
               Update project
-            </Button>
+            </Button> */}
+            <TFButton label="Cancel" variant="secondary" handleClick={closeModal} style={{marginRight: '20px'}} size="small"/>
+              <TFButton label="Update Project" type="submit" size="small"/>
             </div>
         
       </Form>

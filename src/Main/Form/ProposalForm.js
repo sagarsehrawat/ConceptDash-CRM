@@ -28,6 +28,7 @@ import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import AuthContext from '../../Context/AuthContext'
 import plus from '../../Images/plus.svg'
+import TFButton from "../../components/ui/TFButton/TFButton";
 const styles = {
   nameHeading: {
     height: "20px",
@@ -1062,12 +1063,15 @@ function ProposalForm(props) {
               </div>
             )}
             <div className="d-flex d-row justify-content-end" style={{marginTop:'44px', marginRight:'20px', position: 'sticky'}}>
-            <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
+            {/* <Button onClick={closeModal} style={{color:'#70757A', backgroundColor:'#FFFFFF', borderColor:'#70757A', marginRight:'20px'}}>
               Cancel
-            </Button>
-            <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
+            </Button> */}
+            <TFButton label="Cancel" variant="secondary" handleClick={closeModal} style={{marginRight: '20px'}} size="small" />
+            {/* <Button style={{backgroundColor:PRIMARY_COLOR}} type="submit">
               Add Proposal
-            </Button>
+            </Button> */}
+            <TFButton label="Add Proposal" type="submit" size="small"/>
+            
             </div>
           </Form>
           <Modal show={show} onHide={handleClose}>

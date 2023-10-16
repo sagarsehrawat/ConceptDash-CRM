@@ -41,6 +41,8 @@ import TabPanel from "@mui/lab/TabPanel";
 import filterIcon from "../../Images/Filter.svg";
 import UpdateEmployeeForm from '../Form/UpdateEmployeeForm'
 import PreHireEmployeeForm from "../Form/PreHireEmployeeForm";
+import TFButton from '../../components/ui/TFButton/TFButton'
+import plusIcon from '../../assets/icons/Plus.svg'
 
 function Employee(props) {
   const { isCollapsed } = props;
@@ -1019,9 +1021,7 @@ function Employee(props) {
         style={styles.headerContainer}
       >
         <p style={styles.heading}>Employees</p>
-        <button style={styles.addButton} disabled={!privileges.includes('Add Employee')} onClick={handleShow}>
-          <p style={styles.addButtonText}>+ Add New Employee</p>
-        </button>
+        <TFButton icon={plusIcon} label = "Add New Employee" disabled={!privileges.includes('Add Employee')} handleClick={handleShow} />
       </div>
       <div
         className="d-flex flex-row"

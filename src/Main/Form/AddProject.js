@@ -22,6 +22,7 @@ import RedAlert from "../Loader/RedAlert";
 import AddDepartment from "./AddDepartment";
 import AddCategory from "./AddCategory";
 import AuthContext from "../../Context/AuthContext";
+import TFButton from "../../components/ui/TFButton/TFButton";
 
 const styles = {
   container: {
@@ -314,9 +315,9 @@ function AddProject(props) {
               <Form.Group as={Col}>
                 <Form.Select name="projectStage" onChange={handleChange}>
                   <option value="">Project Stage</option>
-                  <option value="Not Started Yet">Not Started Yet</option>
+                  <option value="Not Started">Not Started</option>
                   <option value="Completed">Completed</option>
-                  <option value="Ongoing">Ongoing</option>
+                  <option value="In Progress">In Progress</option>
                 </Form.Select>
               </Form.Group>
             </Row>
@@ -392,9 +393,10 @@ function AddProject(props) {
                 />
               </Form.Group>
             </Row>
-            <Button className="submit-btn" variant="primary" type="submit">
+            {/* <Button className="submit-btn" variant="primary" type="submit">
               Submit
-            </Button>
+            </Button> */}
+            <TFButton label="Submit" type="submit"  size="small"/>
           </Form>
 
           <Modal
