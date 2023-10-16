@@ -38,6 +38,7 @@ function UpdateTask(props) {
   const [isSubmit, setIsSubmit] = useState(false);
   const [employees, setemployees] = useState([]);
   const { setgreen, closeModal, api, apiCall, setred, updateTask } = props;
+  const [show, setShow] = useState(false)
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [form, setform] = useState({

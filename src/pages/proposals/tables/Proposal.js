@@ -18,7 +18,7 @@ import tIcon from '../../../Images/taskIcon.svg'
 import open from '../../../Images/openinDrive.svg'
 import { useNavigate } from "react-router-dom";
 import TTMMain from '../ttm/TTMMain'
-import SearchBar from '../../../components/ui/SearchBar/SearchBar'
+import SearchBar from '../../../components/ui/TFSearchBar/TFSearchBar'
 
 const Proposal = (props) => {
     const navigate = useNavigate();
