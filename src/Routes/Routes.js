@@ -17,41 +17,15 @@ import TokenRegenerated from '../Main/Login/TokenRegenerated';
 import Error404 from '../Main/Login/Error404';
 import GaurdedRoutes from './GaurdedRoutes';
 import DownPage from '../pages/server-down-page/DownPage';
-import SERVICES from '../services/Services';
 
 const AllRoutes = () => {
-    
-  const [serverStatus, setServerStatus] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await SERVICES.serverStatus();
-        console.log('res', res)
-
-        if (res === "Hello World!") {
-          setServerStatus("up");
-        } else {
-          throw "Server did not respond!";
-        }
-      } catch (error) {
-        setServerStatus("down");
-        console.log("error", error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if(serverStatus===null){
-    return <div>Loading</div>
-  }
-
     return (
         <>
             <Router>
                 <Routes>
-                    <Route path='/' element={<GaurdedRoutes serverStatus={serverStatus}/>}>
+                    <Route exact path='/server-down' element={<DownPage />} />
+                    <Route path='/' element={<GaurdedRoutes/>}>
                         <Route exact path='/' element={<Login />} />
-                        <Route exact path='/server-down' element={<DownPage />} />
                         <Route exact path='/passwordChanged' element={<PasswordChanged />} />
                         <Route exact path='/forgotPassword' element={<ForgotPassword />} />
                         <Route exact path='/otp' element={<EnterOtp />} />

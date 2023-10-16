@@ -1,30 +1,29 @@
 import React, { useEffect, useState } from "react";
-import SERVICES from "../services/Services";
 import { Navigate, Outlet } from "react-router-dom";
+import SERVICES from "../services/Services";
 
-const GaurdedRoutes = ({serverStatus}) => {
-//   const [serverStatus, setServerStatus] = useState(null);
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const res = await SERVICES.serverStatus();
+const GaurdedRoutes = () => {
+  const [serverStatus, setServerStatus] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await SERVICES.serverStatus();
 
-//         if (res === "Hello World!") {
-//           setServerStatus("up");
-//         } else {
-//           throw "Server did not respond!";
-//         }
-//       } catch (error) {
-//         console.log("error", error);
-//         setServerStatus("down");
-//       }
-//     };
-//     fetchData();
-//   }, []);
-//   if(serverStatus===null){
-//     return <div>Loading</div>
-//   }
+        if (res === "Hello World!") {
+          setServerStatus("up");
+        } else {
+            throw "Server did not respond!";
+        }
+    } catch (error) {
+          setServerStatus("down");
+        }
+    };
+    fetchData();
+}, []);
 
+  if(serverStatus===null){
+    return <></>
+  }
   return serverStatus === "up" ?  <Outlet /> : <Navigate to="/server-down" />;
 };
 
