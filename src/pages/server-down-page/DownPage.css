@@ -1,0 +1,35 @@
+.down-page-background{
+    width: 100vw;
+    height: 100vh;
+    background: #8361FE;
+    position: relative;
+}
+
+.top-left-bg{
+    position: absolute;
+    background-image: url('../../assets/images/DownPage/top-left-bg.svg');
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+}
+
+.bottom-right-bg{
+    position: absolute;
+    background-image: url('../../assets/images/DownPage/bottom-right-bg.svg');
+    width: 100%;
+    left: 70%;
+    top: 10%;
+    bottom: 0;
+    right: 0;
+    background-repeat: no-repeat;
+}
+
+.center-bg{
+    background-image: url('../../assets/images/DownPage/center-bg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 940px;
+    height: 522px;
+}
