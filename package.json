@@ -17,6 +17,7 @@
     "@react-icons/all-files": "^4.1.0",
     "@react-three/fiber": "^6.0.14",
     "@syncfusion/ej2-react-buttons": "^20.4.53",
+    "@syncfusion/ej2-react-gantt": "^23.1.39",
     "@syncfusion/ej2-react-schedule": "^20.4.53",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
