@@ -34,7 +34,7 @@ const IndependentProject = ({ form, handleForm }) => {
             width='100%'
             defaultValue={form.department}
             onChange={handleForm}
-            options={[{ value: 1, label: 'Products' }, { value: 2, label: 'Transportation' }, { value: 1, label: 'Estimation' }]}
+            options={[{ value: 1, label: 'Architecture' }, { value: 2, label: 'Transportation' }, { value: 1, label: 'Estimation' }]}
           />
         </div>
 

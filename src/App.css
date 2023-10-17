@@ -59,3 +59,18 @@
   top: 0;
   z-index: 4;
 }
+
+.fixed-header-column{
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  border-right: 1px solid #EBEDF8;
+}
+
+.fixed-column {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  border-right: 1px solid #EBEDF8;
+}

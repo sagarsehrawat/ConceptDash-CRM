@@ -7,6 +7,8 @@ import IndependentProject from './types/IndependentProject';
 import RosterProject from './types/RosterProject';
 import ChildProject from './types/ChildProject';
 import FormUtils from '../../../utils/FormUtils';
+import tasklistFormatter from '../utils/TaskListFormatter.utils';
+import Tasklist from './tasklist/Tasklist';
 
 const AddProject = (props) => {
     const styles = {
@@ -36,10 +38,19 @@ const AddProject = (props) => {
         designInfo: []
     })
 
+    const [taskList, setTaskList] = useState([])
+    const [openTasks, setOpenTasks] = useState([])
+
     const resetForm = (val) => {
         setForm({
             projectType: val,
             department: "",
+            departmentId: '',
+            projectCategory: '',
+            projectCategoryId: '',
+            city: '',
+            cityId: '',
+            projectName: '',
             status: 'In Progress',
             priority: 'Medium',
             designChecklist: [],
@@ -63,6 +74,9 @@ const AddProject = (props) => {
                 break;
             case 'department':
                 FormUtils.typeaheadForm(setForm, key, value);
+                const tasks = tasklistFormatter(form.department)
+                setTaskList(tasks);
+                setOpenTasks(tasks.map(task => task.taskId ));
                 break;
             case 'projectCategory':
                 FormUtils.typeaheadForm(setForm, key, value);
@@ -133,23 +147,7 @@ const AddProject = (props) => {
 
                         <div className='w-100'>
                             <p className="heading-2">Project Milestone and Tasks</p>
-                            <div className='tasklist-wrapper'>
-                                <table className='tasklist-table w-100'>
-                                    <thead className='fixed-table-header'>
-                                        <tr>
-                                            <th className='tasklist-table-header fixed-column' style={{width: '256px'}}>Milestone/ Task</th>
-                                            <th className='tasklist-table-header' style={{width: '120px'}}>Due Date</th>
-                                            <th className='tasklist-table-header' style={{width: '110px'}}>Status</th>
-                                            <th className='tasklist-table-header' style={{width: '140px'}}>Assigned To</th>
-                                            <th className='tasklist-table-header' style={{width: '88px'}}>Priority</th>
-                                            <th className='tasklist-table-header' style={{width: '174px'}}>Progress</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                            </div>
+                            <Tasklist taskList={taskList} setTaskList={setTaskList} openTasks={openTasks} setOpenTasks={setOpenTasks}/>
                         </div>
                     </div>
                 </ModalBody>

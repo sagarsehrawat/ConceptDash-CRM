@@ -67,6 +67,7 @@
     "three": "^0.127.0",
     "three.meshline": "^1.4.0",
     "threejs-meshline": "^2.0.12",
+    "uuid": "^9.0.1",
     "victory": "^36.6.8",
     "web-vitals": "^2.1.4"
   },

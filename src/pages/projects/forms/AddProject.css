@@ -56,7 +56,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: 20px;
-    /* 142.857% */
     color: #3D424F;
 }
 
@@ -101,7 +100,6 @@
     font-style: normal;
     font-weight: 700;
     line-height: 32px;
-    /* 145.455% */
 }
 
 .project-subheader {
@@ -112,7 +110,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: 20px;
-    /* 142.857% */
 }
 
 .project-input {
@@ -125,7 +122,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: 20px;
-    /* 142.857% */
 }
 
 .project-textarea,
@@ -142,7 +138,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: 20px;
-    /* 142.857% */
     text-align: center;
 }
 
@@ -155,37 +150,3 @@
     line-height: 30px;
 }
 
-.tasklist-wrapper {
-    position: relative;
-    overflow-x: auto;
-}
-
-.tasklist-table {
-    border-collapse: separate;
-    border-spacing: 8px 0;
-    background: #F7F7F9;
-}
-
-.tasklist-table-header {
-    height: 20px;
-    padding: 4px var(--8-pad, 8px);
-    border-radius: 6px 0px 0px 0px;
-    background: #F7F7F9;
-    color: #728492;
-    font-family: Roboto;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 20px;
-}
-
-.tasklist-table-header::before{
-    content: '';
-    display: block;
-    width: 8px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0px;
-    left: 0px;
-}
