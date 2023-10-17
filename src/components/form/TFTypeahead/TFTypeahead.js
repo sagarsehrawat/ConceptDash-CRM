@@ -1,77 +1,92 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./TFTypeahead.css";
 
-const TFTypeahead = ({ name, placeholder, defaultValue, onChange, options, required, readOnly, width }) => {
+const TFTypeahead = ({
+  name,
+  placeholder,
+  defaultValue,
+  onChange,
+  options,
+  required,
+  readOnly,
+  width,
+}) => {
   const [value, setValue] = useState(defaultValue);
   const [isVisible, setisVisible] = useState(false);
   const [isValid, setIsValid] = useState(true);
   // TODO : Implement Asynchronous Functionality
   // TODO : Implement MultiSelect Functionality
 
+  // Handle Blur functionality to choose option when moves away from input
   const handleBlur = () => {
-    const exactMatch = options.find(option => option.label === value);
-    if(value===''){
+    const exactMatch = options.find((option) => option.label === value);
+    if (value === "") {
       setIsValid(true);
-      onChange(name, {label: '', value: ''})
-    }
-    else if (!exactMatch) {
+      onChange(name, { label: "", value: "" });
+    } else if (!exactMatch) {
       setIsValid(false);
-      onChange(name, {label: '', value: ''})
+      onChange(name, { label: "", value: "" });
     } else {
       setIsValid(true);
-      onChange(name, exactMatch)
+      onChange(name, exactMatch);
     }
     setisVisible(false);
   };
   return (
     <>
-      <div className='typeahead-wrapper' style={{width: width}}>
+      <div className="typeahead-wrapper" style={{ width: width }}>
         <input
           name={name}
           placeholder={placeholder}
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          className='typeahead-input'
+          className="typeahead-input"
           onFocus={(e) => {
-            setisVisible(true)
+            setisVisible(true);
           }}
           onBlur={handleBlur}
-          style={{border: isValid ? '' : '1px solid red'}}
-          autoComplete='off'
+          style={{ border: isValid ? "" : "1px solid red" }}
+          autoComplete="off"
           required={required}
           readOnly={readOnly}
         />
-        {
-          isVisible ? (
-            <div className="typeahead-options-modal" style={{width: width}}>
-              {options.map((option) => {
-                if (option.label.toLowerCase().includes(value.toLowerCase())) {
-                  return <div
+        {isVisible ? (
+          <div className="typeahead-options-modal" style={{ width: width }}>
+            {options.map((option) => {
+              if (option.label.toLowerCase().includes(value.toLowerCase())) {
+                return (
+                  <div
                     className="typeahead-option"
                     onMouseDown={() => {
-                      setValue(option.label); 
+                      setValue(option.label);
                       onChange(name, option);
-                    } }
+                    }}
                     key={option.value}
                   >
                     {option.label}
-                  </div>;
-                } else {
-                  return <></>;
-                }
-              })}
-              {options.every((option) => !option.label.toLowerCase().includes(value.toLowerCase())) && (
-                <div className="typeahead-no-match-found" key='0'>No Match Found</div>
-              )}
-            </div>
-          ) : (
-            <></>
-          )}
+                  </div>
+                );
+              } else {
+                return <></>;
+              }
+            })}
+            {options.every(
+              (option) =>
+                !option.label.toLowerCase().includes(value.toLowerCase())
+            ) && (
+              <div className="typeahead-no-match-found" key="0">
+                No Match Found
+              </div>
+            )}
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </>
-  )
-}
+  );
+};
 
 TFTypeahead.propTypes = {
   /**
@@ -79,24 +94,24 @@ TFTypeahead.propTypes = {
    */
   placeholder: PropTypes.string,
   /**
-   * Value of the Typeahead input field
+   * Default Value of the Typeahead input field
    */
   defaultValue: PropTypes.string,
   /**
-   * useRef variable for the table which can stop the scrolling of the table
+   * onChange callback function
    */
   onChange: PropTypes.func,
   /**
-   * useRef variable for the table which can stop the scrolling of the table
+   * Name of the typeahead input field
    */
   name: PropTypes.string,
   /**
-   * useRef variable for the table which can stop the scrolling of the table
+   * Options for Typeahead field
    */
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      label: PropTypes.string
+      label: PropTypes.string,
     })
   ),
   /**
@@ -114,14 +129,14 @@ TFTypeahead.propTypes = {
 };
 
 TFTypeahead.defaultProps = {
-  placeholder: '',
-  defaultValue: '',
-  onChange: () => { },
-  name: '',
+  placeholder: "",
+  defaultValue: "",
+  onChange: () => {},
+  name: "",
   options: [],
   required: false,
   readOnly: false,
-  width: '224px'
+  width: "224px",
 };
 
-export default TFTypeahead
+export default TFTypeahead;
