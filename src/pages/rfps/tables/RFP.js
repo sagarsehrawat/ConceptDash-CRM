@@ -20,7 +20,6 @@ import TFSearchBar from '../../../components/ui/TFSearchBar/TFSearchBar';
 import TFButton from '../../../components/ui/TFButton/TFButton';
 import TFChip from '../../../components/ui/TFChip/TFChip';
 import plusIcon from '../../../Images/addPlus.svg'
-import DateChip from '../../../components/ui/DateChip/DateChip';
 
 const RFP = (props) => {
     const { isCollapsed } = props
@@ -1237,17 +1236,17 @@ const RFP = (props) => {
                                         ? <></>
                                         : 
                                         <>
-                                        {/* <div style={styles.dateContainer} >
+                                        <div style={styles.dateContainer} >
                                             <p style={styles.date}>{formatDate(e.Submission_Date)}</p>                                        
                                             </div>
-                                         */}
-                                         <DateChip 
+                                        
+                                         {/* <DateChip 
                                          date={formatDate(e.Submission_Date)} 
                                          tableRef={tableRef} 
                                          onUpdate={handleStatusUpdate} 
                                          dateContainerStyles={styles.dateContainer} 
                                          dateStyles={styles.date}
-                                         />
+                                         /> */}
                                         </>
                                         }
                                 </td>
