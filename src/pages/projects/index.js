@@ -1,8 +1,8 @@
 import React from 'react'
-import RFP from './tables/RFP'
+import Project from './tables/Project'
 const index = (props) => {
   return (
-    <RFP isCollapsed={props.isCollapsed}/>
+    <Project isCollapsed={props.isCollapsed}/>
   )
 }
 

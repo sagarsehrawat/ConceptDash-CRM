@@ -1,8 +1,8 @@
 import React from 'react'
-import RFP from './tables/RFP'
+import Calendar from './tables/Calendar'
 const index = (props) => {
   return (
-    <RFP isCollapsed={props.isCollapsed}/>
+    <Calendar isCollapsed={props.isCollapsed}/>
   )
 }
 

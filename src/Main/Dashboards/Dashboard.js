@@ -46,34 +46,34 @@ import logout from "../../Images/logout.svg";
 // import ExpenseUpdate from "../Update/ExpenseUpdate";
 // import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
-import RFP from "../v2/RFP";
-import TestDemo from "../v2/Calendar.js";
+import RFP from "../../pages/rfps/index";
+import TestDemo from "../../pages/calendar/index";
 import Proposal from "../../pages/proposals/index";
-import Employee from "../v2/Employee";
+import Employee from "../../pages/employee/index";
 import notificationIcon from '../../Images/Notification icon.svg'
-import Customers from "../v2/Customers";
-import Project from "../v2/Project";
+import Customers from "../../pages/customers/index";
+import Project from "../../pages/projects/index";
 // import ProjectDetail from "../Update/ProjectDetail";
-import BudgetCities from "../v2/BudgetCities";
-import Tasks from "../v2/Tasks";
-import AddTask from "../Form/AddTask";
+import BudgetCities from "../../pages/budgetCities/index";
+import Tasks from "../../pages/tasks/index";
+import AddTask from "../../pages/tasks/forms/AddTask";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
-import RFPform from "../Form/RFPform";
-import ProposalForm from "../Form/ProposalForm";
+import RFPform from "../../pages/rfps/forms/RFPform";
+import ProposalForm from "../../pages/proposals/forms/ProposalForm";
 import projectForm from '../../Images/projectForm.svg'
 import cross from '../../Images/cross.svg'
 import announcement from '../../Images/announcement.svg'
-import ProjectForm from "../Form/ProjectForm";
+import ProjectForm from "../../pages/projects/forms/ProjectForm";
 import Privileges from '../Update/Privileges.js'
 import { GET_CELEBRATIONS, GET_EMPLOYEE_PRIVILEGES, GET_NOTIFICATIONS, HOST, PRIMARY_COLOR } from "../Constants/Constants";
-import PMSelector from "../v2/PMSelector";
+import PMSelector from "../../pages/pmSelector/index";
 import Notifications from "./Notifications";
 import AddCity from "../Form/AddCity";
 import AddDepartment from "../Form/AddDepartment";
 import AddCategory from "../Form/AddCategory";
-import Profile from "../v2/Profile";
-import Announcements from "../v2/Announcements";
+import Profile from "../../pages/profile/index";
+import Announcements from "../../pages/announcements/index";
 import AddBudgetCity from "../Form/AddBudgetCity";
 import TTMMain from "../../pages/proposals/ttm/TTMMain";
 
