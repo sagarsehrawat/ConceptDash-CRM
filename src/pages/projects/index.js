@@ -1,5 +1,5 @@
 import React from 'react'
-import ProjectsTable from './table/ProjectsTable'
+import ProjectsTable from './tables/ProjectsTable'
 
 const index = (props) => {
   return (

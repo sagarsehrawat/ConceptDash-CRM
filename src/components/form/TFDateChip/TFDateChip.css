@@ -1,4 +1,4 @@
-.chip-wrapper {
+.datechip-wrapper {
     display: flex;
     position: relative;
     gap: 8px;
@@ -13,6 +13,8 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
+    border-radius: 6px;
+    background: #F6F7F7;
 
     color: #3D424F;
     text-align: center;
@@ -27,6 +29,7 @@
 .datechip-modal {
     position: absolute;
     z-index: 2;
+    top: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -34,6 +37,7 @@
     border-radius: 12px;
     background: #FFF;
     box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.08);
+    margin-top: 8px;
 }
 
 .input-wrapper {

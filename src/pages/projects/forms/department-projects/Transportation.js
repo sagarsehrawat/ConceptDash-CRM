@@ -1,5 +1,5 @@
 import React from "react";
-import TFChip from "../../../../components/ui/TFChip/TFChip";
+import TFChip from "../../../../components/form/TFChip/TFChip";
 import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead";
 
 const Transportation = ({ form, handleForm }) => {
