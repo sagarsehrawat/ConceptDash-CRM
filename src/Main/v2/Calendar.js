@@ -2,7 +2,6 @@ import { faChevronDown, faChevronLeft, faChevronRight, faClock, faPeopleGroup, f
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Agenda, Day, Inject, Month, ScheduleComponent, ViewDirective, ViewsDirective, Week } from '@syncfusion/ej2-react-schedule'
 import React, { useEffect, useRef, useState } from 'react'
-import { primaryColour } from '../Constants/styles'
 import GreenAlert from '../Loader/GreenAlert'
 import LoadingSpinner from '../Loader/Loader'
 import RedAlert from '../Loader/RedAlert'
@@ -500,11 +499,11 @@ const Calendar = () => {
                         document.querySelector(".e-schedule-toolbar-container > div > div > div.e-toolbar-right > div.e-today > button").click()
                         setdate(moment())
                     }}>Today</button>
-                    <FontAwesomeIcon icon={faChevronLeft} color={primaryColour} style={{ marginRight: "24px", cursor: "pointer" }} onClick={(e) => {
+                    <FontAwesomeIcon icon={faChevronLeft} color={PRIMARY_COLOR} style={{ marginRight: "24px", cursor: "pointer" }} onClick={(e) => {
                         document.querySelector(".e-schedule-toolbar-container > div > div > div > div.e-prev > button").click()
                         view==='Day' ? setdate(date.clone().subtract(1, 'day')) : setdate(date.clone().subtract(1, 'week'))
                     }} />
-                    <FontAwesomeIcon icon={faChevronRight} color={primaryColour} style={{ marginRight: "12px", cursor: "pointer" }} onClick={(e) => {
+                    <FontAwesomeIcon icon={faChevronRight} color={PRIMARY_COLOR} style={{ marginRight: "12px", cursor: "pointer" }} onClick={(e) => {
                         document.querySelector(".e-schedule-toolbar-container > div > div > div > div.e-next > button").click()
                         view==='Day' ? setdate(date.clone().add(1, 'day')) : setdate(date.clone().add(1, 'week'))
                     }} />
