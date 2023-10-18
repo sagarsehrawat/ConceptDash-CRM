@@ -2,7 +2,6 @@ import { faCloudArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Dropdown, Form, Modal } from "react-bootstrap";
-import { primaryColour } from "../Constants/styles";
 import pinnedActive from "../../Images/Pin icon_Active.svg";
 import pinnedInactive from "../../Images/Pin icon.svg";
 import arrow from '../../Images/Celebrations/arrow.svg'

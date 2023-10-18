@@ -1,25 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Login.css";
-import axios from "axios";
-import { CHANGE_PASSWORD, GET_EMPLOYEE_PRIVILEGES, HOST, LOGIN, PRIMARY_COLOR } from "../Constants/Constants";
-import AuthContext from "../../Context/AuthContext";
-import {
-    MDBContainer,
-    MDBInput,
-} from "mdb-react-ui-kit";
-import { Button } from "react-bootstrap";
 import leftSide from '../../Images/Left side.svg'
 import leftSideBig from '../../Images/Left sideBig.svg'
-import { Modal } from "react-bootstrap";
-// import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-// import "@fortawesome/fontawesome-free/css/all.min.css";
-import deadline from '../../Images/Vector.png'
-import cross from '../../Images/cross1.svg'
 import right from '../../Images/right.svg'
-import SmallerLoader from "../Loader/SmallerLoader";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeDropper } from '@fortawesome/free-solid-svg-icons';
 
 function PasswordChanged() {
     
