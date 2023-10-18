@@ -3,7 +3,7 @@ import './Tasklist.css'
 import moment from 'moment'
 import TFIcon from '../../../components/ui/TFIcon/TFIcon'
 import ICONS from '../../../constants/Icons'
-import TFChip from '../../../components/form/TFChip/TFChip'
+import TFChip from '../../../components/ui/TFChip/TFChip'
 import TaskListUtils from '../utils/TaskListUtils'
 
 const Tasklist = ({ taskList, setTaskList, openTasks, setOpenTasks }) => {
