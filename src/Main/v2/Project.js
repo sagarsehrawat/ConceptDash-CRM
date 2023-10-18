@@ -40,7 +40,6 @@ import {
   UPDATE_PROJECT_STATUS,
 } from "../Constants/Constants";
 import moment from "moment";
-import AddProject from "../Form/AddProject";
 import UpdateProjectForm from "../Form/UpdateProjectForm";
 import ProjectForm from "../Form/ProjectForm";
 import open from "../../Images/openinDrive.svg";

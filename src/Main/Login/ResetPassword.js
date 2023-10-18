@@ -8,7 +8,6 @@ import {
     MDBContainer,
     MDBInput,
 } from "mdb-react-ui-kit";
-import { Button } from "react-bootstrap";
 import leftSide from '../../Images/Left side.svg'
 import leftSideBig from '../../Images/Left sideBig.svg'
 import { Modal } from "react-bootstrap";
@@ -16,9 +15,6 @@ import { Modal } from "react-bootstrap";
 // import "@fortawesome/fontawesome-free/css/all.min.css";
 import deadline from '../../Images/Vector.png'
 import cross from '../../Images/cross1.svg'
-import SmallerLoader from "../Loader/SmallerLoader";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeDropper } from '@fortawesome/free-solid-svg-icons';
 
 function ResetPassword() {
     const [show, setShow] = useState(false);
