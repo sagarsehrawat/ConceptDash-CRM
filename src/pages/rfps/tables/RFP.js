@@ -18,7 +18,7 @@ import tIcon from '../../../Images/taskIcon.svg'
 import open from '../../../Images/openinDrive.svg'
 import TFSearchBar from '../../../components/ui/TFSearchBar/TFSearchBar';
 import TFButton from '../../../components/ui/TFButton/TFButton';
-import TFChip from '../../../components/ui/TFChip/TFChip';
+import TFChip from '../../../components/form/TFChip/TFChip';
 import plusIcon from '../../../Images/addPlus.svg'
 
 const RFP = (props) => {
