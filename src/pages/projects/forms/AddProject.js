@@ -7,8 +7,8 @@ import IndependentProject from './types/IndependentProject';
 import RosterProject from './types/RosterProject';
 import ChildProject from './types/ChildProject';
 import FormUtils from '../../../utils/FormUtils';
-import tasklistFormatter from '../utils/TaskListFormatter.utils';
-import Tasklist from './tasklist/Tasklist';
+import Tasklist from '../tasklist/Tasklist';
+import TaskListUtils from '../utils/TaskListUtils';
 
 const AddProject = (props) => {
     const styles = {
@@ -37,6 +37,7 @@ const AddProject = (props) => {
         designChecklist: [],
         designInfo: []
     })
+    const formUtils = FormUtils(setForm)
 
     const [taskList, setTaskList] = useState([])
     const [openTasks, setOpenTasks] = useState([])
@@ -63,32 +64,32 @@ const AddProject = (props) => {
 
         switch (key) {
             case 'projectType':
-                FormUtils.radioButtonForm(setForm, key, value);
+                formUtils.radioButtonForm(key, value);
                 resetForm(value)
                 break;
             case 'designChecklist':
-                FormUtils.checkboxForm(setForm, key, value)
+                formUtils.checkboxForm(key, value)
                 break;
             case 'designInfo':
-                FormUtils.checkboxForm(setForm, key, value)
+                formUtils.checkboxForm(key, value)
                 break;
             case 'department':
-                FormUtils.typeaheadForm(setForm, key, value);
-                const tasks = tasklistFormatter(form.department)
+                formUtils.typeaheadForm(key, value);
+                const tasks = TaskListUtils().taskListFormatter(form.department)
                 setTaskList(tasks);
                 setOpenTasks(tasks.map(task => task.taskId ));
                 break;
             case 'projectCategory':
-                FormUtils.typeaheadForm(setForm, key, value);
+                formUtils.typeaheadForm(key, value);
                 break;
             case 'projectManager':
-                FormUtils.typeaheadForm(setForm, key, value);
+                formUtils.typeaheadForm(key, value);
                 break;
             case 'city':
-                FormUtils.typeaheadForm(setForm, key, value);
+                formUtils.typeaheadForm(key, value);
                 break;
             default:
-                FormUtils.typeInputForm(setForm, key, value);
+                formUtils.typeInputForm(key, value);
                 break;
         }
     }
