@@ -16,27 +16,20 @@ import { useNavigate } from "react-router-dom";
 import AuthenticationContext from "../../Context/AuthContext";
 import tIcon from '../../Images/taskIcon.svg'
 import { Sidebar, Menu, MenuItem, useProSidebar, SubMenu } from "react-pro-sidebar";
-import { primaryColour } from "../Constants/styles";
 import dashboardActive from "../../Images/Dashboard Active state.svg";
 import dashboardInactive from "../../Images/Dashboard icon inactive.svg";
-import pinnedActive from "../../Images/Pin icon_Active.svg";
-import pinnedInactive from "../../Images/Pin icon.svg";
 import tasksActive from "../../Images/My tasks_Active.svg";
 import tasksInactive from "../../Images/My tasks.svg";
 import budgetsActive from "../../Images/Budget_Active.svg";
 import budgetsInactive from "../../Images/Budget.svg";
 import calendarActive from "../../Images/Calendar_Active.svg";
 import calendarInactive from "../../Images/Calendar.svg";
-import celebrationActive from "../../Images/Celebrations_Active.svg";
-import celebrationInactive from "../../Images/Celebrations.svg";
 import companiesActive from "../../Images/Companies_Active.svg";
 import companiesInactive from "../../Images/Companies.svg";
 import contactsActive from "../../Images/Contacts_Active.svg";
 import contactsInactive from "../../Images/Contacts.svg";
 import employeeActive from "../../Images/Employee_Active.svg";
 import employeeInactive from "../../Images/Employee.svg";
-import expenseActive from "../../Images/Expense_Active.svg";
-import expenseInactive from "../../Images/Expense.svg";
 import projectsActive from "../../Images/Projects_Active.svg";
 import projectsInactive from "../../Images/Projects.svg";
 import proposalsActive from "../../Images/Proposals_Active.svg";
@@ -44,26 +37,21 @@ import proposalsInactive from "../../Images/Proposals.svg";
 import rfpActive from "../../Images/RFP_Active.svg";
 import rfpInactive from "../../Images/RFP.svg";
 import T from "../../Images/T.svg";
-import ellipse from "../../Images/Ellipse.png";
 import dp from "../../Images/noprofile.jpeg";
 import askforce from "../../Images/ASKFORCE.svg";
 import account from "../../Images/accountSettings.svg";
 import team from "../../Images/teamManagement.svg";
 import adminSettings from "../../Images/adminSettings.svg";
-// import { faArrowDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faEdit, faMagnifyingGlass, faPlug, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons'
 import logout from "../../Images/logout.svg";
-import ExpenseUpdate from "../Update/ExpenseUpdate";
 import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
 import RFP from "../v2/RFP";
 import TestDemo from "../v2/Calendar.js";
 import Proposal from "../v2/Proposal";
 import Employee from "../v2/Employee";
-import settingsIcon from '../../Images/Settings icon.svg'
 import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../v2/Customers";
 import Project from "../v2/Project";
-import ProjectDetail from "../Update/ProjectDetail";
 import BudgetCities from "../v2/BudgetCities";
 import Tasks from "../v2/Tasks";
 import AddTask from "../Form/AddTask";
@@ -565,11 +553,9 @@ const Dashboard = () => {
     if (nav === 6) return <Project isCollapsed={isCollapsed} />
     if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
     if (nav === 8) return <TestDemo />;
-    if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <Customers isCollapsed={isCollapsed} />;
     if (nav === 12) return <Privileges />;
-    if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
     if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
     if (nav === 18) return <TTMTable  isCollapsed={isCollapsed}/>
