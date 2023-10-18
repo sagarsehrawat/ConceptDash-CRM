@@ -9,7 +9,7 @@ import { ADD_TIMESHEET, GET_EMPLOYEENAMES, GET_WEEKLY_TIMESHEET, HOST, PRIMARY_C
 import GreenAlert from '../Loader/GreenAlert'
 import RedAlert from '../Loader/RedAlert'
 import { Modal } from 'react-bootstrap'
-import AddTask from '../Form/AddTask'
+import AddTask from '../../pages/tasks/forms/AddTask'
 import cross from '../../Images/cross.svg'
 import tIcon from '../../Images/taskIcon.svg'
 

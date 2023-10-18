@@ -5,6 +5,7 @@ import { Button, Dropdown, Form, Modal } from "react-bootstrap";
 import pinnedActive from "../../Images/Pin icon_Active.svg";
 import pinnedInactive from "../../Images/Pin icon.svg";
 import arrow from '../../Images/Celebrations/arrow.svg'
+
 import BudgetCharts from "./BudgetCharts";
 import axios from "axios";
 import { HOST, PROJECT_CHART, GET_ADMIN_TASKS, PRIMARY_COLOR } from "../Constants/Constants";
@@ -30,7 +31,7 @@ import groupicon from '../../Images/Celebrations/groupicon.svg'
 const Home = (props) => {
   const { setnav } = props;
   const { isCollapsed, viewportWidth } = props;
-  const [ishovered,setishovered]=useState(false)
+  const [ishovered, setishovered] = useState(false)
   const styles = {
   
     celebrations: {
@@ -208,7 +209,16 @@ const Home = (props) => {
       boxShadow: "0px 5px 4px rgba(232, 76, 61, 0.25)",
       borderRadius: "12px",
     },
-    
+    celebrations: {
+      width: "100%",
+      height: "96px",
+      left: "1180px",
+      marginTop: "16px",
+      background:
+        "linear-gradient(102.69deg, #EFE2F7 1.6%, rgba(216, 236, 244, 0.807866) 39.1%, rgba(239, 226, 247, 0) 96.08%)",
+      filter: "drop-shadow(0px 4px 25px rgba(0, 0, 0, 0.08))",
+      borderRadius: "12px",
+    },
     tasks: {
       boxSizing: "border-box",
       width: "100%",
@@ -228,6 +238,18 @@ const Home = (props) => {
       background: "#FFFFFF",
       border: "1px solid #EBE9F1",
       borderRadius: "12px",
+    },
+    celebrationHeading: {
+      width: "102px",
+      height: "28px",
+      marginLeft: "16px",
+      marginTop: "12px",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 500,
+      fontSize: "18px",
+      lineHeight: "28px",
+      color: "#0A0A0A",
     },
     tasksHeading: {
       width: "127px",
@@ -274,6 +296,7 @@ const Home = (props) => {
     calendarBottom: {
       width: "100%",
       height: "14px",
+      // marginLeft: "85px",
       marginTop: "6px",
       marginBottom: "10px",
       fontFamily: "'Roboto'",
@@ -299,6 +322,21 @@ const Home = (props) => {
       color: PRIMARY_COLOR,
       cursor: "pointer",
       textAlign: 'center'
+    },
+    celebrationsCross: {
+      // marginLeft: '113.6px',
+      marginTop: '12.6px',
+      marginRight: '12.6px',
+    },
+    celebrationBottom: {
+      width: "50%",
+      fontFamily: "'Roboto'",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "11px",
+      lineHeight: "16px",
+      color: "#0A0A0A",
+      textAlign: "left",
     },
     rect1: {
       width: "3px",
@@ -370,16 +408,6 @@ const Home = (props) => {
       fontSize: "13px",
       fontFamily: "Roboto",
     },
-    celetext:{
-     paddingTop: "10px",
-      width: "50%",
-      color: "#0A0A0A",
-      fontFamily: "Roboto",
-       fontSize: "12px",
-      fontStyle: "normal",
-     fontWeight: "400",
-     lineHeight: "16px"
-    },
   };
   const SCOPES =
     "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar";
@@ -426,11 +454,10 @@ const Home = (props) => {
     );
   };
   const [isLoadingCal, setisLoadingCal] = useState(false);
-  // celebrations
-  const [celeShow, setceleShow] = useState(false);
-  const handleCloseCele = () => setceleShow(false);
-  const handleShowCele = () => setceleShow(true);
-
+    // celebrations
+    const [celeShow, setceleShow] = useState(false);
+    const handleCloseCele = () => setceleShow(false);
+    const handleShowCele = () => setceleShow(true);
   const initClient = async () => {
     setisLoadingCal(true);
     if (!localStorage.getItem("access_token")) {
@@ -651,14 +678,6 @@ console.log(sideTasks[0]);
               </option>
             </Form.Select>
             <div className="d-flex flex-row">
-              {/* <Button style={styles.exportButton}>
-                <FontAwesomeIcon
-                  icon={faCloudArrowDown}
-                  style={styles.exportButtonIcon}
-                  color={primaryColour}
-                />
-                <p style={styles.exportButtonText}>Export</p>
-              </Button> */}
               {chartComponent === "1" || chartComponent === "3" || chartComponent === "2" ? (
                 <Form.Select
                   style={styles.headerDropdown3}
@@ -720,7 +739,7 @@ console.log(sideTasks[0]);
               <div style={styles.deadlineHeading}>Deadlines Approaching!</div>
             </div>
           </div>
-            <button style={{border:"none"}}>  
+          <button style={{border:"none"}}>  
           <div onClick={handleShowCele}  style={styles.celebrations} onMouseEnter={() => setishovered(true)} onMouseLeave={() => setishovered(false)}>
             <div className="d-flex justify-content-between align-items-center " style={{ display: "flex", flexDirection: "row" }}>
               <div style={styles.celebrationHeading}>Celebrations</div>
