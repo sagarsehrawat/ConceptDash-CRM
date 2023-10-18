@@ -1,7 +1,7 @@
 import Chip from "../TFChip";
 
 export default {
-  title: 'Components/Chip',
+  title: 'Form/Chip',
   component: Chip,
   parameters: {
     layout: 'centered',

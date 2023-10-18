@@ -1,19 +1,43 @@
-.wrapper {
+.datechip-wrapper {
+    display: flex;
+    position: relative;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.datechip {
+    display: flex;
+    width: max-content;
+    padding: 4px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 6px;
+    background: #F6F7F7;
+
+    color: #3D424F;
+    text-align: center;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+}
+
+.datechip-modal {
     position: absolute;
     z-index: 2;
-    margin-top: 8px;
-    margin-left: -15px;
-    margin-top: 28px;
-    /* border: 1px solid blue; */
-    width: 284px;
+    top: 100%;
     display: flex;
-    /* padding: 12px; */
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
     border-radius: 12px;
     background: #FFF;
     box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.08);
+    margin-top: 8px;
 }
 
 .input-wrapper {
@@ -22,13 +46,13 @@
     padding: 4px 8px;
     align-items: center;
     gap: 8px;
-    align-self: stretch;   
+    align-self: stretch;
     border-radius: 6px;
     border: 1px solid #EBEDF8;
     background: #F6F7F7;
 }
 
-.input-wrapper > input { 
+.input-wrapper>input {
     outline: none;
     border: none;
     background: none;
@@ -37,12 +61,11 @@
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
-    line-height: 24px; /* 150% */
+    line-height: 24px;
 }
 
 .MuiDateCalendar-root {
     width: 260px !important;
-    /* border: 1px solid red; */
     margin: 0px 12px 12px 12px !important;
 }
 
@@ -60,12 +83,11 @@
     font-size: 14px !important;
     font-style: normal !important;
     font-weight: 400 !important;
-    line-height: 20px !important; /* 142.857% */
+    line-height: 20px !important;
 }
 
 .MuiPickersFadeTransitionGroup-root.MuiDateCalendar-viewTransitionContainer {
     margin-top: 12px;
-    /* border: 1px solid blue; */
 }
 
 .MuiDayCalendar-header {
@@ -88,7 +110,7 @@
     font-size: 14px !important;
     font-style: normal !important;
     font-weight: 400 !important;
-    line-height: 20px !important; /* 142.857% */
+    line-height: 20px !important;
 }
 
 .MuiDayCalendar-weekContainer {
@@ -109,7 +131,7 @@
     font-size: 14px !important;
     font-style: normal !important;
     font-weight: 400 !important;
-    line-height: 20px !important; /* 142.857% */
+    line-height: 20px !important;
 }
 
 .MuiButtonBase-root.MuiPickersDay-root.MuiPickersDay-dayWithMargin.Mui-selected {
