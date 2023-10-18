@@ -17,7 +17,6 @@ import { Modal } from "react-bootstrap";
 // import "@fortawesome/fontawesome-free/css/all.min.css";
 import deadline from '../../Images/Vector.png'
 import cross from '../../Images/cross1.svg'
-import SmallerLoader from "../Loader/SmallerLoader";
 import {useLocation} from 'react-router-dom';
 import LoadingSpinner from "../Loader/Loader";
 

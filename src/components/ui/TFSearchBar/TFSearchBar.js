@@ -6,10 +6,10 @@ import ICONS from "../../../constants/Icons";
 
 const SearchBar = (props) => {
   const { placeholder, searchFunc, apiFunc, style } = props;
-  const [s, setS] = useState('')
+  const [s, setS] = useState("");
   let [search, setSearch] = searchFunc;
-  
-  if(search===null){
+
+  if (search === null) {
     search = s;
     setSearch = setS;
   }
@@ -40,7 +40,11 @@ const SearchBar = (props) => {
 
   return (
     <div className="searchbar-container">
-        <TFIcon icon={ICONS.MAGNIFYING_GLASS_WHITE} className={`searchbar-icon ${isFocused ? 'searchbar-icon-focus' : ''}`} alt="Search Icon"/>
+      <TFIcon
+        icon={ICONS.MAGNIFYING_GLASS_WHITE}
+        className={`searchbar-icon ${isFocused ? "searchbar-icon-focus" : ""}`}
+        alt="Search Icon"
+      />
       <input
         className={`searchbar`}
         style={style}
@@ -56,19 +60,19 @@ const SearchBar = (props) => {
 };
 
 SearchBar.propTypes = {
-   /**
+  /**
    * Placeholder for the SearchBar
    */
   placeholder: PropTypes.string,
-   /**
+  /**
    * useState variable for the accessing the SearchBar Value
    */
   searchFunc: PropTypes.array.isRequired,
-   /**
+  /**
    * useState Variable for Backend Searching
    */
   apiFunc: PropTypes.array,
-   /**
+  /**
    * Any Custom Styles for SearchBar
    */
   style: PropTypes.object,

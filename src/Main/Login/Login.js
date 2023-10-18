@@ -16,9 +16,6 @@ import { Modal } from "react-bootstrap";
 // import "@fortawesome/fontawesome-free/css/all.min.css";
 import deadline from '../../Images/Vector.png'
 import cross from '../../Images/cross1.svg'
-import SmallerLoader from "../Loader/SmallerLoader";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import TFButton from "../../components/ui/TFButton/TFButton";
 
 

@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from "prop-types";
 import Icons from '../../../constants/Icons';
 
-const TFIcon = ({ icon, alt, classname }) => {
+const TFIcon = ({ icon, alt, className }) => {
   return (
-    <img src={icon} alt={alt} classname={classname} />
+    <img src={icon} alt={alt} className={className} />
   )
 }
 
@@ -20,7 +20,7 @@ TFIcon.propTypes = {
   /**
   * Classname for icon
   */
-  classname: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default TFIcon
