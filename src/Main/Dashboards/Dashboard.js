@@ -43,8 +43,7 @@ import account from "../../Images/accountSettings.svg";
 import team from "../../Images/teamManagement.svg";
 import adminSettings from "../../Images/adminSettings.svg";
 import logout from "../../Images/logout.svg";
-// import ExpenseUpdate from "../Update/ExpenseUpdate";
-// import CompanyUpdate from "../Update/CompanyUpdate";
+import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
 import RFP from "../../pages/rfps/index";
 import TestDemo from "../../pages/calendar/index";
@@ -53,7 +52,6 @@ import Employee from "../../pages/employee/index";
 import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../../pages/customers/index";
 import Project from "../../pages/projects/index";
-// import ProjectDetail from "../Update/ProjectDetail";
 import BudgetCities from "../../pages/budgetCities/index";
 import Tasks from "../../pages/tasks/index";
 import AddTask from "../../pages/tasks/forms/AddTask";
@@ -546,7 +544,7 @@ const Dashboard = () => {
     if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
     if (nav === 8) return <TestDemo />;
     // if (nav === 9) return <ExpenseUpdate />;
-    // if (nav === 10) return <CompanyUpdate />;
+    if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <Customers isCollapsed={isCollapsed} />;
     if (nav === 12) return <Privileges />;
     // if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
