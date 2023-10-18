@@ -65,6 +65,7 @@ export const GET_PROJECT_PAYMENTS = '/api/get/project/payments'
 export const GET_PROJECT_SUBMISSIONS = '/api/get/project/submissions'
 export const GET_PROJECT_EXPENSES = '/api/get/project/expenses'
 export const GET_PROJECT_EXTRAS = '/api/get/project/extras'
+export const GET_TTM = '/api/get/ttm'
 
 export const GET_BUDGET_COUNT = '/api/get/budget/count'
 export const GET_EMPLOYEE_COUNT = '/api/get/employee/count'
@@ -167,6 +168,7 @@ export const UPDATE_PRIVILEGE = '/api/update/privileges'
 export const UPDATE_EXPENSE_TRANSACTION = '/api/update/expenseTransaction'
 export const UPDATE_TASK_STATUS = '/api/update/task/status'
 export const UPDATE_TASK_PRIORITY = '/api/update/task/priority'
+export const UPDATE_TTM = '/api/update/ttm'
 
 //Chart APIs
 export const COUNTS = '/api/get/counts'
