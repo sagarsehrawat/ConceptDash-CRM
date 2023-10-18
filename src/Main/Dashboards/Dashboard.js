@@ -51,8 +51,6 @@ import Proposal from "../v2/Proposal";
 import Employee from "../v2/Employee";
 import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../v2/Customers";
-// import Project from "../v2/Project";
-import ProjectDetail from "../Update/ProjectDetail";
 import BudgetCities from "../v2/BudgetCities";
 import Tasks from "../v2/Tasks";
 import AddTask from "../Form/AddTask";
