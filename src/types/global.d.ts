@@ -3,7 +3,7 @@ export {};
 
 declare global{
     interface RFP {
-        RFP_ID : number,
+        RFP_ID : number | string,
 
     }
 }

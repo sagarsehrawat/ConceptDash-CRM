@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface RFP {
-  RFP_ID: string; // Change the type to match your data structure
-  // Add other fields as needed
-}
-
 interface RFPState {
   newRFPs: number;
   percentage: number;
   totalRFPs: number;
   rfps: RFP[];
+}
+
+interface RFPStatus {
+    Total : number | string,
+    Month : number | string,
+    Percentage : number | string
 }
 
 const initialState: RFPState = {
@@ -26,16 +27,19 @@ const rfpSlice = createSlice({
     initRFPs: (state, action: PayloadAction<RFP[]>) => {
       state.rfps = action.payload;
     },
+    initData: (state, action: PayloadAction<RFPStatus>) => {
+
+    },
     addRFP: (state, action: PayloadAction<RFP>) => {
       state.rfps.push(action.payload);
     },
-    updateRFP: (state, action: PayloadAction<{ rfpId: string; data: Partial<RFP> }>) => {
+    updateRFP: (state, action: PayloadAction<{ rfpId: string | number; data: Partial<RFP> }>) => {
       const { rfpId, data } = action.payload;
       state.rfps = state.rfps.map((rfp) =>
         rfp.RFP_ID === rfpId ? { ...rfp, ...data } : rfp
       );
     },
-    deleteRFP: (state, action: PayloadAction<string>) => {
+    deleteRFP: (state, action: PayloadAction<string | number>) => {
       const rfpIdToDelete = action.payload;
       state.rfps = state.rfps.filter((rfp) => rfp.RFP_ID !== rfpIdToDelete);
     },
@@ -44,6 +48,7 @@ const rfpSlice = createSlice({
 
 export const {
   initRFPs,
+  initData,
   addRFP,
   updateRFP,
   deleteRFP,
