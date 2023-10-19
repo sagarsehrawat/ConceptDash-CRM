@@ -1,5 +1,5 @@
 import axios from "axios";
-import APIS, { BASE_URL } from "../constants/APIS";
+import APIS, { BASE_URL } from "../constants/APIS.ts";
 
 axios.defaults.baseURL = BASE_URL 
 
