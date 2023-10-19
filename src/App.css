@@ -12,3 +12,12 @@
   flex-direction: column;
   justify-content: space-around;
 }
+
+.heading-2 {
+  color: #0A0A0A;
+  font-family: Roboto;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px;
+}
