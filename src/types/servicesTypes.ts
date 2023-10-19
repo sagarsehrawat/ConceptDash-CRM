@@ -1,11 +1,5 @@
-interface RfpStatus {
-    Total : number | string,
-    Month : number | string,
-    Percentage : number | string
-}
-
 declare module "Services"{
-    export interface ErrorStatusResponse {
+    export interface ErrorResponse {
         success : boolean,
         error : string,
         description : Object
@@ -13,6 +7,10 @@ declare module "Services"{
 
     export interface RfpStatusResponse {
         success : boolean,
-        res : Array<RfpStatus>
+        res : Array<{
+            Total : number | string,
+            Month : number | string,
+            Percentage : number | string
+        }>
     }
 }

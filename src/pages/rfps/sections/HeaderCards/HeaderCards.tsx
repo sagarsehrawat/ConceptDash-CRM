@@ -1,20 +1,29 @@
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { selectNewRFPs, selectPercentage, selectTotalRFPs } from '../../../../redux/slices/rfpSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { initData, selectNewRFPs, selectPercentage, selectTotalRFPs } from '../../../../redux/slices/rfpSlice'
+import SERVICES from '../../../../services/Services'
+import './HeaderCards.'
 
 type Props = {}
 
 const HeaderCards = (props: Props) => {
+  const dispatch = useDispatch();
   const newRfps : number = useSelector(selectNewRFPs);
   const percent : number = useSelector(selectPercentage);
   const totalRfps : number = useSelector(selectTotalRFPs);
 
   useEffect(() => {
-    const fetchDate = () => {
-      
+    const fetchData = async () => {
+      try{
+        const response = await SERVICES.rfpStatus();
+        dispatch(initData(response.res[0]));
+      } catch(error) {
+        console.log(error)
+      }
     }
+    fetchData();
   }, [])
   
   return (

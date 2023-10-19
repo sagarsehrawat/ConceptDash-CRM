@@ -10,11 +10,11 @@ import { Modal } from 'react-bootstrap'
 import TFIcon from '../../../../components/ui/TFIcon/TFIcon'
 
 type Props = {
-  apiCall: number,
-  setCall: Function
+  api: number,
+  setApi: Function
 }
 
-const Header = ({apiCall, setCall}: Props) => {
+const Header = ({api, setApi}: Props) => {
   const privileges: string[] = useSelector(selectPrivileges);
   const [show, setShow] = useState<boolean>(false)
 
@@ -22,7 +22,7 @@ const Header = ({apiCall, setCall}: Props) => {
     <>
       <div className='d-flex flex-row justify-content-between align-items-center' style={{ margin: '32px 24px 0px 32px' }}>
         <p className='heading-2'>RFPs (Request For Proposals)</p>
-        <TFButton icon={PlusIcon} label="Add New RFP" disabled={privileges.includes("Add RFP")} handleClick={() => setShow(true)} />
+        <TFButton icon={PlusIcon} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={() => setShow(true)} />
       </div>
 
       <Modal
@@ -52,8 +52,8 @@ const Header = ({apiCall, setCall}: Props) => {
         {
           <RFPform
             closeModal={() => setShow(false)}
-            api={apiCall}
-            apiCall={setCall}
+            api={api}
+            apiCall={setApi}
           />
         }
       </Modal>
