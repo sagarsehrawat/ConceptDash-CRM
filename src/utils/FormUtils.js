@@ -41,6 +41,18 @@ const FormUtils = (setForm) => ({
 
             return newForm;
         });
+    },
+
+    dropdownForm: (setForm, key, value) => {
+        setForm((prev) => {
+            const newForm = { ...prev };
+
+            const valueIndex = newForm[key].indexOf(value);
+
+            newForm[valueIndex] = value;
+
+            return newForm;
+        });
     }
 });
 
