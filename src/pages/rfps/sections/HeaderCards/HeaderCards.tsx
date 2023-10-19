@@ -1,6 +1,6 @@
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { selectNewRFPs, selectPercentage, selectTotalRFPs } from '../../../../redux/slices/rfpSlice'
 
@@ -10,6 +10,13 @@ const HeaderCards = (props: Props) => {
   const newRfps : number = useSelector(selectNewRFPs);
   const percent : number = useSelector(selectPercentage);
   const totalRfps : number = useSelector(selectTotalRFPs);
+
+  useEffect(() => {
+    const fetchDate = () => {
+      
+    }
+  }, [])
+  
   return (
     <>
       <div className='d-flex flex-row' style={{ marginLeft: "32px", marginBottom: "20px" }}>
@@ -20,11 +27,11 @@ const HeaderCards = (props: Props) => {
             {percent >= 0
               ? <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
                 <FontAwesomeIcon icon={faArrowUp} color="#34A853" />
-                <p className='percentage'>{percent}% increase</p>
+                <p className='percentage percentage-green'>{percent}% increase</p>
               </div>
               : <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
                 <FontAwesomeIcon icon={faArrowDown} color="#FE3766" />
-                <p className='percentage' style={{ color: "#FE3766" }}>{percent}% decrease</p>
+                <p className='percentage percentage-red' style={{ color: "#FE3766" }}>{percent}% decrease</p>
               </div>
             }
           </div>
@@ -34,7 +41,7 @@ const HeaderCards = (props: Props) => {
           <p className='header-card-subheading'>{totalRfps}</p>
         </div>
       </div>
-      <div style={styles.headerLine}></div>
+      <div className='header-line'></div>
       <p className='heading-2'>RFPs</p>
     </>
   )

@@ -117,111 +117,6 @@ const RFP = (props) => {
             flexDirection: 'row',
             cursor: 'pointer'
         },
-        headerContainer: {
-            marginTop: "30px",
-            marginLeft: "32px",
-            marginRight: "24px"
-        },
-        heading: {
-            width: "244px",
-            height: "28px",
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 500,
-            fontSize: "18px",
-            lineHeight: "28px",
-            color: "#0A0A0A",
-            display: "inline-block",
-            marginBottom: "18px"
-        },
-        addButton: {
-            boxSizing: "border-box",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "8px 16px",
-            gap: "8px",
-            width: "157px",
-            height: "40px",
-            background: PRIMARY_COLOR,
-            border: "1px solid #6519E1",
-            boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
-            borderRadius: "5px",
-        },
-        addButtonText: {
-            width: "125px",
-            height: "24px",
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "16px",
-            lineHeight: "24px",
-            color: "#FBFBFB",
-            flex: "none",
-            margin: 0,
-            flexGrow: 0
-        },
-        topContainer: {
-            width: "208px",
-            height: "68px",
-            left: "32px",
-            top: "76px",
-            background: "#FFFFFF",
-            border: "1px solid #EBE9F1",
-            borderRadius: "12px",
-            marginRight: "20px"
-        },
-        topContainerHeading: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "14px",
-            lineHeight: "20px",
-            color: "#0A0A0A",
-            marginLeft: "12px",
-            marginTop: "8px",
-            marginBottom: "4px"
-        },
-        topContainerSubheading: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 500,
-            fontSize: "18px",
-            lineHeight: "28px",
-            color: "#0A0A0A",
-            marginLeft: "12px",
-            display: "inline-block"
-        },
-        percent: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "12px",
-            lineHeight: "16px",
-            color: "#34A853",
-            display: "inline-block",
-            marginLeft: "8px"
-        },
-        headerLine: {
-            height: "0px",
-            left: "32px",
-            top: "164px",
-            border: "1px solid #EBE9F1",
-            marginLeft: "32px",
-            marginRight: "32px",
-            marginBottom: "20px"
-        },
-        heading2: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 500,
-            fontSize: "18px",
-            lineHeight: "28px",
-            color: "#0A0A0A",
-            marginLeft: "32px",
-            marginBottom: "8px",
-        },
         table: {
             width: "100%",
             overflowX: "hidden",
@@ -611,6 +506,7 @@ const RFP = (props) => {
                     },
                 })
                 .then((res) => {
+                    console.log(res.data.res)
                     let obj = rfpCount
                     obj.Total = res.data.res[0].Total
                     obj.Month = res.data.res[0].Month
