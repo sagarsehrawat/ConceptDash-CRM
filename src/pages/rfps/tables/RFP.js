@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_GOOGLE_DRIVE_URL, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST, PRIMARY_COLOR, UPDATE_RFP_STATUS } from '../../../Main/Constants/Constants';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowsUpDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faCross, faDownload, faEdit, faFilter, faMagnifyingGlass, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faEdit, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Button, Form, Modal } from 'react-bootstrap';
 import GreenAlert from '../../../Main/Loader/GreenAlert';
 import RedAlert from '../../../Main/Loader/RedAlert';
@@ -11,7 +11,6 @@ import LoadingSpinner from '../../../Main/Loader/Loader';
 import RFPform from '../forms/RFPform';
 import AuthenticationContext from '../../../Context/AuthContext';
 import UpdateRFP from '../forms/UpdateRFP';
-import { RadioButtonComponent } from '@syncfusion/ej2-react-buttons';
 import filterIcon from '../../../Images/Filter.svg'
 import cross from '../../../Images/cross.svg'
 import tIcon from '../../../Images/taskIcon.svg'
@@ -20,16 +19,22 @@ import TFSearchBar from '../../../components/ui/TFSearchBar/TFSearchBar';
 import TFButton from '../../../components/ui/TFButton/TFButton';
 import TFChip from '../../../components/form/TFChip/TFChip';
 import plusIcon from '../../../Images/addPlus.svg'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+    initRFPs,
+    selectRFPs,
+    updateRFP
+} from '../../../redux/slices/rfpSlice.ts'
 
 const RFP = (props) => {
     const { isCollapsed } = props
     const { privileges, setPrivileges } = useContext(AuthenticationContext)
-    
+    const dispatch = useDispatch()
     const [apiCall, setCall] = useState(0);
     const [green, setgreen] = useState(false);
     const [red, setred] = useState(false);
 
-    const [rfps, setrfps] = useState([]);
+    const rfps = useSelector(selectRFPs)
     const [selectedRfps, setselectedRfps] = useState([]);
     const [rfpCount, setrfpCount] = useState({ Total: 0, Month: 0, Percent: 0 });
     const [cities, setcities] = useState([]);
@@ -683,7 +688,7 @@ const RFP = (props) => {
                     },
                 })
                 .then((res) => {
-                    setrfps(res.data.res);
+                    dispatch(initRFPs(res.data.res))
                     setpages(res.data.totalPages)
                     setIsLoading(false);
                 })
@@ -709,7 +714,7 @@ const RFP = (props) => {
                 },
             })
             .then((res) => {
-                setrfps(res.data.res);
+                dispatch(initRFPs(res.data.res))
                 setpages(res.data.totalPages)
                 setIsLoading(false);
             })
@@ -792,6 +797,7 @@ const RFP = (props) => {
     }
 
     const handleStatusUpdate = async (rfpId, action) => {
+        dispatch(updateRFP({rfpId, data: {'Action' : action}}))
         const response = await axios.post(
           HOST + UPDATE_RFP_STATUS,
           {
@@ -803,7 +809,6 @@ const RFP = (props) => {
           }
         );
     
-        console.log(response);
         return response;
       };
 
@@ -1254,10 +1259,10 @@ const RFP = (props) => {
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Project_Category}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Manager_Name}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "120px" }}>                      <TFChip
-                        label={e.Action}
-                        id={e.RFP_ID}
+                        value={e.Action}
                         tableRef={tableRef}
-                        onUpdate={handleStatusUpdate}
+                        name={e.RFP_ID}
+                        onChange={handleStatusUpdate}
                         options={["No Go", "Review", "Go"]}
                       /></td>
                                 <td style={{ ...styles.tableCell, minWidth: "180px" }}>{e.RFP_Number}</td>
