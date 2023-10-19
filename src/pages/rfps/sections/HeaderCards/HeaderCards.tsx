@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { initData, selectNewRFPs, selectPercentage, selectTotalRFPs } from '../../../../redux/slices/rfpSlice'
 import SERVICES from '../../../../services/Services'
-import './HeaderCards.'
+import './HeaderCards.css'
 
 type Props = {}
 

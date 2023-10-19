@@ -13,6 +13,7 @@ import {
   GET_PROJECT_CATEGORIES,
   GET_BUDGET_NAMES,
   ADD_RFP,
+  GET_MANAGERS,
 } from "../../../Main/Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import AddCity from "../../../Main/Form/AddCity";
@@ -139,6 +140,18 @@ function RFPform(props) {
         formUtils.inputFilesForm(key, value);
         resetForm(value);
         break;
+      case 'source':
+        formUtils.dropdownForm(key, value);
+        resetForm(value);
+        break;
+      case 'city':
+        formUtils.dropdownForm(key, value);
+        resetForm(value);
+        break;
+      case 'remarks':
+        formUtils.typeInputForm(key, value);
+        resetForm(value);
+        break;
     }
   }
 
@@ -155,7 +168,7 @@ function RFPform(props) {
     const newForm = form;
     if (name === 'files') {
       newForm[name] = e.target.files;
-      setform(newForm)
+      setForm(newForm)
       return;
     }
     if (name === 'dept') {
@@ -163,7 +176,7 @@ function RFPform(props) {
     }
 
     newForm[name] = value;
-    setform(newForm);
+    setForm(newForm);
   };
   const [cities, setcities] = useState([]);
   const [depts, setdepts] = useState([]);
