@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface RFPState {
-  newRFPs: number;
-  percentage: number;
-  totalRFPs: number;
+  newRFPs: number | string;
+  percentage: number | string;
+  totalRFPs: number | string;
   rfps: RFP[];
 }
 
@@ -28,7 +28,9 @@ const rfpSlice = createSlice({
       state.rfps = action.payload;
     },
     initData: (state, action: PayloadAction<RFPStatus>) => {
-
+      state.newRFPs = action.payload.Month;
+      state.percentage = action.payload.Percentage;
+      state.totalRFPs = action.payload.Total;
     },
     addRFP: (state, action: PayloadAction<RFP>) => {
       state.rfps.push(action.payload);
