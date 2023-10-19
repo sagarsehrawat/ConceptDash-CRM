@@ -1,5 +1,5 @@
-const FormUtils = {
-    typeInputForm: (setForm, key, value) => {
+const FormUtils = (setForm) => ({
+    typeInputForm: (key, value) => {
         setForm((prev) => {
             return {
                 ...prev,
@@ -8,7 +8,7 @@ const FormUtils = {
         });
     },
 
-    typeaheadForm: (setForm, key, value) => {
+    typeaheadForm: (key, value) => {
         setForm((prev) => {
             return {
                 ...prev,
@@ -18,7 +18,7 @@ const FormUtils = {
         });
     },
 
-    radioButtonForm: (setForm, key, value) => {
+    radioButtonForm: (key, value) => {
         setForm((prev) => {
             return {
                 ...prev,
@@ -27,7 +27,7 @@ const FormUtils = {
         });
     },
 
-    checkboxForm: (setForm, key, value) => {
+    checkboxForm: (key, value) => {
         setForm((prev) => {
             const newForm = { ...prev };
 
@@ -42,6 +42,6 @@ const FormUtils = {
             return newForm;
         });
     }
-};
+});
 
 export default FormUtils;
