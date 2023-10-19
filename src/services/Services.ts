@@ -1,5 +1,7 @@
 import axios from "axios";
-import APIS from "../constants/APIS";
+import APIS, { BASE_URL } from "../constants/APIS";
+
+axios.defaults.baseURL = BASE_URL 
 
 const SERVICES = {
     serverStatus: async () => {

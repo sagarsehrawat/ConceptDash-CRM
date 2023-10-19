@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import SERVICES from "../services/Services";
+import SERVICES from "../services/Services.ts";
 
 const GaurdedRoutes = () => {
   const [serverStatus, setServerStatus] = useState(null);
