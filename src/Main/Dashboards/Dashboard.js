@@ -45,7 +45,7 @@ import adminSettings from "../../Images/adminSettings.svg";
 import logout from "../../Images/logout.svg";
 import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
-import RFP from "../../pages/rfps/index";
+import RFP from "../../pages/rfps/Index";
 import TestDemo from "../../pages/calendar/index";
 import Proposal from "../../pages/proposals/index";
 import Employee from "../../pages/employee/index";

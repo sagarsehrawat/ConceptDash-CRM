@@ -25,6 +25,7 @@ import {
     selectRFPs,
     updateRFP
 } from '../../../redux/slices/rfpSlice.ts'
+import Header from '../sections/Header/Header.tsx';
 
 const RFP = (props) => {
     const { isCollapsed } = props
@@ -848,11 +849,7 @@ const RFP = (props) => {
         <>
             {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
             {red === true ? <RedAlert setRed={setred} /> : <></>}
-            <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
-                <p style={styles.heading}>RFPs (Request For Proposals)</p>
-                {/* <button style={styles.addButton} disabled={!privileges.includes("Add RFP")} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button> */}
-                <TFButton icon={plusIcon} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={handleShow} />
-            </div>
+            <Header apiCall={apiCall} setCall={setCall} />
 
             {/* Header Cards */}
             <div className='d-flex flex-row' style={{ marginLeft: "32px", marginBottom: "20px" }}>

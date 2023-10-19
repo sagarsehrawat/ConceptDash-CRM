@@ -1,11 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Privilege {
-  Privilege: string
-}
+
 
 interface PrivilegeState {
-  privileges: Privilege[];
+  privileges: string[];
 }
 
 const initialState: PrivilegeState = {
@@ -16,7 +14,7 @@ const privilegeSlice = createSlice({
   name: 'privileges',
   initialState,
   reducers: {
-    initPrivileges: (state, action: PayloadAction<Privilege[]>) => {
+    initPrivileges: (state, action: PayloadAction<string[]>) => {
       state.privileges = action.payload;
     },
   },
