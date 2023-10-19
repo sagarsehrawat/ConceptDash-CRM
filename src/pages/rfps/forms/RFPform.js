@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import "../../../Main/Form/Form.css";
+import './Form.css'
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -10,11 +11,8 @@ import {
   GET_CITIES,
   GET_DEPARTMENTS,
   GET_PROJECT_CATEGORIES,
-  GET_EMPLOYEENAMES,
   GET_BUDGET_NAMES,
   ADD_RFP,
-  PRIMARY_COLOR,
-  GET_MANAGERS
 } from "../../../Main/Constants/Constants";
 import Modal from "react-bootstrap/Modal";
 import AddCity from "../../../Main/Form/AddCity";
@@ -26,6 +24,7 @@ import AddCategory from "../../../Main/Form/AddCategory";
 import AuthContext from '../../../Context/AuthContext'
 import plus from '../../../Images/plus.svg'
 import TFButton from "../../../components/ui/TFButton/TFButton";
+import FormUtils from '../../../utils/FormUtils';
 
 const styles = {
   nameHeading: {
@@ -60,22 +59,89 @@ function RFPform(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [form, setform] = useState({
+  const [form, setForm] = useState({
     dept: "",
     projectCat: "",
     action: "",
     managerName: "",
     projectName: "",
-    // bidDate: "",
     startDate: "",
     submissionDate: "",
     rfpNumber: "",
-    // amount: "",
     client: "",
     files: [],
     source: '',
-    city: ''
+    city: '',
+    remakrs: ''
   });
+
+  const formUtils = FormUtils(setForm)
+
+  const resetForm = (val) => {
+    setForm({
+      dept: "",
+      projectCat: "",
+      action: "",
+      managerName: "",
+      projectName: "",
+      startDate: "",
+      submissionDate: "",
+      rfpNumber: "",
+      client: "",
+      files: [],
+      source: '',
+      city: '',
+      remakrs: ''
+    })
+  }
+
+  const handleForm = (key, value) => {
+    console.log(key, value);
+
+    switch(key) {
+      case 'dept':
+        formUtils.dropdownForm(key, value);
+        resetForm(value);
+        break;
+      case 'projectCat':
+        formUtils.dropdownForm(key, value);
+        resetForm(value);
+        break;
+      case 'action':
+        formUtils.dropdownForm(key, value);
+        resetForm(value);
+        break;
+      case 'managerName':
+        formUtils.dropdownForm(key, value);
+        resetForm(value);
+        break;
+      case 'projectName':
+        formUtils.typeInputForm(key, value);
+        resetForm(value);
+        break;
+      case 'startDate':
+        formUtils.typeInputForm(key, value);
+        resetForm(value);
+        break;
+      case 'submissionDate':
+        formUtils.typeInputForm(key, value);
+        resetForm(value);
+        break;
+      case 'rfpNumber':
+        formUtils.typeInputForm(key, value);
+        resetForm(value);
+        break;
+      case 'client':
+        formUtils.typeInputForm(key, value);
+        resetForm(value);
+        break;
+      case 'files':
+        formUtils.inputFilesForm(key, value);
+        resetForm(value);
+        break;
+    }
+  }
+
   const [radio, setradio] = useState(false);
   const handleRadio = (e) => {
     if (e.target.value === "yes") {
