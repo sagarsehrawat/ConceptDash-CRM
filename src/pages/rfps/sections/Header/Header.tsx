@@ -7,6 +7,7 @@ import cross from '../../../../Images/cross.svg'
 import tIcon from '../../../../Images/taskIcon.svg'
 import RFPform from '../../forms/RFPform'
 import { Modal } from 'react-bootstrap'
+import TFIcon from '../../../../components/ui/TFIcon/TFIcon'
 
 type Props = {
   apiCall: number,
@@ -43,7 +44,7 @@ const Header = ({apiCall, setCall}: Props) => {
       >
         <div className='d-flex flex-row justify-content-between align-items-center' style={{ marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection: 'row' }}>
           <div className='d-flex flex-row'>
-            <img src={tIcon} />
+            <TFIcon icon={tIcon} />
             <div className='heading-2'>Add New RFP</div>
           </div>
           <div><img onClick={() => setShow(false)} style={{ marginRight: '26px', marginTop: '6px', float: 'right' }} src={cross} /></div>

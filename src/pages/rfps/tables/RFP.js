@@ -852,30 +852,7 @@ const RFP = (props) => {
             <Header apiCall={apiCall} setCall={setCall} />
 
             {/* Header Cards */}
-            <div className='d-flex flex-row' style={{ marginLeft: "32px", marginBottom: "20px" }}>
-                <div style={styles.topContainer}>
-                    <p style={styles.topContainerHeading}>New RFPs</p>
-                    <div className=''>
-                        <p style={styles.topContainerSubheading}>{rfpCount.Month}</p>
-                        {rfpCount.Percent >= 0
-                            ? <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
-                                <FontAwesomeIcon icon={faArrowUp} color="#34A853" />
-                                <p style={styles.percent}>{rfpCount.Percent}% increase</p>
-                            </div>
-                            : <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
-                                <FontAwesomeIcon icon={faArrowDown} color="#FE3766" />
-                                <p style={{ ...styles.percent, color: "#FE3766" }}>{rfpCount.Percent}% decrease</p>
-                            </div>
-                        }
-                    </div>
-                </div>
-                <div style={styles.topContainer}>
-                    <p style={styles.topContainerHeading}>Total RFPs</p>
-                    <p style={styles.topContainerSubheading}>{rfpCount.Total}</p>
-                </div>
-            </div>
-            <div style={styles.headerLine}></div>
-            <p style={styles.heading2}>RFPs</p>
+
 
             {/* Filter and Other Buttons */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
