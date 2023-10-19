@@ -745,10 +745,6 @@ const RFP = (props) => {
         <>
             {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
             {red === true ? <RedAlert setRed={setred} /> : <></>}
-            <Header apiCall={apiCall} setCall={setCall} />
-
-            {/* Header Cards */}
-
 
             {/* Filter and Other Buttons */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
