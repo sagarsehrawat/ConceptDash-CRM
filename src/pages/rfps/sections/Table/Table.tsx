@@ -63,43 +63,43 @@ const Table = ({ api, currPage, filter, search, setPages }: Props) => {
     <>
       {
         isLoading ?
-          <div>
+          <div className='w-100' style={{height: '492px'}}>
               <LoadingSpinner />
           </div>
           : <div className='table-wrapper' ref={tableRef}>
             <table className='w-100' style={{overflowX : "hidden"}}>
-              <thead className='table-header'>
+              <thead className='table-header fixed-table-header'>
                 <tr>
-                  <th>RFP Name</th>
-                  <th>Client</th>
-                  <th>Source</th>
-                  <th>Action</th>
-                  <th>Submission Date</th>
-                  <th>RFP Number</th>
-                  <th>Remarks</th>
-                  <th>Rating</th>
-                  <th>Start Date</th>
-                  <th>Project Manager</th>
-                  <th>Department</th>
-                  <th>Project Category</th>
+                  <th className='table-heading fixed-header-column'>RFP Name</th>
+                  <th className='table-heading'>Client</th>
+                  <th className='table-heading'>Source</th>
+                  <th className='table-heading'>Action</th>
+                  <th className='table-heading'>Submission Date</th>
+                  <th className='table-heading'>RFP Number</th>
+                  <th className='table-heading'>Remarks</th>
+                  <th className='table-heading'>Rating</th>
+                  <th className='table-heading'>Start Date</th>
+                  <th className='table-heading'>Project Manager</th>
+                  <th className='table-heading'>Department</th>
+                  <th className='table-heading'>Project Category</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody style={{background: "#FFFFFF"}}>
                 {
-                  rfps.map(rfp => (
-                    <tr>
-                      <td>{rfp.Project_Name}</td>
-                      <td>{rfp.Client}</td>
-                      <td>{rfp.Source}</td>
-                      <td>{rfp.Action}</td>
-                      <td>{rfp.Submission_Date?.format('D MMM, YYYY')}</td>
-                      <td>{rfp.RFP_Number}</td>
-                      <td>{rfp.Remarks}</td>
-                      <td>{rfp.Rating}</td>
-                      <td>{rfp.Start_Date?.format('D MMM, YYYY')}</td>
-                      <td>{rfp.Project_Manager}</td>
-                      <td>{rfp.Department}</td>
-                      <td>{rfp.Project_Category}</td>
+                  rfps && rfps.map(rfp => (
+                    <tr style={{width: "100%", background: "#FFFFFF", verticalAlign: "top"}}>
+                      <td className='table-cell fixed-column'>{rfp.Project_Name}</td>
+                      <td className='table-cell'>{rfp.Client}</td>
+                      <td className='table-cell'>{rfp.Source}</td>
+                      <td className='table-cell'>{rfp.Action}</td>
+                      <td className='table-cell'>{rfp.Submission_Date?.format('D MMM, YYYY')}</td>
+                      <td className='table-cell'>{rfp.RFP_Number}</td>
+                      <td className='table-cell'>{rfp.Remarks}</td>
+                      <td className='table-cell'>{rfp.Rating}</td>
+                      <td className='table-cell'>{rfp.Start_Date?.format('D MMM, YYYY')}</td>
+                      <td className='table-cell'>{rfp.Project_Manager}</td>
+                      <td className='table-cell'>{rfp.Department}</td>
+                      <td className='table-cell'>{rfp.Project_Category}</td>
                     </tr>
                   ))
                 }
