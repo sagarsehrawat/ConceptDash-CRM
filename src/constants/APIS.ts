@@ -7,7 +7,8 @@ const APIS = {
     GET_CITIES : '/api/get/list/cities',
     GET_DEPARTMENTS : '/api/get/list/departments',
     GET_PROJECT_CATEGORIES : '/api/get/list/projectCategories',
-    GET_MANAGERS : '/api/get/list/managers'
+    GET_MANAGERS : '/api/get/list/managers',
+    GET_RFPS : '/api/get/page/rfps'
 };
 
 export default APIS;

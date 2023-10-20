@@ -1,0 +1,27 @@
+.table-wrapper {
+    border-bottom: 1px solid #EBE9F1;
+    height: 492px;
+    overflow: auto;
+    position: relative;
+}
+
+.table-header {
+    height: 44px;
+    background: #F7F7F9;
+    text-align: center;
+    border-bottom: 0px;
+}
+
+.table-heading {
+    color: var(--Dark-grey, #70757A);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    text-align: left;
+    border-bottom: 1px solid #EBE9F1;
+    border-top: 1px solid #EBE9F1;
+    vertical-align: middle;
+    padding-left: 22px;
+}

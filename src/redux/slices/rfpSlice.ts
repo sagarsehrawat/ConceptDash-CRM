@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import moment from "moment";
 
 interface RFPState {
   newRFPs: number | string;
@@ -25,7 +26,12 @@ const rfpSlice = createSlice({
   initialState,
   reducers: {
     initRFPs: (state, action: PayloadAction<RFP[]>) => {
-      state.rfps = action.payload;
+      state.rfps = action.payload.map(rfp => ({
+        ...rfp,
+        Submission_Date: moment(rfp.Submission_Date),
+        Created_At: moment(rfp.Created_At),
+        Start_Date: moment(rfp.Start_Date)
+      }));
     },
     initData: (state, action: PayloadAction<RFPStatus>) => {
       state.newRFPs = action.payload.Month;

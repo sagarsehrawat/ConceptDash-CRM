@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS, { BASE_URL } from "../constants/APIS";
-import { ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetManagerNames, RfpStatusResponse } from "Services";
+import { ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetManagerNamesResponse, GetRfpsResponse, RfpStatusResponse } from "Services";
 
 axios.defaults.baseURL = BASE_URL
 
@@ -14,14 +14,14 @@ const SERVICES = {
         }
     },
 
-    rfpStatus: async () : Promise<RfpStatusResponse> => {
+    rfpStatus: async (): Promise<RfpStatusResponse> => {
         try {
             const response = await axios.get(APIS.GET_RFP_COUNT, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
                 },
             });
-            if(response.data.success === false){
+            if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
             return response.data as RfpStatusResponse;
@@ -30,14 +30,14 @@ const SERVICES = {
         }
     },
 
-    getCities: async () : Promise<GetCitiesResponse> => {
+    getCities: async (): Promise<GetCitiesResponse> => {
         try {
             const response = await axios.get(APIS.GET_CITIES, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
                 },
             });
-            if(response.data.success === false){
+            if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
             return response.data as GetCitiesResponse;
@@ -46,14 +46,14 @@ const SERVICES = {
         }
     },
 
-    getDepartments: async () : Promise<GetDepartmetnsResponse> => {
+    getDepartments: async (): Promise<GetDepartmetnsResponse> => {
         try {
             const response = await axios.get(APIS.GET_DEPARTMENTS, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
                 },
             });
-            if(response.data.success === false){
+            if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
             return response.data as GetDepartmetnsResponse;
@@ -78,17 +78,38 @@ const SERVICES = {
     //     }
     // },
 
-    getManagers: async () : Promise<GetManagerNames> => {
+    getManagers: async (): Promise<GetManagerNamesResponse> => {
         try {
             const response = await axios.get(APIS.GET_MANAGERS, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
                 },
             });
-            if(response.data.success === false){
+            if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
-            return response.data as GetManagerNames;
+            return response.data as GetManagerNamesResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getRfps: async (limit : number, currentPage : number, filter : Object, search : string, sort : string): Promise<GetRfpsResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_RFPS, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    limit,
+                    offset: (currentPage - 1) * limit,
+                    filter: JSON.stringify(filter),
+                    search,
+                    sort,
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetRfpsResponse;
         } catch (error) {
             throw error;
         }

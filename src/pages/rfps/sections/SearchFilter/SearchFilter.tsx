@@ -22,10 +22,10 @@ type Props = {
 
 interface FilterType {
   dept: (string | number)[],
-   cat: (string | number)[], 
-   city: (string | number)[], 
-   manager: (string | number)[], 
-   source: (string | number)[]
+  cat: (string | number)[],
+  city: (string | number)[],
+  manager: (string | number)[],
+  source: (string | number)[]
 }
 
 const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isCollapsed }: Props) => {
@@ -97,21 +97,21 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
     }
     fetchData();
   }, [])
-  
+
   const handleFilter = (key: keyof FilterType, value: string | number) => {
     setFilter((prevFilter: FilterType) => {
       const updatedFilter = { ...prevFilter };
-  
+
       if (updatedFilter[key] && updatedFilter[key].includes(value)) {
         updatedFilter[key] = updatedFilter[key].filter(element => element !== value);
       } else {
         updatedFilter[key] = [...(updatedFilter[key] || []), value];
       }
-  
+
       return updatedFilter;
     });
   };
-  
+
 
   const filterSize = () => {
     return filter.city.length + filter.cat.length + filter.dept.length + filter.manager.length + filter.source.length;
@@ -129,7 +129,15 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
         />
 
         {/* Filter */}
-        <Button style={{ backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }} onClick={() => setShow(true)}><img src={filterIcon} alt="Filter Icon" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>{filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}</Button>
+        <Button 
+        className='d-flex flex-row align-items-center'
+        style={{ backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }}
+         onClick={() => setShow(true)}
+         >
+          <img src={filterIcon} alt="Filter Icon" />
+          <p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>
+          {filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}
+          </Button>
         <Modal
           show={show}
           onHide={() => setShow(false)}
@@ -139,14 +147,34 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
           animation={false}
         >
           <div style={{ width: "786px", height: "356px", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px" }}>
-            <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
-              <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
+            <div
+              className='d-flex flex-row justify-content-between align-items-center'
+              style={{ margin: "16px 30px 20px 20px" }}>
+              <p className='filter-modal-heading'>Filters</p>
               <div className='d-flex align-items-center'>
-                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => { setFilter({ dept: [], cat: [], city: [], manager: [], source: [] }); setprevFilter({ dept: [], cat: [], city: [], manager: [], source: [] }); setApi(api + 1); setShow(false); }}>Clear All</Button>
-                <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={() => setShow(false)} />
+                <Button
+                  style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }}
+                  disabled={filterSize() === 0}
+                  onClick={(e) => {
+                    setFilter({ dept: [], cat: [], city: [], manager: [], source: [] });
+                    setprevFilter({ dept: [], cat: [], city: [], manager: [], source: [] });
+                    setApi(api + 1);
+                    setShow(false);
+                  }}>
+                  Clear All
+                </Button>
+                <FontAwesomeIcon
+                  icon={faX}
+                  style={{ height: "9px", cursor: "pointer" }}
+                  color={PRIMARY_COLOR}
+                  onClick={() => setShow(false)}
+                />
               </div>
             </div>
-            <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "20px", marginRight: "20px" }}>
+
+            <div
+              className='d-flex flex-row justify-content-between'
+              style={{ marginLeft: "20px", marginRight: "20px" }}>
               <div className='filter-container filter-subcontainer'>
                 <p className='filter-subheading'>City {filter.city.length === 0 ? "" : `/${filter.city.length}`}</p>
                 <input
@@ -157,10 +185,10 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
                   placeholder="Search"
                   id="city-search"
                 />
-                {isLoading2[1] ? <LoadingSpinner /> : cities.map(e => {
+                {isLoading2[0] ? <LoadingSpinner /> : cities.map(e => {
                   if (e.City.toLowerCase().startsWith(searchCity.toLowerCase())) {
                     return (
-                      <div style={{ backgroundColor: filter.city.includes(e.City_ID) ? "#DBDBF4" : "#F7F7F9" }} className='filter-subcontainer' onClick={() => handleFilter('city', e.City_ID)}><p className='filter-body-text'>{e.City}</p></div>
+                      <div style={{ backgroundColor: filter.city.includes(e.City_ID) ? "#DBDBF4" : "#F7F7F9" }} className='filter-sub-subcontainer' onClick={() => handleFilter('city', e.City_ID)}><p className='filter-body-text'>{e.City}</p></div>
                     )
                   } else {
                     return <></>
@@ -168,30 +196,57 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
 
                 })}
               </div>
+
               <div className='filter-container filter-subcontainer'>
                 <p className='filter-subheading'>Source {filter.source.length === 0 ? "" : `/${filter.source.length}`}</p>
-                <div style={{ backgroundColor: filter.source.includes('Construct Connect') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} className='filter-subcontainer' onClick={() => handleFilter('source', 'Construct Connect')}><p className='filter-body-text'>Construct Connect</p></div>
-                <div style={{ backgroundColor: filter.source.includes('Bids and Tenders') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} className='filter-subcontainer' onClick={() => handleFilter('source', 'Bids and Tenders')}><p className='filter-body-text'>Bids & Tenders</p></div>
-                <div style={{ backgroundColor: filter.source.includes('Biddingo') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} className='filter-subcontainer' onClick={() => handleFilter('source', 'Biddingo')}><p className='filter-body-text'>Biddingo</p></div>
-                <div style={{ backgroundColor: filter.source.includes('Merx') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} className='filter-subcontainer' onClick={() => handleFilter('source', 'Merx')}><p className='filter-body-text'>Merx</p></div>
+                <div
+                  style={{ backgroundColor: filter.source.includes('Construct Connect') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }}
+                  className='filter-sub-subcontainer'
+                  onClick={() => handleFilter('source', 'Construct Connect')}
+                >
+                  <p className='filter-body-text'>Construct Connect</p>
+                </div>
+                <div
+                  style={{ backgroundColor: filter.source.includes('Bids and Tenders') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }}
+                  className='filter-sub-subcontainer'
+                  onClick={() => handleFilter('source', 'Bids and Tenders')}
+                >
+                  <p className='filter-body-text'>Bids & Tenders</p>
+                </div>
+                <div
+                  style={{ backgroundColor: filter.source.includes('Biddingo') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }}
+                  className='filter-sub-subcontainer'
+                  onClick={() => handleFilter('source', 'Biddingo')}
+                >
+                  <p className='filter-body-text'>Biddingo</p>
+                </div>
+                <div
+                  style={{ backgroundColor: filter.source.includes('Merx') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }}
+                  className='filter-sub-subcontainer'
+                  onClick={() => handleFilter('source', 'Merx')}
+                >
+                  <p className='filter-body-text'>Merx</p>
+                </div>
               </div>
+
               <div className='filter-container filter-subcontainer'>
                 <p className='filter-subheading'>Department {filter.dept.length === 0 ? "" : `/${filter.dept.length}`}</p>
-                {isLoading2[2] ? <LoadingSpinner /> : depts.map(e => {
+                {isLoading2[1] ? <LoadingSpinner /> : depts.map(e => {
                   return (
-                    <div style={{ backgroundColor: filter.dept.includes(e.Department_ID) ? "#DBDBF4" : "#F7F7F9" }} className='filter-subheading' onClick={() => handleFilter('dept', e.Department_ID)}><p className='filter-body-text'>{e.Department}</p></div>
+                    <div style={{ backgroundColor: filter.dept.includes(e.Department_ID) ? "#DBDBF4" : "#F7F7F9" }} className='filter-sub-subcontainer' onClick={() => handleFilter('dept', e.Department_ID)}><p className='filter-body-text'>{e.Department}</p></div>
                   )
                 })}
               </div>
               <div className='filter-container filter-subcontainer'>
                 <p className='filter-subheading'>Project Managers {filter.manager.length === 0 ? "" : `/${filter.manager.length}`}</p>
-                {isLoading2[4] ? <LoadingSpinner /> : employees.map((e) => {
+                {isLoading2[2] ? <LoadingSpinner /> : employees.map((e) => {
                   return (
-                    <div style={{ backgroundColor: filter.manager.includes(e.Employee_ID) ? "#DBDBF4" : "#F7F7F9" }} className='filter-subheading' onClick={() => handleFilter('manager', e.Employee_ID)}><p className='filter-body-text'>{e.Full_Name}</p></div>
+                    <div style={{ backgroundColor: filter.manager.includes(e.Employee_ID) ? "#DBDBF4" : "#F7F7F9" }} className='filter-sub-subcontainer' onClick={() => handleFilter('manager', e.Employee_ID)}><p className='filter-body-text'>{e.Full_Name}</p></div>
                   )
                 })}
               </div>
             </div>
+
             <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
               <TFButton
                 label='Filter'

@@ -38,11 +38,17 @@ declare module "Services"{
         }>
     }
 
-    export interface GetManagerNames {
+    export interface GetManagerNamesResponse {
         success : boolean,
         res : Array<{
             Employee_ID : number | string,
             Full_Name : string,
         }>
+    }
+
+    export interface GetRfpsResponse {
+        success : boolean,
+        res : Array<RFP>,
+        totalPages : number
     }
 }

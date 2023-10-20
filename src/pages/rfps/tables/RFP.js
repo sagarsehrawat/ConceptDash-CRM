@@ -466,59 +466,6 @@ const RFP = (props) => {
         }
     }
 
-    // useEffect(() => {
-    //     setIsLoading(true);
-    //     setcurrPage(1)
-    //     const call = async () => {
-    //         await axios
-    //             .get(HOST + GET_PAGE_RFPS, {
-    //                 headers: {
-    //                     auth: "Rose " + localStorage.getItem("auth"),
-    //                     limit: limit,
-    //                     offset: (currPage - 1) * limit,
-    //                     filter: JSON.stringify(filter),
-    //                     search: value,
-    //                     sort: sort,
-    //                 },
-    //             })
-    //             .then((res) => {
-    //                 dispatch(initRFPs(res.data.res))
-    //                 setpages(res.data.totalPages)
-    //                 setIsLoading(false);
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //             });
-    //     }
-    //     call()
-    // }, [apiCall])
-
-    // const handlePage = async (page) => {
-    //     setIsLoading(true);
-    //     setcurrPage(page);
-    //     await axios
-    //         .get(HOST + GET_PAGE_RFPS, {
-    //             headers: {
-    //                 auth: "Rose " + localStorage.getItem("auth"),
-    //                 limit: limit,
-    //                 offset: (page - 1) * limit,
-    //                 filter: JSON.stringify(filter),
-    //                 search: value,
-    //                 sort: sort,
-    //             },
-    //         })
-    //         .then((res) => {
-    //             dispatch(initRFPs(res.data.res))
-    //             setpages(res.data.totalPages)
-    //             setIsLoading(false);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // }
-
-
-
     const handleDeleteBudget = async (e) => {
         setIsLoading(true)
         e.preventDefault();
@@ -904,20 +851,7 @@ const RFP = (props) => {
                         ))}
                     </tbody>
                 </table>
-            </div>
-
-            {/* Buttons */}
-            {/* <div className='d-flex flex-row justify-content-end' style={{ marginTop: "20px", marginRight: "24px", marginBottom: "20px" }}>
-                <Button style={styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(currPage - 1)}><FontAwesomeIcon icon={faChevronLeft} color="#70757A" /></Button>
-                <Button style={currPage === 1 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(1)}><p style={currPage === 1 ? styles.curPage : styles.page}>1</p></Button>
-                {pages >= 2 ? <Button style={currPage === 2 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 2} onClick={(e) => handlePage(2)}><p style={currPage === 2 ? styles.curPage : styles.page}>2</p></Button> : <></>}
-                {pages >= 3 ? <Button style={currPage === 3 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 3} onClick={(e) => handlePage(3)}><p style={currPage === 3 ? styles.curPage : styles.page}>3</p></Button> : <></>}
-                {pages >= 4 ? <Button style={currPage === 4 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 4} onClick={(e) => handlePage(4)}><p style={currPage === 4 ? styles.curPage : styles.page}>4</p></Button> : <></>}
-                {pages >= 5 ? <Button style={currPage === 5 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 5} onClick={(e) => handlePage(5)}><p style={currPage === 5 ? styles.curPage : styles.page}>5</p></Button> : <></>}
-                {pages >= 7 ? <p style={{ marginLeft: "8px" }}>.....</p> : <></>}
-                {pages >= 6 ? <Button style={currPage === pages ? styles.curPageContainer : styles.pageContainer} disabled={currPage === pages} onClick={(e) => handlePage(pages)}><p style={currPage === pages ? styles.curPage : styles.page}>{pages}</p></Button> : <></>}
-                <Button style={styles.pageContainer} disabled={currPage === pages} onClick={(e) => handlePage(currPage + 1)}><FontAwesomeIcon icon={faChevronRight} color="#70757A" /></Button>
-            </div> */}
+            {/* </div> */}
 
             <div style={{ ...styles.floatingContainer, display: selectedRfps.length === 0 ? "none" : "", visibility: selectedRfps.length === 0 ? "hidden" : "visible" }}>
                 <p style={styles.floatinContainerText}>{selectedRfps.length}</p>
