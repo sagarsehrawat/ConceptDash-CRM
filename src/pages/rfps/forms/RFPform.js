@@ -1,30 +1,31 @@
-// import React, { useEffect, useState, useContext } from "react";
-// import "../../../Main/Form/Form.css";
-// import './Form.css'
-// import axios from "axios";
-// import Form from "react-bootstrap/Form";
-// import Button from "react-bootstrap/Button";
-// import Col from "react-bootstrap/Col";
-// import Row from "react-bootstrap/Row";
-// import {
-//   HOST,
-//   GET_CITIES,
-//   GET_DEPARTMENTS,
-//   GET_PROJECT_CATEGORIES,
-//   GET_BUDGET_NAMES,
-//   ADD_RFP,
-// } from "../../../Main/Constants/Constants";
-// import Modal from "react-bootstrap/Modal";
-// import AddCity from "../../../Main/Form/AddCity";
-// import LoadingSpinner from "../../../Main/Loader/Loader";
-// import GreenAlert from "../../../Main/Loader/GreenAlert";
-// import RedAlert from "../../../Main/Loader/RedAlert";
-// import AddDepartment from "../../../Main/Form/AddDepartment";
-// import AddCategory from "../../../Main/Form/AddCategory";
-// import AuthContext from '../../../Context/AuthContext'
-// import plus from '../../../Images/plus.svg'
-// import TFButton from "../../../components/ui/TFButton/TFButton";
-// import FormUtils from '../../../utils/FormUtils';
+import React, { useEffect, useState, useContext } from "react";
+import "../../../Main/Form/Form.css";
+import './Form.css'
+import axios from "axios";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import {
+  HOST,
+  GET_CITIES,
+  GET_DEPARTMENTS,
+  GET_PROJECT_CATEGORIES,
+  GET_BUDGET_NAMES,
+  ADD_RFP,
+  GET_MANAGERS,
+} from "../../../Main/Constants/Constants";
+import Modal from "react-bootstrap/Modal";
+import AddCity from "../../../Main/Form/AddCity";
+import LoadingSpinner from "../../../Main/Loader/Loader";
+import GreenAlert from "../../../Main/Loader/GreenAlert";
+import RedAlert from "../../../Main/Loader/RedAlert";
+import AddDepartment from "../../../Main/Form/AddDepartment";
+import AddCategory from "../../../Main/Form/AddCategory";
+import AuthContext from '../../../Context/AuthContext'
+import plus from '../../../Images/plus.svg'
+import TFButton from "../../../components/ui/TFButton/TFButton";
+import FormUtils from '../../../utils/FormUtils';
 
 // const styles = {
 //   nameHeading: {
@@ -98,102 +99,114 @@
 //   const handleForm = (key, value) => {
 //     console.log(key, value);
 
-//     switch(key) {
-//       case 'dept':
-//         formUtils.dropdownForm(key, value);
-//         resetForm(value);
-//         break;
-//       case 'projectCat':
-//         formUtils.dropdownForm(key, value);
-//         resetForm(value);
-//         break;
-//       case 'action':
-//         formUtils.dropdownForm(key, value);
-//         resetForm(value);
-//         break;
-//       case 'managerName':
-//         formUtils.dropdownForm(key, value);
-//         resetForm(value);
-//         break;
-//       case 'projectName':
-//         formUtils.typeInputForm(key, value);
-//         resetForm(value);
-//         break;
-//       case 'startDate':
-//         formUtils.typeInputForm(key, value);
-//         resetForm(value);
-//         break;
-//       case 'submissionDate':
-//         formUtils.typeInputForm(key, value);
-//         resetForm(value);
-//         break;
-//       case 'rfpNumber':
-//         formUtils.typeInputForm(key, value);
-//         resetForm(value);
-//         break;
-//       case 'client':
-//         formUtils.typeInputForm(key, value);
-//         resetForm(value);
-//         break;
-//       case 'files':
-//         formUtils.inputFilesForm(key, value);
-//         resetForm(value);
-//         break;
-//     }
-//   }
+    switch(key) {
+      case 'dept':
+        formUtils.dropdownForm(key, value);
+        resetForm(value);
+        break;
+      case 'projectCat':
+        formUtils.dropdownForm(key, value);
+        resetForm(value);
+        break;
+      case 'action':
+        formUtils.dropdownForm(key, value);
+        resetForm(value);
+        break;
+      case 'managerName':
+        formUtils.dropdownForm(key, value);
+        resetForm(value);
+        break;
+      case 'projectName':
+        formUtils.typeInputForm(key, value);
+        resetForm(value);
+        break;
+      case 'startDate':
+        formUtils.typeInputForm(key, value);
+        resetForm(value);
+        break;
+      case 'submissionDate':
+        formUtils.typeInputForm(key, value);
+        resetForm(value);
+        break;
+      case 'rfpNumber':
+        formUtils.typeInputForm(key, value);
+        resetForm(value);
+        break;
+      case 'client':
+        formUtils.typeInputForm(key, value);
+        resetForm(value);
+        break;
+      case 'files':
+        formUtils.inputFilesForm(key, value);
+        resetForm(value);
+        break;
+      case 'source':
+        formUtils.dropdownForm(key, value);
+        resetForm(value);
+        break;
+      case 'city':
+        formUtils.dropdownForm(key, value);
+        resetForm(value);
+        break;
+      case 'remarks':
+        formUtils.typeInputForm(key, value);
+        resetForm(value);
+        break;
+    }
+  }
 
-//   const [radio, setradio] = useState(false);
-//   const handleRadio = (e) => {
-//     if (e.target.value === "yes") {
-//       setradio(false);
-//     } else if (e.target.value === "no") {
-//       setradio(true);
-//     }
-//   };
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     const newForm = form;
-//     if (name === 'files') {
-//       newForm[name] = e.target.files;
-//       setform(newForm)
-//       return;
-//     }
-//     if (name === 'dept') {
-//       getProjectCategories(value)
-//     }
+  const [radio, setradio] = useState(false);
+  const handleRadio = (e) => {
+    if (e.target.value === "yes") {
+      setradio(false);
+    } else if (e.target.value === "no") {
+      setradio(true);
+    }
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    const newForm = form;
+    if (name === 'files') {
+      newForm[name] = e.target.files;
+      setForm(newForm)
+      return;
+    }
+    if (name === 'dept') {
+      getProjectCategories(value)
+    }
 
-//     newForm[name] = value;
-//     setform(newForm);
-//   };
-//   const [cities, setcities] = useState([]);
-//   const [depts, setdepts] = useState([]);
-//   const [projectDepts, setprojectDepts] = useState([]);
-//   const [budgets, setbudgets] = useState([]);
-//   const getProjectCategories = async (e) => {
-//     await axios
-//       .get(HOST + GET_PROJECT_CATEGORIES, {
-//         headers: { auth: "Rose " + localStorage.getItem("auth"), id: e },
-//       })
-//       .then((res) => {
-//         setprojectDepts(res.data.res);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   }
-//   useEffect(() => {
-//     setisLoading(true);
-//     const call = async () => {
-//       await axios
-//         .get(HOST + GET_CITIES, {
-//           headers: { auth: "Rose " + localStorage.getItem("auth") },
-//         })
-//         .then((res) => {
-//           setcities(res.data.res);
-//         })
-//         .catch((err) => {
-//           console.log(err);
-//         });
+    newForm[name] = value;
+    setForm(newForm);
+  };
+  const [cities, setcities] = useState([]);
+  const [depts, setdepts] = useState([]);
+  const [projectDepts, setprojectDepts] = useState([]);
+  const [budgets, setbudgets] = useState([]);
+  const getProjectCategories = async (e) => {
+    await axios
+      .get(HOST + GET_PROJECT_CATEGORIES, {
+        headers: { auth: "Rose " + localStorage.getItem("auth"), id: e },
+      })
+      .then((res) => {
+        setprojectDepts(res.data.res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  useEffect(() => {
+    setisLoading(true);
+    const call = async () => {
+      await axios
+        .get(HOST + GET_CITIES, {
+          headers: { auth: "Rose " + localStorage.getItem("auth") },
+        })
+        .then((res) => {
+          setcities(res.data.res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
 //       await axios
 //         .get(HOST + GET_DEPARTMENTS, {
