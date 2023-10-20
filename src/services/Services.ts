@@ -1,15 +1,10 @@
 import axios from "axios";
 import APIS, { BASE_URL } from "../constants/APIS";
-import { ErrorResponse, RfpStatusResponse } from "Services";
+import { ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetManagerNames, RfpStatusResponse } from "Services";
 
 axios.defaults.baseURL = BASE_URL
 
-interface Services {
-    serverStatus: () => Promise<any>;
-    rfpStatus: () => Promise<RfpStatusResponse>;
-}
-
-const SERVICES : Services = {
+const SERVICES = {
     serverStatus: async () => {
         try {
             const response = await axios.get(APIS.SERVER_STATUS);
@@ -33,7 +28,71 @@ const SERVICES : Services = {
         } catch (error) {
             throw error;
         }
-    }
+    },
+
+    getCities: async () : Promise<GetCitiesResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_CITIES, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                },
+            });
+            if(response.data.success === false){
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetCitiesResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getDepartments: async () : Promise<GetDepartmetnsResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_DEPARTMENTS, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                },
+            });
+            if(response.data.success === false){
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetDepartmetnsResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    // getProjectCategories: async () : Promise<GetDepartmetnsResponse> => {
+    //     try {
+    //         const response = await axios.get(APIS.GET_PROJECT_CATEGORIES, {
+    //             headers: {
+    //                 auth: "Rose " + localStorage.getItem("auth"),
+    //             },
+    //         });
+    //         if(response.data.success === false){
+    //             throw response.data as ErrorResponse
+    //         }
+    //         return response.data as GetDepartmetnsResponse;
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // },
+
+    getManagers: async () : Promise<GetManagerNames> => {
+        try {
+            const response = await axios.get(APIS.GET_MANAGERS, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                },
+            });
+            if(response.data.success === false){
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetManagerNames;
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 export default SERVICES;

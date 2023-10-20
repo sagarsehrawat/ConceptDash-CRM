@@ -11,7 +11,6 @@ import LoadingSpinner from '../../../Main/Loader/Loader';
 import RFPform from '../forms/RFPform';
 import AuthenticationContext from '../../../Context/AuthContext';
 import UpdateRFP from '../forms/UpdateRFP';
-import filterIcon from '../../../Images/Filter.svg'
 import cross from '../../../Images/cross.svg'
 import tIcon from '../../../Images/taskIcon.svg'
 import open from '../../../Images/openinDrive.svg'
@@ -38,10 +37,6 @@ const RFP = (props) => {
     const rfps = useSelector(selectRFPs)
     const [selectedRfps, setselectedRfps] = useState([]);
     const [rfpCount, setrfpCount] = useState({ Total: 0, Month: 0, Percent: 0 });
-    const [cities, setcities] = useState([]);
-    const [depts, setdepts] = useState([]);
-    const [projectCats, setprojectCats] = useState([]);
-    const [employees, setemployees] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
     const [isLoading2, setIsLoading2] = useState([true, true, true, true, true]);
@@ -51,21 +46,11 @@ const RFP = (props) => {
     const [currPage, setcurrPage] = useState(1);
     const [sort, setsort] = useState("RFP_ID DESC");
     const [value, setValue] = useState("");
-    const [searchCity, setsearchCity] = useState("");
-    const [filter, setfilter] = useState({ dept: [], cat: [], city: [], manager: [], source: [] });
-    const [prevFilter, setprevFilter] = useState({ dept: [], cat: [], city: [], manager: [], source: [] });
-    const [filter2, setfilter2] = useState('Basic')
-    const [advancedFilter, setadvancedFilter] = useState([['', 'IS', '']])
 
     //Add Form Modal
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
-    //Filter Modal
-    const [filterModal, setfilterModal] = useState(false);
-    const closeFilterModal = () => {setfilter(prevFilter); setfilterModal(false)};
-    const openFilterModal = () => setfilterModal(true);
 
     //Sort Modal
     const [sortModal, setsortModal] = useState(null);
@@ -355,21 +340,6 @@ const RFP = (props) => {
             fontSize: "14px",
             lineHeight: "20px"
         },
-        citySearchInputContainer: {
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            padding: "2px 50px 2px 4px",
-            gap: "4px",
-            width: "120px",
-            height: "20px",
-            left: "20px",
-            top: "84px",
-            background: "#F3F3F4",
-            borderRadius: "6px",
-            border: "none",
-            marginBottom: "8px",
-        },
         floatingContainer: {
             boxSizing: "border-box",
             position: "absolute",
@@ -496,143 +466,58 @@ const RFP = (props) => {
         }
     }
 
-    useEffect(() => {
-        setIsLoading2([true, true, true, true, true])
-        const call = async () => {
-            await axios
-                .get(HOST + GET_RFP_COUNT, {
-                    headers: {
-                        auth: "Rose " + localStorage.getItem("auth"),
-                    },
-                })
-                .then((res) => {
-                    console.log(res.data.res)
-                    let obj = rfpCount
-                    obj.Total = res.data.res[0].Total
-                    obj.Month = res.data.res[0].Month
-                    obj.Percent = res.data.res[0].Percent ?? 0
-                    setrfpCount(obj)
-                    setIsLoading2(prev => [false, ...prev.slice(1, 5)])
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+    // useEffect(() => {
+    //     setIsLoading(true);
+    //     setcurrPage(1)
+    //     const call = async () => {
+    //         await axios
+    //             .get(HOST + GET_PAGE_RFPS, {
+    //                 headers: {
+    //                     auth: "Rose " + localStorage.getItem("auth"),
+    //                     limit: limit,
+    //                     offset: (currPage - 1) * limit,
+    //                     filter: JSON.stringify(filter),
+    //                     search: value,
+    //                     sort: sort,
+    //                 },
+    //             })
+    //             .then((res) => {
+    //                 dispatch(initRFPs(res.data.res))
+    //                 setpages(res.data.totalPages)
+    //                 setIsLoading(false);
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             });
+    //     }
+    //     call()
+    // }, [apiCall])
 
-            await axios
-                .get(HOST + GET_CITIES, {
-                    headers: { auth: "Rose " + localStorage.getItem("auth") },
-                })
-                .then((res) => {
-                    setcities(res.data.res);
-                    setIsLoading2(prev => [prev[0], false, ...prev.slice(2, 5)])
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+    // const handlePage = async (page) => {
+    //     setIsLoading(true);
+    //     setcurrPage(page);
+    //     await axios
+    //         .get(HOST + GET_PAGE_RFPS, {
+    //             headers: {
+    //                 auth: "Rose " + localStorage.getItem("auth"),
+    //                 limit: limit,
+    //                 offset: (page - 1) * limit,
+    //                 filter: JSON.stringify(filter),
+    //                 search: value,
+    //                 sort: sort,
+    //             },
+    //         })
+    //         .then((res) => {
+    //             dispatch(initRFPs(res.data.res))
+    //             setpages(res.data.totalPages)
+    //             setIsLoading(false);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // }
 
-            await axios
-                .get(HOST + GET_DEPARTMENTS, {
-                    headers: { auth: "Rose " + localStorage.getItem("auth") },
-                })
-                .then((res) => {
-                    setdepts(res.data.res);
-                    setIsLoading2(prev => [...prev.slice(0, 2), false, ...prev.slice(3, 5)])
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
 
-            await axios
-                .get(HOST + GET_PROJECT_CATEGORIES, {
-                    headers: { auth: "Rose " + localStorage.getItem("auth") },
-                })
-                .then((res) => {
-                    setprojectCats(res.data.res);
-                    setIsLoading2(prev => [...prev.slice(0, 3), false, ...prev.slice(4, 5)])
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-
-            await axios
-                .get(HOST + GET_EMPLOYEENAMES, {
-                    headers: { auth: "Rose " + localStorage.getItem("auth") },
-                })
-                .then((res) => {
-                    setemployees(res.data.res);
-                    setIsLoading2(prev => [...prev.slice(0, 4), false])
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
-        call()
-    }, [])
-
-    useEffect(() => {
-        setIsLoading(true);
-        setcurrPage(1)
-        const call = async () => {
-            await axios
-                .get(HOST + GET_PAGE_RFPS, {
-                    headers: {
-                        auth: "Rose " + localStorage.getItem("auth"),
-                        limit: limit,
-                        offset: (currPage - 1) * limit,
-                        filter: JSON.stringify(filter),
-                        search: value,
-                        sort: sort,
-                    },
-                })
-                .then((res) => {
-                    dispatch(initRFPs(res.data.res))
-                    setpages(res.data.totalPages)
-                    setIsLoading(false);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
-        call()
-    }, [apiCall])
-
-    const handlePage = async (page) => {
-        setIsLoading(true);
-        setcurrPage(page);
-        await axios
-            .get(HOST + GET_PAGE_RFPS, {
-                headers: {
-                    auth: "Rose " + localStorage.getItem("auth"),
-                    limit: limit,
-                    offset: (page - 1) * limit,
-                    filter: JSON.stringify(filter),
-                    search: value,
-                    sort: sort,
-                },
-            })
-            .then((res) => {
-                dispatch(initRFPs(res.data.res))
-                setpages(res.data.totalPages)
-                setIsLoading(false);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-
-    const handleFilter = (key, value) => {
-        if (filter[key].includes(value)) {
-            setfilter(prevFilter => ({
-                ...prevFilter,
-                [key]: prevFilter[key].filter(element => element !== value)
-            }));
-        } else {
-            setfilter(prevFilter => ({
-                ...prevFilter,
-                [key]: [...prevFilter[key], value]
-            }));
-        }
-    }
 
     const handleDeleteBudget = async (e) => {
         setIsLoading(true)
@@ -674,10 +559,6 @@ const RFP = (props) => {
         if (date === "" || date === null || date === undefined) return "";
         const formattedDate = moment(date)
         return formattedDate.format('D MMM, YYYY')
-    }
-
-    const filterSize = () => {
-        return filter.city.length + filter.cat.length + filter.dept.length + filter.manager.length + filter.source.length;
     }
 
     useEffect(() => {
@@ -733,126 +614,13 @@ const RFP = (props) => {
         }
     }
 
-    const filterInput1 =
-        <Form.Select style={styles.filterInput1}>
-            <option>Column</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-        </Form.Select >
-
     return (
         <>
             {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
             {red === true ? <RedAlert setRed={setred} /> : <></>}
 
             {/* Filter and Other Buttons */}
-            <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
-            <TFSearchBar 
-                    placeholder={'RFPs'}
-                    searchFunc={[value, setValue]} 
-                    style={{'margin-right': '12px'}}
-                    apiFunc={[apiCall, setCall]}
-                />
-                <Button style={{ ...styles.filterButton, backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }} onClick={openFilterModal}><img src={filterIcon} alt="Filter Icon" /><p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>{filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}</Button>
-                <Modal
-                    show={filterModal}
-                    onHide={closeFilterModal}
-                    style={styles.filterModal}
-                    dialogClassName="filter-dialog"
-                    backdropClassName="filter-backdrop"
-                    animation={false}
-                >
-                    {filter2 === 'Basic' ? <div style={{ width: "786px", height: "356px", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px" }}>
-                        <div className='d-flex flex-row justify-content-between align-items-center' style={{ "marginTop": "16px", marginLeft: "20px", marginRight: "30px", marginBottom: "20px" }}>
-                            <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
-                            <div className='d-flex align-items-center'>
-                                <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }} disabled={filterSize() === 0} onClick={(e) => {setfilter({ dept: [], cat: [], city: [], manager: [], source: [] }); setprevFilter({ dept: [], cat: [], city: [], manager: [], source: [] }); setCall(apiCall+1); setfilterModal(false);}}>Clear All</Button>
-                                <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={closeFilterModal} />
-                            </div>
-                        </div>
-                        <div className='d-flex flex-row justify-content-between' style={{ marginLeft: "20px", marginRight: "20px" }}>
-                            {/* <div style={styles.filterSubcontainer} className='filter-container'>
-                                <p style={styles.filterSubheading}>City {filter.city.length === 0 ? "" : `/${filter.city.length}`}</p>
-                                <input
-                                    style={styles.citySearchInputContainer}
-                                    type="text"
-                                    className='searchInput'
-                                    value={searchCity}
-                                    onChange={(e) => setsearchCity(e.target.value)}
-                                    placeholder="Search"
-                                    id="city-search"
-                                />
-                                {isLoading2[1] ? <LoadingSpinner /> : cities.map(e => {
-                                    if (e.City.toLowerCase().startsWith(searchCity.toLowerCase())) {
-                                        return (
-                                            <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.city.includes(e.City_ID) ? "#DBDBF4" : "#F7F7F9" }} onClick={() => handleFilter('city', e.City_ID)}><p style={styles.filterBodyText}>{e.City}</p></div>
-                                        )
-                                    } else {
-                                        return <></>
-                                    }
 
-                                })}
-                            </div> */}
-                            <div style={styles.filterSubcontainer} className='filter-container'>
-                                <p style={styles.filterSubheading}>Source {filter.source.length === 0 ? "" : `/${filter.source.length}`}</p>
-                                <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Construct Connect') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Construct Connect')}><p style={styles.filterBodyText}>Construct Connect</p></div>
-                                <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Bids and Tenders') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Bids and Tenders')}><p style={styles.filterBodyText}>Bids & Tenders</p></div>
-                                <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Biddingo') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Biddingo')}><p style={styles.filterBodyText}>Biddingo</p></div>
-                                <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.source.includes('Merx') ? "rgba(219, 219, 244, 0.55)" : "#F7F7F9" }} onClick={() => handleFilter('source', 'Merx')}><p style={styles.filterBodyText}>Merx</p></div>
-                            </div>
-                            <div style={styles.filterSubcontainer} className='filter-container'>
-                                <p style={styles.filterSubheading}>Department {filter.dept.length === 0 ? "" : `/${filter.dept.length}`}</p>
-                                {isLoading2[2] ? <LoadingSpinner /> : depts.map(e => {
-                                    return (
-                                        <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.dept.includes(e.Department_ID) ? "#DBDBF4" : "#F7F7F9" }} onClick={() => handleFilter('dept', e.Department_ID)}><p style={styles.filterBodyText}>{e.Department}</p></div>
-                                    )
-                                })}
-                            </div>
-                            <div style={styles.filterSubcontainer} className='filter-container'>
-                                <p style={styles.filterSubheading}>Project Category {filter.cat.length === 0 ? "" : `/${filter.cat.length}`}</p>
-                                {isLoading2[3] ? <LoadingSpinner /> : projectCats.map(e => {
-                                    return (
-                                        <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.cat.includes(e.Project_Cat_ID) ? "#DBDBF4" : "#F7F7F9" }} onClick={() => handleFilter('cat', e.Project_Cat_ID)}><p style={styles.filterBodyText}>{e.Project_Category}</p></div>
-                                    )
-                                })}
-                            </div>
-                            <div style={styles.filterSubcontainer} className='filter-container'>
-                                <p style={styles.filterSubheading}>Project Managers {filter.manager.length === 0 ? "" : `/${filter.manager.length}`}</p>
-                                {isLoading2[4] ? <LoadingSpinner /> : employees.map(e => {
-                                    return (
-                                        <div style={{ ...styles.filterSubSubContainer, backgroundColor: filter.manager.includes(e.Employee_ID) ? "#DBDBF4" : "#F7F7F9" }} onClick={() => handleFilter('manager', e.Employee_ID)}><p style={styles.filterBodyText}>{e.Full_Name}</p></div>
-                                    )
-                                })}
-                            </div>
-                        </div>
-                        <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
-                            {/* <Button style={styles.filterButton2} onClick={(e) => setfilter2('Advanced')}>Go to Advanced Filters</Button> */}
-                            <Button style={styles.filterButton3} onClick={(e) => { setprevFilter(filter); setCall(apiCall + 1); setfilterModal(false) }}>Filter</Button>
-                        </div>
-                    </div> :
-                        <div className='d-flex flex-column' style={{ width: "786px", height: "auto", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px", padding: "20px", gap: "20px" }}>
-                            <div className='d-flex flex-row justify-content-between align-items-center'>
-                                <p style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "16px", lineHeight: "24px", color: "#0A0A0A", margin: "0px" }}>Filters</p>
-                                <div className='d-flex align-items-center'>
-                                    <Button style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }} disabled={filter.cat.length === 0 && filter.dept.length === 0 && filter.source.length === 0 && filter.city.length === 0 && filter.manager.length === 0} onClick={(e) => setfilter({ dept: [], cat: [], city: [], manager: [], source: [] })}>Clear All</Button>
-                                    <FontAwesomeIcon icon={faX} style={{ height: "9px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={closeFilterModal} />
-                                </div>
-                            </div>
-                            <div className='d-flex flex-row justify-content-between'>
-                                <p style={styles.whereText}>WHERE</p>
-                                {filterInput1}
-                            </div>
-                            <div className='d-flex flex-row justify-content-start'>
-                                <FontAwesomeIcon icon={faPlus} color={PRIMARY_COLOR} />
-                            </div>
-                            <div className='d-flex flex-row justify-content-between'>
-                                <Button style={styles.filterButton2} onClick={(e) => setfilter2('Basic')}>Go to Basic Filters</Button>
-                                <Button style={styles.filterButton3} onClick={(e) => { setCall(apiCall + 1); closeFilterModal(); }}>Filter</Button>
-                            </div>
-                        </div>}
-                </Modal>
-            </div>
 
             {/* Table */}
             <div style={{ borderBottom: "1px solid #EBE9F1", height: "492px", overflow: "auto", position: "relative" }} ref={tableRef}>
@@ -1139,7 +907,7 @@ const RFP = (props) => {
             </div>
 
             {/* Buttons */}
-            <div className='d-flex flex-row justify-content-end' style={{ marginTop: "20px", marginRight: "24px", marginBottom: "20px" }}>
+            {/* <div className='d-flex flex-row justify-content-end' style={{ marginTop: "20px", marginRight: "24px", marginBottom: "20px" }}>
                 <Button style={styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(currPage - 1)}><FontAwesomeIcon icon={faChevronLeft} color="#70757A" /></Button>
                 <Button style={currPage === 1 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 1} onClick={(e) => handlePage(1)}><p style={currPage === 1 ? styles.curPage : styles.page}>1</p></Button>
                 {pages >= 2 ? <Button style={currPage === 2 ? styles.curPageContainer : styles.pageContainer} disabled={currPage === 2} onClick={(e) => handlePage(2)}><p style={currPage === 2 ? styles.curPage : styles.page}>2</p></Button> : <></>}
@@ -1149,7 +917,7 @@ const RFP = (props) => {
                 {pages >= 7 ? <p style={{ marginLeft: "8px" }}>.....</p> : <></>}
                 {pages >= 6 ? <Button style={currPage === pages ? styles.curPageContainer : styles.pageContainer} disabled={currPage === pages} onClick={(e) => handlePage(pages)}><p style={currPage === pages ? styles.curPage : styles.page}>{pages}</p></Button> : <></>}
                 <Button style={styles.pageContainer} disabled={currPage === pages} onClick={(e) => handlePage(currPage + 1)}><FontAwesomeIcon icon={faChevronRight} color="#70757A" /></Button>
-            </div>
+            </div> */}
 
             <div style={{ ...styles.floatingContainer, display: selectedRfps.length === 0 ? "none" : "", visibility: selectedRfps.length === 0 ? "hidden" : "visible" }}>
                 <p style={styles.floatinContainerText}>{selectedRfps.length}</p>

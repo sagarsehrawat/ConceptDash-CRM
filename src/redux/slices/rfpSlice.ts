@@ -10,7 +10,7 @@ interface RFPState {
 interface RFPStatus {
     Total : number | string,
     Month : number | string,
-    Percentage : number | string
+    Percent : number | string
 }
 
 const initialState: RFPState = {
@@ -29,7 +29,7 @@ const rfpSlice = createSlice({
     },
     initData: (state, action: PayloadAction<RFPStatus>) => {
       state.newRFPs = action.payload.Month;
-      state.percentage = action.payload.Percentage;
+      state.percentage = action.payload.Percent;
       state.totalRFPs = action.payload.Total;
     },
     addRFP: (state, action: PayloadAction<RFP>) => {
