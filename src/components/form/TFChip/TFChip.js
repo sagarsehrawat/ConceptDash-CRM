@@ -82,6 +82,7 @@ const TFChip = ({ value, tableRef, options, onChange, name }) => {
                 {options.map((option) => (
                   <div
                     className="chip-modal-item"
+                    key={option}
                     onClick={(e) => {
                       setisVisible(false);
                       onChange(name, option);

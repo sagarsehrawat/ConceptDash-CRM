@@ -8,7 +8,7 @@ declare global{
         City_ID : number | null,
         City : string | null,
         Client : string | null,
-        Created_At : moment.Moment,
+        Created_At : string,
         Department : string | null,
         Department_ID : number | null,
         Folder_ID : string | null,
@@ -23,7 +23,7 @@ declare global{
         Remarks : string | null,
         Rating : number | null
         Source : string | null,
-        Start_Date : moment.Moment | null,
-        Submission_Date : moment.Moment | null
+        Start_Date : string | null,
+        Submission_Date : string | null
     }
 }

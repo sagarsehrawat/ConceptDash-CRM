@@ -57,6 +57,11 @@ declare module "Services"{
         res : Object
     }
 
+    export interface UpdateRfpDateResponse {
+        success : boolean,
+        res : Object
+    }
+
     export interface GetGoogleDriveUrlResponse {
         success : boolean,
         res : string | null

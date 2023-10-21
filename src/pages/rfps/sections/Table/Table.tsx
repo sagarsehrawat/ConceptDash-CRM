@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
+import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
 
 interface FilterType {
   dept: (string | number)[],
@@ -54,15 +55,26 @@ const Table = ({ api, currPage, filter, search, setPages, isCollapsed }: Props) 
   }, [api, currPage]);
 
   const handleStatusUpdate = async (rfpId: number, action: string) => {
-    const prevAction = rfps.filter(rfp => rfp.RFP_ID === rfpId);
+    const prevRfp = rfps.filter(rfp => rfp.RFP_ID === rfpId);
     try {
       dispatch(updateRFP({ rfpId, data: { 'Action': action } }))
       await SERVICES.updateRfpStatus(rfpId, action);
     } catch (error) {
       console.log(error);
-      dispatch(updateRFP({ rfpId, data: { Action: prevAction[0].Action } }));
+      dispatch(updateRFP({ rfpId, data: { Action: prevRfp[0].Action } }));
     }
   };
+
+  const handleDateUpdate = async (rfpId : number, key: keyof RFP, date : string) => {
+    const prevRfp = rfps.filter(rfp => rfp.RFP_ID === rfpId);
+    try {
+      dispatch(updateRFP({ rfpId, data: { [key]: date } }))
+      await SERVICES.updateRfpDate(rfpId, key, date);
+    } catch (error) {
+      console.log(error);
+      dispatch(updateRFP({ rfpId, data: { [key]: prevRfp[0][key] } }));
+    }
+  }
 
   const openDriveLink = async (id: string) => {
     try {
@@ -81,7 +93,7 @@ const Table = ({ api, currPage, filter, search, setPages, isCollapsed }: Props) 
             <LoadingSpinner />
           </div>
           : <div className='table-wrapper' ref={tableRef}>
-            <table className='w-100' style={{ overflowX: "hidden", borderCollapse: "separate" }}>
+            <table className='w-100' style={{ borderCollapse: "separate" }} ref={tableRef}>
               <thead className='table-header fixed-table-header'>
                 <tr>
                   <th className='table-heading fixed-header-column' style={{ width: "300px" }}>RFP Name</th>
@@ -134,11 +146,31 @@ const Table = ({ api, currPage, filter, search, setPages, isCollapsed }: Props) 
                           options={["No Go", "Review", "Go"]}
                         />
                       </td>
-                      <td className='table-cell'>{rfp.Submission_Date?.format('D MMM, YYYY')}</td>
+                      <td className='table-cell'>
+                        {rfp.Submission_Date
+                          ? (<TFDateChip
+                            value={rfp.Submission_Date}
+                            name={rfp.RFP_ID}
+                            tableRef={tableRef}
+                            onChange={(name:number, value : string) => handleDateUpdate(name, 'Submission_Date', value)}
+                          />)
+                          : ""
+                        }
+                      </td>
                       <td className='table-cell'>{rfp.RFP_Number}</td>
                       <td className='table-cell'>{rfp.Remarks}</td>
                       <td className='table-cell'>{rfp.Rating}</td>
-                      <td className='table-cell'>{rfp.Start_Date?.format('D MMM, YYYY')}</td>
+                      <td className='table-cell'>
+                      {rfp.Start_Date
+                          ? (<TFDateChip
+                            value={rfp.Start_Date}
+                            name={rfp.RFP_ID}
+                            tableRef={tableRef}
+                            onChange={(name:number, value : string) => handleDateUpdate(name, 'Start_Date', value)}
+                          />)
+                          : ""
+                        }
+                      </td>
                       <td className='table-cell'>{rfp.Project_Manager}</td>
                       <td className='table-cell'>{rfp.Department}</td>
                       <td className='table-cell'>{rfp.Project_Category}</td>
@@ -158,7 +190,7 @@ const Table = ({ api, currPage, filter, search, setPages, isCollapsed }: Props) 
           privileges.includes("Delete RFP")
             ? <div
               style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }}
-              // onClick={(e) => handleShowDelete()}
+            // onClick={(e) => handleShowDelete()}
             >
               <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
               <p className='floating-container-icon-text'>Delete</p>
@@ -170,7 +202,7 @@ const Table = ({ api, currPage, filter, search, setPages, isCollapsed }: Props) 
             ? <Button
               style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }}
               disabled={selectedRfps.length !== 1}
-              // onClick={handleUpdate}
+            // onClick={handleUpdate}
             >
               <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
               <p className='floating-container-icon-text'>Edit</p>
