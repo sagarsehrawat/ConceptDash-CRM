@@ -171,52 +171,6 @@ const RFP = (props) => {
             lineHeight: "20px",
             color: "#FE3766"
         },
-        pageContainer: {
-            width: "32px",
-            height: "32px",
-            left: "1009px",
-            top: "792px",
-            border: "1px solid #EBE9F1",
-            borderRadius: "4px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginLeft: "8px",
-            backgroundColor: "white"
-        },
-        curPageContainer: {
-            width: "32px",
-            height: "32px",
-            left: "1009px",
-            top: "792px",
-            border: "1px solid #6519E1",
-            borderRadius: "4px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginLeft: "8px",
-            backgroundColor: "white"
-        },
-        curPage: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "14px",
-            lineHeight: "20px",
-            textAlign: "center",
-            color: PRIMARY_COLOR,
-            margin: "0px"
-        },
-        page: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "14px",
-            lineHeight: "20px",
-            textAlign: "center",
-            color: "#70757A",
-            margin: "0px"
-        },
         searchInputContainer: {
             boxSizing: "border-box",
             display: "flex",
@@ -520,22 +474,6 @@ const RFP = (props) => {
     const handleTableScroll = () => {
         setscrolled(tableRef.current.scrollLeft)
     }
-
-    const handleStatusUpdate = async (rfpId, action) => {
-        dispatch(updateRFP({rfpId, data: {'Action' : action}}))
-        const response = await axios.post(
-          HOST + UPDATE_RFP_STATUS,
-          {
-            rfpId,
-            action,
-          },
-          {
-            headers: { auth: "Rose " + localStorage.getItem("auth") },
-          }
-        );
-    
-        return response;
-      };
 
     const sortModalLeft = (idx) => {
         if (isCollapsed) {

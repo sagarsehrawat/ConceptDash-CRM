@@ -115,7 +115,7 @@ TFChip.propTypes = {
   /**
    * useRef variable for the table which can stop the scrolling of the table
    */
-  tableRef: PropTypes.func,
+  tableRef: PropTypes.any,
   /**
    * Function on what to do when updating with the modal 
    */

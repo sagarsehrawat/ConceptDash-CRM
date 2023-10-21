@@ -65,6 +65,7 @@
   top: 0;
   z-index: 3;
   border-right: 1px solid #EBEDF8;
+  background: #F7F7F9;;
 }
 
 .fixed-column {
@@ -72,4 +73,5 @@
   left: 0;
   z-index: 1;
   border-right: 1px solid #EBEDF8;
+  background-color: #FFFFFF;
 }
