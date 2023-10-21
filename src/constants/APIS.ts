@@ -8,7 +8,8 @@ const APIS = {
     GET_PROJECT_CATEGORIES : '/api/get/list/projectCategories',
     GET_MANAGERS : '/api/get/list/managers',
     GET_RFPS : '/api/get/page/rfps',
-    UPDATE_RFP_STATUS : '/api/update/rfp/status'
+    UPDATE_RFP_STATUS : '/api/update/rfp/status',
+    GET_GOOGLE_DRIVE_URL : '/google-api/get/fileLink'
 };
 
 export default APIS;

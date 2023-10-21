@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetManagerNamesResponse, GetRfpsResponse, RfpStatusResponse } from "Services";
+import { ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetRfpsResponse, RfpStatusResponse, UpdateRfpStatusResponse } from "Services";
 
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -116,7 +116,7 @@ const SERVICES = {
         }
     },
 
-    updateRfpStatus: async (rfpId: number, action: string) => {
+    updateRfpStatus: async (rfpId: number, action: string): Promise<UpdateRfpStatusResponse> => {
         try {
             console.log(APIS.BASE_URL, APIS.GET_RFPS)
             const response = await axios.post(APIS.UPDATE_RFP_STATUS,
@@ -130,7 +130,26 @@ const SERVICES = {
             if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
-            return response.data as GetRfpsResponse;
+            return response.data as UpdateRfpStatusResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getGoogleDriveUrl: async (id : number | string): Promise<GetGoogleDriveUrlResponse> => {
+        try {
+            console.log(APIS.BASE_URL, APIS.GET_RFPS)
+            const response = await axios.get(APIS.UPDATE_RFP_STATUS,
+                {
+                    headers: { 
+                        auth: "Rose " + localStorage.getItem("auth"), 
+                        id
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetGoogleDriveUrlResponse;
         } catch (error) {
             throw error;
         }

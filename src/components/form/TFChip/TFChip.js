@@ -123,7 +123,7 @@ TFChip.propTypes = {
   /**
    * name of the field
    */
-  name: PropTypes.string,
+  name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 TFChip.defaultProps = {

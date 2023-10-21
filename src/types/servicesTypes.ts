@@ -51,4 +51,14 @@ declare module "Services"{
         res : Array<RFP>,
         totalPages : number
     }
+
+    export interface UpdateRfpStatusResponse {
+        success : boolean,
+        res : Object
+    }
+
+    export interface GetGoogleDriveUrlResponse {
+        success : boolean,
+        res : string | null
+    }
 }

@@ -41,3 +41,79 @@
     text-align: left;
     vertical-align: middle;
 }
+
+.open-in-drive{
+    width: 92px;
+    height: 16px;
+    left: 0px;
+    top: 20px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #3692EF;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+.floating-container{
+    box-sizing: border-box;
+    position: absolute;
+    width: 522px;
+    height: 76px;
+    top: 636px;
+    background: #FFFFFF;
+    border: 1px solid #6519E1;
+    box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.0);
+    border-radius: 6px;
+    z-index: 1000;
+}
+
+.floating-container-text{
+    width: 14px;
+    height: 36px;
+    margin-left: 32px;
+    margin-top: 26px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 36px;
+    color: #8361FE;
+    display: inline-block;
+}
+
+.floating-container-text2{
+    width: 128px;
+    height: 24px;
+    left: 58px;
+    top: 32px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #0A0A0A;
+    display: inline-block;
+    margin-left: 12px;
+}
+
+.floating-container-line{
+    width: 46px;
+    height: 0px;
+    border: 1px solid #EBE9F1;
+    transform: rotate(90deg);
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.floating-container-icon-text{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #0A0A0A;
+}

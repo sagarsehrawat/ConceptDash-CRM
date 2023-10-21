@@ -41,7 +41,7 @@ const rfpSlice = createSlice({
     addRFP: (state, action: PayloadAction<RFP>) => {
       state.rfps.push(action.payload);
     },
-    updateRFP: (state, action: PayloadAction<{ rfpId: string | number; data: Partial<RFP> }>) => {
+    updateRFP: (state, action: PayloadAction<{ rfpId: number; data: Partial<RFP> }>) => {
       const { rfpId, data } = action.payload;
       state.rfps = state.rfps.map((rfp) =>
         rfp.RFP_ID === rfpId ? { ...rfp, ...data } : rfp

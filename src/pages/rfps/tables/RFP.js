@@ -343,12 +343,7 @@ const RFP = (props) => {
             marginBottom: "12px"
         },
         floatingContainerIconText: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "14px",
-            lineHeight: "20px",
-            color: "#0A0A0A"
+
         },
         whereText: {
             fontFamily: "'Roboto'",
