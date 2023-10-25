@@ -1,20 +1,29 @@
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { selectNewRFPs, selectPercentage, selectTotalRFPs } from '../../../../redux/slices/rfpSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { initData, selectNewRFPs, selectPercentage, selectTotalRFPs } from '../../../../redux/slices/rfpSlice'
+import SERVICES from '../../../../services/Services'
+import './HeaderCards.css'
 
 type Props = {}
 
 const HeaderCards = (props: Props) => {
-  const newRfps : number = useSelector(selectNewRFPs);
-  const percent : number = useSelector(selectPercentage);
-  const totalRfps : number = useSelector(selectTotalRFPs);
+  const dispatch = useDispatch();
+  const newRfps : number | string = useSelector(selectNewRFPs);
+  const percent : number | string = useSelector(selectPercentage);
+  const totalRfps : number | string = useSelector(selectTotalRFPs);
 
   useEffect(() => {
-    const fetchDate = () => {
-      
+    const fetchData = async () => {
+      try{
+        const response = await SERVICES.rfpStatus();
+        dispatch(initData(response.res[0]));
+      } catch(error) {
+        console.log(error)
+      }
     }
+    fetchData();
   }, [])
   
   return (
@@ -24,7 +33,7 @@ const HeaderCards = (props: Props) => {
           <p className='header-card-heading'>New RFPs</p>
           <div className=''>
             <p className='header-card-subheading'>{newRfps}</p>
-            {percent >= 0
+            {parseFloat(percent.toString()) >= 0
               ? <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
                 <FontAwesomeIcon icon={faArrowUp} color="#34A853" />
                 <p className='percentage percentage-green'>{percent}% increase</p>
@@ -42,7 +51,7 @@ const HeaderCards = (props: Props) => {
         </div>
       </div>
       <div className='header-line'></div>
-      <p className='heading-2'>RFPs</p>
+      <p className='heading-2' style={{marginLeft : "32px"}}>RFPs</p>
     </>
   )
 }

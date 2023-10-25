@@ -41,6 +41,24 @@ const FormUtils = (setForm) => ({
 
             return newForm;
         });
+    },
+
+    dropdownForm: (key, value) => {
+        setForm((prev) => {
+            return {
+                ...prev,
+                [key]: value
+            }
+        });
+    },
+
+    inputFilesForm: (key, value) => {
+        setForm((prev) => {
+            return {
+                ...prev,
+                [key]: value
+            }
+        });
     }
 });
 

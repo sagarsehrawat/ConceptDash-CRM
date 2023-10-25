@@ -82,6 +82,7 @@ const TFChip = ({ value, tableRef, options, onChange, name }) => {
                 {options.map((option) => (
                   <div
                     className="chip-modal-item"
+                    key={option}
                     onClick={(e) => {
                       setisVisible(false);
                       onChange(name, option);
@@ -115,7 +116,7 @@ TFChip.propTypes = {
   /**
    * useRef variable for the table which can stop the scrolling of the table
    */
-  tableRef: PropTypes.func,
+  tableRef: PropTypes.any,
   /**
    * Function on what to do when updating with the modal 
    */
@@ -123,7 +124,7 @@ TFChip.propTypes = {
   /**
    * name of the field
    */
-  name: PropTypes.string,
+  name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 TFChip.defaultProps = {
