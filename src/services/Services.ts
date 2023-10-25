@@ -14,7 +14,7 @@ const SERVICES = {
         }
     },
 
-    rfpStatus: async (): Promise<RfpStatusResponse | ErrorResponse> => {
+    rfpStatus: async (): Promise<RfpStatusResponse> => {
         try {
             const response = await axios.get(APIS.GET_RFP_COUNT, {
                 headers: {
@@ -30,7 +30,7 @@ const SERVICES = {
         }
     },
 
-    getCities: async (): Promise<GetCitiesResponse | ErrorResponse> => {
+    getCities: async (): Promise<GetCitiesResponse> => {
         try {
             const response = await axios.get(APIS.GET_CITIES, {
                 headers: {
@@ -46,7 +46,7 @@ const SERVICES = {
         }
     },
 
-    getDepartments: async (): Promise<GetDepartmetnsResponse | ErrorResponse> => {
+    getDepartments: async (): Promise<GetDepartmetnsResponse > => {
         try {
             const response = await axios.get(APIS.GET_DEPARTMENTS, {
                 headers: {
@@ -78,7 +78,7 @@ const SERVICES = {
     //     }
     // },
 
-    getManagers: async (): Promise<GetManagerNamesResponse | ErrorResponse> => {
+    getManagers: async (): Promise<GetManagerNamesResponse > => {
         try {
             const response = await axios.get(APIS.GET_MANAGERS, {
                 headers: {
@@ -94,7 +94,7 @@ const SERVICES = {
         }
     },
 
-    getRfps: async (limit: number, currentPage: number, filter: Object, search: string, sort: string): Promise<GetRfpsResponse | ErrorResponse> => {
+    getRfps: async (limit: number, currentPage: number, filter: Object, search: string, sort: string): Promise<GetRfpsResponse> => {
         try {
             const response = await axios.get(APIS.GET_RFPS, {
                 headers: {
@@ -115,7 +115,7 @@ const SERVICES = {
         }
     },
 
-    updateRfpStatus: async (rfpId: number, action: string): Promise<UpdateRfpStatusResponse | ErrorResponse> => {
+    updateRfpStatus: async (rfpId: number, action: string): Promise<UpdateRfpStatusResponse> => {
         try {
             const response = await axios.post(APIS.UPDATE_RFP_STATUS,
                 {
@@ -134,7 +134,7 @@ const SERVICES = {
         }
     },
 
-    updateRfpDate: async (rfpId: number, field: string, date: string): Promise<UpdateRfpDateResponse | ErrorResponse> => {
+    updateRfpDate: async (rfpId: number, field: string, date: string): Promise<UpdateRfpDateResponse> => {
         try {
             const response = await axios.post(APIS.UPDATE_RFP_DATE,
                 {
@@ -154,7 +154,7 @@ const SERVICES = {
         }
     },
 
-    getGoogleDriveUrl: async (id: number | string): Promise<GetGoogleDriveUrlResponse | ErrorResponse> => {
+    getGoogleDriveUrl: async (id: number | string): Promise<GetGoogleDriveUrlResponse> => {
         try {
             const response = await axios.get(APIS.UPDATE_RFP_STATUS,
                 {
