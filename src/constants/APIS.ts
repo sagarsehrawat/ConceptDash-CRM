@@ -9,6 +9,7 @@ const APIS = {
     GET_MANAGERS : '/api/get/list/managers',
     GET_RFPS : '/api/get/page/rfps',
     UPDATE_RFP_STATUS : '/api/update/rfp/status',
+    UPDATE_RFP_DATE : '/api/update/rfp/date',
     GET_GOOGLE_DRIVE_URL : '/google-api/get/fileLink'
 };
 
