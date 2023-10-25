@@ -45,7 +45,7 @@ import adminSettings from "../../Images/adminSettings.svg";
 import logout from "../../Images/logout.svg";
 import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
-import RFP from "../../pages/rfps/index";
+import RFP from "../../pages/rfps/Index";
 import TestDemo from "../../pages/calendar/index";
 import Proposal from "../../pages/proposals/index";
 import Employee from "../../pages/employee/index";
@@ -74,7 +74,6 @@ import Profile from "../../pages/profile/index";
 import Announcements from "../../pages/announcements/index";
 import AddBudgetCity from "../Form/AddBudgetCity";
 import TTMMain from "../../pages/proposals/ttm/TTMMain";
-
 
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();

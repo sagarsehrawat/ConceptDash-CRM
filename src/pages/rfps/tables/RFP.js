@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { DELETE_RFP, GET_CITIES, GET_DEPARTMENTS, GET_EMPLOYEENAMES, GET_GOOGLE_DRIVE_URL, GET_PAGE_RFPS, GET_PROJECT_CATEGORIES, GET_RFP_COUNT, HOST, PRIMARY_COLOR, UPDATE_RFP_STATUS } from '../../../Main/Constants/Constants';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowsUpDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faCross, faDownload, faEdit, faFilter, faMagnifyingGlass, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faEdit, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Button, Form, Modal } from 'react-bootstrap';
 import GreenAlert from '../../../Main/Loader/GreenAlert';
 import RedAlert from '../../../Main/Loader/RedAlert';
@@ -11,7 +11,6 @@ import LoadingSpinner from '../../../Main/Loader/Loader';
 import RFPform from '../forms/RFPform';
 import AuthenticationContext from '../../../Context/AuthContext';
 import UpdateRFP from '../forms/UpdateRFP';
-import { RadioButtonComponent } from '@syncfusion/ej2-react-buttons';
 import filterIcon from '../../../Images/Filter.svg'
 import cross from '../../../Images/cross.svg'
 import tIcon from '../../../Images/taskIcon.svg'
@@ -20,16 +19,23 @@ import TFSearchBar from '../../../components/ui/TFSearchBar/TFSearchBar';
 import TFButton from '../../../components/ui/TFButton/TFButton';
 import TFChip from '../../../components/form/TFChip/TFChip';
 import plusIcon from '../../../Images/addPlus.svg'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+    initRFPs,
+    selectRFPs,
+    updateRFP
+} from '../../../redux/slices/rfpSlice.ts'
+import Header from '../sections/Header/Header.tsx';
 
 const RFP = (props) => {
     const { isCollapsed } = props
     const { privileges, setPrivileges } = useContext(AuthenticationContext)
-    
+    const dispatch = useDispatch()
     const [apiCall, setCall] = useState(0);
     const [green, setgreen] = useState(false);
     const [red, setred] = useState(false);
 
-    const [rfps, setrfps] = useState([]);
+    const rfps = useSelector(selectRFPs)
     const [selectedRfps, setselectedRfps] = useState([]);
     const [rfpCount, setrfpCount] = useState({ Total: 0, Month: 0, Percent: 0 });
     const [cities, setcities] = useState([]);
@@ -110,111 +116,6 @@ const RFP = (props) => {
             display: 'flex',
             flexDirection: 'row',
             cursor: 'pointer'
-        },
-        headerContainer: {
-            marginTop: "30px",
-            marginLeft: "32px",
-            marginRight: "24px"
-        },
-        heading: {
-            width: "244px",
-            height: "28px",
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 500,
-            fontSize: "18px",
-            lineHeight: "28px",
-            color: "#0A0A0A",
-            display: "inline-block",
-            marginBottom: "18px"
-        },
-        addButton: {
-            boxSizing: "border-box",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "8px 16px",
-            gap: "8px",
-            width: "157px",
-            height: "40px",
-            background: PRIMARY_COLOR,
-            border: "1px solid #6519E1",
-            boxShadow: "0px 4px 8px rgba(88, 82, 246, 0.25)",
-            borderRadius: "5px",
-        },
-        addButtonText: {
-            width: "125px",
-            height: "24px",
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "16px",
-            lineHeight: "24px",
-            color: "#FBFBFB",
-            flex: "none",
-            margin: 0,
-            flexGrow: 0
-        },
-        topContainer: {
-            width: "208px",
-            height: "68px",
-            left: "32px",
-            top: "76px",
-            background: "#FFFFFF",
-            border: "1px solid #EBE9F1",
-            borderRadius: "12px",
-            marginRight: "20px"
-        },
-        topContainerHeading: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "14px",
-            lineHeight: "20px",
-            color: "#0A0A0A",
-            marginLeft: "12px",
-            marginTop: "8px",
-            marginBottom: "4px"
-        },
-        topContainerSubheading: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 500,
-            fontSize: "18px",
-            lineHeight: "28px",
-            color: "#0A0A0A",
-            marginLeft: "12px",
-            display: "inline-block"
-        },
-        percent: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "12px",
-            lineHeight: "16px",
-            color: "#34A853",
-            display: "inline-block",
-            marginLeft: "8px"
-        },
-        headerLine: {
-            height: "0px",
-            left: "32px",
-            top: "164px",
-            border: "1px solid #EBE9F1",
-            marginLeft: "32px",
-            marginRight: "32px",
-            marginBottom: "20px"
-        },
-        heading2: {
-            fontFamily: "'Roboto'",
-            fontStyle: "normal",
-            fontWeight: 500,
-            fontSize: "18px",
-            lineHeight: "28px",
-            color: "#0A0A0A",
-            marginLeft: "32px",
-            marginBottom: "8px",
         },
         table: {
             width: "100%",
@@ -605,6 +506,7 @@ const RFP = (props) => {
                     },
                 })
                 .then((res) => {
+                    console.log(res.data.res)
                     let obj = rfpCount
                     obj.Total = res.data.res[0].Total
                     obj.Month = res.data.res[0].Month
@@ -683,7 +585,7 @@ const RFP = (props) => {
                     },
                 })
                 .then((res) => {
-                    setrfps(res.data.res);
+                    dispatch(initRFPs(res.data.res))
                     setpages(res.data.totalPages)
                     setIsLoading(false);
                 })
@@ -709,7 +611,7 @@ const RFP = (props) => {
                 },
             })
             .then((res) => {
-                setrfps(res.data.res);
+                dispatch(initRFPs(res.data.res))
                 setpages(res.data.totalPages)
                 setIsLoading(false);
             })
@@ -792,6 +694,7 @@ const RFP = (props) => {
     }
 
     const handleStatusUpdate = async (rfpId, action) => {
+        dispatch(updateRFP({rfpId, data: {'Action' : action}}))
         const response = await axios.post(
           HOST + UPDATE_RFP_STATUS,
           {
@@ -803,7 +706,6 @@ const RFP = (props) => {
           }
         );
     
-        console.log(response);
         return response;
       };
 
@@ -843,37 +745,10 @@ const RFP = (props) => {
         <>
             {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
             {red === true ? <RedAlert setRed={setred} /> : <></>}
-            <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
-                <p style={styles.heading}>RFPs (Request For Proposals)</p>
-                {/* <button style={styles.addButton} disabled={!privileges.includes("Add RFP")} onClick={handleShow}><p style={styles.addButtonText} >+ Add New RFP</p></button> */}
-                <TFButton icon={plusIcon} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={handleShow} />
-            </div>
+            <Header apiCall={apiCall} setCall={setCall} />
 
             {/* Header Cards */}
-            <div className='d-flex flex-row' style={{ marginLeft: "32px", marginBottom: "20px" }}>
-                <div style={styles.topContainer}>
-                    <p style={styles.topContainerHeading}>New RFPs</p>
-                    <div className=''>
-                        <p style={styles.topContainerSubheading}>{rfpCount.Month}</p>
-                        {rfpCount.Percent >= 0
-                            ? <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
-                                <FontAwesomeIcon icon={faArrowUp} color="#34A853" />
-                                <p style={styles.percent}>{rfpCount.Percent}% increase</p>
-                            </div>
-                            : <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
-                                <FontAwesomeIcon icon={faArrowDown} color="#FE3766" />
-                                <p style={{ ...styles.percent, color: "#FE3766" }}>{rfpCount.Percent}% decrease</p>
-                            </div>
-                        }
-                    </div>
-                </div>
-                <div style={styles.topContainer}>
-                    <p style={styles.topContainerHeading}>Total RFPs</p>
-                    <p style={styles.topContainerSubheading}>{rfpCount.Total}</p>
-                </div>
-            </div>
-            <div style={styles.headerLine}></div>
-            <p style={styles.heading2}>RFPs</p>
+
 
             {/* Filter and Other Buttons */}
             <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
@@ -1254,10 +1129,10 @@ const RFP = (props) => {
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Project_Category}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "200px" }}>{e.Manager_Name}</td>
                                 <td style={{ ...styles.tableCell, minWidth: "120px" }}>                      <TFChip
-                        label={e.Action}
-                        id={e.RFP_ID}
+                        value={e.Action}
                         tableRef={tableRef}
-                        onUpdate={handleStatusUpdate}
+                        name={e.RFP_ID}
+                        onChange={handleStatusUpdate}
                         options={["No Go", "Review", "Go"]}
                       /></td>
                                 <td style={{ ...styles.tableCell, minWidth: "180px" }}>{e.RFP_Number}</td>

@@ -16,7 +16,7 @@ import LinkExpired from '../Main/Login/LinkExpired';
 import TokenRegenerated from '../Main/Login/TokenRegenerated';
 import Error404 from '../Main/Login/Error404';
 import GaurdedRoutes from './GaurdedRoutes';
-import DownPage from '../pages/server-down-page/DownPage';
+import DownPage from '../pages/server-down-page/DownPage.tsx';
 
 const AllRoutes = () => {
     return (
