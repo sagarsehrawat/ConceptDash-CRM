@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetRfpsResponse, RfpStatusResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse } from "Services";
+import { AddRfpResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpStatusResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse } from "Services";
 
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -14,7 +14,7 @@ const SERVICES = {
         }
     },
 
-    rfpStatus: async (): Promise<RfpStatusResponse | ErrorResponse> => {
+    rfpStatus: async (): Promise<RfpStatusResponse> => {
         try {
             const response = await axios.get(APIS.GET_RFP_COUNT, {
                 headers: {
@@ -30,7 +30,7 @@ const SERVICES = {
         }
     },
 
-    getCities: async (): Promise<GetCitiesResponse | ErrorResponse> => {
+    getCities: async (): Promise<GetCitiesResponse> => {
         try {
             const response = await axios.get(APIS.GET_CITIES, {
                 headers: {
@@ -46,7 +46,7 @@ const SERVICES = {
         }
     },
 
-    getDepartments: async (): Promise<GetDepartmetnsResponse | ErrorResponse> => {
+    getDepartments: async (): Promise<GetDepartmetnsResponse> => {
         try {
             const response = await axios.get(APIS.GET_DEPARTMENTS, {
                 headers: {
@@ -62,23 +62,24 @@ const SERVICES = {
         }
     },
 
-    // getProjectCategories: async () : Promise<GetDepartmetnsResponse> => {
-    //     try {
-    //         const response = await axios.get(APIS.GET_PROJECT_CATEGORIES, {
-    //             headers: {
-    //                 auth: "Rose " + localStorage.getItem("auth"),
-    //             },
-    //         });
-    //         if(response.data.success === false){
-    //             throw response.data as ErrorResponse
-    //         }
-    //         return response.data as GetDepartmetnsResponse;
-    //     } catch (error) {
-    //         throw error;
-    //     }
-    // },
+    getProjectCategories: async (departmentId: string | number) : Promise<GetProjectCategoriesResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_PROJECT_CATEGORIES, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    id: departmentId
+                },
+            });
+            if(response.data.success === false){
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetProjectCategoriesResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
 
-    getManagers: async (): Promise<GetManagerNamesResponse | ErrorResponse> => {
+    getManagers: async (): Promise<GetManagerNamesResponse> => {
         try {
             const response = await axios.get(APIS.GET_MANAGERS, {
                 headers: {
@@ -94,7 +95,7 @@ const SERVICES = {
         }
     },
 
-    getRfps: async (limit: number, currentPage: number, filter: Object, search: string, sort: string): Promise<GetRfpsResponse | ErrorResponse> => {
+    getRfps: async (limit: number, currentPage: number, filter: Object, search: string, sort: string): Promise<GetRfpsResponse> => {
         try {
             const response = await axios.get(APIS.GET_RFPS, {
                 headers: {
@@ -115,7 +116,7 @@ const SERVICES = {
         }
     },
 
-    updateRfpStatus: async (rfpId: number, action: string): Promise<UpdateRfpStatusResponse | ErrorResponse> => {
+    updateRfpStatus: async (rfpId: number, action: string): Promise<UpdateRfpStatusResponse> => {
         try {
             const response = await axios.post(APIS.UPDATE_RFP_STATUS,
                 {
@@ -134,7 +135,7 @@ const SERVICES = {
         }
     },
 
-    updateRfpDate: async (rfpId: number, field: string, date: string): Promise<UpdateRfpDateResponse | ErrorResponse> => {
+    updateRfpDate: async (rfpId: number, field: string, date: string): Promise<UpdateRfpDateResponse> => {
         try {
             const response = await axios.post(APIS.UPDATE_RFP_DATE,
                 {
@@ -154,7 +155,7 @@ const SERVICES = {
         }
     },
 
-    getGoogleDriveUrl: async (id: number | string): Promise<GetGoogleDriveUrlResponse | ErrorResponse> => {
+    getGoogleDriveUrl: async (id: number | string): Promise<GetGoogleDriveUrlResponse> => {
         try {
             const response = await axios.get(APIS.UPDATE_RFP_STATUS,
                 {
@@ -170,7 +171,28 @@ const SERVICES = {
         } catch (error) {
             throw error;
         }
-    }
+    },
+
+    addRfp: async (form: FormData): Promise<AddRfpResponse> => {
+        try {
+            const response = await axios.post(APIS.ADD_RFP, form,
+                {
+                    maxContentLength: 500 * 1024 * 1024, // 100MB
+                    maxBodyLength: 500 * 1024 * 1024, // 100MB
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        auth: 'Rose ' + localStorage.getItem('auth'),
+                    },
+                    timeout: 1800000,
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as AddRfpResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 export default SERVICES;

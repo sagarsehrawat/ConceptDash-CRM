@@ -33,8 +33,8 @@ declare module "Services"{
     export interface GetProjectCategoriesResponse {
         success : boolean,
         res : Array<{
-            Department_ID : number | string,
-            Department : string,
+            Project_Cat_ID : number,
+            Project_Category : string,
         }>
     }
 
@@ -65,5 +65,9 @@ declare module "Services"{
     export interface GetGoogleDriveUrlResponse {
         success : boolean,
         res : string | null
+    }
+
+    export interface AddRfpResponse {
+        success : boolean
     }
 }
