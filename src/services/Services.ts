@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetRfpsResponse, RfpStatusResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse } from "Services";
+import { ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpStatusResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse } from "Services";
 
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -62,21 +62,22 @@ const SERVICES = {
         }
     },
 
-    // getProjectCategories: async () : Promise<GetDepartmetnsResponse> => {
-    //     try {
-    //         const response = await axios.get(APIS.GET_PROJECT_CATEGORIES, {
-    //             headers: {
-    //                 auth: "Rose " + localStorage.getItem("auth"),
-    //             },
-    //         });
-    //         if(response.data.success === false){
-    //             throw response.data as ErrorResponse
-    //         }
-    //         return response.data as GetDepartmetnsResponse;
-    //     } catch (error) {
-    //         throw error;
-    //     }
-    // },
+    getProjectCategories: async (departmentId : number) : Promise<GetProjectCategoriesResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_PROJECT_CATEGORIES, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    id: departmentId
+                },
+            });
+            if(response.data.success === false){
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetProjectCategoriesResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
 
     getManagers: async (): Promise<GetManagerNamesResponse > => {
         try {

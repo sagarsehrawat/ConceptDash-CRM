@@ -5,13 +5,12 @@ import './TFInput.css'
 const TFInput = ({
   name,
   placeholder,
-  defaultValue,
+  value,
   onChange,
   required,
   readOnly,
   width,
 }) => {
-  const [value, setValue] = useState(defaultValue);
   return (
     <>
       <div className="tfinput-wrapper" style={{ width }}>
@@ -19,10 +18,7 @@ const TFInput = ({
           name={name}
           placeholder={placeholder}
           value={value}
-          onChange={(e) => {
-            setValue(e.target.value);
-            onChange(e.target.name, e.target.value);
-          }}
+          onChange={onChange}
           className="tfinput"
           autoComplete="off"
           required={required}
@@ -39,9 +35,9 @@ TFInput.propTypes = {
    */
   placeholder: PropTypes.string,
   /**
-   * Default Value of the Typeahead input field
+   * Value of the Typeahead input field
    */
-  defaultValue: PropTypes.string,
+  value: PropTypes.string,
   /**
    * onChange callback function
    */

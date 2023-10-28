@@ -1,11 +1,11 @@
-.down-page-background{
+.down-page-background {
     width: 100vw;
     height: 100vh;
     background: #8361FE;
     position: relative;
 }
 
-.top-left-bg{
+.top-left-bg {
     position: absolute;
     background-image: url('../../assets/images/DownPage/top-left-bg.svg');
     height: 100%;
@@ -15,21 +15,52 @@
     background-repeat: no-repeat;
 }
 
-.bottom-right-bg{
+.bottom-right-bg {
     position: absolute;
     background-image: url('../../assets/images/DownPage/bottom-right-bg.svg');
     width: 100%;
     left: 70%;
-    top: 10%;
+    top: 1%;
     bottom: 0;
     right: 0;
     background-repeat: no-repeat;
 }
 
-.center-bg{
+.center-bg {
     background-image: url('../../assets/images/DownPage/center-bg.svg');
+    display: relative;
     background-repeat: no-repeat;
     background-size: cover;
     width: 940px;
     height: 522px;
+}
+
+.server-down-text-1 {
+    color: #F4F5F7;
+    font-family: Poppins;
+    font-size: 120px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120px;
+    margin-top: 56px;
+}
+
+.server-down-text-2 {
+    color: #334155;
+    font-family: Inter;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px;
+    margin-bottom: 8px;
+}
+
+.server-down-text-3{
+    color: #8A94A2;
+text-align: center;
+font-family: Inter;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 24px; /* 150% */
 }

@@ -1,8 +1,9 @@
 import React from "react";
 import TFChip from "../../../../components/form/TFChip/TFChip";
 import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead";
+import TFDateChip from "../../../../components/form/TFDateChip/TFDateChip";
 
-const Products = ({ form, handleForm }) => {
+const Products = ({ form, handleForm, cities }) => {
   return (
     <>
       <div className="d-flex flex-column gap-8 w-100">
@@ -25,7 +26,7 @@ const Products = ({ form, handleForm }) => {
             width='100%'
             defaultValue={form.city}
             onChange={handleForm}
-            options={[{ value: 1, label: 'Products' }, { value: 2, label: 'Transportation' }, { value: 1, label: 'Estimation' }]}
+            options={cities}
           />
         </div>
 
@@ -33,12 +34,10 @@ const Products = ({ form, handleForm }) => {
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Status</p>
           <TFChip
-            label={form.status}
+            name='status'
+            value={form.status}
             options={["Not Started", "In Progress", "Completed"]}
-            onUpdate={async (id, option) => {
-              handleForm("status", option);
-              return { success: true };
-            }}
+            onChange={handleForm}
           />
         </div>
 
@@ -66,24 +65,20 @@ const Products = ({ form, handleForm }) => {
         {/* Due Date */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Due Date</p>
-          <input
-            type="date"
-            name="dueDate"
-            className="project-input"
+          <TFDateChip
             value={form.dueDate}
-            onChange={(e) => handleForm(e.target.name, e.target.value)}
+            name='dueDate'
+            onChange={handleForm}
           />
         </div>
 
         {/* Follow Up Date */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Follow-up Date</p>
-          <input
-            type="date"
-            name="followUpDate"
-            className="project-input"
+          <TFDateChip
             value={form.followUpDate}
-            onChange={(e) => handleForm(e.target.name, e.target.value)}
+            name='followUpDate'
+            onChange={handleForm}
           />
         </div>
 
@@ -118,12 +113,10 @@ const Products = ({ form, handleForm }) => {
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Priority</p>
           <TFChip
-            label={form.priority}
+          name='priority'
+            value={form.priority}
             options={["Low", "Medium", "High", "Critical"]}
-            onUpdate={async (id, option) => {
-              handleForm("priority", option);
-              return { success: true };
-            }}
+            onChange={handleForm}
           />
         </div>
 

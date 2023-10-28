@@ -24,8 +24,14 @@ const DownPage = (props: Props) => {
   return (
     <div className='down-page-background d-flex justify-content-center align-items-center'>
       <div className='top-left-bg' />
+      <div className='center-bg'>
+        <div className='d-flex flex-column justify-content-cetner align-items-center w-100 h-100'>
+          <p className='server-down-text-1'>500</p>
+          <p className='server-down-text-2'>Sorry, Something went technically wrong</p>
+          <p className='server-down-text-3'>Internal Server Error. Try again later.</p>
+        </div>
+      </div>
       <div className='bottom-right-bg' />
-      <div className='center-bg' />
     </div>
   )
 }

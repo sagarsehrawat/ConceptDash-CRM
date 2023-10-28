@@ -6,141 +6,44 @@
                 "task": "Project Initiation Meeting"
             },
             {
-                "task": "Public & Stakeholder Consultation"
+                "task": "Background data collection and Field Review"
             },
             {
-                "task": "Contract Signing"
+                "task": "Public and Stakeholder COnsultation"
+            },
+            {
+                "task": "Review Meeting with City/Municipality/Town/County"
             }
         ]
     },
     {
-        "task": "Pre Design",
+        "task": "Preliminary Design",
         "subtasks": [
             {
-                "task": "Background Research about Site & Location"
+                "task": "Trip generation spreadsheet using ITE Trip generation Manual"
             },
             {
-                "task": "Survey of Existing Conditions"
+                "task": "Spreadsheet Future Traffic development using growth rate"
             },
             {
-                "task": "Determine Zoning & Landuse, bylaw requirement"
-            },
-            {
-                "task": "Confirm Project Feasibility/ Alternatives"
+                "task": "Review Meeting with City/Municipality/Town/County"
             }
         ]
     },
     {
-        "task": "Schematic Design",
+        "task": "Detailed Design (60%)",
         "subtasks": [
             {
-                "task": "Sketches & Models to Test Ideas, Concept & Relationship"
+                "task": "Preparation of Draft TIS Report"
             },
             {
-                "task": "Client Feedback & Refinement"
+                "task": "Review and Approval from the City/Town"
             },
             {
                 "task": "Preliminary Floor Plans & Exterior Concept Ready for further Development"
             },
             {
                 "task": "Confirm Project Feasibility/ Alternatives"
-            }
-        ]
-    },
-    {
-        "task": "Design Development",
-        "subtasks": [
-            {
-                "task": "Significant Advancement & further refinement of Design"
-            },
-            {
-                "task": "Structural Engineer & Other Consultant added to Team"
-            },
-            {
-                "task": "Preliminary Cost Estimating and Value Engineering"
-            },
-            {
-                "task": "Outline Specification"
-            }
-        ]
-    },
-    {
-        "task": "Detail Development",
-        "subtasks": [
-            {
-                "task": "Detailed Design (90%)"
-            },
-            {
-                "task": "Detailed Design (90%) - SUbmission and Review"
-            }
-        ]
-    },
-    {
-        "task": "Constructon Documents",
-        "subtasks": [
-            {
-                "task": "Client Decisions on Material and Finishes"
-            },
-            {
-                "task": "Specify all fixtures & Components to be installed"
-            },
-            {
-                "task": "Dimensional Drawings and connection details"
-            }
-        ]
-    },
-    {
-        "task": "Building Permit",
-        "subtasks": [
-            {
-                "task": "Building, Land Use Compliance checklist and forms"
-            },
-            {
-                "task": "Monitor Application progress & provide additional information as requested"
-            }
-        ]
-    },
-    {
-        "task": "Final Design",
-        "subtasks": [
-            {
-                "task": "Final Design - SUbmission and Review"
-            },
-            {
-                "task": "Preparation and SUbmission of Final Engineering Drawings"
-            }
-        ]
-    },
-    {
-        "task": "Bidding & Negotiation",
-        "subtasks": [
-            {
-                "task": "Issue Drawings and specs to bidding contractors"
-            },
-            {
-                "task": "Review and COmpare bids and advice client"
-            }
-        ]
-    },
-    {
-        "task": "Construction Administration",
-        "subtasks": [
-            {
-                "task": "Regular on site meeting with client and builder and consultants"
-            },
-            {
-                "task": "Review pay application from GC and Sub-Contractors shop drawings"
-            },
-            {
-                "task": "Final Punch List"
-            }
-        ]
-    },
-    {
-        "task": "As Built Drawings",
-        "subtasks": [
-            {
-                "task": "As Built Drawings"
             }
         ]
     }

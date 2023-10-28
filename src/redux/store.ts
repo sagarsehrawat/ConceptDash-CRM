@@ -4,12 +4,14 @@ import logger from 'redux-logger'
 import _ from 'lodash'
 import rfpSlice from './slices/rfpSlice.ts'
 import privilegeSlice from './slices/privilegeSlice.ts'
+import projectSlice from './slices/projectSlice.ts'
 
 const debounceNotify = _.debounce((notify) => notify())
 
 const reducer = {
     rfps: rfpSlice,
-    privileges: privilegeSlice
+    privileges: privilegeSlice,
+    projects: projectSlice
 }
 
 export default configureStore({

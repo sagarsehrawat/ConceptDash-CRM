@@ -59,7 +59,7 @@ import {
     selectCompletedProjects,
     selectPercentage,
     selectTotalProjects
-} from '../../../redux/projectsSlice'
+} from '../../../redux/slices/projectSlice.ts'
 
 const ProjectsTable = (props) => {
         const { isCollapsed } = props;
@@ -804,6 +804,7 @@ const ProjectsTable = (props) => {
               })
               .then((res) => {
                 dispatch(initProjects(res.data.res));
+                console.log(res.data)
                 setpages(res.data.totalPages);
                 setIsLoading(false);
               })

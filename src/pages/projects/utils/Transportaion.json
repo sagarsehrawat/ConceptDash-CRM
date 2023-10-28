@@ -1,3 +1,101 @@
 [
-    
+    {
+        "task": "Project Initiation",
+        "subtasks": [
+            {
+                "task": "Prepare TOR & Get Approval"
+            },
+            {
+                "task": "Review Town's Transportation Division for historical traffic data in terms of 'Annual Daily Traffic' (AADT) and 'Turning Movement Count' (TMC) at the study area intersections"
+            },
+            {
+                "task": "Project Initiation Meeting"
+            },
+            {
+                "task": "Background data collection and Field Review"
+            },
+            {
+                "task": "Review meeting with City/Municipality/Town/County"
+            }
+        ]
+    },
+    {
+        "task": "30% Completion",
+        "subtasks": [
+            {
+                "task": "Preliminary Design (30%)"
+            },
+            {
+                "task": "Preliminary Design - Submission and Review"
+            },
+            {
+                "task": "Traffic Control Plan and Construction Staging"
+            }
+        ]
+    },
+    {
+        "task": "Detailed Design (90%)",
+        "subtasks": [
+            {
+                "task": "Detailed Design (90%)"
+            },
+            {
+                "task": "Detailed Design (90%) - Submission and Review"
+            },
+            {
+                "task": "Traffic Control Plan and Construction Staging"
+            },
+            {
+                "task": "Agency and Regulatory Approvals"
+            },
+            {
+                "task": "Review meeting with City/Municipality/Town/County"
+            },
+            {
+                "task": "Coordination with affected Landowners and Stakeholders"
+            },
+            {
+                "task": "Finalization of Traffic Management Plan"
+            }
+        ]
+    },
+    {
+        "task": "Final Design",
+        "subtasks": [
+            {
+                "task": "Final Design - Submission and Review"
+            },
+            {
+                "task": "Preparations and Submission of Final Engineering Drawigns"
+            }
+        ]
+    },
+    {
+        "task": "Tender",
+        "subtasks": [
+            {
+                "task": "Preparation and Submission of detailed Cost estimate and Tender Documents"
+            },
+            {
+                "task": "Review of Tender Submissions and Provide recommendation letter for the award of the tender/construction contract"
+            }
+        ]
+    },
+    {
+        "task" : "Contract Administration and Inspection Services",
+        "subtasks": [
+            {
+                "task": "Pre-Construction Meeting"
+            },
+            {
+                "task": "Contract Administration"
+            },
+            {
+                "task": "Construction Inspection"
+            },
+            {
+                "task": "As-Built Drawings"
+            }
+        ]
+    }
 ]

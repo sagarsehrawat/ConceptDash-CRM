@@ -5,13 +5,15 @@ import TFIcon from '../../../components/ui/TFIcon/TFIcon'
 import ICONS from '../../../constants/Icons'
 import TFChip from '../../../components/form/TFChip/TFChip'
 import TaskListUtils from '../utils/TaskListUtils'
+import TFDateChip from '../../../components/form/TFDateChip/TFDateChip'
+import TFTypeahead from '../../../components/form/TFTypeahead/TFTypeahead'
 
 const Tasklist = ({ taskList, setTaskList, openTasks, setOpenTasks }) => {
-    const taskListUtils = TaskListUtils(setTaskList);
+    const taskListUtils = new TaskListUtils(setTaskList);
     useEffect(() => {
-      console.log(taskList)
+        console.log(taskList)
     }, [taskList])
-    
+
 
     const handleClickMilestone = (taskId) => {
         setOpenTasks(prev => {
@@ -52,7 +54,11 @@ const Tasklist = ({ taskList, setTaskList, openTasks, setOpenTasks }) => {
                                                 {task.task}
                                             </div>
                                         </td>
-                                        <td className='tasklist-cell'>{moment(task.endDate).format('DD-MM-YYYY')}</td>
+                                        <td className='tasklist-cell'>
+                                            <TFDateChip
+                                                value={moment(task.endDate)}
+                                            />
+                                        </td>
                                         <td className='tasklist-cell'><TFChip value={task.status} /></td>
                                         <td className='tasklist-cell'></td>
                                         <td className='tasklist-cell'><TFChip name='priority' value={task.priority} options={['Low', 'Medium', 'High', 'Critical']} onChange={(name, value) => taskListUtils.handleTaskListChange(task.taskId, null, name, value)} /></td>
@@ -63,10 +69,40 @@ const Tasklist = ({ taskList, setTaskList, openTasks, setOpenTasks }) => {
                                             ? task.subtasks.map(subtask => (
                                                 <tr>
                                                     <td className='tasklist-cell fixed-column' style={{ borderLeft: '1px solid #EBEDF8', borderRight: '1px solid #EBEDF8', paddingLeft: '36px' }}>{subtask.task}</td>
-                                                    <td className='tasklist-cell'>{moment(subtask.endDate).format('DD-MM-YYYY')}</td>
-                                                    <td className='tasklist-cell'><TFChip name='status' value={subtask.status} options={['Not Started', 'In Progress', 'Completed']} onChange={(name, value) => taskListUtils.handleTaskListChange(subtask.parentId, subtask.taskId, name, value)} /></td>
-                                                    <td className='tasklist-cell'>{subtask.assignedTo}</td>
-                                                    <td className='tasklist-cell'><TFChip name='priority' value={subtask.priority} options={['Low', 'Medium', 'High', 'Critical']} onChange={(name, value) => taskListUtils.handleTaskListChange(subtask.parentId, subtask.taskId, name, value)} /></td>
+                                                    <td className='tasklist-cell'>
+                                                        <TFDateChip
+                                                            value={moment(subtask.endDate)}
+                                                            name='endDate'
+                                                            onChange={(name, value) => taskListUtils.handleTaskListChange(subtask.parentId, subtask.taskId, name, value)}
+                                                        />
+                                                    </td>
+                                                    <td className='tasklist-cell'>
+                                                        <TFChip
+                                                            name='status'
+                                                            value={subtask.status}
+                                                            options={['Not Started', 'In Progress', 'Completed']}
+                                                            onChange={(name, value) => taskListUtils.handleTaskListChange(subtask.parentId, subtask.taskId, name, value)}
+                                                        />
+                                                    </td>
+                                                    <td className='tasklist-cell'>
+                                                        <TFTypeahead
+                                                            value
+                                                            name='assignedTo'
+                                                            placeholder='Assigned To'
+                                                            width='100%'
+                                                            defaultValue={subtask.assignedTo}
+                                                            onChange={(name, value) =>taskListUtils.handleTaskListChange(subtask.parentId, subtask.taskId, name, value)}
+                                                            options={[]}
+                                                        />
+                                                    </td>
+                                                    <td className='tasklist-cell'>
+                                                        <TFChip
+                                                            name='priority'
+                                                            value={subtask.priority}
+                                                            options={['Low', 'Medium', 'High', 'Critical']}
+                                                            onChange={(name, value) => taskListUtils.handleTaskListChange(subtask.parentId, subtask.taskId, name, value)}
+                                                        />
+                                                    </td>
                                                     <td className='tasklist-cell'>{subtask.progress}</td>
                                                 </tr>
                                             ))

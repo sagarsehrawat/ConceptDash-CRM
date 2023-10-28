@@ -33,11 +33,10 @@ declare module "Services"{
     export interface GetProjectCategoriesResponse {
         success : boolean,
         res : Array<{
-            Department_ID : number | string,
-            Department : string,
+            Project_Cat_ID : number | string,
+            Project_Category : string,
         }>
     }
-
     export interface GetManagerNamesResponse {
         success : boolean,
         res : Array<{

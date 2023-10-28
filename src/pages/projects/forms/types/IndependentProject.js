@@ -5,18 +5,18 @@ import Transportation from "../department-projects/Transportation";
 import Estimation from "../department-projects/Estimation";
 import TFTypeahead from '../../../../components/form/TFTypeahead/TFTypeahead'
 
-const IndependentProject = ({ form, handleForm }) => {
+const IndependentProject = ({ form, handleForm, departments, cities,projectCategories }) => {
   // Handle Changing of Departments in Form
   const handleDepartmentProject = (department) => {
     switch (department) {
       case 'Products':
-        return <Products form={form} handleForm={handleForm} />
-      case 'Transportation':
-        return <Transportation form={form} handleForm={handleForm} />
+        return <Products form={form} handleForm={handleForm} cities={cities} />
+      case 'Traffic and transportation Engineering':
+        return <Transportation form={form} handleForm={handleForm} cities={cities} />
       case 'Estimation':
-        return <Estimation form={form} handleForm={handleForm} />
+        return <Estimation form={form} handleForm={handleForm} cities={cities} />
       default:
-        return <Default form={form} handleForm={handleForm} />
+        return <Default form={form} handleForm={handleForm} cities={cities} />
     }
   }
 
@@ -34,13 +34,13 @@ const IndependentProject = ({ form, handleForm }) => {
             width='100%'
             defaultValue={form.department}
             onChange={handleForm}
-            options={[{ value: 1, label: 'Architecture' }, { value: 2, label: 'Transportation' }, { value: 1, label: 'Estimation' }]}
+            options={departments}
           />
         </div>
 
         {/* Project Category */}
         {
-          form.departmentId
+          projectCategories.length !==0
             ? <div className="d-flex flex-start gap-8">
               <p className="project-label">Project Category</p>
               <TFTypeahead
@@ -49,7 +49,7 @@ const IndependentProject = ({ form, handleForm }) => {
                 width='100%'
                 defaultValue={form.projectCategory}
                 onChange={handleForm}
-                options={[{ value: 1, label: 'Products' }, { value: 2, label: 'Transportation' }, { value: 1, label: 'Estimation' }]}
+                options={projectCategories}
               />
             </div>
             : <></>

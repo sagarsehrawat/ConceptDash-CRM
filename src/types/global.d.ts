@@ -26,4 +26,44 @@ declare global{
         Start_Date : string | null,
         Submission_Date : string | null
     }
+
+    interface Project {
+        Project_Id : number,
+        City : string | null,
+        City_ID : number | null,
+        Client_ID : number | null,
+        Country : string | null,
+        Date_Created : string,
+        Department_ID : number | null,
+        Department: string | null,
+        Employee_ID : number | null,
+        Folder_ID : string | null,
+        Follow_Up_Notes : string | null,
+        Geaographic_Area : string | null,
+        Manager_Name : string | null,
+        Municipal_Status : string | null,
+        Municipality_Type : string | number,
+        Next_Follow_Up : string | null,
+        Notes : string | null,
+        PO : string | null,
+        PO_Amount : number | null,
+        PO_Date : string | null,
+        Population_2021 : string | number | null,
+        Project_Cat_ID : number | null,
+        Project_Code : string | null,
+        Project_Due_Date : string | null,
+        Project_Manager_ID : numbner | null,
+        Project_Name : string,
+        Project_Value : number | null,
+        Province : string | null,
+        Status : string | null,
+        Team_Members : string | null,
+        Website : string | null,
+        dept : string | null
+    }
+
+    interface Department {
+        Department_ID : number,
+        Department : string
+    }
 }

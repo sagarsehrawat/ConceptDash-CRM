@@ -1,8 +1,9 @@
 import React from "react";
 import TFChip from "../../../../components/form/TFChip/TFChip";
 import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead";
+import TFDateChip from "../../../../components/form/TFDateChip/TFDateChip";
 
-const RosterProject = ({ form, handleForm }) => {
+const RosterProject = ({ form, handleForm, cities }) => {
   return (
     <>
       {/* Project Details */}
@@ -33,7 +34,7 @@ const RosterProject = ({ form, handleForm }) => {
             width='100%'
             defaultValue={form.city}
             onChange={handleForm}
-            options={[{ value: 1, label: 'Products' }, { value: 2, label: 'Transportation' }, { value: 1, label: 'Estimation' }]}
+            options={cities}
           />
         </div>
 
@@ -41,36 +42,30 @@ const RosterProject = ({ form, handleForm }) => {
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Status</p>
           <TFChip
-            label={form.status}
+            name='status'
+            value={form.status}
             options={["Not Started", "In Progress", "Completed"]}
-            onUpdate={async (id, option) => {
-              handleForm("status", option);
-              return { success: true };
-            }}
+            onChange={handleForm}
           />
         </div>
 
         {/* Contract Accepted Date */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Contract Accepted Date</p>
-          <input
-            type="date"
-            name="contractAcceptedDate"
-            className="project-input"
+          <TFDateChip
             value={form.contractAcceptedDate}
-            onChange={(e) => handleForm(e.target.name, e.target.value)}
+            name='contractAcceptedDate'
+            onChange={handleForm}
           />
         </div>
 
         {/* Contract Expiry Date */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Contract Expiry Date</p>
-          <input
-            type="date"
-            name="contractExpiryDate"
-            className="project-input"
+          <TFDateChip
             value={form.contractExpiryDate}
-            onChange={(e) => handleForm(e.target.name, e.target.value)}
+            name='contractExpiryDate'
+            onChange={handleForm}
           />
         </div>
 

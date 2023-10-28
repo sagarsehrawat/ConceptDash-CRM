@@ -23,7 +23,7 @@ const TFDateChip = ({
         if (date === moment(value).format('DD-MM-YYYY')) return;
         const isDateValid = moment(date, "DD-MM-YYYY", true);
         if (isDateValid.isValid()) {
-            onChange(name, moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD'));
+            onChange(name, moment(date, 'DD-MM-YYYY'));
             setIsValid(true);
             setisVisible(false);
         } else {
@@ -94,7 +94,7 @@ const TFDateChip = ({
                                 value={moment(value)}
                                 onChange={(e) => {
                                     setDate(e.format('DD-MM-YYYY'));
-                                    onChange(name, e.format('YYYY-MM-DD'));
+                                    onChange(name, e);
                                     setisVisible(false);
                                 }}
                                 views={["day"]}
@@ -136,7 +136,7 @@ TFDateChip.propTypes = {
 };
 
 TFDateChip.defaultProps = {
-    defaultDate: '23 Sep, 2023',
+    value: moment().format(),
     tableRef: null,
     style: {}
 };
