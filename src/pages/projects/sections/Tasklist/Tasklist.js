@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import './Tasklist.css'
 import moment from 'moment'
-import TFIcon from '../../../components/ui/TFIcon/TFIcon'
-import ICONS from '../../../constants/Icons'
-import TFChip from '../../../components/form/TFChip/TFChip'
-import TaskListUtils from '../utils/TaskListUtils'
-import TFDateChip from '../../../components/form/TFDateChip/TFDateChip'
-import TFTypeahead from '../../../components/form/TFTypeahead/TFTypeahead'
+import TFIcon from '../../../../components/ui/TFIcon/TFIcon'
+import ICONS from '../../../../constants/Icons'
+import TFChip from '../../../../components/form/TFChip/TFChip'
+import TaskListUtils from '../../utils/TaskListUtils'
+import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip'
+import TFTypeahead from '../../../../components/form/TFTypeahead/TFTypeahead'
 
 const Tasklist = ({ taskList, setTaskList, openTasks, setOpenTasks }) => {
     const taskListUtils = new TaskListUtils(setTaskList);

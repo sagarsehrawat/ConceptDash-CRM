@@ -17,7 +17,7 @@ const HeaderCards = (props: Props) => {
   useEffect(() => {
     const fetchData = async () => {
       try{
-        const response = await SERVICES.rfpStatus();
+        const response = await SERVICES.rfpCount();
         dispatch(initData(response.res[0]));
       } catch(error) {
         console.log(error)

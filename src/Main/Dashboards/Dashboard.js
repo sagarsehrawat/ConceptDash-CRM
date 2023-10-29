@@ -51,7 +51,7 @@ import Proposal from "../../pages/proposals/index";
 import Employee from "../../pages/employee/index";
 import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../../pages/customers/index";
-import Project from "../../pages/projects/index";
+import Project from "../../pages/projects/Index.tsx";
 import BudgetCities from "../../pages/budgetCities/index";
 import Tasks from "../../pages/tasks/index";
 import AddTask from "../../pages/tasks/forms/AddTask";

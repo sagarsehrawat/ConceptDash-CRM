@@ -7,7 +7,7 @@ import IndependentProject from './types/IndependentProject';
 import RosterProject from './types/RosterProject';
 import ChildProject from './types/ChildProject';
 import FormUtils from '../../../utils/FormUtils';
-import Tasklist from '../tasklist/Tasklist';
+import Tasklist from '../sections/Tasklist/Tasklist';
 import TaskListUtils from '../utils/TaskListUtils';
 import moment from 'moment';
 import TFButton from '../../../components/ui/TFButton/TFButton';

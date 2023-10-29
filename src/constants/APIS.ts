@@ -3,6 +3,7 @@ const APIS = {
     // BASE_URL : 'http://localhost:8080',
     SERVER_STATUS : `/`,
     GET_RFP_COUNT : '/api/get/rfp/count',
+    GET_PROJECT_CHART: '/api/get/chart/project',
     GET_CITIES : '/api/get/list/cities',
     GET_DEPARTMENTS : '/api/get/list/departments',
     GET_PROJECT_CATEGORIES : '/api/get/list/projectCategories',

@@ -5,12 +5,20 @@ declare module "Services"{
         description : Object
     }
 
-    export interface RfpStatusResponse {
+    export interface RfpCountResponse {
         success : boolean,
         res : Array<{
             Total : number | string,
             Month : number | string,
             Percent : number | string
+        }>
+    }
+
+    export interface ProjectCountResponse {
+        success : boolean,
+        res : Array<{
+            Count : number,
+            Status : string
         }>
     }
 

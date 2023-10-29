@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import TFButton from '../../../../components/ui/TFButton/TFButton'
 import { useSelector } from 'react-redux'
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice'
-import PlusIcon from '../../../../Images/addPlus.svg'
 import cross from '../../../../Images/cross.svg'
 import tIcon from '../../../../Images/taskIcon.svg'
 import RFPform from '../../forms/RFPform'
 import { Modal } from 'react-bootstrap'
 import TFIcon from '../../../../components/ui/TFIcon/TFIcon'
+import ICONS from '../../../../constants/Icons'
 
 type Props = {
   api: number,
@@ -22,7 +22,7 @@ const Header = ({api, setApi}: Props) => {
     <>
       <div className='d-flex flex-row justify-content-between align-items-center' style={{ margin: '32px 24px 0px 32px' }}>
         <p className='heading-2'>RFPs (Request For Proposals)</p>
-        <TFButton icon={PlusIcon} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={() => setShow(true)} />
+        <TFButton icon={ICONS.PLUS_WHITE} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={() => setShow(true)} />
       </div>
 
       <Modal
