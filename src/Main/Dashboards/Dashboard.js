@@ -17,6 +17,8 @@ import AuthenticationContext from "../../Context/AuthContext";
 import tIcon from '../../Images/taskIcon.svg'
 import { Sidebar, Menu, MenuItem, useProSidebar, SubMenu } from "react-pro-sidebar";
 import { primaryColour } from "../Constants/styles";
+import campaignActive from "../../Images/campaign-active.svg"
+import campaignInactive from "../../Images/campaign-inactive.svg"
 import dashboardActive from "../../Images/Dashboard Active state.svg";
 import dashboardInactive from "../../Images/Dashboard icon inactive.svg";
 import pinnedActive from "../../Images/Pin icon_Active.svg";
@@ -88,6 +90,7 @@ import AddBudgetCity from "../Form/AddBudgetCity";
 import Wishes from "../v2/Updated_Module/Wishes";
 import crossbtn from '../../Images/Celebrations/cross_wishes.svg'
 import TTMTable from "../v2/TTMTable";
+import CampaignRoot from "../v3/campaign/CampaignRoot";
 
 
 
@@ -573,6 +576,7 @@ const Dashboard = () => {
     if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
     if (nav === 18) return <TTMTable  isCollapsed={isCollapsed}/>
+    if(nav === 19)return <CampaignRoot isCollapsed={isCollapsed} />
   };
 
   const [show, setShow] = useState(false);
@@ -990,6 +994,16 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
+
+                <div 
+                  style={nav === 19 ? mystyles.sidebarMenuItemActive.collapsed : mystyles.sidebarMenuItem} 
+                  onClick={(e) => setnav(19)}
+                >
+                  <div style={nav === 19 ? mystyles.sidebarMenuItemIconActive.collapsed : mystyles.sidebarMenuItemIcon.collapsed} >
+                    <img src={nav === 19 ? campaignActive : campaignInactive} alt="Dashboard Icon" />
+                  </div>
+                </div>
+
                 {/* <div
                   style={
                     nav === 9
@@ -1438,6 +1452,18 @@ const Dashboard = () => {
                     }
                   >
                     Calendar
+                  </p>
+                </div>
+
+                <div 
+                  style={ nav === 19 ? mystyles.sidebarMenuItemActive.nonCollapsed:  mystyles.sidebarMenuItem}
+                  onClick={(e) => setnav(19)}
+                >
+                  <div style={nav === 19 ? mystyles.sidebarMenuItemIconActive.nonCollapsed : mystyles.sidebarMenuItemIcon.nonCollapsed} >
+                    <img src={nav === 19 ? campaignActive : campaignInactive} alt="Dashboard Icon" />
+                  </div>
+                  <p style={nav === 19 ? mystyles.sidebarMenuItemTextActive : mystyles.sidebarMenuItemText} >
+                    Campaign
                   </p>
                 </div>
                 {/* <div
