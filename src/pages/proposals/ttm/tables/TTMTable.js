@@ -717,8 +717,8 @@ const calculateEndDate=(startDate, duration)=> {
                         findMilestoneStatus(e.subtasks)===2 ? <div style={{  textAlign:'center', height: '20px', background: '#559776', border: '0.4px solid #559776', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Completed</div> :<></>
                       }</div>
                   </td>
-                  <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'>{findStartDate(e.subtasks)?findStartDate(e.subtasks):''}</td>
-                  <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'>{findEndDate(e.subtasks)?findEndDate(e.subtasks):''}</td>
+                  <td style={{textAlign:'left', paddingLeft:"15px", background:'white'}} className='td no-focus'>{findStartDate(e.subtasks)?findStartDate(e.subtasks):''}</td>
+                  <td style={{textAlign:'left', paddingLeft:"15px", background:'white'}} className='td no-focus'>{findEndDate(e.subtasks)?findEndDate(e.subtasks):''}</td>
                   <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'>{calculateDuration(findStartDate(e.subtasks), findEndDate(e.subtasks))}</td>
                   <td colSpan={childArr.length+2} style={{background:'white'}} className='td'>
                     
@@ -822,7 +822,7 @@ const calculateEndDate=(startDate, duration)=> {
                   return(
                     <>
                     {task.visibility?
-                    <tr className='' style={{backgroundColor:'cyan'}}>
+                    <tr className=''>
                       <td style={{paddingLeft:'32px'}} className='td'
                       >{task.TaskName}</td>
                       <td style={{background:'white'}} className='td'><div style={{cursor:'pointer'}} onClick={()=>{setcurrStatus(e.status);setid([e.parentID, task.childId]);openstatusModal()}}>
@@ -917,108 +917,6 @@ const calculateEndDate=(startDate, duration)=> {
         </tbody>
       </table>
       </div>
-      {/* <Modal show={show} onHide={handleCloseStage1}>
-        <Modal.Header closeButton>
-          <Modal.Title>Select Task (Project Initiation Stage)</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 0)}}>
-            <option>Select Task</option>
-            <option value='4'>Obtaining necessary permits</option>
-            <option value='5'>Pre-design Site visit</option>
-            <option value='6'>Preliminary Survey</option>
-            <option value='7'>Traffic Count</option>
-            <option value='8'>Identification of Problem/ Opportunity</option>
-          </Form.Select>
-        </Modal.Body>
-      </Modal>
-
-      <Modal show={showStage2} onHide={handleCloseStage2}>
-        <Modal.Header closeButton>
-          <Modal.Title>Select Task (Environmental Assessment (Project Dependent))</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 1)}}>
-            <option>Select Task</option>
-            <option value='0'>Development of Alternative Solutions</option>
-            <option value='1'>Development of Alternative Design concepts for preferred solution</option>
-            <option value='2'>Environmental Study Report (ESR)</option>
-            <option value='3'>Public Information Centre</option>
-          </Form.Select>
-        </Modal.Body>
-      </Modal>
-
-      <Modal show={showStage3} onHide={handleCloseStage3}>
-        <Modal.Header closeButton>
-          <Modal.Title>Select Task (Site Investigations (Project Dependent))</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 2)}}>
-            <option>Select Task</option>
-            <option value='0'>Topographic Survey</option>
-            <option value='1'>Legal Survey</option>
-            <option value='2'>Geotechnical Investigation</option>
-            <option value='3'>SUE Investigation</option>
-            <option value='4'>CCTV Inspection</option>
-            <option value='5'>Hydrogeological Investigation</option>
-            <option value='6'>Environmental Assessment</option>
-          </Form.Select>
-        </Modal.Body>
-      </Modal>
-
-      <Modal show={showStage4} onHide={handleCloseStage4}>
-        <Modal.Header closeButton>
-          <Modal.Title>Select Task (Preliminary Design )</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 3)}}>
-            <option>Select Task</option>
-            <option value='4'>Coordination meeting with relevant authorities</option>
-            <option value='5'>Public Information Centre</option>
-          </Form.Select>
-        </Modal.Body>
-      </Modal>
-
-      <Modal show={showStage5} onHide={handleCloseStage5}>
-        <Modal.Header closeButton>
-          <Modal.Title>Select Task (Detailed Design (60%))</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 4)}}>
-            <option>Select Task</option>
-            <option value='2'>Streetlight Design</option>
-            <option value='3'>Streetscaaping and Landscaping</option>
-            <option value='4'>Property Acquisition Plan</option>
-            <option value='5'>Soil Management Plan</option>
-            <option value='6'>Traffic Control Plan and Construction Staging</option>
-          </Form.Select>
-        </Modal.Body>
-      </Modal>
-
-      <Modal show={showStage7} onHide={handleCloseStage7}>
-        <Modal.Header closeButton>
-          <Modal.Title>Select Task (Final Design)</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 6)}}>
-            <option>Select Task</option>
-            <option value='2'>Draft Quantitiy Take-off and Cost Estimation</option>
-          </Form.Select>
-        </Modal.Body>
-      </Modal>
-
-      <Modal show={showStage9} onHide={handleCloseStage9}>
-        <Modal.Header closeButton>
-          <Modal.Title>Select Task (Contract Administration and Inscpection Services)</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Select onChange={(e)=>{handleAddTaskStage1(e, 8)}}>
-            <option>Select Task</option>
-            <option value='4'>Completion and Warranty site inspections</option>
-            <option value='5'>Maintenance Period Support</option>
-          </Form.Select>
-        </Modal.Body>
-      </Modal> */}
 
       <Modal show={openAddTask} onHide={handleCloseAddTask}>
         <Modal.Header closeButton>
