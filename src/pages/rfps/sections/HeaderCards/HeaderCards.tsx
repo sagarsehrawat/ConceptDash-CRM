@@ -33,7 +33,7 @@ const HeaderCards = (props: Props) => {
           <p className='header-card-heading'>New RFPs</p>
           <div className=''>
             <p className='header-card-subheading'>{newRfps}</p>
-            {parseFloat(percent.toString()) >= 0
+            {0 >= 0
               ? <div style={{ "marginLeft": "26px", display: "inline-block" }} className=''>
                 <FontAwesomeIcon icon={faArrowUp} color="#34A853" />
                 <p className='percentage percentage-green'>{percent}% increase</p>

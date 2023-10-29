@@ -9,6 +9,7 @@
 .primary-btn{
     margin: 0;
     display: inline-flex;
+    width: fit-content;
     padding: 8px 24px 8px 24px;
     align-items: center;
     gap: 8px;
@@ -88,6 +89,7 @@
 .secondary-btn{
     display: inline-flex;
     padding: 8px 24px 8px 24px;
+    width: fit-content;
     align-items: center;
     gap: 8px;
     border-radius: 6px;

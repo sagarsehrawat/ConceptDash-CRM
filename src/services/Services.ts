@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, ProjectCountResponse, RfpStatusResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse } from "Services";
+import { AddRfpResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpStatusResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse, ProjectCountResponse } from "Services";
 
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -63,7 +63,7 @@ const SERVICES = {
         }
     },
 
-    getDepartments: async (): Promise<GetDepartmetnsResponse > => {
+    getDepartments: async (): Promise<GetDepartmetnsResponse> => {
         try {
             const response = await axios.get(APIS.GET_DEPARTMENTS, {
                 headers: {
@@ -79,7 +79,7 @@ const SERVICES = {
         }
     },
 
-    getProjectCategories: async (departmentId : number) : Promise<GetProjectCategoriesResponse> => {
+    getProjectCategories: async (departmentId: string | number) : Promise<GetProjectCategoriesResponse> => {
         try {
             const response = await axios.get(APIS.GET_PROJECT_CATEGORIES, {
                 headers: {
@@ -96,7 +96,7 @@ const SERVICES = {
         }
     },
 
-    getManagers: async (): Promise<GetManagerNamesResponse > => {
+    getManagers: async (): Promise<GetManagerNamesResponse> => {
         try {
             const response = await axios.get(APIS.GET_MANAGERS, {
                 headers: {
@@ -188,7 +188,28 @@ const SERVICES = {
         } catch (error) {
             throw error;
         }
-    }
+    },
+
+    addRfp: async (form: FormData): Promise<AddRfpResponse> => {
+        try {
+            const response = await axios.post(APIS.ADD_RFP, form,
+                {
+                    maxContentLength: 500 * 1024 * 1024, // 100MB
+                    maxBodyLength: 500 * 1024 * 1024, // 100MB
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        auth: 'Rose ' + localStorage.getItem('auth'),
+                    },
+                    timeout: 1800000,
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as AddRfpResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 export default SERVICES;

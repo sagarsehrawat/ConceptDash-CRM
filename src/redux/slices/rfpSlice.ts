@@ -39,7 +39,7 @@ const rfpSlice = createSlice({
       state.totalRFPs = action.payload.Total;
     },
     addRFP: (state, action: PayloadAction<RFP>) => {
-      state.rfps.push(action.payload);
+      state.rfps = [action.payload, ...state.rfps];
     },
     updateRFP: (state, action: PayloadAction<{ rfpId: number; data: Partial<RFP> }>) => {
       const { rfpId, data } = action.payload;

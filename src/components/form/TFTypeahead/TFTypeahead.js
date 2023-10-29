@@ -112,7 +112,7 @@ TFTypeahead.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      label: PropTypes.string,
+      label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     })
   ),
   /**
