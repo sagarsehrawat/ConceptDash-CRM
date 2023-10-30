@@ -45,7 +45,7 @@ import adminSettings from "../../Images/adminSettings.svg";
 import logout from "../../Images/logout.svg";
 import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
-import RFP from "../../pages/rfps/Index";
+import RFP from "../../pages/rfps/Index.tsx";
 import TestDemo from "../../pages/calendar/index";
 import Proposal from "../../pages/proposals/index";
 import Employee from "../../pages/employee/index";
@@ -74,6 +74,8 @@ import Profile from "../../pages/profile/index";
 import Announcements from "../../pages/announcements/index";
 import AddBudgetCity from "../Form/AddBudgetCity";
 import TTMMain from "../../pages/proposals/ttm/TTMMain";
+import { useDispatch } from "react-redux";
+import { initPrivileges } from "../../redux/slices/privilegeSlice";
 
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();
@@ -455,6 +457,7 @@ const Dashboard = () => {
   const [notifCounts, setnotifCounts] = useState(0);
   const [wish, setwish] = useState();
   const [showwish, setshowwish] = useState();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios
@@ -471,6 +474,7 @@ const Dashboard = () => {
         });
         localStorage.setItem("privileges", JSON.stringify(arr));
         setPrivileges(arr);
+        dispatch(initPrivileges(arr));
       })
       .catch((err) => {
         console.log(err);

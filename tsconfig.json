@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es6",
         "lib": [
             "dom",
             "dom.iterable",
@@ -17,14 +17,22 @@
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,
+        "allowImportingTsExtensions": true,
         "noEmit": true,
-        "jsx": "react-jsx",
-        "typeRoots": ["./node/modules/@types", "./src/types"]
+        "jsx": "react",
+        "sourceMap": true,
+        "declaration": true,
+        "noUnusedLocals": true, 
+        "noUnusedParameters": true, 
+        "incremental": true,
+        "typeRoots": [
+            "./node/modules/@types",
+            "./src/types"
+        ]
     },
     "include": [
-        "src",
+        "src/**/*",
         "src/components",
-        "src/types/custom.d.ts",
-        "src/types/global.d.ts"
-    ]
+    ],
+    "exclude": ["node_modules", "build"]
 }
