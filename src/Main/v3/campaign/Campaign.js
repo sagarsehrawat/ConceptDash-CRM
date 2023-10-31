@@ -199,14 +199,13 @@ export default function Campaign({ isCollapsed, setPage }) {
             }),
           }}
           disabled={isLoading || selectedLists.length === 0}
-          // onClick={() => setOpen(true)}
-          onClick={() => setPage("create_campaign_form")}
+          onClick={() => setOpen(true)}
         >
           Create Campaign
         </Button>
       </div>
       
-      {/* <CampaignModal
+      <CampaignModal
         open={open}
         setOpen={setOpen}
         lists={lists}
@@ -218,7 +217,7 @@ export default function Campaign({ isCollapsed, setPage }) {
         setData={setData}
         params={params}
         setParams={setParams}
-      /> */}
+      />
     </>
   );
 }
