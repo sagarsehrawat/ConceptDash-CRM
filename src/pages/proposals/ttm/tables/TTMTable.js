@@ -15,6 +15,7 @@ import tIcon from '../../../../Images/taskIcon.svg'
 import NewTaskorMilestone from '../forms/NewTaskorMilestone';
 import cross from '../../../../Images/cross.svg'
 import moment from 'moment';
+import TFInput from '../../../../components/form/TFInput/TFInput'
 
 function TTMTable(props) {
   const {Name, Id} = props;
@@ -196,8 +197,8 @@ const calculateEndDate=(startDate, duration)=> {
     h[b]=parseInt(value);
     setchange(true)
     setrate(h);
-}
-    let span = 13;
+  }
+  let span = 13;
 
   const getDurationInDays=(startDate, endDate)=> {
     const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
@@ -630,7 +631,7 @@ const calculateEndDate=(startDate, duration)=> {
                 }
               </>)
             })}
-            <th style={{width:'12vw', background:'white', verticalAlign:'middle'}} className='normals th' colSpan={2}>Hrs</th>
+            <th style={{width:'12vw', background:'white', verticalAlign:'middle'}} className='normals th'>Hrs</th>
           </tr>
         </thead>
         <tbody>
@@ -652,7 +653,7 @@ const calculateEndDate=(startDate, duration)=> {
               )
             })}
             <td className='normals td' rowSpan={3} style={{verticalAlign:'middle', background:'#DBDBF4'}}>Total Hrs</td>
-            <td className='normals td' rowSpan={3} style={{verticalAlign:'middle', background:'#DBDBF4'}}>Labour Fees($)</td>
+            {/* <td className='normals td' rowSpan={3} style={{verticalAlign:'middle', background:'#DBDBF4'}}>Labour Fees($)</td> */}
           </tr>
           <tr className='tr'>
             <td style={{zIndex:'6', background:'white'}} className='normals td'>People</td>
@@ -686,6 +687,12 @@ const calculateEndDate=(startDate, duration)=> {
                         value={e?e:''}
                         onChange={(eve)=>handleChangeRate(eve, idx)}
                     />
+                    {/* <TFInput
+                      placeholder="$ 0"
+                      name="idx" 
+                      onChange={(name, value)=>handleChangeRate({target: {value}}, idx)}
+                      width={e?"35px":"100%"}
+                    /> */}
                 </td>
               )
             })}
@@ -693,7 +700,8 @@ const calculateEndDate=(startDate, duration)=> {
           {editingData?editingData.map((e)=>{
             return(
               <>
-              <tr><td bgcolor='#E4FEF1'
+              <tr><td
+              className='td'
                 style={{
                   height: '38px',
                   textAlign:'left',
@@ -705,10 +713,7 @@ const calculateEndDate=(startDate, duration)=> {
                   lineHeight: '20px',
                   backgroundColor: 'white',
                 }}>
-                  <div className='d-flex justify-content-start empty'>
-                    <div>{e.TaskName}</div>
-                    
-                  </div>
+                   {e.TaskName}
                   </td>
                   <td style={{background:'white'}} className='td'><div>
                       {findMilestoneStatus(e.subtasks)===0
@@ -850,30 +855,42 @@ const calculateEndDate=(startDate, duration)=> {
                               value={h?h:''}
                               onChange={(eve)=>handleHRchange(e.parentID, task.childId ,idx, eve)}
                             />
+                            {/* <TFInput
+                              placeholder="0 hr"
+                              name="idx"
+                              onChange={(name, value)=>handleChangeRate(e.parentID, task.childId, idx, value)}
+                              width={e?"50%":"100%"}
+                            /> */}
                             {h ? <p style={{ display: "inline" }}> hr</p> : ""}
                           </td>)
                         )
                       })}
                       <td style={{paddingLeft:'32px', zIndex:'6', background:'#DBDBF4'}} className='td'>{sumTaskHrs(task.hrs)} hr</td>
-                      <td style={{paddingLeft:'32px', zIndex:'6', background:'#DBDBF4'}} className='td'>{sumTaskHrs(task.hrs)}</td>
+                      {/* <td style={{paddingLeft:'32px', zIndex:'6', background:'#DBDBF4'}} className='td'>{sumTaskHrs(task.hrs)}</td> */}
                     </tr>:<></>}</>
                   )
                 })}
-                {<tr><td colSpan={childArr.length+7} bgcolor='#FFF'
-                style={{
-                  height: '38px',
-                  textAlign:'left',
-                  color:'var(--dark-grey, #70757A)',
-                  fontSize: '13px',
-                  fontFamily: 'Roboto',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  lineHeight: '20px',
-                  backgroundColor: '#FFF',
-                }}>
-                  <p className='empty' onClick={()=>{handleOpenNewTaskMile();setseletedMilestone(e.parentID)}} style={{
-                    paddingLeft:'24px', cursor:'pointer'
-                  }}>Add/Remove Task +</p></td>
+                {<tr>
+                  <td 
+                    className='td'
+                    style={{
+                      // position:'fixed',
+                      height: '38px',
+                      textAlign:'left',
+                      color:'var(--dark-grey, #70757A)',
+                      fontSize: '13px',
+                      fontFamily: 'Roboto',
+                      fontStyle: 'normal',
+                      fontWeight: '400',
+                      lineHeight: '20px',
+                      backgroundColor: '#FFF',
+                  }}>
+                    <div onClick={()=>{handleOpenNewTaskMile();setseletedMilestone(e.parentID)}} style={{ cursor:'pointer'
+                    }}>Add Task/Milestone +</div>
+                  </td>
+                  <td className='td' colSpan={childArr.length+6}>
+
+                  </td>
                 </tr>}
               </>
             )

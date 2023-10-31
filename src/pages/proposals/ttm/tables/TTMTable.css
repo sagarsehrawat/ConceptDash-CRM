@@ -41,7 +41,7 @@
   }
   
   .tableFixHead .table {
-    border-collapse: collapse;
+    border-collapse: separate;
     width: 100%;
   }
   
@@ -169,7 +169,8 @@
         width: fit-content;
         position: sticky;
         left: 0;
-        padding-left: 24px;
+        /* padding-left: 24px; */
+        z-index: 2;
       }
       /* .totals{
         position: absolute;
