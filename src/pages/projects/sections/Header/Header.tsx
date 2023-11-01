@@ -17,7 +17,7 @@ const Header = ({  }: Props) => {
         <>
             <div className='d-flex flex-row justify-content-between align-items-center' style={{ margin: '32px 24px 0px 32px' }}>
                 <p className='heading-2'>Projects</p>
-                <TFButton icon={ICONS.PLUS_WHITE} label="Add New RFP" disabled={!privileges.includes("Add Project")} handleClick={() => setShow(true)} />
+                <TFButton icon={ICONS.PLUS_WHITE} label="Add New Project" disabled={!privileges.includes("Add Project")} handleClick={() => setShow(true)} />
             </div>
 
             <AddProject
