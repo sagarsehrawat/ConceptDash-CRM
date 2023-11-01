@@ -5,10 +5,10 @@ import { initRFPs, selectRFPs, updateRFP } from '../../../../redux/slices/rfpSli
 import LoadingSpinner from '../../../../Main/Loader/Loader';
 import './Table.css'
 import TFChip from '../../../../components/form/TFChip/TFChip';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import open from '../../../../Images/openinDrive.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faEdit, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
@@ -23,6 +23,7 @@ interface FilterType {
 
 type Props = {
   api: number,
+  setApi: Function,
   currPage: number,
   setPages: Function,
   filter: FilterType,
@@ -30,19 +31,36 @@ type Props = {
   isCollapsed: boolean
 }
 
-const Table = ({ api, currPage, filter, search, setPages, isCollapsed }: Props) => {
+const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedRfps, setselectedRfps] = useState<number[]>([])
+  const [selectedRfps, setselectedRfps] = useState<number[]>([]);
   const tableRef = useRef(null);
   const dispatch = useDispatch();
   const rfps = useSelector(selectRFPs);
   const privileges = useSelector(selectPrivileges);
 
+  
+  const sortRef = useRef(null);
+  const [showSortModal, setShowSortModal] = useState<string>("");
+  const [sort, setSort] = useState<string>('RFP_ID DESC');
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
+      setShowSortModal('');
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await SERVICES.getRfps(50, currPage, filter, search, 'RFP_ID DESC');
+        const response = await SERVICES.getRfps(50, currPage, filter, search, sort);
         console.log(response)
         dispatch(initRFPs(response.res));
         setPages(response.totalPages);
@@ -65,7 +83,7 @@ const Table = ({ api, currPage, filter, search, setPages, isCollapsed }: Props) 
     }
   };
 
-  const handleDateUpdate = async (rfpId : number, key: keyof RFP, date : string) => {
+  const handleDateUpdate = async (rfpId: number, key: keyof RFP, date: string) => {
     const prevRfp = rfps.filter(rfp => rfp.RFP_ID === rfpId);
     try {
       dispatch(updateRFP({ rfpId, data: { [key]: date } }))
@@ -85,6 +103,34 @@ const Table = ({ api, currPage, filter, search, setPages, isCollapsed }: Props) 
     }
   }
 
+  const sortModal = (column: string) =>
+    showSortModal === column
+      ? <div className='d-flex flex-column justify-content-between sort-container' ref={sortRef}>
+        <div
+          className='d-flex flex-row justify-content-around sort-hover'
+          onClick={(e) => {
+            setSort(column);
+            setApi(api + 1);
+            setShowSortModal("");
+          }}
+        >
+          <FontAwesomeIcon icon={faArrowUp} />
+          <p className='sort-text'>Sort Ascending</p>
+        </div>
+        <div
+          className='d-flex flex-row justify-content-around sort-hover'
+          onClick={(e) => {
+            setSort(`${column} DESC`);
+            setApi(api + 1);
+            setShowSortModal("");
+          }}
+        >
+          <FontAwesomeIcon icon={faArrowDown} />
+          <p className='sort-text'>Sort Descending</p>
+        </div>
+      </div>
+      : <></>;
+
   return (
     <>
       {
@@ -96,18 +142,54 @@ const Table = ({ api, currPage, filter, search, setPages, isCollapsed }: Props) 
             <table className='w-100' style={{ borderCollapse: "separate" }} ref={tableRef}>
               <thead className='table-header fixed-table-header'>
                 <tr>
-                  <th className='table-heading fixed-header-column' style={{ width: "300px" }}>RFP Name</th>
-                  <th className='table-heading' style={{ width: "150px" }}>Client</th>
-                  <th className='table-heading' style={{ width: "190px" }}>Source</th>
-                  <th className='table-heading' style={{ width: "120px" }}>Action</th>
-                  <th className='table-heading' style={{ width: "180px" }}>Submission Date</th>
-                  <th className='table-heading' style={{ width: "180px" }}>RFP Number</th>
-                  <th className='table-heading' style={{ width: "250px" }}>Remarks</th>
-                  <th className='table-heading' style={{ width: "200px" }}>Rating</th>
-                  <th className='table-heading' style={{ width: "180px" }}>Start Date</th>
-                  <th className='table-heading' style={{ width: "200px" }}>Project Manager</th>
-                  <th className='table-heading' style={{ width: "250px" }}>Department</th>
-                  <th className='table-heading' style={{ width: "200px" }}>Project Category</th>
+                  <th className='table-heading fixed-header-column' style={{ width: "300px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('Project_Name')}>RFP Name</p>
+                    {sortModal('Project_Name')}
+                  </th>
+                  <th className='table-heading' style={{ width: "150px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('Client')}>Client</p>
+                    {sortModal('Client')}
+                  </th>
+                  <th className='table-heading' style={{ width: "190px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('Source')}>Source</p>
+                    {sortModal('Source')}
+                  </th>
+                  <th className='table-heading' style={{ width: "120px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('Action')}>Action</p>
+                    {sortModal('Action')}
+                  </th>
+                  <th className='table-heading' style={{ width: "180px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('Submission_Date')}>Submission Date</p>
+                    {sortModal('Submission_Date')}
+                  </th>
+                  <th className='table-heading' style={{ width: "180px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('RFP_Number')}>RFP Number</p>
+                    {sortModal('RFP_Number')}
+                  </th>
+                  <th className='table-heading' style={{ width: "250px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('Remarks')}>Remarks</p>
+                    {sortModal('Remarks')}
+                  </th>
+                  <th className='table-heading' style={{ width: "200px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('Rating')}>Rating</p>
+                    {sortModal('Rating')}
+                  </th>
+                  <th className='table-heading' style={{ width: "180px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('Start_Date')}>Start Date</p>
+                    {sortModal('Start_Date')}
+                  </th>
+                  <th className='table-heading' style={{ width: "200px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('Project_Manager')}>Project Manager</p>
+                    {sortModal('Project_Manager')}
+                  </th>
+                  <th className='table-heading' style={{ width: "250px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('Department')}>Department</p>
+                    {sortModal('Department')}
+                  </th>
+                  <th className='table-heading' style={{ width: "200px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('Project_Category')}>Project Category</p>
+                    {sortModal('Project_Category')}
+                  </th>
                 </tr>
               </thead>
               <tbody style={{ background: "#FFFFFF" }}>
@@ -152,7 +234,7 @@ const Table = ({ api, currPage, filter, search, setPages, isCollapsed }: Props) 
                             value={rfp.Submission_Date}
                             name={rfp.RFP_ID}
                             tableRef={tableRef}
-                            onChange={(name:number, value : string) => handleDateUpdate(name, 'Submission_Date', value)}
+                            onChange={(name: number, value: string) => handleDateUpdate(name, 'Submission_Date', value)}
                           />)
                           : ""
                         }
@@ -161,12 +243,12 @@ const Table = ({ api, currPage, filter, search, setPages, isCollapsed }: Props) 
                       <td className='table-cell'>{rfp.Remarks}</td>
                       <td className='table-cell'>{rfp.Rating}</td>
                       <td className='table-cell'>
-                      {rfp.Start_Date
+                        {rfp.Start_Date
                           ? (<TFDateChip
                             value={rfp.Start_Date}
                             name={rfp.RFP_ID}
                             tableRef={tableRef}
-                            onChange={(name:number, value : string) => handleDateUpdate(name, 'Start_Date', value)}
+                            onChange={(name: number, value: string) => handleDateUpdate(name, 'Start_Date', value)}
                           />)
                           : ""
                         }
