@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import AuthenticationContext from "../../Context/AuthContext";
 import tIcon from '../../Images/taskIcon.svg'
 import { Sidebar, useProSidebar } from "react-pro-sidebar";
+import campaignActive from "../../Images/campaign-active.svg"
+import campaignInactive from "../../Images/campaign-inactive.svg"
 import dashboardActive from "../../Images/Dashboard Active state.svg";
 import dashboardInactive from "../../Images/Dashboard icon inactive.svg";
 import tasksActive from "../../Images/My tasks_Active.svg";
@@ -74,6 +76,7 @@ import Profile from "../../pages/profile/index";
 import Announcements from "../../pages/announcements/index";
 import AddBudgetCity from "../Form/AddBudgetCity";
 import TTMMain from "../../pages/proposals/ttm/TTMMain";
+import CampaignRoot from "../v3/campaign/CampaignRoot";
 import { useDispatch } from "react-redux";
 import { initPrivileges } from "../../redux/slices/privilegeSlice";
 
@@ -556,6 +559,7 @@ const Dashboard = () => {
     if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
     if (nav === 18) return <TTMMain isCollapsed={isCollapsed}/>
+    if(nav === 19)return <CampaignRoot isCollapsed={isCollapsed} />
   };
 
   const [show, setShow] = useState(false);
@@ -912,6 +916,15 @@ const Dashboard = () => {
                       src={nav === 8 ? calendarActive : calendarInactive}
                       alt="Dashboard Icon"
                     />
+                  </div>
+                </div>
+                {/* Campaign */}
+                <div 
+                  style={nav === 19 ? mystyles.sidebarMenuItemActive.collapsed : mystyles.sidebarMenuItem} 
+                  onClick={(e) => setnav(19)}
+                >
+                  <div style={nav === 19 ? mystyles.sidebarMenuItemIconActive.collapsed : mystyles.sidebarMenuItemIcon.collapsed} >
+                    <img src={nav === 19 ? campaignActive : campaignInactive} alt="Dashboard Icon" />
                   </div>
                 </div>
                 {privileges.includes('View Companies') ? <div
@@ -1277,6 +1290,18 @@ const Dashboard = () => {
                     }
                   >
                     Calendar
+                  </p>
+                </div>
+                {/* Campaign */}
+                <div 
+                  style={ nav === 19 ? mystyles.sidebarMenuItemActive.nonCollapsed:  mystyles.sidebarMenuItem}
+                  onClick={(e) => setnav(19)}
+                >
+                  <div style={nav === 19 ? mystyles.sidebarMenuItemIconActive.nonCollapsed : mystyles.sidebarMenuItemIcon.nonCollapsed} >
+                    <img src={nav === 19 ? campaignActive : campaignInactive} alt="Dashboard Icon" />
+                  </div>
+                  <p style={nav === 19 ? mystyles.sidebarMenuItemTextActive : mystyles.sidebarMenuItemText} >
+                    Campaign
                   </p>
                 </div>
                 {privileges.includes('View Companies') ? <div

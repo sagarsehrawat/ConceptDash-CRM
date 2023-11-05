@@ -400,7 +400,7 @@ const AddRfp = ({ show, setShow, api, setApi }: Props) => {
               label="Cancel"
               variant="secondary"
             />
-            <TFButton handleClick={handleSubmit} label="Add Employee" />
+            <TFButton handleClick={handleSubmit} label="Add RFP" />
           </div>
         </form>
         }

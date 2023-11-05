@@ -212,4 +212,11 @@ export const GET_PROPOSAL = (proposalId) => `/proposal/get-proposal/${proposalId
 export const GET_PROJECT_CATEGORY_DEPARTMENT = '/proposal/get-project-category-department'
 export const CREATE_PROPOSAL = '/proposal/create-proposal'
 
+// Campaign APIs
+export const GET_ALL_LISTS = '/campaign/get-all-lists'
+export const CREATE_CAMPAIGN = "/campaign/create-campaign"
+export const GET_ALL_CAMPAIGNS = "/campaign/get-all-campaigns"
+export const GET_CAMPAIGN_NUMBER = (campaignId) =>  `/campaign/get-campaign-report/numbers/${campaignId}`
+export const GET_CAMPAIGN_CONTACT = (campaignId,ev) => `/campaign/get-campaign-report/contacts/${campaignId}/${ev}`
+
 export const PRIMARY_COLOR = '#8361FE'

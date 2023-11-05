@@ -1,0 +1,76 @@
+.campaignCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--outline-color, #EBE9F1);
+    background: #fff;
+    padding: 12px 32px;
+}
+.campaignCard:hover {
+    background: #F0F0F0;
+}
+
+th {
+    padding: 12px 32px;
+    color: var(--dark-grey, #70757A);
+    font-size: 14px;
+    font-family: Roboto;
+    font-weight: 600;
+    line-height: 20px;
+}
+.tr {
+    padding: 12px 32px;
+    border-bottom: 1px solid var(--outline-color, #EBE9F1);
+    background: #FFF;   
+    cursor: pointer;
+}
+.tr:hover { 
+    background: #F0F0F0;
+}
+
+td {
+    padding: 12px 32px;
+}
+
+.campaignName {
+    color: var(--black-text, #0A0A0A);
+    font-size: 13px;
+    font-family: Roboto;
+    font-weight: 500;
+    line-height: 20px;
+    overflow: hidden;
+}
+.campaignSubject {
+    color: var(--dark-grey, #70757A);
+    font-size: 13px;
+    font-family: Roboto;
+    font-weight: 500;
+    line-height: 20px;
+    overflow: hidden;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.navigation-btn {
+    height: 32px;
+    width: 32px;
+    padding: 6px 0px;
+    border-radius: 4px;
+    border: 1px solid var(--outline-color, #EBE9F1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.navigation-btn > p {
+    color: var(--dark-grey, #70757A);
+    text-align: center;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}

@@ -1,5 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
+import { AddRfpResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpStatusResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse } from "Services";
 import { AddRfpResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse, ProjectCountResponse } from "Services";
 
 axios.defaults.baseURL = APIS.BASE_URL
@@ -174,7 +175,7 @@ const SERVICES = {
 
     getGoogleDriveUrl: async (id: number | string): Promise<GetGoogleDriveUrlResponse> => {
         try {
-            const response = await axios.get(APIS.UPDATE_RFP_STATUS,
+            const response = await axios.get(APIS.GET_GOOGLE_DRIVE_URL,
                 {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
