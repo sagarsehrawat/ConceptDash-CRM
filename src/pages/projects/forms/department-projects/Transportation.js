@@ -47,7 +47,7 @@ const Transportation = ({ form, handleForm, cities }) => {
           <div className="d-flex flex-row">
             <p
               className="d-flex align-items-center project-name-input"
-              style={{ fontSize: "14px" }}
+              style={{ fontSize: "14px", marginLeft: "8px" }}
             >
               $
             </p>
@@ -68,7 +68,7 @@ const Transportation = ({ form, handleForm, cities }) => {
           <TFChip
             name='clientResponse'
             value={form.clientResponse}
-            options={["Not Started", "In Progress", "Completed"]}
+            options={["Recieved", "Waiting", "Approved"]}
             onChange={handleForm}
           />
         </div>

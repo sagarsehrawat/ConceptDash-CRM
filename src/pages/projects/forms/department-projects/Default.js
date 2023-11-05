@@ -47,7 +47,7 @@ const Default = ({ form, handleForm, cities }) => {
           <div className="d-flex flex-row">
             <p
               className="d-flex align-items-center project-name-input"
-              style={{ fontSize: "14px" }}
+              style={{ fontSize: "14px", marginLeft: "8px" }}
             >
               $
             </p>

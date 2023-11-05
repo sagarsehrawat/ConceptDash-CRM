@@ -2,6 +2,7 @@ import React from 'react'
 import TFChip from '../../../../components/form/TFChip/TFChip';
 import TFTypeahead from '../../../../components/form/TFTypeahead/TFTypeahead';
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
+import TFInput from '../../../../components/form/TFInput/TFInput';
 
 const Estimation = ({ form, handleForm,cities }) => {
   return (
@@ -47,7 +48,7 @@ const Estimation = ({ form, handleForm,cities }) => {
           <div className="d-flex flex-row">
             <p
               className="d-flex align-items-center project-name-input"
-              style={{ fontSize: "14px" }}
+              style={{ fontSize: "14px", marginLeft: "8px" }}
             >
               $
             </p>
@@ -123,14 +124,13 @@ const Estimation = ({ form, handleForm,cities }) => {
         {/* Request Sent to*/}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Request Sent to</p>
-          <input
-            type="text"
+          <TFInput
             name="requestSentTo"
             placeholder='Type Name'
-            className="project-input"
             value={form.requestSentTo}
-            onChange={(e) => handleForm(e.target.name, e.target.value)}
-          />
+            onChange={handleForm}
+            width="100%"
+            />
         </div>
 
         {/* Request Recieved On */}

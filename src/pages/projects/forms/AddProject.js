@@ -39,6 +39,7 @@ const AddProject = (props) => {
         projectName: '',
         status: 'Not Started',
         priority: 'Medium',
+        clientResponse: 'Waiting',
         designChecklist: [],
         designInfo: [],
         dueDate: moment().format(),
@@ -117,12 +118,10 @@ const AddProject = (props) => {
                 formUtils.checkboxForm(key, value)
                 break;
             case 'department':
-                formUtils.typeaheadForm(key, value);
                 setProjectCategories([]);
-                const tasks = TaskListUtils.taskListFormatter(value.label)
+                const tasks = TaskListUtils.taskListFormatter(value.label);
                 setTaskList(tasks);
                 setOpenTasks(tasks.map(task => task.taskId));
-                break;
             case 'projectCategory':
             case 'projectManager':
             case 'city':
