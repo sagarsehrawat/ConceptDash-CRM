@@ -167,7 +167,10 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
                   icon={faX}
                   style={{ height: "9px", cursor: "pointer" }}
                   color={PRIMARY_COLOR}
-                  onClick={() => setShow(false)}
+                  onClick={() => {
+                    setFilter(prevFilter);
+                    setShow(false);
+                }}
                 />
               </div>
             </div>

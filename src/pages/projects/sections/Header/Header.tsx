@@ -10,7 +10,7 @@ type Props = {
     setApi: Function
 }
 
-const Header = ({  }: Props) => {
+const Header = ({ api, setApi }: Props) => {
     const privileges: string[] = useSelector(selectPrivileges);
     const [show, setShow] = useState<boolean>(false)
     return (
@@ -20,10 +20,12 @@ const Header = ({  }: Props) => {
                 <TFButton icon={ICONS.PLUS_WHITE} label="Add New Project" disabled={!privileges.includes("Add Project")} handleClick={() => setShow(true)} />
             </div>
 
-            <AddProject
-                show={show}
-                onHide={() => setShow(false)}
-            />
+            {show &&
+                <AddProject
+                    api={api}
+                    setApi={setApi}
+                    onHide={() => setShow(false)}
+                />}
         </>
     )
 }

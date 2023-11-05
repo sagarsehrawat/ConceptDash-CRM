@@ -150,7 +150,7 @@ const AddProject = (props) => {
     return (
         <>
             <Modal
-                show={props.show}
+                show={true}
                 onHide={props.onHide}
                 style={styles.addModal}
                 dialogClassName=""

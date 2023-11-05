@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { AddRfpResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpStatusResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse, ProjectCountResponse } from "Services";
+import { AddRfpResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse, ProjectCountResponse } from "Services";
 
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -14,7 +14,7 @@ const SERVICES = {
         }
     },
 
-    rfpCount: async (): Promise<RfpStatusResponse> => {
+    rfpCount: async (): Promise<RfpCountResponse> => {
         try {
             const response = await axios.get(APIS.GET_RFP_COUNT, {
                 headers: {
@@ -24,7 +24,7 @@ const SERVICES = {
             if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
-            return response.data as RfpStatusResponse;
+            return response.data as RfpCountResponse;
         } catch (error) {
             throw error;
         }

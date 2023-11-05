@@ -4,6 +4,7 @@ import Architecture from './Architecture.json';
 import Estimation from './Estimation.json';
 import Transportation from './Transportaion.json'
 import Municipal from './Municipal.json';
+import SitePlanSubdivision from './SitePlanSubdivision.json'
 
 class TaskListUtils {
     constructor(setTaskList = null) {
@@ -24,6 +25,9 @@ class TaskListUtils {
                 break;
             case 'Traffic and transportation Engineering':
                 tasks = Transportation;
+                break;
+            case 'Site plan subdivision':
+                tasks = SitePlanSubdivision;
                 break;
             default:
                 tasks = [];
@@ -83,7 +87,7 @@ class TaskListUtils {
         const subtaskEndDates = task.subtasks.map(subtask => subtask.endDate);
 
         if (subtaskEndDates.length === 0) {
-            return moment(); 
+            return moment();
         }
 
         const maxEndDate = moment.max(subtaskEndDates);
@@ -115,8 +119,8 @@ class TaskListUtils {
                         subtasks: task.subtasks.map(subtask => {
                             if (subtask.taskId === subtaskId) {
                                 // Handle adding id as well as value in case of typeahead component
-                                if(key==='assignedTo'){
-                                    return { ...subtask, [key]: value.label, [`${key}Id`]: value.value};
+                                if (key === 'assignedTo') {
+                                    return { ...subtask, [key]: value.label, [`${key}Id`]: value.value };
                                 }
                                 return { ...subtask, [key]: value };
                             }
