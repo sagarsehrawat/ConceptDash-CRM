@@ -98,7 +98,7 @@ const RosterProject = ({ form, handleForm, cities }) => {
 
         {/* Project Description */}
         <div className="d-flex flex-column gap-12 w-100">
-          <p className="project-label">Project Description</p>
+          <p className="project-label">Roster Description</p>
           <textarea
             name="projectDescription"
             className="project-textarea"

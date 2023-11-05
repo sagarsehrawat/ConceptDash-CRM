@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { AddRfpResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse, ProjectCountResponse } from "Services";
+import { AddRfpResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse, ProjectCountResponse, GetRostersListResponse } from "Services";
 
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -112,6 +112,22 @@ const SERVICES = {
         }
     },
 
+    getRostersList: async (): Promise<GetRostersListResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_ROSTERS_LIST, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetRostersListResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
     getRfps: async (limit: number, currentPage: number, filter: Object, search: string, sort: string): Promise<GetRfpsResponse> => {
         try {
             const response = await axios.get(APIS.GET_RFPS, {
@@ -206,6 +222,27 @@ const SERVICES = {
                 throw response.data as ErrorResponse
             }
             return response.data as AddRfpResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getProjects: async (limit: number, currentPage: number, filter: Object, search: string, sort: string): Promise<GetRfpsResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_RFPS, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    limit,
+                    offset: (currentPage - 1) * limit,
+                    filter: JSON.stringify(filter),
+                    search,
+                    sort,
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetRfpsResponse;
         } catch (error) {
             throw error;
         }

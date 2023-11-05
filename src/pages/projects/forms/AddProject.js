@@ -15,6 +15,34 @@ import SERVICES from '../../../services/Services';
 import LoadingSpinner from '../../../Main/Loader/Loader';
 import Utils from '../../../utils/Utils';
 
+const FORM = {
+    projectType: "Independent Project",
+    department: "",
+    departmentId: '',
+    projectCategory: '',
+    projectCategoryId: '',
+    projectName: '',
+    city: '',
+    cityId: '',
+    status: 'Not Started',
+    dueDate: moment(),
+    followUpDate: moment(),
+    projectManager: '',
+    projectManagerId: '',
+    teamMembers: [],
+    projectDescription: '',
+    contractAcceptedDate: moment(),
+    contractExpiryDate: moment(),
+    roster: '',
+    rosterId: '',
+    clientResponse: 'Waiting',
+    requestSentTo: '',
+    requestRecievedOn: moment(),
+    priority: 'Medium',
+    designChecklist: [],
+    designInfo: [],
+}
+
 const AddProject = (props) => {
     const styles = {
         addModal: {
@@ -28,29 +56,14 @@ const AddProject = (props) => {
         },
     }
 
-    const [form, setForm] = useState({
-        projectType: "Independent Project",
-        department: "",
-        departmentId: '',
-        projectCategory: '',
-        projectCategoryId: '',
-        city: '',
-        cityId: '',
-        projectName: '',
-        status: 'Not Started',
-        priority: 'Medium',
-        clientResponse: 'Waiting',
-        designChecklist: [],
-        designInfo: [],
-        dueDate: moment().format(),
-        followUpDate: moment().format()
-    })
+    const [form, setForm] = useState(FORM)
     const formUtils = FormUtils(setForm)
 
     const [taskList, setTaskList] = useState([]);
     const [openTasks, setOpenTasks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [departments, setDepartments] = useState([]);
+    const [rosters, setRosters] = useState([]);
     const [projectCategories, setProjectCategories] = useState([]);
     const [cities, setCities] = useState([]);
 
@@ -64,7 +77,8 @@ const AddProject = (props) => {
                 const citiesResponse = await SERVICES.getCities();
                 setCities(Utils.convertToTypeaheadOptions(citiesResponse.res, 'City', 'City_ID'));
 
-                
+                const rosterResponse = await SERVICES.getRostersList();
+                setRosters(Utils.convertToTypeaheadOptions(rosterResponse.res, 'project_name', 'project_id'));
             } catch (error) {
                 console.log(error);
             }
@@ -88,20 +102,8 @@ const AddProject = (props) => {
 
     const resetForm = (val) => {
         setForm({
+            ...FORM,
             projectType: val,
-            department: "",
-            departmentId: '',
-            projectCategory: '',
-            projectCategoryId: '',
-            city: '',
-            cityId: '',
-            projectName: '',
-            status: 'Not Started',
-            priority: 'Medium',
-            designChecklist: [],
-            designInfo: [],
-            dueDate: moment().format(),
-            followUpDate: moment().format()
         });
     }
 
@@ -138,9 +140,9 @@ const AddProject = (props) => {
             case 'Independent Project':
                 return <IndependentProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories}/>
             case 'Roster Project':
-                return <RosterProject form={form} handleForm={handleForm} cities={cities} />
+                return <RosterProject form={form} handleForm={handleForm} cities={cities}/>
             case 'Child Project':
-                return <ChildProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories}/>
+                return <ChildProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories} rosters={rosters}/>
             default:
                 return <></>
         }

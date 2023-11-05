@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import moment from "moment";
 
 interface ProjectState {
     newProjects: number,
@@ -31,8 +32,12 @@ export const projectSlice = createSlice({
     initialState,
     reducers: {
         initProjects: (state, action: PayloadAction<Project[]>) => {
-            state.projects = [];
-            state.projects.push(...action.payload)
+            state.projects = action.payload.map(project => ({
+                ...project,
+                Date_Created: moment(project.Date_Created),
+                PO_Date: moment(project.PO_Date),
+                Project_Due_Date: moment(project.Project_Due_Date),
+              }));
         },
         initData: (state, action: PayloadAction<ProjectStatus>) => {
             state.newProjects = action.payload.newProjects;

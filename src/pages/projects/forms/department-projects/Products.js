@@ -188,10 +188,10 @@ const Products = ({ form, handleForm, cities }) => {
                 type="checkbox"
                 className="project-input-checkbox"
                 name="designInfo"
-                checked={form.designInfo.includes("Linear")}
-                onChange={(e) => handleForm(e.target.name, "Linear")}
+                checked={form.designInfo.includes("Liner")}
+                onChange={(e) => handleForm(e.target.name, "Liner")}
               />
-              <p className="project-checkbox-label">Linear</p>
+              <p className="project-checkbox-label">Liner</p>
             </div>
             <div className="d-flex flex-row align-items-center gap-8">
               <input

@@ -38,6 +38,14 @@ declare module "Services"{
         }>
     }
 
+    export interface GetRostersListResponse {
+        success : boolean,
+        res : Array<{
+            project_id : number,
+            project_name : string,
+        }>
+    }
+
     export interface GetProjectCategoriesResponse {
         success : boolean,
         res : Array<{

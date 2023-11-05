@@ -116,7 +116,7 @@ TFDateChip.propTypes = {
     /**
      * Default Date value
      */
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, moment]),
     /**
      * useRef variable for the table which can stop the scrolling of the table
      */

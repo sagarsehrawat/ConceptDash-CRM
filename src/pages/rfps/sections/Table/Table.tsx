@@ -40,7 +40,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
   const privileges = useSelector(selectPrivileges);
 
   
-  const sortRef = useRef(null);
+  const sortRef = useRef<HTMLDivElement>(null);
   const [showSortModal, setShowSortModal] = useState<string>("");
   const [sort, setSort] = useState<string>('RFP_ID DESC');
   useEffect(() => {
@@ -229,29 +229,23 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                         />
                       </td>
                       <td className='table-cell'>
-                        {rfp.Submission_Date
-                          ? (<TFDateChip
+                        {rfp.Submission_Date.isValid() && <TFDateChip
                             value={rfp.Submission_Date}
                             name={rfp.RFP_ID}
                             tableRef={tableRef}
                             onChange={(name: number, value: string) => handleDateUpdate(name, 'Submission_Date', value)}
-                          />)
-                          : ""
-                        }
+                          />}
                       </td>
                       <td className='table-cell'>{rfp.RFP_Number}</td>
                       <td className='table-cell'>{rfp.Remarks}</td>
                       <td className='table-cell'>{rfp.Rating}</td>
                       <td className='table-cell'>
-                        {rfp.Start_Date
-                          ? (<TFDateChip
+                        {rfp.Start_Date.isValid() && <TFDateChip
                             value={rfp.Start_Date}
                             name={rfp.RFP_ID}
                             tableRef={tableRef}
                             onChange={(name: number, value: string) => handleDateUpdate(name, 'Start_Date', value)}
-                          />)
-                          : ""
-                        }
+                          />}
                       </td>
                       <td className='table-cell'>{rfp.Project_Manager}</td>
                       <td className='table-cell'>{rfp.Department}</td>

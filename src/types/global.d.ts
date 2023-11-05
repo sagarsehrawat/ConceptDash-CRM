@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export {};
 
 
@@ -8,7 +10,7 @@ declare global{
         City_ID : number | null,
         City : string | null,
         Client : string | null,
-        Created_At : string,
+        Created_At : moment.Moment,
         Department : string | null,
         Department_ID : number | null,
         Folder_ID : string | null,
@@ -23,8 +25,8 @@ declare global{
         Remarks : string | null,
         Rating : number | null
         Source : string | null,
-        Start_Date : string | null,
-        Submission_Date : string | null
+        Start_Date : moment.Moment,
+        Submission_Date : moment.Moment
     }
 
     interface Project {
@@ -33,7 +35,7 @@ declare global{
         City_ID : number | null,
         Client_ID : number | null,
         Country : string | null,
-        Date_Created : string,
+        Date_Created : moment.Moment,
         Department_ID : number | null,
         Department: string | null,
         Employee_ID : number | null,
@@ -47,11 +49,11 @@ declare global{
         Notes : string | null,
         PO : string | null,
         PO_Amount : number | null,
-        PO_Date : string | null,
+        PO_Date : moment.Moment,
         Population_2021 : string | number | null,
         Project_Cat_ID : number | null,
         Project_Code : string | null,
-        Project_Due_Date : string | null,
+        Project_Due_Date : moment.Moment,
         Project_Manager_ID : numbner | null,
         Project_Name : string,
         Project_Value : number | null,
@@ -59,7 +61,8 @@ declare global{
         Status : string | null,
         Team_Members : string | null,
         Website : string | null,
-        dept : string | null
+        dept : string | null,
+        project_type: string
     }
 
     interface Department {

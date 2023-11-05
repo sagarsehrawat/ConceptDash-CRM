@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Header from './sections/Header/Header';
 import HeaderCards from './sections/HeaderCards/HeaderCards';
 import SearchFilter from './sections/SearchFilter/SearchFilter';
+import Pages from './sections/Pages/Pages';
 
 type Props = {
   isCollapsed: boolean
@@ -18,8 +19,8 @@ const Index = (props: Props) => {
       <Header api={api} setApi={setApi} />
       <HeaderCards />
        <SearchFilter api={api} setApi={setApi} value={value} setValue={setValue} filter={filter} setFilter={setfilter} isCollapsed={props.isCollapsed} />
-      {/*<Table api={api} currPage={currPage} setPages={setpages} filter={filter} search={value} isCollapsed={props.isCollapsed} />
-      <Pages pages={pages} currPage={currPage} setcurrPage={setcurrPage} /> */}
+      {/*<Table api={api} currPage={currPage} setPages={setpages} filter={filter} search={value} isCollapsed={props.isCollapsed} />*/}
+      <Pages pages={pages} currPage={currPage} setcurrPage={setcurrPage} /> 
     </>
   )
 }

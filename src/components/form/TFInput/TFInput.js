@@ -18,7 +18,9 @@ const TFInput = ({
           name={name}
           placeholder={placeholder}
           value={value}
-          onChange={onChange}
+          onChange={(e) => {
+            onChange(e.target.name, e.target.value);
+          }}
           className="tfinput"
           autoComplete="off"
           required={required}

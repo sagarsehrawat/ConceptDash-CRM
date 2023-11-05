@@ -5,7 +5,7 @@ import Estimation from "../department-projects/Estimation";
 import Default from "../department-projects/Default";
 import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead";
 
-const ChildProject = ({ form, handleForm, departments, cities, projectCategories }) => {
+const ChildProject = ({ form, handleForm, departments, cities, projectCategories, rosters }) => {
   // Handle Changing of Departments in Form
   const handleDepartmentProject = (department) => {
     switch (department) {
@@ -34,7 +34,7 @@ const ChildProject = ({ form, handleForm, departments, cities, projectCategories
             defaultValue={form.roster}
             width='100%'
             onChange={handleForm}
-            options={[{ value: 1, label: 'Products' }, { value: 2, label: 'Transportation' }, { value: 1, label: 'Estimation' }]}
+            options={rosters}
           />
         </div>
 

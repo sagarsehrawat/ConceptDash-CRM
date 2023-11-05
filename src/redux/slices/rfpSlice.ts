@@ -28,9 +28,9 @@ const rfpSlice = createSlice({
     initRFPs: (state, action: PayloadAction<RFP[]>) => {
       state.rfps = action.payload.map(rfp => ({
         ...rfp,
-        Submission_Date: rfp.Submission_Date ? moment(rfp.Submission_Date).format() : null,
-        Created_At: moment(rfp.Created_At).format(),
-        Start_Date: rfp.Start_Date ? moment(rfp.Start_Date).format() : null,
+        Submission_Date: moment(rfp.Submission_Date),
+        Created_At: moment(rfp.Created_At),
+        Start_Date: moment(rfp.Start_Date),
       }));
     },
     initData: (state, action: PayloadAction<RFPStatus>) => {

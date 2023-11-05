@@ -69,7 +69,7 @@ const Estimation = ({ form, handleForm,cities }) => {
           <TFChip
             value={form.clientResponse}
             name='clientResponse'
-            options={["Not Started", "In Progress", "Completed"]}
+            options={["Recieved", "Waiting", "Approved"]}
             onChange={handleForm}
           />
         </div>
