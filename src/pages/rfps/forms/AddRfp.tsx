@@ -101,7 +101,7 @@ const AddRfp = ({ show, setShow, api, setApi }: Props) => {
 
   const formUtils = FormUtils(setForm);
 
-  const handleForm = (key: string, value: string | number) => {
+  const handleForm = (key: string, value: string | number | FileList | null) => {
     console.log(key, value);
 
     switch (key) {
@@ -174,6 +174,7 @@ const AddRfp = ({ show, setShow, api, setApi }: Props) => {
     for (let i = 0; i < form.files.length; i++) {
       formData.append('files', form.files[i]);
     }
+
 
     try {
       const response = await SERVICES.addRfp(formData);
@@ -388,7 +389,7 @@ const AddRfp = ({ show, setShow, api, setApi }: Props) => {
                 style={{ padding: "0" }}
                 name="files"
                 type="file"
-                onChange={(e) => handleForm(e.target.name, e.target.value)}
+                onChange={(e) => handleForm(e.target.name, e.target.files)}
                 multiple
               />
             </div>
