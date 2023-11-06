@@ -37,6 +37,7 @@ interface FormType {
   files: File;
   source: string;
   city: string;
+  cityId: number;
   remarks: string;
 }
 
@@ -58,6 +59,7 @@ const AddRfp = ({ show, setShow, api, setApi }: Props) => {
     files: [],
     source: "",
     city: "",
+    cityId: "",
     remarks: "",
   });
 
@@ -168,7 +170,7 @@ const AddRfp = ({ show, setShow, api, setApi }: Props) => {
     formData.append('rfpNumber', form.rfpNumber);
     formData.append('source', form.source);
     formData.append('client', form.client);
-    formData.append('cityId', form.city);
+    formData.append('cityId', form.cityId);
     formData.append('remarks', form.remarks);
 
     for (let i = 0; i < form.files.length; i++) {
