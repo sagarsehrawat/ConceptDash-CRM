@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './TTMTable.css'
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
@@ -15,7 +15,7 @@ import tIcon from '../../../../Images/taskIcon.svg'
 import NewTaskorMilestone from '../forms/NewTaskorMilestone';
 import cross from '../../../../Images/cross.svg'
 import moment from 'moment';
-import TFInput from '../../../../components/form/TFInput/TFInput'
+import TFChip from '../../../../components/ui/TFChip/TFChip'
 
 function TTMTable(props) {
   const {Name, Id} = props;
@@ -23,6 +23,7 @@ function TTMTable(props) {
   const [show, setShow] = useState(false);
   const handleCloseStage1 = () => setShow(false);
   const handleShowStage1 = () => setShow(true);
+  const tableRef = useRef(null);
 
   const [showStage2, setShowStage2] = useState(false);
   const handleCloseStage2 = () => setShowStage2(false);
@@ -595,6 +596,10 @@ const calculateEndDate=(startDate, duration)=> {
     return duration;
   }
 
+  const handleUpdateChip=()=>{
+    
+  }
+
   return (
     isLoading?<LoadingSpinner/>:
     <div>
@@ -831,11 +836,13 @@ const calculateEndDate=(startDate, duration)=> {
                       <td style={{paddingLeft:'32px'}} className='td'
                       >{task.TaskName}</td>
                       <td style={{background:'white'}} className='td'><div style={{cursor:'pointer'}} onClick={()=>{setcurrStatus(e.status);setid([e.parentID, task.childId]);openstatusModal()}}>
-                      {task.status === 0 && task.Progress<100
+                      {/* {task.status === 0 && task.Progress<100
                         ? <div style={{  textAlign:'center', height: '20px', background: '#E4EEFE', border: '0.4px solid #E4EEFE', borderRadius: '24px', paddingLeft: '6px', paddingRight:'6px' }}>Not Started</div> :
                           task.status === 1 && task.Progress<100 ? <div style={{  textAlign:'center', height: '20px', background: '#FFF4EF', border: '0.4px solid #FFF4EF', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Ongoing</div> :
                             task.status === 2||task.Progress===100 ? <div style={{  textAlign:'center', height: '20px', background: '#559776', border: '0.4px solid #559776', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Completed</div> :<></>
-                      }</div></td>
+                      } */}
+                      <TFChip label='Status' tableRef={tableRef} options='"Not Started", "Ongoing", "Completed"' id={task.taskID} onUpdate={handleUpdateChip} />
+                      </div></td>
                       <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "start", e.parentID, task.childId)} selected={new Date(task.StartDate)} /></td>
                       <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "end", e.parentID, task.childId)} selected={calculateEndDate(new Date(task.StartDate), task.Duration)} /></td>
                       <td style={{ textAlign:'center', background:'white'}} className='td'>
