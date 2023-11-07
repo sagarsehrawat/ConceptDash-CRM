@@ -25,7 +25,7 @@ const Header = ({api, setApi}: Props) => {
         <p className='heading-2'>RFPs (Request For Proposals)</p>
         <TFButton icon={PlusIcon} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={() => setShow(true)} />
       </div>
-      <AddRfp show={show} setShow={setShow} api={api} setApi={setApi}/>
+      {show && <AddRfp show={show} setShow={setShow} api={api} setApi={setApi}/>}
     </>
   )
 }

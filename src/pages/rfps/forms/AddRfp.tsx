@@ -177,6 +177,8 @@ const AddRfp = ({ show, setShow, api, setApi }: Props) => {
       formData.append('files', form.files[i]);
     }
 
+    console.log(form);
+    console.log(formData);
 
     try {
       const response = await SERVICES.addRfp(formData);
@@ -192,7 +194,7 @@ const AddRfp = ({ show, setShow, api, setApi }: Props) => {
   return (
     <>
       <Modal
-        show={show}
+        show={true}
         onHide={() => setShow(false)}
         backdrop="static"
         style={{
