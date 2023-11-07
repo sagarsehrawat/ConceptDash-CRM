@@ -106,6 +106,12 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
     }
   }
 
+  const [editForm, setEditForm] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
+  const handleUpdate = () => {
+    // Set form data according to rfp and set isEditing true
+  }
+
   const openDriveLink = async (id: string) => {
     try {
       const response = await SERVICES.getGoogleDriveUrl(id);
@@ -296,7 +302,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
             ? <Button
               style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }}
               disabled={selectedRfps.length !== 1}
-            // onClick={handleUpdate}
+            onClick={handleUpdate}
             >
               <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
               <p className='floating-container-icon-text'>Edit</p>

@@ -12,56 +12,59 @@ import TFTypeahead from "../../../components/form/TFTypeahead/TFTypeahead";
 import TFInput from "../../../components/form/TFInput/TFInput";
 import LoadingSpinner from "../../../Main/Loader/Loader";
 import { useDispatch, useSelector } from 'react-redux';
-import { addRFP } from "../../../redux/slices/rfpSlice";
 
 type Props = {
-  show: boolean;
-  setShow: Function;
-  api: number;
-  setApi: Function;
+  show: boolean,
+  setShow: Function,
+  api: number,
+  setApi: Function,
+  isEditing: true,
+  editForm: FormType
 };
 
 interface FormType {
   department: string;
-  departmentId: number;
+  departmentId: string;
   projectCat: string;
-  projectCatId: number;
+  projectCatId: string;
   action: string;
   managerName: string;
-  managerNameId: number;
+  managerNameId: string;
   projectName: string;
   startDate: string | Date;
   submissionDate: string | Date;
   rfpNumber: string;
   client: string;
-  files: File;
+  files: Array<any>;
   source: string;
   city: string;
-  cityId: number;
+  cityId: string;
   remarks: string;
 }
 
-const AddRfp = ({ show, setShow, api, setApi }: Props) => {
+const FORM : FormType = {
+  department: "",
+  departmentId: "",
+  projectCat: "",
+  projectCatId: "",
+  action: "",
+  managerName: "",
+  managerNameId: "",
+  projectName: "",
+  startDate: "",
+  submissionDate: "",
+  rfpNumber: "",
+  client: "",
+  files: [],
+  source: "",
+  city: "",
+  cityId: "",
+  remarks: "",
+}
+
+const AddRfp = ({ show, setShow, api, setApi, isEditing, editForm }: Props) => {
   const dispatch = useDispatch();
-  const [form, setForm] = useState({
-    department: "",
-    departmentId: "",
-    projectCat: "",
-    projectCatId: "",
-    action: "",
-    managerName: "",
-    managerNameId: "",
-    projectName: "",
-    startDate: "",
-    submissionDate: "",
-    rfpNumber: "",
-    client: "",
-    files: [],
-    source: "",
-    city: "",
-    cityId: "",
-    remarks: "",
-  });
+  const [form, setForm] = useState(isEditing ? editForm : FORM);
 
   const [cities, setCities] = useState<
     Array<{ label: string | number; value: string | number }>
@@ -177,18 +180,15 @@ const AddRfp = ({ show, setShow, api, setApi }: Props) => {
       formData.append('files', form.files[i]);
     }
 
-    console.log(form);
-    console.log(formData);
-
     try {
-      const response = await SERVICES.addRfp(formData);
+      await SERVICES.addRfp(formData);
       setApi(api+1);
       setShow(!show);
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
-
   }
 
   return (
