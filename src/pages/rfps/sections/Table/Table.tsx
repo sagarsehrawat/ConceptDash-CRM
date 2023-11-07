@@ -94,6 +94,18 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
     }
   }
 
+  const handleDelete = async () => {
+    try {
+      await SERVICES.deleteRfps(selectedRfps);
+      setApi(api+1);
+      // setShowSortModal(false);
+    } catch (error) {
+      console.log(error);
+    } finally{
+      setselectedRfps([]);
+    }
+  }
+
   const openDriveLink = async (id: string) => {
     try {
       const response = await SERVICES.getGoogleDriveUrl(id);
