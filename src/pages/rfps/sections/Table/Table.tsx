@@ -41,9 +41,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
   const rfps = useSelector(selectRFPs);
   const privileges = useSelector(selectPrivileges);
 
-  const [showDelete, setShowDelete] = useState(false);
-  const handleCloseDelete = () => setShowDelete(false);
-  const handleShowDelete = () => setShowDelete(true);
+  const [showDelete, setShowDelete] = useState<boolean>(false);
   
   const sortRef = useRef(null);
   const [showSortModal, setShowSortModal] = useState<string>("");
@@ -103,10 +101,10 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
     try {
       await SERVICES.deleteRfps(selectedRfps);
       setApi(api + 1);
-      // setShowSortModal(false);
     } catch (error) {
       console.log(error);
     } finally {
+      setShowDelete(false);
       setselectedRfps([]);
     }
   }
@@ -157,9 +155,6 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         </div>
       </div>
       : <></>;
-  const handleDeleteRFP = async () => {
-    
-    };
   return (
     <>
       {
@@ -301,7 +296,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
           privileges.includes("Delete RFP")
             ? <div
               style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }}
-            onClick={(e) => handleShowDelete()}
+            onClick={(e) => setShowDelete(true)}
             >
               <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
               <p className='floating-container-icon-text'>Delete</p>
@@ -326,7 +321,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
           <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={(e) => setselectedRfps([])} />
         </div>
       </div>
-      {<TFDeleteModal show={showDelete} onHide={handleCloseDelete} onDelete={handleDeleteRFP} label='RFP(s)'/>}
+      {<TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete} label='RFP(s)'/>}
       {show
         && <AddRfp
           api={api}

@@ -88,7 +88,6 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
       }
       : FORM
   );
-  console.log(editForm);
 
   const [cities, setCities] = useState<
     Array<{ label: string | number; value: string | number }>
@@ -187,6 +186,7 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log(form.managerNameId)
     const formData = new FormData();
     formData.append('departmentId', form.departmentId.toString());
     formData.append('projectCatId', form.projectCatId.toString());
