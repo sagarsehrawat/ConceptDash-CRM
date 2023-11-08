@@ -9,9 +9,11 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import open from '../../../../Images/openinDrive.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp, faEdit, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
+import { DELETE_RFP, HOST, PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
+import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
+import AddRfp from '../../forms/AddRfp';
 
 interface FilterType {
   dept: (string | number)[],
@@ -39,6 +41,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
   const rfps = useSelector(selectRFPs);
   const privileges = useSelector(selectPrivileges);
 
+  const [showDelete, setShowDelete] = useState<boolean>(false);
   
   const sortRef = useRef(null);
   const [showSortModal, setShowSortModal] = useState<string>("");
@@ -94,6 +97,28 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
     }
   }
 
+  const handleDelete = async () => {
+    try {
+      await SERVICES.deleteRfps(selectedRfps);
+      setApi(api + 1);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setShowDelete(false);
+      setselectedRfps([]);
+    }
+  }
+
+  const [editForm, setEditForm] = useState<RFP | null>(null);
+  const [show, setShow] = useState<boolean>(false);
+  const handleClickUpdate = () => {
+    const rfp = rfps.find(rfp => rfp.rfp_id === selectedRfps[0]);
+    if (!rfp) return;
+
+    setEditForm(rfp);
+    setShow(true);
+  }
+
   const openDriveLink = async (id: string) => {
     try {
       const response = await SERVICES.getGoogleDriveUrl(id);
@@ -130,7 +155,6 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         </div>
       </div>
       : <></>;
-
   return (
     <>
       {
@@ -272,7 +296,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
           privileges.includes("Delete RFP")
             ? <div
               style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }}
-            // onClick={(e) => handleShowDelete()}
+            onClick={(e) => setShowDelete(true)}
             >
               <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
               <p className='floating-container-icon-text'>Delete</p>
@@ -284,7 +308,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
             ? <Button
               style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }}
               disabled={selectedRfps.length !== 1}
-            // onClick={handleUpdate}
+              onClick={handleClickUpdate}
             >
               <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
               <p className='floating-container-icon-text'>Edit</p>
@@ -297,6 +321,16 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
           <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={(e) => setselectedRfps([])} />
         </div>
       </div>
+      {<TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete} label='RFP(s)'/>}
+      {show
+        && <AddRfp
+          api={api}
+          setApi={setApi}
+          show={show}
+          setShow={setShow}
+          isEditing={true}
+          editForm={editForm}
+        />}
     </>
   )
 }

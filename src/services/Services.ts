@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { AddRfpResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpStatusResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse } from "Services";
+import { AddRfpResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpStatusResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse } from "Services";
 axios.defaults.baseURL = APIS.BASE_URL
 
 const SERVICES = {
@@ -129,6 +129,24 @@ const SERVICES = {
                 throw response.data as ErrorResponse
             }
             return response.data as UpdateRfpStatusResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    deleteRfps: async (rfpIds: number[]): Promise<DeleteResponse> => {
+        try {
+            const response = await axios.post(APIS.DELETE_RFPS,
+                {
+                    ids: JSON.stringify(rfpIds)
+                },
+                {
+                    headers: { auth: "Rose " + localStorage.getItem("auth"), },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as DeleteResponse;
         } catch (error) {
             throw error;
         }

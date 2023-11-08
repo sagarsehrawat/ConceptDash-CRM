@@ -10,6 +10,7 @@ const APIS = {
     GET_RFPS : '/api/get/page/rfps',
     UPDATE_RFP_STATUS : '/api/update/rfp/status',
     UPDATE_RFP_DATE : '/api/update/rfp/date',
+    DELETE_RFPS : '/api/delete/rfp/id',
     GET_GOOGLE_DRIVE_URL : '/google-api/get/fileLink',
     ADD_RFP : '/api/add/rfp'
 };
