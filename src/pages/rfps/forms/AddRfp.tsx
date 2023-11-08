@@ -13,14 +13,15 @@ import TFInput from "../../../components/form/TFInput/TFInput";
 import LoadingSpinner from "../../../Main/Loader/Loader";
 import { useDispatch, useSelector } from 'react-redux';
 import moment from "moment";
+import { showErrorModal, showSuccessModal } from "../../../redux/slices/alertSlice";
 
 type Props = {
-  show: boolean,
-  setShow: Function,
-  api: number,
-  setApi: Function,
-  isEditing: boolean,
-  editForm: RFP | null
+  show: boolean;
+  setShow: Function;
+  api: number;
+  setApi: Function;
+  isEditing: boolean;
+  editForm: RFP | null;
 };
 
 interface FormType {
@@ -206,10 +207,12 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
 
     try {
       await SERVICES.addRfp(formData);
+      dispatch(showSuccessModal('RFP Added.'));
       setApi(api + 1);
       setShow(!show);
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      dispatch(showErrorModal('Something went wrong.'))
     } finally {
       setIsLoading(false);
     }
