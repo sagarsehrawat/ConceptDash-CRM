@@ -9,9 +9,10 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import open from '../../../../Images/openinDrive.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp, faEdit, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
+import { DELETE_RFP, HOST, PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
+import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
 
 interface FilterType {
   dept: (string | number)[],
@@ -39,6 +40,9 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
   const rfps = useSelector(selectRFPs);
   const privileges = useSelector(selectPrivileges);
 
+  const [showDelete, setShowDelete] = useState(false);
+  const handleCloseDelete = () => setShowDelete(false);
+  const handleShowDelete = () => setShowDelete(true);
   
   const sortRef = useRef(null);
   const [showSortModal, setShowSortModal] = useState<string>("");
@@ -130,7 +134,9 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         </div>
       </div>
       : <></>;
-
+  const handleDeleteRFP = async () => {
+    
+    };
   return (
     <>
       {
@@ -272,7 +278,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
           privileges.includes("Delete RFP")
             ? <div
               style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }}
-            // onClick={(e) => handleShowDelete()}
+            onClick={(e) => handleShowDelete()}
             >
               <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
               <p className='floating-container-icon-text'>Delete</p>
@@ -297,6 +303,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
           <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={(e) => setselectedRfps([])} />
         </div>
       </div>
+      {<TFDeleteModal show={showDelete} onHide={handleCloseDelete} onDelete={handleDeleteRFP} label='RFP(s)'/>}
     </>
   )
 }
