@@ -12,37 +12,38 @@ import TFTypeahead from "../../../components/form/TFTypeahead/TFTypeahead";
 import TFInput from "../../../components/form/TFInput/TFInput";
 import LoadingSpinner from "../../../Main/Loader/Loader";
 import { useDispatch, useSelector } from 'react-redux';
+import moment from "moment";
 
 type Props = {
   show: boolean,
   setShow: Function,
   api: number,
   setApi: Function,
-  isEditing: true,
-  editForm: FormType
+  isEditing: boolean,
+  editForm: RFP | null
 };
 
 interface FormType {
   department: string;
-  departmentId: string;
+  departmentId: string | number;
   projectCat: string;
-  projectCatId: string;
+  projectCatId: string | number;
   action: string;
   managerName: string;
-  managerNameId: string;
+  managerNameId: string | number;
   projectName: string;
-  startDate: string | Date;
-  submissionDate: string | Date;
+  startDate: string;
+  submissionDate: string;
   rfpNumber: string;
   client: string;
   files: Array<any>;
   source: string;
   city: string;
-  cityId: string;
+  cityId: string | number;
   remarks: string;
 }
 
-const FORM : FormType = {
+const FORM: FormType = {
   department: "",
   departmentId: "",
   projectCat: "",
@@ -62,9 +63,32 @@ const FORM : FormType = {
   remarks: "",
 }
 
-const AddRfp = ({ show, setShow, api, setApi, isEditing, editForm }: Props) => {
+const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Props) => {
   const dispatch = useDispatch();
-  const [form, setForm] = useState(isEditing ? editForm : FORM);
+  const [form, setForm] = useState(
+    isEditing && editForm
+      ? {
+        department: editForm.department ?? "",
+        departmentId: editForm.department_id ?? "",
+        projectCat: editForm.project_category ?? "",
+        projectCatId: editForm.project_cat_id ?? "",
+        action: editForm.action,
+        managerName: editForm.project_manager ?? "",
+        managerNameId: editForm.project_manager_id ?? "",
+        projectName: editForm.project_name,
+        startDate: editForm.start_date ? moment(editForm.start_date).format("YYYY-MM-DD") : "",
+        submissionDate: editForm.submission_date ? moment(editForm.submission_date).format("YYYY-MM-DD") : "",
+        rfpNumber: editForm.rfp_number ?? "",
+        client: editForm.client ?? "",
+        files: [],
+        source: editForm.source ?? "",
+        city: editForm.city ?? "",
+        cityId: editForm.city_id ?? "",
+        remarks: editForm.remarks ?? "",
+      }
+      : FORM
+  );
+  console.log(editForm);
 
   const [cities, setCities] = useState<
     Array<{ label: string | number; value: string | number }>
@@ -91,7 +115,7 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing, editForm }: Props) => {
     fetchData();
   }, []);
 
-  
+
   useEffect(() => {
     const getProjectCategories = async () => {
       try {
@@ -159,21 +183,21 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing, editForm }: Props) => {
         break;
     }
   };
-  
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) =>{
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     const formData = new FormData();
-    formData.append('departmentId', form.departmentId);
-    formData.append('projectCatId', form.projectCatId);
-    formData.append('projectManagerId', form.managerNameId);
-    formData.append('projectName',form.projectName);
-    formData.append('startDate', form.startDate);
-    formData.append('submissionDate', form.submissionDate);
+    formData.append('departmentId', form.departmentId.toString());
+    formData.append('projectCatId', form.projectCatId.toString());
+    formData.append('projectManagerId', form.managerNameId.toString());
+    formData.append('projectName', form.projectName);
+    formData.append('startDate', form.startDate.toString());
+    formData.append('submissionDate', form.submissionDate.toString());
     formData.append('rfpNumber', form.rfpNumber);
     formData.append('source', form.source);
     formData.append('client', form.client);
-    formData.append('cityId', form.cityId);
+    formData.append('cityId', form.cityId.toString());
     formData.append('remarks', form.remarks);
 
     for (let i = 0; i < form.files.length; i++) {
@@ -182,7 +206,7 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing, editForm }: Props) => {
 
     try {
       await SERVICES.addRfp(formData);
-      setApi(api+1);
+      setApi(api + 1);
       setShow(!show);
     } catch (error) {
       console.log(error)
@@ -232,182 +256,188 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing, editForm }: Props) => {
           </div>
         </div>
         {
-        isLoading
-        ? <div style={{height:'150px'}} className="w-100">
-          <LoadingSpinner />
-        </div>
-        : <form>
-          <div className="d-flex flex-row justify-content-around">
-            <div>
-              <p className="nameHeading">Project Name<sup style={{color:'red'}}>*</sup></p>
-              <TFInput
-                placeholder="Project Name"
-                name="projectName"
-                value={form.projectName}
-                onChange={handleForm}
-                required={true}
-                width="740px"
-              />
+          isLoading
+            ? <div style={{ height: '150px' }} className="w-100">
+              <LoadingSpinner />
             </div>
-          </div>
+            : <form>
+              <div className="d-flex flex-row justify-content-around">
+                <div>
+                  <p className="nameHeading">Project Name<sup style={{ color: 'red' }}>*</sup></p>
+                  <TFInput
+                    placeholder="Project Name"
+                    name="projectName"
+                    value={form.projectName}
+                    onChange={handleForm}
+                    required={true}
+                    width="740px"
+                  />
+                </div>
+              </div>
 
-          <div className="d-flex flex-row justify-content-around">
-            <div>
-              <p className="nameHeading">City</p>
-              <TFTypeahead
-                name="city"
-                placeholder="Choose City"
-                onChange={handleForm}
-                options={cities}
-                width="740px"
-              />
-            </div>
-          </div>
+              <div className="d-flex flex-row justify-content-around">
+                <div>
+                  <p className="nameHeading">City</p>
+                  <TFTypeahead
+                    name="city"
+                    defaultValue={form.city}
+                    placeholder="Choose City"
+                    onChange={handleForm}
+                    options={cities}
+                    width="740px"
+                  />
+                </div>
+              </div>
 
-          <div className="d-flex flex-row justify-content-around">
-            <div>
-              <p className="nameHeading">Client</p>
-              <TFInput
-                placeholder="Enter Client"
-                name="client"
-                value={form.client}
-                onChange={handleForm}
-                width="740px"
-              />
-            </div>
-          </div>
+              <div className="d-flex flex-row justify-content-around">
+                <div>
+                  <p className="nameHeading">Client</p>
+                  <TFInput
+                    placeholder="Enter Client"
+                    name="client"
+                    value={form.client}
+                    onChange={handleForm}
+                    width="740px"
+                  />
+                </div>
+              </div>
 
-          <div
-            className="d-flex flex-row justify-content-start"
-            style={{ marginLeft: "20px", width: "740px" }}
-          >
-            <div style={{ marginRight: "20px", width: "234px" }}>
-              <p className="nameHeading">Department</p>
-              <TFTypeahead
-                name="department"
-                placeholder="Choose Department"
-                onChange={handleForm}
-                options={departments}
-                width="100%"
-              />
-            </div>
-
-            <div style={{ marginRight: "20px", width: "233px" }}>
-              <p className="nameHeading">Project Manager</p>
-              <TFTypeahead
-                name="managerName"
-                placeholder="Choose Project Manager"
-                onChange={handleForm}
-                options={managers}
-                width="100%"
-              />
-            </div>
-
-            {form.department!=="" && projectCategories.length!==0?<div style={{ width: "233px" }}>
-              <p className="nameHeading">Project Category</p>
-              <TFTypeahead
-                name="projectCat"
-                placeholder="Choose Project Category"
-                onChange={handleForm}
-                options={projectCategories}
-                width="100%"
-              />
-            </div>:<></>}
-          </div>
-
-          <div
-            className="d-flex flex-row justify-content-start"
-            style={{ marginLeft: "20px", width: "740px" }}
-          >
-            <div style={{ marginRight: "20px", width: "234px" }}>
-              <p className="nameHeading">Question Date</p>
-              <input
-                className="nameInput dropdown three"
-                name="startDate"
-                type="date"
-                onChange={(e) => handleForm(e.target.name, e.target.value)}
-              />
-            </div>
-
-            <div style={{ marginRight: "20px", width: "233px" }}>
-              <p className="nameHeading">Submission Date</p>
-              <input
-                className="nameInput dropdown three"
-                name="submissionDate"
-                type="date"
-                onChange={(e) => handleForm(e.target.name, e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div
-            className="d-flex flex-row justify-content-start"
-            style={{ marginLeft: "20px", width: "740px" }}
-          >
-            <div style={{ marginRight: "20px", width: "234px" }}>
-              <p className="nameHeading">RFP Number</p>
-              <TFInput
-                placeholder="Enter RFP Number"
-                name="rfpNumber"
-                value={form.rfpNumber}
-                onChange={handleForm}
-                width="100%"
-              />
-            </div>
-
-            <div style={{ marginRight: "20px", width: "233px" }}>
-              <p className="nameHeading">Select Source</p>
-              <select
-                className="nameInput dropdown three"
-                name="source"
-                onChange={(e) => handleForm(e.target.name, e.target.value)}
+              <div
+                className="d-flex flex-row justify-content-start"
+                style={{ marginLeft: "20px", width: "740px" }}
               >
-                <option>Select Source</option>
-                <option value="Construct Connect">Construct Connect</option>
-                <option value="Bids and Tenders">Bids and Tenders</option>
-                <option value="Biddingo">Biddingo</option>
-                <option value="Merx">Merx</option>
-              </select>
-            </div>
-          </div>
+                <div style={{ marginRight: "20px", width: "234px" }}>
+                  <p className="nameHeading">Department</p>
+                  <TFTypeahead
+                    name="department"
+                    defaultValue={form.department}
+                    placeholder="Choose Department"
+                    onChange={handleForm}
+                    options={departments}
+                    width="100%"
+                  />
+                </div>
 
-          <div className="d-flex flex-row justify-content-around">
-            <div>
-              <p className="nameHeading">Remarks</p>
-              <textarea
-                className="nameInput"
-                name="remarks"
-                rows={2}
-                onChange={(e) => handleForm(e.target.name, e.target.value)}
-              />
-            </div>
-          </div>
+                <div style={{ marginRight: "20px", width: "233px" }}>
+                  <p className="nameHeading">Project Manager</p>
+                  <TFTypeahead
+                    name="managerName"
+                    defaultValue={form.managerName}
+                    placeholder="Choose Project Manager"
+                    onChange={handleForm}
+                    options={managers}
+                    width="100%"
+                  />
+                </div>
 
-          <div className="d-flex flex-row justify-content-around">
-            <div>
-              <p className="nameHeading">
-                Relevent Files (Upto 500 MB each file)
-              </p>
-              <input
-                className="nameInput"
-                style={{ padding: "0" }}
-                name="files"
-                type="file"
-                onChange={(e) => handleForm(e.target.name, e.target.files)}
-                multiple
-              />
-            </div>
-          </div>
+                {form.department !== "" && projectCategories.length !== 0 ? <div style={{ width: "233px" }}>
+                  <p className="nameHeading">Project Category</p>
+                  <TFTypeahead
+                    name="projectCat"
+                    defaultValue={form.projectCat}
+                    placeholder="Choose Project Category"
+                    onChange={handleForm}
+                    options={projectCategories}
+                    width="100%"
+                  />
+                </div> : <></>}
+              </div>
 
-          <div className="d-flex flex-row justify-content-end gap-8 formFooter">
-            <TFButton
-              handleClick={() => setShow(!show)}
-              label="Cancel"
-              variant="secondary"
-            />
-            <TFButton handleClick={handleSubmit} label="Add RFP" />
-          </div>
-        </form>
+              <div
+                className="d-flex flex-row justify-content-start"
+                style={{ marginLeft: "20px", width: "740px" }}
+              >
+                <div style={{ marginRight: "20px", width: "234px" }}>
+                  <p className="nameHeading">Question Date</p>
+                  <input
+                    className="nameInput dropdown three"
+                    name="startDate"
+                    type="date"
+                    value={form.startDate}
+                    onChange={(e) => handleForm(e.target.name, e.target.value)}
+                  />
+                </div>
+
+                <div style={{ marginRight: "20px", width: "233px" }}>
+                  <p className="nameHeading">Submission Date</p>
+                  <input
+                    className="nameInput dropdown three"
+                    name="submissionDate"
+                    type="date"
+                    value={form.submissionDate}
+                    onChange={(e) => handleForm(e.target.name, e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div
+                className="d-flex flex-row justify-content-start"
+                style={{ marginLeft: "20px", width: "740px" }}
+              >
+                <div style={{ marginRight: "20px", width: "234px" }}>
+                  <p className="nameHeading">RFP Number</p>
+                  <TFInput
+                    placeholder="Enter RFP Number"
+                    name="rfpNumber"
+                    value={form.rfpNumber}
+                    onChange={handleForm}
+                    width="100%"
+                  />
+                </div>
+
+                <div style={{ marginRight: "20px", width: "233px" }}>
+                  <p className="nameHeading">Select Source</p>
+                  <select
+                    className="nameInput dropdown three"
+                    name="source"
+                    onChange={(e) => handleForm(e.target.name, e.target.value)}
+                  >
+                    <option>Select Source</option>
+                    <option value="Construct Connect">Construct Connect</option>
+                    <option value="Bids and Tenders">Bids and Tenders</option>
+                    <option value="Biddingo">Biddingo</option>
+                    <option value="Merx">Merx</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="d-flex flex-row justify-content-around">
+                <div>
+                  <p className="nameHeading">Remarks</p>
+                  <textarea
+                    className="nameInput"
+                    name="remarks"
+                    rows={2}
+                    onChange={(e) => handleForm(e.target.name, e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="d-flex flex-row justify-content-around">
+                <div>
+                  <p className="nameHeading">
+                    Relevent Files (Upto 500 MB each file)
+                  </p>
+                  <input
+                    className="nameInput"
+                    style={{ padding: "0" }}
+                    name="files"
+                    type="file"
+                    onChange={(e) => handleForm(e.target.name, e.target.files)}
+                    multiple
+                  />
+                </div>
+              </div>
+
+              <div className="d-flex flex-row justify-content-end gap-8 formFooter">
+                <TFButton
+                  handleClick={() => setShow(!show)}
+                  label="Cancel"
+                  variant="secondary"
+                />
+                <TFButton handleClick={handleSubmit} label="Add RFP" />
+              </div>
+            </form>
         }
       </Modal>
     </>

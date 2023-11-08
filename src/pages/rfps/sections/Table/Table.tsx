@@ -12,6 +12,7 @@ import { faArrowDown, faArrowUp, faEdit, faTrash, faXmark } from '@fortawesome/f
 import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
+import AddRfp from '../../forms/AddRfp';
 
 interface FilterType {
   dept: (string | number)[],
@@ -39,7 +40,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
   const rfps = useSelector(selectRFPs);
   const privileges = useSelector(selectPrivileges);
 
-  
+
   const sortRef = useRef(null);
   const [showSortModal, setShowSortModal] = useState<string>("");
   const [sort, setSort] = useState<string>('RFP_ID DESC');
@@ -97,19 +98,23 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
   const handleDelete = async () => {
     try {
       await SERVICES.deleteRfps(selectedRfps);
-      setApi(api+1);
+      setApi(api + 1);
       // setShowSortModal(false);
     } catch (error) {
       console.log(error);
-    } finally{
+    } finally {
       setselectedRfps([]);
     }
   }
 
-  const [editForm, setEditForm] = useState({});
-  const [isEditing, setIsEditing] = useState(false);
-  const handleUpdate = () => {
-    // Set form data according to rfp and set isEditing true
+  const [editForm, setEditForm] = useState<RFP | null>(null);
+  const [show, setShow] = useState<boolean>(false);
+  const handleClickUpdate = () => {
+    const rfp = rfps.find(rfp => rfp.rfp_id === selectedRfps[0]);
+    if (!rfp) return;
+
+    setEditForm(rfp);
+    setShow(true);
   }
 
   const openDriveLink = async (id: string) => {
@@ -302,7 +307,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
             ? <Button
               style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "35px", cursor: "pointer", backgroundColor: "transparent", border: "none" }}
               disabled={selectedRfps.length !== 1}
-            onClick={handleUpdate}
+              onClick={handleClickUpdate}
             >
               <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
               <p className='floating-container-icon-text'>Edit</p>
@@ -315,6 +320,15 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
           <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={(e) => setselectedRfps([])} />
         </div>
       </div>
+      {show
+        && <AddRfp
+          api={api}
+          setApi={setApi}
+          show={show}
+          setShow={setShow}
+          isEditing={true}
+          editForm={editForm}
+        />}
     </>
   )
 }
