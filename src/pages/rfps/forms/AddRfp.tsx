@@ -115,7 +115,7 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
     fetchData();
   }, []);
 
-
+  
   useEffect(() => {
     const getProjectCategories = async () => {
       try {
@@ -187,7 +187,6 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(form.managerNameId)
     const formData = new FormData();
     formData.append('departmentId', form.departmentId.toString());
     formData.append('projectCatId', form.projectCatId.toString());
