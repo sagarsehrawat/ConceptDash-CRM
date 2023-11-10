@@ -124,7 +124,7 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
         <TFSearchBar
           placeholder={'RFPs'}
           searchFunc={[value, setValue]}
-          style={{ 'margin-right': '12px' }}
+          style={{ 'marginRight': '12px' }}
           apiFunc={[api, setApi]}
         />
 

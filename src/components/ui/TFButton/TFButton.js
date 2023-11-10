@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from "prop-types";
 import './TFButton.css'
 
-const  TFButton = ({icon, label, disabled, variant, handleClick, size, style}) => {
+const  TFButton = ({icon, label, disabled, variant, handleClick, size, style, className}) => {
   const buttonClassName = variant === 'secondary' ? 'secondary-btn': 'primary-btn';
     
     if(icon!==""){
@@ -15,7 +15,7 @@ const  TFButton = ({icon, label, disabled, variant, handleClick, size, style}) =
     }
     
   return (
-    <button style={style} className={buttonClassName} onClick={handleClick} disabled={disabled}>
+    <button style={style} className={`${buttonClassName} ${className}`} onClick={handleClick} disabled={disabled}>
         <>
             {icon===''?<></>:(
                 <div>
@@ -56,7 +56,11 @@ TFButton.propTypes = {
     /**
    * Custom style for the Button
    */
-    style: PropTypes.object
+    style: PropTypes.object,
+    /**
+   * ClassName for button
+   */
+    className: PropTypes.string
   };
 
 TFButton.defaultProps = {

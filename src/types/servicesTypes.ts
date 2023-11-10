@@ -85,4 +85,8 @@ declare module "Services"{
     export interface AddRfpResponse {
         success : boolean
     }
+
+    export interface DeleteResponse {
+        success : boolean
+    }
 }
