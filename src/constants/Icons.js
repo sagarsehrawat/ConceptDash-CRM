@@ -9,9 +9,7 @@ const ICONS = {
     PLUS_WHITE,
     TICK_PRIMARY,
     WARNING_RED,
-    TICK_GREEN
-    TICK_PRIMARY,
-    WARNING_RED
+    TICK_GREEN,
 };
 
 export default ICONS;
