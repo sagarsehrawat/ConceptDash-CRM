@@ -19,7 +19,7 @@ const TFErrorAlert = (props: Props) => {
         return () => clearTimeout(timer);
       }, []);
 
-  return true && (
+  return errorMessage!=="" && (
     <div className='tf-alert-backdrop d-flex justify-content-end align-items-start'>
         <div className='tf-error-alert d-flex flex-row align-items-center'>
             <div className='error-square-container d-flex justify-content-center align-items-center'>
