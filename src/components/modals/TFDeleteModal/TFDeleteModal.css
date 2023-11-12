@@ -1,0 +1,88 @@
+.tf-modal-backdrop {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1050;
+    background: rgba(121, 137, 151, 0.12);
+    overflow-y: hidden;
+}
+
+.tf-delete-modal {
+    display: flex;
+    width: 360px;
+    padding: var(--32-pad, 32px) 24px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    border-radius: var(--12-pad, 12px);
+    background: #FFF;
+
+    /* New Card shadow */
+    box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.08);
+}
+
+.delete-modal-header {
+    background: #FFF5F5;
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    text-align: center;
+    padding-top: 8px;
+}
+
+.delete-modal-body {
+    text-align: center;
+}
+
+.delete-modal-body-heading {
+    color: #3D424F;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 142.857% */
+    margin-bottom: 12px;
+}
+
+.delete-modal-body-text{
+    color: var(--Dark-grey, #70757A);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+}
+
+.tf-delete-modal-input {
+    width: 255px;
+}
+
+.tf-delete-modal-footer {
+    width: 255px;
+}
+
+.tf-modal-delete-button {
+    background: #FF5252 !important;
+    box-shadow: none !important;
+}
+
+.tf-modal-delete-button:disabled {
+    background: rgba(29, 27, 32, 0.12) !important;
+    border: none;
+    color: #A9A8AA;
+    box-shadow: none !important;
+}
+
+
+.tf-modal-delete-button-cancel {
+    border: 1px solid var(--Checkbox-colour, #BEBEC0) !important;
+    box-shadow: none !important;
+    background: none;
+    color: var(--Dark-grey, #70757A) !important;
+
+}

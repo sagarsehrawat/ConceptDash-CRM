@@ -1,6 +1,6 @@
 const APIS = {
-    // BASE_URL : 'https://crm-api.conceptdash.ca',
-    BASE_URL : 'http://localhost:8080',
+    BASE_URL : 'https://crm-api.conceptdash.ca',
+    // BASE_URL : 'http://localhost:8080',
     SERVER_STATUS : `/`,
     GET_RFP_COUNT : '/api/get/rfp/count',
     GET_PROJECT_CHART: '/api/get/chart/project',
@@ -12,6 +12,7 @@ const APIS = {
     GET_RFPS : '/api/get/page/rfps',
     UPDATE_RFP_STATUS : '/api/update/rfp/status',
     UPDATE_RFP_DATE : '/api/update/rfp/date',
+    DELETE_RFPS : '/api/delete/rfp/id',
     GET_GOOGLE_DRIVE_URL : '/google-api/get/fileLink',
     ADD_RFP : '/api/add/rfp',
     ADD_PROJECT: '/project/add'

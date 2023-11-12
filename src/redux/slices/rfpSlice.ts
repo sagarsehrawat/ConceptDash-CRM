@@ -28,9 +28,9 @@ const rfpSlice = createSlice({
     initRFPs: (state, action: PayloadAction<RFP[]>) => {
       state.rfps = action.payload.map(rfp => ({
         ...rfp,
-        Submission_Date: moment(rfp.Submission_Date),
-        Created_At: moment(rfp.Created_At),
-        Start_Date: moment(rfp.Start_Date),
+        Submission_Date: moment(rfp.submission_date),
+        Created_At: moment(rfp.created_at),
+        Start_Date: moment(rfp.start_date),
       }));
     },
     initData: (state, action: PayloadAction<RFPStatus>) => {
@@ -44,12 +44,12 @@ const rfpSlice = createSlice({
     updateRFP: (state, action: PayloadAction<{ rfpId: number; data: Partial<RFP> }>) => {
       const { rfpId, data } = action.payload;
       state.rfps = state.rfps.map((rfp) =>
-        rfp.RFP_ID === rfpId ? { ...rfp, ...data } : rfp
+        rfp.rfp_id === rfpId ? { ...rfp, ...data } : rfp
       );
     },
     deleteRFP: (state, action: PayloadAction<string | number>) => {
       const rfpIdToDelete = action.payload;
-      state.rfps = state.rfps.filter((rfp) => rfp.RFP_ID !== rfpIdToDelete);
+      state.rfps = state.rfps.filter((rfp) => rfp.rfp_id !== rfpIdToDelete);
     },
   },
 });
