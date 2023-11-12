@@ -82,7 +82,7 @@ declare module "Services"{
         res : string | null
     }
 
-    export interface AddRfpResponse {
+    export interface AddResponse {
         success : boolean
     }
 }

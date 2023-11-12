@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { AddRfpResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse, ProjectCountResponse, GetRostersListResponse } from "Services";
+import { AddResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse, ProjectCountResponse, GetRostersListResponse } from "Services";
 
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -206,7 +206,7 @@ const SERVICES = {
         }
     },
 
-    addRfp: async (form: FormData): Promise<AddRfpResponse> => {
+    addRfp: async (form: FormData): Promise<AddResponse> => {
         try {
             const response = await axios.post(APIS.ADD_RFP, form,
                 {
@@ -221,7 +221,7 @@ const SERVICES = {
             if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
-            return response.data as AddRfpResponse;
+            return response.data as AddResponse;
         } catch (error) {
             throw error;
         }
@@ -247,6 +247,26 @@ const SERVICES = {
             throw error;
         }
     },
+
+    addProject: async (): Promise<AddResponse> => {
+        try{
+            const response = await axios.post(APIS.ADD_PROJECT, 
+                {
+
+                },
+                {
+                    headers: {
+                        auth: 'Rose ' + localStorage.getItem('auth'),
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as AddResponse;
+        } catch(error) {
+            throw error;
+        }
+    }
 };
 
 export default SERVICES;

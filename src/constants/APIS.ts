@@ -13,7 +13,8 @@ const APIS = {
     UPDATE_RFP_STATUS : '/api/update/rfp/status',
     UPDATE_RFP_DATE : '/api/update/rfp/date',
     GET_GOOGLE_DRIVE_URL : '/google-api/get/fileLink',
-    ADD_RFP : '/api/add/rfp'
+    ADD_RFP : '/api/add/rfp',
+    ADD_PROJECT: '/project/add'
 };
 
 export default APIS;

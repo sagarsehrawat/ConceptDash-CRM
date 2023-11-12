@@ -148,6 +148,20 @@ const AddProject = (props) => {
         }
     }
 
+    const handleSubmit = async () => {
+        try{
+            setIsLoading(true);
+            const addProjectResponse = await SERVICES.addProject();
+
+
+        } catch (error) {
+            console.log(error);
+        }
+        finally {
+            setIsLoading(false);
+        }
+    }
+
     return (
         <>
             <Modal
@@ -206,7 +220,7 @@ const AddProject = (props) => {
                                 />
                                 <TFButton
                                     label='Add Project'
-                                    handleClick={() => { }}
+                                    handleClick={handleSubmit}
                                     variant='primary'
                                 />
                             </div>
