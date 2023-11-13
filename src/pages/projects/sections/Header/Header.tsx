@@ -22,6 +22,7 @@ const Header = ({ api, setApi }: Props) => {
 
             {show &&
                 <AddProject
+                    show={show}
                     api={api}
                     setApi={setApi}
                     onHide={() => setShow(false)}
