@@ -243,36 +243,6 @@ const SERVICES = {
     },
 
 
-    updateRfp: async (id: number, departmentId: number | string, projectCatId: number | string, source: string, projectManagerId: number | string, startDate: string, submissionDate: string, projectName: string, rfpNumber: string, client: string, cityId: number | string, remarks: string): Promise<UpdateRfpResponse> => {
-        try {
-            const response = await axios.post(APIS.UPDATE_RFP,
-                {
-                    id,
-                    departmentId,
-                    projectCatId, 
-                    source,
-                    projectManagerId,
-                    startDate,
-                    submissionDate,
-                    projectName,
-                    rfpNumber,
-                    client,
-                    cityId,
-                    remarks
-                },
-                {
-                    headers: { auth: "Rose " + localStorage.getItem("auth"), },
-                });
-            if (response.data.success === false) {
-                throw response.data as ErrorResponse
-            }
-            return response.data as UpdateResponse;
-        } catch (error) {
-            throw error;
-        }
-    },
-
-
     updateRfp: async (id: number, departmentId: number | string, projectCatId: number | string, source: string, projectManagerId: number | string, startDate: string, submissionDate: string, projectName: string, rfpNumber: string, client: string, cityId: number | string, remarks: string): Promise<UpdateResponse> => {
         try {
             const response = await axios.post(APIS.UPDATE_RFP,
