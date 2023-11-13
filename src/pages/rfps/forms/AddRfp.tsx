@@ -14,6 +14,7 @@ import LoadingSpinner from "../../../Main/Loader/Loader";
 import { useDispatch, useSelector } from 'react-redux';
 import moment from "moment";
 import { showErrorModal, showSuccessModal } from "../../../redux/slices/alertSlice";
+import { updateRFP } from "../../../redux/slices/rfpSlice";
 
 type Props = {
   show: boolean;
@@ -89,7 +90,7 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
       }
       : FORM
   );
-
+  console.log(form)
   const [cities, setCities] = useState<
     Array<{ label: string | number; value: string | number }>
   >([]);
@@ -131,7 +132,6 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
   const formUtils = FormUtils(setForm);
 
   const handleForm = (key: string, value: string | number | FileList | null) => {
-    console.log(key, value);
 
     switch (key) {
       case "department":
@@ -183,30 +183,15 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
         break;
     }
   };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault();
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append('departmentId', form.departmentId.toString());
-    formData.append('projectCatId', form.projectCatId.toString());
-    formData.append('projectManagerId', form.managerNameId.toString());
-    formData.append('projectName', form.projectName);
-    formData.append('startDate', form.startDate.toString());
-    formData.append('submissionDate', form.submissionDate.toString());
-    formData.append('rfpNumber', form.rfpNumber);
-    formData.append('source', form.source);
-    formData.append('client', form.client);
-    formData.append('cityId', form.cityId.toString());
-    formData.append('remarks', form.remarks);
-
-    for (let i = 0; i < form.files.length; i++) {
-      formData.append('files', form.files[i]);
-    }
-
+    isEditing?handleSubmitEdit():handleSubmitAdd();
+  }
+  const handleSubmitEdit = async () => {
     try {
-      await SERVICES.addRfp(formData);
-      dispatch(showSuccessModal('RFP Added.'));
+      await SERVICES.updateRfp(editForm!.rfp_id, form.departmentId, form.projectCatId, form.source, form.managerNameId, form.startDate, form.submissionDate, form.projectName, form.rfpNumber, form.client, form.cityId, form.remarks);
+      dispatch(showSuccessModal('RFP Updated.'));
       setApi(api + 1);
       setShow(!show);
     } catch (error) {
@@ -215,6 +200,35 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
     } finally {
       setIsLoading(false);
     }
+  }
+  const handleSubmitAdd = async () => {
+      const formData = new FormData();
+      formData.append('departmentId', form.departmentId.toString());
+      formData.append('projectCatId', form.projectCatId.toString());
+      formData.append('projectManagerId', form.managerNameId.toString());
+      formData.append('projectName', form.projectName);
+      formData.append('startDate', form.startDate.toString());
+      formData.append('submissionDate', form.submissionDate.toString());
+      formData.append('rfpNumber', form.rfpNumber);
+      formData.append('source', form.source);
+      formData.append('client', form.client);
+      formData.append('cityId', form.cityId.toString());
+      formData.append('remarks', form.remarks);
+  
+      for (let i = 0; i < form.files.length; i++) {
+        formData.append('files', form.files[i]);
+      }
+      try {
+        await SERVICES.addRfp(formData);
+        dispatch(showSuccessModal('RFP Added.'));
+        setApi(api + 1);
+        setShow(!show);
+      } catch (error) {
+        console.log(error);
+        dispatch(showErrorModal('Something went wrong.'))
+      } finally {
+        setIsLoading(false);
+      }
   }
 
   return (
@@ -247,7 +261,7 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
         >
           <div className="d-flex flex-row">
             <TFIcon icon={tIcon} />
-            <div className="heading-2">Add New RFP</div>
+            <div className="heading-2">{isEditing?'Update RFP':'Add New RFP'}</div>
           </div>
           <div>
             <img
@@ -411,6 +425,7 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
                     name="remarks"
                     rows={2}
                     onChange={(e) => handleForm(e.target.name, e.target.value)}
+                    value={form.remarks}
                   />
                 </div>
               </div>
@@ -437,7 +452,7 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
                   label="Cancel"
                   variant="secondary"
                 />
-                <TFButton handleClick={handleSubmit} label="Add RFP" />
+                <TFButton handleClick={handleSubmit} label={isEditing?"Update RFP":"Add RFP"} />
               </div>
             </form>
         }

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import './TFErrorAlert.css'
 import { useDispatch, useSelector } from 'react-redux';
-import { removeSuccessModal, selectErrorMessage } from '../../../redux/slices/alertSlice';
+import { removeErrorModal, selectErrorMessage } from '../../../redux/slices/alertSlice';
 import TFIcon from '../../ui/TFIcon/TFIcon';
 import ICONS from '../../../constants/Icons';
 
@@ -13,11 +13,11 @@ const TFErrorAlert = (props: Props) => {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-          dispatch(removeSuccessModal());
+          dispatch(removeErrorModal());
         }, 3000);
     
         return () => clearTimeout(timer);
-      }, []);
+      }, [errorMessage]);
 
   return errorMessage!=="" && (
     <div className='tf-alert-backdrop d-flex justify-content-end align-items-start'>

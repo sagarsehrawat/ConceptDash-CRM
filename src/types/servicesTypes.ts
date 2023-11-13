@@ -97,4 +97,9 @@ declare module "Services"{
     export interface DeleteResponse {
         success : boolean
     }
+
+    export interface UpdateRfpResponse {
+        success : boolean,
+        res : Object
+    }
 }
