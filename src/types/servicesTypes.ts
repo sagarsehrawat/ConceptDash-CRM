@@ -5,12 +5,20 @@ declare module "Services"{
         description : Object
     }
 
-    export interface RfpStatusResponse {
+    export interface RfpCountResponse {
         success : boolean,
         res : Array<{
             Total : number | string,
             Month : number | string,
             Percent : number | string
+        }>
+    }
+
+    export interface ProjectCountResponse {
+        success : boolean,
+        res : Array<{
+            Count : number,
+            Status : string
         }>
     }
 
@@ -30,6 +38,14 @@ declare module "Services"{
         }>
     }
 
+    export interface GetRostersListResponse {
+        success : boolean,
+        res : Array<{
+            project_id : number,
+            project_name : string,
+        }>
+    }
+
     export interface GetProjectCategoriesResponse {
         success : boolean,
         res : Array<{
@@ -37,13 +53,20 @@ declare module "Services"{
             Project_Category : string,
         }>
     }
-
     export interface GetManagerNamesResponse {
         success : boolean,
         res : Array<{
-            Employee_ID : number | string,
+            Employee_ID : number,
             Full_Name : string,
         }>
+    }
+
+    export interface GetEmployeesListResponse {
+        success: boolean,
+        res: {
+            Employee_ID : number,
+            Full_Name : string
+        }[]
     }
 
     export interface GetRfpsResponse {
@@ -52,14 +75,14 @@ declare module "Services"{
         totalPages : number
     }
 
-    export interface UpdateRfpStatusResponse {
+    export interface GetProjectsResponse {
         success : boolean,
-        res : Object
+        res : Array<Project>,
+        totalPages : number
     }
 
-    export interface UpdateRfpDateResponse {
+    export interface UpdateResponse {
         success : boolean,
-        res : Object
     }
 
     export interface GetGoogleDriveUrlResponse {
@@ -67,7 +90,7 @@ declare module "Services"{
         res : string | null
     }
 
-    export interface AddRfpResponse {
+    export interface AddResponse {
         success : boolean
     }
 

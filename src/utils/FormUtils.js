@@ -59,7 +59,27 @@ const FormUtils = (setForm) => ({
                 [key]: value
             }
         });
-    }
+    },
+
+    multiSelectForm: (key, value) => {
+        setForm((prev) => {
+            const isValueInArray = prev[key].some((item) => item.value === value.value);
+      
+          if (isValueInArray) {
+            const updatedArray = prev[key].filter((item) => item.value !== value.value);
+
+            return {
+              ...prev,
+              [key]: updatedArray,
+            };
+          } else {
+            return {
+              ...prev,
+              [key]: [...prev[key], value],
+            };
+          }
+        });
+      }
 });
 
 export default FormUtils;
