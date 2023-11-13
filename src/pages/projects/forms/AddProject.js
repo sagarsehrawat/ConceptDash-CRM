@@ -14,6 +14,8 @@ import TFButton from '../../../components/ui/TFButton/TFButton';
 import SERVICES from '../../../services/Services';
 import LoadingSpinner from '../../../Main/Loader/Loader';
 import Utils from '../../../utils/Utils';
+import { useDispatch } from 'react-redux';
+import { showErrorModal, showSuccessModal } from '../../../redux/slices/alertSlice';
 
 const FORM = {
     projectType: "Independent Project",
@@ -21,6 +23,7 @@ const FORM = {
     departmentId: '',
     projectCategory: '',
     projectCategoryId: '',
+    projectValue: '',
     projectName: '',
     city: '',
     cityId: '',
@@ -43,19 +46,8 @@ const FORM = {
     designInfo: [],
 }
 
-const AddProject = (props) => {
-    const styles = {
-        addModal: {
-            position: "absolute",
-            width: "50vw",
-            background: "#FFFFFF",
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: '50vw',
-        },
-    }
-
+const AddProject = ({ onHide, api, setApi }) => {
+    const dispatch = useDispatch();
     const [form, setForm] = useState(FORM)
     const formUtils = FormUtils(setForm)
 
@@ -63,6 +55,8 @@ const AddProject = (props) => {
     const [openTasks, setOpenTasks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [departments, setDepartments] = useState([]);
+    const [managers, setManagers] = useState([]);
+    const [employees, setEmployees] = useState([]);
     const [rosters, setRosters] = useState([]);
     const [projectCategories, setProjectCategories] = useState([]);
     const [cities, setCities] = useState([]);
@@ -73,6 +67,12 @@ const AddProject = (props) => {
             try {
                 const departmentsResponse = await SERVICES.getDepartments();
                 setDepartments(Utils.convertToTypeaheadOptions(departmentsResponse.res, 'Department', 'Department_ID'));
+
+                const projectManagersResponse = await SERVICES.getManagers();
+                setManagers(Utils.convertToTypeaheadOptions(projectManagersResponse.res, 'Full_Name', 'Employee_ID'));
+
+                const employeesResponse = await SERVICES.getEmployeesList();
+                setEmployees(Utils.convertToTypeaheadOptions(employeesResponse.res, 'Full_Name', 'Employee_ID'));
 
                 const citiesResponse = await SERVICES.getCities();
                 setCities(Utils.convertToTypeaheadOptions(citiesResponse.res, 'City', 'City_ID'));
@@ -88,17 +88,17 @@ const AddProject = (props) => {
     }, []);
 
     useEffect(() => {
-      const getProjectCategories = async () => {
-        try{
-            const projectCatoriesResponse = await SERVICES.getProjectCategories(form.departmentId);
-            setProjectCategories(Utils.convertToTypeaheadOptions(projectCatoriesResponse.res, 'Project_Category', 'Project_Cat_ID'));
-        } catch (error) {
-            console.log(error);
+        const getProjectCategories = async () => {
+            try {
+                const projectCatoriesResponse = await SERVICES.getProjectCategories(form.departmentId);
+                setProjectCategories(Utils.convertToTypeaheadOptions(projectCatoriesResponse.res, 'Project_Category', 'Project_Cat_ID'));
+            } catch (error) {
+                console.log(error);
+            }
         }
-      }
-      getProjectCategories();
+        getProjectCategories();
     }, [form.departmentId])
-    
+
 
     const resetForm = (val) => {
         setForm({
@@ -111,6 +111,9 @@ const AddProject = (props) => {
         console.log(key, value);
 
         switch (key) {
+            case 'teamMembers':
+                formUtils.multiSelectForm(key, value);
+                break;
             case 'projectType':
                 formUtils.radioButtonForm(key, value);
                 resetForm(value)
@@ -124,6 +127,7 @@ const AddProject = (props) => {
                 const tasks = TaskListUtils.taskListFormatter(value.label);
                 setTaskList(tasks);
                 setOpenTasks(tasks.map(task => task.taskId));
+            case 'roster':
             case 'projectCategory':
             case 'projectManager':
             case 'city':
@@ -138,24 +142,49 @@ const AddProject = (props) => {
     const handleProjectType = (projectType) => {
         switch (projectType) {
             case 'Independent Project':
-                return <IndependentProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories}/>
+                return <IndependentProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories} managers={managers} employees={employees} />
             case 'Roster Project':
-                return <RosterProject form={form} handleForm={handleForm} cities={cities}/>
+                return <RosterProject form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
             case 'Child Project':
-                return <ChildProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories} rosters={rosters}/>
+                return <ChildProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories} rosters={rosters} managers={managers} employees={employees} />
             default:
                 return <></>
         }
     }
 
     const handleSubmit = async () => {
-        try{
+        try {
             setIsLoading(true);
-            const addProjectResponse = await SERVICES.addProject();
-
-
+            await SERVICES.addProject(
+                form.projectName,
+                form.projectType,
+                form.departmentId,
+                form.projectValue,
+                form.projectCategoryId,
+                form.cityId,
+                form.status,
+                form.dueDate,
+                form.followUpDate,
+                form.projectManagerId,
+                form.teamMembers,
+                form.projectDescription,
+                form.contractAcceptedDate,
+                form.contractExpiryDate,
+                form.rosterId,
+                form.clientResponse,
+                form.requestSentTo,
+                form.requestRecievedOn,
+                form.priority,
+                form.designChecklist,
+                form.designInfo,
+                taskList
+            );
+            setApi(api + 1);
+            onHide();
+            dispatch(showSuccessModal('Project Added!'))
         } catch (error) {
             console.log(error);
+            dispatch(showErrorModal('Something went wrong!'))
         }
         finally {
             setIsLoading(false);
@@ -164,21 +193,16 @@ const AddProject = (props) => {
 
     return (
         <>
-            <Modal
-                show={true}
-                onHide={props.onHide}
-                style={styles.addModal}
-                dialogClassName=""
-                backdrop="static"
-                animation={false}
+            <div
+                className='tf-modal-backdrop d-flex justify-content-end align-items-start'
             >
-                {
-                    isLoading
-                        ? <div className='w-100' style={{ height: '100vh' }}>
-                            <LoadingSpinner />
-                        </div>
-                        : <ModalBody>
-                            <div className='project-modal-container'>
+                <div className='project-modal'>
+                    {
+                        isLoading
+                            ? <div className='w-100 h-100'>
+                                <LoadingSpinner />
+                            </div>
+                            : <div className='project-modal-container'>
                                 <div className='project-modal-header'>
                                     <div className='icon-container'>
                                         <img src={headerIcon} />
@@ -212,21 +236,21 @@ const AddProject = (props) => {
                                     </div>
                                     : <></>}
                             </div>
-                            <div className='project-modal-footer w-100'>
-                                <TFButton
-                                    label='Cancel'
-                                    handleClick={props.onHide}
-                                    variant='secondary'
-                                />
-                                <TFButton
-                                    label='Add Project'
-                                    handleClick={handleSubmit}
-                                    variant='primary'
-                                />
-                            </div>
-                        </ModalBody>
-                }
-            </Modal>
+                    }
+                    <div className='project-modal-footer w-100'>
+                        <TFButton
+                            label='Cancel'
+                            handleClick={onHide}
+                            variant='secondary'
+                        />
+                        <TFButton
+                            label='Add Project'
+                            handleClick={handleSubmit}
+                            variant='primary'
+                        />
+                    </div>
+                </div>
+            </div>
         </>
     )
 }

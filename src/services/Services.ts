@@ -1,6 +1,7 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse, ProjectCountResponse, GetRostersListResponse } from "Services";
+import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, ProjectCountResponse, GetRostersListResponse, GetEmployeesListResponse, GetProjectsResponse, UpdateResponse } from "Services";
+import moment from "moment";
 
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -98,7 +99,7 @@ const SERVICES = {
 
     getManagers: async (): Promise<GetManagerNamesResponse> => {
         try {
-            const response = await axios.get(APIS.GET_MANAGERS, {
+            const response = await axios.get(APIS.GET_MANAGERS_LIST, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
                 },
@@ -107,6 +108,22 @@ const SERVICES = {
                 throw response.data as ErrorResponse
             }
             return response.data as GetManagerNamesResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getEmployeesList: async (): Promise<GetEmployeesListResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_EMPLOYEES_LIST, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetEmployeesListResponse;
         } catch (error) {
             throw error;
         }
@@ -149,7 +166,7 @@ const SERVICES = {
         }
     },
 
-    updateRfpStatus: async (rfpId: number, action: string): Promise<UpdateRfpStatusResponse> => {
+    updateRfpStatus: async (rfpId: number, action: string): Promise<UpdateResponse> => {
         try {
             const response = await axios.post(APIS.UPDATE_RFP_STATUS,
                 {
@@ -162,7 +179,27 @@ const SERVICES = {
             if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
-            return response.data as UpdateRfpStatusResponse;
+            return response.data as UpdateResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    updateProjectStatus: async (projectId: number, status: string, projectType: string): Promise<UpdateResponse> => {
+        try {
+            const response = await axios.put(APIS.UPDATE_PROJECT_STATUS,
+                {
+                    projectId,
+                    status,
+                    projectType
+                },
+                {
+                    headers: { auth: "Rose " + localStorage.getItem("auth"), },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as UpdateResponse;
         } catch (error) {
             throw error;
         }
@@ -186,7 +223,7 @@ const SERVICES = {
         }
     },
 
-    updateRfpDate: async (rfpId: number, field: string, date: string): Promise<UpdateRfpDateResponse> => {
+    updateRfpDate: async (rfpId: number, field: string, date: string): Promise<UpdateResponse> => {
         try {
             const response = await axios.post(APIS.UPDATE_RFP_DATE,
                 {
@@ -200,7 +237,7 @@ const SERVICES = {
             if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
-            return response.data as UpdateRfpDateResponse;
+            return response.data as UpdateResponse;
         } catch (error) {
             throw error;
         }
@@ -245,9 +282,9 @@ const SERVICES = {
         }
     },
 
-    getProjects: async (limit: number, currentPage: number, filter: Object, search: string, sort: string): Promise<GetRfpsResponse> => {
+    getProjects: async (limit: number, currentPage: number, filter: Object, search: string, sort: string): Promise<GetProjectsResponse> => {
         try {
-            const response = await axios.get(APIS.GET_RFPS, {
+            const response = await axios.get(APIS.GET_PROJECTS, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
                     limit,
@@ -260,17 +297,69 @@ const SERVICES = {
             if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
-            return response.data as GetRfpsResponse;
+            return response.data as GetProjectsResponse;
         } catch (error) {
             throw error;
         }
     },
 
-    addProject: async (): Promise<AddResponse> => {
+    addProject: async (
+        projectName: string,
+        projectType: string,
+        departmentId: string | number,
+        projectValue: string,
+        projectCategoryId: string | number,
+        cityId: string | number,
+        status: string,
+        dueDate: moment.Moment | string,
+        followUpDate: moment.Moment | string,
+        projectManagerId: string,
+        teamMemberIds: {label:string, value: string | number}[],
+        description: string,
+        contractAcceptedDate: moment.Moment | string,
+        contractExpiryDate: moment.Moment | string,
+        rosterId: string | number,
+        clientResponse: string,
+        requestSentTo: string,
+        requestRecievedOn: moment.Moment | string,
+        priority: string,
+        designCheckList: string[],
+        designInfo: string[],
+        taskList: Object
+    ): Promise<AddResponse> => {
         try{
+            const extraInfo : any = {};
+            if(projectType === 'Child Project')
+                extraInfo.parentId = rosterId;
+            if(departmentId === 1){
+                extraInfo['clientResponse'] = clientResponse;
+            }else if(departmentId === 8 && projectCategoryId === 68) {
+                extraInfo.priority = priority;
+                extraInfo.designCheckList = designCheckList;
+                extraInfo.designInfo = designInfo;
+            }else if(departmentId === 7){
+                extraInfo['clientResponse'] = clientResponse;
+                extraInfo.requestSentTo = requestSentTo;
+                extraInfo.requestRecievedOn = moment(requestRecievedOn).format('YYYY-MM-DD');
+            }
             const response = await axios.post(APIS.ADD_PROJECT, 
                 {
-
+                    projectCategoryId,
+                    projectManagerId,
+                    projectValue,
+                    projectName,
+                    projectType,
+                    departmentId,
+                    description,
+                    cityId,
+                    status,
+                    teamMemberIds: teamMemberIds.map(item => item.value),
+                    dueDate: moment(dueDate).format('YYYY-MM-DD'),
+                    followUpDate: moment(followUpDate).format('YYYY-MM-DD'),
+                    contractAcceptedDate: moment(contractAcceptedDate).format('YYYY-MM-DD'),
+                    contractExpiryDate: moment(contractExpiryDate).format('YYYY-MM-DD'),
+                    extraInfo,
+                    taskList
                 },
                 {
                     headers: {

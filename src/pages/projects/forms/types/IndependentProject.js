@@ -5,18 +5,18 @@ import Transportation from "../department-projects/Transportation";
 import Estimation from "../department-projects/Estimation";
 import TFTypeahead from '../../../../components/form/TFTypeahead/TFTypeahead'
 
-const IndependentProject = ({ form, handleForm, departments, cities,projectCategories }) => {
+const IndependentProject = ({ form, handleForm, departments, cities, projectCategories, managers, employees }) => {
   // Handle Changing of Departments in Form
-  const handleDepartmentProject = (department) => {
+  const handleDepartmentProject = (department, projectCategory = null) => {
     switch (department) {
-      case 'Products':
-        return <Products form={form} handleForm={handleForm} cities={cities} />
       case 'Traffic and transportation Engineering':
-        return <Transportation form={form} handleForm={handleForm} cities={cities} />
+        return <Transportation form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
       case 'Estimation':
-        return <Estimation form={form} handleForm={handleForm} cities={cities} />
+        return <Estimation form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
+      case 'Products':
+        if (projectCategory === 'EzStorm') return <Products form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
       default:
-        return <Default form={form} handleForm={handleForm} cities={cities} />
+        return <Default form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
     }
   }
 
@@ -40,7 +40,7 @@ const IndependentProject = ({ form, handleForm, departments, cities,projectCateg
 
         {/* Project Category */}
         {
-          projectCategories.length !==0
+          projectCategories.length !== 0 && form.departmentId !== ""
             ? <div className="d-flex flex-start gap-8">
               <p className="project-label">Project Category</p>
               <TFTypeahead
@@ -64,7 +64,7 @@ const IndependentProject = ({ form, handleForm, departments, cities,projectCateg
         </p>
       </div>
 
-      {handleDepartmentProject(form.department)}
+      {handleDepartmentProject(form.department, form.projectCategory)}
     </>
   );
 };

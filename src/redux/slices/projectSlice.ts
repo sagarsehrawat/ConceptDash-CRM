@@ -34,10 +34,10 @@ export const projectSlice = createSlice({
         initProjects: (state, action: PayloadAction<Project[]>) => {
             state.projects = action.payload.map(project => ({
                 ...project,
-                Date_Created: moment(project.Date_Created),
-                PO_Date: moment(project.PO_Date),
-                Project_Due_Date: moment(project.Project_Due_Date),
-              }));
+                date_created: moment(project.date_created),
+                due_date: moment(project.due_date),
+                follow_up_date: moment(project.follow_up_date)
+            }));
         },
         initData: (state, action: PayloadAction<ProjectStatus>) => {
             state.newProjects = action.payload.newProjects;
@@ -87,15 +87,30 @@ export const projectSlice = createSlice({
         addProject: (state, action: PayloadAction<Project>) => {
             state.projects.push(action.payload)
         },
-        updateProject: (state, action: PayloadAction<{ projectId: number; data: Partial<Project> }>) => {
-            const { projectId, data } = action.payload;
-            state.projects = state.projects.map((project) =>
-                project.Project_Id === projectId ? { ...project, ...data } : project
-            );
+        updateProject: (state, action: PayloadAction<{ projectId: number; data: Partial<Project>; parentId: number | null; }>) => {
+            const { projectId, data, parentId } = action.payload;
+            if (parentId === null) {
+                state.projects = state.projects.map((project) =>
+                    project.project_id === projectId ? { ...project, ...data } : project
+                );
+            } else {
+                state.projects = state.projects.map((project) =>
+                    project.project_id === parentId
+                        ? {
+                            ...project,
+                            child_projects_info: project.child_projects_info ? project.child_projects_info.map((prev) =>
+                                prev.project_id === projectId
+                                    ? { ...prev, ...data }
+                                    : prev
+                            ) : null
+                        }
+                        : project
+                );
+            }
         },
         deleteProject: (state, action: PayloadAction<number>) => {
             const projectIdToDelete = action.payload;
-            state.projects = state.projects.filter((project) => project.Project_Id !== projectIdToDelete);
+            state.projects = state.projects.filter((project) => project.project_id !== projectIdToDelete);
         }
     }
 });

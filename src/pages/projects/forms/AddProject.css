@@ -1,12 +1,8 @@
 .project-modal {
-    position: absolute;
-    width: 50vw;
+    width: 52vw;
     height: 100vh;
     background: #ffffff;
-    top: 0;
-    left: 50vw;
-    right: 0;
-    bottom: 0;
+    overflow-y: scroll;
 }
 
 .project-modal-container {

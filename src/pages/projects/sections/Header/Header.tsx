@@ -20,9 +20,7 @@ const Header = ({ api, setApi }: Props) => {
                 <TFButton icon={ICONS.PLUS_WHITE} label="Add New Project" disabled={!privileges.includes("Add Project")} handleClick={() => setShow(true)} />
             </div>
 
-            {show &&
-                <AddProject
-                    show={show}
+                {show && <AddProject
                     api={api}
                     setApi={setApi}
                     onHide={() => setShow(false)}

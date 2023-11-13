@@ -56,9 +56,17 @@ declare module "Services"{
     export interface GetManagerNamesResponse {
         success : boolean,
         res : Array<{
-            Employee_ID : number | string,
+            Employee_ID : number,
             Full_Name : string,
         }>
+    }
+
+    export interface GetEmployeesListResponse {
+        success: boolean,
+        res: {
+            Employee_ID : number,
+            Full_Name : string
+        }[]
     }
 
     export interface GetRfpsResponse {
@@ -67,14 +75,14 @@ declare module "Services"{
         totalPages : number
     }
 
-    export interface UpdateRfpStatusResponse {
+    export interface GetProjectsResponse {
         success : boolean,
-        res : Object
+        res : Array<Project>,
+        totalPages : number
     }
 
-    export interface UpdateRfpDateResponse {
+    export interface UpdateResponse {
         success : boolean,
-        res : Object
     }
 
     export interface GetGoogleDriveUrlResponse {

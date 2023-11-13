@@ -5,15 +5,15 @@ import { initRFPs, selectRFPs, updateRFP } from '../../../../redux/slices/rfpSli
 import LoadingSpinner from '../../../../Main/Loader/Loader';
 import './Table.css'
 import TFChip from '../../../../components/form/TFChip/TFChip';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import open from '../../../../Images/openinDrive.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp, faEdit, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { DELETE_RFP, HOST, PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
 import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
 import AddRfp from '../../forms/AddRfp';
+import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 
 interface FilterType {
   dept: (string | number)[],
@@ -219,7 +219,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
               <tbody style={{ background: "#FFFFFF" }}>
                 {
                   rfps && rfps.map(rfp => (
-                    <tr style={{ width: "100%", backgroundColor: selectedRfps.includes(rfp.rfp_id) ? "#F5F3FE" : "white", verticalAlign: "top" }} id={rfp.rfp_id.toString()}>
+                    <tr style={{ width: "100%", backgroundColor: selectedRfps.includes(rfp.rfp_id) ? "#F5F3FE" : "white", verticalAlign: "top" }} key={rfp.rfp_id.toString()}>
                       <td className='table-cell fixed-column' style={{ fontWeight: "500", backgroundColor: selectedRfps.includes(rfp.rfp_id) ? "#F5F3FE" : "white" }}>
                         <div className='d-flex flex-row align-items-center'>
                           <Form.Check

@@ -3,8 +3,9 @@ import TFChip from '../../../../components/form/TFChip/TFChip';
 import TFTypeahead from '../../../../components/form/TFTypeahead/TFTypeahead';
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
 import TFInput from '../../../../components/form/TFInput/TFInput';
+import TFMultiSelect from '../../../../components/form/TFMultiSelect/TFMultiSelect';
 
-const Estimation = ({ form, handleForm,cities }) => {
+const Estimation = ({ form, handleForm,cities, managers, employees }) => {
   return (
     <>
       <div className="d-flex flex-column gap-8 w-100">
@@ -103,22 +104,21 @@ const Estimation = ({ form, handleForm,cities }) => {
             width='100%'
             defaultValue={form.projectManager}
             onChange={handleForm}
-            options={[]}
+            options={managers}
           />
         </div>
 
         {/* Team Members */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Team Members</p>
-          <select
+          <TFMultiSelect
             name="teamMembers"
-            className="project-select"
-            placeholder="Select Team Members"
-            value={form.teamMembers}
-            onChange={(e) => handleForm(e.target.name, e.target.value)}
-          >
-            <option value="">Choose Team Members</option>
-          </select>
+            placeholder="Select Team Memebers"
+            selectedOptions={form.teamMembers}
+            onChange={handleForm}
+            options={employees}
+            width="100%"
+          />
         </div>
 
         {/* Request Sent to*/}

@@ -5,18 +5,18 @@ import Estimation from "../department-projects/Estimation";
 import Default from "../department-projects/Default";
 import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead";
 
-const ChildProject = ({ form, handleForm, departments, cities, projectCategories, rosters }) => {
+const ChildProject = ({ form, handleForm, departments, cities, projectCategories, rosters, managers, employees }) => {
   // Handle Changing of Departments in Form
-  const handleDepartmentProject = (department) => {
+  const handleDepartmentProject = (department, projectCategory = null) => {
     switch (department) {
-      case 'Products':
-        return <Products form={form} handleForm={handleForm} cities={cities} />
       case 'Traffic and transportation Engineering':
-        return <Transportation form={form} handleForm={handleForm} cities={cities} />
+        return <Transportation form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
       case 'Estimation':
-        return <Estimation form={form} handleForm={handleForm} cities={cities} />
+        return <Estimation form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
+        case 'Products':
+          if (projectCategory === 'EzStorm') return <Products form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
       default:
-        return <Default form={form} handleForm={handleForm} cities={cities} />
+        return <Default form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
     }
   }
 
@@ -55,7 +55,7 @@ const ChildProject = ({ form, handleForm, departments, cities, projectCategories
 
         {/* Project Category */}
         {
-          projectCategories.length !== 0
+          form.departmentId!=="" && projectCategories.length !== 0
             ? <div className="d-flex flex-start gap-8">
               <p className="project-label">Project Category</p>
               <TFTypeahead
@@ -79,7 +79,7 @@ const ChildProject = ({ form, handleForm, departments, cities, projectCategories
         </p>
       </div>
 
-      {handleDepartmentProject(form.department)}
+      {handleDepartmentProject(form.department, form.projectCategory)}
     </>
   );
 };
