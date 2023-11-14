@@ -6,9 +6,8 @@ import { initData, selectNewRFPs, selectPercentage, selectTotalRFPs } from '../.
 import SERVICES from '../../../../services/Services'
 import './HeaderCards.css'
 
-type Props = {}
 
-const HeaderCards = (props: Props) => {
+const HeaderCards = () => {
   const dispatch = useDispatch();
   const newRfps : number | string = useSelector(selectNewRFPs);
   const percent : number | string = useSelector(selectPercentage);

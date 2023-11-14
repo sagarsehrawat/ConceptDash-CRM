@@ -133,7 +133,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
       ? <div className='d-flex flex-column justify-content-between sort-container' ref={sortRef}>
         <div
           className='d-flex flex-row justify-content-around sort-hover'
-          onClick={(e) => {
+          onClick={() => {
             setSort(column);
             setApi(api + 1);
             setShowSortModal("");
@@ -144,7 +144,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         </div>
         <div
           className='d-flex flex-row justify-content-around sort-hover'
-          onClick={(e) => {
+          onClick={() => {
             setSort(`${column} DESC`);
             setApi(api + 1);
             setShowSortModal("");
@@ -227,7 +227,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                             type="checkbox"
                             checked={selectedRfps.includes(rfp.rfp_id)}
                             readOnly={true}
-                            onClick={(e) => {
+                            onClick={() => {
                               if (!selectedRfps.includes(rfp.rfp_id)) {
                                 setselectedRfps(prev => [...prev, rfp.rfp_id]);
                               } else {
@@ -237,7 +237,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                           />
                           <div style={{ display: 'flex', flexDirection: 'column' }}>
                             <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{rfp.project_name}</div>
-                            <div className='open-in-drive' onClick={(e) => openDriveLink(rfp.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>
+                            <div className='open-in-drive' onClick={() => openDriveLink(rfp.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>
                           </div>
                         </div>
                       </td>
@@ -290,7 +290,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
           privileges.includes("Delete RFP")
             ? <div
               style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }}
-            onClick={(e) => setShowDelete(true)}
+            onClick={() => setShowDelete(true)}
             >
               <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
               <p className='floating-container-icon-text'>Delete</p>
@@ -312,7 +312,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         <div style={{ marginLeft: "10px" }} className='floating-container-line'></div>
 
         <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
-          <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={(e) => setselectedRfps([])} />
+          <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={() => setselectedRfps([])} />
         </div>
       </div>
       {<TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete} label='RFP(s)'/>}

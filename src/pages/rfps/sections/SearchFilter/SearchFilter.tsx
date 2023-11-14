@@ -155,7 +155,7 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
                 <Button
                   style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }}
                   disabled={filterSize() === 0}
-                  onClick={(e) => {
+                  onClick={() => {
                     setFilter({ dept: [], cat: [], city: [], manager: [], source: [] });
                     setprevFilter({ dept: [], cat: [], city: [], manager: [], source: [] });
                     setApi(api + 1);
@@ -254,7 +254,7 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
               <TFButton
                 label='Filter'
                 style={styles.filterButton3}
-                handleClick={(e) => { setprevFilter(filter); setApi(api + 1); setShow(false); }}
+                handleClick={() => { setprevFilter(filter); setApi(api + 1); setShow(false); }}
               />
             </div>
           </div>

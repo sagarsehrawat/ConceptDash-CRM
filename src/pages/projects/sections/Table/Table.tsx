@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { initProjects, selectProjects, updateProject } from '../../../../redux/slices/projectSlice';
-import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
 import SERVICES from '../../../../services/Services';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -31,14 +30,13 @@ type Props = {
 }
 
 
-const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }: Props) => {
+const Table = ({ api, setApi, currPage, filter, search, setPages }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedProjects, setselectedProjects] = useState<number[]>([]);
   const [selectedRosters, setSelectedRosters] = useState<number[]>([]);
   const tableRef = useRef(null);
   const dispatch = useDispatch();
   const projects = useSelector(selectProjects);
-  const privileges = useSelector(selectPrivileges);
 
   const sortRef = useRef<HTMLDivElement>(null);
   const [showSortModal, setShowSortModal] = useState<string>("");
@@ -81,7 +79,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
       ? <div className='d-flex flex-column justify-content-between sort-container' ref={sortRef}>
         <div
           className='d-flex flex-row justify-content-around sort-hover'
-          onClick={(e) => {
+          onClick={() => {
             setSort(column);
             setApi(api + 1);
             setShowSortModal("");
@@ -92,7 +90,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         </div>
         <div
           className='d-flex flex-row justify-content-around sort-hover'
-          onClick={(e) => {
+          onClick={() => {
             setSort(`${column} DESC`);
             setApi(api + 1);
             setShowSortModal("");
@@ -188,12 +186,12 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                               selectedRosters.includes(idx)
                                 ? <FontAwesomeIcon
                                   icon={faChevronDown}
-                                  onClick={(eve) => setSelectedRosters(prev => prev.filter(ele => ele !== idx))}
+                                  onClick={() => setSelectedRosters(prev => prev.filter(ele => ele !== idx))}
                                   style={{ cursor: "pointer" }}
                                 />
                                 : <FontAwesomeIcon
                                   icon={faChevronRight}
-                                  onClick={(eve) => setSelectedRosters(prev => [...prev, idx])}
+                                  onClick={() => setSelectedRosters(prev => [...prev, idx])}
                                   style={{ cursor: "pointer" }}
                                 />
                             }
@@ -216,7 +214,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                         <td className='table-cell'>
                           <div className='d-flex flex-column align-items-center justify-content-start'>
                             <p>{project.project_code}</p>
-                            {project.folder_id && <div className='open-in-drive' onClick={(e) => openDriveLink(project.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>}
+                            {project.folder_id && <div className='open-in-drive' onClick={() => openDriveLink(project.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>}
                           </div>
                         </td>
                         <td className='table-cell'>{project.city}</td>
@@ -251,7 +249,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                         <td className='table-cell'>$ {project.project_value}</td>
                       </tr>
                       {
-                        project.child_projects_info && selectedRosters.includes(idx) && project.child_projects_info.map((childProject, index) => (
+                        project.child_projects_info && selectedRosters.includes(idx) && project.child_projects_info.map((childProject) => (
                           <tr style={{ width: "100%", backgroundColor: selectedProjects.includes(childProject.project_id) ? "#F5F3FE" : "white", verticalAlign: "top" }} key={childProject.project_id}>
                             <td className='table-cell fixed-column' style={{ backgroundColor: selectedProjects.includes(childProject.project_id) ? "#F5F3FE" : "white" }}>
                               <div className='d-flex flex-row justify-content-start gap-8 align-items-center'>
@@ -274,7 +272,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                             <td className='table-cell'>
                               <div className='d-flex flex-column align-items-center justify-content-start'>
                                 <p>{childProject.project_code}</p>
-                                {project.folder_id && <div className='open-in-drive' onClick={(e) => openDriveLink(childProject.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>}
+                                {project.folder_id && <div className='open-in-drive' onClick={() => openDriveLink(childProject.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>}
                               </div>
                             </td>
                             <td className='table-cell'>{childProject.city}</td>
@@ -336,7 +334,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                       <td className='table-cell'>
                         <div className='d-flex flex-column align-items-center justify-content-start'>
                           <p>{project.project_code}</p>
-                          {project.folder_id && <div className='open-in-drive' onClick={(e) => openDriveLink(project.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>}
+                          {project.folder_id && <div className='open-in-drive' onClick={() => openDriveLink(project.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>}
                         </div>
                       </td>
                       <td className='table-cell'>{project.city}</td>

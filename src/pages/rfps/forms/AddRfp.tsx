@@ -11,10 +11,9 @@ import Utils from "../../../utils/Utils";
 import TFTypeahead from "../../../components/form/TFTypeahead/TFTypeahead";
 import TFInput from "../../../components/form/TFInput/TFInput";
 import LoadingSpinner from "../../../Main/Loader/Loader";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import moment from "moment";
 import { showErrorModal, showSuccessModal } from "../../../redux/slices/alertSlice";
-import { updateRFP } from "../../../redux/slices/rfpSlice";
 
 type Props = {
   show: boolean;
