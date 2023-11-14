@@ -15,7 +15,7 @@ import tIcon from '../../../../Images/taskIcon.svg'
 import NewTaskorMilestone from '../forms/NewTaskorMilestone';
 import cross from '../../../../Images/cross.svg'
 import moment from 'moment';
-import TFChip from '../../../../components/ui/TFChip/TFChip'
+import TFChip from '../../../../components/form/TFChip/TFChip'
 
 function TTMTable(props) {
   const {Name, Id} = props;

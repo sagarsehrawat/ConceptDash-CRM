@@ -12,17 +12,8 @@ import person from "../../../Images/Person.svg";
 import filter from "../../../Images/Filter.svg";
 import edit from "../../../Images/Editor.svg";
 import del from "../../../Images/Delete.svg";
-import taskList from "../../../Images/TaskList.svg";
-import timesheet from "../../../Images/Timesheet.svg";
-import report from "../../../Images/Report.svg";
-import person from "../../../Images/Person.svg";
-import filter from "../../../Images/Filter.svg";
-import edit from "../../../Images/Editor.svg";
-import del from "../../../Images/Delete.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from 'moment'
-import cross from '../../../Images/cross.svg'
-import tIcon from '../../../Images/taskIcon.svg'
 import cross from '../../../Images/cross.svg'
 import tIcon from '../../../Images/taskIcon.svg'
 import {
@@ -52,17 +43,8 @@ import Reports from "../../reports/index";
 import AuthenticationContext from "../../../Context/AuthContext";
 import GreenAlert from "../../../Main/Loader/GreenAlert";
 import RedAlert from "../../../Main/Loader/RedAlert";
-import { DELETE_TASK, GET_EMPLOYEENAMES, GET_PAGE_TASKS, HOST, UPDATE_TASK_STATUS, PRIMARY_COLOR, UPDATE_TASK_PRIORITY } from "../../../Main/Constants/Constants";
-import LoadingSpinner from "../../../Main/Loader/Loader";
-import AddTask from "../forms/AddTask";
-import UpdateTask from "../forms/UpdateTask";
-import TimeSheet from "../../../Main/TimeSheet/TimeSheet";
-import Reports from "../../reports/index";
-import AuthenticationContext from "../../../Context/AuthContext";
-import GreenAlert from "../../../Main/Loader/GreenAlert";
-import RedAlert from "../../../Main/Loader/RedAlert";
 import './Tasks.css'
-import TFChip from "../../../components/ui/TFChip/TFChip";
+import TFChip from "../../../components/form/TFChip/TFChip";
 import TFButton from '../../../components/ui/TFButton/TFButton'
 import plusIcon from '../../../assets/icons/Plus.svg'
 
