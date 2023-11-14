@@ -222,7 +222,7 @@ const SERVICES = {
 
     addRfp: async (form: FormData): Promise<AddRfpResponse> => {
         try {
-            const response = await axios.post(APIS.UPDATE_RFP, form,
+            const response = await axios.post(APIS.ADD_RFP, form,
                 {
                     headers: {
                         auth: 'Rose ' + localStorage.getItem('auth'),
