@@ -1,0 +1,90 @@
+.sndCard-text1 {
+    color: var(--dark-grey, #70757A);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    font-family: Roboto;
+    font-style: normal;
+}
+.sndCard-text2 {
+    color: var(--dark-grey, #0A0A0A);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    font-family: Roboto;
+    font-style: normal;
+}
+
+.statsCard-container {
+    display: flex;
+    padding: 14px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    border-radius: 12px;
+    border: 1px solid var(--outline-color, #EBE9F1);
+    background: #FFF;
+    min-width: 250px;
+    cursor: pointer;
+}
+.statsCard-container-active {
+    border: 1px solid var(--mob-primary-colour, #8361FE);
+    background: #F5F3FE;
+    /* Card Selection Shadow */
+    box-shadow: 0px 4px 6px 0px #D9D9D9;
+}
+.statsCard-text1 {
+    color: #0A0A0A;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+.statsCard-text2 {
+    color: #0A0A0A;
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px;
+}
+
+.contatcts-heading {
+    color: #DE2424;
+    /* Heading 2 18pt */
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px;
+}
+
+th {
+    padding: 12px 32px;
+    color: var(--dark-grey, #70757A);
+    font-size: 13px;
+    font-family: Roboto;
+    font-weight: 600;
+    line-height: 20px;
+}
+
+.tr {
+    padding: 12px 32px;
+    border-bottom: 1px solid var(--outline-color, #EBE9F1);
+    background: #FFF;   
+    cursor: pointer;
+}
+.tr:hover { 
+    background: #F0F0F0;
+}
+
+td {
+    padding: 12px 32px;
+    color: #0A0A0A;
+    font-family: Roboto;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 142.857% */
+}

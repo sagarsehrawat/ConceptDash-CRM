@@ -1,0 +1,55 @@
+.tf-alert-backdrop {
+    padding: 48px;
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.tf-success-alert {
+    padding: 20px;
+    align-items: flex-start;
+    gap: 16px;
+    border-radius: var(--12-pad, 12px);
+    border: 1px solid #C0E2C9;
+    background: #EAF7EE;
+    z-index: 2050;
+    width: 458px;
+}
+
+.success-square-container {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: var(--12-pad, 12px);
+    background: #3AB65D;
+}
+
+.success-circle-container {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 100%;
+    background-color: #FFF;
+}
+
+.alert-heading {
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+.alert-subheading {
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}

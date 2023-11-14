@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import AuthenticationContext from "../../Context/AuthContext";
 import tIcon from '../../Images/taskIcon.svg'
 import { Sidebar, useProSidebar } from "react-pro-sidebar";
+import campaignActive from "../../Images/campaign-active.svg"
+import campaignInactive from "../../Images/campaign-inactive.svg"
 import dashboardActive from "../../Images/Dashboard Active state.svg";
 import dashboardInactive from "../../Images/Dashboard icon inactive.svg";
 import tasksActive from "../../Images/My tasks_Active.svg";
@@ -45,7 +47,7 @@ import adminSettings from "../../Images/adminSettings.svg";
 import logout from "../../Images/logout.svg";
 import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
-import RFP from "../../pages/rfps/index";
+import RFP from "../../pages/rfps/Index.tsx";
 import TestDemo from "../../pages/calendar/index";
 import Proposal from "../../pages/proposals/index";
 import Employee from "../../pages/employee/index";
@@ -74,6 +76,9 @@ import Profile from "../../pages/profile/index";
 import Announcements from "../../pages/announcements/index";
 import AddBudgetCity from "../Form/AddBudgetCity";
 import TTMMain from "../../pages/proposals/ttm/TTMMain";
+import CampaignRoot from "../v3/campaign/CampaignRoot";
+import { useDispatch } from "react-redux";
+import { initPrivileges } from "../../redux/slices/privilegeSlice";
 
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();
@@ -455,6 +460,7 @@ const Dashboard = () => {
   const [notifCounts, setnotifCounts] = useState(0);
   const [wish, setwish] = useState();
   const [showwish, setshowwish] = useState();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios
@@ -471,6 +477,7 @@ const Dashboard = () => {
         });
         localStorage.setItem("privileges", JSON.stringify(arr));
         setPrivileges(arr);
+        dispatch(initPrivileges(arr));
       })
       .catch((err) => {
         console.log(err);
@@ -544,6 +551,7 @@ const Dashboard = () => {
     if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
     if (nav === 8) return <TestDemo />;
     // if (nav === 9) return <ExpenseUpdate />;
+    // if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <Customers isCollapsed={isCollapsed} />;
     if (nav === 12) return <Privileges />;
@@ -551,6 +559,7 @@ const Dashboard = () => {
     if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
     if (nav === 18) return <TTMMain isCollapsed={isCollapsed}/>
+    if(nav === 19)return <CampaignRoot isCollapsed={isCollapsed} />
   };
 
   const [show, setShow] = useState(false);
@@ -907,6 +916,15 @@ const Dashboard = () => {
                       src={nav === 8 ? calendarActive : calendarInactive}
                       alt="Dashboard Icon"
                     />
+                  </div>
+                </div>
+                {/* Campaign */}
+                <div 
+                  style={nav === 19 ? mystyles.sidebarMenuItemActive.collapsed : mystyles.sidebarMenuItem} 
+                  onClick={(e) => setnav(19)}
+                >
+                  <div style={nav === 19 ? mystyles.sidebarMenuItemIconActive.collapsed : mystyles.sidebarMenuItemIcon.collapsed} >
+                    <img src={nav === 19 ? campaignActive : campaignInactive} alt="Dashboard Icon" />
                   </div>
                 </div>
                 {privileges.includes('View Companies') ? <div
@@ -1272,6 +1290,18 @@ const Dashboard = () => {
                     }
                   >
                     Calendar
+                  </p>
+                </div>
+                {/* Campaign */}
+                <div 
+                  style={ nav === 19 ? mystyles.sidebarMenuItemActive.nonCollapsed:  mystyles.sidebarMenuItem}
+                  onClick={(e) => setnav(19)}
+                >
+                  <div style={nav === 19 ? mystyles.sidebarMenuItemIconActive.nonCollapsed : mystyles.sidebarMenuItemIcon.nonCollapsed} >
+                    <img src={nav === 19 ? campaignActive : campaignInactive} alt="Dashboard Icon" />
+                  </div>
+                  <p style={nav === 19 ? mystyles.sidebarMenuItemTextActive : mystyles.sidebarMenuItemText} >
+                    Campaign
                   </p>
                 </div>
                 {privileges.includes('View Companies') ? <div

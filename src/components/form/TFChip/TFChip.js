@@ -7,28 +7,25 @@ const values = ['Completed', 'In Progress', 'Not Started', 'Critical', 'High', '
 
 // Class list for Chips
 const classes = {
-  'Completed' : 'completed-chip',
-  'In Progress' : 'in-progress-chip',
-  'Not Started' : 'not-started-chip',
-  'Critical' : 'critical-chip',
-  'High' : 'high-chip',
-  'Medium' : 'medium-chip',
-  'Low' : 'low-chip',
-  'Done' : 'done-chip',
-  'Not Found' : 'not-found-chip',
-  'Draft Budget' : 'draft-budget-chip',
-  'Won' : 'won-chip',
-  'Pending' : 'pending-chip',
-  'Lost' : 'lost-chip',
-  'Go' : 'go-chip',
-  'No Go' : 'nogo-chip',
-  'Review' : 'review-chip'
+  'Completed': 'completed-chip',
+  'In Progress': 'in-progress-chip',
+  'Not Started': 'not-started-chip',
+  'Critical': 'critical-chip',
+  'High': 'high-chip',
+  'Medium': 'medium-chip',
+  'Low': 'low-chip',
+  'Done': 'done-chip',
+  'Not Found': 'not-found-chip',
+  'Draft Budget': 'draft-budget-chip',
+  'Won': 'won-chip',
+  'Pending': 'pending-chip',
+  'Lost': 'lost-chip',
+  'Go': 'go-chip',
+  'No Go': 'nogo-chip',
+  'Review': 'review-chip'
 }
 
-const Chip = ({ label, tableRef, options, onUpdate, id }) => {
-  // const [chip, setChip] = useState(value)
-  const [value, setValue] = useState(label)
-  const [chipClass, setChipClass] = useState(classes[label]);
+const TFChip = ({ value, tableRef, options, onChange, name }) => {
   const [isVisible, setisVisible] = useState(false);
 
   const chipRef = useRef(null);
@@ -52,58 +49,44 @@ const Chip = ({ label, tableRef, options, onUpdate, id }) => {
 
   //  Handle Opening and Closing of Modal
   const handleModal = () => {
-    if (onUpdate) setisVisible(!isVisible);
+    if (onChange) setisVisible(!isVisible);
   };
 
   // Handle the table scrolling i.e. block it when modal is open and run it when modal is closed
   useEffect(() => {
-    if (onUpdate && tableRef) {
+    if (onChange && tableRef) {
       if (isVisible) {
         tableRef.current.style.overflowY = 'hidden';
       } else {
         tableRef.current.style.overflowY = 'auto';
       }
     }
-  }, [onUpdate, isVisible, tableRef]);
-
-  // Handle Click on the update modal
-  const handleClick = async (e, option) => {
-    e.preventDefault();
-    const prev = value;
-    setValue(option);
-    setChipClass(classes[option]);
-    setisVisible(false);
-
-    try{
-      const response = await onUpdate(id, option)
-
-      if(response.sucess === false) throw '';
-    } catch(e) {
-      setValue(prev);
-      setChipClass(classes[prev]);
-    }
-  };
+  }, [onChange, isVisible, tableRef]);
 
   return (
     <>
       <div className="chip-wrapper">
         <div
-          className={`chip ${chipClass}`}
-          style={{"cursor" : onUpdate ? "pointer" : "default"}}
+          className={`chip ${classes[value]}`}
+          style={{ "cursor": onChange ? "pointer" : "default" }}
           onClick={handleModal}
         >
           {value}
         </div>
-        {onUpdate ? (
+        {onChange ? (
           isVisible ? (
-            <div 
-            className="chip-modal" 
-            ref={chipRef}>
+            <div
+              className="chip-modal"
+              ref={chipRef}>
               <div className="chip-modal-container">
                 {options.map((option) => (
                   <div
                     className="chip-modal-item"
-                    onClick={(e) => handleClick(e, option)}
+                    key={option}
+                    onClick={(e) => {
+                      setisVisible(false);
+                      onChange(name, option);
+                    }}
                   >
                     <div className={`chip ${classes[option]}`}>{option}</div>
                   </div>
@@ -121,11 +104,11 @@ const Chip = ({ label, tableRef, options, onUpdate, id }) => {
   );
 };
 
-Chip.propTypes = {
+TFChip.propTypes = {
   /**
-   * Label for the Chip
+   * Value for the Chip
    */
-  label: PropTypes.oneOf(values).isRequired,
+  value: PropTypes.oneOf(values).isRequired,
   /**
    * Options for the update modal of the chip
    */
@@ -133,21 +116,22 @@ Chip.propTypes = {
   /**
    * useRef variable for the table which can stop the scrolling of the table
    */
-  tableRef: PropTypes.func,
+  tableRef: PropTypes.any,
   /**
    * Function on what to do when updating with the modal 
    */
-  onUpdate: PropTypes.func,
+  onChange: PropTypes.func,
   /**
-   * ID of the row to be updated in Table
+   * name of the field
    */
-  id: PropTypes.number,
+  name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
-Chip.defaultProps = {
+TFChip.defaultProps = {
   tableRef: null,
-  onUpdate: null,
-  options: []
+  onChange: null,
+  options: [],
+  name:'',
 };
 
-export default Chip;
+export default TFChip;

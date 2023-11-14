@@ -24,7 +24,7 @@ import UpdateCity2 from '../../../Main/v2-forms/UpdateCity2'
 import tIcon from '../../../Images/taskIcon.svg'
 import cross from '../../../Images/cross.svg'
 import TFSearchBar from '../../../components/ui/TFSearchBar/TFSearchBar'
-import TFChip from '../../../components/ui/TFChip/TFChip'
+import TFChip from '../../../components/form/TFChip/TFChip'
 import TFButton from '../../../components/ui/TFButton/TFButton'
 import plusIcon from '../../../assets/icons/Plus.svg'
 
