@@ -3,9 +3,8 @@ import SERVICES from '../../services/Services.ts';
 import { useNavigate } from 'react-router-dom';
 import './DownPage.css'
 
-type Props = {}
 
-const DownPage = (props: Props) => {
+const DownPage = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {

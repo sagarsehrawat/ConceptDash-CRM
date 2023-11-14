@@ -13,14 +13,14 @@ type Props = {
 const Header = ({api, setApi}: Props) => {
   const privileges: string[] = useSelector(selectPrivileges);
   const [show, setShow] = useState<boolean>(false)
-
+  const editForm= null;
   return (
     <>
       <div className='d-flex flex-row justify-content-between align-items-center' style={{ margin: '32px 24px 0px 32px' }}>
         <p className='heading-2'>RFPs (Request For Proposals)</p>
         <TFButton icon={ICONS.PLUS_WHITE} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={() => setShow(true)} />
       </div>
-      {show && <AddRfp show={show} setShow={setShow} api={api} setApi={setApi}/>}
+      {show && <AddRfp show={show} setShow={setShow} isEditing={false} editForm={editForm} api={api} setApi={setApi}/>}
     </>
   )
 }

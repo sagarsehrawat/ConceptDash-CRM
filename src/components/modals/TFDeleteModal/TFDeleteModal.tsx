@@ -16,7 +16,7 @@ const TFDeleteModal = ({ show, onHide, onDelete, label }: Props) => {
 
   const [value, setvalue] = useState<string>("")
 
-  const onChange = (key: string, value: string) => setvalue(value);
+  const onChange = (value: string) => setvalue(value);
 
   useEffect(() => {
     if(show) document.body.style.overflow = 'hidden';

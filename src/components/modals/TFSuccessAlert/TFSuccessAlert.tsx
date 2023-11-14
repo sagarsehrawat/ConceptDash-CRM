@@ -3,15 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   removeSuccessModal,
   selectSuccessMessage,
-  showSuccessModal,
 } from "../../../redux/slices/alertSlice";
 import "./TFSuccessAlert.css";
 import TFIcon from "../../ui/TFIcon/TFIcon";
 import ICONS from "../../../constants/Icons";
 
-type Props = {};
 
-const TFSuccessModal = (props: Props) => {
+const TFSuccessModal = () => {
   const dispatch = useDispatch();
   const successMessage = useSelector(selectSuccessMessage);
 

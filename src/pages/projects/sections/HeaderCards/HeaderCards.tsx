@@ -6,9 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import Utils from '../../../../utils/Utils'
 
-type Props = {}
 
-const HeaderCards = (props: Props) => {
+const HeaderCards = () => {
     const dispatch = useDispatch();
     const newProjects = useSelector(selectNewProjects)
     const ongoingProjects = useSelector(selectOngoingProjects)

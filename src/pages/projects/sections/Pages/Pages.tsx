@@ -16,14 +16,14 @@ const Pages = ({ pages, currPage, setcurrPage }: Props) => {
         <Button
           className='page-container'
           disabled={currPage === 1}
-          onClick={(e) => setcurrPage(currPage - 1)}
+          onClick={() => setcurrPage(currPage - 1)}
         >
           <FontAwesomeIcon icon={faChevronLeft} color="#70757A" />
         </Button>
         <Button
           className={currPage === 1 ? 'current-page-container' : 'page-container'}
           disabled={currPage === 1}
-          onClick={(e) => setcurrPage(1)}
+          onClick={() => setcurrPage(1)}
         >
           1
         </Button>
@@ -31,7 +31,7 @@ const Pages = ({ pages, currPage, setcurrPage }: Props) => {
           ? <Button
             className={currPage === 2 ? 'current-page-container' : 'page-container'}
             disabled={currPage === 2}
-            onClick={(e) => setcurrPage(2)}
+            onClick={() => setcurrPage(2)}
           >
             2
           </Button>
@@ -41,7 +41,7 @@ const Pages = ({ pages, currPage, setcurrPage }: Props) => {
           ? <Button
             className={currPage === 3 ? 'current-page-container' : 'page-container'}
             disabled={currPage === 3}
-            onClick={(e) => setcurrPage(3)}
+            onClick={() => setcurrPage(3)}
           >
             3
           </Button>
@@ -52,7 +52,7 @@ const Pages = ({ pages, currPage, setcurrPage }: Props) => {
           ? <Button
             className={currPage === 4 ? 'current-page-container' : 'page-container'}
             disabled={currPage === 4}
-            onClick={(e) => setcurrPage(4)}
+            onClick={() => setcurrPage(4)}
           >
             4
           </Button>
@@ -62,7 +62,7 @@ const Pages = ({ pages, currPage, setcurrPage }: Props) => {
           ? <Button
             className={currPage === 5 ? 'current-page-container' : 'page-container'}
             disabled={currPage === 5}
-            onClick={(e) => setcurrPage(5)}
+            onClick={() => setcurrPage(5)}
           >
             5
           </Button>
@@ -76,7 +76,7 @@ const Pages = ({ pages, currPage, setcurrPage }: Props) => {
           ? <Button
             className={currPage === 6 ? 'current-page-container' : 'page-container'}
             disabled={currPage === pages}
-            onClick={(e) => setcurrPage(pages)}
+            onClick={() => setcurrPage(pages)}
           >
             {pages}
           </Button>
@@ -85,7 +85,7 @@ const Pages = ({ pages, currPage, setcurrPage }: Props) => {
         <Button
           className='page-container'
           disabled={currPage === pages}
-          onClick={(e) => setcurrPage(currPage + 1)}
+          onClick={() => setcurrPage(currPage + 1)}
         >
           <FontAwesomeIcon icon={faChevronRight} color="#70757A" />
         </Button>

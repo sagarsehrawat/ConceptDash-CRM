@@ -36,11 +36,11 @@ const TFMultiSelect = ({
             >
                 <div
                     className='multiselect-container'
-                    onFocus={(e) => {
+                    onFocus={() => {
                         setisVisible(true);
                         if (inputRef && inputRef.current) inputRef.current.focus();
                     }}
-                    onBlur={(e) => {
+                    onBlur={() => {
                         setValue("");
                         setisVisible(false);
                     }}
