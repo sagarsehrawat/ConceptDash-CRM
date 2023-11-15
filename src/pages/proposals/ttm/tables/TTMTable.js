@@ -155,7 +155,6 @@ const calculateEndDate=(startDate, duration)=> {
         for(let i=0;i<h.hrs.length;i++) {
           sum += h.hrs[i]*rate[i]
         }
-        console.log(sum)
       })
     })
   }
@@ -841,7 +840,7 @@ const calculateEndDate=(startDate, duration)=> {
                           task.status === 1 && task.Progress<100 ? <div style={{  textAlign:'center', height: '20px', background: '#FFF4EF', border: '0.4px solid #FFF4EF', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Ongoing</div> :
                             task.status === 2||task.Progress===100 ? <div style={{  textAlign:'center', height: '20px', background: '#559776', border: '0.4px solid #559776', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Completed</div> :<></>
                       } */}
-                      <TFChip label='Status' tableRef={tableRef} options={["Not Started", "Ongoing", "Completed"]} id={task.TaskID}  />
+                      <TFChip value={task.status===0?"Not Started":(task.status===1?"Ongoing":"Completed")} tableRef={tableRef} options={["Not Started", "Ongoing", "Completed"]} name={task.TaskID} onChange={updateStatus} />
                       </div></td>
                       <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "start", e.parentID, task.childId)} selected={new Date(task.StartDate)} /></td>
                       <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "end", e.parentID, task.childId)} selected={calculateEndDate(new Date(task.StartDate), task.Duration)} /></td>
