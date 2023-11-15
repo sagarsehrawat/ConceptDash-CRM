@@ -91,3 +91,8 @@
     font-weight: 400;
     line-height: 20px;
 }
+
+.multiselect-option-checkbox {
+    border: 0.6px solid #8361FE;
+    background-color: #FFF;
+}

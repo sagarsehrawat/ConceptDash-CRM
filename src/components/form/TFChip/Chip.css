@@ -61,7 +61,7 @@
     background: #F7F8F8;
 }
 
-.completed-chip{
+.completed-chip, .recieved-chip{
     background: #E4EEFE;
     color: #5079E1;
 }
@@ -81,12 +81,12 @@
     color: #D93838;
 }
 
-.medium-chip, .draft-budget-chip, .pending-chip, .review-chip{
+.medium-chip, .draft-budget-chip, .pending-chip, .review-chip, .waiting-chip{
     background: #FFF4EF;
     color: #FD9568;
 }
 
-.in-progress-chip, .low-chip, .done-chip, .won-chip, .go-chip{
+.in-progress-chip, .low-chip, .done-chip, .won-chip, .go-chip, .approved-chip{
     background: #EFFEFA;
     color: #13A579;
 }

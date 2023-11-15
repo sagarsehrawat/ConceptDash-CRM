@@ -7,7 +7,13 @@ const Utils = {
         options.map(option => ({
             value: option[valueKey],
             label: option[labelKey]
-        }))
+        })),
+
+        calculatePercentage : (val : number, total : number) : number => {
+            if (!total) return 0;
+            
+            return Math.round((val / total) * 100);
+        }
 };
 
 export default Utils;

@@ -5,9 +5,9 @@ import { removeErrorModal, selectErrorMessage } from '../../../redux/slices/aler
 import TFIcon from '../../ui/TFIcon/TFIcon';
 import ICONS from '../../../constants/Icons';
 
-type Props = {}
 
-const TFErrorAlert = (props: Props) => {
+
+const TFErrorAlert = () => {
     const dispatch = useDispatch();
     const errorMessage = useSelector(selectErrorMessage);
 

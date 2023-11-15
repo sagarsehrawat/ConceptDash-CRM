@@ -1,0 +1,32 @@
+.tasklist-wrapper {
+    position: relative;
+    overflow-x: auto;
+    max-height: 472px;
+}
+
+.tasklist-table {
+    background: #F7F7F9;
+}
+
+.tasklist-table-header {
+    height: 20px;
+    padding: 4px var(--8-pad, 8px);
+    border-radius: 6px 0px 0px 0px;
+    background: #F7F7F9;
+    color: #728492;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+}
+
+.tasklist-cell {
+    height: 36px;
+    padding: 4px var(--8-pad, 8px);
+    align-items: center;
+    gap: var(--8-pad, 8px);
+    flex-shrink: 0;
+    border-bottom: 1px solid #EBEDF8;
+    background: #FFF;
+}

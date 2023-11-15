@@ -53,7 +53,7 @@ import Proposal from "../../pages/proposals/index";
 import Employee from "../../pages/employee/index";
 import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../../pages/customers/index";
-import Project from "../../pages/projects/index";
+import Project from "../../pages/projects/Index.tsx";
 import BudgetCities from "../../pages/budgetCities/index";
 import Tasks from "../../pages/tasks/index";
 import AddTask from "../../pages/tasks/forms/AddTask";
@@ -144,6 +144,7 @@ const Dashboard = () => {
       height: "56px",
       left: "0px",
       top: "0px",
+      position: 'fixed',
       backgroundColor: "#FAFBFB",
       borderBottom: "1px solid #EBE9F1",
       width: "100vw",
@@ -1399,9 +1400,11 @@ const Dashboard = () => {
         </Sidebar>
         <div
           style={{
+            marginTop: '56px',
             marginLeft: isCollapsed ? "68px" : "228px",
             backgroundColor: "#F8FAFB",
             height: `${window.innerHeight - 56}px`,
+            overflowY: 'auto',
             width: isCollapsed ? `${viewportWidth - 68}px` : `${viewportWidth - 228}px`
           }}
         >

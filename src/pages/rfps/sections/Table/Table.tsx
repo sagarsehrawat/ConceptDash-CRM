@@ -5,15 +5,15 @@ import { initRFPs, selectRFPs, updateRFP } from '../../../../redux/slices/rfpSli
 import LoadingSpinner from '../../../../Main/Loader/Loader';
 import './Table.css'
 import TFChip from '../../../../components/form/TFChip/TFChip';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import open from '../../../../Images/openinDrive.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp, faEdit, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { DELETE_RFP, HOST, PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
 import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
 import AddRfp from '../../forms/AddRfp';
+import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 
 interface FilterType {
   dept: (string | number)[],
@@ -43,7 +43,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
 
   const [showDelete, setShowDelete] = useState<boolean>(false);
   
-  const sortRef = useRef(null);
+  const sortRef = useRef<HTMLDivElement>(null);
   const [showSortModal, setShowSortModal] = useState<string>("");
   const [sort, setSort] = useState<string>('RFP_ID DESC');
   useEffect(() => {
@@ -133,7 +133,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
       ? <div className='d-flex flex-column justify-content-between sort-container' ref={sortRef}>
         <div
           className='d-flex flex-row justify-content-around sort-hover'
-          onClick={(e) => {
+          onClick={() => {
             setSort(column);
             setApi(api + 1);
             setShowSortModal("");
@@ -144,7 +144,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         </div>
         <div
           className='d-flex flex-row justify-content-around sort-hover'
-          onClick={(e) => {
+          onClick={() => {
             setSort(`${column} DESC`);
             setApi(api + 1);
             setShowSortModal("");
@@ -219,7 +219,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
               <tbody style={{ background: "#FFFFFF" }}>
                 {
                   rfps && rfps.map(rfp => (
-                    <tr style={{ width: "100%", backgroundColor: selectedRfps.includes(rfp.rfp_id) ? "#F5F3FE" : "white", verticalAlign: "top" }} id={rfp.rfp_id.toString()}>
+                    <tr style={{ width: "100%", backgroundColor: selectedRfps.includes(rfp.rfp_id) ? "#F5F3FE" : "white", verticalAlign: "top" }} key={rfp.rfp_id.toString()}>
                       <td className='table-cell fixed-column' style={{ fontWeight: "500", backgroundColor: selectedRfps.includes(rfp.rfp_id) ? "#F5F3FE" : "white" }}>
                         <div className='d-flex flex-row align-items-center'>
                           <Form.Check
@@ -227,7 +227,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                             type="checkbox"
                             checked={selectedRfps.includes(rfp.rfp_id)}
                             readOnly={true}
-                            onClick={(e) => {
+                            onClick={() => {
                               if (!selectedRfps.includes(rfp.rfp_id)) {
                                 setselectedRfps(prev => [...prev, rfp.rfp_id]);
                               } else {
@@ -237,7 +237,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                           />
                           <div style={{ display: 'flex', flexDirection: 'column' }}>
                             <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{rfp.project_name}</div>
-                            <div className='open-in-drive' onClick={(e) => openDriveLink(rfp.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>
+                            <div className='open-in-drive' onClick={() => openDriveLink(rfp.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>
                           </div>
                         </div>
                       </td>
@@ -253,29 +253,23 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                         />
                       </td>
                       <td className='table-cell'>
-                        {rfp.submission_date
-                          ? (<TFDateChip
+                        {rfp.submission_date.isValid() && <TFDateChip
                             value={rfp.submission_date}
                             name={rfp.rfp_id}
                             tableRef={tableRef}
                             onChange={(name: number, value: string) => handleDateUpdate(name, 'submission_date', value)}
-                          />)
-                          : ""
-                        }
+                          />}
                       </td>
                       <td className='table-cell'>{rfp.rfp_number}</td>
                       <td className='table-cell'>{rfp.remarks}</td>
                       <td className='table-cell'>{rfp.rating}</td>
                       <td className='table-cell'>
-                        {rfp.start_date
-                          ? (<TFDateChip
+                        {rfp.start_date.isValid() && <TFDateChip
                             value={rfp.start_date}
                             name={rfp.rfp_id}
                             tableRef={tableRef}
                             onChange={(name: number, value: string) => handleDateUpdate(name, 'start_date', value)}
-                          />)
-                          : ""
-                        }
+                          />}
                       </td>
                       <td className='table-cell'>{rfp.project_manager}</td>
                       <td className='table-cell'>{rfp.department}</td>
@@ -296,7 +290,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
           privileges.includes("Delete RFP")
             ? <div
               style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginLeft: "90px", cursor: "pointer" }}
-            onClick={(e) => setShowDelete(true)}
+            onClick={() => setShowDelete(true)}
             >
               <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
               <p className='floating-container-icon-text'>Delete</p>
@@ -318,7 +312,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         <div style={{ marginLeft: "10px" }} className='floating-container-line'></div>
 
         <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
-          <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={(e) => setselectedRfps([])} />
+          <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={() => setselectedRfps([])} />
         </div>
       </div>
       {<TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete} label='RFP(s)'/>}

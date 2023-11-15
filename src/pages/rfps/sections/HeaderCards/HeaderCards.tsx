@@ -6,9 +6,8 @@ import { initData, selectNewRFPs, selectPercentage, selectTotalRFPs } from '../.
 import SERVICES from '../../../../services/Services'
 import './HeaderCards.css'
 
-type Props = {}
 
-const HeaderCards = (props: Props) => {
+const HeaderCards = () => {
   const dispatch = useDispatch();
   const newRfps : number | string = useSelector(selectNewRFPs);
   const percent : number | string = useSelector(selectPercentage);
@@ -17,7 +16,7 @@ const HeaderCards = (props: Props) => {
   useEffect(() => {
     const fetchData = async () => {
       try{
-        const response = await SERVICES.rfpStatus();
+        const response = await SERVICES.rfpCount();
         dispatch(initData(response.res[0]));
       } catch(error) {
         console.log(error)

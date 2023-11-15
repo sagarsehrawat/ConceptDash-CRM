@@ -1,0 +1,50 @@
+[
+    {
+        "task": "Project Initiation",
+        "subtasks": [
+            {
+                "task": "Project Initiation Meeting"
+            },
+            {
+                "task": "Background data collection and Field Review"
+            },
+            {
+                "task": "Public and Stakeholder COnsultation"
+            },
+            {
+                "task": "Review Meeting with City/Municipality/Town/County"
+            }
+        ]
+    },
+    {
+        "task": "Preliminary Design",
+        "subtasks": [
+            {
+                "task": "Trip generation spreadsheet using ITE Trip generation Manual"
+            },
+            {
+                "task": "Spreadsheet Future Traffic development using growth rate"
+            },
+            {
+                "task": "Review Meeting with City/Municipality/Town/County"
+            }
+        ]
+    },
+    {
+        "task": "Detailed Design (60%)",
+        "subtasks": [
+            {
+                "task": "Preparation of Draft TIS Report"
+            },
+            {
+                "task": "Review and Approval from the City/Town"
+            },
+            {
+                "task": "Preliminary Floor Plans & Exterior Concept Ready for further Development"
+            },
+            {
+                "task": "Confirm Project Feasibility/ Alternatives"
+            }
+        ]
+    }
+]

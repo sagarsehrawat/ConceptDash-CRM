@@ -1,8 +1,8 @@
 import React from 'react'
 
-type Props = {}
 
-const TFModal = (props: Props) => {
+
+const TFModal = () => {
   return (
     <div>TFModal</div>
   )
