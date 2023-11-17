@@ -10,8 +10,7 @@ const TFTypeahead = ({
   options,
   required,
   readOnly,
-  width,
-  isMultiSelect
+  width
 }) => {
   const [value, setValue] = useState(defaultValue);
   const [isVisible, setisVisible] = useState(false);

@@ -64,7 +64,6 @@ import ProposalForm from "../../pages/proposals/forms/ProposalForm";
 import projectForm from '../../Images/projectForm.svg'
 import cross from '../../Images/cross.svg'
 import announcement from '../../Images/announcement.svg'
-import ProjectForm from "../../pages/projects/forms/ProjectForm";
 import Privileges from '../Update/Privileges.js'
 import { GET_CELEBRATIONS, GET_EMPLOYEE_PRIVILEGES, GET_NOTIFICATIONS, HOST, PRIMARY_COLOR } from "../Constants/Constants";
 import PMSelector from "../../pages/pmSelector/index";
@@ -1494,33 +1493,6 @@ const Dashboard = () => {
           }
       </Modal>
 
-      {/* Add Project Form Modal */}
-      <Modal
-        show={projectShow}
-        onHide={handleCloseProject}
-        backdrop="static"
-        style={mystyles.addModal}
-        dialogClassName="filter-dialog"
-        animation={false}
-      >
-        <div className='d-flex flex-row justify-content-between align-items-center' style={{ marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection: 'row' }}>
-          <div className='d-flex flex-row'>
-            <img src={projectForm} />
-            <div style={mystyles.addHeading}>Creating new project</div>
-          </div>
-          <div><img onClick={handleCloseProject} style={{ marginRight: '25px', float: 'right' }} src={cross} /></div>
-        </div>
-        {
-          <ProjectForm
-            setRed={setred}
-            setGreen={setgreen}
-            closeModal={handleClose}
-            api={apiCall}
-            apiCall={setCall}
-          />
-        }
-
-      </Modal>
       <Modal
             backdrop="static"
             size="lg"
