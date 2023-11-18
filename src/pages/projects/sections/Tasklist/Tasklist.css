@@ -6,6 +6,7 @@
 
 .tasklist-table {
     background: #F7F7F9;
+    border-collapse: separate;
 }
 
 .tasklist-table-header {
@@ -29,4 +30,16 @@
     flex-shrink: 0;
     border-bottom: 1px solid #EBEDF8;
     background: #FFF;
+}
+
+.add-task-cell {
+    color: var(--Dark-grey, #70757A);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    border-left: 1px solid #EBEDF8;
+    border-right: 1px solid #EBEDF8;
+    padding-left: 36px;
+    cursor: pointer;
 }

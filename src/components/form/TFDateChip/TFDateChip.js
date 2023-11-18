@@ -14,7 +14,7 @@ const TFDateChip = ({
     name,
 }) => {
     const [isVisible, setisVisible] = useState(false);
-    const [date, setDate] = useState(moment(value).format('DD-MM-YYYY'))
+    const [date, setDate] = useState(moment(value).isValid() ? moment(value).format('DD-MM-YYYY') : '')
     const [isValid, setIsValid] = useState(true)
     const dateChipRef = useRef(null);
 
@@ -22,7 +22,11 @@ const TFDateChip = ({
     const handleBlur = () => {
         if (date === moment(value).format('DD-MM-YYYY')) return;
         const isDateValid = moment(date, "DD-MM-YYYY", true);
-        if (isDateValid.isValid()) {
+        if(date === ''){
+            onChange(name, '');
+            setIsValid(true);
+            setisVisible(false);
+        }else if (isDateValid.isValid()) {
             onChange(name, moment(date, 'DD-MM-YYYY'));
             setIsValid(true);
             setisVisible(false);
@@ -39,7 +43,7 @@ const TFDateChip = ({
                     !ref.current ||
                     ref.current.contains(event.target) ||
                     event.target.classList.contains("wrapper") ||
-                    !moment(date, "DD-MM-YYYY", true).isValid()
+                    (!moment(date, "DD-MM-YYYY", true).isValid() && date!=='')
                 ) {
                     return;
                 }
@@ -72,7 +76,7 @@ const TFDateChip = ({
                     className='datechip'
                     onClick={handleModal}
                 >
-                    {moment(value).format('D MMM, YYYY').replace('.', '')}
+                    {moment(value).isValid() ? moment(value).format('D MMM, YYYY').replace('.', '') : 'Choose Date'}
                 </div>
                 {onChange && isVisible ? (
                     <div className="datechip-modal" ref={dateChipRef}>
@@ -91,8 +95,9 @@ const TFDateChip = ({
                         </div>
                         <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="en">
                             <DateCalendar
-                                value={moment(value)}
+                                value={moment(value).isValid() ? moment(value) : moment()}
                                 onChange={(e) => {
+                                    console.log(e);
                                     setDate(e.format('DD-MM-YYYY'));
                                     onChange(name, e);
                                     setisVisible(false);

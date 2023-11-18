@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from "prop-types";
-import Icons from '../../../constants/Icons';
+import ICONS from '../../../constants/Icons';
 
 const TFIcon = ({ icon, alt, className, onClick, style }) => {
   return (
-    <img src={icon} alt={alt} className={className} onClick={onClick} style={style}/>
+    <img src={icon} alt={alt} className={className} onClick={onClick} style={{...style, cursor: onClick ? "pointer" : "default"}}/>
   )
 }
 
@@ -12,7 +12,7 @@ TFIcon.propTypes = {
   /**
   * Placeholder for the SearchBar
   */
-  icon: PropTypes.oneOf(Object.keys(Icons)),
+  icon: PropTypes.oneOf(Object.keys(ICONS)),
   /**
   * Alt Text for Icon
   */
