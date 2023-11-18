@@ -78,7 +78,7 @@ const SERVICES = {
         }
     },
 
-    getProjectCategories: async (departmentId: string | number) : Promise<GetProjectCategoriesResponse> => {
+    getProjectCategories: async (departmentId: string | number): Promise<GetProjectCategoriesResponse> => {
         try {
             const response = await axios.get(APIS.GET_PROJECT_CATEGORIES, {
                 headers: {
@@ -86,7 +86,7 @@ const SERVICES = {
                     id: departmentId
                 },
             });
-            if(response.data.success === false){
+            if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
             return response.data as GetProjectCategoriesResponse;
@@ -221,6 +221,24 @@ const SERVICES = {
         }
     },
 
+    deleteProjects: async (proejctIds: number[]): Promise<DeleteResponse> => {
+        try {
+            const response = await axios.delete(APIS.DELETE_PROJECTS,
+                {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                        projectids: JSON.stringify(proejctIds)
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as DeleteResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
     updateRfpDate: async (rfpId: number, field: string, date: string): Promise<UpdateResponse> => {
         try {
             const response = await axios.post(APIS.UPDATE_RFP_DATE,
@@ -248,7 +266,7 @@ const SERVICES = {
                 {
                     id,
                     departmentId,
-                    projectCatId, 
+                    projectCatId,
                     source,
                     projectManagerId,
                     startDate,
@@ -327,7 +345,7 @@ const SERVICES = {
         }
     },
 
-    getProjectById: async (projectid: string | number) : Promise<GetProjectById> => {
+    getProjectById: async (projectid: string | number): Promise<GetProjectById> => {
         try {
             const response = await axios.get(APIS.GET_PROJECT_BY_ID, {
                 headers: {
@@ -355,7 +373,7 @@ const SERVICES = {
         dueDate: moment.Moment | string,
         followUpDate: moment.Moment | string,
         projectManagerId: string,
-        teamMemberIds: {label:string, value: string | number}[],
+        teamMemberIds: { label: string, value: string | number }[],
         description: string,
         contractAcceptedDate: moment.Moment | string,
         contractExpiryDate: moment.Moment | string,
@@ -368,22 +386,22 @@ const SERVICES = {
         designInfo: string[],
         taskList: Object
     ): Promise<AddResponse> => {
-        try{
-            const extraInfo : any = {};
-            if(projectType === 'Child Project')
+        try {
+            const extraInfo: any = {};
+            if (projectType === 'Child Project')
                 extraInfo.parentId = rosterId;
-            if(departmentId === 1){
+            if (departmentId === 1) {
                 extraInfo['clientResponse'] = clientResponse;
-            }else if(departmentId === 8 && projectCategoryId === 68) {
+            } else if (departmentId === 8 && projectCategoryId === 68) {
                 extraInfo.priority = priority;
                 extraInfo.designCheckList = designCheckList;
                 extraInfo.designInfo = designInfo;
-            }else if(departmentId === 7){
+            } else if (departmentId === 7) {
                 extraInfo['clientResponse'] = clientResponse;
                 extraInfo.requestSentTo = requestSentTo;
                 extraInfo.requestRecievedOn = moment(requestRecievedOn).format('YYYY-MM-DD');
             }
-            const response = await axios.post(APIS.ADD_PROJECT, 
+            const response = await axios.post(APIS.ADD_PROJECT,
                 {
                     projectCategoryId,
                     projectManagerId,
@@ -411,7 +429,7 @@ const SERVICES = {
                 throw response.data as ErrorResponse
             }
             return response.data as AddResponse;
-        } catch(error) {
+        } catch (error) {
             throw error;
         }
     },
@@ -427,7 +445,7 @@ const SERVICES = {
         dueDate: moment.Moment | string,
         followUpDate: moment.Moment | string,
         projectManagerId: string,
-        teamMemberIds: {label:string, value: string | number}[],
+        teamMemberIds: { label: string, value: string | number }[],
         description: string,
         contractAcceptedDate: moment.Moment | string,
         contractExpiryDate: moment.Moment | string,
@@ -441,22 +459,22 @@ const SERVICES = {
         taskList: Object,
         projectId: number
     ): Promise<UpdateResponse> => {
-        try{
-            const extraInfo : any = {};
-            if(projectType === 'Child Project')
+        try {
+            const extraInfo: any = {};
+            if (projectType === 'Child Project')
                 extraInfo.parentId = rosterId;
-            if(departmentId === 1){
+            if (departmentId === 1) {
                 extraInfo['clientResponse'] = clientResponse;
-            }else if(departmentId === 8 && projectCategoryId === 68) {
+            } else if (departmentId === 8 && projectCategoryId === 68) {
                 extraInfo.priority = priority;
                 extraInfo.designCheckList = designCheckList;
                 extraInfo.designInfo = designInfo;
-            }else if(departmentId === 7){
+            } else if (departmentId === 7) {
                 extraInfo['clientResponse'] = clientResponse;
                 extraInfo.requestSentTo = requestSentTo;
                 extraInfo.requestRecievedOn = moment(requestRecievedOn).isValid() ? moment(requestRecievedOn).format('YYYY-MM-DD') : '';
             }
-            const response = await axios.put(APIS.UPDATE_PROJECT, 
+            const response = await axios.put(APIS.UPDATE_PROJECT,
                 {
                     projectCategoryId,
                     projectManagerId,
@@ -485,7 +503,7 @@ const SERVICES = {
                 throw response.data as ErrorResponse
             }
             return response.data as UpdateResponse;
-        } catch(error) {
+        } catch (error) {
             throw error;
         }
     }

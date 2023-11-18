@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { initProjects, selectProjects, updateProject } from '../../../../redux/slices/projectSlice';
+import { deleteProject, initProjects, selectProjects, updateProject } from '../../../../redux/slices/projectSlice';
 import SERVICES from '../../../../services/Services';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowUp} from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '../../../../Main/Loader/Loader';
-import { showErrorModal } from '../../../../redux/slices/alertSlice';
+import { showErrorModal, showSuccessModal } from '../../../../redux/slices/alertSlice';
 import IndependentRow from './IndependentRow';
 import RosterRows from './RosterRows';
 import './Table.css';
@@ -61,7 +61,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProjectId }
         setSelectedRosters([]);
 
         const response = await SERVICES.getProjects(50, currPage, filter, search, sort);
-        console.log(response);
+
         dispatch(initProjects(response.res));
         setPages(response.totalPages);
 
@@ -109,6 +109,29 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProjectId }
     } catch (error) {
       console.log(error);
       dispatch(updateProject({ projectId: id, data: { 'status': prev[0].status }, parentId }));
+      dispatch(showErrorModal('Something went wrong!'));
+    }
+  }
+
+  const handleDateUpdate = async (id: number, value: string, projectType: string, parentId: number | null = null) => {
+    const prev = projects.filter(project => project.project_id === id);
+    try {
+      // dispatch(updateProject({ projectId: id, data: { 'status': option }, parentId }))
+      // await SERVICES.updateProjectStatus(id, option, projectType);
+    } catch (error) {
+      console.log(error);
+      dispatch(updateProject({ projectId: id, data: { 'status': prev[0].status }, parentId }));
+      dispatch(showErrorModal('Something went wrong!'));
+    }
+  }
+
+  const handleDelete = async (id: number[]) => {
+    try {
+      dispatch(deleteProject(id));
+      await SERVICES.deleteProjects(id);
+      dispatch(showSuccessModal('Project(s) Deleted Successfully!'));
+    } catch (error) {
+      console.log(error);
       dispatch(showErrorModal('Something went wrong!'));
     }
   }

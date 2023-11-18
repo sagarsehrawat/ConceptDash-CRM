@@ -18,6 +18,7 @@ import moment from 'moment'
 import Tasklist from '../Tasklist/Tasklist'
 import TFButton from '../../../../components/ui/TFButton/TFButton'
 import ChildProjectList from './ChildProjectList'
+import RosterProject from '../../forms/types/RosterProject'
 
 type Props = {
     projectId: number;
@@ -203,7 +204,7 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
     }
 
     const handleFormType = () => {
-        if (project.projectType === 'Roster') return <></>;
+        if (project.projectType === 'Roster') return <RosterProject form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />;
         if (project.departmentId === '1') return <Transportation form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
         else if (project.departmentId === '7') return <Estimation form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
         else if (project.departmentId === '8' && project.projectCategoryId === '68') return <Products form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
@@ -275,18 +276,18 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
                     <div className='project-detail-body' ref={tabRefs[0]}>
                         <div className='w-100'>
                             <form>
-                                {/* Project Name */}
-                                <input
-                                    type="text"
-                                    name="projectName"
-                                    className="project-input project-name-input"
-                                    placeholder="Project Name"
-                                    value={project.projectName}
-                                    onChange={(e) => handleForm(e.target.name, e.target.value)}
-                                />
-
                                 {project.projectType !== 'Roster Project'
                                     && (<>
+                                        {/* Project Name */}
+                                        <input
+                                            type="text"
+                                            name="projectName"
+                                            className="project-input project-name-input"
+                                            placeholder="Project Name"
+                                            value={project.projectName}
+                                            onChange={(e) => handleForm(e.target.name, e.target.value)}
+                                        />
+
                                         {/* Department */}
                                         <div className="d-flex flex-start gap-8 w-100">
                                             <p className="project-label">
@@ -327,7 +328,7 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
 
 
                         <div className='w-100' ref={tabRefs[1]}>
-                            <p className="heading-2" style={{marginBottom: "16px"}}>{project.projectType !== 'Roster Project' ? 'Project Milestone and Tasks' : 'Child Projects'}</p>
+                            <p className="heading-2" style={{ marginBottom: "16px" }}>{project.projectType !== 'Roster Project' ? 'Project Milestone and Tasks' : 'Child Projects'}</p>
                             {
                                 project.projectType !== 'Roster Project' ?
                                     <Tasklist taskList={tasklist} employees={employees} setTaskList={setTasklist} openTasks={openTasks} setOpenTasks={setOpenTasks} />

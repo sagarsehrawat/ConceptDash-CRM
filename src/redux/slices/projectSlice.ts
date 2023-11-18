@@ -110,9 +110,9 @@ export const projectSlice = createSlice({
                 );
             }
         },
-        deleteProject: (state, action: PayloadAction<number>) => {
+        deleteProject: (state, action: PayloadAction<number[]>) => {
             const projectIdToDelete = action.payload;
-            state.projects = state.projects.filter((project) => project.project_id !== projectIdToDelete);
+            state.projects = state.projects.filter((project) => !projectIdToDelete.includes(project.project_id));
         }
     }
 });

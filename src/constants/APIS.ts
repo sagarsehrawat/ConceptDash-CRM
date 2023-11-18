@@ -21,7 +21,8 @@ const APIS = {
     ADD_RFP : '/api/add/rfp',
     UPDATE_RFP : '/api/update/rfp',
     ADD_PROJECT: '/project/add',
-    UPDATE_PROJECT: '/project/update'
+    UPDATE_PROJECT: '/project/update',
+    DELETE_PROJECTS : '/project/delete',
 };
 
 export default APIS;
