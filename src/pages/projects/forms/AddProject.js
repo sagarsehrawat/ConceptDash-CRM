@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, ModalBody } from 'react-bootstrap'
 import './AddProject.css'
 import headerIcon from '../../../Images/Projects.svg';
 import tick from '../../../assets/icons/Primary_Color_Tick.svg'
@@ -9,7 +8,6 @@ import ChildProject from './types/ChildProject';
 import FormUtils from '../../../utils/FormUtils';
 import Tasklist from '../sections/Tasklist/Tasklist';
 import TaskListUtils from '../utils/TaskListUtils';
-import moment from 'moment';
 import TFButton from '../../../components/ui/TFButton/TFButton';
 import SERVICES from '../../../services/Services';
 import LoadingSpinner from '../../../Main/Loader/Loader';
@@ -232,7 +230,7 @@ const AddProject = ({ onHide, api, setApi }) => {
                                 {form.projectType !== 'Roster Project'
                                     ? <div className='w-100'>
                                         <p className="heading-2">Project Milestone and Tasks</p>
-                                        <Tasklist taskList={taskList} setTaskList={setTaskList} openTasks={openTasks} setOpenTasks={setOpenTasks} />
+                                        <Tasklist taskList={taskList} employees={employees} setTaskList={setTaskList} openTasks={openTasks} setOpenTasks={setOpenTasks} />
                                     </div>
                                     : <></>}
                             </div>

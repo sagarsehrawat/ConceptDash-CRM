@@ -16,7 +16,6 @@ const TFTypeahead = ({
   const [isVisible, setisVisible] = useState(false);
   const [isValid, setIsValid] = useState(true);
   // TODO : Implement Asynchronous Functionality
-  // TODO : Implement MultiSelect Functionality
 
   // Handle Blur functionality to choose option when moves away from input
   const handleBlur = () => {

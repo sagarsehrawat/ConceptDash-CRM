@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, ProjectCountResponse, GetRostersListResponse, GetEmployeesListResponse, GetProjectsResponse, UpdateResponse } from "Services";
+import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, ProjectCountResponse, GetRostersListResponse, GetEmployeesListResponse, GetProjectsResponse, UpdateResponse, GetProjectById } from "Services";
 import moment from "moment";
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -32,10 +32,9 @@ const SERVICES = {
 
     projectCount: async (): Promise<ProjectCountResponse> => {
         try {
-            const response = await axios.get(APIS.GET_PROJECT_CHART, {
+            const response = await axios.get(APIS.GET_PROJECT_COUNT, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
-                    chart: "Status",
                 },
             });
             if (response.data.success === false) {
@@ -328,6 +327,23 @@ const SERVICES = {
         }
     },
 
+    getProjectById: async (projectid: string | number) : Promise<GetProjectById> => {
+        try {
+            const response = await axios.get(APIS.GET_PROJECT_BY_ID, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    projectid
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetProjectById;
+        } catch (error) {
+            throw error;
+        }
+    },
+
     addProject: async (
         projectName: string,
         projectType: string,
@@ -395,6 +411,80 @@ const SERVICES = {
                 throw response.data as ErrorResponse
             }
             return response.data as AddResponse;
+        } catch(error) {
+            throw error;
+        }
+    },
+
+    updateProject: async (
+        projectName: string,
+        projectType: string,
+        departmentId: string | number,
+        projectValue: string,
+        projectCategoryId: string | number,
+        cityId: string | number,
+        status: string,
+        dueDate: moment.Moment | string,
+        followUpDate: moment.Moment | string,
+        projectManagerId: string,
+        teamMemberIds: {label:string, value: string | number}[],
+        description: string,
+        contractAcceptedDate: moment.Moment | string,
+        contractExpiryDate: moment.Moment | string,
+        rosterId: string | number,
+        clientResponse: string,
+        requestSentTo: string,
+        requestRecievedOn: moment.Moment | string,
+        priority: string,
+        designCheckList: string[],
+        designInfo: string[],
+        taskList: Object,
+        projectId: number
+    ): Promise<UpdateResponse> => {
+        try{
+            const extraInfo : any = {};
+            if(projectType === 'Child Project')
+                extraInfo.parentId = rosterId;
+            if(departmentId === 1){
+                extraInfo['clientResponse'] = clientResponse;
+            }else if(departmentId === 8 && projectCategoryId === 68) {
+                extraInfo.priority = priority;
+                extraInfo.designCheckList = designCheckList;
+                extraInfo.designInfo = designInfo;
+            }else if(departmentId === 7){
+                extraInfo['clientResponse'] = clientResponse;
+                extraInfo.requestSentTo = requestSentTo;
+                extraInfo.requestRecievedOn = moment(requestRecievedOn).isValid() ? moment(requestRecievedOn).format('YYYY-MM-DD') : '';
+            }
+            const response = await axios.put(APIS.UPDATE_PROJECT, 
+                {
+                    projectCategoryId,
+                    projectManagerId,
+                    projectValue,
+                    projectName,
+                    projectType,
+                    departmentId,
+                    description,
+                    cityId,
+                    status,
+                    teamMemberIds: teamMemberIds.map(item => item.value),
+                    dueDate: moment(dueDate).isValid() ? moment(dueDate).format('YYYY-MM-DD') : '',
+                    followUpDate: moment(followUpDate).isValid() ? moment(followUpDate).format('YYYY-MM-DD') : '',
+                    contractAcceptedDate: moment(contractAcceptedDate).isValid() ? moment(contractAcceptedDate).format('YYYY-MM-DD') : '',
+                    contractExpiryDate: moment(contractExpiryDate).isValid() ? moment(contractExpiryDate).format('YYYY-MM-DD') : '',
+                    extraInfo,
+                    taskList,
+                    projectId
+                },
+                {
+                    headers: {
+                        auth: 'Rose ' + localStorage.getItem('auth'),
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as UpdateResponse;
         } catch(error) {
             throw error;
         }

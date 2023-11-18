@@ -1,0 +1,18 @@
+.tf-tab-wrapper {
+    display: flex;
+    padding: 6px var(--8-pad, 8px);
+    align-items: center;
+    gap: 4px;
+    border-bottom: 1px solid var(--mob-primary-colour, #8361FE);
+    width: max-content;
+    cursor: pointer;
+}
+
+.tf-tab-label {
+    color: var(--Dark-grey, #70757A);
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+}

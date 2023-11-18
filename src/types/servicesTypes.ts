@@ -16,10 +16,13 @@ declare module "Services"{
 
     export interface ProjectCountResponse {
         success : boolean,
-        res : Array<{
-            Count : number,
-            Status : string
-        }>
+        res : {
+            total_projects: number,
+            completed_projects: number,
+            ongoing_projects: number,
+            new_projects: number,
+            percentage_change: number
+        }
     }
 
     export interface GetCitiesResponse {
@@ -101,5 +104,10 @@ declare module "Services"{
     export interface UpdateRfpResponse {
         success : boolean,
         res : Object
+    }
+
+    export interface GetProjectById {
+        success : true,
+        res : Project
     }
 }

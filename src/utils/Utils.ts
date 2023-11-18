@@ -3,7 +3,7 @@ const Utils = {
         options: T[],
         labelKey: keyof T,
         valueKey: keyof T
-    ): Array<{ value: T[keyof T], label: T[keyof T] }> =>
+    ): TypeaheadOptions =>
         options.map(option => ({
             value: option[valueKey],
             label: option[labelKey]
@@ -13,6 +13,13 @@ const Utils = {
             if (!total) return 0;
             
             return Math.round((val / total) * 100);
+        },
+
+        convertProjectCodeToArray: (projectCode : string | null) : string[] => {
+            if(!projectCode) return [];
+            const res = projectCode.match(/[A-Za-z]+|\d+/g) as string[];
+            console.log(res);
+            return res;
         }
 };
 

@@ -547,43 +547,24 @@ const Dashboard = () => {
     if (nav === 4) return <RFP isCollapsed={isCollapsed} />
     if (nav === 17) return <Proposal isCollapsed={isCollapsed} />
     if (nav === 5) return <PMSelector isCollapsed={isCollapsed} />
-    if (nav === 6) return <Project isCollapsed={isCollapsed} />
+    if (nav === 6) return <Project isCollapsed={isCollapsed} setnav={setnav}/>
     if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
     if (nav === 8) return <TestDemo />;
-    // if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <Customers isCollapsed={isCollapsed} />;
     if (nav === 12) return <Privileges />;
-    // if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
     if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
     if (nav === 18) return <TTMMain isCollapsed={isCollapsed}/>
     if(nav === 19)return <CampaignRoot isCollapsed={isCollapsed} />
   };
 
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const [prop, setprop] = useState(false)
   const[checkwish,setcheckwish] = useState(false)
   const currentdate= new Date()
-   function shouldrender(){
-     let returnval=false;
-     const lastdate=new Date(localStorage.getItem('lastshown'));
-     console.log(lastdate)
-      if(lastdate==null) {
-        returnval=true;
-      }
-      if(currentdate.getDate()!==lastdate.getDate() && currentdate.getMonth()!==lastdate.getMonth()){
-        returnval=true;
-        
-      }
-      return returnval;
-    }  
+
     useEffect(()=>{
        if(checkwish===false){
-       console.log("inside useEffect")
          let stored=localStorage.getItem('lastshown')
         let storeddate=new Date(stored)
          if(storeddate!==null) localStorage.setItem('lastshown',currentdate)
