@@ -71,6 +71,7 @@ const IndependentProject = ({ form, handleForm, departments, cities, projectCate
           name="projectName"
           className="project-input project-name-input"
           placeholder="Project Name"
+          required={true}
           value={form.projectName}
           onChange={(e) => handleForm(e.target.name, e.target.value)}
         />

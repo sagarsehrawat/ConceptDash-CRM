@@ -33,6 +33,7 @@ const ChildProject = ({ form, handleForm, departments, cities, projectCategories
             placeholder='Choose Roster'
             defaultValue={form.roster}
             width='100%'
+            required={true}
             onChange={handleForm}
             options={rosters}
           />
