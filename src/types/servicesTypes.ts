@@ -75,6 +75,11 @@ declare module "Services"{
         totalPages : number
     }
 
+    export interface GetTrackingRfpsResponse {
+        success : boolean,
+        res : Array<RFP>
+    }
+
     export interface GetProjectsResponse {
         success : boolean,
         res : Array<Project>,

@@ -365,7 +365,7 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
                 <div style={{ marginRight: "20px", width: "234px" }}>
                   <p className="nameHeading">Question Date</p>
                   <input
-                    className="nameInput dropdown three"
+                    className="nameInput dropdown three-3"
                     name="startDate"
                     type="date"
                     value={form.startDate}
@@ -376,7 +376,7 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
                 <div style={{ marginRight: "20px", width: "233px" }}>
                   <p className="nameHeading">Submission Date</p>
                   <input
-                    className="nameInput dropdown three"
+                    className="nameInput dropdown three-3"
                     name="submissionDate"
                     type="date"
                     value={form.submissionDate}
@@ -403,7 +403,7 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
                 <div style={{ marginRight: "20px", width: "233px" }}>
                   <p className="nameHeading">Select Source</p>
                   <select
-                    className="nameInput dropdown three"
+                    className="nameInput dropdown three-3"
                     name="source"
                     onChange={(e) => handleForm(e.target.name, e.target.value)}
                   >

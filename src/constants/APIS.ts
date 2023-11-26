@@ -11,15 +11,18 @@ const APIS = {
     GET_MANAGERS_LIST : '/api/get/list/managers',
     GET_EMPLOYEES_LIST : '/api/get/employeeNames',
     GET_RFPS : '/api/get/page/rfps',
+    GET_TRACKING_RFPS : '/api/get/page/trackingrfps',
     GET_PROJECTS : '/project/fetch',
     UPDATE_RFP_STATUS : '/api/update/rfp/status',
+    UPDATE_RFP_RATING : '/api/update/rfp/rating',
     UPDATE_PROJECT_STATUS : '/project/update/status',
     UPDATE_RFP_DATE : '/api/update/rfp/date',
     DELETE_RFPS : '/api/delete/rfp/id',
     GET_GOOGLE_DRIVE_URL : '/google-api/get/fileLink',
     ADD_RFP : '/api/add/rfp',
     UPDATE_RFP : '/api/update/rfp',
-    ADD_PROJECT: '/project/add'
+    ADD_PROJECT: '/project/add',
+    ADD_PROPOSAL: '/api/add/proposal',
 };
 
 export default APIS;
