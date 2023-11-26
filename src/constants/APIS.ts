@@ -3,7 +3,7 @@ const APIS = {
     // BASE_URL : 'http://localhost:8080',
     SERVER_STATUS : `/`,
     GET_RFP_COUNT : '/api/get/rfp/count',
-    GET_PROJECT_CHART: '/api/get/chart/project',
+    GET_PROJECT_COUNT: '/project/fetch/count',
     GET_CITIES : '/api/get/list/cities',
     GET_ROSTERS_LIST: '/project/roster/list',
     GET_DEPARTMENTS : '/api/get/list/departments',
@@ -13,6 +13,7 @@ const APIS = {
     GET_RFPS : '/api/get/page/rfps',
     GET_TRACKING_RFPS : '/api/get/page/trackingrfps',
     GET_PROJECTS : '/project/fetch',
+    GET_PROJECT_BY_ID : '/project/fetch/id',
     UPDATE_RFP_STATUS : '/api/update/rfp/status',
     UPDATE_RFP_RATING : '/api/update/rfp/rating',
     UPDATE_PROJECT_STATUS : '/project/update/status',
@@ -22,6 +23,7 @@ const APIS = {
     ADD_RFP : '/api/add/rfp',
     UPDATE_RFP : '/api/update/rfp',
     ADD_PROJECT: '/project/add',
+    UPDATE_PROJECT: '/project/update',
     ADD_PROPOSAL: '/api/add/proposal',
 };
 

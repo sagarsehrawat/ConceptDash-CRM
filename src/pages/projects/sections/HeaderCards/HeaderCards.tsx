@@ -4,8 +4,6 @@ import { initData, selectCompletedProjects, selectNewProjects, selectOngoingProj
 import SERVICES from '../../../../services/Services'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import Utils from '../../../../utils/Utils'
-
 
 const HeaderCards = () => {
     const dispatch = useDispatch();
@@ -20,15 +18,12 @@ const HeaderCards = () => {
             try {
                 const response = await SERVICES.projectCount();
                 const projectCounts = { newProjects: 0, ongoingProjects : 0, completedProjects: 0, percentage : 0, totalProjects: 0};
-  
-                response.res.map(e => {
-                    projectCounts.totalProjects += e.Count;
-                    if(e.Status==='Not Started') projectCounts.newProjects = e.Count;
-                    if(e.Status==='In Progress') projectCounts.ongoingProjects = e.Count;
-                    if(e.Status==='Completed') projectCounts.completedProjects = e.Count;
-                })
-                projectCounts.percentage = Utils.calculatePercentage(projectCounts.newProjects, projectCounts.totalProjects);
-                console.log(projectCounts)
+
+                projectCounts.newProjects = response.res.new_projects;
+                projectCounts.ongoingProjects = response.res.ongoing_projects;
+                projectCounts.completedProjects = response.res.completed_projects;
+                projectCounts.percentage = response.res.percentage_change;
+                projectCounts.totalProjects = response.res.total_projects;
 
                 dispatch(initData(projectCounts));
             } catch (error) {

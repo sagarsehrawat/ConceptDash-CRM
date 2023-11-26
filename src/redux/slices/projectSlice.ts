@@ -36,7 +36,9 @@ export const projectSlice = createSlice({
                 ...project,
                 date_created: moment(project.date_created),
                 due_date: moment(project.due_date),
-                follow_up_date: moment(project.follow_up_date)
+                follow_up_date: moment(project.follow_up_date),
+                contract_accepted_date: moment(project.contract_accepted_date),
+                contract_expiry_date: moment(project.contract_expiry_date)
             }));
         },
         initData: (state, action: PayloadAction<ProjectStatus>) => {

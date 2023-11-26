@@ -23,6 +23,7 @@ const RosterProject = ({ form, handleForm, cities, managers, employees }) => {
           className="project-input project-name-input"
           placeholder="Project Name"
           value={form.projectName}
+          required={true}
           onChange={(e) => handleForm(e.target.name, e.target.value)}
         />
 

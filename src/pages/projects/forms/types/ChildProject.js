@@ -13,8 +13,8 @@ const ChildProject = ({ form, handleForm, departments, cities, projectCategories
         return <Transportation form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
       case 'Estimation':
         return <Estimation form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
-        case 'Products':
-          if (projectCategory === 'EzStorm') return <Products form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
+      case 'Products':
+        if (projectCategory === 'EzStorm') return <Products form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
       default:
         return <Default form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
     }
@@ -33,6 +33,7 @@ const ChildProject = ({ form, handleForm, departments, cities, projectCategories
             placeholder='Choose Roster'
             defaultValue={form.roster}
             width='100%'
+            required={true}
             onChange={handleForm}
             options={rosters}
           />
@@ -55,7 +56,7 @@ const ChildProject = ({ form, handleForm, departments, cities, projectCategories
 
         {/* Project Category */}
         {
-          form.departmentId!=="" && projectCategories.length !== 0
+          form.departmentId !== "" && projectCategories.length !== 0
             ? <div className="d-flex flex-start gap-8">
               <p className="project-label">Project Category</p>
               <TFTypeahead
@@ -79,7 +80,18 @@ const ChildProject = ({ form, handleForm, departments, cities, projectCategories
         </p>
       </div>
 
-      {handleDepartmentProject(form.department, form.projectCategory)}
+      <div className="d-flex flex-column gap-8 w-100">
+        {/* Project Name */}
+        <input
+          type="text"
+          name="projectName"
+          className="project-input project-name-input"
+          placeholder="Project Name"
+          value={form.projectName}
+          onChange={(e) => handleForm(e.target.name, e.target.value)}
+        />
+        {handleDepartmentProject(form.department, form.projectCategory)}
+      </div>
     </>
   );
 };
