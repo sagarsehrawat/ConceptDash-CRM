@@ -50,7 +50,7 @@ const HeaderCards = () => {
         </div>
       </div>
       <div className='header-line'></div>
-      <p className='heading-2' style={{marginLeft : "32px"}}>RFPs</p>
+      {/* <p className='heading-2' style={{marginLeft : "32px"}}>RFPs</p> */}
     </>
   )
 }

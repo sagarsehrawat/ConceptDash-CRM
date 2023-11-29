@@ -139,6 +139,14 @@ const Dashboard = () => {
    const handleopencityform = () => setcityform(true);
 
   const mystyles = {
+    topBarHeading: {
+      color: "var(--Dark-grey, #70757A)",
+      fontFamily: "Roboto",
+      fontSize: "16px",
+      fontStyle: "normal",
+      fontWeight: 500,
+      lineHeight: "24px"
+    },
     topNavbar: {
       height: "56px",
       left: "0px",
@@ -581,6 +589,7 @@ const Dashboard = () => {
           className="d-flex justify-content-end"
           style={mystyles.topNavbar}
         >
+          {nav===4?<div style={{...mystyles.topBarHeading, marginRight: isCollapsed?'71vw':'60vw'}}>RFP's</div>:<></>}
           <NavDropdown title={<FontAwesomeIcon
             icon={faCirclePlus}
             color={PRIMARY_COLOR}

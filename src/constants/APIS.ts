@@ -11,9 +11,11 @@ const APIS = {
     GET_MANAGERS_LIST : '/api/get/list/managers',
     GET_EMPLOYEES_LIST : '/api/get/employeeNames',
     GET_RFPS : '/api/get/page/rfps',
+    GET_TRACKING_RFPS : '/api/get/page/trackingrfps',
     GET_PROJECTS : '/project/fetch',
     GET_PROJECT_BY_ID : '/project/fetch/id',
     UPDATE_RFP_STATUS : '/api/update/rfp/status',
+    UPDATE_RFP_RATING : '/api/update/rfp/rating',
     UPDATE_PROJECT_STATUS : '/project/update/status',
     UPDATE_RFP_DATE : '/api/update/rfp/date',
     DELETE_RFPS : '/api/delete/rfp/id',
@@ -21,7 +23,8 @@ const APIS = {
     ADD_RFP : '/api/add/rfp',
     UPDATE_RFP : '/api/update/rfp',
     ADD_PROJECT: '/project/add',
-    UPDATE_PROJECT: '/project/update'
+    UPDATE_PROJECT: '/project/update',
+    ADD_PROPOSAL: '/api/add/proposal',
 };
 
 export default APIS;
