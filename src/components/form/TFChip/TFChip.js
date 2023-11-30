@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import "./Chip.css";
 
 // Array of Available Options
-const values = ['Completed', 'In Progress', 'Not Started', 'Critical', 'High', 'Medium', 'Low', 'Done', 'Not Found', 'Draft Budget', 'Won', 'Pending', 'Lost', 'Go', 'No Go', 'Review']
+const values = ['Completed', 'In Progress', 'Not Started', 'Critical', 'High', 'Medium', 'Low', 'Done', 'Not Found', 'Draft Budget', 'Won', 'Pending', 'Lost', 'Go', 'No Go', 'Review','Primary','Secondary','Tertiary','Client','Consultant','Partner']
 
 // Class list for Chips
 const classes = {
@@ -22,7 +22,13 @@ const classes = {
   'Lost': 'lost-chip',
   'Go': 'go-chip',
   'No Go': 'nogo-chip',
-  'Review': 'review-chip'
+  'Review': 'review-chip',
+  'Primary' : 'primary',
+  'Tertiary' : 'tertiary',
+  'Secondary' : 'secondary',
+  'Client' : 'client',
+  'Consultant' : 'consultant',
+  'Partner' : 'partner',
 }
 
 const TFChip = ({ value, tableRef, options, onChange, name }) => {

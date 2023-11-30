@@ -79,7 +79,10 @@ import TTMMain from "../../pages/proposals/ttm/TTMMain";
 import CampaignRoot from "../v3/campaign/CampaignRoot";
 import { useDispatch } from "react-redux";
 import { initPrivileges } from "../../redux/slices/privilegeSlice";
-
+import AllOrganisations from "../v3/Contacts/Index/AllOrganisations.tsx";
+import People from "../v3/Contacts/Index/People.tsx";
+import ContactPerson from "../v3/Contacts/Pages/ContactPerson.tsx";
+import CompanyPage from "../v3/Contacts/Pages/CompanyPage.tsx";
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();
   const navigate = useNavigate();
@@ -92,6 +95,8 @@ const Dashboard = () => {
   const [red, setred] = useState(false);
   const [apiCall, setCall] = useState(0);
 
+  const [contactPersonData, setContactPersonData] = useState({});
+  const [organizationData, setOrganizationData] = useState({});
   const { privileges, setPrivileges } = useContext(AuthenticationContext);
 
   //Add Task Form Modal
@@ -559,6 +564,10 @@ const Dashboard = () => {
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
     if (nav === 18) return <TTMMain isCollapsed={isCollapsed}/>
     if(nav === 19)return <CampaignRoot isCollapsed={isCollapsed} />
+    if(nav === 20) return <AllOrganisations isCollapsed={isCollapsed} setnav={setnav} setOrganizationData={setOrganizationData}/>
+    if(nav === 21) return <People isCollapsed={isCollapsed} setnav={setnav}  setContactPersonData={setContactPersonData}/>
+    if(nav === 22) return <ContactPerson isCollapsed={isCollapsed} contactPersonData={contactPersonData}/>
+    if(nav === 23) return <CompanyPage isCollapsed={isCollapsed} organizationData={organizationData}/>
   };
 
   const [show, setShow] = useState(false);
@@ -566,6 +575,7 @@ const Dashboard = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [prop, setprop] = useState(false)
+  const [prop2, setprop2] = useState(false)
   const[checkwish,setcheckwish] = useState(false)
   const currentdate= new Date()
    function shouldrender(){
@@ -968,6 +978,28 @@ const Dashboard = () => {
                     />
                   </div>
                 </div> : <></>}
+                {/* client */}
+                {privileges.includes('View Contacts') ? <div
+                  style={
+                    nav === 20
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(20)}
+                >
+                  <div
+                    style={
+                      nav === 20
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 20 ? contactsActive : contactsInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div> : <></>}
                 <div
                   style={
                     nav === 16
@@ -1333,6 +1365,85 @@ const Dashboard = () => {
                     Companies
                   </p>
                 </div> : <></>}
+                {privileges.includes('View Contacts') ? <div
+                  style={{...
+                    prop
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem, backgroundColor:prop?'#F0F0F1':'#fbfbfb', boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)"
+                  }}
+                  onClick={()=>{setprop2(!prop2)}}
+                >
+                  <div
+                    style={
+                        mystyles.sidebarMenuItemIcon.nonCollapsed
+                    }
+                  >
+                    <img
+                      src={contactsInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                  <p
+                    style={
+                         mystyles.sidebarMenuItemText
+                    }
+                  >
+                    Clients
+                  </p>
+                  <div style={{marginLeft:'4em'}}>{prop2?<FontAwesomeIcon icon={faChevronDown} />:<FontAwesomeIcon icon={faChevronRight} />}</div>
+                </div> : <></>}
+                {prop2?<div
+                  style={{...
+                    nav === 20
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem, backgroundColor:nav===20?PRIMARY_COLOR:'#F0F0F1'
+                  }}
+                  onClick={(e) => setnav(20)}
+                >
+                  <div
+                    style={{...
+                      nav === 20
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)", backgroundColor: nav===20?PRIMARY_COLOR:'#F0F0F1'
+                    }}
+                  >
+                  </div>
+                  <p
+                    style={
+                      nav === 20
+                        ? mystyles.sidebarMenuItemTextActive
+                        : mystyles.sidebarMenuItemText
+                    }
+                  >
+                    Organisations
+                  </p>
+                </div>:<></>}
+                {prop2?<div
+                  style={{...
+                    nav === 21
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem, backgroundColor:nav===21?PRIMARY_COLOR:'#F0F0F1'
+                  }}
+                  onClick={(e) => setnav(21)}
+                >
+                  <div
+                    style={{...
+                      nav === 21
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)", backgroundColor: nav===21?PRIMARY_COLOR:'#F0F0F1'
+                    }}
+                  >
+                  </div>
+                  <p
+                    style={
+                      nav === 21
+                        ? mystyles.sidebarMenuItemTextActive
+                        : mystyles.sidebarMenuItemText
+                    }
+                  >
+                    People
+                  </p>
+                </div>:<></>}
                 {privileges.includes('View Contacts') ? <div
                   style={
                     nav === 11

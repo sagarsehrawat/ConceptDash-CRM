@@ -1,5 +1,5 @@
 export const HOST = 'https://crm-api.conceptdash.ca'
-// export const HOST = 'http://localhost:8080'
+export const HOST1 = 'http://localhost:8080'
 
 // get apis
 export const GET_CELEBRATIONS='/api/get/celebrations'
@@ -220,3 +220,25 @@ export const GET_CAMPAIGN_NUMBER = (campaignId) =>  `/campaign/get-campaign-repo
 export const GET_CAMPAIGN_CONTACT = (campaignId,ev) => `/campaign/get-campaign-report/contacts/${campaignId}/${ev}`
 
 export const PRIMARY_COLOR = '#8361FE'
+
+
+// Client APIs
+
+export const ORGANIZATION_COUNT='/client/get/organization/count'
+export const PEOPLE_COUNT='/client/get/people/count'
+export const ADD_PEOPLE = '/client/add/people';
+export const ALL_PEOPLE_IN_ORGANIZATION='/client/get/people/all'
+
+export const GET_ALL_ORGANIZATION='/client/get/page/organization'
+export const GET_ALL_PEOPLE='/client/get/page/people'
+export const ORGANIZATION_DETAILS='/client/get/organization'
+export const PERSON_DETAILS='/client/get/people'
+
+export const GENERAL_NOTES='/client/get/people/generalchats'
+export const PROJECT_NOTES='/client/get/people/projectspecific'
+export const ADD_GENERAL_NOTES='/client/add/people/generalchats'
+export const ADD_PROJECT_NOTES='/client/add/people/projectspecific' 
+
+export const UPDATE_GENERAL_NOTES="/client/update/people/generalchats"
+export const UPDATE_PROJECT_NOTES="/client/update/people/projectspecific"
+// export const DELETE_GENERAL_NOTES="/client/delete/people/generalchats"

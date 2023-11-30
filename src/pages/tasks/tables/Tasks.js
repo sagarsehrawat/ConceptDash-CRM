@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from 'moment'
 import cross from '../../../Images/cross.svg'
 import tIcon from '../../../Images/taskIcon.svg'
-import {
+import {  
   faArrowDown,
   faArrowsUpDown,
   faArrowUp,
