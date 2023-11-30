@@ -1,0 +1,44 @@
+.tf-error-alert{
+    padding: 20px;
+    align-items: flex-start;
+    gap: 16px;
+    border-radius: var(--12-pad, 12px);
+    border: 1px solid #FEB9B9;
+    background: #FFF5F5;
+    z-index: 2050;
+    width: 458px;
+}
+
+.error-square-container {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: var(--12-pad, 12px);
+    background: #FF5252;
+}
+
+.error-circle-container {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 100%;
+    background-color: #FFF;
+}
+
+.alert-heading {
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+.alert-subheading {
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}

@@ -5,13 +5,24 @@ declare module "Services"{
         description : Object
     }
 
-    export interface RfpStatusResponse {
+    export interface RfpCountResponse {
         success : boolean,
         res : Array<{
             Total : number | string,
             Month : number | string,
             Percent : number | string
         }>
+    }
+
+    export interface ProjectCountResponse {
+        success : boolean,
+        res : {
+            total_projects: number,
+            completed_projects: number,
+            ongoing_projects: number,
+            new_projects: number,
+            percentage_change: number
+        }
     }
 
     export interface GetCitiesResponse {
@@ -30,6 +41,14 @@ declare module "Services"{
         }>
     }
 
+    export interface GetRostersListResponse {
+        success : boolean,
+        res : Array<{
+            project_id : number,
+            project_name : string,
+        }>
+    }
+
     export interface GetProjectCategoriesResponse {
         success : boolean,
         res : Array<{
@@ -37,13 +56,20 @@ declare module "Services"{
             Project_Category : string,
         }>
     }
-
     export interface GetManagerNamesResponse {
         success : boolean,
         res : Array<{
-            Employee_ID : number | string,
+            Employee_ID : number,
             Full_Name : string,
         }>
+    }
+
+    export interface GetEmployeesListResponse {
+        success: boolean,
+        res: {
+            Employee_ID : number,
+            Full_Name : string
+        }[]
     }
 
     export interface GetRfpsResponse {
@@ -52,14 +78,19 @@ declare module "Services"{
         totalPages : number
     }
 
-    export interface UpdateRfpStatusResponse {
+    export interface GetTrackingRfpsResponse {
         success : boolean,
-        res : Object
+        res : Array<RFP>
     }
 
-    export interface UpdateRfpDateResponse {
+    export interface GetProjectsResponse {
         success : boolean,
-        res : Object
+        res : Array<Project>,
+        totalPages : number
+    }
+
+    export interface UpdateResponse {
+        success : boolean,
     }
 
     export interface GetGoogleDriveUrlResponse {
@@ -67,7 +98,21 @@ declare module "Services"{
         res : string | null
     }
 
-    export interface AddRfpResponse {
+    export interface AddResponse {
         success : boolean
+    }
+
+    export interface DeleteResponse {
+        success : boolean
+    }
+
+    export interface UpdateRfpResponse {
+        success : boolean,
+        res : Object
+    }
+
+    export interface GetProjectById {
+        success : true,
+        res : Project
     }
 }

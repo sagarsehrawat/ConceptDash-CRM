@@ -4,17 +4,21 @@ import logger from 'redux-logger'
 import _ from 'lodash'
 import rfpSlice from './slices/rfpSlice.ts'
 import privilegeSlice from './slices/privilegeSlice.ts'
+import alertSlice from './slices/alertSlice.ts'
+import projectSlice from './slices/projectSlice.ts'
 
 const debounceNotify = _.debounce((notify) => notify())
 
 const reducer = {
     rfps: rfpSlice,
-    privileges: privilegeSlice
+    privileges: privilegeSlice,
+    alerts: alertSlice,
+    projects: projectSlice
 }
 
 export default configureStore({
     reducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
-    devTools: process.env.NODE_ENV !== 'production',
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}).concat(logger),
+    devTools: true,
     enhancers: [batchedSubscribe(debounceNotify)],
 });

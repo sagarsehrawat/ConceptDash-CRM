@@ -24,7 +24,7 @@ const AllRoutes = () => {
             <Router>
                 <Routes>
                     <Route exact path='/server-down' element={<DownPage />} />
-                    <Route path='/' element={<GaurdedRoutes/>}>
+                    <Route path='/' element={<GaurdedRoutes />}>
                         <Route exact path='/' element={<Login />} />
                         <Route exact path='/passwordChanged' element={<PasswordChanged />} />
                         <Route exact path='/forgotPassword' element={<ForgotPassword />} />
@@ -35,7 +35,7 @@ const AllRoutes = () => {
                         <Route exact path='/regenerated/token' element={<TokenRegenerated />} />
                         <Route exact path='/404' element={<Error404 />} />
 
-                        {/*******************Protected Routes******** */} 
+                        {/*******************Protected Routes******** */}
                         <Route path='/' element={<ProtectedRoutes />} >
                             <Route exact path='/admin' element={<Dashboard />} />
                             <Route exact path='/engineers' element={<Dashboard />} />

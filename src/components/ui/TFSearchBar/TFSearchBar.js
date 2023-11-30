@@ -4,7 +4,7 @@ import "./TFSearchBar.css";
 import TFIcon from "../TFIcon/TFIcon";
 import ICONS from "../../../constants/Icons";
 
-const SearchBar = (props) => {
+const TFSearchBar = (props) => {
   const { placeholder, searchFunc, apiFunc, style } = props;
   const [s, setS] = useState("");
   let [search, setSearch] = searchFunc;
@@ -59,7 +59,7 @@ const SearchBar = (props) => {
   );
 };
 
-SearchBar.propTypes = {
+TFSearchBar.propTypes = {
   /**
    * Placeholder for the SearchBar
    */
@@ -78,11 +78,11 @@ SearchBar.propTypes = {
   style: PropTypes.object,
 };
 
-SearchBar.defaultProps = {
+TFSearchBar.defaultProps = {
   placeholder: "",
   apiFunc: [null, null],
   searchFunc: [null, null],
   style: {},
 };
 
-export default SearchBar;
+export default TFSearchBar;

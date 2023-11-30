@@ -14,7 +14,7 @@ const TFDateChip = ({
     name,
 }) => {
     const [isVisible, setisVisible] = useState(false);
-    const [date, setDate] = useState(moment(value).format('DD-MM-YYYY'))
+    const [date, setDate] = useState(moment(value).isValid() ? moment(value).format('DD-MM-YYYY') : '')
     const [isValid, setIsValid] = useState(true)
     const dateChipRef = useRef(null);
 
@@ -22,8 +22,12 @@ const TFDateChip = ({
     const handleBlur = () => {
         if (date === moment(value).format('DD-MM-YYYY')) return;
         const isDateValid = moment(date, "DD-MM-YYYY", true);
-        if (isDateValid.isValid()) {
-            onChange(name, moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD'));
+        if(date === ''){
+            onChange(name, '');
+            setIsValid(true);
+            setisVisible(false);
+        }else if (isDateValid.isValid()) {
+            onChange(name, moment(date, 'DD-MM-YYYY'));
             setIsValid(true);
             setisVisible(false);
         } else {
@@ -39,7 +43,7 @@ const TFDateChip = ({
                     !ref.current ||
                     ref.current.contains(event.target) ||
                     event.target.classList.contains("wrapper") ||
-                    !moment(date, "DD-MM-YYYY", true).isValid()
+                    (!moment(date, "DD-MM-YYYY", true).isValid() && date!=='')
                 ) {
                     return;
                 }
@@ -72,7 +76,7 @@ const TFDateChip = ({
                     className='datechip'
                     onClick={handleModal}
                 >
-                    {moment(value).format('D MMM, YYYY').replace('.', '')}
+                    {moment(value).isValid() ? moment(value).format('D MMM, YYYY').replace('.', '') : 'Choose Date'}
                 </div>
                 {onChange && isVisible ? (
                     <div className="datechip-modal" ref={dateChipRef}>
@@ -91,10 +95,11 @@ const TFDateChip = ({
                         </div>
                         <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="en">
                             <DateCalendar
-                                value={moment(value)}
+                                value={moment(value).isValid() ? moment(value) : moment()}
                                 onChange={(e) => {
+                                    console.log(e);
                                     setDate(e.format('DD-MM-YYYY'));
-                                    onChange(name, e.format('YYYY-MM-DD'));
+                                    onChange(name, e);
                                     setisVisible(false);
                                 }}
                                 views={["day"]}
@@ -116,7 +121,7 @@ TFDateChip.propTypes = {
     /**
      * Default Date value
      */
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, moment]),
     /**
      * useRef variable for the table which can stop the scrolling of the table
      */
@@ -136,7 +141,7 @@ TFDateChip.propTypes = {
 };
 
 TFDateChip.defaultProps = {
-    defaultDate: '23 Sep, 2023',
+    value: moment().format(),
     tableRef: null,
     style: {}
 };

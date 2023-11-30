@@ -36,6 +36,7 @@ const RFP = (props) => {
 
     const rfps = useSelector(selectRFPs)
     const [selectedRfps, setselectedRfps] = useState([]);
+    console.log(selectedRfps)
     const [rfpCount, setrfpCount] = useState({ Total: 0, Month: 0, Percent: 0 });
 
     const [isLoading, setIsLoading] = useState(false);

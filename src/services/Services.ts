@@ -1,6 +1,7 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { AddRfpResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpStatusResponse, UpdateRfpDateResponse, UpdateRfpStatusResponse } from "Services";
+import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, ProjectCountResponse, GetRostersListResponse, GetEmployeesListResponse, GetProjectsResponse, UpdateResponse, GetProjectById, GetTrackingRfpsResponse } from "Services";
+import moment from "moment";
 axios.defaults.baseURL = APIS.BASE_URL
 
 const SERVICES = {
@@ -13,7 +14,7 @@ const SERVICES = {
         }
     },
 
-    rfpStatus: async (): Promise<RfpStatusResponse> => {
+    rfpCount: async (): Promise<RfpCountResponse> => {
         try {
             const response = await axios.get(APIS.GET_RFP_COUNT, {
                 headers: {
@@ -23,7 +24,23 @@ const SERVICES = {
             if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
-            return response.data as RfpStatusResponse;
+            return response.data as RfpCountResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    projectCount: async (): Promise<ProjectCountResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_PROJECT_COUNT, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as ProjectCountResponse;
         } catch (error) {
             throw error;
         }
@@ -80,7 +97,7 @@ const SERVICES = {
 
     getManagers: async (): Promise<GetManagerNamesResponse> => {
         try {
-            const response = await axios.get(APIS.GET_MANAGERS, {
+            const response = await axios.get(APIS.GET_MANAGERS_LIST, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
                 },
@@ -89,6 +106,38 @@ const SERVICES = {
                 throw response.data as ErrorResponse
             }
             return response.data as GetManagerNamesResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getEmployeesList: async (): Promise<GetEmployeesListResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_EMPLOYEES_LIST, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetEmployeesListResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getRostersList: async (): Promise<GetRostersListResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_ROSTERS_LIST, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetRostersListResponse;
         } catch (error) {
             throw error;
         }
@@ -115,7 +164,26 @@ const SERVICES = {
         }
     },
 
-    updateRfpStatus: async (rfpId: number, action: string): Promise<UpdateRfpStatusResponse> => {
+    getTrackingRfps: async (filter: Object, search: string, sort: string): Promise<GetTrackingRfpsResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_TRACKING_RFPS, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    filter: JSON.stringify(filter),
+                    search,
+                    sort,
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetTrackingRfpsResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    updateRfpStatus: async (rfpId: number, action: string): Promise<UpdateResponse> => {
         try {
             const response = await axios.post(APIS.UPDATE_RFP_STATUS,
                 {
@@ -128,13 +196,70 @@ const SERVICES = {
             if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
-            return response.data as UpdateRfpStatusResponse;
+            return response.data as UpdateResponse;
         } catch (error) {
             throw error;
         }
     },
 
-    updateRfpDate: async (rfpId: number, field: string, date: string): Promise<UpdateRfpDateResponse> => {
+    updateRfpRating: async (rfpId: number, rating: number): Promise<UpdateResponse> => {
+        try {
+            const response = await axios.post(APIS.UPDATE_RFP_RATING,
+                {
+                    rfpId,
+                    rating,
+                },
+                {
+                    headers: { auth: "Rose " + localStorage.getItem("auth"), },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as UpdateResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    updateProjectStatus: async (projectId: number, status: string, projectType: string): Promise<UpdateResponse> => {
+        try {
+            const response = await axios.put(APIS.UPDATE_PROJECT_STATUS,
+                {
+                    projectId,
+                    status,
+                    projectType
+                },
+                {
+                    headers: { auth: "Rose " + localStorage.getItem("auth"), },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as UpdateResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    deleteRfps: async (rfpIds: number[]): Promise<DeleteResponse> => {
+        try {
+            const response = await axios.post(APIS.DELETE_RFPS,
+                {
+                    ids: JSON.stringify(rfpIds)
+                },
+                {
+                    headers: { auth: "Rose " + localStorage.getItem("auth"), },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as DeleteResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    updateRfpDate: async (rfpId: number, field: string, date: string): Promise<UpdateResponse> => {
         try {
             const response = await axios.post(APIS.UPDATE_RFP_DATE,
                 {
@@ -148,7 +273,37 @@ const SERVICES = {
             if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
-            return response.data as UpdateRfpDateResponse;
+            return response.data as UpdateResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+
+    updateRfp: async (id: number, departmentId: number | string, projectCatId: number | string, source: string, projectManagerId: number | string, startDate: string, submissionDate: string, projectName: string, rfpNumber: string, client: string, cityId: number | string, remarks: string): Promise<UpdateResponse> => {
+        try {
+            const response = await axios.post(APIS.UPDATE_RFP,
+                {
+                    id,
+                    departmentId,
+                    projectCatId, 
+                    source,
+                    projectManagerId,
+                    startDate,
+                    submissionDate,
+                    projectName,
+                    rfpNumber,
+                    client,
+                    cityId,
+                    remarks
+                },
+                {
+                    headers: { auth: "Rose " + localStorage.getItem("auth"), },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as UpdateResponse;
         } catch (error) {
             throw error;
         }
@@ -172,26 +327,263 @@ const SERVICES = {
         }
     },
 
-    addRfp: async (form: FormData): Promise<AddRfpResponse> => {
+    addRfp: async (form: FormData): Promise<AddResponse> => {
         try {
             const response = await axios.post(APIS.ADD_RFP, form,
                 {
-                    maxContentLength: 500 * 1024 * 1024, // 100MB
-                    maxBodyLength: 500 * 1024 * 1024, // 100MB
                     headers: {
-                        'Content-Type': 'multipart/form-data',
                         auth: 'Rose ' + localStorage.getItem('auth'),
                     },
-                    timeout: 1800000,
                 });
             if (response.data.success === false) {
                 throw response.data as ErrorResponse
             }
-            return response.data as AddRfpResponse;
+            return response.data as AddResponse;
+        } catch (error) {
+            console.log(error)
+            throw error;
+        }
+    },
+
+    getProjects: async (limit: number, currentPage: number, filter: Object, search: string, sort: string): Promise<GetProjectsResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_PROJECTS, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    limit,
+                    offset: (currentPage - 1) * limit,
+                    filter: JSON.stringify(filter),
+                    search,
+                    sort,
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetProjectsResponse;
         } catch (error) {
             throw error;
         }
     },
+
+    getProjectById: async (projectid: string | number) : Promise<GetProjectById> => {
+        try {
+            const response = await axios.get(APIS.GET_PROJECT_BY_ID, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    projectid
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetProjectById;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    addProposal: async (
+        departmentId: null | undefined | number,
+        projectCatId: null | undefined | number,
+        status: string | null | undefined,
+        result: string | null | undefined,
+        debriefing: string | null | undefined,
+        projectManagerId: null | undefined | number,
+        projectName: string | null | undefined,
+        questionDeadline: string,
+        closingDeadline: string,
+        team: string | null | undefined,
+        designPrice: string | number | undefined,
+        provisionalItems: string | number,
+        contractAdminPrice: string | number,
+        subConsultantPrice: string | number,
+        winningPrice: string | number,
+        winningBidderId: string | number,
+        cityId: null | number | undefined,
+        rfpId: null | number | undefined
+    ): Promise<AddResponse> => {
+        try {
+            const response = await axios.post(APIS.ADD_PROPOSAL, 
+                {
+                    departmentId: departmentId,
+                    projectCatId: projectCatId,
+                    status: status,
+                    result: result,
+                    debriefing: debriefing,
+                    projectManagerId: projectManagerId,
+                    projectName: projectName,
+                    questionDeadline: questionDeadline,
+                    closingDeadline: closingDeadline,
+                    team: team,
+                    designPrice: designPrice,
+                    provisionalItems: provisionalItems,
+                    contractAdminPrice: contractAdminPrice,
+                    subConsultantPrice: subConsultantPrice,
+                    winningPrice: winningPrice,
+                    winningBidderId: winningBidderId,
+                    cityId: cityId,
+                    rfpId: rfpId
+                },
+                {
+                    headers: {
+                        auth: 'Rose ' + localStorage.getItem('auth'),
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as AddResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    addProject: async (
+        projectName: string,
+        projectType: string,
+        departmentId: string | number,
+        projectValue: string,
+        projectCategoryId: string | number,
+        cityId: string | number,
+        status: string,
+        dueDate: moment.Moment | string,
+        followUpDate: moment.Moment | string,
+        projectManagerId: string,
+        teamMemberIds: {label:string, value: string | number}[],
+        description: string,
+        contractAcceptedDate: moment.Moment | string,
+        contractExpiryDate: moment.Moment | string,
+        rosterId: string | number,
+        clientResponse: string,
+        requestSentTo: string,
+        requestRecievedOn: moment.Moment | string,
+        priority: string,
+        designCheckList: string[],
+        designInfo: string[],
+        taskList: Object
+    ): Promise<AddResponse> => {
+        try{
+            const extraInfo : any = {};
+            if(projectType === 'Child Project')
+                extraInfo.parentId = rosterId;
+            if(departmentId === 1){
+                extraInfo['clientResponse'] = clientResponse;
+            }else if(departmentId === 8 && projectCategoryId === 68) {
+                extraInfo.priority = priority;
+                extraInfo.designCheckList = designCheckList;
+                extraInfo.designInfo = designInfo;
+            }else if(departmentId === 7){
+                extraInfo['clientResponse'] = clientResponse;
+                extraInfo.requestSentTo = requestSentTo;
+                extraInfo.requestRecievedOn = moment(requestRecievedOn).format('YYYY-MM-DD');
+            }
+            const response = await axios.post(APIS.ADD_PROJECT, 
+                {
+                    projectCategoryId,
+                    projectManagerId,
+                    projectValue,
+                    projectName,
+                    projectType,
+                    departmentId,
+                    description,
+                    cityId,
+                    status,
+                    teamMemberIds: teamMemberIds.map(item => item.value),
+                    dueDate: moment(dueDate).format('YYYY-MM-DD'),
+                    followUpDate: moment(followUpDate).format('YYYY-MM-DD'),
+                    contractAcceptedDate: moment(contractAcceptedDate).format('YYYY-MM-DD'),
+                    contractExpiryDate: moment(contractExpiryDate).format('YYYY-MM-DD'),
+                    extraInfo,
+                    taskList
+                },
+                {
+                    headers: {
+                        auth: 'Rose ' + localStorage.getItem('auth'),
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as AddResponse;
+        } catch(error) {
+            throw error;
+        }
+    },
+
+    updateProject: async (
+        projectName: string,
+        projectType: string,
+        departmentId: string | number,
+        projectValue: string,
+        projectCategoryId: string | number,
+        cityId: string | number,
+        status: string,
+        dueDate: moment.Moment | string,
+        followUpDate: moment.Moment | string,
+        projectManagerId: string,
+        teamMemberIds: {label:string, value: string | number}[],
+        description: string,
+        contractAcceptedDate: moment.Moment | string,
+        contractExpiryDate: moment.Moment | string,
+        rosterId: string | number,
+        clientResponse: string,
+        requestSentTo: string,
+        requestRecievedOn: moment.Moment | string,
+        priority: string,
+        designCheckList: string[],
+        designInfo: string[],
+        taskList: Object,
+        projectId: number
+    ): Promise<UpdateResponse> => {
+        try{
+            const extraInfo : any = {};
+            if(projectType === 'Child Project')
+                extraInfo.parentId = rosterId;
+            if(departmentId === 1){
+                extraInfo['clientResponse'] = clientResponse;
+            }else if(departmentId === 8 && projectCategoryId === 68) {
+                extraInfo.priority = priority;
+                extraInfo.designCheckList = designCheckList;
+                extraInfo.designInfo = designInfo;
+            }else if(departmentId === 7){
+                extraInfo['clientResponse'] = clientResponse;
+                extraInfo.requestSentTo = requestSentTo;
+                extraInfo.requestRecievedOn = moment(requestRecievedOn).isValid() ? moment(requestRecievedOn).format('YYYY-MM-DD') : '';
+            }
+            const response = await axios.put(APIS.UPDATE_PROJECT, 
+                {
+                    projectCategoryId,
+                    projectManagerId,
+                    projectValue,
+                    projectName,
+                    projectType,
+                    departmentId,
+                    description,
+                    cityId,
+                    status,
+                    teamMemberIds: teamMemberIds.map(item => item.value),
+                    dueDate: moment(dueDate).isValid() ? moment(dueDate).format('YYYY-MM-DD') : '',
+                    followUpDate: moment(followUpDate).isValid() ? moment(followUpDate).format('YYYY-MM-DD') : '',
+                    contractAcceptedDate: moment(contractAcceptedDate).isValid() ? moment(contractAcceptedDate).format('YYYY-MM-DD') : '',
+                    contractExpiryDate: moment(contractExpiryDate).isValid() ? moment(contractExpiryDate).format('YYYY-MM-DD') : '',
+                    extraInfo,
+                    taskList,
+                    projectId
+                },
+                {
+                    headers: {
+                        auth: 'Rose ' + localStorage.getItem('auth'),
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as UpdateResponse;
+        } catch(error) {
+            throw error;
+        }
+    }
 };
 
 export default SERVICES;

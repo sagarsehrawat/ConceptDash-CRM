@@ -2,7 +2,7 @@
     display: flex;
     position: relative;
     gap: 8px;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
 }
 
@@ -61,32 +61,32 @@
     background: #F7F8F8;
 }
 
-.completed-chip{
+.completed-chip, .recieved-chip, .external-chip, .zero {
     background: #E4EEFE;
     color: #5079E1;
 }
 
-.not-started-chip{
+.not-started-chip, .one{
     background: #FEF5E7;
     color: #C6720E;
 }
 
-.critical-chip{
+.critical-chip, .two{
     background: #FBE1E1;
     color: #8B0000;
 }
 
-.high-chip, .not-found-chip, .lost-chip, .nogo-chip{
+.high-chip, .not-found-chip, .lost-chip, .nogo-chip, .three{
     background: #FFF1F1;
     color: #D93838;
 }
 
-.medium-chip, .draft-budget-chip, .pending-chip, .review-chip{
+.medium-chip, .draft-budget-chip, .pending-chip, .review-chip, .waiting-chip, .four{
     background: #FFF4EF;
     color: #FD9568;
 }
 
-.in-progress-chip, .low-chip, .done-chip, .won-chip, .go-chip{
+.in-progress-chip, .low-chip, .done-chip, .won-chip, .go-chip, .approved-chip, .five{
     background: #EFFEFA;
     color: #13A579;
 }

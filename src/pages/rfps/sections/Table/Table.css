@@ -2,6 +2,7 @@
     border-bottom: 1px solid #EBE9F1;
     height: 492px;
     position: relative;
+    overflow: auto;
 }
 
 .table-header {
@@ -12,7 +13,6 @@
 }
 
 .table-heading {
-    position: relative;
     color: var(--Dark-grey, #70757A);
     font-family: Roboto;
     font-size: 14px;

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import "./Chip.css";
 
 // Array of Available Options
-const values = ['Completed', 'In Progress', 'Not Started', 'Critical', 'High', 'Medium', 'Low', 'Done', 'Not Found', 'Draft Budget', 'Won', 'Pending', 'Lost', 'Go', 'No Go', 'Review','Primary','Secondary','Tertiary','Client','Consultant','Partner']
+const values = ['Completed', 'In Progress', 'Not Started', 'Critical', 'High', 'Medium', 'Low', 'Done', 'Not Found', 'Draft Budget', 'Won', 'Pending', 'Lost', 'Go', 'No Go', 'Review', 'Recieved', 'Approved', 'Waiting', 'External', '0', '1', '2', '3', '4', '5','Primary','Secondary','Tertiary','Client','Consultant','Partner']
 
 // Class list for Chips
 const classes = {
@@ -22,7 +22,17 @@ const classes = {
   'Lost': 'lost-chip',
   'Go': 'go-chip',
   'No Go': 'nogo-chip',
-  'Review': 'review-chip',
+  'Review': 'review-chip', 
+  'Recieved': 'recieved-chip', 
+  'Approved': 'approved-chip', 
+  'Waiting': 'waiting-chip',
+  'External': 'external-chip',
+  '0': 'zero',
+  '1': 'one',
+  '2': 'two',
+  '3': 'three',
+  '4': 'four',
+  '5': 'five',
   'Primary' : 'primary',
   'Tertiary' : 'tertiary',
   'Secondary' : 'secondary',
