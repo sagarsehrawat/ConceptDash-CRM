@@ -18,7 +18,7 @@ const reducer = {
 
 export default configureStore({
     reducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}).concat(logger),
     devTools: true,
     enhancers: [batchedSubscribe(debounceNotify)],
 });

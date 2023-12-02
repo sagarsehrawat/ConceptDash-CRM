@@ -27,14 +27,12 @@ interface FilterType {
 type Props = {
   api: number,
   setApi: Function,
-  currPage: number,
-  setPages: Function,
   filter: FilterType,
   search: string,
   isCollapsed: boolean
 }
 
-const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }: Props) => {
+const TrackingTable = ({ api, setApi, filter, search, isCollapsed }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedRfps, setselectedRfps] = useState<number[]>([]);
   const tableRef = useRef(null);
@@ -66,17 +64,15 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await SERVICES.getRfps(50, currPage, filter, search, sort);
-        dispatch(initRFPs(response.res));
-        console.log(response.res)
-        setPages(response.totalPages);
+        const trackingResponse = await SERVICES.getTrackingRfps(filter, search, sort);
+        dispatch(initRFPs(trackingResponse.res));
         setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
     }
     fetchData();
-  }, [api, currPage]);
+  }, [api]);
   const [transitionRFPData, setTransitionRFPData] = useState<RFP>()
   const handleStatusUpdate = async (rfpId: number, action: string) => {
     if(action==="Go") {
@@ -92,17 +88,6 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         dispatch(updateRFP({ rfpId, data: { action: prevRfp[0].action } }));
       }
     }
-  };
-
-  const handleRatingUpdate = async (rfpId: number, rating: string) => {
-      const prevRfp = rfps.filter(rfp => rfp.rfp_id === rfpId);
-      try {
-        dispatch(updateRFP({ rfpId, data: { 'rating': parseInt(rating)  } }))
-        await SERVICES.updateRfpRating(rfpId, parseInt(rating));
-      } catch (error) {
-        console.log(error);
-        dispatch(updateRFP({ rfpId, data: { rating: prevRfp[0].rating } }));
-      }
   };
 
   const handleStatusGoUpdate = async () => {
@@ -152,6 +137,17 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
       dispatch(updateRFP({ rfpId, data: { [key]: prevRfp[0][key] } }));
     }
   }
+
+  const handleRatingUpdate = async (rfpId: number, rating: string) => {
+    const prevRfp = rfps.filter(rfp => rfp.rfp_id === rfpId);
+    try {
+      dispatch(updateRFP({ rfpId, data: { 'rating': parseInt(rating)  } }))
+      await SERVICES.updateRfpRating(rfpId, parseInt(rating));
+    } catch (error) {
+      console.log(error);
+      dispatch(updateRFP({ rfpId, data: { rating: prevRfp[0].rating } }));
+    }
+   };
 
   const handleDelete = async () => {
     try {
@@ -394,4 +390,4 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
   )
 }
 
-export default Table
+export default TrackingTable

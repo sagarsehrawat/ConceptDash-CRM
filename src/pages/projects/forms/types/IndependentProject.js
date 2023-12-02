@@ -64,7 +64,19 @@ const IndependentProject = ({ form, handleForm, departments, cities, projectCate
         </p>
       </div>
 
-      {handleDepartmentProject(form.department, form.projectCategory)}
+      <div className="d-flex flex-column gap-8 w-100">
+        {/* Project Name */}
+        <input
+          type="text"
+          name="projectName"
+          className="project-input project-name-input"
+          placeholder="Project Name"
+          required={true}
+          value={form.projectName}
+          onChange={(e) => handleForm(e.target.name, e.target.value)}
+        />
+        {handleDepartmentProject(form.department, form.projectCategory)}
+      </div>
     </>
   );
 };

@@ -64,7 +64,6 @@ import ProposalForm from "../../pages/proposals/forms/ProposalForm";
 import projectForm from '../../Images/projectForm.svg'
 import cross from '../../Images/cross.svg'
 import announcement from '../../Images/announcement.svg'
-import ProjectForm from "../../pages/projects/forms/ProjectForm";
 import Privileges from '../Update/Privileges.js'
 import { GET_CELEBRATIONS, GET_EMPLOYEE_PRIVILEGES, GET_NOTIFICATIONS, HOST, PRIMARY_COLOR } from "../Constants/Constants";
 import PMSelector from "../../pages/pmSelector/index";
@@ -140,6 +139,14 @@ const Dashboard = () => {
    const handleopencityform = () => setcityform(true);
 
   const mystyles = {
+    topBarHeading: {
+      color: "var(--Dark-grey, #70757A)",
+      fontFamily: "Roboto",
+      fontSize: "16px",
+      fontStyle: "normal",
+      fontWeight: 500,
+      lineHeight: "24px"
+    },
     topNavbar: {
       height: "56px",
       left: "0px",
@@ -548,44 +555,25 @@ const Dashboard = () => {
     if (nav === 4) return <RFP isCollapsed={isCollapsed} />
     if (nav === 17) return <Proposal isCollapsed={isCollapsed} />
     if (nav === 5) return <PMSelector isCollapsed={isCollapsed} />
-    if (nav === 6) return <Project isCollapsed={isCollapsed} />
+    if (nav === 6) return <Project isCollapsed={isCollapsed} setnav={setnav}/>
     if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
     if (nav === 8) return <TestDemo />;
-    // if (nav === 9) return <ExpenseUpdate />;
     // if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <Customers isCollapsed={isCollapsed} />;
     if (nav === 12) return <Privileges />;
-    // if (nav === 14) return <ProjectDetail setnav={setnav} project={project} />
     if (nav === 15) return <Profile  isCollapsed={isCollapsed}/>
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
     if (nav === 18) return <TTMMain isCollapsed={isCollapsed}/>
     if(nav === 19)return <CampaignRoot isCollapsed={isCollapsed} />
   };
 
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const [prop, setprop] = useState(false)
   const[checkwish,setcheckwish] = useState(false)
   const currentdate= new Date()
-   function shouldrender(){
-     let returnval=false;
-     const lastdate=new Date(localStorage.getItem('lastshown'));
-     console.log(lastdate)
-      if(lastdate==null) {
-        returnval=true;
-      }
-      if(currentdate.getDate()!==lastdate.getDate() && currentdate.getMonth()!==lastdate.getMonth()){
-        returnval=true;
-        
-      }
-      return returnval;
-    }  
+
     useEffect(()=>{
        if(checkwish===false){
-       console.log("inside useEffect")
          let stored=localStorage.getItem('lastshown')
         let storeddate=new Date(stored)
          if(storeddate!==null) localStorage.setItem('lastshown',currentdate)
@@ -602,6 +590,7 @@ const Dashboard = () => {
           className="d-flex justify-content-end"
           style={mystyles.topNavbar}
         >
+          {nav===4?<div style={{...mystyles.topBarHeading, marginRight: isCollapsed?'71vw':'60vw'}}>RFP's</div>:<></>}
           <NavDropdown title={<FontAwesomeIcon
             icon={faCirclePlus}
             color={PRIMARY_COLOR}
@@ -1495,33 +1484,6 @@ const Dashboard = () => {
           }
       </Modal>
 
-      {/* Add Project Form Modal */}
-      <Modal
-        show={projectShow}
-        onHide={handleCloseProject}
-        backdrop="static"
-        style={mystyles.addModal}
-        dialogClassName="filter-dialog"
-        animation={false}
-      >
-        <div className='d-flex flex-row justify-content-between align-items-center' style={{ marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection: 'row' }}>
-          <div className='d-flex flex-row'>
-            <img src={projectForm} />
-            <div style={mystyles.addHeading}>Creating new project</div>
-          </div>
-          <div><img onClick={handleCloseProject} style={{ marginRight: '25px', float: 'right' }} src={cross} /></div>
-        </div>
-        {
-          <ProjectForm
-            setRed={setred}
-            setGreen={setgreen}
-            closeModal={handleClose}
-            api={apiCall}
-            apiCall={setCall}
-          />
-        }
-
-      </Modal>
       <Modal
             backdrop="static"
             size="lg"

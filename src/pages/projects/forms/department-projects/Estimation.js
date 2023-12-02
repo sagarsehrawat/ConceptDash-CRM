@@ -8,17 +8,6 @@ import TFMultiSelect from '../../../../components/form/TFMultiSelect/TFMultiSele
 const Estimation = ({ form, handleForm,cities, managers, employees }) => {
   return (
     <>
-      <div className="d-flex flex-column gap-8 w-100">
-        {/* Project Name */}
-        <input
-          type="text"
-          name="projectName"
-          className="project-input project-name-input"
-          placeholder="Project Name"
-          value={form.projectName}
-          onChange={(e) => handleForm(e.target.name, e.target.value)}
-        />
-
         {/* City */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">City</p>
@@ -153,7 +142,6 @@ const Estimation = ({ form, handleForm,cities, managers, employees }) => {
             onChange={(e) => handleForm(e.target.name, e.target.value)}
           />
         </div>
-      </div>
     </>
   )
 }

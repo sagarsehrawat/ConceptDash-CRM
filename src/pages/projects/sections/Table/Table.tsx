@@ -3,14 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { initProjects, selectProjects, updateProject } from '../../../../redux/slices/projectSlice';
 import SERVICES from '../../../../services/Services';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowUp, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp} from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '../../../../Main/Loader/Loader';
-import TFChip from '../../../../components/form/TFChip/TFChip';
-import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
-import { Form } from 'react-bootstrap';
-import './Table.css'
-import open from '../../../../Images/openinDrive.svg'
 import { showErrorModal } from '../../../../redux/slices/alertSlice';
+import IndependentRow from './IndependentRow';
+import RosterRows from './RosterRows';
+import './Table.css';
 
 interface FilterType {
   dept: (string | number)[],
@@ -20,17 +18,18 @@ interface FilterType {
 }
 
 type Props = {
-  api: number,
-  setApi: Function,
-  currPage: number,
-  setPages: Function,
-  filter: FilterType,
-  search: string,
-  isCollapsed: boolean
+  api: number;
+  setApi: Function;
+  currPage: number;
+  setPages: Function;
+  filter: FilterType;
+  search: string;
+  isCollapsed: boolean;
+  setProjectId: Function;
 }
 
 
-const Table = ({ api, setApi, currPage, filter, search, setPages }: Props) => {
+const Table = ({ api, setApi, currPage, filter, search, setPages, setProjectId }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedProjects, setselectedProjects] = useState<number[]>([]);
   const [selectedRosters, setSelectedRosters] = useState<number[]>([]);
@@ -102,14 +101,14 @@ const Table = ({ api, setApi, currPage, filter, search, setPages }: Props) => {
       </div>
       : <></>;
 
-  const handleStatusUpdate = async (id: number, option: string, projectType: string, parentId : number | null = null) => {
+  const handleStatusUpdate = async (id: number, option: string, projectType: string, parentId: number | null = null) => {
     const prev = projects.filter(project => project.project_id === id);
-    try{
-      dispatch(updateProject({projectId : id, data: {'status': option}, parentId}))
+    try {
+      dispatch(updateProject({ projectId: id, data: { 'status': option }, parentId }))
       await SERVICES.updateProjectStatus(id, option, projectType);
-    } catch(error) {
+    } catch (error) {
       console.log(error);
-      dispatch(updateProject({projectId : id, data: {'status': prev[0].status}, parentId}));
+      dispatch(updateProject({ projectId: id, data: { 'status': prev[0].status }, parentId }));
       dispatch(showErrorModal('Something went wrong!'));
     }
   }
@@ -175,199 +174,34 @@ const Table = ({ api, setApi, currPage, filter, search, setPages }: Props) => {
           </thead>
           <tbody style={{ background: "#FFFFFF" }}>
             {
-              projects && projects.map((project: Project, idx: number) => {
+              projects && projects.map((project: Project) => {
                 if (project.project_type === 'Roster Project') {
                   return (
                     <>
-                      <tr style={{ width: "100%", backgroundColor: selectedProjects.includes(idx) ? "#F5F3FE" : "white", verticalAlign: "top" }} key={idx}>
-                        <td className='table-cell fixed-column' style={{ backgroundColor: selectedProjects.includes(idx) ? "#F5F3FE" : "white" }}>
-                          <div className='d-flex flex-row justify-content-start gap-8 align-items-center'>
-                            {
-                              selectedRosters.includes(idx)
-                                ? <FontAwesomeIcon
-                                  icon={faChevronDown}
-                                  onClick={() => setSelectedRosters(prev => prev.filter(ele => ele !== idx))}
-                                  style={{ cursor: "pointer" }}
-                                />
-                                : <FontAwesomeIcon
-                                  icon={faChevronRight}
-                                  onClick={() => setSelectedRosters(prev => [...prev, idx])}
-                                  style={{ cursor: "pointer" }}
-                                />
-                            }
-                            <Form.Check
-                              inline
-                              type="checkbox"
-                              checked={selectedProjects.includes(idx)}
-                              readOnly={true}
-                              onClick={() => {
-                                if (!selectedProjects.includes(idx)) {
-                                  setselectedProjects(prev => [...prev, idx]);
-                                } else {
-                                  setselectedProjects(prev => prev.filter(ele => ele !== idx));
-                                }
-                              }}
-                            />
-                            <p className='table-project-name-text'>{project.project_name}</p>
-                          </div>
-                        </td>
-                        <td className='table-cell'>
-                          <div className='d-flex flex-column align-items-center justify-content-start'>
-                            <p>{project.project_code}</p>
-                            {project.folder_id && <div className='open-in-drive' onClick={() => openDriveLink(project.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>}
-                          </div>
-                        </td>
-                        <td className='table-cell'>{project.city}</td>
-                        <td className='table-cell'>
-                          <TFChip
-                            value={project.status}
-                            tableRef={tableRef}
-                            name={project.project_id}
-                            onChange={(id, option) => handleStatusUpdate(id, option, project.project_type)}
-                            options={["Not Started", "In Progress", "Completed"]}
-                          />
-                        </td>
-                        <td className='table-cell'>
-                          {project.due_date.isValid() && <TFDateChip
-                            value={project.due_date}
-                            name={project.project_id}
-                            tableRef={tableRef}
-                          // onChange={(name: number, value: string) => handleDateUpdate(name, 'submission_date', value)}
-                          />}
-                        </td>
-                        <td className='table-cell'>
-                          {project.follow_up_date.isValid() && <TFDateChip
-                            value={project.follow_up_date}
-                            name={project.project_id}
-                            tableRef={tableRef}
-                          // onChange={(name: number, value: string) => handleDateUpdate(name, 'submission_date', value)}
-                          />}
-                        </td>
-                        <td className='table-cell'>{project.project_manager}</td>
-                        <td className='table-cell'>0</td>
-                        <td className='table-cell'>{project.department}</td>
-                        <td className='table-cell'>$ {project.project_value}</td>
-                      </tr>
-                      {
-                        project.child_projects_info && selectedRosters.includes(idx) && project.child_projects_info.map((childProject) => (
-                          <tr style={{ width: "100%", backgroundColor: selectedProjects.includes(childProject.project_id) ? "#F5F3FE" : "white", verticalAlign: "top" }} key={childProject.project_id}>
-                            <td className='table-cell fixed-column' style={{ backgroundColor: selectedProjects.includes(childProject.project_id) ? "#F5F3FE" : "white" }}>
-                              <div className='d-flex flex-row justify-content-start gap-8 align-items-center'>
-                                <Form.Check
-                                  inline
-                                  type="checkbox"
-                                  checked={selectedProjects.includes(childProject.project_id)}
-                                  readOnly={true}
-                                  onClick={() => {
-                                    if (!selectedProjects.includes(childProject.project_id)) {
-                                      setselectedProjects(prev => [...prev, childProject.project_id]);
-                                    } else {
-                                      setselectedProjects(prev => prev.filter(ele => ele !== childProject.project_id));
-                                    }
-                                  }}
-                                />
-                                <p className='table-project-name-text'>{childProject.project_name}</p>
-                              </div>
-                            </td>
-                            <td className='table-cell'>
-                              <div className='d-flex flex-column align-items-center justify-content-start'>
-                                <p>{childProject.project_code}</p>
-                                {project.folder_id && <div className='open-in-drive' onClick={() => openDriveLink(childProject.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>}
-                              </div>
-                            </td>
-                            <td className='table-cell'>{childProject.city}</td>
-                            <td className='table-cell'>
-                              <TFChip
-                                value={childProject.status}
-                                tableRef={tableRef}
-                                name={childProject.project_id}
-                                onChange={(id, option) => handleStatusUpdate(id, option, childProject.project_type, project.project_id)}
-                                options={["Not Started", "In Progress", "Completed"]}
-                              />
-                            </td>
-                            <td className='table-cell'>
-                              {childProject.due_date && <TFDateChip
-                                value={childProject.due_date}
-                                name={childProject.project_id}
-                                tableRef={tableRef}
-                              // onChange={(name: number, value: string) => handleDateUpdate(name, 'submission_date', value)}
-                              />}
-                            </td>
-                            <td className='table-cell'>
-                              {childProject.follow_up_date && <TFDateChip
-                                value={childProject.follow_up_date}
-                                name={childProject.project_id}
-                                tableRef={tableRef}
-                              // onChange={(name: number, value: string) => handleDateUpdate(name, 'submission_date', value)}
-                              />}
-                            </td>
-                            <td className='table-cell'>{childProject.project_manager}</td>
-                            <td className='table-cell'>0</td>
-                            <td className='table-cell'>{childProject.department}</td>
-                            <td className='table-cell'>$ {childProject.project_value}</td>
-                          </tr>
-                        ))
-                      }
+                      <RosterRows
+                        project={project}
+                        tableRef={tableRef}
+                        selectedRosters={selectedRosters}
+                        setSelectedRosters={setSelectedRosters}
+                        selectedProjects={selectedProjects}
+                        setSelectedProjects={setselectedProjects}
+                        openDriveLink={openDriveLink}
+                        handleStatusUpdate={handleStatusUpdate}
+                        setProjectId={setProjectId}
+                      />
                     </>
                   )
                 } else if (project.project_type === 'Independent Project') {
                   return (
-                    <tr style={{ width: "100%", backgroundColor: selectedProjects.includes(idx) ? "#F5F3FE" : "white", verticalAlign: "top" }} key={idx}>
-                      <td className='table-cell fixed-column' style={{ backgroundColor: selectedProjects.includes(idx) ? "#F5F3FE" : "white" }}>
-                        <div className='d-flex flex-row justify-content-start gap-8 align-items-center'>
-                          <Form.Check
-                            inline
-                            type="checkbox"
-                            checked={selectedProjects.includes(idx)}
-                            readOnly={true}
-                            onClick={() => {
-                              if (!selectedProjects.includes(idx)) {
-                                setselectedProjects(prev => [...prev, idx]);
-                              } else {
-                                setselectedProjects(prev => prev.filter(ele => ele !== idx));
-                              }
-                            }}
-                          />
-                          <p className='table-project-name-text'>{project.project_name}</p>
-                        </div>
-                      </td>
-                      <td className='table-cell'>
-                        <div className='d-flex flex-column align-items-center justify-content-start'>
-                          <p>{project.project_code}</p>
-                          {project.folder_id && <div className='open-in-drive' onClick={() => openDriveLink(project.folder_id ?? "")}>Open in Drive&nbsp;&nbsp;<img src={open} /></div>}
-                        </div>
-                      </td>
-                      <td className='table-cell'>{project.city}</td>
-                      <td className='table-cell'>
-                        <TFChip
-                          value={project.status}
-                          tableRef={tableRef}
-                          name={project.project_id}
-                          onChange={(id, option) => handleStatusUpdate(id, option, project.project_type)}
-                          options={["Not Started", "In Progress", "Completed"]}
-                        />
-                      </td>
-                      <td className='table-cell'>
-                        {project.due_date.isValid() && <TFDateChip
-                          value={project.due_date}
-                          name={project.project_id}
-                          tableRef={tableRef}
-                        // onChange={(name: number, value: string) => handleDateUpdate(name, 'submission_date', value)}
-                        />}
-                      </td>
-                      <td className='table-cell'>
-                        {project.follow_up_date.isValid() && <TFDateChip
-                          value={project.follow_up_date}
-                          name={project.project_id}
-                          tableRef={tableRef}
-                        // onChange={(name: number, value: string) => handleDateUpdate(name, 'submission_date', value)}
-                        />}
-                      </td>
-                      <td className='table-cell'>{project.project_manager}</td>
-                      <td className='table-cell'>0</td>
-                      <td className='table-cell'>{project.department}</td>
-                      <td className='table-cell'>$ {project.project_value}</td>
-                    </tr>
+                    <IndependentRow
+                      project={project}
+                      tableRef={tableRef}
+                      selectedProjects={selectedProjects}
+                      setselectedProjects={setselectedProjects}
+                      openDriveLink={openDriveLink}
+                      handleStatusUpdate={handleStatusUpdate}
+                      setProjectId={setProjectId}
+                    />
                   )
                 }
               })
