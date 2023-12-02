@@ -102,7 +102,7 @@ function TTMMain(props) {
               </TabList>
             </Box>
             <TabPanel value="1">
-              <div style={{ width: '100%', float: 'left', marginLeft: '5px', marginTop: '20px' }}>
+              <div style={{ width: '100%', float: 'left', marginTop: '20px' }}>
                 <TTMTable Name={Name} Id={Id}/>
               </div>
             </TabPanel>

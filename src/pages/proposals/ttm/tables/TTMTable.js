@@ -82,18 +82,19 @@ function TTMTable(props) {
           headers: { auth: "Rose " + localStorage.getItem("auth"), proposalId:Id }
         })
         .then((res) => {
+          // console.log(JSON.parse(res.data.res[0].Designations))
           let data = JSON.parse(res.data.res[0].Data)
           let empIDs = JSON.parse(res.data.res[0].Employee_Info)[0]
           let hrRates = JSON.parse(res.data.res[0].Employee_Info)[1]
           let desigs = JSON.parse(res.data.res[0].Designations);
-          console.log(JSON.parse(res.data.res[0].Data))
+          // console.log(JSON.parse(res.data.res[0]))
           formChildArr(desigs)
           setemps(empIDs)
           setrate(hrRates)
           seteditingData(data)
           setdesignations(desigs)
           calculateTotalHrs(data)
-          // calcTotalLabour(data)
+          calcTotalLabour(data)
         })
         .catch((err) => {
           console.log(err);
@@ -602,13 +603,6 @@ const calculateEndDate=(startDate, duration)=> {
   return (
     isLoading?<LoadingSpinner/>:
     <div>
-     {/* <div className='d-flex flex-row justify-content-between'> */}
-      {/* <div className='pageHeader'>TTM : {Name}</div> */}
-      {/* <Button variant='success' onClick={handleOpenAddTask} style={{marginRight:'2vw', height:'8vh'}}>Add Task</Button> */}
-     {/* </div> */}
-
-      {/* Table Header */}
- 
       <div className='tableHeader d-flex flex-row justify-content-between'> 
       <div className='d-flex flex-row align-items-center'>
         <div className='tableHeaderText'>{Name}</div>
@@ -624,7 +618,7 @@ const calculateEndDate=(startDate, duration)=> {
         <thead>
           <tr style={{zIndex:'9'}}>
             <th className='normals th' style={{verticalAlign:'middle'}}>Project Department</th>
-            <th className='normals th' style={{background:'white', verticalAlign:'middle'}} colSpan={4}>Timelines</th>
+            <th className='normals th' style={{background:'white', verticalAlign:'middle', width:'30vw'}} colSpan={4}>Timelines</th>
             {designations.map((e, idx)=>{
               return (
                 <>
@@ -722,7 +716,7 @@ const calculateEndDate=(startDate, duration)=> {
                   <td style={{background:'white'}} className='td'><div>
                       {findMilestoneStatus(e.subtasks)===0
                         ? <div style={{  textAlign:'center', height: '20px', background: '#E4EEFE', border: '0.4px solid #E4EEFE', borderRadius: '24px', paddingLeft: '6px', paddingRight:'6px' }}>Not Started</div> :
-                        findMilestoneStatus(e.subtasks)===1 ? <div style={{  textAlign:'center', height: '20px', background: '#FFF4EF', border: '0.4px solid #FFF4EF', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Ongoing</div> :
+                        findMilestoneStatus(e.subtasks)===1 ? <div style={{  textAlign:'center', height: '20px', background: '#FFF4EF', border: '0.4px solid #FFF4EF', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>In Progress</div> :
                         findMilestoneStatus(e.subtasks)===2 ? <div style={{  textAlign:'center', height: '20px', background: '#559776', border: '0.4px solid #559776', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Completed</div> :<></>
                       }</div>
                   </td>
@@ -840,7 +834,7 @@ const calculateEndDate=(startDate, duration)=> {
                           task.status === 1 && task.Progress<100 ? <div style={{  textAlign:'center', height: '20px', background: '#FFF4EF', border: '0.4px solid #FFF4EF', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Ongoing</div> :
                             task.status === 2||task.Progress===100 ? <div style={{  textAlign:'center', height: '20px', background: '#559776', border: '0.4px solid #559776', borderRadius: '24px', paddingLeft: '10px', paddingRight:'10px' }}>Completed</div> :<></>
                       } */}
-                      <TFChip value={task.status===0?"Not Started":(task.status===1?"Ongoing":"Completed")} tableRef={tableRef} options={["Not Started", "Ongoing", "Completed"]} name={task.TaskID} onChange={updateStatus} />
+                      <TFChip value={task.status===0?"Not Started":(task.status===1?"In Progress":"Completed")} tableRef={tableRef} options={["Not Started", "In Progress", "Completed"]} name={task.TaskID} onChange={updateStatus} />
                       </div></td>
                       <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "start", e.parentID, task.childId)} selected={new Date(task.StartDate)} /></td>
                       <td style={{paddingLeft:'12px', width:'fit-content', textAlign:'center', background:'white'}} className='td no-focus'><DatePicker dateFormat="d MMM yyyy" onChange={(date)=>handleDatesChange(date, "end", e.parentID, task.childId)} selected={calculateEndDate(new Date(task.StartDate), task.Duration)} /></td>
