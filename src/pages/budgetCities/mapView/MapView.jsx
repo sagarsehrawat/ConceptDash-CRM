@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styles from "./MapView.module.css";
 import expandIcon from "../../../assets/icons/Expand.svg";
+import arrowRight from "../../../assets/icons/Arrow_Right.svg";
+import arrowLeft from "../../../assets/icons/Arrow_Left.svg";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -10,6 +12,7 @@ const MapView = ({ expand, setExpand }) => {
     zoom: 12, // initial zoom
   });
   const [type, setType] = useState(1); //1: Regular, 2: Satellite
+  const [openRightBar, setOpenRightBar] = useState(true);
 
   const updateCenter = (newCenter) => {
     setViewport({
@@ -56,6 +59,16 @@ const MapView = ({ expand, setExpand }) => {
           </>
         </MapContainer>
       </div>
+      {expand && (
+        <div className={openRightBar ? styles.rightBar : styles.rightBarClose}>
+          <div
+            onClick={() => setOpenRightBar(!openRightBar)}
+            className={ styles.open}
+          >
+            <img src={openRightBar ? arrowRight : arrowLeft} alt="" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
