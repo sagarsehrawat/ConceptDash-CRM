@@ -583,7 +583,26 @@ const SERVICES = {
         } catch(error) {
             throw error;
         }
-    }
+    },
+
+    deleteProject: async (projectId: number, projectType: string): Promise<DeleteResponse> => {
+        try {
+            const response = await axios.delete(APIS.DELETE_PROJECT,
+                {
+                    headers: { 
+                        auth: "Rose " + localStorage.getItem("auth"), 
+                        projectid: projectId,
+                        projecttype: projectType
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as DeleteResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 export default SERVICES;
