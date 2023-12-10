@@ -58,6 +58,7 @@
     text-align: center;
     border: none;
     background-color: white;
+    position: relative;
   }
   
   .normals{

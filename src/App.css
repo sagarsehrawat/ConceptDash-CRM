@@ -75,3 +75,11 @@
   border-right: 1px solid #EBEDF8;
   background-color: #FFFFFF;
 }
+
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}

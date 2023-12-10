@@ -7,6 +7,10 @@ import CROSS_PRIMARY from '../assets/icons/Cross_Primary.svg'
 import ARROW_DROPDOWN_OPEN_BLACK from '../assets/icons/Arrow_Dropdown_Open_Black.svg'
 import ARROW_DROPDOWN_CLOSE_BLACK from '../assets/icons/Arrow_Dropdown_Close_Black.svg'
 import CHEVRON_LEFT_BLACK from '../assets/icons/Chevron_left_Black.svg'
+import INFO from '../assets/icons/Info.svg'
+import EDIT from '../assets/icons/Edit.svg'
+import DELETE from '../assets/icons/Delete.svg'
+import PLUSGREY from '../assets/icons/PlusGrey.svg'
 
 const ICONS = {
     MAGNIFYING_GLASS_WHITE,
@@ -17,7 +21,11 @@ const ICONS = {
     CROSS_PRIMARY,
     ARROW_DROPDOWN_OPEN_BLACK,
     ARROW_DROPDOWN_CLOSE_BLACK,
-    CHEVRON_LEFT_BLACK
+    CHEVRON_LEFT_BLACK,
+    INFO,
+    EDIT,
+    DELETE,
+    PLUSGREY
 };
 
 export default ICONS;
