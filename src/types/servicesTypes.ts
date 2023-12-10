@@ -25,6 +25,14 @@ declare module "Services"{
         }
     }
 
+    export interface BudgetCountResponse {
+        success : boolean,
+        res : {
+            year_23: 'Not Found' | 'Draft Budget' | 'Done';
+            count: number;
+        }[]
+    }
+
     export interface GetCitiesResponse {
         success : boolean,
         res : Array<{
@@ -87,6 +95,17 @@ declare module "Services"{
         success : boolean,
         res : Array<Project>,
         totalPages : number
+    }
+
+    export interface GetBudgetCitiesResponse {
+        success : boolean,
+        res : Array<City>,
+    }
+
+    export interface GetCityBudgetResponse {
+        success : boolean,
+        res : Array<Budget>,
+        totalAmount: number
     }
 
     export interface UpdateResponse {

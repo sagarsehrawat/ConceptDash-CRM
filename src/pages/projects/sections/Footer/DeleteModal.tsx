@@ -1,10 +1,11 @@
-import React from 'react'
-import { PRIMARY_COLOR } from '../../../../../Main/Constants/Constants';
+import React, { useState } from 'react'
+import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 import { useSelector } from 'react-redux';
-import { selectPrivileges } from '../../../../../redux/slices/privilegeSlice';
+import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import Delete from "../../../../../Images/Delete.svg";
+import Delete from "../../../../Images/Delete.svg";
+import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
 
 type Props = {
     selectedProjects: number[];
@@ -14,6 +15,7 @@ type Props = {
 
 const DeleteModal = ({ selectedProjects, setSelectedProjects, handleDelete }: Props) => {
     const privileges = useSelector(selectPrivileges);
+    const [showDeleteModal, setshowDeleteModal] = useState<boolean>(false)
     return (
         <>
             <div
@@ -70,7 +72,7 @@ const DeleteModal = ({ selectedProjects, setSelectedProjects, handleDelete }: Pr
                         marginBottom: "12px", marginLeft: "-23px"
                     }}
                 ></div>
-                {privileges.includes("Delete Project") && selectedProjects.length === 1 ? (
+                {privileges.includes("Delete Project") && (
                     <div
                         style={{
                             marginBottom: "15px",
@@ -80,7 +82,7 @@ const DeleteModal = ({ selectedProjects, setSelectedProjects, handleDelete }: Pr
                             marginLeft: "50px",
                             cursor: "pointer",
                         }}
-                        onClick={() => handleDelete()}
+                        onClick={() => setshowDeleteModal(true)}
                     >
                         {/* <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} /> */}
                         <img src={Delete} />
@@ -93,8 +95,6 @@ const DeleteModal = ({ selectedProjects, setSelectedProjects, handleDelete }: Pr
                             color: "#0A0A0A",
                         }}>Delete</p>
                     </div>
-                ) : (
-                    <></>
                 )}
                 <div
                     style={{
@@ -123,6 +123,15 @@ const DeleteModal = ({ selectedProjects, setSelectedProjects, handleDelete }: Pr
                     />
                 </div>
             </div >
+            <TFDeleteModal 
+            show={showDeleteModal}
+            onHide={() => setshowDeleteModal(false)}
+            onDelete={() => {
+                handleDelete();
+                setSelectedProjects([])
+            }}
+            label='Project'
+            />
         </>
     )
 }

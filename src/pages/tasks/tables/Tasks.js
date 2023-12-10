@@ -47,6 +47,7 @@ import './Tasks.css'
 import TFChip from "../../../components/form/TFChip/TFChip";
 import TFButton from '../../../components/ui/TFButton/TFButton'
 import plusIcon from '../../../assets/icons/Plus.svg'
+import TFDeleteModal from '../../../components/modals/TFDeleteModal/TFDeleteModal'
 
 function Tasks(props) {
   const { isCollapsed } = props;
@@ -488,9 +489,7 @@ function Tasks(props) {
       }));
     }
   };
-  const filterSize = () => {
-    return returnData.employee.length;
-  };
+
   const filterSize1 = () => {
     return (
       returnData.assignedBy.length +
@@ -503,16 +502,12 @@ function Tasks(props) {
     const formattedDate = moment(date)
     return formattedDate.format('D MMM, YYYY')
   }
-  const [currStatus, setcurrStatus] = useState('')
-  const [id, setid] = useState('')
+
   const handleDelete = () => {
     axios
-      .post(
+      .delete(
         HOST + DELETE_TASK,
-        {
-          id: deleteID,
-        },
-        { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+        { headers: { auth: "Rose " + localStorage.getItem("auth"), id: deleteID, } }
       )
       .then((res) => {
         if (res.data.success) {
@@ -535,12 +530,13 @@ function Tasks(props) {
     seteid(e.target.value);
     setCall(apiCall+1);
   }
-
+  
   const handleStatusUpdate = async (taskId, s) => {
     let status;
     if(s==="Not Started") status = 1;
     if(s==="In Progress") status = 2;
     if(s==="Completed") status = 3;
+    
 
     const response = await axios
       .post(
@@ -551,6 +547,7 @@ function Tasks(props) {
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       );
+      setCall(apiCall+1);
 
       return response;
   }
@@ -562,6 +559,7 @@ function Tasks(props) {
     if(p==='Medium') priority = 3;
     if(p==='Low') priority = 4;
 
+    console.log(p);
     const response = await axios.post(
       HOST + UPDATE_TASK_PRIORITY,
       {
@@ -571,24 +569,25 @@ function Tasks(props) {
       {
         headers: { auth: "Rose " + localStorage.getItem("auth") },
       }
-    );
-
-    return response;
-  }
-
-  const getPriority = (priority, id) => {
-    if(priority===1) return <TFChip label="Critical" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
-    if(priority===2) return <TFChip label="High" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
-    if(priority===3) return <TFChip label="Medium" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
-    if(priority===4) return <TFChip label="Low" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
-  }
-
-  const getStatus = (status, id) => {
-    if(status===1) return <TFChip label="Not Started" onUpdate={handleStatusUpdate} id={id} options={["Not Started", "In Progress", "Completed"]}/>
-    if(status===2) return <TFChip label="In Progress" onUpdate={handleStatusUpdate} id={id} options={["Not Started", "In Progress", "Completed"]}/>
-    if(status===3) return <TFChip label="Completed" onUpdate={handleStatusUpdate} id={id} options={["Not Started", "In Progress", "Completed"]}/>
-  }
-
+      );
+      setCall(apiCall+1);
+      
+      return response;
+    }
+    
+    const getPriority = (priority, id) => {
+      if(priority===1) return <TFChip value="Critical" onChange={handlePriorityUpdate} name={id} options={["Low", "Medium", "High", "Critical"]}/>
+      if(priority===2) return <TFChip value="High" onChange={handlePriorityUpdate} name={id} options={["Low", "Medium", "High", "Critical"]}/>
+      if(priority===3) return <TFChip value="Medium" onChange={handlePriorityUpdate} name={id} options={["Low", "Medium", "High", "Critical"]}/>
+      if(priority===4) return <TFChip value="Low" onChange={handlePriorityUpdate} name={id} options={["Low", "Medium", "High", "Critical"]}/>
+    }
+    
+    const getStatus = (status, id) => {
+      if(status===1) return <TFChip value="Not Started" onChange={handleStatusUpdate} name id={id} options={["Not Started", "In Progress", "Completed"]}/>
+      if(status===2) return <TFChip value="In Progress" onChange={handleStatusUpdate} name={id} options={["Not Started", "In Progress", "Completed"]}/>
+      if(status===3) return <TFChip value="Completed" onChange={handleStatusUpdate} name={id} options={["Not Started", "In Progress", "Completed"]}/>
+    }
+  
   return (
     <div>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
@@ -1194,10 +1193,10 @@ function Tasks(props) {
                                     {e.assigner}
                                   </td>
                                   <td style={styles.cell} >
-                                  {getPriority(e.Priority, e.task_id)}
+                                  {getPriority(e.priority, e.task_id)}
                                   </td>
                                   <td style={{ ...styles.cell}}>
-                                  {getStatus(e.Status, e.task_id)}
+                                  {getStatus(e.status, e.task_id)}
                                   </td>
                                   <td style={styles.cell}>
                                     {e.reviewer}
@@ -1237,10 +1236,10 @@ function Tasks(props) {
                                     {e.assigner}
                                   </td>
                                   <td style={styles.cell}>
-                                  {getPriority(e.Priority, e.task_id)}
+                                  {getPriority(e.priority, e.task_id)}
                                   </td>
                                   <td style={{ ...styles.cell}}>
-                                  {getStatus(e.Status, e.task_id)}
+                                  {getStatus(e.status, e.task_id)}
                                   </td>
                                   <td style={styles.cell}>
                                     {e.reviewer}
@@ -1280,10 +1279,10 @@ function Tasks(props) {
                                     {e.assigner}
                                   </td>
                                   <td style={styles.cell}>
-                                  {getPriority(e.Priority, e.task_id)}
+                                  {getPriority(e.priority, e.task_id)}
                                   </td>
                                   <td style={{ ...styles.cell}}>
-                                  {getStatus(e.Status, e.task_id)}
+                                  {getStatus(e.status, e.task_id)}
                                   </td>
                                   <td style={styles.cell}>
                                     {e.reviewer}
@@ -1324,10 +1323,10 @@ function Tasks(props) {
                                     {e.assigner}
                                   </td>
                                   <td style={styles.cell}>
-                                  {getPriority(e.Priority, e.task_id)}
+                                  {getPriority(e.priority, e.task_id)}
                                   </td>
                                   <td style={{ ...styles.cell}}>
-                                  {getStatus(e.Status, e.task_id)}
+                                  {getStatus(e.status, e.task_id)}
                                   </td>
                                   <td style={styles.cell}>
                                     {e.reviewer}
@@ -1421,35 +1420,7 @@ function Tasks(props) {
 
       
       {/* Delete Modal */}
-      <Modal
-        show={showDelete}
-        onHide={handleCloseDelete}
-        backdrop="static"
-        size="sm"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.title>Confirm Deletion</Modal.title>
-        </Modal.Header>
-        <Modal.Body>
-          <p style={{ textAlign: "center", marginBottom: '10px' }}>
-            <b>Delete the selected Task!!</b>
-          </p>
-          <div className="d-flex flex-row justify-content-between">
-
-            <div style={{ display: "inline-block" }}>
-              <Button variant="danger" onClick={handleCloseDelete}>
-                Cancel
-              </Button>
-            </div>
-            <div style={{ display: "inline-block", float: "right" }}>
-              <Button variant="success" onClick={handleDelete}>
-                Proceed
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete} label='Task'/>
     </div>
   );
 }

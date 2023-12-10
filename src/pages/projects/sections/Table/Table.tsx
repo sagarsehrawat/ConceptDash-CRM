@@ -9,7 +9,7 @@ import { showErrorModal, showSuccessModal } from '../../../../redux/slices/alert
 import IndependentRow from './IndependentRow';
 import RosterRows from './RosterRows';
 import './Table.css';
-import DeleteModal from './modals/DeleteModal';
+import DeleteModal from '../Footer/DeleteModal';
 
 interface FilterType {
   dept: (string | number)[],
@@ -62,7 +62,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProjectId }
         setSelectedRosters([]);
 
         const response = await SERVICES.getProjects(50, currPage, filter, search, sort);
-        console.log(response);
+
         dispatch(initProjects(response.res));
         setPages(response.totalPages);
 
@@ -117,7 +117,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProjectId }
   const handleDeleteProject = async () => {
     const project = projects.filter(project => project.project_id === selectedProjects[0])[0];
     try {
-      await SERVICES.deleteProject(selectedProjects[0], project.project_type);
+      await SERVICES.deleteProject(selectedProjects, project.project_type);
       setApi(api+1);
       dispatch(showSuccessModal('Project Deleted Successfully!'))
     } catch (error) {
