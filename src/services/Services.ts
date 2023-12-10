@@ -669,7 +669,7 @@ const SERVICES = {
             } else if (departmentId === 7) {
                 extraInfo['clientResponse'] = clientResponse;
                 extraInfo.requestSentTo = requestSentTo;
-                extraInfo.requestRecievedOn = moment(requestRecievedOn).format('YYYY-MM-DD');
+                extraInfo.requestRecievedOn = moment(requestRecievedOn).isValid() ? moment(requestRecievedOn).format('YYYY-MM-DD') : '';
             }
             const response = await axios.post(APIS.ADD_PROJECT,
                 {
@@ -683,10 +683,10 @@ const SERVICES = {
                     cityId,
                     status,
                     teamMemberIds: teamMemberIds.map(item => item.value),
-                    dueDate: moment(dueDate).format('YYYY-MM-DD'),
-                    followUpDate: moment(followUpDate).format('YYYY-MM-DD'),
-                    contractAcceptedDate: moment(contractAcceptedDate).format('YYYY-MM-DD'),
-                    contractExpiryDate: moment(contractExpiryDate).format('YYYY-MM-DD'),
+                    dueDate: moment(dueDate).isValid() ? moment(dueDate).format('YYYY-MM-DD') : '',
+                    followUpDate: moment(followUpDate).isValid() ? moment(followUpDate).format('YYYY-MM-DD') : '',
+                    contractAcceptedDate: moment(contractAcceptedDate).isValid() ? moment(contractAcceptedDate).format('YYYY-MM-DD') : '',
+                    contractExpiryDate: moment(contractExpiryDate).isValid() ? moment(contractExpiryDate).format('YYYY-MM-DD') : '',
                     extraInfo,
                     taskList
                 },
