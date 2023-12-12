@@ -42,22 +42,22 @@ function UpdateTask(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [form, setform] = useState({
-    title: updateTask.Title??updateTask.Title,
-    reviewedBy: updateTask.Reviewed_By??updateTask.Reviewed_By,
-    priority: updateTask.Priority??updateTask.Priority,
-    assignedTo: updateTask.Assigned_To??updateTask.Assigned_To,
-    description: updateTask.Description??updateTask.Description,
-    startDate: updateTask.Start_Date??updateTask.Start_Date,
-    dueDate: updateTask.Due_Date??updateTask.Due_Date,
+    title: updateTask.title??updateTask.title,
+    reviewedBy: updateTask.reviewed_by??updateTask.reviewed_by,
+    priority: updateTask.priority??updateTask.priority,
+    assignedTo: updateTask.assigned_to??updateTask.assigned_to,
+    description: updateTask.description??updateTask.description,
+    startDate: updateTask.start_date??updateTask.start_date,
+    dueDate: updateTask.due_date??updateTask.due_date,
   });
   const [isLoading, setisLoading] = useState(false)
-  const [title, settitle] = useState(updateTask.Title)
-  const [review, setreview] = useState(updateTask.Reviewed_By)
-  const [priority, setpriority] = useState(updateTask.Priority)
-  const [assignto, setassignto] = useState(updateTask.Assigned_To)
-  const [descrip, setdescrip] = useState(updateTask.Description)
-  const [sDate, setsDate] = useState(updateTask.Start_Date)
-  const [dDate, setdDate] = useState(updateTask.Due_Date)
+  const [title, settitle] = useState(updateTask.title)
+  const [review, setreview] = useState(updateTask.reviewed_by)
+  const [priority, setpriority] = useState(updateTask.priority)
+  const [assignto, setassignto] = useState(updateTask.assigned_to)
+  const [descrip, setdescrip] = useState(updateTask.description)
+  const [sDate, setsDate] = useState(updateTask.start_date)
+  const [dDate, setdDate] = useState(updateTask.due_date)
   const handleChange = (e) => {
     const { name, value } = e.target;
     if(name==='title') {
@@ -107,21 +107,21 @@ function UpdateTask(props) {
     e.preventDefault();
     setIsSubmit(true);
     axios
-      .post(
+      .put(
         HOST + UPDATE_TASK,
         {
-          id: updateTask.Task_ID,
-          type: updateTask.Type,
+          id: updateTask.task_id,
+          type: updateTask.type,
           title: title,
-          ID: updateTask.ID,
+          ID: updateTask.id,
           description: descrip,
           startDate: sDate,
           dueDate: dDate,
           assignedTo: assignto,
-          assignedBy: updateTask.Assigned_By?updateTask.Assigned_By:localStorage.getItem('employeeId'),
+          assignedBy: updateTask.assigned_by?updateTask.assigned_by:localStorage.getItem('employeeId'),
           reviewedBy: review,
           priority: priority,
-          status: updateTask.Status===0?1:updateTask.Status
+          status: updateTask.status===0?1:updateTask.status
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )

@@ -77,8 +77,8 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
         managerName: editForm.project_manager ?? "",
         managerNameId: editForm.project_manager_id ?? "",
         projectName: editForm.project_name,
-        startDate: editForm.start_date ? moment(editForm.start_date).format("YYYY-MM-DD") : "",
-        submissionDate: editForm.submission_date ? moment(editForm.submission_date).format("YYYY-MM-DD") : "",
+        startDate: moment(editForm?.start_date).isValid() ? moment(editForm.start_date).format("YYYY-MM-DD") : "",
+        submissionDate: moment(editForm?.start_date).isValid() ? moment(editForm.submission_date).format("YYYY-MM-DD") : "",
         rfpNumber: editForm.rfp_number ?? "",
         client: editForm.client ?? "",
         files: [],
@@ -89,7 +89,6 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
       }
       : FORM
   );
-  console.log(form)
   const [cities, setCities] = useState<
     Array<{ label: string | number; value: string | number }>
   >([]);

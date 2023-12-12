@@ -158,6 +158,7 @@ const formattedDate = `${year}-${month}-${day}`;
         setisLoading(false);
         if (res.data.success) {
           closeModal();
+          props.apiCall(prev => prev+1)
           setGreen(true);
         } else {
           setRed(true);

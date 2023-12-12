@@ -20,7 +20,7 @@ const TFSearchBar = (props) => {
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (api != null) setApi(api + 1);
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(delayDebounceFn);
   }, [search]);

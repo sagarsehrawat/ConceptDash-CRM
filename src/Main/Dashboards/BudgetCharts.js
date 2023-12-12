@@ -341,10 +341,10 @@ const BudgetCharts = (props) => {
                 const y = new Date().getFullYear();
 
                 for (let i = 0; i < arr.length; i++) {
-                    if (arr[i].Budget_Category === "Construction") {
-                        construction[arr[i].Budget_Year - y + parseInt(year)] = arr[i].Total_Amount / 1000;
-                    } else {
-                        design[arr[i].Budget_Year - y + parseInt(year)] = arr[i].Total_Amount / 1000;
+                    if (arr[i].budget_category === "Construction") {
+                        construction[arr[i].budget_year - y + parseInt(year)] = arr[i].total_amount / 1000;
+                    } else if(arr[i].budget_category === "Design") {
+                        design[arr[i].budget_year - y + parseInt(year)] = arr[i].total_amount / 1000;
                     }
                 }
 
@@ -379,21 +379,21 @@ const BudgetCharts = (props) => {
                 let data1 = [0, 0, 0, 0], data2 = [0, 0, 0, 0], data3 = [0, 0, 0, 0]
                 const y = new Date().getFullYear();
                 arr.map(e => {
-                    if (y - e.Budget_Year === 0) {
-                        if (e.Source === "Construct Connect") data3[0] = e.Count
-                        if (e.Source === "Merx") data3[1] = e.Count
-                        if (e.Source === "Biddingo") data3[2] = e.Count
-                        if (e.Source === "Bids and Tenders") data3[3] = e.Count
-                    } else if (y - e.Budget_Year === 1) {
-                        if (e.Source === "Construct Connect") data2[0] = e.Count
-                        if (e.Source === "Merx") data2[1] = e.Count
-                        if (e.Source === "Biddingo") data2[2] = e.Count
-                        if (e.Source === "Bids and Tenders") data2[3] = e.Count
-                    } else if (y - e.Budget_Year === 2) {
-                        if (e.Source === "Construct Connect") data1[0] = e.Count
-                        if (e.Source === "Merx") data1[1] = e.Count
-                        if (e.Source === "Biddingo") data1[2] = e.Count
-                        if (e.Source === "Bids and Tenders") data1[3] = e.Count
+                    if (y - e.budget_year === 0) {
+                        if (e.source === "Construct Connect") data3[0] = e.count
+                        if (e.source === "Merx") data3[1] = e.count
+                        if (e.source === "Biddingo") data3[2] = e.count
+                        if (e.source === "Bids and Tenders") data3[3] = e.count
+                    } else if (y - e.budget_year === 1) {
+                        if (e.source === "Construct Connect") data2[0] = e.count
+                        if (e.source === "Merx") data2[1] = e.count
+                        if (e.source === "Biddingo") data2[2] = e.count
+                        if (e.source === "Bids and Tenders") data2[3] = e.count
+                    } else if (y - e.budget_year === 2) {
+                        if (e.source === "Construct Connect") data1[0] = e.count
+                        if (e.source === "Merx") data1[1] = e.count
+                        if (e.source === "Biddingo") data1[2] = e.count
+                        if (e.source === "Bids and Tenders") data1[3] = e.count
                     }
                 })
                 setbudgetSourceChartData({
@@ -441,8 +441,8 @@ const BudgetCharts = (props) => {
                 const arr = res.data.res;
                 let obj = projectCategoryBudgetChartData
                 arr.map(e => {
-                    obj[e.Department] = {}
-                    obj[e.Department]['percent'] = e.Percent
+                    obj[e.department] = {}
+                    obj[e.department]['percent'] = e.percent
                 })
                 setprojectCategoryBudgetChartData(obj)
             }).catch((err) => {
@@ -459,11 +459,11 @@ const BudgetCharts = (props) => {
                 const arr = res.data.res;
                 let obj = projectCategoryBudgetChartData
                 for (let i = 0; i < arr.length;) {
-                    if (arr[i].Department in obj) {
-                        obj[arr[i].Department][arr[i].Budget_Year] = arr[i].Total_Amount
+                    if (arr[i].department in obj) {
+                        obj[arr[i].department][arr[i].budget_year] = arr[i].total_amount
                         i++;
                     } else {
-                        obj[arr[i].Department] = {}
+                        obj[arr[i].department] = {}
                     }
                 }
                 setprojectCategoryBudgetChartData(obj)

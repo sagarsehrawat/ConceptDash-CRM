@@ -562,7 +562,7 @@ const BudgetCities = (props) => {
                         auth: "Rose " + localStorage.getItem("auth"),
                         search: value2,
                         filter: JSON.stringify(filter),
-                        city: city.City_ID,
+                        city: city.city_id,
                         year: year,
                     },
                 })
@@ -612,27 +612,6 @@ const BudgetCities = (props) => {
             {red === true ? <RedAlert setRed={setred} /> : <></>}
             {budget
                 ? <>
-                    <div className='d-flex flex-row justify-content-between' style={styles.headerContainer}>
-                        <p style={styles.heading}>Budget Status for Cities</p>
-                    </div>
-
-                    {/* Header Cards */}
-                    <div className='d-flex flex-row' style={{ marginLeft: "32px", marginBottom: "20px" }}>
-                        <div style={styles.topContainer}>
-                            <p style={styles.topContainerHeading}>Budget Done</p>
-                            <p style={{ ...styles.topContainerSubheading, color: "#559776" }}>{budgetCount.Done}</p>
-                        </div>
-                        <div style={styles.topContainer}>
-                            <p style={styles.topContainerHeading}>Draft Budget</p>
-                            <p style={{ ...styles.topContainerSubheading, color: "#FD9568" }}>{budgetCount.Draft}</p>
-                        </div>
-                        <div style={styles.topContainer}>
-                            <p style={styles.topContainerHeading}>Not Found</p>
-                            <p style={{ ...styles.topContainerSubheading, color: "#D93838" }}>{budgetCount.Not_Found}</p>
-                        </div>
-                    </div>
-                    <div style={styles.headerLine}></div>
-                    <p style={styles.heading2}>Cities</p>
 
                     {/* Filter and Other Buttons */}
                     <div className='d-flex flex-row justify-content-between' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px", marginRight:'32px' }}>
@@ -665,26 +644,26 @@ const BudgetCities = (props) => {
                                         <LoadingSpinner />
                                     </td>
                                 </tr> : cities && cities.map((e, idx) => {
-                                    if (e.City?.toLowerCase().startsWith(value?.toLowerCase())) {
-                                        return (<tr style={{ ...styles.tableRow }} className='' id={e.City_Budget_ID}>
+                                    if (e.city?.toLowerCase().startsWith(value?.toLowerCase())) {
+                                        return (<tr style={{ ...styles.tableRow }} className='' id={e.city_budget_id}>
                                             <td className='' style={{ ...styles.tableCell, fontWeight: "500" }}>
                                                 <div className='d-flex flex-column justify-content-start'>
-                                                    <p style={{ WebkitLineClamp: "1", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.City}</p>
-                                                    <p style={{ fontWeight: "400", color: "#70757A" }}>{e.Municipality_Type}</p>
+                                                    <p style={{ WebkitLineClamp: "1", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.city}</p>
+                                                    <p style={{ fontWeight: "400", color: "#70757A" }}>{e.municipality_type}</p>
                                                 </div>
                                             </td>
-                                            <td style={{ ...styles.tableCell }}>{e.Geographic_Area}</td>
-                                            <td style={{ ...styles.tableCell }}>{e.Population_2021}</td>
-                                            <td style={{ ...styles.tableCell, fontWeight: "600" }}>{addComma(e.Capital_Budget_23)}</td>
+                                            <td style={{ ...styles.tableCell }}>{e.geographic_area}</td>
+                                            <td style={{ ...styles.tableCell }}>{e.population_2021}</td>
+                                            <td style={{ ...styles.tableCell, fontWeight: "600" }}>{addComma(e.capital_budget_23)}</td>
                                             <td style={{ ...styles.tableCell }}><TFChip
-                                                                                    label={e.Year_22}
-                                                                                    id={e.City_Budget_ID}
+                                                                                    value={e.year_22}
+                                                                                    name={e.city_budget_id}
                                                                                     tableRef={tableRef}
                                                                                     options={["Not Found", "Draft Budget", "Done"]}
                                                                                 /></td>
                                             <td style={{ ...styles.tableCell }}><TFChip
-                                                                                    label={e.Year_23}
-                                                                                    id={e.City_Budget_ID}
+                                                                                    value={e.year_23}
+                                                                                    label={e.city_budget_id}
                                                                                     tableRef={tableRef}
                                                                                     options={["Not Found", "Draft Budget", "Done"]}
                                                                                 /></td>
@@ -745,7 +724,7 @@ const BudgetCities = (props) => {
                                     </div>
                                     <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
                                         <p style={styles.topContainerHeading2}>City Website</p>
-                                        <a style={styles.topContainerSubheading2} href={city.Website} target="_blank" rel="noreferrer">{city.Website ?? "-"}</a>
+                                        <a style={styles.topContainerSubheading2} href={city.website} target="_blank" rel="noreferrer">{city.Website ?? "-"}</a>
                                     </div>
                                 </div>
                                 <div className='d-flex flex-row justify-content-center align-items-center'>
@@ -754,7 +733,7 @@ const BudgetCities = (props) => {
                                     </div>
                                     <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
                                         <p style={styles.topContainerHeading2}>Budget 2022 Website</p>
-                                        <a style={styles.topContainerSubheading2} href={city.Website_22} target="_blank" rel="noreferrer">{city.Website_22 ?? "-"}</a>
+                                        <a style={styles.topContainerSubheading2} href={city.website_22} target="_blank" rel="noreferrer">{city.Website_22 ?? "-"}</a>
                                     </div>
                                 </div>
                                 <div className='d-flex flex-row justify-content-center align-items-center'>
@@ -763,7 +742,7 @@ const BudgetCities = (props) => {
                                     </div>
                                     <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
                                         <p style={{ ...styles.topContainerHeading2, width: "447px" }}>Budget 2023 Website</p>
-                                        <a style={styles.topContainerSubheading2} href={city.Website_23} target="_blank" rel="noreferrer">{city.Website_23 ?? "-"}</a>
+                                        <a style={styles.topContainerSubheading2} href={city.website_23} target="_blank" rel="noreferrer">{city.Website_23 ?? "-"}</a>
                                     </div>
                                 </div>
                             </div>
@@ -774,7 +753,7 @@ const BudgetCities = (props) => {
                                     </div>
                                     <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
                                         <p style={styles.topContainerHeading2}>2022 Budget</p>
-                                        <p style={{ ...styles.topContainerSubheading2 }}>{city.Year_22}</p>
+                                        <p style={{ ...styles.topContainerSubheading2 }}>{city.year_22}</p>
                                     </div>
                                 </div>
                                 <div className='d-flex flex-row justify-content-center align-items-center'>
@@ -783,7 +762,7 @@ const BudgetCities = (props) => {
                                     </div>
                                     <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
                                         <p style={styles.topContainerHeading2}>2023 Budget</p>
-                                        <p style={{ ...styles.topContainerSubheading2 }}>{city.Year_23}</p>
+                                        <p style={{ ...styles.topContainerSubheading2 }}>{city.year_23}</p>
                                     </div>
                                 </div>
                                 <div className='d-flex flex-row justify-content-center align-items-center'>
@@ -792,7 +771,7 @@ const BudgetCities = (props) => {
                                     </div>
                                     <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
                                         <p style={styles.topContainerHeading2}>Remarks</p>
-                                        <p style={{ ...styles.topContainerSubheading2, width: "447px" }}>{city.Remarks ?? "-"}</p>
+                                        <p style={{ ...styles.topContainerSubheading2, width: "447px" }}>{city.remarks ?? "-"}</p>
                                     </div>
                                 </div>
                             </div>

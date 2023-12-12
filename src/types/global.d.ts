@@ -73,4 +73,39 @@ declare global{
     }
 
     type TypeaheadOptions =  Array<{label: string, value: string}>
+
+    interface City {
+        city_id: number;
+        city: string;
+        province: string;
+        country: string;
+        population_2021: string;
+        website: string;
+        municipality_type: string;
+        municipality_status: string;
+        geographic_area: string;
+        city_budget_id: number;
+        year_22: string;
+        website_22: string;
+        year_23: string;
+        website_23: string;
+        remarks: string;
+        capital_budget_23: number | null;
+    }
+
+    interface Budget {
+        budget_id: number;
+        city_id: number;
+        city: string;
+        department_id: number | null;
+        department: string | null;
+        project_cat_id: number | null;
+        project_category: string | null;
+        project_name: string;
+        budget_category: string;
+        budget_amount: number | null;
+        budget_year: string;
+        source: string | null;
+        serial_no: string | null;
+    }
 }
