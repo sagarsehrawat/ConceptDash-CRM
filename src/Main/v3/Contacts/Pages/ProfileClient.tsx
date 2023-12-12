@@ -16,6 +16,8 @@ import bold from '../icons/format_bold_black_24dp 2.svg'
 import bulletlist from '../icons/format_list_bulleted_black_24dp (1) 2.svg'
 import numberlist from '../icons/format_list_numbered_black_24dp 2.svg'
 import emoticons from '../icons/sentiment_satisfied_alt_black_24dp 3.svg'
+import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
+import 'draft-js/dist/Draft.css';
 
 type Props={
   contactPersonData: any,
@@ -35,23 +37,16 @@ const ProfileClient = (props:Props) => {
     const [projectChat, setProjectChat] = useState(null);
     const [showGeneralBox, setShowGeneralBox] = useState<Boolean>(true);
     const [showProjectBox, setShowProjectBox] = useState<Boolean>(true);
+
+    const [editorState, setEditorState] =useState(() => EditorState.createEmpty());
     const handleBoldClick = () => {
-      const selectedText = window.getSelection().toString();
-    
-      // Check if selected text already contains '**'
-      if (selectedText.includes('**')) {
-        // Remove existing '**' to toggle bold off
-        setInputText((prevText) => prevText.replace(/\*\*/g, ''));
-      } else {
-        // Wrap selected text in '**' to make it bold
-        setInputText((prevText) => `${prevText}**${selectedText}**`);
-      }
+      setEditorState(RichUtils.toggleInlineStyle(editorState, 'BOLD'));
     };
     
   
     const handleBulletListClick = () => {
       // Prefix selected text with '*' to create a bullet point
-      setInputText((prevText) => `${prevText}* ${window.getSelection().toString()}\n`);
+    setEditorState(RichUtils.toggleBlockType(editorState, 'unordered-list-item'));
     };
 
 const handleChange = (event: Event, newValue : any) => {
@@ -67,7 +62,10 @@ const handleChange = (event: Event, newValue : any) => {
             borderRadius: '16px 16px 0px 0px',
             border: '1px solid var(--New-Outline, #EBEDF8)',
             background: '#FFF',
-            width:"775px",
+            marginRight: '20px',
+            marginTop: '20px',
+            width:"-webkit-fill-available",
+
           },
           name:{
                 color: 'var(--Black-text, #3D424F)',
@@ -78,7 +76,6 @@ const handleChange = (event: Event, newValue : any) => {
                 lineHeight: '24px', // 150%
                 letterSpacing: '0.103px',
                 display: "flex",
-                 alignItems: "center",
                 gap: "var(--8-pad, 8px)",
           },
            position : {
@@ -109,7 +106,8 @@ const handleChange = (event: Event, newValue : any) => {
   borderBottom: '1px solid var(--New-Outline, #EBEDF8)',
   borderLeft: '1px solid var(--New-Outline, #EBEDF8)',
   background: '#FFF',
-  width:"775px",
+  width:"-webkit-fill-available",
+  marginRight: '20px'
   // margin:"0px 20px 20px 0px"
 
           },
@@ -123,7 +121,7 @@ const handleChange = (event: Event, newValue : any) => {
           },
           headingdata:{
             display: "flex",
-            padding: "0px 16px",
+            // padding: "0px 16px",
             alignItems: "center",
             gap: "var(--8-pad, 8px)",
             alignSelf: "stretch",
@@ -147,14 +145,14 @@ const handleChange = (event: Event, newValue : any) => {
             fontWeight: "400",
             lineHeight: "16px",
           },
-          note:{
+            note:{
                 display: 'flex',
-                width: '477px',
                 padding: '20px',
                 flexDirection: 'column',
                 alignItems: 'flex-start',
                 borderRadius: '16px',
                 border: '1px solid var(--New-Outline, #EBEDF8)',
+                flex: 100,
                 background: '#FFF',      
                 marginRight:"20px",
                 marginTop:"24px",       
@@ -238,6 +236,7 @@ const handleChange = (event: Event, newValue : any) => {
                       },
                   })
                   .then((res) => {
+                      console.log(res.data.res[0]);
                        setPersonData(res.data.res[0]);
                   })
                   .catch((err) => {
@@ -253,11 +252,12 @@ const handleChange = (event: Event, newValue : any) => {
                 .get(HOST1 + GENERAL_NOTES, {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
-                        peopleid: JSON.stringify(props.id) 
+                        peopleid: 1
                     },
                 })
                 .then((res) => {
-                     setGeneralChat(res.res[0].general);
+                     console.log(res)
+                     setGeneralChat(res.data.res[0].general);
                      const rem = res.data.res[0].general?.filter((each) => each.reminder === true);
                       setReminders(rem);
                       console.log(reminders);
@@ -275,11 +275,12 @@ const handleChange = (event: Event, newValue : any) => {
               .get(HOST1 + PROJECT_NOTES, {
                   headers: {
                       auth: "Rose " + localStorage.getItem("auth"),
-                      peopleid: JSON.stringify(props.id),
-                      projectid: "4" 
+                      peopleid: 1,
+                      projectid: 1 
                   },
               })
               .then((res) => {
+                   console.log(res);
                    setProjectChat(res.data.res[0].chat);
                    console.log(projectChat);
               })
@@ -327,8 +328,8 @@ const handleChange = (event: Event, newValue : any) => {
           date: JSON.stringify(new Date().getDate()),
           notes: projectText,
           reminder: 'false',
-          peopleId: '1', 
-          projectId: '1'
+          peopleId: 1, 
+          projectId: 1
         },
         {
           headers: {
@@ -356,8 +357,8 @@ const handleChange = (event: Event, newValue : any) => {
      <div style={{marginLeft:"20px", background: "#F8FAFB"}}>
           <div style={styles.header}>
             <div style={{display: "flex",flexDirection: "column",justifyContent: "center",alignItems: "flex-start",}}>
-            <div style={styles.name}>{personData?.name} <TFChip value="Primary"/></div>
-            <div style={styles.position}>ux designer</div>
+            <div style={styles.name}>{personData?.name} <TFChip value={personData?.contact_type}/></div>
+            <div style={styles.position}>{personData?.job_title}</div>
             </div>
             <div style={{display:"flex", gap:"12px"}}>  
              <button style={styles.resume}>Resume</button>
@@ -365,13 +366,13 @@ const handleChange = (event: Event, newValue : any) => {
           </div>
           <div style={styles.details}>
             <div style={{ display: "flex", width: "120px", padding: "0px var(--8-pad, 8px)", flexDirection: "column", alignItems: "flex-start", gap: "var(--8-pad, 8px)" }}>
-              <div style={styles.subheading}>label<TFChip value={personData?.company_type} /></div>
+              <div style={styles.subheading}>Label<TFChip value={personData?.company_type}/></div>
               </div>
               <div style={{display: "flex", width: "210px", padding: "0px var(--8-pad, 8px) 0px 24px", flexDirection: "column", alignItems: "flex-start", gap: "var(--8-pad, 8px)", borderRight: "1px solid var(--New-Outline, #EBEDF8)"}}>
-          <div style={styles.subheading}>project <div style={styles.headingdata}>Taskforce phase 2</div></div>
+          <div style={styles.subheading}>Project <div style={styles.headingdata}>Taskforce phase 2</div></div>
           </div>
-          <div style={{ display: "flex", width: "218px", padding: "0px var(--8-pad, 8px) 0px 24px", flexDirection: "column", alignItems: "flex-start", gap: "var(--8-pad, 8px)" }}><div style={styles.subheading}>email <div style={styles.headingdata}>{personData?.email}</div></div></div>
-          <div style={{  display: "flex",flexDirection: "column",alignItems: "flex-start",padding: "0px var(--8-pad, 8px) 0px 24px", gap:"var(--8-pad, 8px)"}}><div style={styles.subheading}>phone <div style={styles.headingdata}>{personData?.phone}</div></div></div>
+          <div style={{ display: "flex", width: "218px", padding: "0px var(--8-pad, 8px) 0px 24px", flexDirection: "column", alignItems: "flex-start", gap: "var(--8-pad, 8px)" }}><div style={styles.subheading}>Email <div style={styles.headingdata}>{personData?.email}</div></div></div>
+          <div style={{  display: "flex",flexDirection: "column",alignItems: "flex-start",padding: "0px var(--8-pad, 8px) 0px 24px", gap:"var(--8-pad, 8px)"}}><div style={styles.subheading}>Phone <div style={styles.headingdata}>{personData?.phone}</div></div></div>
           </div>
           <div style={{display:"flex"}}>
             <div style={styles.note}>
@@ -443,14 +444,16 @@ const handleChange = (event: Event, newValue : any) => {
             <div style={{...styles.subcontent2, lineHeight: "24px", fontSize:"14px"}}>Take a note</div>
            </div>) : 
            ( <div>
-      <textarea
+      {/* <textarea
         id="textInput"
         placeholder="Take a note..."
         rows="5"
         cols="50"
         value={projectText}
         onChange={(e) => setProjectText(e.target.value)}
-      ></textarea>
+      ></textarea> */}
+        <Editor editorState={editorState} onChange={setEditorState} />;
+
        <div style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "space-between",alignItems: "center",alignSelf: "stretch",
         borderRadius: "0px 0px var(--12-pad, 12px) var(--12-pad, 12px)",border: "1px solid var(--New-Outline, #EBEDF8)",background: "#FFF"}}>
         <div style={{display: "flex",alignItems: "flex-start",gap: "var(--12-pad, 12px)"}}>
@@ -461,7 +464,7 @@ const handleChange = (event: Event, newValue : any) => {
         </div>
         <div style={{display: "flex",alignItems: "flex-start",gap: "var(--12-pad, 12px)"}}>
         <button style={styles.resume} onClick={()=>setShowGeneralBox(true)}>Cancel</button>
-        <TFButton label="Save" handleClick={handleSave2}/>
+        <TFButton label="Save" handleClick={handleSave}/>
         </div>
         </div>
         </div> )}

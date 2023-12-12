@@ -227,7 +227,13 @@ export const PRIMARY_COLOR = '#8361FE'
 export const ORGANIZATION_COUNT='/client/get/organization/count'
 export const PEOPLE_COUNT='/client/get/people/count'
 export const ADD_PEOPLE = '/client/add/people';
+export const ADD_ORGANIZATION = '/client/add/organization'
+export const UPDATE_ORGANIZATION = '/client/update/organization'
+export const DELETE_ORGANIZATION = '/client/delete/organization'
+export const UPDATE_PEOPLE = '/client/update/people'
+export const DELETE_PEOPLE = '/client/delete/people'
 export const ALL_PEOPLE_IN_ORGANIZATION='/client/get/people/all'
+export const GET_ORGANIZATION_LIST = '/client/get/organization/list'
 
 export const GET_ALL_ORGANIZATION='/client/get/page/organization'
 export const GET_ALL_PEOPLE='/client/get/page/people'

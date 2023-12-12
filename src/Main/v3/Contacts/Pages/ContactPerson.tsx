@@ -89,6 +89,7 @@ const ContactPerson = (props: Props) => {
         }
      }
      useEffect(() => {
+      setIsLoading(true);
       const call = async () => {
           await axios
               .get(HOST1 + ORGANIZATION_DETAILS, {
@@ -100,6 +101,7 @@ const ContactPerson = (props: Props) => {
               .then((res) => {
                   //  console.log(res.data.res[0]);
                    setOrganisationData(res.data.res[0]);
+                   setIsLoading(false);
               })
               .catch((err) => {
                   console.log(err);
@@ -119,8 +121,9 @@ const ContactPerson = (props: Props) => {
                 },
             })
             .then((res) => {
-                //  console.log(res.data.res);
-                 setAllPeopleData(res.data.res)
+                 const filteredData = res.data.res.filter(item => item.name.toLowerCase().startsWith(value.toLowerCase()));
+                 filteredData !== null ? setAllPeopleData(filteredData) : setAllPeopleData(res.data.res);
+                 console.log(allPeopleData);
             })
             .catch((err) => {
                 console.log(err);
@@ -128,24 +131,28 @@ const ContactPerson = (props: Props) => {
     }
     call1()
     setIsLoading(false)
-}, [])
+}, [value,props.contactPersonData]);
   return (
-     <div style={{display:"flex"}}>
+    <>
+      {isloading ?
+       <div style={{position:"absolute", top:"50%", left:"50%"}}><LoadingSpinner /></div>: 
+     (<div style={{display:"flex"}}>
       <div style={{width: "397px",height:"1174px",flexShrink: "0",borderRight: "1px solid var(--New-Outline, #EBEDF8)",background: "#FFF"}}>
       <div style={styles.card}>
         <div style={styles.company}>Company</div>
-        <div style={styles.companyName}>{organizationData.company_name}</div>
+        <div style={styles.companyName}>{organizationData?.company_name}</div>
         <div style={{border: "1px solid #EBEDF8", background: "#E8EAEF",width: "357px",height: "1px",flexShrink: "0", marginTop:"12px", marginBottom:"16px"}}></div>
            <div style={{width: "321px",height: "120px",flexShrink: "0"}}>
-        <div style={styles.companyDetails}><img src={email} alt=""style={{marginRight:"8px"}}/> {organizationData.email}</div>
-        <div style={styles.companyDetails}><img src={webicon} alt=""style={{marginRight:"8px"}}/>{organizationData.website}</div>
-        <div style={styles.companyDetails}><img src={locationicon} alt=""style={{marginRight:"8px"}}/>{organizationData.address}</div>
+        <div style={styles.companyDetails}><img src={email} alt=""style={{marginRight:"8px"}}/> {organizationData?.email}</div>
+        <div style={styles.companyDetails}><img src={webicon} alt=""style={{marginRight:"8px"}}/>{organizationData?.website}</div>
+        <div style={styles.companyDetails}><img src={locationicon} alt=""style={{marginRight:"8px"}}/>{organizationData?.address}</div>
         </div>
       </div>
       <div style={styles.companyName}>Company Type</div>
       {/* the chip */}
-       <div style={{width:"105px", marginLeft:"20px", marginTop : "8px"}}>
-       <TFChip value="Consultant"/>
+       <div style={{ display:"flex", gap:"24px", marginLeft:"20px", marginTop : "8px"}}>
+       <TFChip value={organizationData.company_type}/>
+       <TFChip value={organizationData.contact_type}/>
        </div>
       <div style={styles.searchCard}>
          <div style={styles.searchCard1}>
@@ -172,7 +179,8 @@ const ContactPerson = (props: Props) => {
       </div>
      </div>
      <ProfileClient contactPersonData={props.contactPersonData} id={personId}/>
-     </div>
+     </div>)}
+     </>
   )
 }
 

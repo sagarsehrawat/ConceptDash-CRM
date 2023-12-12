@@ -1,6 +1,6 @@
 
 import React, { useState,useEffect } from 'react'
-import peopleicon from '../icons/Rectangle 4352peopleicon.svg'
+import peopleicon from '../icons/people_black_24dp (2) 1.svg'
 import {HOST1, ORGANIZATION_COUNT,PEOPLE_COUNT } from '../../../Constants/Constants';
 import axios from 'axios'
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
     setValue1: Function,
 }
 
-const HeaderCards = (props: Props) => {
+const AllCards = (props: Props) => {
     const styles = {
          cardMain:{
             display: 'inline-flex',
@@ -79,28 +79,28 @@ const HeaderCards = (props: Props) => {
     <>
                   <div className='d-flex flex-row' style={styles.cardMain}>
                <div style={styles.card} >
-                            <img src={peopleicon} style={{width:"48px",height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}} alt="" />
+               <div style={{width:"48px", height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}}><img src={peopleicon} style={{width:"24px",height:"24px", margin:"12px"}} alt="" /></div>
                              <div style={{display:"flex",flexDirection:"column", alignItems:"flex-start"}}>
                              <p style={styles.topContainerHeading}>All {props.name}</p>
                             <p style={{ ...styles.topContainerSubheading}}>{Number(client)+Number(partners)+Number(consultants)}</p>
                              </div>
                         </div>
                         <div style={styles.card} onClick={()=> props.setValue1("2")}>
-                            <img src={peopleicon} style={{width:"48px",height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}} alt="" />
+                        <div style={{width:"48px", height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}}><img src={peopleicon} style={{width:"24px",height:"24px", margin:"12px"}} alt="" /></div>
                              <div style={{display:"flex",flexDirection:"column", alignItems:"flex-start"}}>
                              <p style={styles.topContainerHeading}>Clients</p>
                             <p style={{ ...styles.topContainerSubheading}}>{client}</p>
                              </div>
                         </div>
                         <div style={styles.card}  onClick={()=> props.setValue1("3")}>
-                            <img src={peopleicon} style={{width:"48px",height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}} alt="" />
+                            <div style={{width:"48px", height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}}><img src={peopleicon} style={{width:"24px",height:"24px", margin:"12px"}} alt="" /></div>
                              <div style={{display:"flex",flexDirection:"column", alignItems:"flex-start"}}>
                              <p style={styles.topContainerHeading}>Consultants</p>
                             <p style={{ ...styles.topContainerSubheading}}>{consultants}</p>
                              </div>
                         </div>
                         <div style={styles.card}  onClick={()=> props.setValue1("4")}>
-                            <img src={peopleicon} style={{width:"48px",height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}} alt="" />
+                        <div style={{width:"48px", height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}}><img src={peopleicon} style={{width:"24px",height:"24px", margin:"12px"}} alt="" /></div>
                              <div style={{display:"flex",flexDirection:"column", alignItems:"flex-start"}}>
                              <p style={styles.topContainerHeading}>Partners</p>
                             <p style={{ ...styles.topContainerSubheading}}>{partners}</p>
@@ -112,4 +112,4 @@ const HeaderCards = (props: Props) => {
   )
 }
 
-export default HeaderCards
+export default AllCards

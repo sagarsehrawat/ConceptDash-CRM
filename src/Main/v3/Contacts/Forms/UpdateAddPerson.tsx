@@ -1,24 +1,25 @@
-import React, { useEffect, useState,useRef } from "react";
-import { FormSelect, Modal } from 'react-bootstrap'
+import React, { useEffect, useState, useRef } from "react";
+import { Button,Modal } from 'react-bootstrap'
 import peopleblack from '../icons/people_black_24dp (2) 1.svg'
 import cross from "../../../../Images/cross.svg";
 import cloud from "../../../../Images/cloud_upload_black_24dp 1.svg"
-import TFButton from "../../../../components/ui/TFButton/TFButton"
-import { HOST1, ADD_PEOPLE, GET_ORGANIZATION_LIST } from "../../../Constants/Constants";
+import TFButton from "../../../../components/ui/TFButton/TFButton.js"
+import { GET_ORGANIZATION_LIST, HOST1, UPDATE_PEOPLE } from "../../../Constants/Constants.js";
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
-import FormUtils from "../../../../utils/FormUtils.js";
-import axios from "axios";
 import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead.js";
 import Utils from '../../../../utils/Utils'
-
+import FormUtils from "../../../../utils/FormUtils.js";
+import axios from "axios";
+import JobTitle from "../../../Form/JobTitle.js";
 type Props={
     show: boolean,
-    setShow: Function
-    id : Number
-    api : number
+    setShow: Function,
+    data:Object
+    api:number,
     setApi: Function
+    setselectedPeople : Function
 } 
-const AddNewPerson = ({show,setShow,id,api, setApi}: Props) => {
+const UpdatePerson = ({show,setShow,data,api,setApi, setselectedPeople}: Props) => {
   const styles = {
     text: {
       color: "var(--Dark-grey, #70757A)",
@@ -30,19 +31,20 @@ const AddNewPerson = ({show,setShow,id,api, setApi}: Props) => {
     },
   };
   const [formData, setFormData] = useState({
-    name: '',
-    jobTitle: '',
-    companyType: 'Client',
-    companyName: '',
-    companyNameId: null,
-    contactType: 'Primary',
-    email: '',
-    phone: '',
-    altphone: '',
+    id:data.id,
+    name: data.name,
+    jobTitle: data.job_title,
+    companyType: data.company_type,
+    companyName: data.company_name,
+    companyId: data.company_id,
+    contactType: data.contact_type,
+    email: data.email,
+    phone: data.phone,
+    altphone:data.alternate_phone,
     cv: '', // Will store the file object
-    address: '',
-    cityId: '',
-    remarks: '',
+    address: data.address,
+    cityId: 1,
+    remarks: data.remarks,
   });
   const formUtils = FormUtils(setFormData);
 
@@ -71,6 +73,8 @@ const AddNewPerson = ({show,setShow,id,api, setApi}: Props) => {
                 console.log(response.data.res);
                 setOrganization(Utils.convertToTypeaheadOptions(response.data.res, 'company_name', 'company_id'));
                 console.log(organization);
+                setApi(api+1)
+                setselectedPeople([]);
                
             } else {
                 console.error(response.data.error);
@@ -82,6 +86,7 @@ const AddNewPerson = ({show,setShow,id,api, setApi}: Props) => {
 
     call1();
 }, []);
+
 const handleForm = (key, value) => {
   console.log(key, value);
    switch (key) {
@@ -95,20 +100,20 @@ const handleForm = (key, value) => {
 
   const handleSubmit = async () => {
     try {
-        console.log(formData)
-      const response = await axios.post( HOST1 + ADD_PEOPLE,{
+      const response = await axios.post( HOST1 + UPDATE_PEOPLE,{
+        id: formData.id,
         name: formData.name,
-        jobTitle: formData.jobTitle,
         companyType: formData.companyType,
-        companyID: formData.companyNameId,
+        companyID: formData.companyId,
         contactType: formData.contactType,
         email: formData.email,
         phone: formData.phone,
          cv: formData.cv,
          address: formData.address,
-         cityId: 1,
+        //  cityId:null,
          remarks: formData.remarks,
-         alternatePhone: formData.altphone
+         jobTitle: formData.jobTitle,
+         alternatePhone: formData.altphone,
       }, 
       {
         headers: {
@@ -118,21 +123,23 @@ const handleForm = (key, value) => {
         console.log('API Response:', response);
 
         setFormData({
+          id:0,
           name: '',
     jobTitle: '',
     companyType: '',
     companyName: '',
+    companyId: 0,
     contactType: '',
     email: '',
     phone: '',
     altphone: '',
     cv: '', // Will store the file object
     address: '',
-    cityId: '',
+    cityId:1,
     remarks: '',
         });
         setShow(false)
-        setApi(api+1);
+        setApi(api+1)
       } 
      catch (error) {
       console.error('API Error:', error);
@@ -140,12 +147,12 @@ const handleForm = (key, value) => {
      console.log(formData);
   };
   return (
-    <>
+    <>  {console.log(data)}
         <div
             className='tf-modal-backdrop d-flex justify-content-end align-items-start'
             >
                <div>
-      <div style={{display: "inline-flex", padding: "54px 48px",flexDirection: "column", alignItems: "flex-start", gap: "20px", background:"#fff", height:"900px"}}>
+      <div style={{display: "inline-flex",height:"900px", padding: "54px 48px",flexDirection: "column", alignItems: "flex-start", gap: "20px", background:"#fff"}}>
         <div style={{
                     display: 'flex',
                     flexDirection: 'coloumn',
@@ -154,7 +161,7 @@ const handleForm = (key, value) => {
         }}>
               <div style={{display: "flex",alignItems: "flex-start", gap:"20px"}}> 
                   <img src={peopleblack}/>
-                  <div className='heading-2'>Add new People</div>
+                  <div className='heading-2'>Update Person</div>
               </div>
         </div>
         <div style={{display: "flex",flexDirection: "column",alignItems: "flex-start",gap:" var(--8-pad, 8px)"}}> 
@@ -167,13 +174,12 @@ const handleForm = (key, value) => {
           ref={inputRef}
           required={true}
           onChange={(e) => handleForm(e.target.name, e.target.value)}
-        />    
+        />  
         <div style={{display: "flex",flexDirection: "column",alignItems: "flex-start",gap:" var(--8-pad, 8px)"}}>
            <div style={{display:"flex",width: "624px",height: "var(--32-pad, 32px)"}}>
             <div style={{...styles.text,display: "flex",width: "160px",alignItems:"center",gap: "var(--8-pad, 8px)"}}>Job Title</div>
             <input type="text" placeholder="Type in Role" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'}style={{...styles.text,display:"flex",width:"456px",padding:" 6px var(--8-pad, 8px)",alignItems: "center",gap:" var(--12-pad, 12px)",outline:"none", border: "none",background: "#F6F7F7"}} value={formData.jobTitle}    required={true}
-            onChange={(e) => handleForm(e.target.name, e.target.value)} name="jobTitle" />
-           </div>
+            onChange={(e) => handleForm(e.target.name, e.target.value)} name="jobTitle" />           </div>
            <div style={{display:"flex"}}>
            <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Label</div>
            <TFChip
@@ -181,7 +187,7 @@ const handleForm = (key, value) => {
                           value={formData.companyType}
                           onChange={handleForm} 
                           options={["Client", "Consultant","Partner"]}
-                        /> </div>
+                        />  </div>
           <div style={{display:"flex"}}>
              <div style={{...styles.text,display: "flex",width:"160px",alignItems: "center",gap:" var(--8-pad, 8px)"}}>Organisation</div>
              <div><TFTypeahead
@@ -190,7 +196,8 @@ const handleForm = (key, value) => {
             width='100%'
             onChange={handleForm}
             options={organization}
-          />    </div></div>
+            defaultValue={formData.companyName}
+          />    </div>          </div>
           <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Contact Type</div>
           <TFChip
@@ -263,7 +270,7 @@ const handleForm = (key, value) => {
              onClick={()=>setShow(false)}>
              Cancel
             </button>
-            <TFButton label='Add People' handleClick={handleSubmit} />
+            <TFButton label='Update Person' handleClick={handleSubmit}/>
            </div>
            </div>
            </div>
@@ -272,4 +279,4 @@ const handleForm = (key, value) => {
   )
 }
 
-export default AddNewPerson
+export default UpdatePerson

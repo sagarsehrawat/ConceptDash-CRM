@@ -5,7 +5,7 @@ import Transportation from "../department-projects/Transportation";
 import Estimation from "../department-projects/Estimation";
 import TFTypeahead from '../../../../components/form/TFTypeahead/TFTypeahead'
 
-const IndependentProject = ({ form, handleForm, departments, cities, projectCategories, managers, employees }) => {
+const   IndependentProject = ({ form, handleForm, departments, cities, projectCategories, managers, employees }) => {
   // Handle Changing of Departments in Form
   const handleDepartmentProject = (department, projectCategory = null) => {
     switch (department) {

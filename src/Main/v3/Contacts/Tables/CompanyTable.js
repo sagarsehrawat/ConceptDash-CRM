@@ -1,13 +1,16 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { GET_ALL_PEOPLE, HOST1, PRIMARY_COLOR,ALL_PEOPLE_IN_ORGANIZATION} from '../../../Constants/Constants.js';
+import { GET_ALL_PEOPLE, HOST1, PRIMARY_COLOR,ALL_PEOPLE_IN_ORGANIZATION,DELETE_PEOPLE} from '../../../Constants/Constants.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faEdit, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '../../../Loader/Loader.js';
-import {Form} from 'react-bootstrap'
+import {Form,Button} from 'react-bootstrap'
 import eyeicon from '../icons/visibility_FILL1_wght300_GRAD200_opsz24 1.svg'
 import dots from '../icons/more_horiz_black_24dp (1) 3.svg'
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
+import UpdateAddPerson from '../Forms/UpdateAddPerson';
+import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
+
 const CompanyTable = (props) => {
     const { isCollapsed, search, setContactPersonData,setnav } = props
     const [apiCall, setCall] = useState(0);
@@ -19,6 +22,9 @@ const CompanyTable = (props) => {
     const [selectedPeople, setselectedPeople]= useState([]);
     const [data, setData] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
+    const [showDelete,setShowDelete] = useState(false)
+    const [edit,setEdit] = useState(false);
+    const [editform,setEditForm] = useState(null);
 
     const styles = {
         table: {
@@ -216,19 +222,56 @@ const CompanyTable = (props) => {
             display: "inline-block",
             marginBottom: "12px"
         },
+        tabletext:{
+          color: "var(--Black-text, #3D424F)",
+fontFamily: "Roboto",
+fontSize: "14px",
+fontStyle: "normal",
+fontWeight: "400",
+lineHeight: "22px",
+width: "180px",
+height: "36px",
+padding: "12px var(--8-pad, 8px)",
+        }
     }
 
     const handleTableScroll = () => {
         setscrolled(tableRef.current.scrollLeft)
     }
-
+    const handleClickUpdate = () => {
+        const obj = data.find(each => each.id === selectedPeople[0]);
+        if (!obj) return;
+        setEditForm(obj);
+        setEdit(true);
+      }
+      
+  const handleDelete = async () => {
+    try {
+      const response = await axios.post( HOST1 + DELETE_PEOPLE,
+        {
+            id:JSON.stringify(selectedPeople) 
+       },
+      {
+        headers: {
+          auth: "Rose " + localStorage.getItem("auth"),
+        },
+      });
+        console.log('API Response:', response);
+      
+      } 
+     catch (error) {
+      console.error('API Error:', error);
+    }
+  };
     useEffect(() => {
         const fetchData = async () => {
             try {
+                 setIsLoading(true)
                 const response = await axios.get(HOST1 + ALL_PEOPLE_IN_ORGANIZATION, {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
-                         companyid: props.id
+                         companyid: props.id,
+                         search: props.search ||''
                     },
                 });
                  console.log(response.data.res)
@@ -245,12 +288,13 @@ const CompanyTable = (props) => {
         };
 
         fetchData();
-    }, []);
+    }, [props.search]);
     return (
         <> 
          {isLoading ?
-       
+            <div style={{position:"absolute", top:"50%", left:"50%"}}>
             <LoadingSpinner />
+            </div>
           :
             <div style={{  borderTop: '1px solid var(--New-Outline, #EBEDF8)', borderBottom: '1px solid var(--New-Outline, #EBEDF8)', background: '#F7F7F9'}} ref={tableRef}>
                 <table style={styles.table} >
@@ -307,16 +351,16 @@ const CompanyTable = (props) => {
               }
             }}
           />
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex',width: "180px",height: "36px",padding: "12px var(--8-pad, 8px)",alignItems: "center",flexShrink: "0"}}>
             <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}  onClick={(e) => {e.preventDefault();setContactPersonData(each);setnav(22);}}> {each.name}</div>
           </div>
         </div>
       </td>
-      <td className='table-cell'><TFChip value={each.company_type} tableRef={tableRef}/></td>
-      <td className='table-cell'>{each.remarks}</td>
-      <td className='table-cell'>{each.email}</td>
-      <td className='table-cell'>{each.phone}</td>
-      <td className='table-cell'><img src={dots} alt=""/></td>
+      <td className='table-cell' style={styles.tabletext}><TFChip value={each.company_type} tableRef={tableRef}/></td>
+      <td  className='table-cell' style={styles.tabletext}>{each.remarks}</td>
+      <td className='table-cell' style={styles.tabletext}>{each.phone}</td>
+      <td className='table-cell' style={styles.tabletext}>{each.email}</td>
+       <td className='table-cell' style={styles.tabletext}><img src={dots} alt=""/></td>
       {/* Add other fields as needed */}
     </tr>
   ))}
@@ -325,6 +369,53 @@ const CompanyTable = (props) => {
                 </table>
                 </div>
 }
+<div style={{ display: selectedPeople.length === 0 ? "none" : "", visibility: selectedPeople.length === 0 ? "hidden" : "visible", left: isCollapsed ? "34.236vw" : "45.347vw" }}>
+
+<div style={{ ...styles.floatingContainer }} className='floating-container'>
+  <p style={{ ...styles.floatinContainerText }} className='floating-container-text'>{selectedPeople.length}</p>
+  <p style={{ ...styles.floatingContainerText2 }} className='floating-container-text2'>Items Selected</p>
+  <div style={{ ...styles.floatingContainerLine, marginLeft: "-23px" }} className='floating-container-line'></div>
+  <div
+    style={{
+      display: "inline-block",
+      textAlign: "center",
+      verticalAlign: "middle",
+      marginLeft: "90px",
+      cursor: "pointer",
+    }}
+    onClick={() => setShowDelete(true)}
+  >
+    <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
+    <p className='floating-container-icon-text'>Delete</p>
+  </div>
+
+  <Button
+    style={{
+      display: "inline-block",
+      textAlign: "center",
+      verticalAlign: "middle",
+      marginLeft: "35px",
+      cursor: "pointer",
+      backgroundColor: "transparent",
+      border: "none",
+    }}
+    disabled={selectedPeople.length !== 1}
+    onClick={handleClickUpdate}
+  >
+    <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
+    <p className='floating-container-icon-text'>Edit</p>
+  </Button>
+
+  <div style={{ ...styles.floatingContainerLine, marginLeft: "10px" }} className='floating-container-line'></div>
+
+  <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
+    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={() => setselectedPeople([])} />
+  </div>
+</div>
+ </div>
+       {edit && <UpdateAddPerson show={edit} setShow={setEdit} data ={editform}/>}
+       {<TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete} label='People'/>}
+
         </>
     )
 }

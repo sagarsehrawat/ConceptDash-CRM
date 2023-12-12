@@ -1,5 +1,5 @@
 import React from 'react'
-import peopleicon from '../icons/Rectangle 4352peopleicon.svg'
+import peopleicon from '../icons/people_black_24dp (2) 1.svg'
 type Props = {
     name : string,
     count : number,
@@ -49,7 +49,7 @@ const CardTemplate = (props: Props) => {
     <>
          <div style={styles.cardMain}>
      <div style={styles.card}>
-    <img src={peopleicon} style={{width:"48px",height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}} alt="" />
+     <div style={{width:"48px", height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}}><img src={peopleicon} style={{width:"24px",height:"24px", margin:"12px"}} alt="" /></div>
      <div style={{display:"flex",flexDirection:"column", alignItems:"flex-start"}}>
      <p style={styles.topContainerHeading}>{props.name}</p>
     <p style={{ ...styles.topContainerSubheading}}>{props.count}</p>

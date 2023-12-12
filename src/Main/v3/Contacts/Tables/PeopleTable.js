@@ -1,15 +1,18 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { GET_ALL_ORGANIZATION, GET_ALL_PEOPLE, HOST1, PRIMARY_COLOR} from '../../../Constants/Constants.js';
+import { GET_ORGANIZATION_LIST, GET_ALL_PEOPLE, HOST1,DELETE_PEOPLE, PRIMARY_COLOR} from '../../../Constants/Constants.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faEdit, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '../../../Loader/Loader.js';
-import {Form} from 'react-bootstrap'
+import {Form,Button} from 'react-bootstrap'
 import eyeicon from '../icons/visibility_FILL1_wght300_GRAD200_opsz24 1.svg'
 import dots from '../icons/more_horiz_black_24dp (1) 3.svg'
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
-const PeopleTable = (props) => {
-    const { isCollapsed, search, setContactPersonData,setnav } = props
+import UpdateAddPerson from '../Forms/UpdateAddPerson';
+import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
+
+const   PeopleTable = (props) => {
+    const { isCollapsed, search, setContactPersonData,setnav,api,setApi } = props
     const [apiCall, setCall] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [value, setValue] = useState("");
@@ -19,7 +22,10 @@ const PeopleTable = (props) => {
     const [selectedPeople, setselectedPeople]= useState([]);
     const [data, setData] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
-
+    const [showDelete,setShowDelete] = useState(false)
+    const [show,setShow] = useState(false);
+    const [edit,setEdit] = useState(false);
+    const [editform,setEditForm] = useState(null);
     const styles = {
         table: {
             width: "100%",
@@ -217,27 +223,56 @@ const PeopleTable = (props) => {
             marginBottom: "12px"
         },
     }
-
+    const handleClickUpdate = () => {
+        const obj = data.find(each => each.id === selectedPeople[0]);
+        console.log(obj);
+       if (!obj) return;
+        setEditForm(obj);
+        setEdit(true);
+      }
     const handleTableScroll = () => {
         setscrolled(tableRef.current.scrollLeft)
     }
+    const handleDelete = async () => {
+        try {
+          const response = await axios.post( HOST1 + DELETE_PEOPLE,
+            {
+                id:JSON.stringify(selectedPeople) 
+           },
+          {
+            headers: {
+              auth: "Rose " + localStorage.getItem("auth"),
+            },
+          });
+            console.log('API Response:', response);
+            setShowDelete(false);
+            setApi(api+1);
+            setselectedPeople([]);
+    
+          } 
+         catch (error) {
+          console.error('API Error:', error);
+        }
+      };
+
 
     useEffect(() => {
+        setIsLoading(true);
         const fetchData = async () => {
             try {
                 const response = await axios.get(HOST1 + GET_ALL_PEOPLE, {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
-                        search:search,
+                        search:props.search || '',
                         filter: JSON.stringify({
-                            companyType:[]
+                            companyType: props.case ? [props.case]: []
                         }),
                         offset: 0,
-                        limit: 10
+                        limit: 25
                     },
                 });
-                 console.log(response.data.res)
                 if (response.data.success) {
+                    console.log(response.data);
                     setData(response.data.res);
                     setTotalPages(response.data.totalPages);
                     setIsLoading(false);
@@ -250,18 +285,20 @@ const PeopleTable = (props) => {
         };
 
         fetchData();
-    }, []);
+    }, [search,api]);
     return (
         <> 
+             {console.log(selectedPeople)}
          {isLoading ?
-       
+            <div style={{ position:"absolute", left:"50%", top:"50%" }}>
             <LoadingSpinner />
+            </div>
           :
             <div style={{  borderTop: '1px solid var(--New-Outline, #EBEDF8)', borderBottom: '1px solid var(--New-Outline, #EBEDF8)', background: '#F7F7F9'}} ref={tableRef}>
                 <table style={styles.table} >
                     <thead style={styles.tableHeader}>
                         <tr>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "220px"}} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "292px", paddingLeft:"32px"}} className='fixed-header2'>
                                 <div style={styles.headingContent} className='hover' >
                                      Name&nbsp;&nbsp;
                                 </div>
@@ -276,7 +313,7 @@ const PeopleTable = (props) => {
                                     Organisation&nbsp;&nbsp;
                                 </div>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>
                                 <div style={{  display: "inline", cursor: "pointer" }} className='hover' >
                                    Contact Type&nbsp;&nbsp;
                                 </div>
@@ -306,7 +343,7 @@ const PeopleTable = (props) => {
                     <tbody style={{ background: "#FFFFFF" }}>
   {data && data.map(each => (
     <tr style={{ width: "100%", backgroundColor: selectedPeople.includes(each.company_id) ? "#F5F3FE" : "white", verticalAlign: "top" }} id={each.company_id} key={each.company_id}>
-      <td className='table-cell fixed-column' style={{ fontWeight: "500", backgroundColor: selectedPeople.includes(each.company_id) ? "#F5F3FE" : "white" }}>
+      <td className='table-cell' style={{ fontWeight: "500", backgroundColor: selectedPeople.includes(each.company_id) ? "#F5F3FE" : "white" }}>
         <div className='d-flex flex-row align-items-center'>
           <Form.Check
             inline
@@ -319,28 +356,31 @@ const PeopleTable = (props) => {
               } else {
                 setselectedPeople(prev => prev.filter(ele => ele !== each.id));
               }
+              console.log(selectedPeople)
             }}
           />
+          <div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}  onClick={(e) => {e.preventDefault();setContactPersonData(each);setnav(22);}}> {each.name}</div>
-            {/* Add other fields as needed */}
+          </div>
+          <div style = {{ color: '#ADBAC7', fontFeatureSettings: "'clig' off, 'liga' off", fontFamily: 'Roboto', fontSize: '14px', fontStyle: 'normal', fontWeight: 400, lineHeight: '16px' }}>{each.job_title}</div>
           </div>
         </div>
       </td>
-      <td className='table-cell'><TFChip value={each.company_type} tableRef={tableRef}/></td>
-      <td className='table-cell'>{each.company_id}</td>
-      <td className='table-cell'> <TFChip value="Tertiary" tableRef={tableRef} /></td>
-      <td className='table-cell'>{each.email}</td>
-      <td className='table-cell'>{each.phone}</td>
-      <td className='table-cell'>
+      <td className='table-cell' style={{padding: "12px var(--8-pad, 8px)"}}><TFChip value={each.company_type} tableRef={tableRef}/></td>
+      <td className='table-cell'  style={{padding: "12px var(--8-pad, 8px)"}}>{each.company_name}</td>
+      <td className='table-cell'  style={{padding: "12px var(--8-pad, 8px)"}}> <TFChip value={each.contact_type} tableRef={tableRef} /></td>
+      <td className='table-cell'  style={{padding: "12px var(--8-pad, 8px)"}}>{each.email}</td>
+      <td className='table-cell'  style={{padding: "12px var(--8-pad, 8px)"}}>{each.phone}</td>
+      {/* <td className='table-cell'>
         <div style={{display: "flex",height: "36px",flexDirection: "column",justifyContent: "space-between",alignItems: "center"}}>
          <div style={{display: "flex",width: "64px",padding: "2px 10px",justifyContent: "center",alignItems: "center",gap: "var(--8-pad, 8px)", borderRadius: "6px",border: "1px solid #E2E8F0"}}>
          <img src={eyeicon} alt=""/>
          <div>CV</div>
          </div>
          </div>
-         </td>
-      <td className='table-cell'><img src={dots} alt=""/></td>
+         </td> */}
+      <td className='table-cell' style={{width:"36px"}}><img src={dots} onClick={(e) => {e.preventDefault();setContactPersonData(each);setnav(22);}} alt=""/></td>
       {/* Add other fields as needed */}
     </tr>
   ))}
@@ -348,7 +388,53 @@ const PeopleTable = (props) => {
 
                 </table>
                 </div>
+                 
 }
+<div style={{ display: selectedPeople.length === 0 ? "none" : "", visibility: selectedPeople.length === 0 ? "hidden" : "visible", left: isCollapsed ? "34.236vw" : "45.347vw" }}>
+<div style={{ ...styles.floatingContainer }} className='floating-container'>
+  <p style={{ ...styles.floatinContainerText }} className='floating-container-text'>{selectedPeople.length}</p>
+  <p style={{ ...styles.floatingContainerText2 }} className='floating-container-text2'>Items Selected</p>
+  <div style={{ ...styles.floatingContainerLine, marginLeft: "-23px" }} className='floating-container-line'></div>
+  <div
+    style={{
+      display: "inline-block",
+      textAlign: "center",
+      verticalAlign: "middle",
+      marginLeft: "90px",
+      cursor: "pointer",
+    }}
+    onClick={() => setShowDelete(true)}
+  >
+    <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
+    <p className='floating-container-icon-text'>Delete</p>
+  </div>
+
+  <Button
+    style={{
+      display: "inline-block",
+      textAlign: "center",
+      verticalAlign: "middle",
+      marginLeft: "35px",
+      cursor: "pointer",
+      backgroundColor: "transparent",
+      border: "none",
+    }}
+    disabled={selectedPeople.length !== 1}
+    onClick={handleClickUpdate}
+  >
+    <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
+    <p className='floating-container-icon-text'>Edit</p>
+  </Button>
+
+  <div style={{ ...styles.floatingContainerLine, marginLeft: "10px" }} className='floating-container-line'></div>
+
+  <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
+    <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={() => setselectedPeople([])} />
+  </div>
+</div>
+</div>
+{edit && <UpdateAddPerson setselectedPeople={setselectedPeople} api={api} setApi={setApi} show={edit} setShow={setEdit} data ={editform}/>}
+       {<TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete} label='People'/>}
         </>
     )
 }

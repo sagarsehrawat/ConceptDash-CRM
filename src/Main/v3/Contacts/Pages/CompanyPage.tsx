@@ -136,8 +136,8 @@ lineHeight: "24px",
 
        </div>
          </div>
-          <AddNewPerson  show={showModal} setShow={setShowModal}/>
-         <CompanyTable id={props.organizationData.company_id}/>
+          { showModal && <AddNewPerson  show={showModal} setShow={setShowModal} id={props.organizationData.company_id}/>}
+         <CompanyTable id={props.organizationData.company_id} search={search}/>
     </div>
     </div>
   )

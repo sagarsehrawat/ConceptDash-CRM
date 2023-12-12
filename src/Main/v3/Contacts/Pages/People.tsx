@@ -1,9 +1,9 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
-import OrganisationCards from '../HeaderCards/OrganisationCards'
+import OrganisationCards from '../HeaderCards/AllCards'
 import SearchBar from '../SearchBar/SearchBar';
 import OrgTable from '../Tables/OrgTable';
-import AddNewPeople from '../Forms/addNewPeople';
+import AddNewPerson from '../Forms/AddnewPerson';
 import Pagination from '../Pagination/Pagination';
 import PeopleTable from '../Tables/PeopleTable';
 
@@ -25,9 +25,9 @@ const People = (props: Props) => {
       return (
           <>
                <OrganisationCards name={props.name} count={0} setValue1={props.setValue1}/>
-               <SearchBar value={value} setValue={setValue} api={api} setApi={setApi} name={props.name} show={show} setShow={setShow}  filter={filter} setFilter={setfilter}/>
-               <AddNewPeople show={show} setShow={setShow} />
-               <PeopleTable currPage={currPage} setPages={setpages} search={value} setContactPersonData={props.setContactPersonData} setnav={props.setnav}/>
+               <SearchBar search={value} setSearch={setValue} api={api} setApi={setApi} name={props.name} show={show} setShow={setShow}  filter={filter} setFilter={setfilter}/>
+               {show && <AddNewPerson  api={api} setApi={setApi} show={show} setShow={setShow} />}
+               <PeopleTable api={api} setApi={setApi} currPage={currPage} setPages={setpages} search={value} setContactPersonData={props.setContactPersonData} setnav={props.setnav}/>
                <Pagination pages={pages} currPage={currPage} setcurrPage={setcurrPage} />
           </>
       )

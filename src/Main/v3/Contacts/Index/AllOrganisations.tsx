@@ -6,14 +6,15 @@ import TabPanel from "@mui/lab/TabPanel";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { PRIMARY_COLOR } from "../../../Constants/Constants";
-import  OrganisationCards from '../HeaderCards/OrganisationCards'
+import  OrganisationCards from '../HeaderCards/AllCards'
 import CardTemplate from "../HeaderCards/CardTemplate";
 import SearchBar from "../SearchBar/SearchBar";
 import OrgTable from "../Tables/OrgTable";
 import Organisations from '../Pages/Organisations'
 import Clients from "../Pages/Clients";
-import SubConsultants from "../Pages/SubConsultants";
+import Consultants from "../Pages/Consultants";
 import Partners from "../Pages/Partners";
+import SubConsultants from "../Pages/SubConsultants";
 type Props ={
   setnav: Function
   setOrganizationData: Function
@@ -64,6 +65,7 @@ topContainerSubheading: {
             width: "100%",
             typography: "body1",
             float: "left",
+            textTransform :"none"
           }}
           style={{ margin: "0" }}
         >
@@ -93,7 +95,7 @@ topContainerSubheading: {
                     justifyContent: "center",
                     paddingBottom: 0,
                   }}
-                  sx={{ fontSize: 12 }}
+                  sx={{ fontSize: 16, textTransform :"none" }}
                   label="All Organizations"
                   value="1"
                 />
@@ -105,7 +107,7 @@ topContainerSubheading: {
                     justifyContent: "center",
                     paddingBottom: 0,
                   }}
-                  sx={{ fontSize: 12 }}
+                  sx={{ fontSize: 16, textTransform :"none" }}
                   label="Clients"
                   value="2"
                 />
@@ -117,7 +119,7 @@ topContainerSubheading: {
                     justifyContent: "center",
                     paddingBottom: 0,
                   }}
-                  sx={{ fontSize: 12 }}
+                  sx={{ fontSize: 18,textTransform :"none" }}
                   label="Consultants"
                   value="3"
                 />
@@ -129,9 +131,21 @@ topContainerSubheading: {
                     justifyContent: "center",
                     paddingBottom: 0,
                   }}
-                  sx={{ fontSize: 12 }}
+                  sx={{ fontSize: 18, textTransform :"none" }}
                   label="Partners"
                   value="4"
+                />
+              <Tab
+                  style={{
+                    color: value1 == 5 ? PRIMARY_COLOR : "#70757A",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    paddingBottom: 0,
+                  }}
+                  sx={{ fontSize: 18, textTransform :"none" }}
+                  label="Sub Consultants"
+                  value="5"
                 />
               </TabList>
             </Box>
@@ -142,17 +156,22 @@ topContainerSubheading: {
             </TabPanel>
             <TabPanel value="2" style={{padding:'0px'}}>
             <div style={{ width: '100%', float: 'left', }}>
-            <Clients case="org"  setnav={props.setnav} />
+            <Clients case="org"  setnav={props.setnav}  setOrganizationData={props.setOrganizationData}/>
               </div>
             </TabPanel>
             <TabPanel value="3" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left', }}>
-             <SubConsultants case="org"  setnav={props.setnav}/>
+             <Consultants case="org"  setnav={props.setnav}  setOrganizationData={props.setOrganizationData}/>
               </div>
             </TabPanel>
             <TabPanel value="4" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left' }}>
-              <Partners case="org"  setnav={props.setnav}/>
+              <Partners case="org"  setnav={props.setnav}  setOrganizationData={props.setOrganizationData}/>
+              </div>
+            </TabPanel>
+            <TabPanel value="5" style={{padding:'0px'}}>
+              <div style={{ width: '100%', float: 'left' }}>
+              <SubConsultants case="org"  setnav={props.setnav}  setOrganizationData={props.setOrganizationData}/>
               </div>
             </TabPanel>
           </TabContext>

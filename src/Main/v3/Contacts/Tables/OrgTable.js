@@ -1,15 +1,17 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { GET_ALL_ORGANIZATION, HOST1, PRIMARY_COLOR} from '../../../Constants/Constants.js';
+import { GET_ALL_ORGANIZATION, HOST1, PRIMARY_COLOR, UPDATE_ORGANIZATION,DELETE_ORGANIZATION} from '../../../Constants/Constants.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faEdit, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '../../../Loader/Loader.js';
-import {Form} from 'react-bootstrap'
+import {Form,Button} from 'react-bootstrap'
 import eyeicon from '../icons/visibility_FILL1_wght300_GRAD200_opsz24 1.svg'
 import dots from '../icons/more_horiz_black_24dp (1) 3.svg'
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
+import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal'
+import UpdateOrganisation from '../Forms/UpdateOrganisation';
 const OrgTable = (props) => {
-    const { isCollapsed, search } = props
+    const { isCollapsed } = props
     const [apiCall, setCall] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [value, setValue] = useState("");
@@ -19,6 +21,9 @@ const OrgTable = (props) => {
     const [selectedOrganizations, setselectedOrganizations]= useState([]);
     const [data, setData] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
+    const [showDelete,setShowDelete] = useState(false)
+    const [edit,setEdit] = useState(false);
+    const [editform,setEditForm] = useState(null);
 
     const styles = {
         table: {
@@ -30,7 +35,8 @@ const OrgTable = (props) => {
             height: "34px",
             background: "#F7F7F9",
             textAlign: "center",
-            borderBottom: "0px"
+            borderBottom: "0px",
+
         },
         tableHeading: {
                 width: '220px',
@@ -221,16 +227,47 @@ const OrgTable = (props) => {
     const handleTableScroll = () => {
         setscrolled(tableRef.current.scrollLeft)
     }
+    const handleClickUpdate = () => {
+        const obj = data.find(each => each.company_id === selectedOrganizations[0]);
+        console.log(obj)
+        if (!obj) return;
+        setEditForm(obj);
+        setEdit(true);
+        console.log(editform);
+      }
 
+      const handleDelete = async () => {
+        try {
+          const response = await axios.post( HOST1 + DELETE_ORGANIZATION,
+            {
+              companyId: JSON.stringify(selectedOrganizations), 
+            },
+          {
+            headers: {
+              auth: "Rose " + localStorage.getItem("auth"),
+            },
+          });
+            console.log('API Response:', response);
+            props.setApi(props.api+1);
+            setShowDelete(false);
+            setselectedOrganizations([]);
+          
+          } 
+         catch (error) {
+          console.error('API Error:', error);
+        }
+      };
+      
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setIsLoading(true)
                 const response = await axios.get(HOST1 + GET_ALL_ORGANIZATION, {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
-                        search:'',
+                        search:props.search ||'',
                         filter: JSON.stringify({
-                            companyType:[]
+                            companyType:  props.case ? [props.case]: []
                         }),
                         offset: 0,
                         limit: 10
@@ -247,38 +284,39 @@ const OrgTable = (props) => {
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
-            console.log(search);
         };
 
         fetchData();
-    }, []);
+    }, [props.search, props.api]);
     return (
         <> 
          {isLoading ?
-       
+            <div style={{position:"absolute", top:"50%", left:"50%"}}>
             <LoadingSpinner />
+            </div>
           :
+             <>
             <div style={{  borderTop: '1px solid var(--New-Outline, #EBEDF8)', borderBottom: '1px solid var(--New-Outline, #EBEDF8)', background: '#F7F7F9'}} ref={tableRef}>
                 <table style={styles.table} >
                     <thead style={styles.tableHeader}>
                         <tr>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "220px"}} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "292px", paddingLeft:"32px"}} className='fixed-header2'>
                                 <div style={styles.headingContent} className='hover' >
                                     Comany Name&nbsp;&nbsp;
                                 </div>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "120px", padding:"6px var(--8-pad, 13px)" }} className='fixed-header2'>
                                 <div style={styles.headingContent} className='hover'>
                                     Label&nbsp;&nbsp;
                                 </div>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "180px" }} className='fixed-header2'>
+                            <th scope="col" style={{ ...styles.tableHeading, width: "180px",}} className='fixed-header2'>
                                 <div style={styles.headingContent} className='hover' >
                                     Website&nbsp;&nbsp;
                                 </div>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>
-                                <div style={{  display: "inline", cursor: "pointer" }} className='hover' >
+                            <th scope="col" style={{ ...styles.tableHeading, width: "120px", padding:"6px var(--8-pad, 13px)" }} className='fixed-header2'>
+                                <div style={styles.headingContent} className='hover' >
                                    Contact Type&nbsp;&nbsp;
                                 </div>
                             </th>
@@ -292,12 +330,12 @@ const OrgTable = (props) => {
                                     Fax&nbsp;&nbsp;
                                 </div>
                             </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "64px" }} className='fixed-header2'>
+                            {/* <th scope="col" style={{ ...styles.tableHeading, width: "64px" }} className='fixed-header2'>
                                 <div style={styles.headingContent} className='hover' >
                                     &nbsp;&nbsp;
                                 </div>
-                            </th>
-                            <th scope="col" style={{ ...styles.tableHeading, width: "34px" }} className='fixed-header2'>
+                            </th> */}
+                            <th scope="col" style={{ ...styles.tableHeading, width: "64px" }} className='fixed-header2'>
                                 <div style={styles.headingContent} className='hover'>
                                     &nbsp;&nbsp;
                                 </div>
@@ -307,7 +345,7 @@ const OrgTable = (props) => {
                     <tbody style={{ background: "#FFFFFF" }}>
   {data && data.map(org => (
     <tr style={{ width: "100%", backgroundColor: selectedOrganizations.includes(org.company_id) ? "#F5F3FE" : "white", verticalAlign: "top" }} id={org.company_id.toString()} key={org.company_id}>
-      <td className='table-cell fixed-column' style={{ fontWeight: "500", backgroundColor: selectedOrganizations.includes(org.company_id) ? "#F5F3FE" : "white" }}>
+      <td className='table-cell' style={{ width: "292px", fontWeight: "500", backgroundColor: selectedOrganizations.includes(org.company_id) ? "#F5F3FE" : "white" }}>
         <div className='d-flex flex-row align-items-center'>
           <Form.Check
             inline
@@ -323,25 +361,26 @@ const OrgTable = (props) => {
             }}
           />
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }} onClick={(e) => {e.preventDefault();props.setOrganizationData(org);props.setnav(23);}}>{org.company_name}</div>
-            {/* Add other fields as needed */}
+            <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden" }} onClick={(e) => {e.preventDefault();props.setOrganizationData(org);props.setnav(23);}}>{org.company_name}</div>
           </div>
         </div>
       </td>
-      <td className='table-cell'><TFChip value={org.company_type} tableRef={tableRef}/></td>
-      <td className='table-cell'>{org.website}</td>
-      <td className='table-cell'> <TFChip value="Tertiary" tableRef={tableRef} /></td>
-      <td className='table-cell'>{org.email}</td>
-      <td className='table-cell'>{org.fax}</td>
-      <td className='table-cell'>
+      <td  className='table-cell'style={{ display: 'flex', width: '120px', height: '58px', padding: '6px var(--8-pad, 0px)', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: 'var(--8-pad, 8px)', flexShrink: '0'}}>
+        <TFChip value={org.company_type} tableRef={tableRef}/></td>
+      <td className='table-cell' style={{width: '180px', height: '36px', padding: '0px var(--8-pad, 8px)', alignItems: 'center', gap: 'var(--8-pad, 8px)'}}>{org.website}</td>
+      <td className='table-cell' style={{ display: 'flex', width: '120px', height: '58px', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', padding:"6px var(--8-pad, 0px)"}}> <TFChip value={org.contact_type} tableRef={tableRef} /></td>
+      <td className='table-cell' style={{padding:"0px var(--8-pad, 8px)"}}>{org.email}</td>
+      <td className='table-cell' style={{padding:"0px var(--8-pad, 8px)"}}>{org.fax}</td>
+      {/* cv feild */}
+      {/* <td className='table-cell'>
         <div style={{display: "flex",height: "36px",flexDirection: "column",justifyContent: "space-between",alignItems: "center"}}>
          <div style={{display: "flex",width: "64px",padding: "2px 10px",justifyContent: "center",alignItems: "center",gap: "var(--8-pad, 8px)", borderRadius: "6px",border: "1px solid #E2E8F0"}}>
          <img src={eyeicon} alt=""/>
          <div>CV</div>
          </div>
          </div>
-         </td>
-      <td className='table-cell'><img src={dots} alt=""/></td>
+         </td> */}
+      <td className='table-cell' ><img src={dots} style={{cursor:"pointer"}} alt="" onClick={(e) => {e.preventDefault();props.setOrganizationData(org);props.setnav(23);}}/></td>
       {/* Add other fields as needed */}
     </tr>
   ))}
@@ -349,6 +388,54 @@ const OrgTable = (props) => {
 
                 </table>
                 </div>
+            <div style={{ display: selectedOrganizations.length === 0 ? "none" : "", visibility: selectedOrganizations.length === 0 ? "hidden" : "visible", left: isCollapsed ? "34.236vw" : "45.347vw" }}>
+
+            <div style={{ ...styles.floatingContainer }} className='floating-container'>
+              <p style={{ ...styles.floatinContainerText }} className='floating-container-text'>{selectedOrganizations.length}</p>
+              <p style={{ ...styles.floatingContainerText2 }} className='floating-container-text2'>Items Selected</p>
+              <div style={{ ...styles.floatingContainerLine, marginLeft: "-23px" }} className='floating-container-line'></div>
+              <div
+                style={{
+                  display: "inline-block",
+                  textAlign: "center",
+                  verticalAlign: "middle",
+                  marginLeft: "90px",
+                  cursor: "pointer",
+                }}
+                onClick={() => setShowDelete(true)}
+              >
+                <FontAwesomeIcon icon={faTrash} style={{ height: "20px" }} />
+                <p className='floating-container-icon-text'>Delete</p>
+              </div>
+            
+              <Button
+                style={{
+                  display: "inline-block",
+                  textAlign: "center",
+                  verticalAlign: "middle",
+                  marginLeft: "35px",
+                  cursor: "pointer",
+                  backgroundColor: "transparent",
+                  border: "none",
+                }}
+                disabled={selectedOrganizations.length !== 1}
+                onClick={handleClickUpdate}
+              >
+                <FontAwesomeIcon icon={faEdit} style={{ height: "20px" }} color="black" />
+                <p className='floating-container-icon-text'>Edit</p>
+              </Button>
+            
+              <div style={{ ...styles.floatingContainerLine, marginLeft: "10px" }} className='floating-container-line'></div>
+            
+              <div style={{ display: "inline-block", textAlign: "center", verticalAlign: "middle", marginBottom: "11px", marginLeft: "10px" }}>
+                <FontAwesomeIcon icon={faXmark} style={{ height: "20px", cursor: "pointer" }} color={PRIMARY_COLOR} onClick={() => setselectedOrganizations([])} />
+              </div>
+            </div>
+             </div>    
+             {edit && <UpdateOrganisation api={props.api} setApi={props.setApi} show={edit} setShow={setEdit} data ={editform}/>}
+       {<TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete}  label='People'/>} 
+             </>
+            
 }
         </>
     )

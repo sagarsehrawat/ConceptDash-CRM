@@ -6,10 +6,11 @@ import TabPanel from "@mui/lab/TabPanel";
 import React, { useContext, useEffect, useState } from "react";
 import { PRIMARY_COLOR } from "../../../Constants/Constants";
 import Organisations from '../Pages/Organisations'
-import SubConsultants from "../Pages/SubConsultants";
+import Consultants from "../Pages/Consultants";
 import Partners from "../Pages/Partners";
 import Clients from "../Pages/Clients";
 import People from "../Pages/People";
+import SubConsultants from "../Pages/SubConsultants";
 type Props ={
   setContactPersonData: Function
   setnav: Function
@@ -89,7 +90,7 @@ topContainerSubheading: {
                     justifyContent: "center",
                     paddingBottom: 0,
                   }}
-                  sx={{ fontSize: 12 }}
+                  sx={{ fontSize: 16,textTransform :"none" }}
                   label="All People"
                   value="1"
                 />
@@ -101,7 +102,7 @@ topContainerSubheading: {
                     justifyContent: "center",
                     paddingBottom: 0,
                   }}
-                  sx={{ fontSize: 12 }}
+                  sx={{ fontSize: 16,textTransform :"none" }}
                   label="Clients"
                   value="2"
                 />
@@ -113,7 +114,7 @@ topContainerSubheading: {
                     justifyContent: "center",
                     paddingBottom: 0,
                   }}
-                  sx={{ fontSize: 12 }}
+                  sx={{ fontSize: 16,textTransform :"none" }}
                   label="Consultant"
                   value="3"
                 />
@@ -125,9 +126,21 @@ topContainerSubheading: {
                     justifyContent: "center",
                     paddingBottom: 0,
                   }}
-                  sx={{ fontSize: 12 }}
+                  sx={{ fontSize: 16,textTransform :"none" }}
                   label="Partners"
                   value="4"
+                />
+                 <Tab
+                  style={{
+                    color: value1 == 5 ? PRIMARY_COLOR : "#70757A",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    paddingBottom: 0,
+                  }}
+                  sx={{ fontSize: 16,textTransform :"none" }}
+                  label="Sub Consultants"
+                  value="5"
                 />
               </TabList>
             </Box>
@@ -138,17 +151,22 @@ topContainerSubheading: {
             </TabPanel>
             <TabPanel value="2" style={{padding:'0px'}}>
             <div style={{ width: '100%', float: 'left', }}>
-            <Clients case="people" />
+            <Clients case="people"  setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>
               </div>
             </TabPanel>
             <TabPanel value="3" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left', }}>
-             <SubConsultants  case="people"/>
+             <Consultants  case="people" setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>
               </div>
             </TabPanel>
             <TabPanel value="4" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left' }}>
-              <Partners  case="people"/>
+              <Partners  case="people"  setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>
+              </div>
+            </TabPanel>
+            <TabPanel value="5" style={{padding:'0px'}}>
+              <div style={{ width: '100%', float: 'left' }}>
+              <SubConsultants case="people"  setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>
               </div>
             </TabPanel>
           </TabContext>

@@ -1,24 +1,21 @@
 import React, { useEffect, useState,useRef } from "react";
-import { FormSelect, Modal } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import peopleblack from '../icons/people_black_24dp (2) 1.svg'
 import cross from "../../../../Images/cross.svg";
 import cloud from "../../../../Images/cloud_upload_black_24dp 1.svg"
 import TFButton from "../../../../components/ui/TFButton/TFButton"
-import { HOST1, ADD_PEOPLE, GET_ORGANIZATION_LIST } from "../../../Constants/Constants";
+import { HOST1,UPDATE_ORGANIZATION } from "../../../Constants/Constants";
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
 import FormUtils from "../../../../utils/FormUtils.js";
 import axios from "axios";
-import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead.js";
-import Utils from '../../../../utils/Utils'
-
 type Props={
     show: boolean,
     setShow: Function
-    id : Number
-    api : number
+    data:Object,
+    api:number
     setApi: Function
 } 
-const AddNewPerson = ({show,setShow,id,api, setApi}: Props) => {
+const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
   const styles = {
     text: {
       color: "var(--Dark-grey, #70757A)",
@@ -30,23 +27,25 @@ const AddNewPerson = ({show,setShow,id,api, setApi}: Props) => {
     },
   };
   const [formData, setFormData] = useState({
-    name: '',
-    jobTitle: '',
-    companyType: 'Client',
-    companyName: '',
-    companyNameId: null,
-    contactType: 'Primary',
-    email: '',
-    phone: '',
-    altphone: '',
-    cv: '', // Will store the file object
-    address: '',
-    cityId: '',
-    remarks: '',
+    company_id:data.company_id,
+    companyName:data.company_name,
+    address:data.address,
+    label:data.company_type,
+    contact:data.contact_type,
+    email:data.email,
+    website:data.website,
+    phone:data.fax,
+    altphone:data.altphone,
+    cv: '',
   });
   const formUtils = FormUtils(setFormData);
-
+    const handleForm = (key, value) => {
+      console.log(key, value);
+              formUtils.typeInputForm(key,value)
+    }
   
+  const tableRef = useRef(null);
+
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -58,57 +57,29 @@ const AddNewPerson = ({show,setShow,id,api, setApi}: Props) => {
   }, []);
 
 
-  const [organization,setOrganization] = useState<any>()
-  useEffect(() => {
-    const call1 = async () => {
-        try {
-            const response = await axios.get(HOST1 + GET_ORGANIZATION_LIST, {
-                headers: {
-                    auth: "Rose " + localStorage.getItem("auth"),
-                },
-            });
-            if (response.data.success) {
-                console.log(response.data.res);
-                setOrganization(Utils.convertToTypeaheadOptions(response.data.res, 'company_name', 'company_id'));
-                console.log(organization);
-               
-            } else {
-                console.error(response.data.error);
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
-
-    call1();
-}, []);
-const handleForm = (key, value) => {
-  console.log(key, value);
-   switch (key) {
-       case "companyName":
-             formUtils.typeaheadForm(key, value);
-             break;
-             default:
-          formUtils.typeInputForm(key,value)
-}
-}
-
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFormData({
+        ...formData,
+        cv: e.target.files[0],
+      });
+    }
+  }; 
+  
   const handleSubmit = async () => {
     try {
-        console.log(formData)
-      const response = await axios.post( HOST1 + ADD_PEOPLE,{
-        name: formData.name,
-        jobTitle: formData.jobTitle,
-        companyType: formData.companyType,
-        companyID: formData.companyNameId,
-        contactType: formData.contactType,
+      const response = await axios.post( HOST1 + UPDATE_ORGANIZATION,{
+        companyId: formData.company_id,
+        companyName: formData.companyName,
+        companyType: formData.label,
+        contactType: formData.contact,
         email: formData.email,
-        phone: formData.phone,
+        website:formData.website,
+        fax: formData.phone,
          cv: formData.cv,
          address: formData.address,
-         cityId: 1,
-         remarks: formData.remarks,
-         alternatePhone: formData.altphone
+         cityId: "+91567",  // Assuming "altphone" corresponds to "cityId"
+         notes: ""
       }, 
       {
         headers: {
@@ -116,23 +87,20 @@ const handleForm = (key, value) => {
         },
       });
         console.log('API Response:', response);
-
+        setApi(api+1)
         setFormData({
-          name: '',
-    jobTitle: '',
-    companyType: '',
-    companyName: '',
-    contactType: '',
-    email: '',
-    phone: '',
-    altphone: '',
-    cv: '', // Will store the file object
-    address: '',
-    cityId: '',
-    remarks: '',
+            company_id:0,
+            companyName: '',
+            address: '',
+            label: 'Client',
+            contact: 'Primary',
+            email: '',
+            website:"",
+            phone: '',
+            altphone: '',
+            cv: '',
         });
         setShow(false)
-        setApi(api+1);
       } 
      catch (error) {
       console.error('API Error:', error);
@@ -140,7 +108,7 @@ const handleForm = (key, value) => {
      console.log(formData);
   };
   return (
-    <>
+    <>   {console.log(data)}
         <div
             className='tf-modal-backdrop d-flex justify-content-end align-items-start'
             >
@@ -154,70 +122,60 @@ const handleForm = (key, value) => {
         }}>
               <div style={{display: "flex",alignItems: "flex-start", gap:"20px"}}> 
                   <img src={peopleblack}/>
-                  <div className='heading-2'>Add new People</div>
+                  <div className='heading-2'>Update Organization</div>
               </div>
         </div>
         <div style={{display: "flex",flexDirection: "column",alignItems: "flex-start",gap:" var(--8-pad, 8px)"}}> 
         <input
           type="text"
-          name="name"
+          name="companyName"
           className="project-input project-name-input"
-          placeholder="Enter Name"
-          value={formData.name}
-          ref={inputRef}
+          placeholder="Enter Organization Name"
+          value={formData.companyName}
           required={true}
           onChange={(e) => handleForm(e.target.name, e.target.value)}
-        />    
+          ref={inputRef}
+        />   
         <div style={{display: "flex",flexDirection: "column",alignItems: "flex-start",gap:" var(--8-pad, 8px)"}}>
-           <div style={{display:"flex",width: "624px",height: "var(--32-pad, 32px)"}}>
-            <div style={{...styles.text,display: "flex",width: "160px",alignItems:"center",gap: "var(--8-pad, 8px)"}}>Job Title</div>
-            <input type="text" placeholder="Type in Role" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'}style={{...styles.text,display:"flex",width:"456px",padding:" 6px var(--8-pad, 8px)",alignItems: "center",gap:" var(--12-pad, 12px)",outline:"none", border: "none",background: "#F6F7F7"}} value={formData.jobTitle}    required={true}
-            onChange={(e) => handleForm(e.target.name, e.target.value)} name="jobTitle" />
-           </div>
+        <div style={{display:"flex"}}>
+          <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Address</div>
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter address" style={{...styles.text, fontWeight:"400px",display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} 
+          value={formData.address} name="address" required={true} onChange={(e) => handleForm(e.target.name, e.target.value)} />          </div>
            <div style={{display:"flex"}}>
            <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Label</div>
            <TFChip
-                          name="companyType"
-                          value={formData.companyType}
-                          onChange={handleForm} 
+                          value={formData.label}
+                          name="label"
+                          onChange={handleForm}
                           options={["Client", "Consultant","Partner"]}
-                        /> </div>
+                        />
+         </div>
           <div style={{display:"flex"}}>
-             <div style={{...styles.text,display: "flex",width:"160px",alignItems: "center",gap:" var(--8-pad, 8px)"}}>Organisation</div>
-             <div><TFTypeahead
-            name='companyName'
-            placeholder='ABC Startup'
-            width='100%'
-            onChange={handleForm}
-            options={organization}
-          />    </div></div>
+             <div style={{...styles.text,display: "flex",width:"160px",alignItems: "center",gap:" var(--8-pad, 8px)"}}>Website</div>
+             <input  type="text" placeholder="ABC STARTUP" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} value={formData.website} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)} onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} name="website"></input>
+          </div>
           <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Contact Type</div>
-          <TFChip
-                          value={formData.contactType}
-                          name="contactType"
+          <TFChip        
+                          name="contact"
+                          value={formData.contact}
                           onChange={handleForm}
-                          options={["Primary","Secondary","Tertiary"]}
+                          options={["Primary", "Secondary","Tertiary"]}
                         />
           </div>
           <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Email</div>
-          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter email id" style={{...styles.text, fontWeight:"400px",display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="email" value={formData.email} onChange={(e )=>handleForm(e.target.name, e.target.value)} />
-         
-          </div>
-          <div style={{display:"flex"}}>
-          <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Phone</div>
-          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter Phone no." style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="phone" value={formData.phone}  onChange={(e) => handleForm(e.target.name, e.target.value)} />
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter email id" style={{...styles.text, fontWeight:"400px",display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="email" value={formData.email} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
          
           </div>
           <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Alternate number</div>
-          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter alternative contact number" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="altphone" value={formData.altphone}  onChange={(e) => handleForm(e.target.name, e.target.value)} />
-         
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter alternative contact number" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="altphone" value={formData.altphone} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
           </div>
           <div style={{display:"flex"}}>
-             <div style={{...styles.text,display: "flex",width:"160px",alignItems: "center",gap:" var(--8-pad, 8px)"}}>Remarks</div>
-             <input  type="text"  onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter Remarks" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} value={formData.remarks}  onChange={(e) => handleForm(e.target.name, e.target.value)} name="remarks"></input>
+          <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Fax</div>
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter Phone no." style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="phone" value={formData.phone} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
+         
           </div>
           </div>  
         </div>
@@ -263,7 +221,7 @@ const handleForm = (key, value) => {
              onClick={()=>setShow(false)}>
              Cancel
             </button>
-            <TFButton label='Add People' handleClick={handleSubmit} />
+            <TFButton label='Update People' handleClick={handleSubmit} />
            </div>
            </div>
            </div>
@@ -272,4 +230,4 @@ const handleForm = (key, value) => {
   )
 }
 
-export default AddNewPerson
+export default UpdateOrganisation

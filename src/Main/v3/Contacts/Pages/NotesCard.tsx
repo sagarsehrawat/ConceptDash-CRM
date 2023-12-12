@@ -120,7 +120,7 @@ const NotesCard = (props : Props) => {
             padding: 'var(--12-pad, 12px) 16px',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            gap: '5px',
+            gap: 'var(--8-pad,8px)',
             alignSelf: 'stretch',
             borderRadius: 'var(--12-pad, 12px)',
   border: '1px solid var(--New-Outline, #EBEDF8)',
@@ -158,6 +158,9 @@ const NotesCard = (props : Props) => {
           display: 'flex',
           alignItems: 'center',
           gap: 'var(--8-pad, 8px)',
+          // padding : '0px var(--8-pad, 8px)',
+          // justifyContent: 'space-between',
+          // alignSelf: 'stretch'
         }   
           
      }
