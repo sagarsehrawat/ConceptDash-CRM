@@ -16,7 +16,7 @@ const TFDeleteModal = ({ show, onHide, onDelete, label }: Props) => {
 
   const [value, setvalue] = useState<string>("")
 
-  const onChange = (key: string, value: string) => {setvalue(value);console.log(key)};
+  const onChange = (_key: string, value: string) => {setvalue(value)};
 
   useEffect(() => {
     if(show) document.body.style.overflow = 'hidden';
@@ -44,7 +44,7 @@ const TFDeleteModal = ({ show, onHide, onDelete, label }: Props) => {
               </div>
               <div className="tf-delete-modal-footer d-flex d-row justify-content-between">
                   <TFButton label="Cancel" variant='secondary' className='tf-modal-delete-button-cancel' handleClick={()=>onHide()}/>
-                  <TFButton label="Yes, Delete" variant='primary' disabled={value!=="delete"} handleClick={()=>{onDelete(); setvalue("")}} className='tf-modal-delete-button'/>
+                  <TFButton label="Yes, Delete" variant='primary' disabled={value!=="delete"} handleClick={()=>{onDelete(); setvalue(""); onHide();}} className='tf-modal-delete-button'/>
               </div>
           </div>
         </div>

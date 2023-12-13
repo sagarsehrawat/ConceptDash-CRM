@@ -13,12 +13,15 @@ type Props = {
     tasks: string[];
     onHide: () => null;
     selectedMilestone: string;
+    addTask: (milestone: string, task: string) => void;
+    addMilestone: (milestone: string, selectedMilestone: string) => void;
 }
 
-const AddTaskModal = ({ tasks, onHide, selectedMilestone }: Props) => {
-    const [form, setForm] = useState<{ type: string, milestone: string, task: string }>({
+const AddTaskModal = ({ tasks, onHide, selectedMilestone, addTask, addMilestone }: Props) => {
+    const [form, setForm] = useState<{ type: 'Add Milestone' | 'Add Task', milestone: string, addMilestone: string, task: string }>({
         type: 'Add Task',
         milestone: selectedMilestone ?? '',
+        addMilestone: '',
         task: ''
     });
     const formUtils = FormUtils(setForm);
@@ -30,7 +33,23 @@ const AddTaskModal = ({ tasks, onHide, selectedMilestone }: Props) => {
         if(name === 'milestone'){
             formUtils.typeaheadForm(name, value);
         }
+        if(name === 'task'){
+            formUtils.typeInputForm(name, value);
+        }
+        if(name === 'addMilestone'){
+            formUtils.typeInputForm(name, value);
+        }
     }
+
+    const onAdd = () => {
+        if(form.type === 'Add Milestone'){
+            addMilestone(form.addMilestone, form.milestone);
+        }else{
+            addTask(form.milestone, form.task);
+        }
+        onHide();
+    }
+
     return (
         <div className="tf-modal-backdrop d-flex justify-content-center align-items-center">
             <div className='add-task-modal'>
@@ -57,7 +76,7 @@ const AddTaskModal = ({ tasks, onHide, selectedMilestone }: Props) => {
                             </div>
                         </div>
 
-                        <div className='d-flex flex-column justify-content-start align-items-start'>
+                        {form.type === "Add Task" ? (<><div className='d-flex flex-column justify-content-start align-items-start w-100'>
                             <p className='project-label'>Choose Milestone <sup style={{ color: "#E13D19" }}>*</sup></p>
                             <TFTypeahead
                                 name={'milestone'}
@@ -69,7 +88,7 @@ const AddTaskModal = ({ tasks, onHide, selectedMilestone }: Props) => {
                             />
                         </div>
 
-                        <div>
+                        <div className='d-flex flex-column justify-content-start align-items-start w-100'>
                         <p className='project-label'>Add Task <sup style={{ color: "#E13D19" }}>*</sup></p>
                             <TFInput
                                 name={'task'}
@@ -78,15 +97,28 @@ const AddTaskModal = ({ tasks, onHide, selectedMilestone }: Props) => {
                                 onChange={handleForm}
                                 width='100%'
                             />
+                        </div></>)
+                        : (
+                            <div className='d-flex flex-column justify-content-start align-items-start w-100'>
+                        <p className='project-label'>Add Milestone<sup style={{ color: "#E13D19" }}>*</sup></p>
+                            <TFInput
+                                name={'addMilestone'}
+                                placeholder='Enter Milestone'
+                                value={form.addMilestone}
+                                onChange={handleForm}
+                                width='100%'
+                            />
                         </div>
+                        )}
                     </div>
-                    <div className='d-flex flex-row justify-content-around'>
+                    <div className='d-flex flex-row justify-content-around w-100'>
                         <TFButton
                             label='Cancel'
                             handleClick={onHide}
                         />
                         <TFButton
                             label={'Add Task'}
+                            handleClick={onAdd}
                         />
                     </div>
                 </div>
