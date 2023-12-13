@@ -26,7 +26,8 @@ const Table = ({ search, filter, year, city, api }: Props) => {
     const tableRef = useRef(null);
     const dispatch = useDispatch();
     const budgets = useSelector(selectBudgets);
-
+    console.log(budgets);
+    
     useEffect(() => {
         const fetchData = async () => {
             try {

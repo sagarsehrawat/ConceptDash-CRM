@@ -57,6 +57,27 @@
   justify-content: center;
   transition: right 0.5s;
 }
+.contents {
+  /* border: 2px solid black; */
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.backToTable {
+  display: inline-flex;
+  padding: 8px 16px;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  background: #8361fe;
+  color: #fbfbfb;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 24px;
+}
 .rightBarClose {
   right: -238px;
 }
