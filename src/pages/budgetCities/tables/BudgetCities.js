@@ -593,31 +593,31 @@ const BudgetCities = (props) => {
     handleShowUpdate2();
   };
 
-    useEffect(() => {
-        const getCityBudgets = async () => {
-            settotalAmount(0)
-            setIsLoading3(true)
-            await axios
-                .get(HOST + GET_CITY_BUDGETS, {
-                    headers: {
-                        auth: "Rose " + localStorage.getItem("auth"),
-                        search: value2,
-                        filter: JSON.stringify(filter),
-                        city: city.city_id,
-                        year: year,
-                    },
-                })
-                .then((res) => {
-                    setbudgets(res.data.res)
-                    settotalAmount(res.data.totalAmount);
-                    setIsLoading3(false);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
-        getCityBudgets()
-    }, [apiCall2])
+  useEffect(() => {
+    const getCityBudgets = async () => {
+      settotalAmount(0);
+      setIsLoading3(true);
+      await axios
+        .get(HOST + GET_CITY_BUDGETS, {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            search: value2,
+            filter: JSON.stringify(filter),
+            city: city.city_id,
+            year: year,
+          },
+        })
+        .then((res) => {
+          setbudgets(res.data.res);
+          settotalAmount(res.data.totalAmount);
+          setIsLoading3(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getCityBudgets();
+  }, [apiCall2]);
 
   const handleDeleteBudget = (e) => {
     e.preventDefault();
@@ -647,180 +647,462 @@ const BudgetCities = (props) => {
       });
   };
 
-    return (
+  return (
+    <>
+      {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
+      {red === true ? <RedAlert setRed={setred} /> : <></>}
+      {budget ? (
         <>
-            {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
-            {red === true ? <RedAlert setRed={setred} /> : <></>}
-            {budget
-                ? <>
+          {/* Filter and Other Buttons */}
+          <div
+            className="d-flex flex-row justify-content-between"
+            style={{
+              marginTop: "8px",
+              marginBottom: "24px",
+              marginLeft: "32px",
+              marginRight: "32px",
+            }}
+          >
+            <TFSearchBar
+              placeholder={"Cities"}
+              searchFunc={[value, setValue]}
+            />
+          </div>
 
-                    {/* Filter and Other Buttons */}
-                    <div className='d-flex flex-row justify-content-between' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px", marginRight:'32px' }}>
-                        <TFSearchBar 
-                        placeholder={'Cities'}
-                        searchFunc={[value, setValue]}/>
-                    </div>
-
-                    {/* Table */}
-                    <div style={{ borderBottom: "1px solid #EBE9F1", height: "542px", overflow: "auto", position: "relative" }} onScroll={(e) => {
-                        // tableRef.current = e.target.scrollTop
-                        console.log(e.target.scrollTop, tableRef.current)
-                        }} ref={tableRef}>
-                        <table style={styles.table} className='rfp-table'>
-                            <thead style={styles.tableHeader}>
-                                <tr>
-                                    <th scope="col" style={{ ...styles.tableHeading, width: "200px" }} className='fixed-header'>City</th>
-                                    <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>Region</th>
-                                    <th scope="col" style={{ ...styles.tableHeading, width: "130px" }} className='fixed-header2'>Population</th>
-                                    <th scope="col" style={{ ...styles.tableHeading, width: "150px" }} className='fixed-header2'>Capital Budget 2023</th>
-                                    <th scope="col" style={{ ...styles.tableHeading, width: "110px" }} className='fixed-header2'>2022 Budget</th>
-                                    <th scope="col" style={{ ...styles.tableHeading, width: "110px" }} className='fixed-header2'>2023 Budget</th>
-                                    <th scope="col" style={{ ...styles.tableHeading, width: "240px" }} className='fixed-header2'>Remarks</th>
-                                    <th scope="col" style={{ ...styles.tableHeading, width: "120px" }} className='fixed-header2'>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody style={styles.tableBody}>
-                                {isLoading ? <tr style={{ height: "542px", width: "100%", background: "white" }}>
-                                    <td colSpan={8}>
-                                        <LoadingSpinner />
-                                    </td>
-                                </tr> : cities && cities.map((e, idx) => {
-                                    if (e.city?.toLowerCase().startsWith(value?.toLowerCase())) {
-                                        return (<tr style={{ ...styles.tableRow }} className='' id={e.city_budget_id}>
-                                            <td className='' style={{ ...styles.tableCell, fontWeight: "500" }}>
-                                                <div className='d-flex flex-column justify-content-start'>
-                                                    <p style={{ WebkitLineClamp: "1", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.city}</p>
-                                                    <p style={{ fontWeight: "400", color: "#70757A" }}>{e.municipality_type}</p>
-                                                </div>
-                                            </td>
-                                            <td style={{ ...styles.tableCell }}>{e.geographic_area}</td>
-                                            <td style={{ ...styles.tableCell }}>{e.population_2021}</td>
-                                            <td style={{ ...styles.tableCell, fontWeight: "600" }}>{addComma(e.capital_budget_23)}</td>
-                                            <td style={{ ...styles.tableCell }}><TFChip
-                                                                                    value={e.year_22}
-                                                                                    name={e.city_budget_id}
-                                                                                    tableRef={tableRef}
-                                                                                    options={["Not Found", "Draft Budget", "Done"]}
-                                                                                /></td>
-                                            <td style={{ ...styles.tableCell }}><TFChip
-                                                                                    value={e.year_23}
-                                                                                    label={e.city_budget_id}
-                                                                                    tableRef={tableRef}
-                                                                                    options={["Not Found", "Draft Budget", "Done"]}
-                                                                                /></td>
-                                            <td style={{ ...styles.tableCell, color: "#70757A" }}><p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.Remarks}</p></td>
-                                            <td style={{ ...styles.tableCell }}>
-                                                <div className='d-flex flex-row'>
-                                                    <FontAwesomeIcon icon={faPencil} style={{ cursor: "pointer", marginRight: "23px" }} color="#70757A" height="18px" onClick={(eve) => { setidx(idx); handleShowUpdate(); }} />
-                                                    <FontAwesomeIcon icon={faArrowRight} style={{ cursor: "pointer" }} color="#70757A" height="18px" onClick={(eve) => { setidx(idx); setcity(e); setbudget(false); setCall2(apiCall2 + 1) }} />
-                                                </div>
-                                            </td>
-                                        </tr>)
-                                    } else {
-                                        return <></>
-                                    }
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                    {/* Update City Modal */}
-                    <Modal
-                        show={showUpdate}
-                        onHide={handleCloseUpdate}
-                        backdrop="static"
-                        centered
-                        size="xl"
-                        keyboard={false}
-                    >
-                        <Modal.Header closeButton>
-                            <Modal.Title>Update City</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <UpdateCity1
-                                cities={cities}
-                                setcities={setcities}
-                                budgetCount={budgetCount}
-                                setbudgetCount={setbudgetCount}
-                                idx={idx}
-                                setgreen={setgreen}
-                                setred={setred}
-                                handleCloseUpdate={handleCloseUpdate}
+          {/* Table */}
+          <div
+            style={{
+              borderBottom: "1px solid #EBE9F1",
+              height: "542px",
+              overflow: "auto",
+              position: "relative",
+            }}
+            onScroll={(e) => {
+              // tableRef.current = e.target.scrollTop
+              console.log(e.target.scrollTop, tableRef.current);
+            }}
+            ref={tableRef}
+          >
+            <table style={styles.table} className="rfp-table">
+              <thead style={styles.tableHeader}>
+                <tr>
+                  <th
+                    scope="col"
+                    style={{ ...styles.tableHeading, width: "200px" }}
+                    className="fixed-header"
+                  >
+                    City
+                  </th>
+                  <th
+                    scope="col"
+                    style={{ ...styles.tableHeading, width: "150px" }}
+                    className="fixed-header2"
+                  >
+                    Region
+                  </th>
+                  <th
+                    scope="col"
+                    style={{ ...styles.tableHeading, width: "130px" }}
+                    className="fixed-header2"
+                  >
+                    Population
+                  </th>
+                  <th
+                    scope="col"
+                    style={{ ...styles.tableHeading, width: "150px" }}
+                    className="fixed-header2"
+                  >
+                    Capital Budget 2023
+                  </th>
+                  <th
+                    scope="col"
+                    style={{ ...styles.tableHeading, width: "110px" }}
+                    className="fixed-header2"
+                  >
+                    2022 Budget
+                  </th>
+                  <th
+                    scope="col"
+                    style={{ ...styles.tableHeading, width: "110px" }}
+                    className="fixed-header2"
+                  >
+                    2023 Budget
+                  </th>
+                  <th
+                    scope="col"
+                    style={{ ...styles.tableHeading, width: "240px" }}
+                    className="fixed-header2"
+                  >
+                    Remarks
+                  </th>
+                  <th
+                    scope="col"
+                    style={{ ...styles.tableHeading, width: "120px" }}
+                    className="fixed-header2"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody style={styles.tableBody}>
+                {isLoading ? (
+                  <tr
+                    style={{
+                      height: "542px",
+                      width: "100%",
+                      background: "white",
+                    }}
+                  >
+                    <td colSpan={8}>
+                      <LoadingSpinner />
+                    </td>
+                  </tr>
+                ) : (
+                  cities &&
+                  cities.map((e, idx) => {
+                    if (
+                      e.city?.toLowerCase().startsWith(value?.toLowerCase())
+                    ) {
+                      return (
+                        <tr
+                          style={{ ...styles.tableRow }}
+                          className=""
+                          id={e.city_budget_id}
+                        >
+                          <td
+                            className=""
+                            style={{ ...styles.tableCell, fontWeight: "500" }}
+                          >
+                            <div className="d-flex flex-column justify-content-start">
+                              <p
+                                style={{
+                                  WebkitLineClamp: "1",
+                                  WebkitBoxOrient: "vertical",
+                                  display: "-webkit-box",
+                                  overflow: "hidden",
+                                  margin: "0px",
+                                }}
+                              >
+                                {e.city}
+                              </p>
+                              <p
+                                style={{ fontWeight: "400", color: "#70757A" }}
+                              >
+                                {e.municipality_type}
+                              </p>
+                            </div>
+                          </td>
+                          <td style={{ ...styles.tableCell }}>
+                            {e.geographic_area}
+                          </td>
+                          <td style={{ ...styles.tableCell }}>
+                            {e.population_2021}
+                          </td>
+                          <td
+                            style={{ ...styles.tableCell, fontWeight: "600" }}
+                          >
+                            {addComma(e.capital_budget_23)}
+                          </td>
+                          <td style={{ ...styles.tableCell }}>
+                            <TFChip
+                              value={e.year_22}
+                              name={e.city_budget_id}
+                              tableRef={tableRef}
+                              options={["Not Found", "Draft Budget", "Done"]}
                             />
-                        </Modal.Body>
-                    </Modal>
-                </>
-                : <>
-                    <div className='d-flex flex-row align-items-baseline' style={styles.headerContainer}>
-                        <FontAwesomeIcon icon={faArrowLeft} color="#70757A" style={{ marginRight: "16px", cursor: "pointer" }} onClick={(e) => { setbudget(true); setValue2(""); settotalAmount(0); setYear(new Date().getFullYear().toString()); setbudgets([]); setfilter({ dept: [], cat: [], budgetCategory: [] }); setprevFilter({ dept: [], cat: [], budgetCategory: [] }) }} />
-                        <p style={styles.heading}>{city.City}</p>
-                    </div>
+                          </td>
+                          <td style={{ ...styles.tableCell }}>
+                            <TFChip
+                              value={e.year_23}
+                              label={e.city_budget_id}
+                              tableRef={tableRef}
+                              options={["Not Found", "Draft Budget", "Done"]}
+                            />
+                          </td>
+                          <td style={{ ...styles.tableCell, color: "#70757A" }}>
+                            <p
+                              style={{
+                                WebkitLineClamp: "2",
+                                WebkitBoxOrient: "vertical",
+                                display: "-webkit-box",
+                                overflow: "hidden",
+                                margin: "0px",
+                              }}
+                            >
+                              {e.Remarks}
+                            </p>
+                          </td>
+                          <td style={{ ...styles.tableCell }}>
+                            <div className="d-flex flex-row">
+                              <FontAwesomeIcon
+                                icon={faPencil}
+                                style={{
+                                  cursor: "pointer",
+                                  marginRight: "23px",
+                                }}
+                                color="#70757A"
+                                height="18px"
+                                onClick={(eve) => {
+                                  setidx(idx);
+                                  handleShowUpdate();
+                                }}
+                              />
+                              <FontAwesomeIcon
+                                icon={faArrowRight}
+                                style={{ cursor: "pointer" }}
+                                color="#70757A"
+                                height="18px"
+                                onClick={(eve) => {
+                                  setidx(idx);
+                                  setcity(e);
+                                  setbudget(false);
+                                  setCall2(apiCall2 + 1);
+                                }}
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    } else {
+                      return <></>;
+                    }
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+          {/* Update City Modal */}
+          <Modal
+            show={showUpdate}
+            onHide={handleCloseUpdate}
+            backdrop="static"
+            centered
+            size="xl"
+            keyboard={false}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Update City</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <UpdateCity1
+                cities={cities}
+                setcities={setcities}
+                budgetCount={budgetCount}
+                setbudgetCount={setbudgetCount}
+                idx={idx}
+                setgreen={setgreen}
+                setred={setred}
+                handleCloseUpdate={handleCloseUpdate}
+              />
+            </Modal.Body>
+          </Modal>
+        </>
+      ) : (
+        <>
+          <div
+            className="d-flex flex-row align-items-baseline"
+            style={styles.headerContainer}
+          >
+            <FontAwesomeIcon
+              icon={faArrowLeft}
+              color="#70757A"
+              style={{ marginRight: "16px", cursor: "pointer" }}
+              onClick={(e) => {
+                setbudget(true);
+                setValue2("");
+                settotalAmount(0);
+                setYear(new Date().getFullYear().toString());
+                setbudgets([]);
+                setfilter({ dept: [], cat: [], budgetCategory: [] });
+                setprevFilter({ dept: [], cat: [], budgetCategory: [] });
+              }}
+            />
+            <p style={styles.heading}>{city.City}</p>
+          </div>
 
-                    {/* Header Cards */}
-                    <div style={styles.topContainer2} className='d-flex flex-row'>
-                        <div className='d-flex flex-column justify-content-between' style={{ width: "98%" }}>
-                            <div className='d-flex flex-row justify-content-between'>
-                                <div className='d-flex flex-row justify-content-center align-items-center'>
-                                    <div style={{ width: "32px", height: "32px", background: "#F3F3F4", borderRadius: "50%" }} className='d-flex justify-content-center align-items-center'>
-                                        <img src={website} alt="Website Icon" />
-                                    </div>
-                                    <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
-                                        <p style={styles.topContainerHeading2}>City Website</p>
-                                        <a style={styles.topContainerSubheading2} href={city.website} target="_blank" rel="noreferrer">{city.Website ?? "-"}</a>
-                                    </div>
-                                </div>
-                                <div className='d-flex flex-row justify-content-center align-items-center'>
-                                    <div style={{ width: "32px", height: "32px", background: "#F3F3F4", borderRadius: "50%" }} className='d-flex justify-content-center align-items-center'>
-                                        <img src={website} alt="Website Icon" />
-                                    </div>
-                                    <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
-                                        <p style={styles.topContainerHeading2}>Budget 2022 Website</p>
-                                        <a style={styles.topContainerSubheading2} href={city.website_22} target="_blank" rel="noreferrer">{city.Website_22 ?? "-"}</a>
-                                    </div>
-                                </div>
-                                <div className='d-flex flex-row justify-content-center align-items-center'>
-                                    <div style={{ width: "32px", height: "32px", background: "#F3F3F4", borderRadius: "50%" }} className='d-flex justify-content-center align-items-center'>
-                                        <img src={website} alt="Website Icon" />
-                                    </div>
-                                    <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
-                                        <p style={{ ...styles.topContainerHeading2, width: "447px" }}>Budget 2023 Website</p>
-                                        <a style={styles.topContainerSubheading2} href={city.website_23} target="_blank" rel="noreferrer">{city.Website_23 ?? "-"}</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='d-flex flex-row justify-content-between'>
-                                <div className='d-flex flex-row justify-content-center align-items-center'>
-                                    <div style={{ width: "32px", height: "32px", background: "#F3F3F4", borderRadius: "50%" }} className='d-flex justify-content-center align-items-center'>
-                                        <img src={dollar} alt="Website Icon" />
-                                    </div>
-                                    <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
-                                        <p style={styles.topContainerHeading2}>2022 Budget</p>
-                                        <p style={{ ...styles.topContainerSubheading2 }}>{city.year_22}</p>
-                                    </div>
-                                </div>
-                                <div className='d-flex flex-row justify-content-center align-items-center'>
-                                    <div style={{ width: "32px", height: "32px", background: "#F3F3F4", borderRadius: "50%" }} className='d-flex justify-content-center align-items-center'>
-                                        <img src={dollar} alt="Website Icon" />
-                                    </div>
-                                    <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
-                                        <p style={styles.topContainerHeading2}>2023 Budget</p>
-                                        <p style={{ ...styles.topContainerSubheading2 }}>{city.year_23}</p>
-                                    </div>
-                                </div>
-                                <div className='d-flex flex-row justify-content-center align-items-center'>
-                                    <div style={{ width: "32px", height: "32px", background: "#F3F3F4", borderRadius: "50%" }} className='d-flex justify-content-center align-items-center'>
-                                        <img src={dollar} alt="Website Icon" />
-                                    </div>
-                                    <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
-                                        <p style={styles.topContainerHeading2}>Remarks</p>
-                                        <p style={{ ...styles.topContainerSubheading2, width: "447px" }}>{city.remarks ?? "-"}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <FontAwesomeIcon icon={faPencil} color="#70757A" style={{ cursor: "pointer", display: "inline" }} onClick={handleShowUpdate3} />
-                    </div>
-                    <div style={styles.headerLine}></div>
-                    <p style={styles.heading2}>Budgets in </p><p style={{ ...styles.heading2, color: "#DE2424", marginLeft: "0px" }}>{city.City}</p>
+          {/* Header Cards */}
+          <div style={styles.topContainer2} className="d-flex flex-row">
+            <div
+              className="d-flex flex-column justify-content-between"
+              style={{ width: "98%" }}
+            >
+              <div className="d-flex flex-row justify-content-between">
+                <div className="d-flex flex-row justify-content-center align-items-center">
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      background: "#F3F3F4",
+                      borderRadius: "50%",
+                    }}
+                    className="d-flex justify-content-center align-items-center"
+                  >
+                    <img src={website} alt="Website Icon" />
+                  </div>
+                  <div
+                    className="d-flex flex-column"
+                    style={{ marginLeft: "8px" }}
+                  >
+                    <p style={styles.topContainerHeading2}>City Website</p>
+                    <a
+                      style={styles.topContainerSubheading2}
+                      href={city.website}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {city.Website ?? "-"}
+                    </a>
+                  </div>
+                </div>
+                <div className="d-flex flex-row justify-content-center align-items-center">
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      background: "#F3F3F4",
+                      borderRadius: "50%",
+                    }}
+                    className="d-flex justify-content-center align-items-center"
+                  >
+                    <img src={website} alt="Website Icon" />
+                  </div>
+                  <div
+                    className="d-flex flex-column"
+                    style={{ marginLeft: "8px" }}
+                  >
+                    <p style={styles.topContainerHeading2}>
+                      Budget 2022 Website
+                    </p>
+                    <a
+                      style={styles.topContainerSubheading2}
+                      href={city.website_22}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {city.Website_22 ?? "-"}
+                    </a>
+                  </div>
+                </div>
+                <div className="d-flex flex-row justify-content-center align-items-center">
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      background: "#F3F3F4",
+                      borderRadius: "50%",
+                    }}
+                    className="d-flex justify-content-center align-items-center"
+                  >
+                    <img src={website} alt="Website Icon" />
+                  </div>
+                  <div
+                    className="d-flex flex-column"
+                    style={{ marginLeft: "8px" }}
+                  >
+                    <p
+                      style={{ ...styles.topContainerHeading2, width: "447px" }}
+                    >
+                      Budget 2023 Website
+                    </p>
+                    <a
+                      style={styles.topContainerSubheading2}
+                      href={city.website_23}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {city.Website_23 ?? "-"}
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex flex-row justify-content-between">
+                <div className="d-flex flex-row justify-content-center align-items-center">
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      background: "#F3F3F4",
+                      borderRadius: "50%",
+                    }}
+                    className="d-flex justify-content-center align-items-center"
+                  >
+                    <img src={dollar} alt="Website Icon" />
+                  </div>
+                  <div
+                    className="d-flex flex-column"
+                    style={{ marginLeft: "8px" }}
+                  >
+                    <p style={styles.topContainerHeading2}>2022 Budget</p>
+                    <p style={{ ...styles.topContainerSubheading2 }}>
+                      {city.year_22}
+                    </p>
+                  </div>
+                </div>
+                <div className="d-flex flex-row justify-content-center align-items-center">
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      background: "#F3F3F4",
+                      borderRadius: "50%",
+                    }}
+                    className="d-flex justify-content-center align-items-center"
+                  >
+                    <img src={dollar} alt="Website Icon" />
+                  </div>
+                  <div
+                    className="d-flex flex-column"
+                    style={{ marginLeft: "8px" }}
+                  >
+                    <p style={styles.topContainerHeading2}>2023 Budget</p>
+                    <p style={{ ...styles.topContainerSubheading2 }}>
+                      {city.year_23}
+                    </p>
+                  </div>
+                </div>
+                <div className="d-flex flex-row justify-content-center align-items-center">
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      background: "#F3F3F4",
+                      borderRadius: "50%",
+                    }}
+                    className="d-flex justify-content-center align-items-center"
+                  >
+                    <img src={dollar} alt="Website Icon" />
+                  </div>
+                  <div
+                    className="d-flex flex-column"
+                    style={{ marginLeft: "8px" }}
+                  >
+                    <p style={styles.topContainerHeading2}>Remarks</p>
+                    <p
+                      style={{
+                        ...styles.topContainerSubheading2,
+                        width: "447px",
+                      }}
+                    >
+                      {city.remarks ?? "-"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <FontAwesomeIcon
+              icon={faPencil}
+              color="#70757A"
+              style={{ cursor: "pointer", display: "inline" }}
+              onClick={handleShowUpdate3}
+            />
+          </div>
+          <div style={styles.headerLine}></div>
+          <p style={styles.heading2}>Budgets in </p>
+          <p
+            style={{ ...styles.heading2, color: "#DE2424", marginLeft: "0px" }}
+          >
+            {city.City}
+          </p>
 
           {/* Filter and Other Buttons */}
           <div
