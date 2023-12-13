@@ -12,13 +12,11 @@ const getRadius = (budget) => {
   if (budget < 1000000) {
     return 1000;
   } else if (budget < 10000000) {
-    return 1500;
-  } else if (budget < 50000000) {
     return 2000;
   } else if (budget < 100000000) {
-    return 2500;
-  } else {
     return 3000;
+  } else {
+    return 4000;
   }
 };
 
@@ -26,14 +24,16 @@ const getOpacity = (budget) => {
   if (budget < 1000000) {
     return 0.1;
   } else if (budget < 10000000) {
-    return 0.15;
-  } else if (budget < 50000000) {
-    return 0.25;
+    return 0.2;
   } else if (budget < 100000000) {
-    return 0.35;
+    return 0.3;
   } else {
     return 0.4;
   }
+};
+
+const getWidth = (budget) => {
+  return (budget / 200000000) * 100 + "%";
 };
 
 const MapView = ({ expand, setExpand, cities, isLoading }) => {
@@ -92,6 +92,12 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
       createRegionData(cities);
     }
   }, [cities]);
+
+  const addComma = (num) => {
+    if (num === null || num === undefined) return "";
+    const n = num;
+    return `$ ${n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  };
 
   // console.log(cities);
 
@@ -159,6 +165,45 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
                 className={styles.backToTable}
               >
                 <img src={tableIcon} alt="" /> Back to Table View
+              </div>
+              <div className={styles.metricsContainer}>
+                <div>Regions</div>
+                {regionData.map((region) => {
+                  return (
+                    <div
+                      onClick={() => {
+                        updateCenter(region.geographical_coordinates);
+                      }}
+                      className={styles.metric}
+                    >
+                      <div className="d-flex justify-content-between">
+                        <div style={{ fontWeight: "400", fontSize: "12px" }}>
+                          {region.geographic_area}
+                        </div>
+                        <div style={{ fontWeight: "600", fontSize: "12px" }}>
+                          {addComma(region.capital_budget_23)}
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "6px",
+                          borderRadius: "8px",
+                          backgroundColor: "#F8F8FB",
+                        }}
+                      >
+                        <div
+                          style={{
+                            height: "100%",
+                            backgroundColor: "#8361FE",
+                            width: getWidth(region.capital_budget_23),
+                            borderRadius: "8px",
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div

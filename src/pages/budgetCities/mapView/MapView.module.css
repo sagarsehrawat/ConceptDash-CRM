@@ -65,6 +65,27 @@
   flex-direction: column;
   align-items: center;
 }
+.metricsContainer {
+  margin-top: 20px;
+  /* border: 2px solid red; */
+  padding: 0px 20px;
+  height: 80%;
+  width: 100%;
+  color: #3d424f;
+  font-size: 14px;
+  font-weight: 600;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.metric {
+  /* border: 1px solid black; */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+}
 .backToTable {
   display: inline-flex;
   padding: 8px 16px;
