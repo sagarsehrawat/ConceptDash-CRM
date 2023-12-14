@@ -5,10 +5,11 @@ import SERVICES from '../../../../services/Services';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp} from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '../../../../Main/Loader/Loader';
-import { showErrorModal } from '../../../../redux/slices/alertSlice';
+import { showErrorModal, showSuccessModal } from '../../../../redux/slices/alertSlice';
 import IndependentRow from './IndependentRow';
 import RosterRows from './RosterRows';
 import './Table.css';
+import DeleteModal from '../Footer/DeleteModal';
 
 interface FilterType {
   dept: (string | number)[],
@@ -61,7 +62,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProjectId }
         setSelectedRosters([]);
 
         const response = await SERVICES.getProjects(50, currPage, filter, search, sort);
-        console.log(response);
+
         dispatch(initProjects(response.res));
         setPages(response.totalPages);
 
@@ -109,6 +110,18 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProjectId }
     } catch (error) {
       console.log(error);
       dispatch(updateProject({ projectId: id, data: { 'status': prev[0].status }, parentId }));
+      dispatch(showErrorModal('Something went wrong!'));
+    }
+  }
+
+  const handleDeleteProject = async () => {
+    const project = projects.filter(project => project.project_id === selectedProjects[0])[0];
+    try {
+      await SERVICES.deleteProject(selectedProjects, project.project_type);
+      setApi(api+1);
+      dispatch(showSuccessModal('Project Deleted Successfully!'))
+    } catch (error) {
+      console.log(error);
       dispatch(showErrorModal('Something went wrong!'));
     }
   }
@@ -209,6 +222,8 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProjectId }
           </tbody>
         </table>
       </div>
+
+      <DeleteModal selectedProjects={selectedProjects} setSelectedProjects={setselectedProjects} handleDelete={handleDeleteProject} />
     </>
 }
 

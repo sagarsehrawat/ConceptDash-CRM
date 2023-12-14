@@ -153,6 +153,71 @@ class TaskListUtils {
                 break;
         }
     }
+
+    addMilestone(milestone, selectedMilestone = null) {
+        const newTaskId = uuidv4();
+        this.setTaskList((prev) => {
+            if (selectedMilestone === null) {
+                prev.push({
+                    task: milestone,
+                    taskId: newTaskId,
+                    startDate: moment(),
+                    endDate: moment(),
+                    priority: 'Medium',
+                    progress: 0,
+                    status: 'Not Started',
+                    children: [],
+                    subtasks: [],
+                });
+            }else{
+                const selectedIndex = prev.findIndex(obj => obj.task === selectedMilestone);
+
+                prev.splice(selectedIndex + 1, 0, {
+                    task: milestone,
+                    taskId: newTaskId,
+                    startDate: moment(),
+                    endDate: moment(),
+                    priority: 'Medium',
+                    progress: 0,
+                    status: 'Not Started',
+                    children: [],
+                    subtasks: [],
+                });
+            }
+
+            return prev;
+        });
+
+        return newTaskId
+    }
+
+    addTask(milestone, newTask) {
+        const newTaskId = uuidv4();
+        this.setTaskList((prev) => {
+            return prev.map(task => {
+                if(task.task === milestone){
+                    return {
+                        ...task,
+                        children: [...task.children, newTaskId],
+                        subtasks: [ ...task.subtasks, {
+                            task: newTask,
+                            taskId:  newTaskId,
+                            parentId:  task.taskId,
+                            startDate:  moment(),
+                            endDate:  moment(),
+                            progress:  0,
+                            status:  'Not Started',
+                            priority:  'Medium',
+                            assignedTo:  '',
+                            assignedToId:  null,
+                        }]
+                    };
+                }
+
+                return task;
+            });
+        })
+    }
 }
 
 export default TaskListUtils;

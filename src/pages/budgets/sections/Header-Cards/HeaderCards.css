@@ -1,0 +1,27 @@
+.header-card-link {
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.header-card-long {
+    height: 144px;
+}
+
+.header-card-link:hover {
+    text-decoration: underline;
+    color: var(--Black-text, #3D424F);
+
+}
+
+.heade-card-subheading-2{
+    color: var(--Black-text, #3D424F);
+font-family: Roboto;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 20px; /* 142.857% */
+}

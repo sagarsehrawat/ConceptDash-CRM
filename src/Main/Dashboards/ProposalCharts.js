@@ -339,13 +339,14 @@ function ProposalCharts(props) {
           },
         })
         .then((res) => {
-            console.log(res.data.res)
           const arr = res.data.res;
+          console.log(arr);
 
           let obj = { City: [], Category: [] };
           arr.map((e) => {
-            obj[e.Type].push(e.Name);
+            obj[e.type].push(e.name);
           });
+          
           settrending(obj);
           setisLoading((prev) => [false, ...prev.splice(1, 3)]);
         })

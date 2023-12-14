@@ -12,7 +12,7 @@ import AddTaskModal from './modals/AddTaskModal'
 const Tasklist = ({ taskList, setTaskList, openTasks, setOpenTasks, employees }) => {
     const taskListUtils = new TaskListUtils(setTaskList);
     const [showAddModal, setShowAddModal] = useState(false);
-    console.log(showAddModal)
+    const [selectedMilestone, setSelectedMilestone] = useState(null);
 
     const handleClickMilestone = (taskId) => {
         setOpenTasks(prev => {
@@ -22,6 +22,15 @@ const Tasklist = ({ taskList, setTaskList, openTasks, setOpenTasks, employees })
                 return [...prev, taskId];
             }
         });
+    }
+
+    const addMilestone = (milestone, selectedMilestone) => {
+        const newTaskId = taskListUtils.addMilestone(milestone, selectedMilestone);
+        setOpenTasks(prev => [...prev, newTaskId]);
+    }
+
+    const addTask = (milestone, task) => {
+        taskListUtils.addTask(milestone, task);
     }
 
     return (
@@ -107,7 +116,7 @@ const Tasklist = ({ taskList, setTaskList, openTasks, setOpenTasks, employees })
                                         ))
                                     }
                                     <tr>
-                                        <td colSpan={6} className='tasklist-cell add-task-cell fixed-column' onClick={() => setShowAddModal(true)}>+ Add new Milestone/Task</td>
+                                        <td colSpan={6} className='tasklist-cell add-task-cell fixed-column' onClick={() => {setSelectedMilestone(task.task); setShowAddModal(true)}}>+ Add new Milestone/Task</td>
                                     </tr>
                                 </>
                             ))
@@ -121,7 +130,7 @@ const Tasklist = ({ taskList, setTaskList, openTasks, setOpenTasks, employees })
                     </tbody>
                 </table>
             </div>
-            {showAddModal && <AddTaskModal tasks={taskList.map((task) => task.task)} onHide={() => setShowAddModal(false)}/>}
+            {showAddModal && <AddTaskModal tasks={taskList.map((task) => task.task)} selectedMilestone={selectedMilestone} onHide={() => {setShowAddModal(false); setSelectedMilestone(null);}} addTask={addTask} addMilestone={addMilestone}/>}
         </>
     )
 }
