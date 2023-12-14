@@ -114,3 +114,16 @@
   position: absolute;
   left: -40px;
 }
+.backToRegions {
+  /* border: 1px solid black; */
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  gap: 8px;
+  font-weight: 400;
+  cursor: pointer;
+}
+.backBTN {
+  border-radius: 50%;
+  background-color: #f4f5f7;
+}
