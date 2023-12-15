@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Header from './sections/Header/Header'
-import HeaderCards from './sections/HeaderCards/HeaderCards'
+// import Header from './sections/Header/Header'
+// import HeaderCards from './sections/HeaderCards/HeaderCards'
 import Tabs from './sections/Tabs/Tabs'
 
 type Props = {
@@ -16,9 +16,10 @@ const Index = (props: Props) => {
 
   return (
     <>
-      <Header api={api} setApi={setApi}/>
-      <HeaderCards />
+      {/* <Header api={api} setApi={setApi}/> */}
+      
       <Tabs setcurrPage={setcurrPage} pages={pages} search={value} currPage={currPage} setPages={setpages} api={api} setApi={setApi} value={value} setValue={setValue} filter={filter} setFilter={setfilter} isCollapsed={props.isCollapsed}/>
+      {/* <HeaderCards /> */}
     </>
   )
 }

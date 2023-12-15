@@ -9,6 +9,12 @@ import LoadingSpinner from '../../../../Main/Loader/Loader';
 import filterIcon from '../../../../Images/Filter.svg'
 import SERVICES from '../../../../services/Services';
 import './SearchFilter.css'
+import AddNewRfp from '../../forms/AddNewRfp/AddNewRfp';
+import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
+import { useSelector } from 'react-redux'
+import ICONS from '../../../../constants/Icons';
+
+
 
 type Props = {
   api: number,
@@ -30,12 +36,16 @@ interface FilterType {
 
 const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isCollapsed }: Props) => {
   const [show, setShow] = useState<boolean>(false);
+  const [showForm, setShowForm] = useState<boolean>(false);
   const [isLoading2, setIsLoading2] = useState([true, true, true]);
   const [searchCity, setsearchCity] = useState<string>("");
   const [cities, setcities] = useState<Array<{ City_ID: number | string, City: string }>>([]);
   const [depts, setdepts] = useState<Array<{ Department_ID: string | number, Department: string }>>([]);
   const [employees, setemployees] = useState<Array<{ Employee_ID: string | number, Full_Name: string }>>([]);
   const [prevFilter, setprevFilter] = useState<FilterType>({ dept: [], cat: [], city: [], manager: [], source: [] });
+
+  const privileges: string[] = useSelector(selectPrivileges);
+
 
   const styles = {
     filterModal: {
@@ -117,10 +127,16 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
     return filter.city.length + filter.cat.length + filter.dept.length + filter.manager.length + filter.source.length;
   }
 
+  const editForm= null;
+
+
   return (
     <>
-      <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
+      <div className='filter-searchbar-wrapper'>
         {/* Searchbar */}
+        <h4 className='rfps-header'>RFP's</h4>
+        <div className='d-flex justify-content-between'>
+          <div className='d-flex'>
         <TFSearchBar
           placeholder={'RFPs'}
           searchFunc={[value, setValue]}
@@ -131,13 +147,17 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
         {/* Filter */}
         <Button 
         className='d-flex flex-row align-items-center'
-        style={{ backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white" }}
+        style={{ backgroundColor: filterSize() > 0 ? "#DBDBF4" : "white", borderColor: "#EBEDF8", gap: "10px" }}
          onClick={() => setShow(true)}
          >
           <img src={filterIcon} alt="Filter Icon" />
           <p style={{ fontStyle: "normal", fontWeight: 400, fontSize: "14px", color: "#0A0A0A", margin: "0" }}>Filters{filterSize() > 0 ? `/ ${filterSize()}` : ""}</p>
           {filterSize() > 0 ? <></> : <FontAwesomeIcon icon={faChevronDown} color="#70757A" />}
           </Button>
+          </div>
+
+        <TFButton icon={ICONS.PLUS_WHITE} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={() => setShowForm(true)} />
+
         <Modal
           show={show}
           onHide={() => setShow(false)}
@@ -153,7 +173,7 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
               <p className='filter-modal-heading'>Filters</p>
               <div className='d-flex align-items-center'>
                 <Button
-                  style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }}
+                  style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px",}}
                   disabled={filterSize() === 0}
                   onClick={() => {
                     setFilter({ dept: [], cat: [], city: [], manager: [], source: [] });
@@ -259,7 +279,11 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
             </div>
           </div>
         </Modal>
+        </div>
       </div>
+
+      {showForm && <AddNewRfp show={showForm} setShow={setShowForm} isEditing={false} editForm={editForm} api={api} setApi={setApi}/>}
+
     </>
   )
 }

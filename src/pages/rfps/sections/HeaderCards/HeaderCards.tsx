@@ -51,7 +51,7 @@ const HeaderCards = () => {
       icon: trending_rfp_icon,
       rfp: newRfps,
       percent: percent,
-      heading: "Trending RFP's",
+      heading: "Tracking RFP's",
     },
   ];
 
@@ -100,7 +100,7 @@ const HeaderCards = () => {
           );
         })}
       </div>
-      <div className="header-line"></div>
+      {/* <div className="header-line"></div> */}
       {/* <p className='heading-2' style={{marginLeft : "32px"}}>RFPs</p> */}
     </>
   );
