@@ -42,7 +42,7 @@ const Index = (props: Props) => {
         <MapView
           expand={expand}
           setExpand={setExpand}
-          cities={cities}
+          citiesMain={cities}
           isLoading={isLoading}
         />
       ) : (
@@ -57,7 +57,7 @@ const Index = (props: Props) => {
               <MapView
                 expand={expand}
                 setExpand={setExpand}
-                cities={cities}
+                citiesMain={cities}
                 isLoading={isLoading}
               />
             </div>

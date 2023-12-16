@@ -90,7 +90,7 @@ const getWidth = (budget, maxVal) => {
   return (budget / maxVal) * 100 + "%";
 };
 
-const MapView = ({ expand, setExpand, cities, isLoading }) => {
+const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
   const [type, setType] = useState(1); //1: Regular, 2: Satellite
   const [openRightBar, setOpenRightBar] = useState(true);
   const [regionData, setRegionData] = useState([]);
@@ -130,31 +130,33 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
         tempData.push(tempObj);
       }
     });
+    tempData = tempData.filter((e) => e.capital_budget_23 > 0);
     tempData.sort((a, b) => b.capital_budget_23 - a.capital_budget_23);
     setCenter(tempData[0].geographical_coordinates);
     setRegionData(tempData);
-    // createRegionOptions(tempData);
   };
 
   const createCitiesData = (region) => {
     let tempData = [];
-    cities.forEach((city) => {
+    citiesMain.forEach((city) => {
       if (city.geographic_area === region) {
         tempData.push(city);
       }
     });
+    console.log("before: ", tempData);
+    tempData = tempData.filter((e) => e.capital_budget_23 > 0);
+    console.log("after: ", tempData);
     tempData.sort((a, b) => b.capital_budget_23 - a.capital_budget_23);
     setZoom(10);
     setCenter(tempData[0].city_coordinates);
     setCitiesData({ ...citiesData, showCities: true, cities: tempData });
-    createCityOptions(tempData);
   };
 
   useEffect(() => {
-    if (cities.length > 0) {
-      createRegionData(cities);
+    if (citiesMain.length > 0) {
+      createRegionData(citiesMain);
     }
-  }, [cities]);
+  }, [citiesMain]);
 
   useEffect(() => {
     const fetchData = async () => {
