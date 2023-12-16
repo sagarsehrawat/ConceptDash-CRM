@@ -40,7 +40,9 @@ lineHeight: "24px",
     borderBottom: "1px solid var(--New-Outline, #EBEDF8)",
     borderLeft: "1px solid var(--New-Outline, #EBEDF8)",
     background: "#FFF",
-    width:"1132px"
+    width:"-webkit-fill-available",
+    marginLeft:"15px",
+    marginRight:"15px"
       },
       addressBox:{
         display: "flex",
@@ -79,9 +81,9 @@ lineHeight: "24px",
      }
     }
   return (
-    <div style={{display: "inline-flex",marginLeft:"20px",paddingTop: "20px",flexDirection: "column",justifyContent: "flex-end",alignItems: "center",gap: "32px", background: "#F8FAFB"}}> 
-       <div style={{width: "1172px",height: "166px", background: "#FFF"}}>
-         <div style={{display: "inline-flex",padding: "16px 20px",justifyContent: "space-between",alignItems: "flex-start", borderRadius: "16px 16px 0px 0px",border: "1px solid var(--New-Outline, #EBEDF8)", width:"1132px"}}>
+    <div style={{display: "inline-flex",paddingTop: "20px",flexDirection: "column",justifyContent: "flex-end",alignItems: "center",gap: "32px", background: "#F8FAFB"}}> 
+       <div style={{width: "-webkit-fill-available",height: "166px"}}>
+         <div style={{display: "inline-flex",padding: "16px 20px",justifyContent: "space-between",alignItems: "flex-start", borderRadius: "16px 16px 0px 0px",border: "1px solid var(--New-Outline, #EBEDF8)", width:"-webkit-fill-available", background: "#FFF"}}>
               <div style={{display: "inline-flex",alignItems: "center",gap: "var(--12-pad, 12px)"}}>
                     <img src={group} alt=""/>
                     <div style={{display: "flex",flexDirection: "column",justifyContent: "center",alignItems: "flex-start"}}>
@@ -123,7 +125,7 @@ lineHeight: "24px",
          </div>
          </div>
          <div style={{width: "1212px", height:"108px", marginTop:"32px",paddingTop:"12px",paddingLeft:"32px"}}>
-            <div style={{ color: "var(--Black-text, #3D424F)", fontFamily: "Roboto", fontSize: "18px", fontStyle: "normal", fontWeight: "500", lineHeight: "28px" }}>
+            <div style={{ color: "var(--Black-text, #3D424F)", fontFamily: "Roboto", fontSize: "18px", fontStyle: "normal", fontWeight: "500", lineHeight: "28px",}}>
               People In {props.organizationData.company_name}
             </div>
            <div style={{marginTop:"14px", display:"flex", justifyContent:"space-between", paddingRight:"32px"}}>

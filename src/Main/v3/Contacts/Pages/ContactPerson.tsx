@@ -102,6 +102,7 @@ const ContactPerson = (props: Props) => {
                   //  console.log(res.data.res[0]);
                    setOrganisationData(res.data.res[0]);
                    setIsLoading(false);
+                 
               })
               .catch((err) => {
                   console.log(err);
@@ -169,7 +170,7 @@ const ContactPerson = (props: Props) => {
            { allPeopleData && allPeopleData.map(each=>(
               <div style={{display: "flex",justifyContent: "space-between",alignItems: "center",alignSelf: "stretch"}}>
                 <div style={{color: "var(--Black-text, #3D424F)",fontFamily: "Roboto",fontSize: "14px",fontStyle: "normal",fontWeight: "400",lineHeight: "20px"}}>{each.name}</div>
-                <img src={arrow} alt="" onClick={(e)=>{e.preventDefault();setPersonId(each.id)}} />
+                <img src={arrow} alt="" onClick={(e)=>{e.preventDefault();setPersonId(each.id); setApi(api+1)}} />
               </div>
            ))
 
@@ -178,7 +179,7 @@ const ContactPerson = (props: Props) => {
         </div>
       </div>
      </div>
-     <ProfileClient contactPersonData={props.contactPersonData} id={personId}/>
+     <ProfileClient contactPersonData={props.contactPersonData} id={personId} api={api} setApi={setApi}/>
      </div>)}
      </>
   )

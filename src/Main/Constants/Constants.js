@@ -247,4 +247,7 @@ export const ADD_PROJECT_NOTES='/client/add/people/projectspecific'
 
 export const UPDATE_GENERAL_NOTES="/client/update/people/generalchats"
 export const UPDATE_PROJECT_NOTES="/client/update/people/projectspecific"
+
+export const DELETE_GENERAL_NOTES='/client/delete/people/generalchats'
+export const DELETE_PROJECT_NOTES='/client/delete/people/projectspecific'
 // export const DELETE_GENERAL_NOTES="/client/delete/people/generalchats"

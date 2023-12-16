@@ -16,38 +16,30 @@ import bold from '../icons/format_bold_black_24dp 2.svg'
 import bulletlist from '../icons/format_list_bulleted_black_24dp (1) 2.svg'
 import numberlist from '../icons/format_list_numbered_black_24dp 2.svg'
 import emoticons from '../icons/sentiment_satisfied_alt_black_24dp 3.svg'
-import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
-import 'draft-js/dist/Draft.css';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 
 type Props={
   contactPersonData: any,
   id: Number
+  api:number
+  setApi:Function
 }
-const ProfileClient = (props:Props) => {
-
-    const [value1, setValue1] = useState("1");
+const    ProfileClient = (props:Props) => {
+   const [value1, setValue1] = useState("1");
     const [value, setValue] = useState("");
-    const [api, setApi] = useState(0);
     const [personData, setPersonData] = useState(null);
     const[isLoading, setisLoading] = useState(false);
     const [generalText, setGeneralText] = useState('');
-    const [projectText, setProjectText] = useState('');
     const [generalChat, setGeneralChat] = useState(null);
-    const [reminders, setReminders] = useState(null);
+    const [reminders, setReminders] = useState<Array>([]);
     const [projectChat, setProjectChat] = useState(null);
     const [showGeneralBox, setShowGeneralBox] = useState<Boolean>(true);
     const [showProjectBox, setShowProjectBox] = useState<Boolean>(true);
 
-    const [editorState, setEditorState] =useState(() => EditorState.createEmpty());
-    const handleBoldClick = () => {
-      setEditorState(RichUtils.toggleInlineStyle(editorState, 'BOLD'));
-    };
-    
-  
-    const handleBulletListClick = () => {
-      // Prefix selected text with '*' to create a bullet point
-    setEditorState(RichUtils.toggleBlockType(editorState, 'unordered-list-item'));
-    };
+    const [projectText, setProjectText] =useState('');
+
 
 const handleChange = (event: Event, newValue : any) => {
   setValue1(newValue);
@@ -121,7 +113,6 @@ const handleChange = (event: Event, newValue : any) => {
           },
           headingdata:{
             display: "flex",
-            // padding: "0px 16px",
             alignItems: "center",
             gap: "var(--8-pad, 8px)",
             alignSelf: "stretch",
@@ -167,7 +158,9 @@ const handleChange = (event: Event, newValue : any) => {
             borderRadius: "16px",
             border: "1px solid var(--New-Outline, #EBEDF8)",
             background: "#FFF",
-            marginTop: "24px"
+            marginTop: "24px",
+            marginRight:"20px",
+            height:"fit-content"
           },
           remindersHeading:{
             display: "flex",
@@ -180,7 +173,8 @@ const handleChange = (event: Event, newValue : any) => {
             fontSize: "16px",
           fontStyle: "normal",
             fontWeight: "500",
-            lineHeight: "24px"
+            lineHeight: "24px",
+            borderBottom: "1px solid var(--New-Outline, #EBEDF8)"
           },
           reminderContents:{
             display: "flex",
@@ -236,8 +230,9 @@ const handleChange = (event: Event, newValue : any) => {
                       },
                   })
                   .then((res) => {
-                      console.log(res.data.res[0]);
                        setPersonData(res.data.res[0]);
+                       props.setApi(props.api+1)
+                       console.log(personData);
                   })
                   .catch((err) => {
                       console.log(err);
@@ -245,51 +240,54 @@ const handleChange = (event: Event, newValue : any) => {
           }
           call()
           setisLoading(false)
-      }, [props.id])  
+      }, [props.id]);  
       useEffect(() => {
         const call1 = async () => {
             await axios
                 .get(HOST1 + GENERAL_NOTES, {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
-                        peopleid: 1
+                        peopleid: JSON.stringify(props.id)
                     },
                 })
                 .then((res) => {
-                     console.log(res)
-                     setGeneralChat(res.data.res[0].general);
-                     const rem = res.data.res[0].general?.filter((each) => each.reminder === true);
+                     res.data.res[0] ? setGeneralChat(res.data.res[0].general) : setGeneralChat(null);
+                     const rem = generalChat?.filter((each) => each.reminder == 'true');
                       setReminders(rem);
+                      console.log("reminders")
                       console.log(reminders);
-                     console.log(generalChat);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         }
         call1()
-    }, [props.id]) 
+    }, [props.id,personData,props.api]) 
     useEffect(() => {
       const call1 = async () => {
           await axios
               .get(HOST1 + PROJECT_NOTES, {
                   headers: {
                       auth: "Rose " + localStorage.getItem("auth"),
-                      peopleid: 1,
+                      peopleid: JSON.stringify(props.id),
                       projectid: 1 
                   },
               })
               .then((res) => {
-                   console.log(res);
-                   setProjectChat(res.data.res[0].chat);
+                   res.data.res[0] ? setProjectChat( res.data.res[0].chat ) : setProjectChat(null);
                    console.log(projectChat);
+                   const rem = projectChat?.filter( each => each.reminder == 'true');
+                   setReminders( [...reminders,...rem]);
+                   console.log("reminders")
+                   console.log([...reminders,...rem]);
+                   
               })
               .catch((err) => {
                   console.log(err);
               });
       }
       call1()
-  }, [props.id]) 
+  }, [props.id,personData,props.api]) 
 
   const handleSave = async () => {
     try {
@@ -300,7 +298,7 @@ const handleChange = (event: Event, newValue : any) => {
           date: JSON.stringify(new Date().getDate()),
           notes: generalText,
           reminder: 'false',
-          peopleId: '1', 
+          peopleId: JSON.stringify(props.id), 
         },
         {
           headers: {
@@ -310,7 +308,8 @@ const handleChange = (event: Event, newValue : any) => {
       );
 
       setGeneralText('');
-      setShowGeneralBox(false); 
+      setShowProjectBox(false); 
+      props.setApi(props.api+1)
       // Do something with the updatedData if needed
       console.log(response);
     } catch (error) {
@@ -328,7 +327,7 @@ const handleChange = (event: Event, newValue : any) => {
           date: JSON.stringify(new Date().getDate()),
           notes: projectText,
           reminder: 'false',
-          peopleId: 1, 
+          peopleId: props.id, 
           projectId: 1
         },
         {
@@ -340,14 +339,13 @@ const handleChange = (event: Event, newValue : any) => {
 
       setProjectText('');
       setShowProjectBox(true)
-      // Do something with the updatedData if needed
+      props.setApi(props.api+1)
       console.log(response);
     } catch (error) {
       console.error(error);
       // Handle error as needed
     }
   };
-
 
   return (
     isLoading ?
@@ -403,6 +401,7 @@ const handleChange = (event: Event, newValue : any) => {
                 
                   float: "left",
                   height: "57px",
+                  marginBottom:"16px"
                 }}
               >
                 <Tab
@@ -411,9 +410,9 @@ const handleChange = (event: Event, newValue : any) => {
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "center",
-                    paddingBottom: 0,
+                    paddingBottom: 0
                   }}
-                  sx={{ fontSize: 12 }}
+                  sx={{ fontSize: 12,  textTransform :"none" }}
                   label="Project"
                   value="1"
                 />
@@ -425,40 +424,79 @@ const handleChange = (event: Event, newValue : any) => {
                     justifyContent: "center",
                     paddingBottom: 0,
                   }}
-                  sx={{ fontSize: 12 }}
+                  sx={{ fontSize: 12,  textTransform :"none" }}
                   label="General"
                   value="2"
                 />
               </TabList>
             </Box>
             <TabPanel value="1" style={{padding:'0px'}}>
-            <div style={{ width: '100%', float: 'left', display:'flex', flexDirection:'column', gap:"16px", marginLeft:"20px" }}>
+            <div style={{ width: '100%', float: 'left', display:'flex', flexDirection:'column', gap:"16px",}}>
               <TFSearchBar
           placeholder={'Project Name'}
           searchFunc={[value, setValue]}
           style={{ 'margin-right': '12px', }}
-          apiFunc={[api, setApi]}
         />
           <div style={{display: "flex",width: "437px",flexDirection: "column",alignItems: "flex-start",gap: "5px"}}>
-        { showGeneralBox ?  (<div style={styles.textarea} onClick={()=>setShowGeneralBox(false)}>
+        { showProjectBox ?  (<div style={styles.textarea} onClick={()=>setShowProjectBox(false)}>
             <div style={{...styles.subcontent2, lineHeight: "24px", fontSize:"14px"}}>Take a note</div>
            </div>) : 
            ( <div>
-      {/* <textarea
-        id="textInput"
-        placeholder="Take a note..."
-        rows="5"
-        cols="50"
-        value={projectText}
-        onChange={(e) => setProjectText(e.target.value)}
-      ></textarea> */}
-        <Editor editorState={editorState} onChange={setEditorState} />;
-
+            <div>
+            <CKEditor
+                editor={ClassicEditor}
+              config={{         
+             toolbar: ['bold', 'italic', 'link', 'numberedList', 'bulletedList', '|', 'undo', 'redo']
+        }}                
+                data={projectText}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  console.log(data);
+                  setProjectText(data);
+                }} /> </div>
+       <div style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "space-between",alignItems: "center",alignSelf: "stretch",
+        width:"437px",borderRadius: "0px 0px var(--12-pad, 12px) var(--12-pad, 12px)",border: "1px solid var(--New-Outline, #EBEDF8)",background: "#FFF"}}>
+        <div style={{display: "flex",alignItems: "flex-start",gap: "var(--12-pad, 12px)"}}>
+        <img src={bold} alt='bold' style={{ cursor: 'pointer' }} />
+          <img src={bulletlist} alt='bulletlist'style={{ cursor: 'pointer' }} />
+        <img src={numberlist} alt='numberedist' style={{ cursor: 'pointer' }} />
+      
+        </div>
+        <div style={{display: "flex",alignItems: "flex-start",gap: "var(--12-pad, 12px)"}}>
+        <button style={styles.resume} onClick={()=>setShowProjectBox(true)}>Cancel</button>
+        <TFButton label="Save" handleClick={handleSave2}/>
+        </div>
+        </div>
+        </div> )}
+       </div>
+          <div style={styles.name}>Notes Taken</div>
+            { projectChat ? projectChat.map((each,index)=> <NotesCard id={props?.id} data={each} index={index} setApi={props.setApi} api={props.api} value="Project"/>)
+            :
+             <>No chats</>}
+    </div>
+            </TabPanel>
+            <TabPanel value="2" style={{padding:'0px'}}>
+            <div style={{ width: '100%', float: 'left', display:'flex', flexDirection:'column', gap:"16px" }}>
+            { showGeneralBox ?  (<div style={styles.textarea} onClick={()=>setShowGeneralBox(false)}>
+            <div style={{...styles.subcontent2, lineHeight: "24px", fontSize:"14px"}}>Take a note</div>
+           </div>) : 
+           ( <div>
+     <CKEditor
+                editor={ClassicEditor}
+              config={{         
+             toolbar: ['bold', 'italic', 'link', 'numberedList', 'bulletedList', '|', 'undo', 'redo']
+        }}                
+                data={generalText}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  console.log(data);
+                  setGeneralText(data);
+                }} />
        <div style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "space-between",alignItems: "center",alignSelf: "stretch",
         borderRadius: "0px 0px var(--12-pad, 12px) var(--12-pad, 12px)",border: "1px solid var(--New-Outline, #EBEDF8)",background: "#FFF"}}>
         <div style={{display: "flex",alignItems: "flex-start",gap: "var(--12-pad, 12px)"}}>
-        <img src={bold} alt='bold' onClick={handleBoldClick} style={{ cursor: 'pointer' }} />
-          <img src={bulletlist} alt='bulletlist' onClick={handleBulletListClick} style={{ cursor: 'pointer' }} />
+        <img src={bold} alt='bold' style={{ cursor: 'pointer' }} />
+          <img src={bulletlist} alt='bulletlist' style={{ cursor: 'pointer' }} />
         <img src={numberlist} alt='numberedist'/>
       
         </div>
@@ -468,41 +506,8 @@ const handleChange = (event: Event, newValue : any) => {
         </div>
         </div>
         </div> )}
-       </div>
-          <div style={styles.name}>Notes Taken</div>
-            { projectChat && projectChat.map((each,index)=> <NotesCard data={each} index={index} value="Project"/>)}
-    </div>
-            </TabPanel>
-            <TabPanel value="2" style={{padding:'0px'}}>
-            <div style={{ width: '100%', float: 'left', display:'flex', flexDirection:'column', gap:"16px" }}>
-            { showProjectBox ?  (<div style={styles.textarea} onClick={()=>setShowProjectBox(false)}>
-            <div style={{...styles.subcontent2, lineHeight: "24px", fontSize:"14px"}}>Take a note</div>
-           </div>) : 
-           ( <div>
-      <textarea
-        id="textInput"
-        placeholder="Take a note..."
-        rows="5"
-        cols="50"
-        value={projectText}
-        onChange={(e) => setProjectText(e.target.value)}
-      ></textarea>
-       <div style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "space-between",alignItems: "center",alignSelf: "stretch",
-        borderRadius: "0px 0px var(--12-pad, 12px) var(--12-pad, 12px)",border: "1px solid var(--New-Outline, #EBEDF8)",background: "#FFF"}}>
-        <div style={{display: "flex",alignItems: "flex-start",gap: "var(--12-pad, 12px)"}}>
-        <img src={bold} alt='bold' onClick={handleBoldClick} style={{ cursor: 'pointer' }} />
-          <img src={bulletlist} alt='bulletlist' onClick={handleBulletListClick} style={{ cursor: 'pointer' }} />
-        <img src={numberlist} alt='numberedist'/>
-      
-        </div>
-        <div style={{display: "flex",alignItems: "flex-start",gap: "var(--12-pad, 12px)"}}>
-        <button style={styles.resume} onClick={()=>setShowProjectBox(true)}>Cancel</button>
-        <TFButton label="Save" handleClick={handleSave2}/>
-        </div>
-        </div>
-        </div> )}
             <div style={styles.name}>Notes Taken</div>
-            { generalChat && generalChat.map((each,index) => <NotesCard data={each} index={index} value="General"/>)}
+            { generalChat && generalChat.map((each,index) => <NotesCard id={props?.id} setApi={props.setApi} api={props.api} data={each} index={index} value="General"/>)}
               </div>
             </TabPanel>
           </TabContext>
@@ -511,7 +516,15 @@ const handleChange = (event: Event, newValue : any) => {
               <div style={styles.remindersHeading}>Reminders</div>
               <div style={styles.reminderContents}>
                   <div style={styles.reminderBox}>
-                   <div style={styles.headingdata}>Follow up on Primary discusssion</div>
+                   <div style={{...styles.headingdata, padding:"0px 16px"}}>Follow up on Primary discusssion</div>
+                   <div style={styles.reminderDate}>30 oct</div>
+                   </div>
+                   <div style={styles.reminderBox}>
+                   <div style={{...styles.headingdata, padding:"0px 16px"}}>Follow up on Primary discusssion</div>
+                   <div style={styles.reminderDate}>30 oct</div>
+                   </div>
+                   <div style={styles.reminderBox}>
+                   <div style={{...styles.headingdata, padding:"0px 16px"}}>Follow up on Primary discusssion</div>
                    <div style={styles.reminderDate}>30 oct</div>
                    </div>
                    </div> 
