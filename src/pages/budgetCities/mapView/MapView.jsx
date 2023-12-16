@@ -197,11 +197,12 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
     if (val !== "") {
       createCitiesData(val);
     } else {
-      setCitiesData({ showCities: false, cities: [] });
-      setCityID("");
       setZoom(8);
       setCenter(regionData[0].geographical_coordinates);
+      setCitiesData({ showCities: false, cities: [] });
     }
+    setBudgets({ showBudgets: false, budgets: [] });
+    setCityID("");
     setOpenRightBar(true);
     setSelectedRegion(val);
   };
@@ -244,6 +245,7 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
               <Dropdown
                 name={"Cities"}
                 value={cityID}
+                search
                 onChange={(val) => {
                   handleCitySelect(val);
                 }}
@@ -401,7 +403,7 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
                     <div>
                       {
                         citiesData.cities.filter((e) => e.city_id === cityID)[0]
-                          .city
+                          ?.city
                       }
                     </div>
                     {budgets.budgets.map((e) => {
