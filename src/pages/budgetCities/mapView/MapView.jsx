@@ -3,35 +3,67 @@ import styles from "./MapView.module.css";
 import expandIcon from "../../../assets/icons/Expand.svg";
 import arrowRight from "../../../assets/icons/Arrow_Right.svg";
 import arrowLeft from "../../../assets/icons/Arrow_Left.svg";
-import { Circle, MapContainer, TileLayer } from "react-leaflet";
+import { Circle, MapContainer, Marker, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import LoadingSpinner from "../../../Main/Loader/Loader";
 import tableIcon from "../../../assets/icons/Table_Icon.svg";
 import back from "../../../assets/icons/Arrow_Left.svg";
+import { Icon } from "leaflet";
+import moment from "moment";
+import SERVICES from "../../../services/Services";
 
-const getRadius = (budget, baseRadius) => {
-  if (budget < 1000000) {
-    return baseRadius * 5;
-  } else if (budget < 10000000) {
-    return baseRadius * 5;
-  } else if (budget < 100000000) {
-    return baseRadius * 5;
+const getRadius = (budget, baseRadius, city = false) => {
+  if (city) {
+    if (budget < 500000) {
+      return baseRadius * 5;
+    } else if (budget < 1000000) {
+      return baseRadius * 10;
+    } else if (budget < 5000000) {
+      return baseRadius * 15;
+    } else {
+      return baseRadius * 20;
+    }
   } else {
-    return baseRadius * 5;
+    if (budget < 1000000) {
+      return baseRadius * 5;
+    } else if (budget < 10000000) {
+      return baseRadius * 10;
+    } else if (budget < 100000000) {
+      return baseRadius * 15;
+    } else {
+      return baseRadius * 20;
+    }
   }
 };
 
-const getOpacity = (budget) => {
-  if (budget < 1000000) {
-    return 0.1;
-  } else if (budget < 10000000) {
-    return 0.3;
-  } else if (budget < 100000000) {
-    return 0.6;
+const getOpacity = (budget, city = false) => {
+  if (city) {
+    if (budget < 500000) {
+      return 0.1;
+    } else if (budget < 1000000) {
+      return 0.3;
+    } else if (budget < 5000000) {
+      return 0.6;
+    } else {
+      return 0.8;
+    }
   } else {
-    return 0.8;
+    if (budget < 1000000) {
+      return 0.1;
+    } else if (budget < 10000000) {
+      return 0.3;
+    } else if (budget < 100000000) {
+      return 0.6;
+    } else {
+      return 0.8;
+    }
   }
 };
+
+const customIcon = new Icon({
+  iconUrl: require("../../../assets/icons/Pin.png"),
+  iconSize: [38, 38],
+});
 
 const getWidth = (budget, maxVal) => {
   return (budget / maxVal) * 100 + "%";
@@ -42,10 +74,21 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
   const [openRightBar, setOpenRightBar] = useState(true);
   const [regionData, setRegionData] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState("");
-  const [showCities, setShowCities] = useState(false);
-  const [citiesData, setCitiesData] = useState([]);
+  const [citiesData, setCitiesData] = useState({
+    showCities: false,
+    cities: [],
+  });
   const [center, setCenter] = useState(["45.4215", "-75.6972"]);
-  const [zoom, setZoom] = useState(10);
+  const [zoom, setZoom] = useState(8);
+  const [cityID, setCityID] = useState("");
+  const [year, setYear] = useState(moment().year().toString());
+  const [filter, setfilter] = useState({
+    dept: [],
+    cat: [],
+    budgetCategory: [],
+  });
+  const [budgets, setBudgets] = useState({ showBudgets: false, budgets: [] });
+  const [loading, setLoading] = useState(false);
 
   const createRegionData = (cities) => {
     let tempData = [];
@@ -79,11 +122,9 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
       }
     });
     tempData.sort((a, b) => b.capital_budget_23 - a.capital_budget_23);
-    setZoom(12);
+    setZoom(10);
     setCenter(tempData[0].city_coordinates);
-    // console.log(tempData);
-    setCitiesData(tempData);
-    setShowCities(true);
+    setCitiesData({ ...citiesData, showCities: true, cities: tempData });
   };
 
   useEffect(() => {
@@ -91,6 +132,35 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
       createRegionData(cities);
     }
   }, [cities]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await SERVICES.getCityBudgets(
+          year,
+          "",
+          cityID,
+          filter
+        );
+        setCitiesData({ ...citiesData, showCities: false });
+        setBudgets({
+          showBudgets: true,
+          budgets: response.res.toSorted(
+            (a, b) => b.budget_amount - a.budget_amount
+          ),
+        });
+        console.log(response.res);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    };
+    if (cityID !== "") {
+      fetchData();
+    }
+  }, [cityID, year, filter]);
 
   const addComma = (num) => {
     if (num === null || num === undefined) return "";
@@ -129,24 +199,55 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
                 maxZoom={21}
                 subdomains={["mt0", "mt1", "mt2", "mt3"]}
               />
-              {showCities
-                ? citiesData.map((e) => {
+              {citiesData.showCities || budgets.showBudgets
+                ? citiesData.cities.map((e, idx) => {
                     if (e.city_coordinates) {
                       return (
-                        <Circle
-                          center={[
-                            Number(e.city_coordinates[0]),
-                            Number(e.city_coordinates[1]),
-                          ]}
-                          radius={getRadius(Number(e.capital_budget_23), 200)}
-                          pathOptions={{
-                            color: "#8361fe",
-                            fillColor: "#8361fe",
-                            fillOpacity: getOpacity(
-                              Number(e.capital_budget_23)
-                            ),
-                          }}
-                        />
+                        <>
+                          <Circle
+                            center={[
+                              Number(e.city_coordinates[0]),
+                              Number(e.city_coordinates[1]),
+                            ]}
+                            radius={getRadius(
+                              Number(e.capital_budget_23),
+                              200,
+                              true
+                            )}
+                            pathOptions={{
+                              color: "#8361fe",
+                              fillColor: "#8361fe",
+                              fillOpacity: getOpacity(
+                                Number(e.capital_budget_23),
+                                true
+                              ),
+                            }}
+                            eventHandlers={{
+                              click: () => {
+                                setCityID(e?.city_id);
+                                setCenter(e?.city_coordinates);
+                                setZoom(12);
+                                setOpenRightBar(true);
+                              },
+                            }}
+                          />
+                          <Marker
+                            eventHandlers={{
+                              click: () => {
+                                setCityID(e?.city_id);
+                                setCenter(e?.city_coordinates);
+                                setZoom(12);
+                                setOpenRightBar(true);
+                              },
+                            }}
+                            key={idx}
+                            icon={customIcon}
+                            position={[
+                              Number(e.city_coordinates[0]),
+                              Number(e.city_coordinates[1]),
+                            ]}
+                          />
+                        </>
                       );
                     } else {
                       return <></>;
@@ -172,6 +273,7 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
                             click: () => {
                               setSelectedRegion(e?.geographic_area);
                               createCitiesData(e?.geographic_area);
+                              setOpenRightBar(true);
                             },
                           }}
                         />
@@ -187,29 +289,93 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
           <div
             className={openRightBar ? styles.rightBar : styles.rightBarClose}
           >
-            <div className={styles.contents}>
-              <div
-                onClick={() => {
-                  setShowCities(false);
-                  setCitiesData([]);
-                  setSelectedRegion("");
-                  setZoom(10);
-                  setCenter(regionData[0].geographical_coordinates);
-                  setExpand(false);
-                }}
-                className={styles.backToTable}
-              >
-                <img src={tableIcon} alt="" /> Back to Table View
-              </div>
-              {showCities ? (
-                <>
+            {loading ? (
+              <LoadingSpinner />
+            ) : (
+              <div className={styles.contents}>
+                <div
+                  onClick={() => {
+                    setCitiesData({ showCities: false, cities: [] });
+                    setSelectedRegion("");
+                    setZoom(8);
+                    setCenter(regionData[0].geographical_coordinates);
+                    setExpand(false);
+                  }}
+                  className={styles.backToTable}
+                >
+                  <img src={tableIcon} alt="" /> Back to Table View
+                </div>
+                {budgets.showBudgets && (
                   <div className={styles.metricsContainer}>
                     <div
                       onClick={() => {
-                        setShowCities(false);
-                        setCitiesData([]);
-                        setSelectedRegion("");
+                        setBudgets({ showBudgets: false, budgets: [] });
+                        setCitiesData({ ...citiesData, showCities: true });
+                        setCityID("");
                         setZoom(10);
+                      }}
+                      className={styles.backToRegions}
+                    >
+                      <div className={styles.backBTN}>
+                        <img src={back} alt="" />
+                      </div>
+                      Back
+                    </div>
+                    <div>
+                      Budgets:{" "}
+                      {
+                        citiesData.cities.filter((e) => e.city_id === cityID)[0]
+                          .city
+                      }
+                    </div>
+                    {budgets.budgets.map((e) => {
+                      return (
+                        <div className={styles.metric}>
+                          <div className="d-flex justify-content-between">
+                            <div
+                              style={{ fontWeight: "400", fontSize: "12px" }}
+                            >
+                              {e?.project_name}
+                            </div>
+                            <div
+                              style={{ fontWeight: "600", fontSize: "12px" }}
+                            >
+                              {addComma(e?.budget_amount)}
+                            </div>
+                          </div>
+                          <div
+                            style={{
+                              width: "100%",
+                              height: "6px",
+                              borderRadius: "8px",
+                              backgroundColor: "#F8F8FB",
+                            }}
+                          >
+                            <div
+                              style={{
+                                height: "100%",
+                                backgroundColor: "#8361FE",
+                                width: getWidth(
+                                  e?.budget_amount,
+                                  budgets.budgets[0].budget_amount * 1.2
+                                ),
+                                borderRadius: "8px",
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+                {citiesData.showCities && (
+                  <div className={styles.metricsContainer}>
+                    <div
+                      onClick={() => {
+                        setCitiesData({ showCities: false, cities: [] });
+                        setCityID("");
+                        setSelectedRegion("");
+                        setZoom(8);
                         setCenter(regionData[0].geographical_coordinates);
                       }}
                       className={styles.backToRegions}
@@ -219,13 +385,14 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
                       </div>
                       Back
                     </div>
-                    <div>Cities</div>
-                    {citiesData.map((city) => {
+                    <div>Cities: {selectedRegion}</div>
+                    {citiesData.cities.map((city) => {
                       return (
                         <div
                           onClick={() => {
                             setCenter(city?.city_coordinates);
-                            setZoom(14);
+                            setCityID(city.city_id);
+                            setZoom(12);
                           }}
                           className={styles.metric}
                         >
@@ -255,7 +422,7 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
                                 backgroundColor: "#8361FE",
                                 width: getWidth(
                                   city?.capital_budget_23,
-                                  200000000
+                                  citiesData.cities[0].capital_budget_23 * 1.2
                                 ),
                                 borderRadius: "8px",
                               }}
@@ -265,53 +432,58 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
                       );
                     })}
                   </div>
-                </>
-              ) : (
-                <div className={styles.metricsContainer}>
-                  <div>Regions</div>
-                  {regionData.map((region) => {
-                    return (
-                      <div
-                        onClick={() => {
-                          setSelectedRegion(region?.geographic_area);
-                          createCitiesData(region?.geographic_area);
-                        }}
-                        className={styles.metric}
-                      >
-                        <div className="d-flex justify-content-between">
-                          <div style={{ fontWeight: "400", fontSize: "12px" }}>
-                            {region?.geographic_area}
-                          </div>
-                          <div style={{ fontWeight: "600", fontSize: "12px" }}>
-                            {addComma(region?.capital_budget_23)}
-                          </div>
-                        </div>
+                )}
+                {!citiesData.showCities && !budgets.showBudgets && (
+                  <div className={styles.metricsContainer}>
+                    <div>Regions</div>
+                    {regionData.map((region) => {
+                      return (
                         <div
-                          style={{
-                            width: "100%",
-                            height: "6px",
-                            borderRadius: "8px",
-                            backgroundColor: "#F8F8FB",
+                          onClick={() => {
+                            setSelectedRegion(region?.geographic_area);
+                            createCitiesData(region?.geographic_area);
                           }}
+                          className={styles.metric}
                         >
+                          <div className="d-flex justify-content-between">
+                            <div
+                              style={{ fontWeight: "400", fontSize: "12px" }}
+                            >
+                              {region?.geographic_area}
+                            </div>
+                            <div
+                              style={{ fontWeight: "600", fontSize: "12px" }}
+                            >
+                              {addComma(region?.capital_budget_23)}
+                            </div>
+                          </div>
                           <div
                             style={{
-                              height: "100%",
-                              backgroundColor: "#8361FE",
-                              width: getWidth(
-                                region?.capital_budget_23,
-                                200000000
-                              ),
+                              width: "100%",
+                              height: "6px",
                               borderRadius: "8px",
+                              backgroundColor: "#F8F8FB",
                             }}
-                          ></div>
+                          >
+                            <div
+                              style={{
+                                height: "100%",
+                                backgroundColor: "#8361FE",
+                                width: getWidth(
+                                  region?.capital_budget_23,
+                                  regionData[0].capital_budget_23 * 1.2
+                                ),
+                                borderRadius: "8px",
+                              }}
+                            ></div>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
             <div
               onClick={() => setOpenRightBar(!openRightBar)}
               className={styles.open}
