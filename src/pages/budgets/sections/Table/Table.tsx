@@ -35,7 +35,7 @@ const Table = ({ search, filter, year, city, api }: Props) => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-
+        console.log(filter);
         const response = await SERVICES.getCityBudgets(
           year,
           search,

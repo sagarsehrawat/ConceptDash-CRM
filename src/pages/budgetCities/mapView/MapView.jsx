@@ -11,6 +11,7 @@ import back from "../../../assets/icons/Arrow_Left.svg";
 import { Icon } from "leaflet";
 import moment from "moment";
 import SERVICES from "../../../services/Services";
+import Dropdown from "../../../components/form/DropDown/Dropdown";
 
 const getRadius = (budget, baseRadius, city = false) => {
   if (city) {
@@ -58,6 +59,26 @@ const getOpacity = (budget, city = false) => {
       return 0.8;
     }
   }
+};
+
+const createRegionOptions = (data) => {
+  let temp = [{ label: "All Regions", value: "" }];
+  if (data.length > 0) {
+    data.forEach((e) => {
+      temp.push({ label: e.geographic_area, value: e.geographic_area });
+    });
+  }
+  return temp;
+};
+
+const createCityOptions = (data) => {
+  let temp = [{ label: "All Cities", value: "" }];
+  if (data.length > 0) {
+    data.forEach((e) => {
+      temp.push({ label: e.city, value: e.city_id });
+    });
+  }
+  return temp;
 };
 
 const customIcon = new Icon({
@@ -112,6 +133,7 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
     tempData.sort((a, b) => b.capital_budget_23 - a.capital_budget_23);
     setCenter(tempData[0].geographical_coordinates);
     setRegionData(tempData);
+    // createRegionOptions(tempData);
   };
 
   const createCitiesData = (region) => {
@@ -125,6 +147,7 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
     setZoom(10);
     setCenter(tempData[0].city_coordinates);
     setCitiesData({ ...citiesData, showCities: true, cities: tempData });
+    createCityOptions(tempData);
   };
 
   useEffect(() => {
@@ -168,11 +191,65 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
     return `$ ${n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
   };
 
+  const handleRegionSelect = (val) => {
+    if (val !== "") {
+      createCitiesData(val);
+    } else {
+      setCitiesData({ showCities: false, cities: [] });
+      setCityID("");
+      setZoom(8);
+      setCenter(regionData[0].geographical_coordinates);
+    }
+    setOpenRightBar(true);
+    setSelectedRegion(val);
+  };
+
+  const handleCitySelect = (val, coordinate) => {
+    if (val !== "") {
+      setZoom(12);
+      if (coordinate) {
+        setCenter(coordinate);
+      } else {
+        setCenter(
+          citiesData.cities.filter((e) => e.city_id === val)[0].city_coordinates
+        );
+      }
+    } else {
+      setBudgets({ showBudgets: false, budgets: [] });
+      setCitiesData({ ...citiesData, showCities: true });
+    }
+    setOpenRightBar(true);
+    setCityID(val);
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   } else {
     return (
       <div className={expand ? styles["container-expanded"] : styles.container}>
+        {expand && (
+          <div className={styles.header}>
+            <Dropdown
+              name={"Regions"}
+              search
+              value={selectedRegion}
+              onChange={(val) => {
+                handleRegionSelect(val);
+              }}
+              options={createRegionOptions(regionData)}
+            />
+            {(citiesData.showCities || budgets.showBudgets) && (
+              <Dropdown
+                name={"Cities"}
+                value={cityID}
+                onChange={(val) => {
+                  handleCitySelect(val);
+                }}
+                options={createCityOptions(citiesData.cities)}
+              />
+            )}
+          </div>
+        )}
         {!expand && (
           <div onClick={() => setExpand(true)} className={styles.expand}>
             <img src={expandIcon} alt="" />
@@ -224,20 +301,20 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
                             }}
                             eventHandlers={{
                               click: () => {
-                                setCityID(e?.city_id);
-                                setCenter(e?.city_coordinates);
-                                setZoom(12);
-                                setOpenRightBar(true);
+                                handleCitySelect(
+                                  e?.city_id,
+                                  e?.city_coordinates
+                                );
                               },
                             }}
                           />
                           <Marker
                             eventHandlers={{
                               click: () => {
-                                setCityID(e?.city_id);
-                                setCenter(e?.city_coordinates);
-                                setZoom(12);
-                                setOpenRightBar(true);
+                                handleCitySelect(
+                                  e?.city_id,
+                                  e?.city_coordinates
+                                );
                               },
                             }}
                             key={idx}
@@ -271,9 +348,7 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
                           }}
                           eventHandlers={{
                             click: () => {
-                              setSelectedRegion(e?.geographic_area);
-                              createCitiesData(e?.geographic_area);
-                              setOpenRightBar(true);
+                              handleRegionSelect(e?.geographic_area);
                             },
                           }}
                         />
@@ -322,7 +397,6 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
                       Back
                     </div>
                     <div>
-                      Budgets:{" "}
                       {
                         citiesData.cities.filter((e) => e.city_id === cityID)[0]
                           .city
@@ -372,11 +446,7 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
                   <div className={styles.metricsContainer}>
                     <div
                       onClick={() => {
-                        setCitiesData({ showCities: false, cities: [] });
-                        setCityID("");
-                        setSelectedRegion("");
-                        setZoom(8);
-                        setCenter(regionData[0].geographical_coordinates);
+                        handleRegionSelect("");
                       }}
                       className={styles.backToRegions}
                     >
@@ -385,14 +455,15 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
                       </div>
                       Back
                     </div>
-                    <div>Cities: {selectedRegion}</div>
+                    <div>{selectedRegion}</div>
                     {citiesData.cities.map((city) => {
                       return (
                         <div
                           onClick={() => {
-                            setCenter(city?.city_coordinates);
-                            setCityID(city.city_id);
-                            setZoom(12);
+                            handleCitySelect(
+                              city.city_id,
+                              city?.city_coordinates
+                            );
                           }}
                           className={styles.metric}
                         >
@@ -440,8 +511,7 @@ const MapView = ({ expand, setExpand, cities, isLoading }) => {
                       return (
                         <div
                           onClick={() => {
-                            setSelectedRegion(region?.geographic_area);
-                            createCitiesData(region?.geographic_area);
+                            handleRegionSelect(region?.geographic_area);
                           }}
                           className={styles.metric}
                         >

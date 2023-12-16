@@ -127,3 +127,12 @@
   border-radius: 50%;
   background-color: #f4f5f7;
 }
+.header{
+  position: absolute;
+  /* border: 2px solid black; */
+  z-index: 1001;
+  margin-top: 20px;
+  margin-left: 84px;
+  display: flex;
+  gap: 12px;
+}
