@@ -3,13 +3,8 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PRIMARY_COLOR } from "../../../Constants/Constants";
-import  OrganisationCards from '../HeaderCards/AllCards'
-import CardTemplate from "../HeaderCards/CardTemplate";
-import SearchBar from "../SearchBar/SearchBar";
-import OrgTable from "../Tables/OrgTable";
 import Organisations from '../Pages/Organisations'
 import Clients from "../Pages/Clients";
 import Consultants from "../Pages/Consultants";
@@ -59,7 +54,7 @@ topContainerSubheading: {
 },
 }
   return (
-    <div style ={{margin : "8px",background: "#F8FAFB"}}>
+    <div style ={{background: "#F8FAFB"}}>
         <Box
           sx={{
             width: "100%",

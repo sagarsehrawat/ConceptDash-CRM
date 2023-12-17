@@ -2,9 +2,8 @@ import React, {useState,useEffect} from 'react'
 import editicon from '../icons/edit_black_24dp (1) 2edit_grey.svg'
 import deleteicon from '../icons/delete_black_24dp 3.svg'
 import notificon from '../icons/notifications_black_24dp (3) 1.svg'
-import moment from 'moment';
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
-import { HOST1,UPDATE_GENERAL_NOTES, UPDATE_PROJECT_NOTES,DELETE_GENERAL_NOTES, DELETE_PROJECT_NOTES} from '../../../Constants/Constants';
+import { HOST,UPDATE_GENERAL_NOTES, UPDATE_PROJECT_NOTES,DELETE_GENERAL_NOTES, DELETE_PROJECT_NOTES} from '../../../Constants/Constants';
 import axios from 'axios';
 import { Modal, Button } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -23,10 +22,17 @@ const NotesCard = (props : Props) => {
    const [date,setDate] = useState<any>(Moment.moment);
    const [showModal, setShowModal] = useState<Boolean>(false);
    const [editModal, setEditModal] = useState<String>(props.data.note);
+
+   useEffect(() => {
+    
+    if (props.data && props.data.note) {
+        setEditModal(props.data.note);
+    }
+}, [props.data]); 
    const handleDelete1 = () => {
-    axios.post(HOST1 + DELETE_PROJECT_NOTES, {
-      peopleId: props.id, // Replace with actual peopleId
-      projectId: 1, // Replace with actual projectId
+    axios.post(HOST + DELETE_PROJECT_NOTES, {
+      peopleId: props.id, 
+      projectId: 1,
       index: props.index,
     }, {
       headers: {
@@ -42,7 +48,7 @@ const NotesCard = (props : Props) => {
       });
   };
   const handleDelete = () => {
-    axios.post(HOST1 + DELETE_GENERAL_NOTES, {
+    axios.post(HOST + DELETE_GENERAL_NOTES, {
       peopleId: props.id, 
       index: props.index,
     }, {
@@ -59,7 +65,7 @@ const NotesCard = (props : Props) => {
       });
   };
    const handleDateChange = (date) => {
-      axios.post(HOST1 + UPDATE_GENERAL_NOTES, {
+      axios.post(HOST + UPDATE_GENERAL_NOTES, {
         name: props.data.name,
         date: props.data.date,
         notes: props.data.note,
@@ -82,7 +88,7 @@ const NotesCard = (props : Props) => {
     };
     const handleDateChange1 = (date) => {
       console.log(date)
-      axios.post(HOST1 + UPDATE_PROJECT_NOTES, {
+      axios.post(HOST + UPDATE_PROJECT_NOTES, {
         name: props.data.name,
         date: props.data.date,
         notes: props.data.note,
@@ -105,7 +111,7 @@ const NotesCard = (props : Props) => {
         });
     };
     const handleEditChange = () => {
-      axios.post(HOST1 + UPDATE_GENERAL_NOTES, {
+      axios.post(HOST + UPDATE_GENERAL_NOTES, {
         name: props.data.name,
         date: props.data.date,
         notes: editModal,
@@ -128,7 +134,7 @@ const NotesCard = (props : Props) => {
         });
     }
     const handleEditChange1 = () => {
-      axios.post(HOST1 + UPDATE_PROJECT_NOTES, {
+      axios.post(HOST + UPDATE_PROJECT_NOTES, {
         name: props.data.name,
         date: props.data.date,
         notes: editModal,
@@ -220,6 +226,7 @@ const NotesCard = (props : Props) => {
                <img src={deleteicon} alt="" onClick={props.value === "General" ?  handleDelete : handleDelete1} />
                {isDateChipOpen ? (
                <TFDateChip
+
                  value={date}
                  onChange={(date) => {
                  console.log(props.data);

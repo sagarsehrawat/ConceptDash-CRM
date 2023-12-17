@@ -1,11 +1,8 @@
 import React,{useState,useEffect} from 'react';
-import axios from 'axios';
 import OrganisationCards from '../HeaderCards/AllCards'
 import SearchBar from '../SearchBar/SearchBar';
 import OrgTable from '../Tables/OrgTable';
-import AddNewPeople from '../Forms/addNewPeople';
 import Pagination from '../Pagination/Pagination';
-import PeopleTable from '../Tables/PeopleTable';
 import AddNewOrganisation from '../Forms/addNewOrganisation';
 
 
@@ -19,7 +16,6 @@ type Props= {
 const AllOrganisations = (props: Props) => {
     const [api, setApi] = useState<number>(0);
     const [show, setShow] = useState<boolean>(false);
-    const [value, setValue] = useState<string>('');
     const [pages, setpages] = useState<number>(1);
     const [currPage, setcurrPage] = useState<number>(1);
     const [search, setsearch] = useState<string>('');

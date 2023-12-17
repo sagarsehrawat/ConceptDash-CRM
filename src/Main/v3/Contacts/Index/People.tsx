@@ -5,7 +5,6 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import React, { useContext, useEffect, useState } from "react";
 import { PRIMARY_COLOR } from "../../../Constants/Constants";
-import Organisations from '../Pages/Organisations'
 import Consultants from "../Pages/Consultants";
 import Partners from "../Pages/Partners";
 import Clients from "../Pages/Clients";
@@ -55,7 +54,7 @@ topContainerSubheading: {
 },
 }
   return (
-    <div style ={{margin : "8px", background: "#F8FAFB"}}>
+    <div style ={{ background: "#F8FAFB"}}>
         <Box
           sx={{
             width: "100%",
@@ -151,22 +150,22 @@ topContainerSubheading: {
             </TabPanel>
             <TabPanel value="2" style={{padding:'0px'}}>
             <div style={{ width: '100%', float: 'left', }}>
-            <Clients case="people"  setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>
+            <Clients case="People"  setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>
               </div>
             </TabPanel>
             <TabPanel value="3" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left', }}>
-             <Consultants  case="people" setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>
+             <Consultants  case="People" setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>
               </div>
             </TabPanel>
             <TabPanel value="4" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left' }}>
-              <Partners  case="people"  setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>
+              <Partners  case="People"  setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>
               </div>
             </TabPanel>
             <TabPanel value="5" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left' }}>
-              <SubConsultants case="people"  setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>
+              <SubConsultants case="People"  setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>
               </div>
             </TabPanel>
           </TabContext>

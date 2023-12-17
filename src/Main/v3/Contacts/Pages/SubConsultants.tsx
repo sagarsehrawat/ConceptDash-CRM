@@ -7,6 +7,7 @@ import { ORGANIZATION_COUNT, PEOPLE_COUNT, HOST1 } from '../../../Constants/Cons
 import PeopleTable from '../Tables/PeopleTable';
 import AddNewOrganisation from '../Forms/addNewOrganisation';
 import AddNewPerson from '../Forms/AddnewPerson';
+import Pagination from '../Pagination/Pagination';
 type Props= {
     case: String
     setnav: Function,
@@ -16,29 +17,31 @@ type Props= {
 const SubConsultants = (props: Props) => {
     const [api, setApi] = useState<number>(0);
     const [value, setValue] = useState<string>('');
-    const [count,setCount] = useState<number>(0);
-    const [apicall, setApicall] = useState<any>(ORGANIZATION_COUNT);
+    const [count,setCount] = useState<number>(0);;
     const [show, setShow] = useState<boolean>(false)
+    const [pages, setpages] = useState<number>(1);
+    const [currPage, setcurrPage] = useState<number>(1);
 
     useEffect(() => {
+        const apiUrl = props.case === "org" ? HOST1 + ORGANIZATION_COUNT : HOST1 + PEOPLE_COUNT;
         const call = async () => {
-            props.case ==="org" ? setApicall(ORGANIZATION_COUNT) : setApicall(PEOPLE_COUNT)
             await axios
-                .get(HOST1 + apicall, {
+                .get(apiUrl, {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
                     },
                 })
                 .then((res) => {
                      console.log(res);
-                     setCount(res.data.res[1].total_count)
+                     let clientData = res.data.res.filter(each => each.company_type === 'Subconsultant');
+                     if (clientData.length > 0)  setCount(clientData[0].count_per_type);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         }
         call()
-    }, [])
+    }, [props.case])
 
       return (
           <>
@@ -46,7 +49,8 @@ const SubConsultants = (props: Props) => {
               <SearchBar value={value} setValue={setValue} api={api} setApi={setApi} show={show} setShow={setShow} name="SubConsultant"/>
                {show && props.case ==="org" && <AddNewOrganisation show={show} setShow={setShow} />}
                {show && props.case !=="org" && <AddNewPerson show={show} setShow={setShow} />}
-               {props.case==="org" ?  <OrgTable case="Consultants" setnav={props.setnav} setOrganizationData={props.setOrganizationData}/> : <PeopleTable case="Consultants" setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>}
+               {props.case==="org" ?  <OrgTable case="Subconsultant"  currPage={currPage} setPages={setpages} setnav={props.setnav} setOrganizationData={props.setOrganizationData}/> : <PeopleTable case="Subconsultant"  currPage={currPage} setPages={setpages}  setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>}
+               <Pagination pages={pages} currPage={currPage} setcurrPage={setcurrPage} />
           </>
       )
 

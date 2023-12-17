@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { GET_ALL_PEOPLE, HOST1, PRIMARY_COLOR,ALL_PEOPLE_IN_ORGANIZATION,DELETE_PEOPLE} from '../../../Constants/Constants.js';
+import { GET_ALL_PEOPLE, HOST, PRIMARY_COLOR,ALL_PEOPLE_IN_ORGANIZATION,DELETE_PEOPLE} from '../../../Constants/Constants.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faEdit, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '../../../Loader/Loader.js';
@@ -247,7 +247,7 @@ padding: "12px var(--8-pad, 8px)",
       
   const handleDelete = async () => {
     try {
-      const response = await axios.post( HOST1 + DELETE_PEOPLE,
+      const response = await axios.post( HOST + DELETE_PEOPLE,
         {
             id:JSON.stringify(selectedPeople) 
        },
@@ -267,11 +267,11 @@ padding: "12px var(--8-pad, 8px)",
         const fetchData = async () => {
             try {
                  setIsLoading(true)
-                const response = await axios.get(HOST1 + ALL_PEOPLE_IN_ORGANIZATION, {
+                const response = await axios.get(HOST + ALL_PEOPLE_IN_ORGANIZATION, {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
                          companyid: props.id,
-                         search: props.search ||''
+                         search: props.search ||'ak'
                     },
                 });
                  console.log(response.data.res)
@@ -325,12 +325,6 @@ padding: "12px var(--8-pad, 8px)",
                                     Phone&nbsp;&nbsp;
                                 </div>
                             </th>
-
-                            <th scope="col" style={{ ...styles.tableHeading, width: "34px" }} className='fixed-header2'>
-                                <div style={styles.headingContent} className='hover'>
-                                    &nbsp;&nbsp;
-                                </div>
-                            </th>
                         </tr>
                     </thead>
                     <tbody style={{ background: "#FFFFFF" }}>
@@ -352,7 +346,7 @@ padding: "12px var(--8-pad, 8px)",
             }}
           />
           <div style={{ display: 'flex',width: "180px",height: "36px",padding: "12px var(--8-pad, 8px)",alignItems: "center",flexShrink: "0"}}>
-            <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}  onClick={(e) => {e.preventDefault();setContactPersonData(each);setnav(22);}}> {each.name}</div>
+            <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px",cursor:"pointer" }}  onClick={(e) => {e.preventDefault();setContactPersonData(each);setnav(22);}}> {each.name}</div>
           </div>
         </div>
       </td>
@@ -360,7 +354,6 @@ padding: "12px var(--8-pad, 8px)",
       <td  className='table-cell' style={styles.tabletext}>{each.remarks}</td>
       <td className='table-cell' style={styles.tabletext}>{each.phone}</td>
       <td className='table-cell' style={styles.tabletext}>{each.email}</td>
-       <td className='table-cell' style={styles.tabletext}><img src={dots} alt=""/></td>
       {/* Add other fields as needed */}
     </tr>
   ))}

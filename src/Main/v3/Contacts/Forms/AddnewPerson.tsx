@@ -1,10 +1,7 @@
 import React, { useEffect, useState,useRef } from "react";
-import { FormSelect, Modal } from 'react-bootstrap'
 import peopleblack from '../icons/people_black_24dp (2) 1.svg'
-import cross from "../../../../Images/cross.svg";
-import cloud from "../../../../Images/cloud_upload_black_24dp 1.svg"
 import TFButton from "../../../../components/ui/TFButton/TFButton"
-import { HOST1, ADD_PEOPLE, GET_ORGANIZATION_LIST } from "../../../Constants/Constants";
+import { HOST, ADD_PEOPLE, GET_ORGANIZATION_LIST } from "../../../Constants/Constants";
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
 import FormUtils from "../../../../utils/FormUtils.js";
 import axios from "axios";
@@ -62,7 +59,7 @@ const AddNewPerson = ({show,setShow,id,api, setApi}: Props) => {
   useEffect(() => {
     const call1 = async () => {
         try {
-            const response = await axios.get(HOST1 + GET_ORGANIZATION_LIST, {
+            const response = await axios.get(HOST + GET_ORGANIZATION_LIST, {
                 headers: {
                     auth: "Rose " + localStorage.getItem("auth"),
                 },
@@ -96,7 +93,7 @@ const handleForm = (key, value) => {
   const handleSubmit = async () => {
     try {
         console.log(formData)
-      const response = await axios.post( HOST1 + ADD_PEOPLE,{
+      const response = await axios.post( HOST + ADD_PEOPLE,{
         name: formData.name,
         jobTitle: formData.jobTitle,
         companyType: formData.companyType,
@@ -180,7 +177,7 @@ const handleForm = (key, value) => {
                           name="companyType"
                           value={formData.companyType}
                           onChange={handleForm} 
-                          options={["Client", "Consultant","Partner"]}
+                          options={["Client", "Consultant","Partner","Subconsultant"]}
                         /> </div>
           <div style={{display:"flex"}}>
              <div style={{...styles.text,display: "flex",width:"160px",alignItems: "center",gap:" var(--8-pad, 8px)"}}>Organisation</div>

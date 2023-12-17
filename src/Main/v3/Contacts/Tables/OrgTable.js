@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { GET_ALL_ORGANIZATION, HOST1, PRIMARY_COLOR, UPDATE_ORGANIZATION,DELETE_ORGANIZATION} from '../../../Constants/Constants.js';
+import { GET_ALL_ORGANIZATION, HOST, PRIMARY_COLOR, UPDATE_ORGANIZATION,DELETE_ORGANIZATION} from '../../../Constants/Constants.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp, faChevronDown, faChevronLeft, faChevronRight, faEdit, faPlus, faSort, faTrash, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '../../../Loader/Loader.js';
@@ -20,7 +20,6 @@ const OrgTable = (props) => {
     const [rowData, setrowData] = useState([]);
     const [selectedOrganizations, setselectedOrganizations]= useState([]);
     const [data, setData] = useState([]);
-    const [totalPages, setTotalPages] = useState(0);
     const [showDelete,setShowDelete] = useState(false)
     const [edit,setEdit] = useState(false);
     const [editform,setEditForm] = useState(null);
@@ -36,6 +35,7 @@ const OrgTable = (props) => {
             background: "#F7F7F9",
             textAlign: "center",
             borderBottom: "0px",
+            width:"100%"
 
         },
         tableHeading: {
@@ -238,7 +238,7 @@ const OrgTable = (props) => {
 
       const handleDelete = async () => {
         try {
-          const response = await axios.post( HOST1 + DELETE_ORGANIZATION,
+          const response = await axios.post( HOST + DELETE_ORGANIZATION,
             {
               companyId: JSON.stringify(selectedOrganizations), 
             },
@@ -262,21 +262,24 @@ const OrgTable = (props) => {
         const fetchData = async () => {
             try {
                 setIsLoading(true)
-                const response = await axios.get(HOST1 + GET_ALL_ORGANIZATION, {
+                const offset = (props.currPage - 1) * 5;
+                  console.log("here")
+                  console.log(offset)
+                const response = await axios.get(HOST + GET_ALL_ORGANIZATION, {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
                         search:props.search ||'',
                         filter: JSON.stringify({
                             companyType:  props.case ? [props.case]: []
                         }),
-                        offset: 0,
-                        limit: 10
+                        offset: offset,
+                        limit: 5
                     },
                 });
                  console.log(response.data.res)
                 if (response.data.success) {
                     setData(response.data.res);
-                    setTotalPages(response.data.totalPages);
+                    props.setPages(response.data.totalPages);
                     setIsLoading(false);
                 } else {
                     console.error(response.data.error);
@@ -287,7 +290,7 @@ const OrgTable = (props) => {
         };
 
         fetchData();
-    }, [props.search, props.api]);
+    }, [props.search, props.api,props.currPage]);
     return (
         <> 
          {isLoading ?
@@ -295,7 +298,7 @@ const OrgTable = (props) => {
             <LoadingSpinner />
             </div>
           :
-             <>
+             <> 
             <div style={{  borderTop: '1px solid var(--New-Outline, #EBEDF8)', borderBottom: '1px solid var(--New-Outline, #EBEDF8)', background: '#F7F7F9'}} ref={tableRef}>
                 <table style={styles.table} >
                     <thead style={styles.tableHeader}>
@@ -335,11 +338,7 @@ const OrgTable = (props) => {
                                     &nbsp;&nbsp;
                                 </div>
                             </th> */}
-                            <th scope="col" style={{ ...styles.tableHeading, width: "64px" }} className='fixed-header2'>
-                                <div style={styles.headingContent} className='hover'>
-                                    &nbsp;&nbsp;
-                                </div>
-                            </th>
+                            
                         </tr>
                     </thead>
                     <tbody style={{ background: "#FFFFFF" }}>
@@ -361,7 +360,7 @@ const OrgTable = (props) => {
             }}
           />
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden" }} onClick={(e) => {e.preventDefault();props.setOrganizationData(org);props.setnav(23);}}>{org.company_name}</div>
+            <div style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", cursor:"pointer" }} onClick={(e) => {e.preventDefault();props.setOrganizationData(org);props.setnav(23);}}>{org.company_name}</div>
           </div>
         </div>
       </td>
@@ -380,7 +379,6 @@ const OrgTable = (props) => {
          </div>
          </div>
          </td> */}
-      <td className='table-cell' ><img src={dots} style={{cursor:"pointer"}} alt="" onClick={(e) => {e.preventDefault();props.setOrganizationData(org);props.setnav(23);}}/></td>
       {/* Add other fields as needed */}
     </tr>
   ))}

@@ -1,10 +1,7 @@
 import React, { useEffect, useState,useRef } from "react";
-import { Modal } from 'react-bootstrap'
 import peopleblack from '../icons/people_black_24dp (2) 1.svg'
-import cross from "../../../../Images/cross.svg";
-import cloud from "../../../../Images/cloud_upload_black_24dp 1.svg"
 import TFButton from "../../../../components/ui/TFButton/TFButton"
-import { HOST1,UPDATE_ORGANIZATION } from "../../../Constants/Constants";
+import { HOST,UPDATE_ORGANIZATION } from "../../../Constants/Constants";
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
 import FormUtils from "../../../../utils/FormUtils.js";
 import axios from "axios";
@@ -56,19 +53,9 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
     }
   }, []);
 
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFormData({
-        ...formData,
-        cv: e.target.files[0],
-      });
-    }
-  }; 
-  
   const handleSubmit = async () => {
     try {
-      const response = await axios.post( HOST1 + UPDATE_ORGANIZATION,{
+      const response = await axios.post( HOST + UPDATE_ORGANIZATION,{
         companyId: formData.company_id,
         companyName: formData.companyName,
         companyType: formData.label,
@@ -147,7 +134,7 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
                           value={formData.label}
                           name="label"
                           onChange={handleForm}
-                          options={["Client", "Consultant","Partner"]}
+                          options={["Client", "Consultant","Partner","Subconsultant"]}
                         />
          </div>
           <div style={{display:"flex"}}>

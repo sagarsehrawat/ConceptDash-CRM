@@ -1,10 +1,7 @@
 import React, { useEffect, useState,useRef } from "react";
-import { Modal } from 'react-bootstrap'
 import peopleblack from '../icons/people_black_24dp (2) 1.svg'
-import cross from "../../../../Images/cross.svg";
-import cloud from "../../../../Images/cloud_upload_black_24dp 1.svg"
 import TFButton from "../../../../components/ui/TFButton/TFButton"
-import { HOST1,ADD_ORGANIZATION } from "../../../Constants/Constants";
+import { HOST,ADD_ORGANIZATION } from "../../../Constants/Constants";
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
 import FormUtils from "../../../../utils/FormUtils.js";
 import axios from "axios";
@@ -58,7 +55,7 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
   
   const handleSubmit = async () => {
     try {
-      const response = await axios.post( HOST1 + ADD_ORGANIZATION,{
+      const response = await axios.post( HOST + ADD_ORGANIZATION,{
         companyName: formData.companyName,
         companyType: formData.label,
         contactType: formData.contact,
@@ -136,8 +133,7 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
                           name="label"
                           value={formData.label}
                           onChange={handleForm} 
-                          options={["Client", "Consultant","Partner"]}
-                        />
+                          options={["Client", "Consultant","Partner","Subconsultant"]}                        />
          </div>
           <div style={{display:"flex"}}>
              <div style={{...styles.text,display: "flex",width:"160px",alignItems: "center",gap:" var(--8-pad, 8px)"}}>Website</div>

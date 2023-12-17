@@ -7,9 +7,13 @@ import React,{useState,useEffect} from 'react'
  import PlusIcon from '../../../../Images/addPlus.svg'
 import CompanyTable from '../Tables/CompanyTable.js';
 import AddNewPerson from '../Forms/AddnewPerson';
+import backarrow from '../icons/arrow_back_black_24dp 1.svg'
 
  type Props={
      organizationData: Object
+     setnav:Function
+     setContactPersonData : Function
+
 }
 const CompanyPage = (props:Props) => {
     const [search,setSearch]= useState<String>("")
@@ -78,12 +82,38 @@ lineHeight: "24px",
       alignItems: "flex-start",
       gap: "var(--8-pad, 8px)",
       borderRight: "1px solid var(--New-Outline, #EBEDF8)",
-     }
+     },
+     backbtn:{
+      width: "85px",
+      height: "37px",
+      flexShrink: "0",
+      borderRadius: "10px",
+      border: "1px solid #E8EAEF",
+      background: "#FFF",  
+      position:"fixed",
+      top:"8px",
+      left:"246px",
+      display:"flex",
+      alignItems:"center",
+      justifyContent:"center",
+      cursor:"pointer",
+      gap:"5px"
+    },
+    back:{
+      color: "#37325A",
+fontFamily: "Roboto",
+fontSize: "14px",
+fontStyle: "normal",
+fontWeight: "500",
+lineHeight: "20px"
     }
+  }
+
   return (
+    <>   <div style={styles.backbtn} onClick={()=>props.setnav(20)}><img src={backarrow}/> <div style={styles.back}>Back</div></div>
     <div style={{display: "inline-flex",paddingTop: "20px",flexDirection: "column",justifyContent: "flex-end",alignItems: "center",gap: "32px", background: "#F8FAFB"}}> 
        <div style={{width: "-webkit-fill-available",height: "166px"}}>
-         <div style={{display: "inline-flex",padding: "16px 20px",justifyContent: "space-between",alignItems: "flex-start", borderRadius: "16px 16px 0px 0px",border: "1px solid var(--New-Outline, #EBEDF8)", width:"-webkit-fill-available", background: "#FFF"}}>
+         <div style={{display: "inline-flex",padding: "16px 20px",justifyContent: "space-between",alignItems: "flex-start", borderRadius: "16px 16px 0px 0px",border: "1px solid var(--New-Outline, #EBEDF8)",  marginLeft:"15px", marginRight:"15px", width:"-webkit-fill-available", background: "#FFF"}}>
               <div style={{display: "inline-flex",alignItems: "center",gap: "var(--12-pad, 12px)"}}>
                     <img src={group} alt=""/>
                     <div style={{display: "flex",flexDirection: "column",justifyContent: "center",alignItems: "flex-start"}}>
@@ -124,7 +154,7 @@ lineHeight: "24px",
          </div>
          </div>
          </div>
-         <div style={{width: "1212px", height:"108px", marginTop:"32px",paddingTop:"12px",paddingLeft:"32px"}}>
+         <div style={{height:"108px", marginTop:"32px",paddingTop:"12px",paddingLeft:"32px"}}>
             <div style={{ color: "var(--Black-text, #3D424F)", fontFamily: "Roboto", fontSize: "18px", fontStyle: "normal", fontWeight: "500", lineHeight: "28px",}}>
               People In {props.organizationData.company_name}
             </div>
@@ -138,10 +168,11 @@ lineHeight: "24px",
 
        </div>
          </div>
-          { showModal && <AddNewPerson  show={showModal} setShow={setShowModal} id={props.organizationData.company_id}/>}
-         <CompanyTable id={props.organizationData.company_id} search={search}/>
+          { showModal && <AddNewPerson  show={showModal} setShow={setShowModal} id={props.organizationData.company_id} />}
+         <CompanyTable id={props.organizationData.company_id} search={search} setnav={props.setnav} setContactPersonData={props.setContactPersonData }/>
     </div>
     </div>
+    </>
   )
 }
 

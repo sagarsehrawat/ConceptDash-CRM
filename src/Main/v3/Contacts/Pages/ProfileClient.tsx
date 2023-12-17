@@ -6,19 +6,16 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import  {PERSON_DETAILS, PRIMARY_COLOR,HOST1,GENERAL_NOTES,PROJECT_NOTES, ADD_GENERAL_NOTES,ADD_PROJECT_NOTES} from "../../../Constants/Constants";
+import  {PERSON_DETAILS, PRIMARY_COLOR,HOST,GENERAL_NOTES,PROJECT_NOTES, ADD_GENERAL_NOTES,ADD_PROJECT_NOTES} from "../../../Constants/Constants";
 import TFSearchBar from '../../../../components/ui/TFSearchBar/TFSearchBar'
 import NotesCard from './NotesCard'
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
 import axios from 'axios';
 import LoadingSpinner from '../../../../Main/Loader/Loader';
-import bold from '../icons/format_bold_black_24dp 2.svg'
-import bulletlist from '../icons/format_list_bulleted_black_24dp (1) 2.svg'
-import numberlist from '../icons/format_list_numbered_black_24dp 2.svg'
-import emoticons from '../icons/sentiment_satisfied_alt_black_24dp 3.svg'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
+import nochat from '../icons/Frame 1000005109emptychat.svg'
+import moment from 'moment';
 
 type Props={
   contactPersonData: any,
@@ -33,8 +30,8 @@ const    ProfileClient = (props:Props) => {
     const[isLoading, setisLoading] = useState(false);
     const [generalText, setGeneralText] = useState('');
     const [generalChat, setGeneralChat] = useState(null);
-    const [reminders, setReminders] = useState<Array>([]);
-    const [projectChat, setProjectChat] = useState(null);
+    const [reminders, setReminders] = useState([]);
+    const [projectChat, setProjectChat] = useState([]);
     const [showGeneralBox, setShowGeneralBox] = useState<Boolean>(true);
     const [showProjectBox, setShowProjectBox] = useState<Boolean>(true);
 
@@ -217,13 +214,26 @@ const handleChange = (event: Event, newValue : any) => {
         borderRadius: "var(--12-pad, 12px)",
         border: "1px solid var(--New-Outline, #EBEDF8)",
         background: "#F8FAFC",
+       },
+       emptychat:{
+        display: "flex",
+        padding: "var(--12-pad, 12px) 16px",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        gap: "5px",
+        flex:" 1 0 0",
+        alignSelf: "stretch",
+        borderRadius: "var(--12-pad, 12px)",
+        border: "1px solid var(--New-Outline, #EBEDF8)",
+        background: "#F8F7FF",
        }
         }
         useEffect(() => {
           const call = async () => {
             setisLoading(true);
               await axios
-                  .get(HOST1 + PERSON_DETAILS, {
+                  .get(HOST + PERSON_DETAILS, {
                       headers: {
                           auth: "Rose " + localStorage.getItem("auth"),
                           id: JSON.stringify(props.id) 
@@ -244,7 +254,7 @@ const handleChange = (event: Event, newValue : any) => {
       useEffect(() => {
         const call1 = async () => {
             await axios
-                .get(HOST1 + GENERAL_NOTES, {
+                .get(HOST + GENERAL_NOTES, {
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
                         peopleid: JSON.stringify(props.id)
@@ -252,10 +262,6 @@ const handleChange = (event: Event, newValue : any) => {
                 })
                 .then((res) => {
                      res.data.res[0] ? setGeneralChat(res.data.res[0].general) : setGeneralChat(null);
-                     const rem = generalChat?.filter((each) => each.reminder == 'true');
-                      setReminders(rem);
-                      console.log("reminders")
-                      console.log(reminders);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -266,7 +272,7 @@ const handleChange = (event: Event, newValue : any) => {
     useEffect(() => {
       const call1 = async () => {
           await axios
-              .get(HOST1 + PROJECT_NOTES, {
+              .get(HOST + PROJECT_NOTES, {
                   headers: {
                       auth: "Rose " + localStorage.getItem("auth"),
                       peopleid: JSON.stringify(props.id),
@@ -276,10 +282,10 @@ const handleChange = (event: Event, newValue : any) => {
               .then((res) => {
                    res.data.res[0] ? setProjectChat( res.data.res[0].chat ) : setProjectChat(null);
                    console.log(projectChat);
-                   const rem = projectChat?.filter( each => each.reminder == 'true');
-                   setReminders( [...reminders,...rem]);
-                   console.log("reminders")
-                   console.log([...reminders,...rem]);
+                  //  const rem = projectChat?.filter( each => each.reminder == 'true');
+                  //  setReminders( [...reminders,...rem]);
+                  //  console.log("reminders")
+                  //  console.log([...reminders,...rem]);
                    
               })
               .catch((err) => {
@@ -288,14 +294,24 @@ const handleChange = (event: Event, newValue : any) => {
       }
       call1()
   }, [props.id,personData,props.api]) 
+  const updateReminders = () => {
+    const generalReminders = generalChat?.filter((each) => each.reminder === 'true') || [];
+    const projectReminders = projectChat?.filter((each) => each.reminder === 'true') || [];
+    setReminders([...generalReminders, ...projectReminders]);
+}
+
+useEffect(() => {
+    // After setting generalChat and projectChat, call updateReminders
+    updateReminders();
+}, [generalChat, projectChat,props.api]); // Add other dependencies if needed
 
   const handleSave = async () => {
     try {
       
-      const response = await axios.post(HOST1 + ADD_GENERAL_NOTES,
+      const response = await axios.post(HOST + ADD_GENERAL_NOTES,
         {
-          name: 'Akarsh Tripathi',
-          date: JSON.stringify(new Date().getDate()),
+          name: localStorage.getItem("employeeName"),
+          date: moment().format('YYYY-MM-DD'),
           notes: generalText,
           reminder: 'false',
           peopleId: JSON.stringify(props.id), 
@@ -321,10 +337,10 @@ const handleChange = (event: Event, newValue : any) => {
   const handleSave2 = async () => {
     try {
       
-      const response = await axios.post(HOST1 + ADD_PROJECT_NOTES,
+      const response = await axios.post(HOST + ADD_PROJECT_NOTES,
         {
-          name: 'Akarsh Tripathi',
-          date: JSON.stringify(new Date().getDate()),
+          name: localStorage.getItem("employeeName"),
+          date:moment().format('YYYY-MM-DD'),
           notes: projectText,
           reminder: 'false',
           peopleId: props.id, 
@@ -454,25 +470,33 @@ const handleChange = (event: Event, newValue : any) => {
                   console.log(data);
                   setProjectText(data);
                 }} /> </div>
-       <div style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "space-between",alignItems: "center",alignSelf: "stretch",
+       <div style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "flex-end",alignItems: "center",alignSelf: "stretch",
         width:"437px",borderRadius: "0px 0px var(--12-pad, 12px) var(--12-pad, 12px)",border: "1px solid var(--New-Outline, #EBEDF8)",background: "#FFF"}}>
-        <div style={{display: "flex",alignItems: "flex-start",gap: "var(--12-pad, 12px)"}}>
-        <img src={bold} alt='bold' style={{ cursor: 'pointer' }} />
-          <img src={bulletlist} alt='bulletlist'style={{ cursor: 'pointer' }} />
-        <img src={numberlist} alt='numberedist' style={{ cursor: 'pointer' }} />
-      
-        </div>
+       
         <div style={{display: "flex",alignItems: "flex-start",gap: "var(--12-pad, 12px)"}}>
         <button style={styles.resume} onClick={()=>setShowProjectBox(true)}>Cancel</button>
-        <TFButton label="Save" handleClick={handleSave2}/>
+        <TFButton label="Save" handleClick={handleSave2}  disabled={!projectText || projectText.trim() === ''} />
         </div>
         </div>
         </div> )}
        </div>
           <div style={styles.name}>Notes Taken</div>
-            { projectChat ? projectChat.map((each,index)=> <NotesCard id={props?.id} data={each} index={index} setApi={props.setApi} api={props.api} value="Project"/>)
-            :
-             <>No chats</>}
+          {
+    projectChat && projectChat.length > 0 ?
+    projectChat.map((each, index) => 
+        <NotesCard 
+            id={props?.id} 
+            data={each} 
+            index={index} 
+            setApi={props.setApi} 
+            api={props.api} 
+            value="Project"
+        />
+    ) :
+    <div style={styles.emptychat}>
+        <img src={nochat} alt="No Chat Available"/>
+    </div>
+}
     </div>
             </TabPanel>
             <TabPanel value="2" style={{padding:'0px'}}>
@@ -492,42 +516,53 @@ const handleChange = (event: Event, newValue : any) => {
                   console.log(data);
                   setGeneralText(data);
                 }} />
-       <div style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "space-between",alignItems: "center",alignSelf: "stretch",
+       <div style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "flex-end",alignItems: "center",alignSelf: "stretch",
         borderRadius: "0px 0px var(--12-pad, 12px) var(--12-pad, 12px)",border: "1px solid var(--New-Outline, #EBEDF8)",background: "#FFF"}}>
-        <div style={{display: "flex",alignItems: "flex-start",gap: "var(--12-pad, 12px)"}}>
-        <img src={bold} alt='bold' style={{ cursor: 'pointer' }} />
-          <img src={bulletlist} alt='bulletlist' style={{ cursor: 'pointer' }} />
-        <img src={numberlist} alt='numberedist'/>
-      
-        </div>
+        
         <div style={{display: "flex",alignItems: "flex-start",gap: "var(--12-pad, 12px)"}}>
         <button style={styles.resume} onClick={()=>setShowGeneralBox(true)}>Cancel</button>
-        <TFButton label="Save" handleClick={handleSave}/>
+        <TFButton label="Save" handleClick={handleSave}  disabled={!generalText || generalText.trim() === ''} />
         </div>
         </div>
         </div> )}
             <div style={styles.name}>Notes Taken</div>
-            { generalChat && generalChat.map((each,index) => <NotesCard id={props?.id} setApi={props.setApi} api={props.api} data={each} index={index} value="General"/>)}
+            {
+    generalChat && generalChat.length > 0 ?
+        generalChat.map((each, index) => 
+            <NotesCard 
+                id={props?.id} 
+                setApi={props.setApi} 
+                api={props.api} 
+                data={each} 
+                index={index} 
+                value="General"
+            />
+        ) :
+        <div style={styles.emptychat}>
+            <img src={nochat} alt="No General Chat Available"/>
+        </div>
+}
               </div>
             </TabPanel>
           </TabContext>
           </Box></div>
           <div style={styles.reminders}>
               <div style={styles.remindersHeading}>Reminders</div>
-              <div style={styles.reminderContents}>
-                  <div style={styles.reminderBox}>
-                   <div style={{...styles.headingdata, padding:"0px 16px"}}>Follow up on Primary discusssion</div>
-                   <div style={styles.reminderDate}>30 oct</div>
-                   </div>
-                   <div style={styles.reminderBox}>
-                   <div style={{...styles.headingdata, padding:"0px 16px"}}>Follow up on Primary discusssion</div>
-                   <div style={styles.reminderDate}>30 oct</div>
-                   </div>
-                   <div style={styles.reminderBox}>
-                   <div style={{...styles.headingdata, padding:"0px 16px"}}>Follow up on Primary discusssion</div>
-                   <div style={styles.reminderDate}>30 oct</div>
-                   </div>
-                   </div> 
+              {reminders && reminders.length > 0  ? (<div style={styles.reminderContents}>
+              {
+    reminders?.map((each) => {
+        return (
+            <div style={styles.reminderBox}>
+                <div style={{...styles.headingdata, padding:"0px 16px"}} dangerouslySetInnerHTML={{ __html: each.note }} />
+                <div style={styles.reminderDate}>
+                    {each.name}
+                </div>
+            </div>
+        );
+    })
+}
+
+                   </div> ) : (<div style={styles.remindersHeading}>No reminders</div>)}
               </div>
           </div>
           </div>

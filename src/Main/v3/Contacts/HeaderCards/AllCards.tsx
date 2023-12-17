@@ -52,22 +52,26 @@ const AllCards = (props: Props) => {
       const [count,setCount] = useState<any>([])
       const [client, setClient] = useState<number>(0);
       const [consultants, setConsultants] = useState<number>(0);
+      const [Subconsultant,setsubconsultant] = useState<number>(0)
       const [partners, setParnters] = useState<number>(0);
-      const [apiCall, setApiCall] = useState<any>(ORGANIZATION_COUNT);
+  
       useEffect(() => {
-          const call = async () => {
-            props.name==="People"? setApiCall(PEOPLE_COUNT) : setApiCall(ORGANIZATION_COUNT);
+        const apiUrl = props.name === 'People' ? HOST1 + PEOPLE_COUNT : HOST1 + ORGANIZATION_COUNT;
+        const call = async () => {
               await axios
-                  .get(HOST1 + apiCall, {
+                  .get(apiUrl, {
                       headers: {
                           auth: "Rose " + localStorage.getItem("auth"),
                       },
                   })
                   .then((res) => {
                        console.log(res.data);
-                       setClient(res.data.res[2].total_count)
-                       setParnters(res.data.res[0].total_count)
-                       setConsultants(res.data.res[1].total_count)
+                       res.data.res.map(each=>{
+                        if(each.company_type==='Consultant')  setConsultants(each.count_per_type)
+                        else if(each.company_type==='Client')  setClient(each.count_per_type)
+                        else if(each.company_type==='Partner')  setParnters(each.count_per_type)
+                        else if(each.company_type==='Subconsultant')  setsubconsultant(each.count_per_type)
+                       })
                   })
                   .catch((err) => {
                       console.log(err);
@@ -76,13 +80,13 @@ const AllCards = (props: Props) => {
           call()
       }, [])
   return (
-    <>
+    <>            {console.log(props)}   
                   <div className='d-flex flex-row' style={styles.cardMain}>
                <div style={styles.card} >
                <div style={{width:"48px", height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}}><img src={peopleicon} style={{width:"24px",height:"24px", margin:"12px"}} alt="" /></div>
                              <div style={{display:"flex",flexDirection:"column", alignItems:"flex-start"}}>
                              <p style={styles.topContainerHeading}>All {props.name}</p>
-                            <p style={{ ...styles.topContainerSubheading}}>{Number(client)+Number(partners)+Number(consultants)}</p>
+                            <p style={{ ...styles.topContainerSubheading}}>{Number(client)+Number(partners)+Number(consultants)+Number(Subconsultant)}</p>
                              </div>
                         </div>
                         <div style={styles.card} onClick={()=> props.setValue1("2")}>
