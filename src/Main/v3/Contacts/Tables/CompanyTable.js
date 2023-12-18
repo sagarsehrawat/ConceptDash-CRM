@@ -13,7 +13,6 @@ import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteM
 
 const CompanyTable = (props) => {
     const { isCollapsed, search, setContactPersonData,setnav } = props
-    const [apiCall, setCall] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [value, setValue] = useState("");
     const tableRef = useRef(null);
@@ -271,7 +270,7 @@ padding: "12px var(--8-pad, 8px)",
                     headers: {
                         auth: "Rose " + localStorage.getItem("auth"),
                          companyid: props.id,
-                         search: props.search ||'ak'
+                         search: props.search
                     },
                 });
                  console.log(response.data.res)
@@ -288,7 +287,7 @@ padding: "12px var(--8-pad, 8px)",
         };
 
         fetchData();
-    }, [props.search]);
+    }, [props.search,props.id, props.api]);
     return (
         <> 
          {isLoading ?
@@ -407,7 +406,7 @@ padding: "12px var(--8-pad, 8px)",
 </div>
  </div>
        {edit && <UpdateAddPerson show={edit} setShow={setEdit} data ={editform}/>}
-       {<TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete} label='People'/>}
+       {<TFDeleteModal show={showDelete} onHide={()=>{setShowDelete(false); props.setApi(props.api+1)}} onDelete={handleDelete} label='People'/>}
 
         </>
     )

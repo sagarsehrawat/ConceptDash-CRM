@@ -1,7 +1,7 @@
 
 import React, { useState,useEffect } from 'react'
 import peopleicon from '../icons/people_black_24dp (2) 1.svg'
-import {HOST1, ORGANIZATION_COUNT,PEOPLE_COUNT } from '../../../Constants/Constants';
+import {HOST, ORGANIZATION_COUNT,PEOPLE_COUNT } from '../../../Constants/Constants';
 import axios from 'axios'
 type Props = {
     name : string,
@@ -49,14 +49,13 @@ const AllCards = (props: Props) => {
         letterSpacing: '0.103px',
       },
       }
-      const [count,setCount] = useState<any>([])
       const [client, setClient] = useState<number>(0);
       const [consultants, setConsultants] = useState<number>(0);
       const [Subconsultant,setsubconsultant] = useState<number>(0)
       const [partners, setParnters] = useState<number>(0);
   
       useEffect(() => {
-        const apiUrl = props.name === 'People' ? HOST1 + PEOPLE_COUNT : HOST1 + ORGANIZATION_COUNT;
+        const apiUrl = props.name === 'People' ? HOST + PEOPLE_COUNT : HOST + ORGANIZATION_COUNT;
         const call = async () => {
               await axios
                   .get(apiUrl, {
@@ -65,8 +64,7 @@ const AllCards = (props: Props) => {
                       },
                   })
                   .then((res) => {
-                       console.log(res.data);
-                       res.data.res.map(each=>{
+                       res.data.res.map((each: { company_type: string; count_per_type: React.SetStateAction<number>; })=>{
                         if(each.company_type==='Consultant')  setConsultants(each.count_per_type)
                         else if(each.company_type==='Client')  setClient(each.count_per_type)
                         else if(each.company_type==='Partner')  setParnters(each.count_per_type)

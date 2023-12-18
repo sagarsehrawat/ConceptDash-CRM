@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState} from 'react'
  import group from '../icons/Ellipse 1823.svg'
  import eye from '../icons/visibility_black_24dp (1) 1.svg'
  import TFChip from '../../../../components/form/TFChip/TFChip.js';
@@ -9,15 +9,29 @@ import CompanyTable from '../Tables/CompanyTable.js';
 import AddNewPerson from '../Forms/AddnewPerson';
 import backarrow from '../icons/arrow_back_black_24dp 1.svg'
 
+type Organization = {
+  company_name: string;
+  company_type: string;
+  contact_type: string;
+  address: string;
+  website: string;
+  email: string;
+  fax: string;
+  company_id: number | null
+  // ... other properties with their respective types
+};
+
  type Props={
-     organizationData: Object
+     organizationData: Organization
      setnav:Function
      setContactPersonData : Function
-
 }
+
+
 const CompanyPage = (props:Props) => {
     const [search,setSearch]= useState<String>("")
     const [showModal,setShowModal] =useState<boolean>(false);
+    const [api,setapi] = useState<number>(0);
     const styles={
         lightText:{
             color: "#8B9FAF",
@@ -47,7 +61,7 @@ lineHeight: "24px",
     width:"-webkit-fill-available",
     marginLeft:"15px",
     marginRight:"15px"
-      },
+      } as React.CSSProperties ,
       addressBox:{
         display: "flex",
         width: "210px",
@@ -56,7 +70,7 @@ lineHeight: "24px",
         alignItems: "flex-start",
         gap: "var(--8-pad, 8px)",
         borderRight: "1px solid var(--New-Outline, #EBEDF8)",
-      },
+      }  as React.CSSProperties,
      websiteBox:{
       display: "flex",
       width: "218px",
@@ -65,7 +79,7 @@ lineHeight: "24px",
       alignItems: "flex-start",
       gap: "var(--8-pad, 8px)",
       borderRight: "1px solid var(--New-Outline, #EBEDF8)",
-     },
+     }  as React.CSSProperties,
      detailsText:{
       color: "var(--Black-text, #3D424F)",
       fontFamily: "Roboto",
@@ -82,7 +96,7 @@ lineHeight: "24px",
       alignItems: "flex-start",
       gap: "var(--8-pad, 8px)",
       borderRight: "1px solid var(--New-Outline, #EBEDF8)",
-     },
+     }  as React.CSSProperties,
      backbtn:{
       width: "85px",
       height: "37px",
@@ -90,8 +104,8 @@ lineHeight: "24px",
       borderRadius: "10px",
       border: "1px solid #E8EAEF",
       background: "#FFF",  
-      position:"fixed",
-      top:"8px",
+      position: "fixed" as const, 
+       top:"8px",
       left:"246px",
       display:"flex",
       alignItems:"center",
@@ -110,7 +124,7 @@ lineHeight: "20px"
   }
 
   return (
-    <>   <div style={styles.backbtn} onClick={()=>props.setnav(20)}><img src={backarrow}/> <div style={styles.back}>Back</div></div>
+    <>   <div style={styles.backbtn} onClick={()=>props.setnav(20)}><img src={backarrow} alt=''/> <div style={styles.back}>Back</div></div>
     <div style={{display: "inline-flex",paddingTop: "20px",flexDirection: "column",justifyContent: "flex-end",alignItems: "center",gap: "32px", background: "#F8FAFB"}}> 
        <div style={{width: "-webkit-fill-available",height: "166px"}}>
          <div style={{display: "inline-flex",padding: "16px 20px",justifyContent: "space-between",alignItems: "flex-start", borderRadius: "16px 16px 0px 0px",border: "1px solid var(--New-Outline, #EBEDF8)",  marginLeft:"15px", marginRight:"15px", width:"-webkit-fill-available", background: "#FFF"}}>
@@ -168,8 +182,8 @@ lineHeight: "20px"
 
        </div>
          </div>
-          { showModal && <AddNewPerson  show={showModal} setShow={setShowModal} id={props.organizationData.company_id} />}
-         <CompanyTable id={props.organizationData.company_id} search={search} setnav={props.setnav} setContactPersonData={props.setContactPersonData }/>
+          { showModal && <AddNewPerson  show={showModal} setShow={setShowModal} id={props.organizationData.company_id} api={api} setApi={setapi} />}
+         <CompanyTable id={props.organizationData.company_id} api={api} search={search} setnav={props.setnav} setContactPersonData={props.setContactPersonData }/>
     </div>
     </div>
     </>

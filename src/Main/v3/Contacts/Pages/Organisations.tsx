@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState} from 'react';
 import OrganisationCards from '../HeaderCards/AllCards'
 import SearchBar from '../SearchBar/SearchBar';
 import OrgTable from '../Tables/OrgTable';
@@ -10,7 +10,6 @@ type Props= {
     name: string
     setValue1: Function,
     setnav: Function
-    setData: Function
     setOrganizationData: Function
 }
 const AllOrganisations = (props: Props) => {

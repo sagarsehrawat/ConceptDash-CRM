@@ -1,14 +1,26 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useState,useRef } from "react";
 import peopleblack from '../icons/people_black_24dp (2) 1.svg'
 import TFButton from "../../../../components/ui/TFButton/TFButton"
 import { HOST,UPDATE_ORGANIZATION } from "../../../Constants/Constants";
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
 import FormUtils from "../../../../utils/FormUtils.js";
 import axios from "axios";
+type Dataprop={
+  company_id: number;
+  company_name: string;
+  address: string;
+  company_type: string;
+  contact_type: string;
+  email: string;
+  website: string;
+  fax:string;
+  altphone: string;
+}
+
 type Props={
     show: boolean,
     setShow: Function
-    data:Object,
+    data:Dataprop,
     api:number
     setApi: Function
 } 
@@ -36,22 +48,14 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
     cv: '',
   });
   const formUtils = FormUtils(setFormData);
-    const handleForm = (key, value) => {
-      console.log(key, value);
+  const handleForm = (key: string|number, value: string|number) => {
+    console.log(key, value);
               formUtils.typeInputForm(key,value)
     }
   
-  const tableRef = useRef(null);
+
 
   const inputRef = useRef(null);
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      const len = inputRef.current.placeholder.length;
-      inputRef.current.setSelectionRange(len, len);
-    }
-  }, []);
 
   const handleSubmit = async () => {
     try {
@@ -103,12 +107,12 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
       <div style={{display: "inline-flex", padding: "54px 48px",flexDirection: "column", alignItems: "flex-start", gap: "20px", background:"#fff", height:"900px"}}>
         <div style={{
                     display: 'flex',
-                    flexDirection: 'coloumn',
+                    flexDirection: 'column',
                     alignItems: 'flex-start',
                     gap: '20px',       
         }}>
               <div style={{display: "flex",alignItems: "flex-start", gap:"20px"}}> 
-                  <img src={peopleblack}/>
+                  <img src={peopleblack} alt=""/>
                   <div className='heading-2'>Update Organization</div>
               </div>
         </div>
@@ -208,7 +212,7 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
              onClick={()=>setShow(false)}>
              Cancel
             </button>
-            <TFButton label='Update People' handleClick={handleSubmit} />
+            <TFButton label='Update Organization' handleClick={handleSubmit} />
            </div>
            </div>
            </div>

@@ -16,7 +16,7 @@ type Props ={
 }
 const ContactPerson = (props: Props) => {
   const [value,setValue] =useState<String>("");
-  const[api,setApi] = useState<Number>(0);
+  const[api,setApi] = useState<number>(0);
   const [organizationData,setOrganisationData] = useState<any>({});
   const [allPeopleData, setAllPeopleData] = useState<any>(null);
   const [isloading,setIsLoading] = useState<boolean>(false);
@@ -72,21 +72,21 @@ const ContactPerson = (props: Props) => {
             borderRadius: '16px',
             border: '1px solid var(--New-Outline, #EBEDF8)',
             margin: '16px 20px'
-        },
+        }  as React.CSSProperties,
         searchCard1:{
           display: "flex",
   flexDirection: "column",
   alignItems: "center",
   gap: "var(--8-pad, 8px)",
   alignSelf: "stretch",
-        },
+        }  as React.CSSProperties,
         peopleCard:{
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
           gap: "var(--12-pad, 12px)",
           alignSelf: "stretch",
-        },
+        }  as React.CSSProperties,
         backbtn:{
           width: "85px",
           height: "37px",
@@ -94,7 +94,7 @@ const ContactPerson = (props: Props) => {
           borderRadius: "10px",
           border: "1px solid #E8EAEF",
           background: "#FFF",  
-          position:"fixed",
+          position: "fixed" as const, 
           top:"8px",
           left:"246px",
           display:"flex",
@@ -146,7 +146,7 @@ lineHeight: "20px", /* 142.857% */
                 },
             })
             .then((res) => {
-                 const filteredData = res.data.res.filter(item => item.name.toLowerCase().startsWith(value.toLowerCase()));
+                 const filteredData = res.data.res.filter((item: { name: string }) => item.name.toLowerCase().startsWith(value.toLowerCase()));
                  filteredData !== null ? setAllPeopleData(filteredData) : setAllPeopleData(res.data.res);
                  console.log(allPeopleData);
             })
@@ -192,7 +192,7 @@ lineHeight: "20px", /* 142.857% */
         />
         </div>
         <div style={{display: "flex",flexDirection: "column",alignItems: "center",gap: "var(--8-pad, 8px)",alignSelf: "stretch"}}>
-           { allPeopleData && allPeopleData.map(each=>(
+           { allPeopleData && allPeopleData.map((each: { name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; id: React.SetStateAction<Number> })=>(
               <div style={{display: "flex",justifyContent: "space-between",alignItems: "center",alignSelf: "stretch"}}>
                 <div style={{color: "var(--Black-text, #3D424F)",fontFamily: "Roboto",fontSize: "14px",fontStyle: "normal",fontWeight: "400",lineHeight: "20px"}}>{each.name}</div>
                 <img src={arrow} alt="" onClick={(e)=>{e.preventDefault();setPersonId(each.id); setApi(api+1)}} />

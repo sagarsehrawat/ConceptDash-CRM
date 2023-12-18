@@ -9,8 +9,16 @@ import { Modal, Button } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Moment from 'moment';
+type Note = {
+  note: string;
+  name: string;
+  date: string; // You might want to use a Date type if the date is stored as a string
+  reminder: boolean;
+  reminderDate: string; // Again, you might want to use a Date type
+};
+
 type Props={
-   data: object
+   data: Note
    index: number
    value :String
    api:number
@@ -19,9 +27,8 @@ type Props={
 }
 const NotesCard = (props : Props) => {
    const [isDateChipOpen, setDateChipOpen] = useState<Boolean>(false);
-   const [date,setDate] = useState<any>(Moment.moment);
-   const [showModal, setShowModal] = useState<Boolean>(false);
-   const [editModal, setEditModal] = useState<String>(props.data.note);
+   const [showModal, setShowModal] = useState<boolean>(false);
+   const [editModal, setEditModal] = useState<string>(props.data.note);
 
    useEffect(() => {
     
@@ -64,7 +71,7 @@ const NotesCard = (props : Props) => {
         console.error('Error updating API:', error);
       });
   };
-   const handleDateChange = (date) => {
+   const handleDateChange = () => {
       axios.post(HOST + UPDATE_GENERAL_NOTES, {
         name: props.data.name,
         date: props.data.date,
@@ -72,7 +79,7 @@ const NotesCard = (props : Props) => {
         peopleId: props.id,
         index: props.index,
         reminder: true,
-        reminderDate: JSON.stringify(date),
+        reminderDate: props.data.date,
       }, {
         headers: {
           auth: "Rose " + localStorage.getItem("auth")
@@ -86,8 +93,7 @@ const NotesCard = (props : Props) => {
           console.error('Error updating API:', error);
         });
     };
-    const handleDateChange1 = (date) => {
-      console.log(date)
+    const handleDateChange1 = () => {
       axios.post(HOST + UPDATE_PROJECT_NOTES, {
         name: props.data.name,
         date: props.data.date,
@@ -96,7 +102,7 @@ const NotesCard = (props : Props) => {
         projectId: 1,
         index: props.index,
         reminder: true,
-        reminderDate: JSON.stringify(date),
+        reminderDate: props.data.date,
       }, {
         headers: {
           auth: "Rose " + localStorage.getItem("auth")
@@ -177,7 +183,7 @@ const NotesCard = (props : Props) => {
             borderRadius: 'var(--12-pad, 12px)',
   border: '1px solid var(--New-Outline, #EBEDF8)',
   background: '#FFF',
-        },
+        }  as React.CSSProperties,
         content:{
             color: 'var(--Black-text, #3D424F)',
             fontFamily: 'Roboto',
@@ -226,12 +232,10 @@ const NotesCard = (props : Props) => {
                <img src={deleteicon} alt="" onClick={props.value === "General" ?  handleDelete : handleDelete1} />
                {isDateChipOpen ? (
                <TFDateChip
-
-                 value={date}
                  onChange={(date) => {
                  console.log(props.data);
                  console.log(date);
-                 props.value === "General" ?  handleDateChange(date) : handleDateChange1(date);
+                 props.value === "General" ?  handleDateChange() : handleDateChange1();
                 setDateChipOpen(!isDateChipOpen) ;
                  }}
                />
