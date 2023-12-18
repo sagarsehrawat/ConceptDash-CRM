@@ -64,6 +64,12 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
       borderRadius: "6px",
       marginRight: "12px"
     },
+    get filterButton() {
+      return this._filterButton;
+    },
+    set filterButton(value) {
+      this._filterButton = value;
+    },
     filterButton3: {
       padding: "4px 12px",
       gap: "10px",
@@ -250,13 +256,13 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
               </div>
             </div>
 
-            <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
-              <TFButton
-                label='Filter'
-                style={styles.filterButton3}
-                handleClick={() => { setprevFilter(filter); setApi(api + 1); setShow(false); }}
-              />
-            </div>
+              <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
+                <TFButton
+                  label='Filter'
+                  style={styles.filterButton3}
+                  handleClick={(e) => { setprevFilter(filter); setApi(api + 1); setShow(false); }}
+                />
+              </div>
           </div>
         </Modal>
       </div>
