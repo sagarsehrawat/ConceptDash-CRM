@@ -11,11 +11,11 @@ import Utils from '../../../../utils/Utils'
 type Props={
     show: boolean,
     setShow: Function
-    id : Number
+    id : number | null
     api : number
     setApi: Function
 } 
-const AddNewPerson = ({show,setShow,id,api, setApi}: Props) => {
+const AddNewPerson = ({setShow,api, setApi}: Props) => {
   const styles = {
     text: {
       color: "var(--Dark-grey, #70757A)",
@@ -46,15 +46,6 @@ const AddNewPerson = ({show,setShow,id,api, setApi}: Props) => {
   
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      const len = inputRef.current.placeholder.length;
-      inputRef.current.setSelectionRange(len, len);
-    }
-  }, []);
-
-
   const [organization,setOrganization] = useState<any>()
   useEffect(() => {
     const call1 = async () => {
@@ -67,7 +58,6 @@ const AddNewPerson = ({show,setShow,id,api, setApi}: Props) => {
             if (response.data.success) {
                 console.log(response.data.res);
                 setOrganization(Utils.convertToTypeaheadOptions(response.data.res, 'company_name', 'company_id'));
-                console.log(organization);
                
             } else {
                 console.error(response.data.error);
@@ -79,7 +69,7 @@ const AddNewPerson = ({show,setShow,id,api, setApi}: Props) => {
 
     call1();
 }, []);
-const handleForm = (key, value) => {
+const handleForm = (key: string|number, value: string|number) => {
   console.log(key, value);
    switch (key) {
        case "companyName":
@@ -116,17 +106,18 @@ const handleForm = (key, value) => {
 
         setFormData({
           name: '',
-    jobTitle: '',
-    companyType: '',
-    companyName: '',
-    contactType: '',
-    email: '',
-    phone: '',
-    altphone: '',
-    cv: '', // Will store the file object
-    address: '',
-    cityId: '',
-    remarks: '',
+          jobTitle: '',
+          companyType: 'Client',
+          companyName: '',
+          companyNameId: null,
+          contactType: 'Primary',
+          email: '',
+          phone: '',
+          altphone: '',
+          cv: '', // Will store the file object
+          address: '',
+          cityId: '',
+          remarks: '',
         });
         setShow(false)
         setApi(api+1);
@@ -145,12 +136,12 @@ const handleForm = (key, value) => {
       <div style={{display: "inline-flex", padding: "54px 48px",flexDirection: "column", alignItems: "flex-start", gap: "20px", background:"#fff", height:"900px"}}>
         <div style={{
                     display: 'flex',
-                    flexDirection: 'coloumn',
+                    flexDirection: 'column',
                     alignItems: 'flex-start',
                     gap: '20px',       
         }}>
               <div style={{display: "flex",alignItems: "flex-start", gap:"20px"}}> 
-                  <img src={peopleblack}/>
+                  <img src={peopleblack} alt=""/>
                   <div className='heading-2'>Add new People</div>
               </div>
         </div>

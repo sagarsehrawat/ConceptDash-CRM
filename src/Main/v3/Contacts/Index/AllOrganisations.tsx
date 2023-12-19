@@ -3,7 +3,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import { PRIMARY_COLOR } from "../../../Constants/Constants";
 import Organisations from '../Pages/Organisations'
 import Clients from "../Pages/Clients";
@@ -17,8 +17,8 @@ type Props ={
 const AllOrganisations = (props: Props) => {
   
 const [value1, setValue1] = useState("1");
-const handleChange = (event: Event, newValue : any) => {
-  setValue1(newValue);
+const handleChange =(event: React.SyntheticEvent, value: any)=> {
+  setValue1(value);
 };
 const styles = {
   topContainer: {
@@ -151,22 +151,22 @@ topContainerSubheading: {
             </TabPanel>
             <TabPanel value="2" style={{padding:'0px'}}>
             <div style={{ width: '100%', float: 'left', }}>
-            <Clients case="org"  setnav={props.setnav}  setOrganizationData={props.setOrganizationData}/>
+            <Clients case="org" setnav={props.setnav} setOrganizationData={props.setOrganizationData} setContactPersonData={null}/>
               </div>
             </TabPanel>
             <TabPanel value="3" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left', }}>
-             <Consultants case="org"  setnav={props.setnav}  setOrganizationData={props.setOrganizationData}/>
+             <Consultants case="org" setnav={props.setnav} setOrganizationData={props.setOrganizationData} setContactPersonData={null}/>
               </div>
             </TabPanel>
             <TabPanel value="4" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left' }}>
-              <Partners case="org"  setnav={props.setnav}  setOrganizationData={props.setOrganizationData}/>
+              <Partners case="org" setnav={props.setnav} setOrganizationData={props.setOrganizationData} setContactPersonData={null}/>
               </div>
             </TabPanel>
             <TabPanel value="5" style={{padding:'0px'}}>
               <div style={{ width: '100%', float: 'left' }}>
-              <SubConsultants case="org"  setnav={props.setnav}  setOrganizationData={props.setOrganizationData}/>
+              <SubConsultants case="org" setnav={props.setnav} setOrganizationData={props.setOrganizationData} setContactPersonData={null}/>
               </div>
             </TabPanel>
           </TabContext>

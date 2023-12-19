@@ -7,7 +7,7 @@ import PeopleTable from '../Tables/PeopleTable';
 
 
 type Props= {
-    name: String
+    name: string
     setValue1: Function,
     setContactPersonData: Function
     setnav: Function
@@ -24,7 +24,7 @@ const People = (props: Props) => {
           <>
                <OrganisationCards name={props.name} count={0} setValue1={props.setValue1}/>
                <SearchBar search={value} setSearch={setValue} api={api} setApi={setApi} name={props.name} show={show} setShow={setShow}  filter={filter} setFilter={setfilter}/>
-               {show && <AddNewPerson  api={api} setApi={setApi} show={show} setShow={setShow} />}
+               {show && <AddNewPerson  api={api} setApi={setApi} show={show} setShow={setShow} id={null} />}
                <PeopleTable api={api} setApi={setApi} currPage={currPage} setPages={setpages} search={value} setContactPersonData={props.setContactPersonData} setnav={props.setnav}/>
                <Pagination pages={pages} currPage={currPage} setcurrPage={setcurrPage} />
           </>

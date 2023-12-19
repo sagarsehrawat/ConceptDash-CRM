@@ -3,7 +3,7 @@ import CardTemplate from '../HeaderCards/CardTemplate';
 import SearchBar from '../SearchBar/SearchBar';
 import OrgTable from '../Tables/OrgTable';
 import axios from 'axios';
-import { ORGANIZATION_COUNT, PEOPLE_COUNT, HOST1 } from '../../../Constants/Constants';
+import { ORGANIZATION_COUNT, PEOPLE_COUNT, HOST } from '../../../Constants/Constants';
 import PeopleTable from '../Tables/PeopleTable';
 import AddNewOrganisation from '../Forms/addNewOrganisation';
 import AddNewPerson from '../Forms/AddnewPerson';
@@ -11,8 +11,8 @@ import Pagination from '../Pagination/Pagination';
 type Props= {
     case: String
     setnav: Function,
-    setOrganizationData: Function
-    setContactPersonData: Function
+    setOrganizationData: Function | null
+    setContactPersonData: Function | null
 }
 const SubConsultants = (props: Props) => {
     const [api, setApi] = useState<number>(0);
@@ -23,7 +23,7 @@ const SubConsultants = (props: Props) => {
     const [currPage, setcurrPage] = useState<number>(1);
 
     useEffect(() => {
-        const apiUrl = props.case === "org" ? HOST1 + ORGANIZATION_COUNT : HOST1 + PEOPLE_COUNT;
+        const apiUrl = props.case === "org" ? HOST + ORGANIZATION_COUNT : HOST + PEOPLE_COUNT;
         const call = async () => {
             await axios
                 .get(apiUrl, {
@@ -33,7 +33,7 @@ const SubConsultants = (props: Props) => {
                 })
                 .then((res) => {
                      console.log(res);
-                     let clientData = res.data.res.filter(each => each.company_type === 'Subconsultant');
+                     let clientData = res.data.res.filter((each: { company_type: string; }) => each.company_type === 'Subconsultant');
                      if (clientData.length > 0)  setCount(clientData[0].count_per_type);
                 })
                 .catch((err) => {
@@ -46,10 +46,10 @@ const SubConsultants = (props: Props) => {
       return (
           <>
               <CardTemplate name="Sub Consultants" count={count}/>
-              <SearchBar value={value} setValue={setValue} api={api} setApi={setApi} show={show} setShow={setShow} name="SubConsultant"/>
-               {show && props.case ==="org" && <AddNewOrganisation show={show} setShow={setShow} />}
-               {show && props.case !=="org" && <AddNewPerson show={show} setShow={setShow} />}
-               {props.case==="org" ?  <OrgTable case="Subconsultant"  currPage={currPage} setPages={setpages} setnav={props.setnav} setOrganizationData={props.setOrganizationData}/> : <PeopleTable case="Subconsultant"  currPage={currPage} setPages={setpages}  setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>}
+              <SearchBar search={value} setSearch={setValue} api={api} setApi={setApi} show={show} setShow={setShow} name="Consultant" filter={{ companyType: [] }}setFilter={() => {}} />
+               {show && props.case ==="org" && <AddNewOrganisation show={show} setShow={setShow} api={api} setApi={setApi} />}
+               {show && props.case !=="org" && <AddNewPerson show={show} setShow={setShow} id={null} api={api} setApi={setApi} />}
+               {props.case==="org" ?  <OrgTable case="Subconsultant"  currPage={currPage} setPages={setpages} setnav={props.setnav} setOrganizationData={props.setOrganizationData}  search={value} /> : <PeopleTable case="Subconsultant"  search={value}  currPage={currPage} setPages={setpages}  setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>}
                <Pagination pages={pages} currPage={currPage} setcurrPage={setcurrPage} />
           </>
       )

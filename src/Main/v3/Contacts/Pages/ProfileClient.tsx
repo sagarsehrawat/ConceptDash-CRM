@@ -17,6 +17,16 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import nochat from '../icons/Frame 1000005109emptychat.svg'
 import moment from 'moment';
 
+type PersonData = {
+  name: string;
+  contact_type: string;
+  job_title: string;
+  company_type: string;
+  email: string;
+  phone: string;
+  // Add other properties as needed
+};
+
 type Props={
   contactPersonData: any,
   id: Number
@@ -26,10 +36,18 @@ type Props={
 const    ProfileClient = (props:Props) => {
    const [value1, setValue1] = useState("1");
     const [value, setValue] = useState("");
-    const [personData, setPersonData] = useState(null);
-    const[isLoading, setisLoading] = useState(false);
+    const [personData, setPersonData] = useState<PersonData>({
+      name: '',
+      contact_type: '',
+      job_title: '',
+      company_type: '',
+      email: '',
+      phone: '',
+      // Add other properties as needed with their initial values
+    });
+        const[isLoading, setisLoading] = useState(false);
     const [generalText, setGeneralText] = useState('');
-    const [generalChat, setGeneralChat] = useState(null);
+    const [generalChat, setGeneralChat] = useState([]);
     const [reminders, setReminders] = useState([]);
     const [projectChat, setProjectChat] = useState([]);
     const [showGeneralBox, setShowGeneralBox] = useState<Boolean>(true);
@@ -38,7 +56,7 @@ const    ProfileClient = (props:Props) => {
     const [projectText, setProjectText] =useState('');
 
 
-const handleChange = (event: Event, newValue : any) => {
+const handleChange = (event: React.SyntheticEvent, newValue: any) => {
   setValue1(newValue);
 };
 
@@ -144,7 +162,7 @@ const handleChange = (event: Event, newValue : any) => {
                 background: '#FFF',      
                 marginRight:"20px",
                 marginTop:"24px",       
-          },
+          } as React.CSSProperties,
           reminders:{
             display: "flex",
             flexDirection: "column",
@@ -158,7 +176,7 @@ const handleChange = (event: Event, newValue : any) => {
             marginTop: "24px",
             marginRight:"20px",
             height:"fit-content"
-          },
+          } as React.CSSProperties,
           remindersHeading:{
             display: "flex",
             padding: "var(--8-pad, 8px) 16px",
@@ -178,7 +196,7 @@ const handleChange = (event: Event, newValue : any) => {
            flexDirection: "column",
           alignItems: "flex-start",
           alignSelf: "stretch"
-          },
+          }as React.CSSProperties,
           reminderBox:{
             display: "flex",
           width: "275px",
@@ -188,7 +206,7 @@ const handleChange = (event: Event, newValue : any) => {
   alignItems: "flex-start",
   gap: "4px",
   borderBottom :"1px solid var(--New-Outline, #EBEDF8)",
-          },
+          } as React.CSSProperties,
           subcontent1:{
             display: 'flex',
             alignItems: 'center',
@@ -214,7 +232,7 @@ const handleChange = (event: Event, newValue : any) => {
         borderRadius: "var(--12-pad, 12px)",
         border: "1px solid var(--New-Outline, #EBEDF8)",
         background: "#F8FAFC",
-       },
+       } as React.CSSProperties,
        emptychat:{
         display: "flex",
         padding: "var(--12-pad, 12px) 16px",
@@ -227,7 +245,7 @@ const handleChange = (event: Event, newValue : any) => {
         borderRadius: "var(--12-pad, 12px)",
         border: "1px solid var(--New-Outline, #EBEDF8)",
         background: "#F8F7FF",
-       }
+       } as React.CSSProperties,
         }
         useEffect(() => {
           const call = async () => {
@@ -261,7 +279,7 @@ const handleChange = (event: Event, newValue : any) => {
                     },
                 })
                 .then((res) => {
-                     res.data.res[0] ? setGeneralChat(res.data.res[0].general) : setGeneralChat(null);
+                     res.data.res[0] ? setGeneralChat(res.data.res[0].general) : setGeneralChat([]);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -280,7 +298,7 @@ const handleChange = (event: Event, newValue : any) => {
                   },
               })
               .then((res) => {
-                   res.data.res[0] ? setProjectChat( res.data.res[0].chat ) : setProjectChat(null);
+                   res.data.res[0] ? setProjectChat( res.data.res[0].chat ) : setProjectChat([]);
                    console.log(projectChat);
                   //  const rem = projectChat?.filter( each => each.reminder == 'true');
                   //  setReminders( [...reminders,...rem]);
@@ -295,8 +313,8 @@ const handleChange = (event: Event, newValue : any) => {
       call1()
   }, [props.id,personData,props.api]) 
   const updateReminders = () => {
-    const generalReminders = generalChat?.filter((each) => each.reminder === 'true') || [];
-    const projectReminders = projectChat?.filter((each) => each.reminder === 'true') || [];
+    const generalReminders = (generalChat.length > 0 && generalChat?.filter((each: { reminder: string; }) => each.reminder === 'true')) || [];
+    const projectReminders = (projectChat.length > 0 && projectChat?.filter((each: { reminder: string; })  => each.reminder === 'true')) || [];
     setReminders([...generalReminders, ...projectReminders]);
 }
 
@@ -376,7 +394,7 @@ useEffect(() => {
             </div>
             <div style={{display:"flex", gap:"12px"}}>  
              <button style={styles.resume}>Resume</button>
-            <TFButton label="Schedule Meet" type="submit"/></div>
+            <TFButton label="Schedule Meet" /></div>
           </div>
           <div style={styles.details}>
             <div style={{ display: "flex", width: "120px", padding: "0px var(--8-pad, 8px)", flexDirection: "column", alignItems: "flex-start", gap: "var(--8-pad, 8px)" }}>
@@ -550,7 +568,7 @@ useEffect(() => {
               <div style={styles.remindersHeading}>Reminders</div>
               {reminders && reminders.length > 0  ? (<div style={styles.reminderContents}>
               {
-    reminders?.map((each) => {
+reminders?.map((each: { note: string; name: string }) => {
         return (
             <div style={styles.reminderBox}>
                 <div style={{...styles.headingdata, padding:"0px 16px"}} dangerouslySetInnerHTML={{ __html: each.note }} />

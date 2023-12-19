@@ -35,23 +35,13 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
   });
   const formUtils = FormUtils(setFormData);
 
-  const handleForm = (key, value) => {
+  const handleForm =  (key: string|number, value: string|number) => {
    
     console.log(key, value);
             formUtils.typeInputForm(key,value)
   }
 
   const inputRef = useRef(null);
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      const len = inputRef.current.placeholder.length;
-      inputRef.current.setSelectionRange(len, len);
-    }
-  }, []);
-
-
   
   const handleSubmit = async () => {
     try {
@@ -61,7 +51,7 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
         contactType: formData.contact,
         email: formData.email,
         website:formData.website,
-        fax: formData.phone,
+        fax: '',
          cv: formData.cv,
          address: formData.address,
          cityId: 1,
@@ -101,7 +91,7 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
       <div style={{display: "inline-flex", padding: "54px 48px",flexDirection: "column", alignItems: "flex-start", gap: "20px", background:"#fff", height:"900px"}}>
         <div style={{
                     display: 'flex',
-                    flexDirection: 'coloumn',
+                    flexDirection: 'column',
                     alignItems: 'flex-start',
                     gap: '20px',       
         }}>
@@ -164,41 +154,6 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
           </div>
           </div>  
         </div>
-        {/* <div style={{display: "flex",width: "624px",flexDirection: "column",alignItems: "center"}}>
-          <div style={{display: "flex",padding:" 6px var(--8-pad, 8px)",justifyContent:"center",alignItems: "center",gap:"var(--8-pad, 8px)"}}>
-              <div style={{color: "#000",textAlign:"center",fontFamily: "Roboto",fontSize: "22px",fontStyle: "normal",fontWeight: "700",lineHeight: "32px"}}>Upload CV</div>
-              </div>
-              <div style={{color: "var(--Dark-grey, #70757A)",textAlign: "center",fontFamily: "Roboto",fontSize: "14px",fontStyle: "normal",fontWeight: "400",lineHeight: "20px"}}>
-              Upload resume/CV of the person  
-              </div>
-        </div> */}
-        {/* <div style={{display: "flex",alignItems: "flex-start",gap: "20px"}}>
-           <div style={{display: "inline-flex",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--8-pad, 8px)"}}>
-            <div style={{...styles.text,fontSize:"16px",lineHeight:"24px"}}>CV / Resume</div>
-           </div>
-           <div style={{display: "flex",width: "456px",padding:" var(--32-pad, 32px)",flexDirection:"column",alignItems: "flex-start",gap: "var(--32-pad, 32px)",borderRadius: "16px",border:"1px solid var(--New-Outline, #EBEDF8)",background: "#FFF"}}>
-            <div style={{display: "flex",flexDirection: "column",alignItems: "flex-start",gap: "4px",alignSelf: "stretch"}}>
-                <div style={{color: "#081621",fontFamily: "Roboto",fontSize: "16px",fontStyle: "normal",fontWeight: "600",lineHeight: "24px"}}>Upload CV</div>
-                <div>
-                     <span style={{color: "var(--Dark-grey, var(--New-grey, #70757A))",fontFamily: "Roboto",fontSize: "14px",fontStyle: "normal",fontWeight: "500",lineHeight: "20px"}}>Click here to upload file</span >
-                      <span style={{color: "var(--Black-text, var(--New-grey, #3D424F))",fontFamily: "Roboto",fontSize:"14px",fontStyle: "italic",fontWeight: "500",lineHeight: "20px"}}>(less than 2mb)</span>
-                </div>
-            </div>
-            <div style={{display: "flex",padding: "24px 0px",flexDirection: "column",alignItems: "center",gap: "var(--8-pad, 8px)",alignSelf: "stretch"}}>
-               <div style={{display: "flex",flexDirection: "column",alignItems: "center",gap: "var(--8-pad, 8px)"}}>
-                  <img src={cloud} alt=""/>
-                  <div style={{color: "#081621",fontFamily:"Inter",fontSize:"16px",fontStyle: "normal",fontWeight: "500",lineHeight:"22px"}}>
-                    Drag and Drop to upload file</div>
-                  <div style={{color: "var(--New-grey, #728492)",textAlign: "center",fontFamily: "Inter",fontSize: "14px",fontStyle: "italic",fontWeight: "500",lineHeight: "22px"}}>Or</div>
-                  <div style={{display: "flex",padding: "6px 20px",alignItems: "center",gap: "8px",borderRadius: "6px",background: "var(--Black-text, #3D424F)"}}>
-                      <div style={{color: "#FBFBFB",fontFamily: "Roboto",fontSize: "16px",fontStyle: "normal",fontWeight: "500",lineHeight: "24px"}}>Browse File
-                      <input type="file" accept=".pdf, .doc, .docx" style={{ display: 'inline-block',position:"absolute",opacity: 0, cursor: 'pointer' }} />
-                      </div>
-                  </div>
-               </div>
-            </div>
-           </div>
-        </div> */}
         </div>
         <div className='project-modal-footer w-100'>
         <div style={{display: "flex",gap: "20px",width:"624px",padding:" 16px 20px",justifyContent: "flex-end",alignItems: "flex-start",background: "#FFF",boxShadow: "0px -2px 2px 0px rgba(235, 233, 241, 0.45)"}}>
@@ -206,7 +161,7 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
              onClick={()=>setShow(false)}>
              Cancel
             </button>
-            <TFButton label='Add People' handleClick={handleSubmit} />
+            <TFButton label='Add Organization' handleClick={handleSubmit} />
            </div>
            </div>
            </div>

@@ -11,17 +11,14 @@ import Pagination from '../Pagination/Pagination';
 type Props= {
     case : String
     setnav: Function,
-    setOrganizationData: Function,
-    setContactPersonData: Function,
+    setOrganizationData: Function | null,
+    setContactPersonData: Function | null,
 }
 const Clients = (props: Props) => {
     const [api, setApi] = useState<number>(0);
     const [value, setValue] = useState<string>('');
     const [count, setCount] =useState<number>(0);
-    const [apicall, setApicall] = useState<any>(ORGANIZATION_COUNT);
     const [show, setShow] = useState<boolean>(false);
-    const [search, setSearch] = useState<String>('')
-
     const [pages, setpages] = useState<number>(1);
     const [currPage, setcurrPage] = useState<number>(1);
 
@@ -35,8 +32,7 @@ const Clients = (props: Props) => {
                     },
                 })
                 .then((res) => {
-                     console.log(res);
-                     let clientData = res.data.res.filter(each => each.company_type === 'Client');
+                     let clientData = res.data.res.filter((each: { company_type: string; }) => each.company_type === 'Client');
                      if (clientData.length > 0)  setCount(clientData[0].count_per_type);
                     })
                 .catch((err) => {
@@ -44,15 +40,15 @@ const Clients = (props: Props) => {
                 });
         }
         call()
-    }, [])
+    }, [props.case])
 
       return (
           <>
               <CardTemplate name="Clients" count={count}/>
-               <SearchBar setSearch={setSearch} search={search} value={value} setValue={setValue} api={api} setApi={setApi} show={show} setShow={setShow} name="Client"/>
+              <SearchBar search={value} setSearch={setValue} api={api} setApi={setApi} show={show} setShow={setShow} name="Clients" filter={{ companyType: [] }}setFilter={() => {}} />
                {show && props.case ==="org" && <AddNewOrganisation api={api} setApi={setApi} show={show} setShow={setShow} />}
-               {show && props.case !=="org" && <AddNewPerson api={api} setApi={setApi} show={show} setShow={setShow} />}
-               {props.case==="org" ?  <OrgTable api={api} setApi={setApi}  currPage={currPage} setPages={setpages} search={search} case="Client" setnav={props.setnav} setOrganizationData={props.setOrganizationData}/> : <PeopleTable  api={api}  setApi={setApi} currPage={currPage} setPages={setpages}  search={search} case="Client" setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>}
+               {show && props.case !=="org" && <AddNewPerson api={api} setApi={setApi} show={show} setShow={setShow} id={null} />}
+               {props.case==="org" ?  <OrgTable api={api} setApi={setApi}  currPage={currPage} setPages={setpages} search={value} case="Client" setnav={props.setnav} setOrganizationData={props.setOrganizationData}/> : <PeopleTable  api={api}  setApi={setApi} currPage={currPage} setPages={setpages}  search={value} case="Client" setnav={props.setnav} setContactPersonData={props.setContactPersonData}/>}
                <Pagination pages={pages} currPage={currPage} setcurrPage={setcurrPage} />
 
           </>

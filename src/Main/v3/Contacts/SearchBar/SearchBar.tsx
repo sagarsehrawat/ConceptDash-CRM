@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import TFButton from '../../../../components/ui/TFButton/TFButton'
 import { useSelector } from 'react-redux'
-import { Button, Modal } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faX } from '@fortawesome/free-solid-svg-icons';
-import { PRIMARY_COLOR } from '../../../Constants/Constants';
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice'
 import PlusIcon from '../../../../Images/addPlus.svg'
 import TFSearchBar from '../../../../components/ui/TFSearchBar/TFSearchBar';
-import filterIcon from '../../../../Images/Filter.svg'
+
 
 type Props ={
     search: string,
   setSearch: Function,
-  api: String,
+  api: number,
   setApi: Function
   show: boolean,
   setShow:Function,

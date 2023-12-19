@@ -8,15 +8,50 @@ import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead.js"
 import Utils from '../../../../utils/Utils'
 import FormUtils from "../../../../utils/FormUtils.js";
 import axios from "axios";
+  interface Dataprop {
+    id: number;
+  name: string;
+  job_title: string;
+  company_type: string;
+  company_name: string;
+  company_id: number;
+  contact_type: string;
+  email: string;
+  phone: string;
+  alternate_phone: string;
+  address: string;
+  cityId: number;
+  remarks: string;
+  }
+  
 type Props={
     show: boolean,
     setShow: Function,
-    data:Object
+    data:Dataprop,
     api:number,
     setApi: Function
     setselectedPeople : Function
 } 
-const UpdatePerson = ({show,setShow,data,api,setApi, setselectedPeople}: Props) => {
+  interface Data {
+    id: number;
+    name: string;
+    jobTitle: string;
+    companyType: string;
+    companyName: string;
+    companyId: number;
+    contactType: string;
+    email: string;
+    phone: string;
+    altphone: string;
+    cv: string
+    address: string;
+    cityId: number;
+    remarks: string;
+  }
+
+
+
+const UpdatePerson = ({setShow,data,api,setApi, setselectedPeople}: Props) => {
   const styles = {
     text: {
       color: "var(--Dark-grey, #70757A)",
@@ -27,7 +62,7 @@ const UpdatePerson = ({show,setShow,data,api,setApi, setselectedPeople}: Props) 
       lineHeight: "20px", 
     },
   };
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Data>({
     id:data.id,
     name: data.name,
     jobTitle: data.job_title,
@@ -48,13 +83,6 @@ const UpdatePerson = ({show,setShow,data,api,setApi, setselectedPeople}: Props) 
   
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      const len = inputRef.current.placeholder.length;
-      inputRef.current.setSelectionRange(len, len);
-    }
-  }, []);
 
 
   const [organization,setOrganization] = useState<any>()
@@ -67,9 +95,7 @@ const UpdatePerson = ({show,setShow,data,api,setApi, setselectedPeople}: Props) 
                 },
             });
             if (response.data.success) {
-                console.log(response.data.res);
                 setOrganization(Utils.convertToTypeaheadOptions(response.data.res, 'company_name', 'company_id'));
-                console.log(organization);
                 setApi(api+1)
                 setselectedPeople([]);
                
@@ -84,7 +110,7 @@ const UpdatePerson = ({show,setShow,data,api,setApi, setselectedPeople}: Props) 
     call1();
 }, []);
 
-const handleForm = (key, value) => {
+const handleForm = (key: string|number, value: string|number) => {
   console.log(key, value);
    switch (key) {
        case "companyName":
@@ -152,12 +178,12 @@ const handleForm = (key, value) => {
       <div style={{display: "inline-flex",height:"900px", padding: "54px 48px",flexDirection: "column", alignItems: "flex-start", gap: "20px", background:"#fff"}}>
         <div style={{
                     display: 'flex',
-                    flexDirection: 'coloumn',
+                    flexDirection: 'column',
                     alignItems: 'flex-start',
                     gap: '20px',       
         }}>
               <div style={{display: "flex",alignItems: "flex-start", gap:"20px"}}> 
-                  <img src={peopleblack}/>
+                  <img src={peopleblack} alt=""/>
                   <div className='heading-2'>Update Person</div>
               </div>
         </div>
