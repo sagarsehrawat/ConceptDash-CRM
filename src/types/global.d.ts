@@ -67,6 +67,53 @@ declare global{
         } | null;
     }
 
+    interface Proposal {
+        proposal_id : number,
+        city_id : string | null,
+        city : string | null,
+        department_id: string | null,
+        project_name: string | null,
+        question_deadline: moment.Moment,
+        closing_deadline: moment.Moment,
+        client : string | null,
+        client_id: string | null,
+        project_manager_id: string | null,
+        design_price : string | null,
+        provisional_items: string | null,
+        contract_admin_price: string | null,
+        sub_consultant_price: string | null,
+        winning_price: string | null,
+        winning_bidder: string | null,
+        project_category_id: string | null,
+        created_at: moment.Moment,
+        result: string,
+        debriefing: string | null,
+        folder_id: string | null,
+        team_members:  {team_member_id: string | number, team_member_name: string}[];
+        bookmark: number[] | null,
+        priority: string,
+        proposal_generator_link: string | null,
+        rating: string | null,
+        plantaker_list: string[] | null,
+        bidder_list: string[] | null,
+        client_contact_details: string | null,
+        project_category: string | null,
+        department: string | null,
+        province: string | null,
+        country: string | null,
+        municipality_type: string | null,
+        project_manager: string | null,
+        total_bid_price: string | null,
+        plantakers_list: string[] | null,
+        bidders_list: string[] | null,
+        project_cat_id: string | null,
+        debriefing_notes: string | null,
+        source: string | null,
+        partner_names: string[] | null,
+        partner_members: {partner_member_id: string | number, partner_member_name: string}[];
+        
+    }
+
     interface Department {
         department_id : number,
         department : string

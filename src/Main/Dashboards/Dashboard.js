@@ -49,11 +49,12 @@ import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
 import RFP from "../../pages/rfps/Index.tsx";
 import TestDemo from "../../pages/calendar/index";
-import Proposal from "../../pages/proposals/index";
+// import Proposal from "../../pages/proposals/index";
 import Employee from "../../pages/employee/index";
 import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../../pages/customers/index";
 import Project from "../../pages/projects/Index.tsx";
+import Proposal from "../../pages/projects copy/Index.tsx";
 import BudgetCities from "../../pages/budgetCities/index";
 import Tasks from "../../pages/tasks/index";
 import AddTask from "../../pages/tasks/forms/AddTask";
@@ -553,9 +554,10 @@ const Dashboard = () => {
     if (nav === 2) return <Tasks isCollapsed={isCollapsed} />;
     if (nav === 3) return <BudgetCities isCollapsed={isCollapsed} />;
     if (nav === 4) return <RFP isCollapsed={isCollapsed} />
-    if (nav === 17) return <Proposal isCollapsed={isCollapsed} />
+    if (nav === 17) return <Proposal isCollapsed={isCollapsed} setnav={setnav}/>
     if (nav === 5) return <PMSelector isCollapsed={isCollapsed} />
     if (nav === 6) return <Project isCollapsed={isCollapsed} setnav={setnav}/>
+    // if (nav === 7) return <Proposal isCollapsed={isCollapsed} />;
     if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
     if (nav === 8) return <TestDemo />;
     if (nav === 10) return <CompanyUpdate />;

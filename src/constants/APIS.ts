@@ -1,6 +1,6 @@
 const APIS = {
-    BASE_URL : 'https://crm-api.conceptdash.ca',
-    // BASE_URL : 'http://localhost:8080',
+    // BASE_URL : 'https://crm-api.conceptdash.ca',
+    BASE_URL : 'http://localhost:8080',
     SERVER_STATUS : `/`,
     GET_RFP_COUNT : '/api/get/rfp/count',
     GET_PROJECT_COUNT: '/project/fetch/count',
@@ -24,7 +24,16 @@ const APIS = {
     UPDATE_RFP : '/api/update/rfp',
     ADD_PROJECT: '/project/add',
     UPDATE_PROJECT: '/project/update',
-    ADD_PROPOSAL: '/api/add/proposal',
+    ADD_PROPOSAL: '/proposal/add/proposal',
+    GET_PROPOSAL_COUNT: '/proposal/get/proposal/count',
+    GET_PROPOSALS:  '/proposal/get/page/proposals',
+    GET_PROPOSALS_BY_ID:  '/proposal/get/list/proposals/id',
+    UPDATE_PROPOSAL:  '/proposal/update/proposal',
+    UPDATE_PROPOSAL_RESULT:  '/proposal/update/proposal/result',
+    UPDATE_PROPOSAL_PRIORITY:  '/proposal/update/proposal/priority',
+    UPDATE_PROPOSAL_BOOKMARK:  '/proposal/update/proposal/bookmark',
+    GET_ORGANIZATION_LIST: 'client/get/organization/list',
+    DELETE_PROPOSALS: 'proposal/delete/proposals'
 };
 
 export default APIS;

@@ -117,6 +117,7 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
                 setCities(Utils.convertToTypeaheadOptions(citiesResponse.res, 'City', 'City_ID'));
 
                 const projectResponse = await SERVICES.getProjectById(projectId);
+                console.log(projectResponse)
                 setProject({
                     projectType: projectResponse.res.project_type,
                     department: projectResponse.res.department ?? '',
@@ -146,6 +147,8 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
                     designInfo: projectResponse.res.extra_info?.designInfo ?? [],
                     childProjects: projectResponse.res.child_projects_info ?? []
                 });
+
+                console.log(project)
                 if (projectResponse.res.tasklist) {
                     setTasklist(projectResponse.res.tasklist ?? []);
                     setOpenTasks(projectResponse.res.tasklist.map((task: any) => task.taskId));
