@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, {useState,useRef } from "react";
 import peopleblack from '../icons/people_black_24dp (2) 1.svg'
 import TFButton from "../../../../components/ui/TFButton/TFButton"
 import { HOST,ADD_ORGANIZATION } from "../../../Constants/Constants";

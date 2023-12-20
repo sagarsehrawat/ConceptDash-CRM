@@ -8,7 +8,6 @@ import axios from 'axios';
 import { Modal, Button } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import Moment from 'moment';
 type Note = {
   note: string;
   name: string;
@@ -255,7 +254,7 @@ const NotesCard = (props : Props) => {
                 data={editModal}
                 onChange={(event, editor) => {
                   const data = editor.getData();
-                  console.log(data);
+                  console.log(event);
                   setEditModal(data);
                 }} />
         </Modal.Body>
