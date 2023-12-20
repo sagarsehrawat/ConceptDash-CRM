@@ -48,28 +48,6 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
       boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
       borderRadius: "6px"
     },
-    filterButton: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-      padding: "8px 12px",
-      gap: "8px",
-      width: "115px",
-      height: "36px",
-      left: "268px",
-      top: "220px",
-      background: "#FFFFFF",
-      border: "1px solid #EBE9F1",
-      borderRadius: "6px",
-      marginRight: "12px"
-    },
-    get filterButton() {
-      return this._filterButton;
-    },
-    set filterButton(value) {
-      this._filterButton = value;
-    },
     filterButton3: {
       padding: "4px 12px",
       gap: "10px",
@@ -260,7 +238,7 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
                 <TFButton
                   label='Filter'
                   style={styles.filterButton3}
-                  handleClick={(e) => { setprevFilter(filter); setApi(api + 1); setShow(false); }}
+                  handleClick={() => { setprevFilter(filter); setApi(api + 1); setShow(false); }}
                 />
               </div>
           </div>
