@@ -16,8 +16,9 @@ type Props ={
 }
 const AllPeople = (props: Props) => {
   
-const [value1, setValue1] = useState("1");
+const [value1, setValue1] = useState(1);
 const handleChange =(event: React.SyntheticEvent, value: any)=> {
+  console.log(event)
   setValue1(value);
 };
 
@@ -31,7 +32,7 @@ const handleChange =(event: React.SyntheticEvent, value: any)=> {
           }}
           style={{ margin: "0" }}
         >
- <TabContext value={value1}>
+ <TabContext value={value1.toString()}>
             <Box sx={{}}>
               <TabList
                 centered

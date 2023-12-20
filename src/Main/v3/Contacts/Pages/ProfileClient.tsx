@@ -34,7 +34,7 @@ type Props={
   setApi:Function
 }
 const    ProfileClient = (props:Props) => {
-   const [value1, setValue1] = useState("1");
+   const [value1, setValue1] = useState(1);
     const [value, setValue] = useState("");
     const [personData, setPersonData] = useState<PersonData>({
       name: '',
@@ -57,6 +57,7 @@ const    ProfileClient = (props:Props) => {
 
 
 const handleChange = (event: React.SyntheticEvent, newValue: any) => {
+  console.log(event);
   setValue1(newValue);
 };
 
@@ -300,10 +301,6 @@ const handleChange = (event: React.SyntheticEvent, newValue: any) => {
               .then((res) => {
                    res.data.res[0] ? setProjectChat( res.data.res[0].chat ) : setProjectChat([]);
                    console.log(projectChat);
-                  //  const rem = projectChat?.filter( each => each.reminder == 'true');
-                  //  setReminders( [...reminders,...rem]);
-                  //  console.log("reminders")
-                  //  console.log([...reminders,...rem]);
                    
               })
               .catch((err) => {
@@ -319,9 +316,8 @@ const handleChange = (event: React.SyntheticEvent, newValue: any) => {
 }
 
 useEffect(() => {
-    // After setting generalChat and projectChat, call updateReminders
     updateReminders();
-}, [generalChat, projectChat,props.api]); // Add other dependencies if needed
+}, [generalChat, projectChat,props.api]); 
 
   const handleSave = async () => {
     try {
@@ -344,11 +340,9 @@ useEffect(() => {
       setGeneralText('');
       setShowProjectBox(false); 
       props.setApi(props.api+1)
-      // Do something with the updatedData if needed
       console.log(response);
     } catch (error) {
       console.error(error);
-      // Handle error as needed
     }
   };
 
@@ -419,7 +413,7 @@ useEffect(() => {
             float: "left",
           }}
           style={{ margin: "0" }}>
-                <TabContext value={value1}>
+                <TabContext value={value1.toString()}>
             <Box sx={{}}>
               <TabList
                 centered
@@ -430,9 +424,7 @@ useEffect(() => {
                     backgroundColor: PRIMARY_COLOR,
                   },
                 }}
-                sx={{
-                  //   marginRight: "400px",
-                
+                sx={{                
                   float: "left",
                   height: "57px",
                   marginBottom:"16px"
@@ -485,7 +477,7 @@ useEffect(() => {
                 data={projectText}
                 onChange={(event, editor) => {
                   const data = editor.getData();
-                  console.log(data);
+                  console.log(event);
                   setProjectText(data);
                 }} /> </div>
        <div style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "flex-end",alignItems: "center",alignSelf: "stretch",
@@ -529,9 +521,9 @@ useEffect(() => {
              toolbar: ['bold', 'italic', 'link', 'numberedList', 'bulletedList', '|', 'undo', 'redo']
         }}                
                 data={generalText}
-                onChange={(event, editor) => {
+                onChange={(event, editor) => {        
                   const data = editor.getData();
-                  console.log(data);
+                  console.log(event);
                   setGeneralText(data);
                 }} />
        <div style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "flex-end",alignItems: "center",alignSelf: "stretch",

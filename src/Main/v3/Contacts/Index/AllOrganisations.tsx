@@ -16,43 +16,11 @@ type Props ={
 }
 const AllOrganisations = (props: Props) => {
   
-const [value1, setValue1] = useState("1");
+const [value1, setValue1] = useState(1);
 const handleChange =(event: React.SyntheticEvent, value: any)=> {
+  console.log(event)
   setValue1(value);
 };
-const styles = {
-  topContainer: {
-    width: "208px",
-    height: "68px",
-    left: "32px",
-    top: "76px",
-    background: "#FFFFFF",
-    border: "1px solid #EBE9F1",
-    borderRadius: "12px",
-    marginRight: "20px"
-},
-topContainerHeading: {
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 400,
-    fontSize: "14px",
-    lineHeight: "20px",
-    color: "#0A0A0A",
-    marginLeft: "12px",
-    marginTop: "8px",
-    marginBottom: "4px"
-},
-topContainerSubheading: {
-    fontFamily: "'Roboto'",
-    fontStyle: "normal",
-    fontWeight: 500,
-    fontSize: "18px",
-    lineHeight: "28px",
-    color: "#0A0A0A",
-    marginLeft: "12px",
-    display: "inline-block"
-},
-}
   return (
     <div style ={{background: "#F8FAFB"}}>
         <Box
@@ -64,7 +32,7 @@ topContainerSubheading: {
           }}
           style={{ margin: "0" }}
         >
- <TabContext value={value1}>
+ <TabContext value={value1.toString()}>
             <Box sx={{}}>
               <TabList
                 centered
