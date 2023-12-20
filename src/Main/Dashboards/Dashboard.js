@@ -59,7 +59,7 @@ import Tasks from "../../pages/tasks/index";
 import AddTask from "../../pages/tasks/forms/AddTask";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
-import RFPform from "../../pages/rfps/forms/RFPform";
+import RFPform from "../../pages/rfps/forms/AddRfp.tsx";
 import ProposalForm from "../../pages/proposals/forms/ProposalForm";
 import projectForm from '../../Images/projectForm.svg'
 import cross from '../../Images/cross.svg'
