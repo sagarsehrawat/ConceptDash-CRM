@@ -11,59 +11,58 @@ function Timeline(props) {
   const [emps, setemps] = useState([])
   const [desigs, setdesigs] = useState([])
   const [a, seta] = useState(0)
-    useEffect(() => {
-        setisLoading(true);
-        const call = async() => {
-          await axios
-            .get(HOST + GET_TTM, {
-              headers: { auth: "Rose " + localStorage.getItem("auth"), proposalId:Id }
-            })
-            .then((res) => {
-                let data = JSON.parse(res.data.res[0].Data)
-                let empRates = JSON.parse(res.data.res[0].Employee_Info)
-                let desigs = JSON.parse(res.data.res[0].Designations)
-                setemps(empRates)
-                seteditingData(data)
-                setdesigs(desigs)
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-    
-          setisLoading(false);
-        };
-        call();
-      }, []);
-    
+useEffect(() => {
+  setisLoading(true);
+  const call = async() => {
+    await axios
+      .get(HOST + GET_TTM, {
+        headers: { auth: "Rose " + localStorage.getItem("auth"), proposalId:Id }
+      })
+      .then((res) => {
+          let data = JSON.parse(res.data.res[0].Data)
+          let empRates = JSON.parse(res.data.res[0].Employee_Info)
+          let desigs = JSON.parse(res.data.res[0].Designations)
+          setemps(empRates)
+          seteditingData(data)
+          setdesigs(desigs)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-    const handleSubmit = async(e) =>{
-        e.preventDefault();
-            setisLoading(true);
-            await axios
-                .post(
-                    HOST + UPDATE_TTM,
-                    {
-                      data: JSON.stringify(editingData),
-                      employeeInfo: JSON.stringify(emps),
-                      designations: JSON.stringify(desigs),
-                      proposalId: Id,
-                    },
-                    { headers: { auth: "Rose " + localStorage.getItem("auth") } }
-                )
-                .then((res) => {
-                    console.log(res)
-                    if(res.data.success) {
-                        // setsubmitLoading(false)
-                        seta(a+1);
-                    }
-                    // seteditProfile(false);
-                    setisLoading(false)
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-    
-      }
+    setisLoading(false);
+  };
+  call();
+}, []);
+
+
+const handleSubmit = async(e) =>{
+  e.preventDefault();
+  setisLoading(true);
+  await axios
+      .post(
+          HOST + UPDATE_TTM,
+          {
+            data: JSON.stringify(editingData),
+            employeeInfo: JSON.stringify(emps),
+            designations: JSON.stringify(desigs),
+            proposalId: Id,
+          },
+          { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+      )
+      .then((res) => {
+          console.log(res)
+          if(res.data.success) {
+              // setsubmitLoading(false)
+              seta(a+1);
+          }
+          // seteditProfile(false);
+          setisLoading(false)
+      })
+      .catch((err) => {
+          console.log(err);
+      });
+}
 
 const taskFields = {
     id: 'TaskID',

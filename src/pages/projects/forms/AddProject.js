@@ -65,10 +65,11 @@ const AddProject = ({ onHide, api, setApi }) => {
             try {
                 const departmentsResponse = await SERVICES.getDepartments();
                 setDepartments(Utils.convertToTypeaheadOptions(departmentsResponse.res, 'Department', 'Department_ID'));
-
+                console.log(departments)
                 const projectManagersResponse = await SERVICES.getManagers();
+                console.log(projectManagersResponse.res)
                 setManagers(Utils.convertToTypeaheadOptions(projectManagersResponse.res, 'Full_Name', 'Employee_ID'));
-
+                console.log(managers)
                 const employeesResponse = await SERVICES.getEmployeesList();
                 setEmployees(Utils.convertToTypeaheadOptions(employeesResponse.res, 'Full_Name', 'Employee_ID'));
 
