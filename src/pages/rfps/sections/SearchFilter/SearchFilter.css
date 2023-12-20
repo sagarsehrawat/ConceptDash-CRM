@@ -1,3 +1,20 @@
+.filter-searchbar-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #FFFFFF;
+    padding: 12px 32px 18px 32px;
+}
+
+.rfps-header {
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px; /* 155.556% */
+}
+
 .filter-button {
     display: flex;
     flex-direction: row;
