@@ -70,4 +70,115 @@
     font-weight: 400;
     line-height: 20px;
   }
+
+  .upload-file-container {
+    .upload-label {
+      min-width: 148px;
+      padding: 6px 0px;
+      align-items: center;
+      gap: var(--8-pad, 8px);
+      color: var(--Dark-grey, #70757a);
+      font-family: Roboto;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 20px;
+    }
+    h2 {
+      color: var(--Black-text, #3d424f);
+      text-align: center;
+      font-family: Roboto;
+      font-size: 22px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 32px; /* 145.455% */
+    }
+
+    p {
+      color: var(--Dark-grey, #70757a);
+      text-align: center;
+      font-family: Roboto;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px; /* 142.857% */
+    }
+
+    .upload-wrapper {
+      display: flex;
+      padding: var(--32-pad, 32px);
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--32-pad, 32px);
+      align-self: stretch;
+      border-radius: 16px;
+      border: 1px solid var(--New-Outline, #ebedf8);
+      background: #fff;
+
+      .upload-inst {
+        h6 {
+          color: #081621;
+          font-family: Roboto;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: 24px; /* 150% */
+        }
+
+        p {
+          color: var(--Black-text, var(--New-grey, #3d424f));
+          font-family: Roboto;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 20px;
+
+          span {
+            color: var(--Black-text, var(--New-grey, #3d424f));
+            font-family: Roboto;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            font-style: italic;
+          }
+        }
+      }
+
+      .file-upload-div {
+        display: flex;
+        padding: 24px 0px;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--8-pad, 8px);
+        align-self: stretch;
+        border-radius: 16px;
+        border: 1px dashed #d1d4e0;
+        background: #f8f9fc;
+
+        .upload-btn-wrapper {
+          position: relative;
+          overflow: hidden;
+          display: inline-block;
+        }
+
+        .btn {
+          color: #fbfbfb;
+          padding: 8px 20px;
+          font-size: 16px;
+          font-weight: 500;
+          border-radius: 6px;
+          font-family: Roboto;
+          background: var(--Black-text, #3d424f);
+          margin-top: 16px;
+        }
+
+        .upload-btn-wrapper input[type="file"] {
+          font-size: 100px;
+          position: absolute;
+          left: 0;
+          top: 0;
+          opacity: 0;
+        }
+      }
+    }
+  }
 }

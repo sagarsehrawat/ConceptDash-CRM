@@ -116,6 +116,7 @@ const AddNewRfp = (props: Props) => {
     Array<{ label: string | number; value: string | number }>
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [uploadedFiles, setUploadedFiles] = useState([form.files]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -277,6 +278,7 @@ const AddNewRfp = (props: Props) => {
 
     for (let i = 0; i < form.files.length; i++) {
       formData.append("files", form.files[i]);
+      setUploadedFiles([...uploadedFiles, form.files[i]])
     }
     try {
       await SERVICES.addRfp(formData);
@@ -290,6 +292,12 @@ const AddNewRfp = (props: Props) => {
       setIsLoading(false);
     }
   };
+
+  // useEffect(() => {
+  //   // handleSubmitAdd();
+  // }, [form.files]);
+
+  // console.log("files", form.files, "upload", uploadedFiles);
 
   return (
     <>
@@ -449,7 +457,7 @@ const AddNewRfp = (props: Props) => {
                   />
                 </div>
 
-                <div className=" justify-content-start align-item-center mb-5">
+                {/* <div className=" justify-content-start align-item-center mb-5">
                   <label>Relevent Files (Upto 500 MB each file)</label>
                   <input
                     className="file-input"
@@ -459,6 +467,64 @@ const AddNewRfp = (props: Props) => {
                     onChange={(e) => handleForm(e.target.name, e.target.files)}
                     multiple
                   />
+                </div> */}
+
+                <div className="justify-content-center align-item-center mb-5 mt-5 upload-file-container">
+                  <h2>Upload Attachments</h2>
+                  <p>Upload any files/documents related to the RFP here.</p>
+                  {/* <label>Upload</label> */}
+                  <div className="d-flex justify-content-start align-item-center mb-5 mt-5">
+                    <div className="upload-label">Upload</div>
+                    <div className="upload-wrapper">
+                      <div className="upload-inst">
+                        <h6>Upload Files</h6>
+                        <p>
+                          Click here to upload the file
+                          <i> (less than 500mb)</i>
+                        </p>
+                      </div>
+
+                      <div className="file-upload-div">
+                        <div className="text-center">
+                          <img src={icons.upload_icon} />
+                          <h5>Drag and Drop to upload file</h5>
+                          <p>Or</p>
+                          <div className="upload-btn-wrapper">
+                            <button className="btn">Browse file</button>
+                            <input
+                              type="file"
+                              name="files"
+                              onChange={(e) =>
+                                handleForm(e.target.name, e.target.files)
+                              }
+                              multiple
+                            />
+                          </div>
+                          <p className="mt-4">
+                            You can upload png, jpeg, xml or pdf
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    {/* <input
+                      style={{ padding: "0" }}
+                      name="files"
+                      type="file"
+                      id="file-upload"
+                      onChange={(e) =>
+                        handleForm(e.target.name, e.target.files)
+                      }
+                      multiple
+                    /> */}
+                  </div>
+                </div>
+
+                <div>
+                  <p>Uploaded Files</p>
+                  {form.files.length > 0 &&
+                    uploadedFiles.map((item:any, key) => {
+                      return <div key={key}>{item.name}</div>;
+                    })}
                 </div>
 
                 <div className="project-modal-footer w-100">

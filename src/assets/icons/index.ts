@@ -4,6 +4,7 @@ import total_rfp_icon from "../icons/total_rfp_icon.svg";
 import new_rfp_icon from "../icons/new_rfp_icon.svg";
 import trending_rfp_icon from "../icons/trending_rfp_icon.svg";
 import trending_up_icon from "../icons/trending_up_icon.svg";
+import upload_icon from "../icons/upload_icon.svg";
 
 export const icons = {
   add_rfp_icon: add_rfp_icon,
@@ -12,4 +13,5 @@ export const icons = {
   new_rfp_icon: new_rfp_icon,
   trending_rfp_icon: trending_rfp_icon,
   trending_up_icon: trending_up_icon,
+  upload_icon: upload_icon,
 };
