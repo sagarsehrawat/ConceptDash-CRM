@@ -41,7 +41,6 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProposalId 
   const sortRef = useRef<HTMLDivElement>(null);
   const [showSortModal, setShowSortModal] = useState<string>("");
   const [sort, setSort] = useState<string>('created_at DESC');
-  const employeeId: number = parseInt(localStorage.getItem("employeeId") ?? '0');
   
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
