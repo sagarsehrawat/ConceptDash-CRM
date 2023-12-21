@@ -114,6 +114,7 @@
       border-radius: 16px;
       border: 1px solid var(--New-Outline, #ebedf8);
       background: #fff;
+      width: 100%;
 
       .upload-inst {
         h6 {
@@ -169,6 +170,7 @@
           font-family: Roboto;
           background: var(--Black-text, #3d424f);
           margin-top: 16px;
+          cursor: pointer;
         }
 
         .upload-btn-wrapper input[type="file"] {

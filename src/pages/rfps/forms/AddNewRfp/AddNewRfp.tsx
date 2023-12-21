@@ -78,29 +78,29 @@ const AddNewRfp = (props: Props) => {
   const [form, setForm] = useState(
     isEditing && editForm
       ? {
-          department: editForm.department ?? "",
-          departmentId: editForm.department_id ?? "",
-          projectCat: editForm.project_category ?? "",
-          projectCatId: editForm.project_cat_id ?? "",
-          action: editForm.action ?? "No Go",
-          managerName: editForm.project_manager ?? "",
-          managerNameId: editForm.project_manager_id ?? "",
-          projectName: editForm.project_name,
-          startDate: moment(editForm?.start_date).isValid()
-            ? moment(editForm.start_date).format("YYYY-MM-DD")
-            : "",
-          submissionDate: moment(editForm?.start_date).isValid()
-            ? moment(editForm.submission_date).format("YYYY-MM-DD")
-            : "",
-          rfpNumber: editForm.rfp_number ?? "",
-          client: editForm.client ?? "",
-          files: [],
-          source: editForm.source ?? "",
-          city: editForm.city ?? "",
-          cityId: editForm.city_id ?? "",
-          clientRating: "",
-          remarks: editForm.remarks ?? "",
-        }
+        department: editForm.department ?? "",
+        departmentId: editForm.department_id ?? "",
+        projectCat: editForm.project_category ?? "",
+        projectCatId: editForm.project_cat_id ?? "",
+        action: editForm.action ?? "No Go",
+        managerName: editForm.project_manager ?? "",
+        managerNameId: editForm.project_manager_id ?? "",
+        projectName: editForm.project_name,
+        startDate: moment(editForm?.start_date).isValid()
+          ? moment(editForm.start_date).format("YYYY-MM-DD")
+          : "",
+        submissionDate: moment(editForm?.start_date).isValid()
+          ? moment(editForm.submission_date).format("YYYY-MM-DD")
+          : "",
+        rfpNumber: editForm.rfp_number ?? "",
+        client: editForm.client ?? "",
+        files: [],
+        source: editForm.source ?? "",
+        city: editForm.city ?? "",
+        cityId: editForm.city_id ?? "",
+        clientRating: "",
+        remarks: editForm.remarks ?? "",
+      }
       : FORM
   );
   const [cities, setCities] = useState<
@@ -299,6 +299,16 @@ const AddNewRfp = (props: Props) => {
 
   // console.log("files", form.files, "upload", uploadedFiles);
 
+  // const handleChange = (file: any) => {
+  //   setFile(file);
+  // }
+
+  // for (let i = 0; i < form.files.length; i++) {
+  // console.log("files", form.files[i]?.name);
+  // uploadedFiles.push(form.files[i]?.name);
+  // console.log("uploaded", uploadedFiles);
+  // }
+
   return (
     <>
       {show && (
@@ -483,7 +493,6 @@ const AddNewRfp = (props: Props) => {
                           <i> (less than 500mb)</i>
                         </p>
                       </div>
-
                       <div className="file-upload-div">
                         <div className="text-center">
                           <img src={icons.upload_icon} />
@@ -498,6 +507,7 @@ const AddNewRfp = (props: Props) => {
                                 handleForm(e.target.name, e.target.files)
                               }
                               multiple
+                              
                             />
                           </div>
                           <p className="mt-4">
@@ -506,25 +516,7 @@ const AddNewRfp = (props: Props) => {
                         </div>
                       </div>
                     </div>
-                    {/* <input
-                      style={{ padding: "0" }}
-                      name="files"
-                      type="file"
-                      id="file-upload"
-                      onChange={(e) =>
-                        handleForm(e.target.name, e.target.files)
-                      }
-                      multiple
-                    /> */}
                   </div>
-                </div>
-
-                <div>
-                  <p>Uploaded Files</p>
-                  {form.files.length > 0 &&
-                    uploadedFiles.map((item:any, key) => {
-                      return <div key={key}>{item.name}</div>;
-                    })}
                 </div>
 
                 <div className="project-modal-footer w-100">
@@ -542,7 +534,7 @@ const AddNewRfp = (props: Props) => {
               </div>
             </>
           )}
-        </AddForm>
+        </AddForm >
       )}
     </>
   );
