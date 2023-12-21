@@ -220,3 +220,34 @@ export const GET_CAMPAIGN_NUMBER = (campaignId) =>  `/campaign/get-campaign-repo
 export const GET_CAMPAIGN_CONTACT = (campaignId,ev) => `/campaign/get-campaign-report/contacts/${campaignId}/${ev}`
 
 export const PRIMARY_COLOR = '#8361FE'
+
+
+// Client APIs
+
+export const ORGANIZATION_COUNT='/client/get/organization/count'
+export const PEOPLE_COUNT='/client/get/people/count'
+export const ADD_PEOPLE = '/client/add/people';
+export const ADD_ORGANIZATION = '/client/add/organization'
+export const UPDATE_ORGANIZATION = '/client/update/organization'
+export const DELETE_ORGANIZATION = '/client/delete/organization'
+export const UPDATE_PEOPLE = '/client/update/people'
+export const DELETE_PEOPLE = '/client/delete/people'
+export const ALL_PEOPLE_IN_ORGANIZATION='/client/get/people/all'
+export const GET_ORGANIZATION_LIST = '/client/get/organization/list'
+
+export const GET_ALL_ORGANIZATION='/client/get/page/organization'
+export const GET_ALL_PEOPLE='/client/get/page/people'
+export const ORGANIZATION_DETAILS='/client/get/organization'
+export const PERSON_DETAILS='/client/get/people'
+
+export const GENERAL_NOTES='/client/get/people/generalchats'
+export const PROJECT_NOTES='/client/get/people/projectspecific'
+export const ADD_GENERAL_NOTES='/client/add/people/generalchats'
+export const ADD_PROJECT_NOTES='/client/add/people/projectspecific' 
+
+export const UPDATE_GENERAL_NOTES="/client/update/people/generalchats"
+export const UPDATE_PROJECT_NOTES="/client/update/people/projectspecific"
+
+export const DELETE_GENERAL_NOTES='/client/delete/people/generalchat'
+export const DELETE_PROJECT_NOTES='/client/delete/people/projectspecific'
+// export const DELETE_GENERAL_NOTES="/client/delete/people/generalchats"
