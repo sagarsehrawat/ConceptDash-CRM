@@ -2,6 +2,9 @@
   "name": "web-app",
   "version": "0.1.0",
   "private": true,
+  "overrides": {
+    "react-refresh": "0.14.0"
+  },
   "dependencies": {
     "@babel/core": "^7.23.3",
     "@ckeditor/ckeditor5-build-classic": "^40.2.0",
