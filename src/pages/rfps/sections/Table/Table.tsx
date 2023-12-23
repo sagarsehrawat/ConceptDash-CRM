@@ -12,9 +12,9 @@ import { faArrowDown, faArrowUp, faEdit, faTrash, faXmark } from '@fortawesome/f
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
 import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
-import AddRfp from '../../forms/AddRfp';
 import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 import TFConversionModal from '../../../../components/modals/TFConversionModal/TFConversionModal';
+import AddNewRfp from '../../forms/AddNewRfp/AddNewRfp';
 
 interface FilterType {
   dept: (string | number)[],
@@ -68,7 +68,6 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         setIsLoading(true);
         const response = await SERVICES.getRfps(50, currPage, filter, search, sort);
         dispatch(initRFPs(response.res));
-        console.log(response.res)
         setPages(response.totalPages);
         setIsLoading(false);
       } catch (error) {
@@ -335,7 +334,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                             onChange={(name: number, value: string) => handleDateUpdate(name, 'start_date', value)}
                           />}
                       </td>
-                      <td className='table-cell'>{rfp.project_manager}</td>
+                      <td className='table-cell'>{rfp.manager_name}</td>
                       <td className='table-cell'>{rfp.department}</td>
                       <td className='table-cell'>{rfp.project_category}</td>
                     </tr>
@@ -382,7 +381,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
       {<TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete} label='RFP(s)'/>}
       {<TFConversionModal show={showConversionModal} onConfirm={handleStatusGoUpdate} onHide={()=>setShowConversionModal(false)} />}
       {show
-        && <AddRfp
+        && <AddNewRfp
           api={api}
           setApi={setApi}
           show={show}

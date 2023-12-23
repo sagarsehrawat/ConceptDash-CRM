@@ -15,7 +15,7 @@ import {
 import TFButton from "../../../../components/ui/TFButton/TFButton";
 import LoadingSpinner from "../../../../Main/Loader/Loader";
 import TFDateChip from "../../../../components/form/TFDateChip/TFDateChip";
-import TFChip from "../../../../components/form/TFChip/TFChip";
+// import TFChip from "../../../../components/form/TFChip/TFChip";
 import { icons } from "../../../../assets/icons";
 
 type Props = {
@@ -45,7 +45,7 @@ interface FormType {
   city: string;
   cityId: string | number;
   remarks: string;
-  clientRating: string;
+  // clientRating: string;
 }
 
 const FORM: FormType = {
@@ -65,7 +65,7 @@ const FORM: FormType = {
   source: "",
   city: "",
   cityId: "",
-  clientRating: "0",
+  // clientRating: "0",
   remarks: "",
 };
 
@@ -73,34 +73,34 @@ const AddNewRfp = (props: Props) => {
   const { show, setShow, api, setApi, isEditing = false, editForm } = props;
 
   const { add_rfp_icon } = icons;
-
+  console.log(editForm)
   const dispatch = useDispatch();
   const [form, setForm] = useState(
     isEditing && editForm
       ? {
-        department: editForm.department ?? "",
-        departmentId: editForm.department_id ?? "",
-        projectCat: editForm.project_category ?? "",
-        projectCatId: editForm.project_cat_id ?? "",
-        action: editForm.action ?? "No Go",
-        managerName: editForm.project_manager ?? "",
-        managerNameId: editForm.project_manager_id ?? "",
-        projectName: editForm.project_name,
-        startDate: moment(editForm?.start_date).isValid()
-          ? moment(editForm.start_date).format("YYYY-MM-DD")
-          : "",
-        submissionDate: moment(editForm?.start_date).isValid()
-          ? moment(editForm.submission_date).format("YYYY-MM-DD")
-          : "",
-        rfpNumber: editForm.rfp_number ?? "",
-        client: editForm.client ?? "",
-        files: [],
-        source: editForm.source ?? "",
-        city: editForm.city ?? "",
-        cityId: editForm.city_id ?? "",
-        clientRating: "",
-        remarks: editForm.remarks ?? "",
-      }
+          department: editForm.department ?? "",
+          departmentId: editForm.department_id ?? "",
+          projectCat: editForm.project_category ?? "",
+          projectCatId: editForm.project_cat_id ?? "",
+          action: editForm.action ?? "No Go",
+          managerName: editForm.manager_name ?? "",
+          managerNameId: editForm.project_manager_id ?? "",
+          projectName: editForm.project_name,
+          startDate: moment(editForm?.start_date).isValid()
+            ? moment(editForm.start_date).format("YYYY-MM-DD")
+            : "",
+          submissionDate: moment(editForm?.submission_date).isValid()
+            ? moment(editForm.submission_date).format("YYYY-MM-DD")
+            : "",
+          rfpNumber: editForm.rfp_number ?? "",
+          client: editForm.client ?? "",
+          files: [],
+          source: editForm.source ?? "",
+          city: editForm.city ?? "",
+          cityId: editForm.city_id ?? "",
+          // clientRating: "",
+          remarks: editForm.remarks ?? "",
+        }
       : FORM
   );
   const [cities, setCities] = useState<
@@ -224,9 +224,9 @@ const AddNewRfp = (props: Props) => {
       case "remarks":
         formUtils.typeInputForm(key, value);
         break;
-      case "clientRating":
-        formUtils.typeInputForm(key, value);
-        break;
+      // case "clientRating":
+      //   formUtils.typeInputForm(key, value);
+      //   break;
     }
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -242,8 +242,8 @@ const AddNewRfp = (props: Props) => {
         form.projectCatId,
         form.source,
         form.managerNameId,
-        form.startDate,
-        form.submissionDate,
+        moment(form?.startDate).isValid()? moment(form.startDate).format("YYYY-MM-DD"): "",
+        moment(form?.submissionDate).isValid()? moment(form.submissionDate).format("YYYY-MM-DD"): "",
         form.projectName,
         form.rfpNumber,
         form.client,
@@ -266,19 +266,22 @@ const AddNewRfp = (props: Props) => {
     formData.append("projectCatId", form.projectCatId.toString());
     formData.append("projectManagerId", form.managerNameId.toString());
     formData.append("projectName", form.projectName);
-    formData.append("startDate", form.startDate.toString());
-    formData.append("submissionDate", form.submissionDate.toString());
+    formData.append("startDate", moment(form?.startDate).isValid()
+    ? moment(form.startDate).format("YYYY-MM-DD")
+    : "");
+    formData.append("submissionDate", moment(form?.startDate).isValid()
+    ? moment(form.submissionDate).format("YYYY-MM-DD")
+    : "");
     formData.append("rfpNumber", form.rfpNumber);
     formData.append("source", form.source);
     formData.append("client", form.client);
     formData.append("cityId", form.cityId.toString());
     formData.append("action", form.action);
-    formData.append("clientRating", form.clientRating);
     formData.append("remarks", form.remarks);
 
     for (let i = 0; i < form.files.length; i++) {
       formData.append("files", form.files[i]);
-      setUploadedFiles([...uploadedFiles, form.files[i]])
+      setUploadedFiles([...uploadedFiles, form.files[i]]);
     }
     try {
       await SERVICES.addRfp(formData);
@@ -312,9 +315,9 @@ const AddNewRfp = (props: Props) => {
   return (
     <>
       {show && (
-        <AddForm heading="Add New RFP" heading_icon={add_rfp_icon}>
+        <AddForm heading={!isEditing?"Add New RFP":"Update RFP"} heading_icon={add_rfp_icon}>
           {isLoading ? (
-            <div className="w-100 h-100">
+            <div style={{marginTop:'50%'}}/*  className="w-100 h-100" */>
               <LoadingSpinner />
             </div>
           ) : (
@@ -356,7 +359,7 @@ const AddNewRfp = (props: Props) => {
                   />
                 </div>
 
-                <div className="d-flex justify-content-start align-item-center mb-3">
+                {/* <div className="d-flex justify-content-start align-item-center mb-3">
                   <label>Client Rating</label>
                   <TFChip
                     name="clientRating"
@@ -364,7 +367,7 @@ const AddNewRfp = (props: Props) => {
                     options={["0", "1", "2", "3", "4", "5"]}
                     onChange={handleForm}
                   />
-                </div>
+                </div> */}
 
                 <div className="d-flex justify-content-start align-item-center mb-3">
                   <label>Source</label>
@@ -374,14 +377,14 @@ const AddNewRfp = (props: Props) => {
                     onChange={(e) => handleForm(e.target.name, e.target.value)}
                   >
                     <option>Select Source</option>
-                    <option value="Construct Connect">Construct Connect</option>
-                    <option value="Bids and Tenders">Bids and Tenders</option>
-                    <option value="Biddingo">Biddingo</option>
-                    <option value="Merx">Merx</option>
+                    <option selected={form.source==="Construct Connect"} value="Construct Connect">Construct Connect</option>
+                    <option selected={form.source==="Bids and Tenders"} value="Bids and Tenders">Bids and Tenders</option>
+                    <option selected={form.source==="Biddingo"} value="Biddingo">Biddingo</option>
+                    <option selected={form.source==="Merx"} value="Merx">Merx</option>
                   </select>
                 </div>
 
-                <div className="d-flex justify-content-start align-item-center mb-3">
+                {/* <div className="d-flex justify-content-start align-item-center mb-3">
                   <label>Action</label>
                   <TFChip
                     name="action"
@@ -389,7 +392,7 @@ const AddNewRfp = (props: Props) => {
                     options={["Go", "No Go", "Review", "External"]}
                     onChange={handleForm}
                   />
-                </div>
+                </div> */}
 
                 <div className="d-flex justify-content-start align-item-center mb-3">
                   <label>Submission Date</label>
@@ -412,7 +415,7 @@ const AddNewRfp = (props: Props) => {
                 </div>
 
                 <div className="d-flex justify-content-start align-item-center mb-3">
-                  <label>Start Date</label>
+                  <label>Question Date</label>
                   <TFDateChip
                     value={form.startDate}
                     name="startDate"
@@ -467,19 +470,7 @@ const AddNewRfp = (props: Props) => {
                   />
                 </div>
 
-                {/* <div className=" justify-content-start align-item-center mb-5">
-                  <label>Relevent Files (Upto 500 MB each file)</label>
-                  <input
-                    className="file-input"
-                    style={{ padding: "0" }}
-                    name="files"
-                    type="file"
-                    onChange={(e) => handleForm(e.target.name, e.target.files)}
-                    multiple
-                  />
-                </div> */}
-
-                <div className="justify-content-center align-item-center mb-5 mt-5 upload-file-container">
+                {!isEditing??<div className="justify-content-center align-item-center mb-5 mt-5 upload-file-container">
                   <h2>Upload Attachments</h2>
                   <p>Upload any files/documents related to the RFP here.</p>
                   {/* <label>Upload</label> */}
@@ -490,7 +481,7 @@ const AddNewRfp = (props: Props) => {
                         <h6>Upload Files</h6>
                         <p>
                           Click here to upload the file
-                          <i> (less than 500mb)</i>
+                          <i> (less than 500MB)</i>
                         </p>
                       </div>
                       <div className="file-upload-div">
@@ -507,7 +498,6 @@ const AddNewRfp = (props: Props) => {
                                 handleForm(e.target.name, e.target.files)
                               }
                               multiple
-                              
                             />
                           </div>
                           <p className="mt-4">
@@ -517,7 +507,7 @@ const AddNewRfp = (props: Props) => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div>}
 
                 <div className="project-modal-footer w-100">
                   <TFButton
@@ -526,7 +516,7 @@ const AddNewRfp = (props: Props) => {
                     variant="secondary"
                   />
                   <TFButton
-                    label="Add RFP"
+                    label={isEditing?"Update RFP":"Add RFP"}
                     handleClick={handleSubmit}
                     variant="primary"
                   />
@@ -534,7 +524,7 @@ const AddNewRfp = (props: Props) => {
               </div>
             </>
           )}
-        </AddForm >
+        </AddForm>
       )}
     </>
   );
