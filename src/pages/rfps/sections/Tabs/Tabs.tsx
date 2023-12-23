@@ -9,6 +9,7 @@ import SearchFilter from '../SearchFilter/SearchFilter';
 import Pages from '../Pages/Pages';
 import Table from '../Table/Table';
 import TrackingTable from '../Table/TrackingTable';
+import HeaderCards from '../HeaderCards/HeaderCards';
 
 interface FilterType {
     dept: (string | number)[],
@@ -50,6 +51,7 @@ const Tabs = ({setcurrPage, pages, search, currPage, setPages, api, setApi, valu
           style={{ margin: "0" }}
         >
           <TabContext value={value1}>
+            <div className='d-flex flex-column gap-4'>
             <Box sx={{}}>
               <TabList
                 centered
@@ -74,10 +76,11 @@ const Tabs = ({setcurrPage, pages, search, currPage, setPages, api, setApi, valu
                     flexDirection: "row",
                     justifyContent: "center",
                     paddingBottom: 0,
-                    fontSize: '16px'
+                    fontSize: '18px',
+                    textTransform: "capitalize",
                   }}
                   sx={{ fontSize: 12 }}
-                  label="Request for Propopsals"
+                  label="Request for proposals"
                   value="1"
                 />
                 
@@ -88,14 +91,19 @@ const Tabs = ({setcurrPage, pages, search, currPage, setPages, api, setApi, valu
                     flexDirection: "row",
                     justifyContent: "center",
                     paddingBottom: 0,
-                    fontSize: '16px'
+                    fontSize: '18px',
+                    textTransform: "capitalize",
+
                   }}
                   sx={{ fontSize: 12 }}
-                  label="Tracking Proposals"
+                  label="Tracking RFP’s"
                   value="2"
                 />
               </TabList>
             </Box>
+            
+            <HeaderCards />
+            </div>
             <TabPanel value="1">
               <div style={{ width: '100%', float: 'left', marginTop: '20px' }}>
                 <SearchFilter api={api} setApi={setApi} value={value} setValue={setValue} filter={filter} setFilter={setFilter} isCollapsed={isCollapsed} />

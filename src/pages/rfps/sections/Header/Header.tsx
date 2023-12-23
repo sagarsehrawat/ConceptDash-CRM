@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import TFButton from '../../../../components/ui/TFButton/TFButton'
 import { useSelector } from 'react-redux'
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice'
-import AddRfp from '../../forms/AddRfp'
+// import AddRfp from '../../forms/AddRfp'
 import ICONS from '../../../../constants/Icons'
+import AddNewRfp from '../../forms/AddNewRfp/AddNewRfp'
 
 type Props = {
   api: number,
@@ -20,7 +21,7 @@ const Header = ({api, setApi}: Props) => {
         <p className='heading-2'>RFPs (Request For Proposals)</p>
         <TFButton icon={ICONS.PLUS_WHITE} label="Add New RFP" disabled={!privileges.includes("Add RFP")} handleClick={() => setShow(true)} />
       </div>
-      {show && <AddRfp show={show} setShow={setShow} isEditing={false} editForm={editForm} api={api} setApi={setApi}/>}
+      {show && <AddNewRfp show={show} setShow={setShow} isEditing={false} editForm={editForm} api={api} setApi={setApi}/>}
     </>
   )
 }
