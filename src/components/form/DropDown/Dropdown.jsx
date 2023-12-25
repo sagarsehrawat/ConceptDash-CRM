@@ -20,6 +20,13 @@ const Dropdown = ({
   const [open, setOpen] = useState(false);
   const [searchStr, setSearchStr] = useState("");
   const [dropdownOptions, setDropdownOptions] = useState();
+  const [checkedItems, setCheckedItems] = useState([]);
+  useEffect(() => {
+    if (checkbox) {
+      setCheckedItems([...value]);
+    }
+  }, [checkbox]);
+
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const ref3 = useRef(null);
@@ -35,9 +42,22 @@ const Dropdown = ({
       e.target !== ref3.current &&
       e.target !== ref4.current &&
       e.target !== ref5.current &&
-      e.target !== ref6.current
+      e.target !== ref6.current &&
+      e.target !== ref7.current
     ) {
-      setOpen(false);
+      if (!checkbox) setOpen(false);
+    }
+  };
+
+  const handleCheck = (elem) => {
+    let tempArr = [];
+    if (checkedItems.filter((e) => e == elem.value).length > 0) {
+      tempArr = checkedItems.filter((e) => e !== elem.value);
+      setCheckedItems(tempArr);
+    } else {
+      tempArr = [...checkedItems];
+      tempArr.push(elem.value);
+      setCheckedItems(tempArr);
     }
   };
 
@@ -72,7 +92,13 @@ const Dropdown = ({
       <div
         className={styles[`dropdown-container`]}
         style={{
-          backgroundColor: value ? "#8361FE" : "#FFFFFF",
+          backgroundColor: checkbox
+            ? value.length > 0
+              ? "#8361FE"
+              : "#FFFFFF"
+            : value
+            ? "#8361FE"
+            : "#FFFFFF",
           border: !value ? "1px solid #70757A" : "none",
         }}
         onClick={() => {
@@ -83,10 +109,22 @@ const Dropdown = ({
           ref={ref2}
           className={styles[`value-field`]}
           style={{
-            color: disable ? "white" : value ? "white" : "",
+            color: disable
+              ? "white"
+              : checkbox
+              ? value.length > 0
+                ? "white"
+                : ""
+              : value
+              ? "white"
+              : "",
           }}
         >
-          {value ? options.filter((e) => e?.value == value)[0]?.label : name}
+          {value
+            ? checkbox
+              ? name + " (" + value.length + ")"
+              : options.filter((e) => e?.value == value)[0]?.label
+            : name}
         </span>
         <button
           ref={ref3}
@@ -96,7 +134,17 @@ const Dropdown = ({
           <img
             ref={ref6}
             className={styles["icon-img"]}
-            src={disable ? downWhite : value ? downWhite : downGray}
+            src={
+              disable
+                ? downWhite
+                : checkbox
+                ? value.length > 0
+                  ? downWhite
+                  : downGray
+                : value
+                ? downWhite
+                : downGray
+            }
             alt=""
           />
         </button>
@@ -121,26 +169,85 @@ const Dropdown = ({
               />
             </div>
           )}
-          {options &&
-            dropdownOptions?.map((elem, idx) => {
-              return (
-                <div
-                  onClick={() => {
-                    if (type) {
-                      onChange(elem?.value, type);
-                    } else {
-                      onChange(elem?.value);
-                    }
+          <div className={styles.optionsContainerMain}>
+            {options && checkbox
+              ? dropdownOptions?.map((elem, idx) => {
+                  return (
+                    <div
+                      onClick={() => {}}
+                      className={styles["option"]}
+                      key={idx}
+                      value={elem?.value}
+                      style={{
+                        display: "flex",
+                        gap: "5px",
+                        alignItems: "center",
+                        padding: "0px 16px",
+                      }}
+                    >
+                      <input
+                        className="pointer"
+                        type="checkbox"
+                        name={name}
+                        id={idx}
+                        value={elem?.value}
+                        onChange={() => handleCheck(elem)}
+                        checked={
+                          checkedItems.filter((e) => e === elem.value)
+                            .length > 0
+                        }
+                      />
+                      <label className={styles.checkLabel} htmlFor={idx}>
+                        {elem?.label}
+                      </label>
+                    </div>
+                  );
+                })
+              : dropdownOptions?.map((elem, idx) => {
+                  return (
+                    <div
+                      onClick={() => {
+                        if (type) {
+                          onChange(elem?.value, type);
+                        } else {
+                          onChange(elem?.value);
+                        }
+                        setOpen(false);
+                      }}
+                      className={styles["option"]}
+                      key={idx}
+                      value={elem?.value}
+                    >
+                      {elem?.label}
+                    </div>
+                  );
+                })}
+          </div>
+          {checkbox && (
+            <div className={styles.checkBelow}>
+              <button
+                className={styles.done}
+                onClick={() => {
+                  setOpen(false);
+                  onChange(checkedItems);
+                }}
+              >
+                Done
+              </button>
+              <button
+                className={styles.clear}
+                onClick={() => {
+                  setCheckedItems([]);
+                  if (value.length > 0) {
+                    onChange([]);
                     setOpen(false);
-                  }}
-                  className={styles["option"]}
-                  key={idx}
-                  value={elem?.value}
-                >
-                  {elem?.label}
-                </div>
-              );
-            })}
+                  }
+                }}
+              >
+                Clear
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

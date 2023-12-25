@@ -110,6 +110,8 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
   });
   const [budgets, setBudgets] = useState({ showBudgets: false, budgets: [] });
   const [loading, setLoading] = useState(false);
+  const [depts, setdepts] = useState([]);
+  const [projectCategories, setProjectCategories] = useState([]);
 
   const createRegionData = (cities) => {
     let tempData = [];
@@ -157,6 +159,27 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
       createRegionData(citiesMain);
     }
   }, [citiesMain]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const departmentsResponse = await SERVICES.getDepartments();
+      let tempDeptArr = [];
+      departmentsResponse.res.forEach((e) => {
+        tempDeptArr.push({ label: e.Department, value: e.Department_ID });
+      });
+      setdepts(tempDeptArr);
+      const projectCategoryResponse = await SERVICES.getProjectCategories("");
+      let tempProjArr = [];
+      projectCategoryResponse.res.forEach((e) => {
+        tempProjArr.push({
+          label: e.Project_Category,
+          value: e.Project_Cat_ID,
+        });
+      });
+      setProjectCategories(tempProjArr);
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -251,6 +274,57 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
                 }}
                 options={createCityOptions(citiesData.cities)}
               />
+            )}
+            {cityID && (
+              <>
+                <Dropdown
+                  name={"Year"}
+                  value={year}
+                  search
+                  onChange={(val) => {
+                    setYear(val);
+                  }}
+                  options={[
+                    { label: "2021", value: "2021" },
+                    { label: "2022", value: "2022" },
+                    { label: "2023", value: "2023" },
+                    { label: "2024", value: "2024" },
+                  ]}
+                />
+                <Dropdown
+                  name={"Budget Category"}
+                  value={filter.budgetCategory}
+                  search
+                  checkbox
+                  onChange={(val) => {
+                    setfilter({ ...filter, budgetCategory: val });
+                  }}
+                  options={[
+                    { label: "Design", value: "Design" },
+                    { label: "Construction", value: "Construction" },
+                  ]}
+                />
+                <Dropdown
+                  name={"Department"}
+                  value={filter.dept}
+                  search
+                  checkbox
+                  onChange={(val) => {
+                    setfilter({ ...filter, dept: val });
+                  }}
+                  options={depts}
+                />
+                <Dropdown
+                  name={"Project Category"}
+                  value={filter.cat}
+                  search
+                  checkbox
+                  onChange={(val) => {
+                    setfilter({ ...filter, cat: val });
+                  }}
+                  options={projectCategories}
+                />
+              </>
             )}
           </div>
         )}
