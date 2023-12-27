@@ -5,9 +5,21 @@ import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
 import TFInput from '../../../../components/form/TFInput/TFInput';
 import TFMultiSelect from '../../../../components/form/TFMultiSelect/TFMultiSelect';
 
-const Estimation = ({ form, handleForm,cities, managers, employees, departments, projectCategories ,clients}) => {
+const Estimation = ({ form, handleForm,cities, managers, employees, departments, projectCategories ,clients, sources}) => {
   return (
     <>
+        {/* Project Name */}
+        <div className="d-flex flex-row gap-8 w-100">
+          <p className="project-label">Proposal Name</p>
+          <TFInput
+            name="projectName"
+            placeholder='Project Name'
+            value={form.projectName}
+            onChange={handleForm}
+            width="100%"
+            />
+        </div>
+
         {/* City */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">City</p>
@@ -52,7 +64,7 @@ const Estimation = ({ form, handleForm,cities, managers, employees, departments,
           <TFChip
             value={form.rating}
             name='rating'
-            options={["1", "2", "3"]}
+            options={["1", "2", "3","4","5"]}
             onChange={handleForm}
           />
         </div>
@@ -115,13 +127,14 @@ const Estimation = ({ form, handleForm,cities, managers, employees, departments,
         {/* Source */}
         <div className="d-flex flex-row gap-8 w-100">
           <p className="project-label">Source</p>
-          <TFInput
-            name="source"
-            placeholder='Source'
-            value={form.source}
+          <TFTypeahead
+            name='source'
+            placeholder='Choose Source'
+            width='100%'
+            defaultValue={form.source}
             onChange={handleForm}
-            width="100%"
-            />
+            options={sources}
+          />
         </div>
 
         {/* Partners */}
@@ -141,6 +154,9 @@ const Estimation = ({ form, handleForm,cities, managers, employees, departments,
 
         {/* Details */}
         <p className="project-header">Team and Department</p>
+        <p className="project-subheader">
+          Add Team Member, Departments and Project Category Details
+        </p>
 
         <div className="d-flex flex-start gap-8">
           <p className="project-label">

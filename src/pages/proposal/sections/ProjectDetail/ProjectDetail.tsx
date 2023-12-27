@@ -112,6 +112,12 @@ const ProposalDetail = ({ proposalId, setProposalId }: Props) => {
     const [projectCategories, setProjectCategories] = useState<TypeaheadOptions>([]);
     const [cities, setCities] = useState<TypeaheadOptions>([]);
     const [clients, setClients] = useState<TypeaheadOptions>([]);
+    const [sources, setSources] = useState([
+        {value: "Construct Connect",label: "Construct Connect"},
+        {value: "Bids and Tenders",label: "Bids and Tenders"},
+        {value: "Biddingo",label: "Biddingo"},
+        {value: "Merx",label: "Merx"}
+    ])
     const formUtils = FormUtils(setProposal);
     const dispatch = useDispatch();
 
@@ -235,6 +241,14 @@ const ProposalDetail = ({ proposalId, setProposalId }: Props) => {
             case 'addPlantaker':
                 setProposal({ ...proposal, [key === 'addBidder' ? 'bidderList' : 'plantakerList']: [...proposal[key === 'addBidder' ? 'bidderList' : 'plantakerList'], ''] });
                 break;
+            case 'removeBidder':
+                const filteredBidderList = proposal.bidderList.filter((_, i) => i !== index);
+                setProposal({ ...proposal, bidderList: filteredBidderList });
+                break;
+            case 'removePlantaker':
+                const filteredPlantakerList = proposal.plantakerList.filter((_, i) => i !== index);
+                setProposal({ ...proposal, plantakerList: filteredPlantakerList });
+                break;
             case 'partners':
             case 'team':
                 formUtils.multiSelectForm(key, value);
@@ -275,7 +289,7 @@ const ProposalDetail = ({ proposalId, setProposalId }: Props) => {
     }
 
     const handleFormType = () => {
-        return <Estimation form={proposal} handleForm={handleForm} cities={cities} managers={managers} employees={employees} departments={departments} projectCategories={projectCategories} clients={clients}/>
+        return <Estimation form={proposal} handleForm={handleForm} cities={cities} managers={managers} employees={employees} departments={departments} projectCategories={projectCategories} clients={clients} sources={sources}/>
     }
 
     const handleFormType2 = () => {
@@ -358,19 +372,7 @@ const ProposalDetail = ({ proposalId, setProposalId }: Props) => {
 
                     <div className='project-detail-body w-100' ref={tabRefs[0]}>
                         <div className='w-100'>
-                            <form>
-                                {/* Project Name */}
-                                <input
-                                type="text"
-                                name="projectName"
-                                className="project-input project-name-input"
-                                placeholder="Project Name"
-                                required={true}
-                                value={proposal.projectName}
-                                onChange={(e) => handleForm(e.target.name, e.target.value)}
-                                   />
-                                {handleFormType()}
-                            </form>
+                            {handleFormType()}
                         </div>
 
 

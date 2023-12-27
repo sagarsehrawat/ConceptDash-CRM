@@ -40,10 +40,11 @@ export const proposalSlice = createSlice({
             }));
         },
         initData: (state, action: PayloadAction<ProposalStatus>) => {
-            // state.newProposals = action.payload.newProposals;
+            state.newProposals = action.payload.newProposals;
             state.totalProposals = action.payload.totalProposals;
             state.wonProposals = action.payload.wonProposals;
             state.lostProposals = action.payload.lostProposals;
+            state.percentage = action.payload.percentage;
         },
         addProposal: (state, action: PayloadAction<Proposal>) => {
             state.proposals = [action.payload, ...state.proposals];

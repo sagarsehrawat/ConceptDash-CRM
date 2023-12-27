@@ -192,9 +192,20 @@ const Bidders = ({ form, handleForm,cities, managers, employees, departments, pr
               lineHeight: '20px',
               bordeRadius: '6px',
               background: '#FFF',
-              borderColor: 'transparent'
+              borderColor: 'transparent',
+              width: '100%'
             }}
             />
+            <div className="d-flex flex-row" type="button" onClick={() => handleForm('removeBidder',0, index)} style={{
+            padding: '6px var(--8-pad, 8px)',
+            borderRadius: '6px',
+            background: 'var(--New-Outline, #EBEDF8)',
+            alignItems: 'center',
+          }}
+
+            >
+            Remove
+            </div>
 
           </div>
         ))}
@@ -249,10 +260,22 @@ const Bidders = ({ form, handleForm,cities, managers, employees, departments, pr
             lineHeight: '20px',
             bordeRadius: '6px',
             background: '#FFF',
-            borderColor: 'transparent'
+            borderColor: 'transparent',
+            width: '100%'
           }}
           
         />
+
+          <div className="d-flex flex-row" type="button" onClick={() => handleForm('removePlantaker',0, index)} style={{
+            padding: '6px var(--8-pad, 8px)',
+            borderRadius: '6px',
+            background: 'var(--New-Outline, #EBEDF8)',
+            alignItems: 'center',
+          }}
+
+            >
+            Remove
+            </div>
 
         </div>
       ))}

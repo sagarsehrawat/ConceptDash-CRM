@@ -26,14 +26,6 @@ const handleTTM=()=>{
 
 
 const IndependentRow = ({ proposal, selectedProposals, setselectedProposals, openDriveLink, tableRef, handleResultUpdate, setProposalId ,handleBookmarkUpdate, handlePriorityUpdate}: Props) => {
-    // if(proposal.bookmark!=null)console.log(typeof(proposal.bookmark[0]));
-    // console.log(typeof(employeeId))
-    // if(proposal.bookmark?.includes(employeeId)){
-    //     console.log('Includes');
-    // }
-    // else{
-    //     console.log("no");
-    // }
     return (
         <tr style={{ width: "100%", backgroundColor: selectedProposals.includes(proposal.proposal_id) ? "#F5F3FE" : "white", verticalAlign: "top" }} key={proposal.proposal_id}>
             <td className='table-cell fixed-column' style={{ "backgroundColor": selectedProposals.includes(proposal.proposal_id) ? "#F5F3FE" : "white" }}>
@@ -102,7 +94,10 @@ const IndependentRow = ({ proposal, selectedProposals, setselectedProposals, ope
                     options={["High", "Medium", "Low"]}
                 />
             </td>
-            <td className='table-cell'>{proposal.total_bid_price}</td>
+            <td className='table-cell'>
+            {proposal.total_bid_price!==null ? `$${proposal.total_bid_price}` : ``}
+            </td>
+
             {/* <td className='table-cell'>{proposal.proposal_generator_link}</td> */}
             <td className='table-cell'><div style={{color:"#3692EF", fontSize:'13px', cursor:'pointer'}} onClick={()=>handleTTM()}>TTM&nbsp;<img src={open} alt='open-in-drive'/></div></td>
             <td className='table-cell'>{proposal.source}</td>

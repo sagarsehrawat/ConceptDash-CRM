@@ -1,9 +1,14 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { initData, selectTotalProposals, selectLostProposals, selectWonProposals} from '../../../../redux/slices/proposalSlice'
+import { initData, selectTotalProposals, selectLostProposals, selectWonProposals,selectNewProposals, selecteNewPercentage} from '../../../../redux/slices/proposalSlice'
 import SERVICES from '../../../../services/Services'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
+// import { icons } from "../../../../assets/icons";
+const { total_rfp_icon, new_rfp_icon, trending_rfp_icon, trending_up_icon } =
+    icons;
+
+
 type Props = {
     api: number,
 }
@@ -14,8 +19,8 @@ const HeaderCards = ({ api }: Props) => {
     const totalProposals  = useSelector(selectTotalProposals)
     const wonProposals = useSelector(selectWonProposals)
     const lostProposals = useSelector(selectLostProposals)
-    const newProposals = useSelector(selectWonProposals)
-    const percentage = useSelector(selectLostProposals)
+    const newProposals = useSelector(selectNewProposals)
+    const percentage = useSelector(selecteNewPercentage)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,8 +32,8 @@ const HeaderCards = ({ api }: Props) => {
                 proposalCounts.totalProposals = response.res[0].total_proposals;
                 proposalCounts.wonProposals = response.res[0].won_proposals;
                 proposalCounts.lostProposals = response.res[0].lost_proposals;
-                proposalCounts.percentage = response.res[0].month;
-                proposalCounts.newProposals = response.res[0].percent;
+                proposalCounts.percentage = response.res[0].percent;
+                proposalCounts.newProposals = response.res[0].month;
 
                 dispatch(initData(proposalCounts));
             } catch (error) {
@@ -37,6 +42,28 @@ const HeaderCards = ({ api }: Props) => {
         }
         fetchData();
     }, [api])
+
+
+    // const cardData = [
+    //     {
+    //       icon: total_rfp_icon,
+    //       rfp: countData.total_rfps,
+    //       percent: countData.total_rfps,
+    //       heading: "Total RFP's",
+    //     },
+    //     {
+    //       icon: new_rfp_icon,
+    //       rfp: countData.rfps_current_month,
+    //       percent: countData.percent_increase_total_rfps,
+    //       heading: "New RFP's",
+    //     },
+    //     {
+    //       icon: trending_rfp_icon,
+    //       rfp: countData.tracking_rfps_current_month,
+    //       percent: countData.percent_increase_tracking_rfps,
+    //       heading: "Tracking RFP's",
+    //     },
+    //   ];
 
     return (
         <>

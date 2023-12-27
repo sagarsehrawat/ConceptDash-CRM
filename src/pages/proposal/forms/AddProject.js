@@ -41,8 +41,8 @@ const FORM = {
     priority: 'Medium',
     proposalGeneratorLink: '',
     rating: '2',
-    bidderList: [""],
-    plantakerList: [""],
+    bidderList: ["","",""],
+    plantakerList: ["","",""],
     clientContactDetails: '',
     source: '',
     partners: [],
@@ -63,6 +63,12 @@ const AddProposal = ({ onHide, api, setApi }) => {
     const [projectCategories, setProjectCategories] = useState([]);
     const [cities, setCities] = useState([]);
     const [clients, setClients] = useState([]);
+    const [sources, setSources] = useState([
+        {value: "Construct Connect",label: "Construct Connect"},
+        {value: "Bids and Tenders",label: "Bids and Tenders"},
+        {value: "Biddingo",label: "Biddingo"},
+        {value: "Merx",label: "Merx"}
+    ])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -83,6 +89,7 @@ const AddProposal = ({ onHide, api, setApi }) => {
 
                 const organizationListResponse = await SERVICES.getOrganizationsList();
                 setClients(Utils.convertToTypeaheadOptions(organizationListResponse.res, 'company_name', 'company_id'));
+                console.log(departments);
 
             } catch (error) {
                 console.log(error);
@@ -136,6 +143,14 @@ const AddProposal = ({ onHide, api, setApi }) => {
             case 'addPlantaker':
             setForm({ ...form, plantakerList: [...form.plantakerList, ''] });
             break;
+            case 'removeBidder':
+            const filteredBidderList = form.bidderList.filter((_, i) => i !== index);
+            setForm({ ...form, bidderList: filteredBidderList });
+            break;
+            case 'removePlantaker':
+            const filteredPlantakerList = form.plantakerList.filter((_, i) => i !== index);
+            setForm({ ...form, plantakerList: filteredPlantakerList });
+            break;
             case 'team':
                 formUtils.multiSelectForm(key, value);
                 break;
@@ -153,6 +168,9 @@ const AddProposal = ({ onHide, api, setApi }) => {
                 formUtils.typeaheadForm(key, value);
                 break;
             case 'projectManager':
+                formUtils.typeaheadForm(key, value);
+                break;
+            case 'source':
                 formUtils.typeaheadForm(key, value);
                 break;
             case 'client':
@@ -242,7 +260,7 @@ const AddProposal = ({ onHide, api, setApi }) => {
                                 </div>
 
                                 <form style={{ width: '100%' }}>
-                                <IndependentProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories} managers={managers} employees={employees} clients ={clients}/>
+                                <IndependentProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories} managers={managers} employees={employees} clients ={clients} sources = {sources}/>
                                 </form>
                             </div>
                     }

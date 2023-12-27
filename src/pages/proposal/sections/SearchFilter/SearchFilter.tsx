@@ -192,7 +192,6 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
                   />
                 </div>
               </div>
-  
               <div
                 className='d-flex flex-row justify-content-between'
                 style={{ marginLeft: "20px", marginRight: "20px" }}>
