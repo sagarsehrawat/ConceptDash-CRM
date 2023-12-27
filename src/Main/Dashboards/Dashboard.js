@@ -565,6 +565,7 @@ const Dashboard = () => {
     // if (nav === 7) return <Proposal isCollapsed={isCollapsed} />;
     if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
     if (nav === 8) return <TestDemo />;
+    // if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <Customers isCollapsed={isCollapsed} />;
     if (nav === 12) return <Privileges />;

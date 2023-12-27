@@ -78,9 +78,10 @@ const TFChip = ({ value, tableRef, options, onChange, name }) => {
     if (onChange && tableRef) {
       if (isVisible) {
         tableRef.current.style.overflowY = 'hidden';
-      } else {
-        tableRef.current.style.overflowY = 'auto';
-      }
+      } 
+      // else {
+      //   tableRef.current.style.overflowY = 'auto';
+      // }
     }
   }, [onChange, isVisible, tableRef]);
 

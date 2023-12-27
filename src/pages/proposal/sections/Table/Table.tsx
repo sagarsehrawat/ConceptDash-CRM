@@ -28,9 +28,10 @@ type Props = {
   search: string;
   isCollapsed: boolean;
   setProposalId: Function;
+  handleTTM: Function;
 }
 
-const Table = ({ api, setApi, currPage, filter, search, setPages, setProposalId }: Props) => {
+const Table = ({ api, setApi, currPage, filter, search, setPages, setProposalId, handleTTM }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedProposals, setSelectedProposals] = useState<number[]>([]);
   const tableRef = useRef(null);
@@ -169,7 +170,6 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProposalId 
     }
   };
   
-
   const handleDeleteProposal = async () => {
     try {
       await SERVICES.deleteProposal(selectedProposals);
@@ -251,6 +251,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProposalId 
                       setProposalId={setProposalId}
                       handleBookmarkUpdate={handleBookmarkUpdate}
                       handlePriorityUpdate={handlePriorityUpdate}
+                      handleTTM={handleTTM}
                     />
                   )
               })
@@ -259,8 +260,8 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProposalId 
         </table>
       </div>
       <DeleteModal selectedProjects={selectedProposals} setSelectedProjects={setSelectedProposals} handleDelete={handleDeleteProposal} />
-
-    </>
+      
+      </>
 }
 
 export default Table

@@ -161,7 +161,7 @@ function NewTaskorMilestone(props) {
             </Row>
           </Form>
           <div style={{display:'flex', flexDirection:'row', marginLeft:'160px', marginTop:'20px'}}>
-              <button style={{...styles.buttonCSS, color:'var(--Dark-grey, #70757A)', marginRight:'20px'}}>Cancel</button>
+              <button onClick={setshow} style={{...styles.buttonCSS, color:'var(--Dark-grey, #70757A)', marginRight:'20px'}}>Cancel</button>
               <button onClick={addMilestone} style={{...styles.buttonCSS, color:'#FBFBFB', background:'var(--mob-primary-colour, #8361FE)'}}>Add Milestone</button>
           </div>
         </div>
