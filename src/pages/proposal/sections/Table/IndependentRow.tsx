@@ -15,17 +15,16 @@ type Props = {
     handleResultUpdate: Function;
     setProposalId: Function;
     handleBookmarkUpdate: Function,
-    handlePriorityUpdate: Function
+    handlePriorityUpdate: Function,
+    handleTTM: Function
 }
 
 const employeeId: number = parseInt(localStorage.getItem("employeeId") ?? '0');
 
-const handleTTM=()=>{
-    console.log(1);
-}
 
 
-const IndependentRow = ({ proposal, selectedProposals, setselectedProposals, openDriveLink, tableRef, handleResultUpdate, setProposalId ,handleBookmarkUpdate, handlePriorityUpdate}: Props) => {
+
+const IndependentRow = ({ proposal, selectedProposals, setselectedProposals, openDriveLink, tableRef, handleResultUpdate, setProposalId ,handleBookmarkUpdate, handlePriorityUpdate, handleTTM}: Props) => {
     return (
         <tr style={{ width: "100%", backgroundColor: selectedProposals.includes(proposal.proposal_id) ? "#F5F3FE" : "white", verticalAlign: "top" }} key={proposal.proposal_id}>
             <td className='table-cell fixed-column' style={{ "backgroundColor": selectedProposals.includes(proposal.proposal_id) ? "#F5F3FE" : "white" }}>
@@ -99,7 +98,7 @@ const IndependentRow = ({ proposal, selectedProposals, setselectedProposals, ope
             </td>
 
             {/* <td className='table-cell'>{proposal.proposal_generator_link}</td> */}
-            <td className='table-cell'><div style={{color:"#3692EF", fontSize:'13px', cursor:'pointer'}} onClick={()=>handleTTM()}>TTM&nbsp;<img src={open} alt='open-in-drive'/></div></td>
+            <td className='table-cell'><div style={{color:"#3692EF", fontSize:'13px', cursor:'pointer'}} onClick={()=>{handleTTM(proposal.proposal_id, proposal.project_name);console.log(1)}}>TTM&nbsp;<img src={open} alt='open-in-drive'/></div></td>
             <td className='table-cell'>{proposal.source}</td>
             <td className='table-cell'>{proposal.partner_names?.join(', ')}</td>
 

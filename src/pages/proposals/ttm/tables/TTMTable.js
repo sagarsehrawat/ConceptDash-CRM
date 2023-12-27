@@ -29,7 +29,7 @@ import TFOptionsModal from "../../../../components/modals/TFOptionsModal/TFOptio
 import TFInput from "../../../../components/form/TFInput/TFInput";
 
 function TTMTable(props) {
-  const { Name, Id } = props;
+  const { Name, Id, setexists } = props;
   const [change, setchange] = useState(false);
   const [show, setShow] = useState(false);
   const handleCloseStage1 = () => setShow(false);
@@ -72,12 +72,12 @@ function TTMTable(props) {
           },
         })
         .then((res) => {
-          // console.log(JSON.parse(res.data.res[0].Designations))
-          let data = JSON.parse(res.data.res[0].Data);
-          let empIDs = JSON.parse(res.data.res[0].Employee_Info)[0];
-          let hrRates = JSON.parse(res.data.res[0].Employee_Info)[1];
-          let consultantNames = JSON.parse(res.data.res[0].Employee_Info).length===3 ? JSON.parse(res.data.res[0].Employee_Info)[2]:[];
-          let desigs = JSON.parse(res.data.res[0].Designations);
+          if(!res.data.res) setexists(false);
+          let data = JSON.parse(res.data.res.data);
+          let empIDs = JSON.parse(res.data.res.employee_info)[0];
+          let hrRates = JSON.parse(res.data.res.employee_info)[1];
+          let consultantNames = JSON.parse(res.data.res.employee_info).length===3 ? JSON.parse(res.data.res.employee_info)[2]:[];
+          let desigs = JSON.parse(res.data.res.designations);
           formChildArr(desigs);
           setemps(empIDs);
           setrate(hrRates);

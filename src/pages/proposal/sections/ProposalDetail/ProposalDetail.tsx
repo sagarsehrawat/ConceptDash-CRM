@@ -262,7 +262,6 @@ const ProposalDetail = ({ proposalId, setProposalId }: Props) => {
             case "projectName":
                 formUtils.typeInputForm(key, value);
                 break;
-            case 'source':
             case 'projectName':
                 formUtils.typeInputForm(key, value);
                 break;
@@ -270,8 +269,10 @@ const ProposalDetail = ({ proposalId, setProposalId }: Props) => {
             case 'projectManager':
             case 'client':
             case 'city':
+            case 'source':
                 formUtils.typeaheadForm(key, value);
                 break;
+            
             case 'department':
                 setProjectCategories([]);
                 formUtils.typeaheadForm(key, value);
