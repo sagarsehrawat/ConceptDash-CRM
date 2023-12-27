@@ -190,12 +190,13 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
         }
     }
 
-    const handleTabChange = (tabValue: number) => {
-        setTab(tabValue);
+    const handleTabChange = (tabValue: number | string) => {
+        const tab = parseInt(tabValue.toString())
+        setTab(tab);
 
         // Assuming 'Task List' is the tab that corresponds to the Tasklist component
-        if (tabRefs[tabValue] && tabRefs[tabValue]?.current) {
-            tabRefs[tabValue].current?.scrollIntoView({
+        if (tabRefs[tab] && tabRefs[tab]?.current) {
+            tabRefs[tab].current?.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start',
             });
