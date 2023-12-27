@@ -4,11 +4,6 @@ import { initData, selectTotalProposals, selectLostProposals, selectWonProposals
 import SERVICES from '../../../../services/Services'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-// import { icons } from "../../../../assets/icons";
-const { total_rfp_icon, new_rfp_icon, trending_rfp_icon, trending_up_icon } =
-    icons;
-
-
 type Props = {
     api: number,
 }
@@ -42,28 +37,6 @@ const HeaderCards = ({ api }: Props) => {
         }
         fetchData();
     }, [api])
-
-
-    // const cardData = [
-    //     {
-    //       icon: total_rfp_icon,
-    //       rfp: countData.total_rfps,
-    //       percent: countData.total_rfps,
-    //       heading: "Total RFP's",
-    //     },
-    //     {
-    //       icon: new_rfp_icon,
-    //       rfp: countData.rfps_current_month,
-    //       percent: countData.percent_increase_total_rfps,
-    //       heading: "New RFP's",
-    //     },
-    //     {
-    //       icon: trending_rfp_icon,
-    //       rfp: countData.tracking_rfps_current_month,
-    //       percent: countData.percent_increase_tracking_rfps,
-    //       heading: "Tracking RFP's",
-    //     },
-    //   ];
 
     return (
         <>

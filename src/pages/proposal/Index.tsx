@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Header from './sections/Header/Header';
-import HeaderCards from './sections/HeaderCard/HeaderCards';
+import HeaderCards from './sections/HeaderCards/HeaderCards';
 import SearchFilter from './sections/SearchFilter/SearchFilter';
 import Pages from './sections/Pages/Pages';
 import Table from './sections/Table/Table';

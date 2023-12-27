@@ -30,6 +30,39 @@ const SERVICES = {
         }
     },
 
+    proposalCount: async (): Promise<ProposalCountResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_PROPOSAL_COUNT, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as ProposalCountResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    budgetCount: async (): Promise<BudgetCountResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_BUDGET_COUNT, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                },
+            });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as BudgetCountResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+
     projectCount: async (): Promise<ProjectCountResponse> => {
         try {
             const response = await axios.get(APIS.GET_PROJECT_COUNT, {

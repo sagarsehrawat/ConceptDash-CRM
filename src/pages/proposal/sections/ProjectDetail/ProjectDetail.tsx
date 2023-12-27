@@ -112,12 +112,18 @@ const ProposalDetail = ({ proposalId, setProposalId }: Props) => {
     const [projectCategories, setProjectCategories] = useState<TypeaheadOptions>([]);
     const [cities, setCities] = useState<TypeaheadOptions>([]);
     const [clients, setClients] = useState<TypeaheadOptions>([]);
-    const [sources, setSources] = useState([
+    const sources = [
         {value: "Construct Connect",label: "Construct Connect"},
         {value: "Bids and Tenders",label: "Bids and Tenders"},
         {value: "Biddingo",label: "Biddingo"},
         {value: "Merx",label: "Merx"}
-    ])
+    ]
+    // const [sources, setSources] = useState([
+    //     {value: "Construct Connect",label: "Construct Connect"},
+    //     {value: "Bids and Tenders",label: "Bids and Tenders"},
+    //     {value: "Biddingo",label: "Biddingo"},
+    //     {value: "Merx",label: "Merx"}
+    // ])
     const formUtils = FormUtils(setProposal);
     const dispatch = useDispatch();
 
