@@ -101,12 +101,12 @@ export const LIKE_ANNOUNCEMENT = '/api/update/like/announcement'
 // add apis
 export const ADD_NEW_USER = '/api/addNewUser'
 export const ADD_NEW_SHIPPER = '/api/addNewShipper'
-export const ADD_TASK = '/api/add/task'
+export const ADD_TASK = '/task/add'
 export const ADD_ASSET = '/api/add/asset'
 export const ADD_BUDGET = '/api/add/budget'
 export const ADD_COMPANY = '/api/add/company'
 export const ADD_CONTACT = '/api/add/contact'
-export const ADD_EMPLOYEE = '/api/add/employee/prehire'
+export const ADD_EMPLOYEE = '/employee/add'
 export const ADD_JOB_TITLE = '/api/add/jobTitle'
 export const ADD_ORDER = '/api/add/order'
 export const ADD_PROJECT = '/api/add/project'
@@ -114,7 +114,7 @@ export const ADD_NEW_PROJECT = '/api/add/newproject'
 export const ADD_PROPOSAL = '/api/add/proposal'
 export const ADD_RFP = '/api/add/rfp'
 export const ADD_SOFTWARE = '/api/add/software'
-export const ADD_TIMESHEET = '/api/add/timesheet'
+export const ADD_TIMESHEET = '/task/timesheet/add'
 export const ADD_CITY = '/api/add/city'
 export const ADD_DEPARTMENT = '/api/add/department'
 export const ADD_CATEGORY = '/api/add/category'
@@ -135,7 +135,7 @@ export const DELETE_RFP = '/api/delete/rfp/id'
 export const DELETE_PROJECT = '/api/delete/project/id'
 export const DELETE_CONTACT = '/api/delete/customer/id'
 export const DELETE_COMPANY = '/api/delete/company/id'
-export const DELETE_TASK = '/api/delete/task/id'
+export const DELETE_TASK = '/task/delete'
 export const DELETE_TRANSACTION = '/api/delete/expenseTransaction/id'
 
 
@@ -161,7 +161,7 @@ export const UPDATE_PROPOSAL = '/api/update/proposal'
 export const UPDATE_STATUS_PROPOSAL = '/api/update/proposal/status'
 export const UPDATE_RFP = '/api/update/rfp'
 export const UPDATE_RFP_STATUS = '/api/update/rfp/status'
-export const UPDATE_TASK = '/api/update/task'
+export const UPDATE_TASK = '/task/update'
 export const UPDATE_PROJECT_TASK_5 = '/api/update/projectTask5'
 export const UPDATE_PROJECT_TASK_4 = '/api/update/projectTask4'
 export const UPDATE_PRIVILEGE = '/api/update/privileges'
@@ -178,9 +178,9 @@ export const PROJECT_TRENDING = '/api/get/chart/project/trending'
 export const PROPOSALS_TRENDING = '/api/get/chart/proposals/trending'
 export const RFP_ACTION = '/api/get/chart/rfp/action'
 export const PROPOSAL_STATUS_COUNTS = '/api/get/status/proposal'
-export const BUDGET_CHART = '/api/get/chart/budget'
+export const BUDGET_CHART = '/budget/chart'
 export const PROJECT_CHART = '/api/get/chart/project'
-export const BUDGET_CHART_DEPARTMENT = '/api/get/chart/budget/department'
+export const BUDGET_CHART_DEPARTMENT = '/budget/chart/department'
 
 // login
 export const LOGIN = '/api/login'
@@ -199,8 +199,8 @@ export const GET_PAGES_PROPOSALS = '/api/get/pages/proposals'
 export const GET_PAGE_CUSTOMERS = '/api/get/customer'
 export const GET_PAGES_CUSTOMERSS = '/api/get/pages/customers'
 export const GET_EXPENSE_TRANSACTIONS = '/api/get/page/expenseTransactions'
-export const GET_PAGE_TASKS = '/api/get/page/tasks'
-export const GET_WEEKLY_TIMESHEET = '/api/get/page/timesheet'
+export const GET_PAGE_TASKS = '/task/get'
+export const GET_WEEKLY_TIMESHEET = '/task/timesheet/get'
 export const GET_PAGE_REPORT = '/api/get/page/reports'
 
 //Google APIs
@@ -220,3 +220,34 @@ export const GET_CAMPAIGN_NUMBER = (campaignId) =>  `/campaign/get-campaign-repo
 export const GET_CAMPAIGN_CONTACT = (campaignId,ev) => `/campaign/get-campaign-report/contacts/${campaignId}/${ev}`
 
 export const PRIMARY_COLOR = '#8361FE'
+
+
+// Client APIs
+
+export const ORGANIZATION_COUNT='/client/get/organization/count'
+export const PEOPLE_COUNT='/client/get/people/count'
+export const ADD_PEOPLE = '/client/add/people';
+export const ADD_ORGANIZATION = '/client/add/organization'
+export const UPDATE_ORGANIZATION = '/client/update/organization'
+export const DELETE_ORGANIZATION = '/client/delete/organization'
+export const UPDATE_PEOPLE = '/client/update/people'
+export const DELETE_PEOPLE = '/client/delete/people'
+export const ALL_PEOPLE_IN_ORGANIZATION='/client/get/people/all'
+export const GET_ORGANIZATION_LIST = '/client/get/organization/list'
+
+export const GET_ALL_ORGANIZATION='/client/get/page/organization'
+export const GET_ALL_PEOPLE='/client/get/page/people'
+export const ORGANIZATION_DETAILS='/client/get/organization'
+export const PERSON_DETAILS='/client/get/people'
+
+export const GENERAL_NOTES='/client/get/people/generalchats'
+export const PROJECT_NOTES='/client/get/people/projectspecific'
+export const ADD_GENERAL_NOTES='/client/add/people/generalchats'
+export const ADD_PROJECT_NOTES='/client/add/people/projectspecific' 
+
+export const UPDATE_GENERAL_NOTES="/client/update/people/generalchats"
+export const UPDATE_PROJECT_NOTES="/client/update/people/projectspecific"
+
+export const DELETE_GENERAL_NOTES='/client/delete/people/generalchat'
+export const DELETE_PROJECT_NOTES='/client/delete/people/projectspecific'
+// export const DELETE_GENERAL_NOTES="/client/delete/people/generalchats"

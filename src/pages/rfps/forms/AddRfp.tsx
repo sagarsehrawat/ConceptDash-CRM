@@ -244,6 +244,7 @@ const AddRfp = ({ show, setShow, api, setApi, isEditing = false, editForm }: Pro
           background: "#FFFFFF",
           boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
           borderRadius: "12px",
+          
         }}
         dialogClassName="filter-dialog"
         animation={false}

@@ -49,17 +49,18 @@ import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
 import RFP from "../../pages/rfps/Index.tsx";
 import TestDemo from "../../pages/calendar/index";
-import Proposal from "../../pages/proposals/index";
+// import Proposal from "../../pages/proposals/index";
 import Employee from "../../pages/employee/index";
 import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../../pages/customers/index";
 import Project from "../../pages/projects/Index.tsx";
-import BudgetCities from "../../pages/budgetCities/index";
+import Proposal from "../../pages/proposal/Index.tsx";
+import BudgetCities from "../../pages/budgetCities/Index";
 import Tasks from "../../pages/tasks/index";
 import AddTask from "../../pages/tasks/forms/AddTask";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
-import RFPform from "../../pages/rfps/forms/RFPform";
+import RFPform from "../../pages/rfps/forms/AddRfp.tsx";
 import ProposalForm from "../../pages/proposals/forms/ProposalForm";
 import projectForm from '../../Images/projectForm.svg'
 import cross from '../../Images/cross.svg'
@@ -78,7 +79,10 @@ import TTMMain from "../../pages/proposals/ttm/TTMMain";
 import CampaignRoot from "../v3/campaign/CampaignRoot";
 import { useDispatch } from "react-redux";
 import { initPrivileges } from "../../redux/slices/privilegeSlice";
-
+import AllOrganisations from "../v3/Contacts/Index/AllOrganisations.tsx";
+import People from "../v3/Contacts/Index/People.tsx";
+import ContactPerson from "../v3/Contacts/Pages/ContactPerson.tsx";
+import CompanyPage from "../v3/Contacts/Pages/CompanyPage.tsx";
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();
   const navigate = useNavigate();
@@ -91,6 +95,8 @@ const Dashboard = () => {
   const [red, setred] = useState(false);
   const [apiCall, setCall] = useState(0);
 
+  const [contactPersonData, setContactPersonData] = useState({});
+  const [organizationData, setOrganizationData] = useState({});
   const { privileges, setPrivileges } = useContext(AuthenticationContext);
 
   //Add Task Form Modal
@@ -553,9 +559,10 @@ const Dashboard = () => {
     if (nav === 2) return <Tasks isCollapsed={isCollapsed} />;
     if (nav === 3) return <BudgetCities isCollapsed={isCollapsed} />;
     if (nav === 4) return <RFP isCollapsed={isCollapsed} />
-    if (nav === 17) return <Proposal isCollapsed={isCollapsed} />
+    if (nav === 17) return <Proposal isCollapsed={isCollapsed} setnav={setnav}/>
     if (nav === 5) return <PMSelector isCollapsed={isCollapsed} />
     if (nav === 6) return <Project isCollapsed={isCollapsed} setnav={setnav}/>
+    // if (nav === 7) return <Proposal isCollapsed={isCollapsed} />;
     if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
     if (nav === 8) return <TestDemo />;
     // if (nav === 9) return <ExpenseUpdate />;
@@ -566,9 +573,14 @@ const Dashboard = () => {
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
     if (nav === 18) return <TTMMain isCollapsed={isCollapsed}/>
     if(nav === 19)return <CampaignRoot isCollapsed={isCollapsed} />
+    if(nav === 20) return <AllOrganisations isCollapsed={isCollapsed} setnav={setnav} setOrganizationData={setOrganizationData}/>
+    if(nav === 21) return <People isCollapsed={isCollapsed} setnav={setnav}  setContactPersonData={setContactPersonData}/>
+    if(nav === 22) return <ContactPerson isCollapsed={isCollapsed} contactPersonData={contactPersonData} setnav={setnav}/>
+    if(nav === 23) return <CompanyPage isCollapsed={isCollapsed} organizationData={organizationData} setnav={setnav} setContactPersonData={setContactPersonData}/>
   };
 
   const [prop, setprop] = useState(false)
+  const [prop2, setprop2] = useState(false)
   const[checkwish,setcheckwish] = useState(false)
   const currentdate= new Date()
 
@@ -959,6 +971,28 @@ const Dashboard = () => {
                     />
                   </div>
                 </div> : <></>}
+                {/* client */}
+                {privileges.includes('View Contacts') ? <div
+                  style={
+                    nav === 20
+                      ? mystyles.sidebarMenuItemActive.collapsed
+                      : mystyles.sidebarMenuItem
+                  }
+                  onClick={(e) => setnav(20)}
+                >
+                  <div
+                    style={
+                      nav === 20
+                        ? mystyles.sidebarMenuItemIconActive.collapsed
+                        : mystyles.sidebarMenuItemIcon.collapsed
+                    }
+                  >
+                    <img
+                      src={nav === 20 ? contactsActive : contactsInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                </div> : <></>}
                 <div
                   style={
                     nav === 16
@@ -1324,6 +1358,85 @@ const Dashboard = () => {
                     Companies
                   </p>
                 </div> : <></>}
+                {privileges.includes('View Contacts') ? <div
+                  style={{...
+                    prop
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem, backgroundColor:prop?'#F0F0F1':'#fbfbfb', boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)"
+                  }}
+                  onClick={()=>{setprop2(!prop2)}}
+                >
+                  <div
+                    style={
+                        mystyles.sidebarMenuItemIcon.nonCollapsed
+                    }
+                  >
+                    <img
+                      src={contactsInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                  <p
+                    style={
+                         mystyles.sidebarMenuItemText
+                    }
+                  >
+                    Clients
+                  </p>
+                  <div style={{marginLeft:'4em'}}>{prop2?<FontAwesomeIcon icon={faChevronDown} />:<FontAwesomeIcon icon={faChevronRight} />}</div>
+                </div> : <></>}
+                {prop2?<div
+                  style={{...
+                    nav === 20
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem, backgroundColor:nav===20?PRIMARY_COLOR:'#F0F0F1'
+                  }}
+                  onClick={(e) => setnav(20)}
+                >
+                  <div
+                    style={{...
+                      nav === 20
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)", backgroundColor: nav===20?PRIMARY_COLOR:'#F0F0F1'
+                    }}
+                  >
+                  </div>
+                  <p
+                    style={
+                      nav === 20
+                        ? mystyles.sidebarMenuItemTextActive
+                        : mystyles.sidebarMenuItemText
+                    }
+                  >
+                    Organisations
+                  </p>
+                </div>:<></>}
+                {prop2?<div
+                  style={{...
+                    nav === 21
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem, backgroundColor:nav===21?PRIMARY_COLOR:'#F0F0F1'
+                  }}
+                  onClick={(e) => setnav(21)}
+                >
+                  <div
+                    style={{...
+                      nav === 21
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)", backgroundColor: nav===21?PRIMARY_COLOR:'#F0F0F1'
+                    }}
+                  >
+                  </div>
+                  <p
+                    style={
+                      nav === 21
+                        ? mystyles.sidebarMenuItemTextActive
+                        : mystyles.sidebarMenuItemText
+                    }
+                  >
+                    People
+                  </p>
+                </div>:<></>}
                 {privileges.includes('View Contacts') ? <div
                   style={
                     nav === 11

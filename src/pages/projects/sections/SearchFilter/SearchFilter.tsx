@@ -115,7 +115,6 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
       });
     };
   
-  
     const filterSize = () => {
       return filter.city.length + filter.cat.length + filter.dept.length + filter.manager.length;
     }

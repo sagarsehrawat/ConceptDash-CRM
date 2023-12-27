@@ -61,6 +61,15 @@ const FormUtils = (setForm) => ({
         });
     },
 
+    selectForm: (key, value) => {
+        setForm((prev) => {
+            return {
+                ...prev,
+                [key]: value
+            }
+        });
+    },
+
     multiSelectForm: (key, value) => {
         setForm((prev) => {
             const isValueInArray = prev[key].some((item) => item.value === value.value);

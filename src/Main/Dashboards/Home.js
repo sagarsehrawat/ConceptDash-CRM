@@ -1,14 +1,8 @@
-import { faCloudArrowDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Button, Dropdown, Form, Modal } from "react-bootstrap";
-import pinnedActive from "../../Images/Pin icon_Active.svg";
-import pinnedInactive from "../../Images/Pin icon.svg";
 import arrow from '../../Images/Celebrations/arrow.svg'
-
 import BudgetCharts from "./BudgetCharts";
 import axios from "axios";
-import { HOST, PROJECT_CHART, GET_ADMIN_TASKS, PRIMARY_COLOR } from "../Constants/Constants";
+import { HOST,  GET_ADMIN_TASKS, PRIMARY_COLOR } from "../Constants/Constants";
 import deadlineImage from "../../Images/Vector.png";
 import Time from "../../Images/Time.png";
 import RFPCharts from "./RFPCharts";
@@ -21,13 +15,14 @@ import {
   ViewDirective,
   Day,
 } from "@syncfusion/ej2-react-schedule";
-import { Internationalization, extend } from "@syncfusion/ej2-base";
-import { gapi } from "gapi-script";
+import { Internationalization } from "@syncfusion/ej2-base";
 import ProjectCharts from "./ProjectCharts";
 import ProposalCharts from "./ProposalCharts";
 import moment from 'moment';
 import Celebrations from "../v2/Updated_Module/Celebrations";
 import groupicon from '../../Images/Celebrations/groupicon.svg'
+import SERVICES from "../../services/Services"
+import {Form, Modal} from "react-bootstrap"
 const Home = (props) => {
   const { setnav } = props;
   const { isCollapsed, viewportWidth } = props;
@@ -536,13 +531,6 @@ const Home = (props) => {
       </div>
     );
   }
-  function onEventRendered(args) {
-    // console.log(((new Date(args.data.StartTime)).getDate()===(new Date()).getDate()))
-    // const element = ((new Date(args.data.StartTime)).getDate()===(new Date()).getDate());
-    // if (element) {
-    //   element.innerText = 'Today';
-    // }
-  }
   const [chartComponent, setchartComponent] = useState("0");
   const [year, setyear] = useState("0");
   const [month, setmonth] = useState(new Date().getMonth().toString());
@@ -555,14 +543,6 @@ const Home = (props) => {
     if (chartComponent === "3") return <ProjectCharts month={month}/>;
   };
 
-  const proposalCharts = () => {
-    return <></>;
-  };
-
-  const projectCharts = () => {
-    return <></>;
-  };
-
   const [isLoadingTasks, setisLoadingTasks] = useState(false);
   
   const [sideTasks, setsideTasks] = useState([]);
@@ -570,27 +550,9 @@ const Home = (props) => {
   useEffect(() => {
     setisLoadingTasks(true);
     const call = async () => {
-      await axios
-        .get(HOST + PROJECT_CHART, {
-          headers: {
-            auth: "Rose " + localStorage.getItem("auth"),
-            chart: "Status",
-          },
-        })
-        .then((res) => {
-          const arr = res.data.res;
-          let p = projects;
-          arr.map((e) => {
-            if (e.Status === null) p[1] = e.Count;
-            if (e.Status === "Ongoing") p[0] = e.Count;
-            if (e.Status === "Not Started Yet") p[3] = e.Count;
-            if (e.Status === "Completed") p[2] = e.Count;
-          });
-          setprojects(p);
-        })
-        .catch((err) => {
-          console.error("Error fetching chart data: ", err);
-        });
+      const response = await SERVICES.projectCount();
+      console.log(response);
+      setprojects([response.res.ongoing_projects, response.res.new_projects, response.res.completed_projects, response.res.total_projects])
 
       await axios
         .get(HOST + GET_ADMIN_TASKS, {
@@ -650,7 +612,7 @@ console.log(sideTasks[0]);
               <div style={{...styles.projectOverviewContainers, marginRight: "0px"}} className='col p-0'>
                 <p style={styles.projectOverviewSubheading}>Total Projects</p>
                 <p style={styles.projectOverviewNumber}>
-                  {projects[0] + projects[1] + projects[2] + projects[3]}
+                  {projects[3]}
                 </p>
               </div>
             </div>
@@ -822,7 +784,6 @@ console.log(sideTasks[0]);
                 eventClick={handleEventClick}
                 showHeaderBar={false}
                 style={{border: 'none'}}
-                eventRendered={onEventRendered}
               >
                 <ViewsDirective>
                   <ViewDirective

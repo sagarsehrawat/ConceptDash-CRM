@@ -12,9 +12,9 @@ import { faArrowDown, faArrowUp, faEdit, faTrash, faXmark } from '@fortawesome/f
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
 import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
-import AddRfp from '../../forms/AddRfp';
 import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 import TFConversionModal from '../../../../components/modals/TFConversionModal/TFConversionModal';
+import AddNewRfp from '../../forms/AddNewRfp/AddNewRfp';
 
 interface FilterType {
   dept: (string | number)[],
@@ -65,6 +65,7 @@ const TrackingTable = ({ api, setApi, filter, search, isCollapsed }: Props) => {
       try {
         setIsLoading(true);
         const trackingResponse = await SERVICES.getTrackingRfps(filter, search, sort);
+        console.log(trackingResponse.res)
         dispatch(initRFPs(trackingResponse.res));
         setIsLoading(false);
       } catch (error) {
@@ -226,6 +227,9 @@ const TrackingTable = ({ api, setApi, filter, search, isCollapsed }: Props) => {
                     <p className='table-heading-text' onClick={() => setShowSortModal('Client')}>Client</p>
                     {sortModal('Client')}
                   </th>
+                  <th className='table-heading' style={{ width: "150px" }}>
+                    <p className='table-heading-text'>External Organizations</p>
+                  </th>
                   <th className='table-heading' style={{ width: "190px" }}>
                     <p className='table-heading-text' onClick={() => setShowSortModal('Source')}>Source</p>
                     {sortModal('Source')}
@@ -294,6 +298,11 @@ const TrackingTable = ({ api, setApi, filter, search, isCollapsed }: Props) => {
                         </div>
                       </td>
                       <td className='table-cell'>{rfp.client}</td>
+                      <td className='table-cell'>
+                        {rfp.organizations?.map((e)=>{
+                          return e.organization_name+ ', '
+                        })}
+                      </td>
                       <td className='table-cell'>{rfp.source}</td>
                       <td className='table-cell'>
                         <TFChip
@@ -331,7 +340,7 @@ const TrackingTable = ({ api, setApi, filter, search, isCollapsed }: Props) => {
                             onChange={(name: number, value: string) => handleDateUpdate(name, 'start_date', value)}
                           />}
                       </td>
-                      <td className='table-cell'>{rfp.project_manager}</td>
+                      <td className='table-cell'>{rfp.manager_name}</td>
                       <td className='table-cell'>{rfp.department}</td>
                       <td className='table-cell'>{rfp.project_category}</td>
                     </tr>
@@ -378,7 +387,7 @@ const TrackingTable = ({ api, setApi, filter, search, isCollapsed }: Props) => {
       {<TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete} label='RFP(s)'/>}
       {<TFConversionModal show={showConversionModal} onConfirm={handleStatusGoUpdate} onHide={()=>setShowConversionModal(false)} />}
       {show
-        && <AddRfp
+        && <AddNewRfp
           api={api}
           setApi={setApi}
           show={show}
