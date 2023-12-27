@@ -1,0 +1,21 @@
+.rfp-modal-container {
+  width: 52vw;
+  height: 100vh;
+  background-color: #fff;
+  padding: 15px 15px 0px 15px;
+  overflow-y: auto;
+
+  .rfp-modal-wrapper {
+    padding: 20px 30px 0px 30px;
+
+    .heading-icon-wrapper {
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

@@ -16,6 +16,7 @@ const HeaderCards = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                console.log('a')
                 const response = await SERVICES.projectCount();
                 const projectCounts = { newProjects: 0, ongoingProjects : 0, completedProjects: 0, percentage : 0, totalProjects: 0};
 

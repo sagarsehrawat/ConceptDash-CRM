@@ -221,7 +221,7 @@ const RFPCharts = (props) => {
 
                 let obj = { City: [], Department: [], Category: [] }
                 arr.map(e => {
-                    obj[e.Type].push(e.Name)
+                    obj[e.type].push(e.name)
                 })
                 settrending(obj)
                 setisLoading(prev => [false, ...prev.splice(1, 3)]);
@@ -238,7 +238,7 @@ const RFPCharts = (props) => {
                 let newArr = action
                 let i = 1;
                 arr.map(e => {
-                    newArr[i++] = e.Count
+                    newArr[i++] = e.count
                 })
                 setaction(newArr)
                 setisLoading(prevState => [prevState[0], false, ...prevState.splice(2, 3)])
@@ -293,7 +293,7 @@ const RFPCharts = (props) => {
                         <>
                             <div style={{ marginLeft: "8px" }} className='d-flex flex-row align-items-center justify-content-between'>
                                 <p style={styles.actionChartSubheader}>{action[4]} RFPs</p>
-                                <p style={styles.actionChartSubheader2}>{(action[3] !== 0 ? Math.abs(action[4] - action[3]) / action[3] : 0) * 100}% than last week</p>
+                                <p style={styles.actionChartSubheader2}>{(action[3] !== 0 ? Math.round(Math.abs(action[4] - action[3]) / action[3], 2) : 0) * 100}% than last week</p>
                             </div>
                             <div style={{ width: "300px", height: "75px", }} className='d-flex flex-row justify-content-center align-items-center'>
                                 <Line options={options} data={{

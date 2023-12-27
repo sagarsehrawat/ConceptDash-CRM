@@ -39,10 +39,10 @@ const TimeSheet = (props) => {
 
   const [timerId, setTimerId] = useState(null);
 
-    //Add Form Modal
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+  //Add Form Modal
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const styles = {
     searchInputContainer: {
@@ -158,10 +158,10 @@ const TimeSheet = (props) => {
       display: "inline",
       background: "white",
       padding: "12px 0px",
-      ':focus' : {
+      ':focus': {
         border: "none",
-      boxShadow: "none",
-      outline: "none",
+        boxShadow: "none",
+        outline: "none",
       }
     },
     addModal: {
@@ -173,8 +173,8 @@ const TimeSheet = (props) => {
       background: "#FFFFFF",
       boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
       borderRadius: "12px",
-  },
-  addHeading: {
+    },
+    addHeading: {
       width: "auto",
       height: "28px",
       marginLeft: "8px",
@@ -185,7 +185,7 @@ const TimeSheet = (props) => {
       lineHeight: "28px",
       color: "#0A0A0A",
       // marginTop:'12px'
-  }
+    }
   }
 
   useEffect(() => {
@@ -198,7 +198,7 @@ const TimeSheet = (props) => {
         })
         .then((res) => {
           let id = localStorage.getItem('employeeId')
-          let arr = res.data.res.filter(e => (parseInt(id) !== e.Employee_ID))
+          let arr = res.data.res.filter(e => (parseInt(id) !== e.employee_id))
           setemployees(arr)
         })
         .catch((err) => {
@@ -217,7 +217,7 @@ const TimeSheet = (props) => {
           headers: {
             auth: "Rose " + localStorage.getItem("auth"),
             employeeid: employeeId,
-            startdate: date.clone().startOf('isoWeek').format('YYYY-MM-DD')
+            startdate: date.clone().startOf('isoweek').format('YYYY-MM-DD')
           },
         })
         .then((res) => {
@@ -232,12 +232,12 @@ const TimeSheet = (props) => {
           };
           res.data.res.map(e => {
             let arr = []
-            for (let i = 1; i <= 7; i++) {
-              if (e[`day_${i}`] === null) {
+            for (let i = 0; i < 7; i++) {
+              if (e.timesheet[i] === null) {
                 arr.push("");
                 continue;
               }
-              let [hr, min] = e[`day_${i}`].split(":")
+              let [hr, min, sec] = e.timesheet[i].split(":")
               hr = parseInt(hr);
               min = parseInt(min);
               if (min === 0) {
@@ -246,11 +246,11 @@ const TimeSheet = (props) => {
                 arr.push(`${hr}:${min}`)
               }
             }
-            if (e.Type === "Projects" || e.Type === "Proposals" || e.Type === "RFP") arr.push(e.Project_Name)
+            if (e.type === "Projects" || e.type === "Proposals" || e.type === "RFP") arr.push(e.project_name ?? "")
             else arr.push("")
-            arr.push(e.Title)
-            arr.push(e.Task_ID)
-            h[e.Type].push(arr)
+            arr.push(e.title)
+            arr.push(e.task_id)
+            h[e.type].push(arr)
           })
           sethours(h)
           h = JSON.parse(JSON.stringify(h))
@@ -276,12 +276,27 @@ const TimeSheet = (props) => {
     }
     setTimerId(setTimeout(() => {
       timeAPI(e, row, col, taskId, date, value)
-    }, 2500));
+    }, 1500));
   }
 
   const getDayTotal = (idx) => {
-    if (idx === 7) return addTime([...hours.Projects.map(e => addTime(e.slice(0, 7))), ...hours.Proposals.map(e => addTime(e.slice(0, 7))), ...hours.RFP.map(e => addTime(e.slice(0, 7))), ...hours.Finance.map(e => addTime(e.slice(0, 7))), ...hours.HR.map(e => addTime(e.slice(0, 7))), ...hours.General.map(e => addTime(e.slice(0, 7))),])
-    return addTime([...hours.Projects.map(e => (e[idx])), ...hours.Proposals.map(e => (e[idx])), ...hours.RFP.map(e => (e[idx])), ...hours.Finance.map(e => (e[idx])), ...hours.HR.map(e => (e[idx])), ...hours.General.map(e => (e[idx]))])
+    if (idx === 7)
+      return addTime([
+        ...hours.Projects.map(e => addTime(e.slice(0, 7))),
+        ...hours.Proposals.map(e => addTime(e.slice(0, 7))),
+        ...hours.RFP.map(e => addTime(e.slice(0, 7))),
+        ...hours.Finance.map(e => addTime(e.slice(0, 7))),
+        ...hours.HR.map(e => addTime(e.slice(0, 7))),
+        ...hours.General.map(e => addTime(e.slice(0, 7))),
+      ])
+    return addTime([
+      ...hours.Projects.map(e => (e[idx])),
+      ...hours.Proposals.map(e => (e[idx])),
+      ...hours.RFP.map(e => (e[idx])),
+      ...hours.Finance.map(e => (e[idx])),
+      ...hours.HR.map(e => (e[idx])),
+      ...hours.General.map(e => (e[idx]))
+    ])
   }
 
   const addTime = (times) => {
@@ -301,30 +316,31 @@ const TimeSheet = (props) => {
 
   const timeAPI = async (e, row, col, taskId, date, time) => {
     if (/^\d+$/.test(time)) {
-      if(parseInt(time) === 0 || parseInt(time)>12) time = null
-      else time = parseInt(time) + ':00';
+      if (parseInt(time) === 0 || parseInt(time) > 9) time = null
+      else time = parseInt(time) + ':00' ;
     } else if (/^\d+:\d{2}$/.test(time)) {
       const [hours, minutes] = time.split(':');
-      if (hours===0 || hours>12 || parseInt(minutes) < 0 || parseInt(minutes) > 59) {
+      if (hours === 0 || hours > 9 || parseInt(minutes) < 0 || parseInt(minutes) > 59) {
         time = null
       }
-    } else if(time === ''){
+    } else if (time === '') {
       time = ''
     } else {
       time = null
     }
 
     const h = { ...hours };
-    h[e][row][col] = time!==null ? time : prevHours[e][row][col]
+    h[e][row][col] = time !== null ? time : prevHours[e][row][col]
     sethours(h)
-    if(time===null) return;
+    if (time === null) return;
 
     await axios
       .post(HOST + ADD_TIMESHEET,
         {
           employeeId: employeeId,
-          time: time==='' ? '' : `0${time}:00`,
+          time: time === '' ? '' : `0${time}:00`,
           date: date,
+          column: col,
           taskId: taskId
         },
         {
@@ -339,7 +355,7 @@ const TimeSheet = (props) => {
           h[e][row][col] = prevHours[e][row][col]
           sethours(h)
           setred(true)
-        }else{
+        } else {
           setprevHours(h)
         }
       })
@@ -979,22 +995,22 @@ const TimeSheet = (props) => {
         dialogClassName="filter-dialog"
         animation={false}
       >
-        <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
-                    <div className='d-flex flex-row'>
-                        <img src={tIcon} />
-                        <div style={styles.addHeading}>Add New Task</div>
-                    </div>
-                    <div><img onClick={handleClose} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
-                </div>
-                {
-                        <AddTask
-                        setRed={setred}
-                        setGreen={setgreen}
-                        closeModal={handleClose}
-                        api={apiCall}
-                        apiCall={setCall}
-                      />
-                    }
+        <div className='d-flex flex-row justify-content-between align-items-center' style={{ marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection: 'row' }}>
+          <div className='d-flex flex-row'>
+            <img src={tIcon} />
+            <div style={styles.addHeading}>Add New Task</div>
+          </div>
+          <div><img onClick={handleClose} style={{ marginRight: '26px', marginTop: '6px', float: 'right' }} src={cross} /></div>
+        </div>
+        {
+          <AddTask
+            setRed={setred}
+            setGreen={setgreen}
+            closeModal={handleClose}
+            api={apiCall}
+            apiCall={setCall}
+          />
+        }
       </Modal>
     </>
   )

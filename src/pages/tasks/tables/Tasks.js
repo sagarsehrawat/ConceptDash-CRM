@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from 'moment'
 import cross from '../../../Images/cross.svg'
 import tIcon from '../../../Images/taskIcon.svg'
-import {
+import {  
   faArrowDown,
   faArrowsUpDown,
   faArrowUp,
@@ -47,6 +47,7 @@ import './Tasks.css'
 import TFChip from "../../../components/form/TFChip/TFChip";
 import TFButton from '../../../components/ui/TFButton/TFButton'
 import plusIcon from '../../../assets/icons/Plus.svg'
+import TFDeleteModal from '../../../components/modals/TFDeleteModal/TFDeleteModal'
 
 function Tasks(props) {
   const { isCollapsed } = props;
@@ -446,15 +447,15 @@ function Tasks(props) {
           let pj = [], prop = [], rf = [], gen = [], fin = [], HR = []
           let arr = res.data.res;
           for (let i = 0; i < arr.length; i++) {
-            if (arr[i].Type === "Projects") {
+            if (arr[i].type === "Projects") {
               pj.push(arr[i]);
-            } else if (arr[i].Type === "Proposals") {
+            } else if (arr[i].type === "Proposals") {
               prop.push(arr[i])
-            } else if (arr[i].Type === "RFP") {
+            } else if (arr[i].type === "RFP") {
               rf.push(arr[i])
-            } else if (arr[i].Type === "General") {
+            } else if (arr[i].type === "General") {
               gen.push(arr[i])
-            } else if (arr[i].Type === "Finance") {
+            } else if (arr[i].type === "Finance") {
               fin.push(arr[i])
             } else {
               HR.push(arr[i])
@@ -488,9 +489,7 @@ function Tasks(props) {
       }));
     }
   };
-  const filterSize = () => {
-    return returnData.employee.length;
-  };
+
   const filterSize1 = () => {
     return (
       returnData.assignedBy.length +
@@ -503,16 +502,12 @@ function Tasks(props) {
     const formattedDate = moment(date)
     return formattedDate.format('D MMM, YYYY')
   }
-  const [currStatus, setcurrStatus] = useState('')
-  const [id, setid] = useState('')
+
   const handleDelete = () => {
     axios
-      .post(
+      .delete(
         HOST + DELETE_TASK,
-        {
-          id: deleteID,
-        },
-        { headers: { auth: "Rose " + localStorage.getItem("auth") } }
+        { headers: { auth: "Rose " + localStorage.getItem("auth"), id: deleteID, } }
       )
       .then((res) => {
         if (res.data.success) {
@@ -535,12 +530,13 @@ function Tasks(props) {
     seteid(e.target.value);
     setCall(apiCall+1);
   }
-
+  
   const handleStatusUpdate = async (taskId, s) => {
     let status;
     if(s==="Not Started") status = 1;
     if(s==="In Progress") status = 2;
     if(s==="Completed") status = 3;
+    
 
     const response = await axios
       .post(
@@ -551,6 +547,7 @@ function Tasks(props) {
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       );
+      setCall(apiCall+1);
 
       return response;
   }
@@ -562,6 +559,7 @@ function Tasks(props) {
     if(p==='Medium') priority = 3;
     if(p==='Low') priority = 4;
 
+    console.log(p);
     const response = await axios.post(
       HOST + UPDATE_TASK_PRIORITY,
       {
@@ -571,24 +569,25 @@ function Tasks(props) {
       {
         headers: { auth: "Rose " + localStorage.getItem("auth") },
       }
-    );
-
-    return response;
-  }
-
-  const getPriority = (priority, id) => {
-    if(priority===1) return <TFChip label="Critical" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
-    if(priority===2) return <TFChip label="High" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
-    if(priority===3) return <TFChip label="Medium" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
-    if(priority===4) return <TFChip label="Low" onUpdate={handlePriorityUpdate} id={id} options={["Low", "Medium", "High", "Critical"]}/>
-  }
-
-  const getStatus = (status, id) => {
-    if(status===1) return <TFChip label="Not Started" onUpdate={handleStatusUpdate} id={id} options={["Not Started", "In Progress", "Completed"]}/>
-    if(status===2) return <TFChip label="In Progress" onUpdate={handleStatusUpdate} id={id} options={["Not Started", "In Progress", "Completed"]}/>
-    if(status===3) return <TFChip label="Completed" onUpdate={handleStatusUpdate} id={id} options={["Not Started", "In Progress", "Completed"]}/>
-  }
-
+      );
+      setCall(apiCall+1);
+      
+      return response;
+    }
+    
+    const getPriority = (priority, id) => {
+      if(priority===1) return <TFChip value="Critical" onChange={handlePriorityUpdate} name={id} options={["Low", "Medium", "High", "Critical"]}/>
+      if(priority===2) return <TFChip value="High" onChange={handlePriorityUpdate} name={id} options={["Low", "Medium", "High", "Critical"]}/>
+      if(priority===3) return <TFChip value="Medium" onChange={handlePriorityUpdate} name={id} options={["Low", "Medium", "High", "Critical"]}/>
+      if(priority===4) return <TFChip value="Low" onChange={handlePriorityUpdate} name={id} options={["Low", "Medium", "High", "Critical"]}/>
+    }
+    
+    const getStatus = (status, id) => {
+      if(status===1) return <TFChip value="Not Started" onChange={handleStatusUpdate} name id={id} options={["Not Started", "In Progress", "Completed"]}/>
+      if(status===2) return <TFChip value="In Progress" onChange={handleStatusUpdate} name={id} options={["Not Started", "In Progress", "Completed"]}/>
+      if(status===3) return <TFChip value="Completed" onChange={handleStatusUpdate} name={id} options={["Not Started", "In Progress", "Completed"]}/>
+    }
+  
   return (
     <div>
       {green === true ? <GreenAlert setGreen={setgreen} /> : <></>}
@@ -721,27 +720,6 @@ function Tasks(props) {
                     </Button>
 
                     {privileges.includes('View Employee Tasks') ? (
-                      // <div
-                      //   className="d-flex flex-row"
-                      //   style={{
-                      //     ...styles.dropdown1,
-                      //     backgroundColor:"white",
-                      //   }}
-                      //   // onClick={openFilterModal}
-                      // >
-                        //  <img src={person} />
-                        //  <p style={styles.dp1Text}>
-                        //   My Tasks
-                        //   {filterSize() > 0 ? `/ ${filterSize()}` : ""}
-                        // </p>
-                        // {filterSize() > 0 ? (
-                        //   <></>
-                        // ) : (
-                        //   <FontAwesomeIcon
-                        //     icon={faChevronDown}
-                        //     color="#70757A"
-                        //   />
-                        // )} 
                         <Form.Select 
                         className="d-flex flex-row"
                         style={{
@@ -755,7 +733,6 @@ function Tasks(props) {
                             <option selected={e.Employee_ID===eid} value={e.Employee_ID}>{e.Full_Name===localStorage.getItem('employeeName')?'My Tasks':e.Full_Name}</option>
                           ))}
                         </Form.Select>
-                      // </div>
                     ) : (
                       <></>
                     )}
@@ -1116,31 +1093,31 @@ function Tasks(props) {
                               {details[0] ? projects.map((e, idx) => (
                                 <tr style={styles.row2}>
                                   <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
-                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name ? e.Project_Name : '-'}</p>&nbsp;&nbsp;
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.project_name ? e.project_name : '-'}</p>&nbsp;&nbsp;
                                     <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
-                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.Title}</p>
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.title}</p>
                                   </td>
                                   <td style={styles.cell}>
-                                    {formatDate(e.Start_Date)}
+                                    {formatDate(e.start_date)}
                                   </td>
                                   <td style={styles.cell}>
-                                    {formatDate(e.Due_Date)}
+                                    {formatDate(e.due_date)}
                                   </td>
                                   <td style={{...styles.cell, textAlign:'left'}}>
-                                    {e.Assigner}
+                                    {e.assigner}
                                   </td>
                                   <td style={{...styles.cell}}>
-                                    {getPriority(e.Priority, e.Task_ID)}
+                                    {getPriority(e.priority, e.task_id)}
                                   </td>
                                   <td style={{ ...styles.cell}}>
-                                  {getStatus(e.Status, e.Task_ID)}
+                                  {getStatus(e.status, e.task_id)}
                                   </td>
                                   <td style={styles.cell}>
-                                    {e.Reviewer}
+                                    {e.reviewer}
                                   </td>
                                   <td style={styles.cell}>
                                     <img style={{ marginRight: '20px', cursor: 'pointer' }} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); handleShowUpdate() }} />
-                                    <img style={{ cursor: 'pointer' }} src={del} onClick={() => { setdeleteID(e.Task_ID); handleShowDelete(); }} />
+                                    <img style={{ cursor: 'pointer' }} src={del} onClick={() => { setdeleteID(e.task_id); handleShowDelete(); }} />
                                   </td>
                                 </tr>
                               )) : <></>}
@@ -1159,31 +1136,31 @@ function Tasks(props) {
                               {details[1] ? proposals.map((e) => (
                                 <tr style={styles.row2}>
                                   <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
-                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name ? e.Project_Name : '-'}</p>&nbsp;&nbsp;
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.project_name ? e.project_name : '-'}</p>&nbsp;&nbsp;
                                     <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
-                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.Title}</p>
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.title}</p>
                                   </td>
                                   <td style={styles.cell}>
-                                    {formatDate(e.Start_Date)}
+                                    {formatDate(e.start_date)}
                                   </td>
                                   <td style={styles.cell}>
-                                    {formatDate(e.Due_Date)}
+                                    {formatDate(e.due_date)}
                                   </td>
                                   <td style={{...styles.cell, textAlign:'left'}}>
-                                    {e.Assigner}
+                                    {e.assigner}
                                   </td>
                                   <td style={styles.cell} align='center'>
-                                  {getPriority(e.Priority, e.Task_ID)}
+                                  {getPriority(e.priority, e.task_id)}
                                   </td>
                                   <td style={{ ...styles.cell}}>
-                                  {getStatus(e.Status, e.Task_ID)}
+                                  {getStatus(e.status, e.task_id)}
                                   </td>
                                   <td style={styles.cell}>
-                                    {e.Reviewer}
+                                    {e.reviewer}
                                   </td>
                                   <td style={styles.cell}>
                                     <img style={{ marginRight: '20px', cursor: 'pointer' }} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); handleShowUpdate() }} />
-                                    <img style={{ cursor: 'pointer' }} src={del} onClick={() => { setdeleteID(e.Task_ID); handleShowDelete(); }} />
+                                    <img style={{ cursor: 'pointer' }} src={del} onClick={() => { setdeleteID(e.task_id); handleShowDelete(); }} />
                                   </td>
                                 </tr>
                               )) : <></>}
@@ -1202,31 +1179,31 @@ function Tasks(props) {
                               {details[2] ? rfps.map((e) => (
                                 <tr style={styles.row2}>
                                   <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
-                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name ? e.Project_Name : '-'}</p>&nbsp;&nbsp;
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.project_name ? e.project_name : '-'}</p>&nbsp;&nbsp;
                                     <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
-                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.Title}</p>
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.title}</p>
                                   </td>
                                   <td style={styles.cell}>
-                                    {formatDate(e.Start_Date)}
+                                    {formatDate(e.start_date)}
                                   </td>
                                   <td style={styles.cell}>
-                                    {formatDate(e.Due_Date)}
+                                    {formatDate(e.due_date)}
                                   </td>
                                   <td style={{...styles.cell, textAlign:'left'}}>
-                                    {e.Assigner}
+                                    {e.assigner}
                                   </td>
                                   <td style={styles.cell} >
-                                  {getPriority(e.Priority, e.Task_ID)}
+                                  {getPriority(e.priority, e.task_id)}
                                   </td>
                                   <td style={{ ...styles.cell}}>
-                                  {getStatus(e.Status, e.Task_ID)}
+                                  {getStatus(e.status, e.task_id)}
                                   </td>
                                   <td style={styles.cell}>
-                                    {e.Reviewer}
+                                    {e.reviewer}
                                   </td>
                                   <td style={styles.cell}>
                                     <img style={{ marginRight: '20px', cursor: 'pointer' }} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); handleShowUpdate() }} />
-                                    <img style={{ cursor: 'pointer' }} src={del} onClick={() => { setdeleteID(e.Task_ID); handleShowDelete(); }} />
+                                    <img style={{ cursor: 'pointer' }} src={del} onClick={() => { setdeleteID(e.task_id); handleShowDelete(); }} />
                                   </td>
                                 </tr>
                               )) : <></>}
@@ -1245,31 +1222,31 @@ function Tasks(props) {
                               {details[3] ? general.map((e) => (
                                 <tr style={styles.row2}>
                                   <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
-                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name ? e.Project_Name : 'General'}</p>&nbsp;&nbsp;
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.project_name ? e.project_name : 'General'}</p>&nbsp;&nbsp;
                                     <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
-                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.Title}</p>
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.title}</p>
                                   </td>
                                   <td style={styles.cell}>
-                                    {formatDate(e.Start_Date)}
+                                    {formatDate(e.start_date)}
                                   </td>
                                   <td style={styles.cell}>
-                                    {formatDate(e.Due_Date)}
+                                    {formatDate(e.due_date)}
                                   </td>
                                   <td style={{...styles.cell, textAlign:'left'}}>
-                                    {e.Assigner}
+                                    {e.assigner}
                                   </td>
                                   <td style={styles.cell}>
-                                  {getPriority(e.Priority, e.Task_ID)}
+                                  {getPriority(e.priority, e.task_id)}
                                   </td>
                                   <td style={{ ...styles.cell}}>
-                                  {getStatus(e.Status, e.Task_ID)}
+                                  {getStatus(e.status, e.task_id)}
                                   </td>
                                   <td style={styles.cell}>
-                                    {e.Reviewer}
+                                    {e.reviewer}
                                   </td>
                                   <td style={styles.cell}>
                                     <img style={{ marginRight: '20px', cursor: 'pointer' }} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); handleShowUpdate() }} />
-                                    <img style={{ cursor: 'pointer' }} src={del} onClick={() => { setdeleteID(e.Task_ID); handleShowDelete(); }} />
+                                    <img style={{ cursor: 'pointer' }} src={del} onClick={() => { setdeleteID(e.task_id); handleShowDelete(); }} />
                                   </td>
                                 </tr>
                               )) : <></>}
@@ -1288,31 +1265,31 @@ function Tasks(props) {
                               {details[4] ? finance.map((e) => (
                                 <tr style={styles.row2}>
                                   <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
-                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name ? e.Project_Name : 'Finance'}</p>&nbsp;&nbsp;
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.project_name ? e.project_name : 'Finance'}</p>&nbsp;&nbsp;
                                     <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
-                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.Title}</p>
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.title}</p>
                                   </td>
                                   <td style={styles.cell}>
-                                    {formatDate(e.Start_Date)}
+                                    {formatDate(e.start_date)}
                                   </td>
                                   <td style={styles.cell}>
-                                    {formatDate(e.Due_Date)}
+                                    {formatDate(e.due_date)}
                                   </td>
                                   <td style={{...styles.cell, textAlign:'left'}}>
-                                    {e.Assigner}
+                                    {e.assigner}
                                   </td>
                                   <td style={styles.cell}>
-                                  {getPriority(e.Priority, e.Task_ID)}
+                                  {getPriority(e.priority, e.task_id)}
                                   </td>
                                   <td style={{ ...styles.cell}}>
-                                  {getStatus(e.Status, e.Task_ID)}
+                                  {getStatus(e.status, e.task_id)}
                                   </td>
                                   <td style={styles.cell}>
-                                    {e.Reviewer}
+                                    {e.reviewer}
                                   </td>
                                   <td style={styles.cell}>
                                     <img style={{ marginRight: '20px', cursor: 'pointer' }} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); handleShowUpdate() }} />
-                                    <img style={{ cursor: 'pointer' }} src={del} onClick={() => { setdeleteID(e.Task_ID); handleShowDelete(); }} />
+                                    <img style={{ cursor: 'pointer' }} src={del} onClick={() => { setdeleteID(e.task_id); handleShowDelete(); }} />
                                   </td>
                                 </tr>
                               )) : <></>}
@@ -1332,31 +1309,31 @@ function Tasks(props) {
                               {details[5] ? hr.map((e) => (
                                 <tr style={styles.row2}>
                                   <td style={{ ...styles.cell, textAlign: "left", paddingLeft: "56px" }}>
-                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.Project_Name ? e.Project_Name : 'HR'}</p>&nbsp;&nbsp;
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 500, fontSize: "13px", color: "#0A0A0A" }}>{e.project_name ? e.project_name : 'HR'}</p>&nbsp;&nbsp;
                                     <FontAwesomeIcon icon={faChevronRight} color="black" height={5} style={{ display: "inline", }} />&nbsp;&nbsp;
-                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.Title}</p>
+                                    <p style={{ display: "inline", fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "13px", color: "#0A0A0A" }}>{e.title}</p>
                                   </td>
                                   <td style={styles.cell}>
-                                    {formatDate(e.Start_Date)}
+                                    {formatDate(e.start_date)}
                                   </td>
                                   <td style={styles.cell}>
-                                    {formatDate(e.Due_Date)}
+                                    {formatDate(e.due_date)}
                                   </td>
                                   <td style={{...styles.cell, textAlign:'left'}}>
-                                    {e.Assigner}
+                                    {e.assigner}
                                   </td>
                                   <td style={styles.cell}>
-                                  {getPriority(e.Priority, e.Task_ID)}
+                                  {getPriority(e.priority, e.task_id)}
                                   </td>
                                   <td style={{ ...styles.cell}}>
-                                  {getStatus(e.Status, e.Task_ID)}
+                                  {getStatus(e.status, e.task_id)}
                                   </td>
                                   <td style={styles.cell}>
-                                    {e.Reviewer}
+                                    {e.reviewer}
                                   </td>
                                   <td style={styles.cell}>
                                     <img style={{ marginRight: '20px', cursor: 'pointer' }} src={edit} onClick={() => { setidx(idx); setupdateTask(e); settask(false); handleShowUpdate() }} />
-                                    <img style={{ cursor: 'pointer' }} src={del} onClick={() => { setdeleteID(e.Task_ID); handleShowDelete(); }} />
+                                    <img style={{ cursor: 'pointer' }} src={del} onClick={() => { setdeleteID(e.task_id); handleShowDelete(); }} />
                                   </td>
                                 </tr>
                               )) : <></>}
@@ -1443,35 +1420,7 @@ function Tasks(props) {
 
       
       {/* Delete Modal */}
-      <Modal
-        show={showDelete}
-        onHide={handleCloseDelete}
-        backdrop="static"
-        size="sm"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Deletion</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p style={{ textAlign: "center", marginBottom: '10px' }}>
-            <b>Delete the selected Task!!</b>
-          </p>
-          <div className="d-flex flex-row justify-content-between">
-
-            <div style={{ display: "inline-block" }}>
-              <Button variant="danger" onClick={handleCloseDelete}>
-                Cancel
-              </Button>
-            </div>
-            <div style={{ display: "inline-block", float: "right" }}>
-              <Button variant="success" onClick={handleDelete}>
-                Proceed
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete} label='Task'/>
     </div>
   );
 }
