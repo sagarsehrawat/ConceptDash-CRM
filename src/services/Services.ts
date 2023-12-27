@@ -232,12 +232,13 @@ const SERVICES = {
         }
     },
 
-    updateRfpStatus: async (rfpId: number, action: string): Promise<UpdateResponse> => {
+    updateRfpStatus: async (rfpId: number, action: string, organizationIds: number[] | null=null): Promise<UpdateResponse> => {
         try {
             const response = await axios.post(APIS.UPDATE_RFP_STATUS,
                 {
                     rfpId,
                     action,
+                    organizationIds
                 },
                 {
                     headers: { auth: "Rose " + localStorage.getItem("auth"), },

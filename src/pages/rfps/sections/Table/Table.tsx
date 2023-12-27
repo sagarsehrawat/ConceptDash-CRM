@@ -15,6 +15,7 @@ import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteM
 import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
 import TFConversionModal from '../../../../components/modals/TFConversionModal/TFConversionModal';
 import AddNewRfp from '../../forms/AddNewRfp/AddNewRfp';
+import TFClientModal from '../../../../components/modals/TFClientModal/TFClientModal';
 
 interface FilterType {
   dept: (string | number)[],
@@ -44,6 +45,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
 
   const [showDelete, setShowDelete] = useState<boolean>(false);
   const [showConversionModal, setShowConversionModal] = useState<boolean>(false);
+  const [showClientModal, setshowClientModal] = useState<number | null>(null);
   
   const sortRef = useRef<HTMLDivElement>(null);
   const [showSortModal, setShowSortModal] = useState<string>("");
@@ -81,6 +83,8 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
     if(action==="Go") {
       setShowConversionModal(true);
       setTransitionRFPId(rfpId);
+    } if (action === 'External') {
+      setshowClientModal(rfpId)
     } else {
       const prevRfp = rfps.filter(rfp => rfp.rfp_id === rfpId);
       try {
@@ -210,6 +214,21 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         </div>
       </div>
       : <></>;
+      
+  const handleOrganizations = async (orgs:TypeaheadOptions) => {
+    const valuesArray = orgs.map((item) => parseInt(item.value));
+    const prevRfp = rfps.filter(rfp => rfp.rfp_id === showClientModal);
+      try {
+        dispatch(updateRFP({ rfpId: showClientModal!, data: { 'action': 'External' } }))
+        await SERVICES.updateRfpStatus(showClientModal!, 'External', valuesArray);
+      } catch (error) {
+        console.log(error);
+        dispatch(updateRFP({ rfpId: showClientModal!, data: { action: prevRfp[0].action } }));
+      }
+      finally {
+        setshowClientModal(null)
+      }
+  }
   return (
     <>
       {
@@ -389,6 +408,8 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
           isEditing={true}
           editForm={editForm}
         />}
+
+      {showClientModal!==null && <TFClientModal show={showClientModal!==null} onHide={() => setshowClientModal(null)} onSubmit={handleOrganizations} />}
     </>
   )
 }

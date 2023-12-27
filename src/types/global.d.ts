@@ -25,7 +25,11 @@ declare global{
         rating : number | null
         source : string | null,
         start_date : moment.Moment,
-        submission_date : moment.Moment
+        submission_date : moment.Moment,
+        organizations: {
+            organization_id: number,
+            organization_name: string
+        }[] | null
     }
 
     interface Project {
