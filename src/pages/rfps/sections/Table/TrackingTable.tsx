@@ -65,6 +65,7 @@ const TrackingTable = ({ api, setApi, filter, search, isCollapsed }: Props) => {
       try {
         setIsLoading(true);
         const trackingResponse = await SERVICES.getTrackingRfps(filter, search, sort);
+        console.log(trackingResponse.res)
         dispatch(initRFPs(trackingResponse.res));
         setIsLoading(false);
       } catch (error) {
@@ -226,6 +227,9 @@ const TrackingTable = ({ api, setApi, filter, search, isCollapsed }: Props) => {
                     <p className='table-heading-text' onClick={() => setShowSortModal('Client')}>Client</p>
                     {sortModal('Client')}
                   </th>
+                  <th className='table-heading' style={{ width: "150px" }}>
+                    <p className='table-heading-text'>External Organizations</p>
+                  </th>
                   <th className='table-heading' style={{ width: "190px" }}>
                     <p className='table-heading-text' onClick={() => setShowSortModal('Source')}>Source</p>
                     {sortModal('Source')}
@@ -294,6 +298,11 @@ const TrackingTable = ({ api, setApi, filter, search, isCollapsed }: Props) => {
                         </div>
                       </td>
                       <td className='table-cell'>{rfp.client}</td>
+                      <td className='table-cell'>
+                        {rfp.organizations?.map((e)=>{
+                          return e.organization_name+ ', '
+                        })}
+                      </td>
                       <td className='table-cell'>{rfp.source}</td>
                       <td className='table-cell'>
                         <TFChip

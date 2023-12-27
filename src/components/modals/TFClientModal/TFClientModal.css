@@ -1,0 +1,14 @@
+.tf-client-modal {
+    display: flex;
+    width: 720px;
+    padding: var(--32-pad, 32px) 24px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    border-radius: var(--12-pad, 12px);
+    background: #FFF;
+
+    /* New Card shadow */
+    box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.08);
+}
