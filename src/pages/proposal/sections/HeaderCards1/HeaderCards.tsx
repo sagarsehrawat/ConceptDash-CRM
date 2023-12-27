@@ -4,7 +4,7 @@ import { initData, selectTotalProposals, selectLostProposals, selectWonProposals
 import SERVICES from '../../../../services/Services'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import { icons } from "../../../../assets/icons";
+// import { icons } from "../../../../assets/icons";
 // const { total_rfp_icon, new_rfp_icon, trending_rfp_icon, trending_up_icon } = icons;
 
 
