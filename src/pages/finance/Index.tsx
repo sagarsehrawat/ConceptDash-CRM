@@ -4,6 +4,7 @@ import HeaderCards from "./sections/HeaderCards/HeaderCards";
 import Table from "./sections/Table/Table";
 import Header from "./sections/Header/Header";
 import InvoiceGenerator from "./sections/InvoiceGenerator/InvoiceGenerator";
+import ProjectTable from "./sections/ProjectTable/ProjectTable";
 
 type Props = {
   variant: "AR" | "AP";
@@ -21,7 +22,8 @@ const Index = ({ variant }: Props) => {
       />
       <HeaderCards variant={variant} />
       <Header variant={variant} tab={selectedTab.toString()} />
-      <Table setpage={setpage}/>
+      {selectedTab === "Projects" && <ProjectTable />}
+      {selectedTab !== "Projects" && <Table setpage={setpage}/>}
     </>
   );
   if(page === "INVOICE_GENERATOR") return <InvoiceGenerator setpage={setpage} />

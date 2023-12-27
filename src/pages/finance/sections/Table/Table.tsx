@@ -11,7 +11,9 @@ const Table = ({setpage}: Props) => {
     <div className='table-wrapper'>
         <table className='w-100' style={{ borderCollapse: "separate" }}>
             <TableHeader />
-          <TableRow invoice={{}} setpage={setpage} />
+            <tbody>
+              <TableRow invoice={{}} setpage={setpage} />
+            </tbody>
         </table>
     </div>
   )

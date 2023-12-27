@@ -418,7 +418,7 @@ const Home = (props) => {
 
     const handleScriptLoad = () => {
       if (window.gapi) {
-        window.gapi.load("client:auth2", initClient);
+        // window.gapi.load("client:auth2", initClient);
         script.removeEventListener("load", handleScriptLoad);
       }
     };

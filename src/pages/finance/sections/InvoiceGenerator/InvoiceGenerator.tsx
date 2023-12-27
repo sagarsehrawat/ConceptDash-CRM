@@ -1,59 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./InvoiceGenerator.module.css";
 import TFDetailPage from "../../../../components/ui/TFDetailPage/TFDetailPage";
 import TFButton from "../../../../components/ui/TFButton/TFButton";
+import ttmData from "../../utils/ttm";
+import InvoiceUtils from "../../utils/InvoiceGenerator.utils";
 
 type Props = {
   setpage: (val: string) => void;
 };
 
-const ROWS = [
-    {
-        label: "SubTotal",
-        value: "$ 600.00"
-    },
-    {
-        label: "Discount",
-        value: "- 2.00 %"
-    },
-    {
-        label: "SubTotal Less Discount",
-        value: "$ 600"
-    },
-    {
-        label: "HST Tax Rate",
-        value: "13.00 %"
-    },
-    {
-        label: "Total HST",
-        value: "$ 750.79"
-    },
-    {
-        label: "Shipping/Handling",
-        value: "$ 150.00"
-    },
-]
-
-const ROWS2 = [
-    {
-        label: "PO Amount",
-        value: "$ 11373.00"
-    },
-    {
-        label: "Amount Invoiced",
-        value: "$ 600"
-    },
-    {
-        label: "Amount Recieved",
-        value: "$ 0"
-    },
-    {
-        label: "Project Balance",
-        value: "$10773.00"
-    },
-];
+type InvoiceRow = {
+    description: string;
+    unit: string;
+    quantity: number;
+    unitPrice: number;
+}
 
 const InvoiceGenerator = ({ setpage }: Props) => {
+    const ttm = {ttm: ttmData.ttm, rates: ttmData.employeeInfo[1] };
+    const invoiceUtils = new InvoiceUtils(ttm);
+
+    const [invoiceRows, setinvoiceRows] = useState<InvoiceRow[]>(invoiceUtils.formatTTM())
   return (
     <>
       <TFDetailPage
@@ -128,20 +95,17 @@ const InvoiceGenerator = ({ setpage }: Props) => {
                             <td className={styles['table-header']} style={{width: "124px"}}>Total</td>
                         </thead>
                         <tbody>
-                            <tr className={styles['table-row']}>
-                                <td className={styles['table-cell-heading']}>Mititgation Measures</td>
-                                <td className={styles['table-cell']}>LS</td>
-                                <td className={styles['table-cell']}>2</td>
-                                <td className={styles['table-cell']}>$ 200.00</td>
-                                <td className={styles['table-cell']}>$ 400.00</td>
-                            </tr>
-                            <tr className={styles['table-row']}>
-                                <td className={styles['table-cell-heading']}>Site Visits</td>
-                                <td className={styles['table-cell']}>LS</td>
-                                <td className={styles['table-cell']}>1</td>
-                                <td className={styles['table-cell']}>$ 200.00</td>
-                                <td className={styles['table-cell']}>$ 200.00</td>
-                            </tr>
+                            {
+                                invoiceRows.map((e: any) => (
+                                    <tr className={styles['table-row']}>
+                                        <td className={styles['table-cell-heading']}>{e.description}</td>
+                                        <td className={styles['table-cell']}>{e.unit}</td>
+                                        <td className={styles['table-cell']}>{e.quantity}</td>
+                                        <td className={styles['table-cell']}>$ {e.unitPrice}</td>
+                                        <td className={styles['table-cell']}>$ {(e.unitPrice*e.quantity).toFixed(2)}</td>
+                                    </tr>
+                                ))
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -154,35 +118,83 @@ const InvoiceGenerator = ({ setpage }: Props) => {
                             <td className={styles['table-header2']} style={{width: "124px"}}></td>
                         </thead>
                         <tbody>
-                            {
-                                ROWS.map(row => (
-                                    <tr className={styles['table-row2']}>
-                                        <td className={styles['table-cell']}></td>
-                                        <td className={styles['table-cell']}></td>
-                                        <td className={styles['table-cell']}></td>
-                                        <td className={styles['table-cell2']}>{row.label}</td>
-                                        <td className={styles['table-cell']}>{row.value}</td>
-                                    </tr>
-                                ))
-                            }
+                            <tr className={styles['table-row2']}>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell2']}>SubTotal</td>
+                                <td className={styles['table-cell']}>$ {invoiceUtils.sumAllRows(invoiceRows)}</td>
+                            </tr>
+                            <tr className={styles['table-row2']}>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell2']}>Discount</td>
+                                <td className={styles['table-cell']}>- 2.00 %</td>
+                            </tr>
+                            <tr className={styles['table-row2']}>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell2']}>SubTotal Less Discount</td>
+                                <td className={styles['table-cell']}>$ {invoiceUtils.calculatePercent(invoiceRows, 2)}</td>
+                            </tr>
+                            <tr className={styles['table-row2']}>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell2']}>HST Tax Rate</td>
+                                <td className={styles['table-cell']}>13.00 %</td>
+                            </tr>
+                            <tr className={styles['table-row2']}>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell2']}>Total HST</td>
+                                <td className={styles['table-cell']}>$ {invoiceUtils.calculatePercent(invoiceRows, 13)}</td>
+                            </tr>
+                            <tr className={styles['table-row2']}>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell2']}>Shipping/ Handling</td>
+                                <td className={styles['table-cell']}>$ 0.00</td>
+                            </tr>
                             <tr className={styles['table-row2']}>
                                 <td className={styles['table-cell']}></td>
                                 <td className={styles['table-cell']}></td>
                                 <td className={styles['table-cell']}></td>
                                 <td className={styles['table-cell3']}>Balance Due</td>
-                                <td className={styles['table-cell3']}>$ 6607.09</td>
+                                <td className={styles['table-cell3']}>$ {invoiceUtils.calculateBalance(invoiceRows, 2)}</td>
                             </tr>
-                            {
-                                ROWS2.map(row => (
-                                    <tr className={styles['table-row3']}>
-                                        <td className={styles['table-cell']}></td>
-                                        <td className={styles['table-cell']}></td>
-                                        <td className={styles['table-cell']}></td>
-                                        <td className={styles['table-cell2']}>{row.label}</td>
-                                        <td className={styles['table-cell']}>{row.value}</td>
-                                    </tr>
-                                ))
-                            }
+                            <tr className={styles['table-row3']}>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell2']}>PO Amount</td>
+                                <td className={styles['table-cell']}>$ 11373.00</td>
+                            </tr>
+                            <tr className={styles['table-row3']}>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell2']}>Amount Invoiced</td>
+                                <td className={styles['table-cell']}>$ {invoiceUtils.calculateBalance(invoiceRows, 2)}</td>
+                            </tr>
+                            <tr className={styles['table-row3']}>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell2']}>Amount Recieved</td>
+                                <td className={styles['table-cell']}></td>
+                            </tr>
+                            <tr className={styles['table-row3']}>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell']}></td>
+                                <td className={styles['table-cell2']}>Project Balance</td>
+                                <td className={styles['table-cell']}>$ 10773.00</td>
+                            </tr>
                         </tbody>
                 </table>
             </div>

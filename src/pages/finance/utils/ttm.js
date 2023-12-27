@@ -14,9 +14,9 @@ const ttm = [
         Progress: 0,
         resources: [1],
         info: "Measure the total property area alloted for construction",
-        hrs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        hrs: [2, 3, 5, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1],
         visibility: true,
-        status: 0,
+        status: 1,
         childId: 0,
       },
       {
@@ -30,9 +30,9 @@ const ttm = [
         info:
           "Obtain an engineered soil test of lot where construction is planned." +
           "From an engineer or company specializing in soil testing",
-        hrs: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        hrs: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         visibility: true,
-        status: 0,
+        status: 1,
         childId: 1,
       },
       {
@@ -702,4 +702,36 @@ const ttm = [
   },
 ];
 
-export default ttm;
+const designations = [
+  {
+    Designation: 'Project Management',
+    children: ['Project Manager', 'Project director', 'QA/QC Lead and Risk Manager'],
+  },
+  {
+    Designation: 'Design',
+    children: ['Technical Design Lead', 'Transportation Planning and Engineering Lead'],
+  },
+  {
+    Designation: 'Design Team',
+    children: ['Roadway Designers', 'Watermain, Sanitary and Storm Sewer Designers', 'Cad Technician'],
+  },
+  {
+    Designation: 'Transportation, Traffic Engineering, Traffic control plans and Utility Coordination',
+    children: ['Transportation, Traffic Engineering, Traffic control plans and Utility Coordination'],
+  },
+  {
+    Designation: 'Bids and Tender Preparation Team',
+    children: ['Take off Engineer', 'Junior Engineer'],
+  },
+  {
+    Designation: 'Contract administration and Construction Inspection',
+    children: ['Contract Administrator', 'Site Inspector'],
+  },
+];
+
+const employeeInfo = [
+  ['Test 1', 'Test 1', 'Test 1', 'Test 1', 'Test 1', 'Test 1', 'Test 1', 'Test 1', 'Test 1', 'Test 1', 'Test 1', 'Test 1', 'Test 1'],
+  [100, 200, 30, 60, 70, 80, 100, 30, 30, 30, 30, 30, 30],
+];
+
+export default {ttm, designations, employeeInfo};
