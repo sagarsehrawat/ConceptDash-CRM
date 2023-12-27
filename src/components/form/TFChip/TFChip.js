@@ -3,10 +3,12 @@ import PropTypes from "prop-types";
 import "./Chip.css";
 
 // Array of Available Options
-const values = ['Completed', 'In Progress', 'Not Started', 'Critical', 'High', 'Medium', 'Low', 'Done', 'Not Found', 'Draft Budget', 'Won', 'Pending', 'Lost', 'Go', 'No Go', 'Review', 'Recieved', 'Approved', 'Waiting', 'External', '0', '1', '2', '3', '4', '5','Primary','Secondary','Tertiary','Client','Consultant','Partner','Subconsultant']
+const values = ['Completed', 'In Progress', 'Not Started', 'Critical', 'High', 'Medium', 'Low', 'Done', 'Not Found', 'Draft Budget', 'Won', 'Pending', 'Lost', 'Go', 'No Go', 'Review', 'Recieved', 'Approved', 'Waiting', 'External', '0', '1', '2', '3', '4', '5','Primary','Secondary','Tertiary','Client','Consultant','Partner','Subconsultant','Yes','No','Submitted','Not Submitted']
 
 // Class list for Chips
 const classes = {
+  'Submitted': 'submitted-chip',
+  'Not Submitted': 'not-submitted-chip',
   'Completed': 'completed-chip',
   'In Progress': 'in-progress-chip',
   'Not Started': 'not-started-chip',
@@ -39,7 +41,9 @@ const classes = {
   'Client' : 'client',
   'Consultant' : 'consultant',
   'Partner' : 'partner',
-  'Subconsultant':'subconsultant'
+  'Subconsultant':'subconsultant',
+  'Yes': 'yes-chip',
+  'No': 'no-chip'
 }
 
 const TFChip = ({ value, tableRef, options, onChange, name }) => {

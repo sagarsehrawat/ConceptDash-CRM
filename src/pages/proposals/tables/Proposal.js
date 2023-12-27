@@ -19,8 +19,17 @@ import open from '../../../Images/openinDrive.svg'
 import { useNavigate } from "react-router-dom";
 import TTMMain from '../ttm/TTMMain'
 import SearchBar from '../../../components/ui/TFSearchBar/TFSearchBar'
+import star from '../../../assets/icons/Star.svg'
+import star_transparent from '../../../assets/icons/Star_Transparent.svg'
 
 const Proposal = (props) => {
+    const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    
+    setIsChecked((prev) => !prev);
+    console.log(isChecked);
+  };
     const navigate = useNavigate();
     const { isCollapsed } = props
     const { privileges, setPrivileges } = useContext(AuthenticationContext)
@@ -643,12 +652,13 @@ const Proposal = (props) => {
                     },
                 })
                 .then((res) => {
+                    console.log(res.data.res);
                     let obj = proposalCount
-                    obj.Total = res.data.res[0].Total
-                    obj.Month = res.data.res[0].Month
-                    obj.Percent = res.data.res[0].Percent ?? 0
-                    obj.Won = res.data.res[0].Won
-                    obj.Lost = res.data.res[0].Lost
+                    obj.Total = res.data.res[0].total_proposals
+                    // obj.Month = res.data.res[0].Month
+                    // obj.Percent = res.data.res[0].Percent ?? 0
+                    obj.Won = res.data.res[0].won_proposals
+                    obj.Lost = res.data.res[0].lost_proposals
                     setproposalCount(obj)
                     setIsLoading2(prev => [false, ...prev.slice(1, 6)])
                 })
@@ -1355,6 +1365,14 @@ const Proposal = (props) => {
                                                     checked={selectedProposals.includes(e.Proposal_ID)}
                                                     readOnly={true}
                                                     onClick={(eve) => { if (eve.target.checked) { setselectedProposals(prev => [...prev, e.Proposal_ID]) } else { setselectedProposals(prev => prev.filter(ele => ele !== e.Proposal_ID)) } }}
+                                                />
+                                                <img
+                                                    src={isChecked ? star : star_transparent}
+                                                    style={{
+                                                    color: isChecked ? 'gold' : 'black',
+                                                    cursor: 'pointer'
+                                                    }}
+                                                    onClick={handleCheckboxChange}
                                                 />
                                                 <div style={{flexDirection:'column'}}>
                                                 <p style={{ WebkitLineClamp: "2", WebkitBoxOrient: "vertical", display: "-webkit-box", overflow: "hidden", margin: "0px" }}>{e.City}</p>

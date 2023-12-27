@@ -76,17 +76,17 @@
     color: #8B0000;
 }
 
-.high-chip, .not-found-chip, .lost-chip, .nogo-chip, .three{
+.high-chip, .not-found-chip, .lost-chip, .nogo-chip, .three, .not-submitted-chip, .no-chip{
     background: #FFF1F1;
     color: #D93838;
 }
 
-.medium-chip, .draft-budget-chip, .pending-chip, .review-chip, .waiting-chip, .four{
+.medium-chip, .draft-budget-chip, .pending-chip, .review-chip, .waiting-chip, .four, .submitted-chip{
     background: #FFF4EF;
     color: #FD9568;
 }
 
-.in-progress-chip, .low-chip, .done-chip, .won-chip, .go-chip, .approved-chip, .five{
+.in-progress-chip, .low-chip, .done-chip, .won-chip, .go-chip, .approved-chip, .five, .yes-chip{
     background: #EFFEFA;
     color: #13A579;
 }

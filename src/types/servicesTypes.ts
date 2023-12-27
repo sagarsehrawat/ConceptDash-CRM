@@ -33,11 +33,30 @@ declare module "Services"{
         }[]
     }
 
+    export interface ProposalCountResponse {
+        success : boolean,
+        res : Array<{
+            total_proposals: number ,
+            won_proposals: number ,
+            lost_proposals: number ,
+            month: number ,
+            percent: number
+        }>
+    }
+
     export interface GetCitiesResponse {
         success : boolean,
         res : Array<{
             City_ID : number | string,
             City : string,
+        }>
+    }
+
+    export interface GetOrganizationsListResponse {
+        success : boolean,
+        res : Array<{
+            company_id : number | string,
+            company_name : string,
         }>
     }
 
@@ -108,6 +127,12 @@ declare module "Services"{
         totalAmount: number
     }
 
+    export interface GetProposalsResponse {
+        success : boolean,
+        res : Array<Proposal>,
+        totalPages : number
+    }
+
     export interface UpdateResponse {
         success : boolean,
     }
@@ -133,5 +158,10 @@ declare module "Services"{
     export interface GetProjectById {
         success : true,
         res : Project
+    }
+
+    export interface GetProposalById {
+        success : true,
+        res : Proposal
     }
 }
