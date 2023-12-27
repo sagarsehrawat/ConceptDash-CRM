@@ -2,20 +2,20 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import moment from "moment";
 
 interface ProposalState {
-    percentage: number | string,
-    newProposals: number | string,
-    wonProposals: number | string,
-    lostProposals: number | string,
-    totalProposals: number | string,
+    percentage: number,
+    newProposals: number,
+    wonProposals: number,
+    lostProposals: number,
+    totalProposals: number,
     proposals: Proposal[],
 }
 
 interface ProposalStatus {
-    percentage: number | string,
-    newProposals: number | string,
-    wonProposals: number | string,
-    lostProposals: number | string,
-    totalProposals: number | string,
+    percentage: number,
+    newProposals: number,
+    wonProposals: number,
+    lostProposals: number,
+    totalProposals: number,
 }
 
 const initialState: ProposalState = {

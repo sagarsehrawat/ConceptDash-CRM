@@ -44,7 +44,7 @@ import {
   import open from "../../../Images/openinDrive.svg";
   import TFSearchBar from "../../../components/ui/TFSearchBar/TFSearchBar.js";
   import TFChip from "../../../components/form/TFChip/TFChip.js";
-import AddProject from "../forms/AddProject.js";
+import AddProject from "../forms/AddProposal.js";
 import { useSelector, useDispatch } from 'react-redux';
 import {
     initData,

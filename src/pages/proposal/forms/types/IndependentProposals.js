@@ -1,6 +1,6 @@
 import React from "react";
-import Estimation from "../department-projects/Estimation";
-import Bidders from "../department-projects/Bidders";
+import Estimation from "../SubDetails/Details";
+import Bidders from "../SubDetails/Bidders";
 
 const IndependentProject = ({ form, handleForm, departments, cities, projectCategories, managers, employees ,clients, sources}) => {
   

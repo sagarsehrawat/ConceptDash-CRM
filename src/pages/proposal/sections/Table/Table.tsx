@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-// import {selectTotalProposals, selectLostProposals, selectWonProposals,selectNewProposals, selecteNewPercentage} from '../../../../redux/slices/proposalSlice'
+import {initData, selectTotalProposals, selectLostProposals, selectWonProposals,selectNewProposals, selecteNewPercentage} from '../../../../redux/slices/proposalSlice'
 import SERVICES from '../../../../services/Services';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp} from '@fortawesome/free-solid-svg-icons';
@@ -40,11 +40,11 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProposalId 
   const sortRef = useRef<HTMLDivElement>(null);
   const [showSortModal, setShowSortModal] = useState<string>("");
   const [sort, setSort] = useState<string>('created_at DESC');
-  // let totalProposals  = useSelector(selectTotalProposals)
-  // let wonProposals = useSelector(selectWonProposals)
-  // let lostProposals = useSelector(selectLostProposals)
-  // let newProposals = useSelector(selectNewProposals)
-  // let percentage = useSelector(selecteNewPercentage)
+  let totalProposals  = useSelector(selectTotalProposals)
+  const wonProposals = useSelector(selectWonProposals)
+  const lostProposals = useSelector(selectLostProposals)
+  const newProposals = useSelector(selectNewProposals)
+  const percentage = useSelector(selecteNewPercentage)
   
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -109,16 +109,26 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProposalId 
   const handleResultUpdate = async (id: number, option: string) => {
     const prev = proposals.filter(proposals => proposals.proposal_id === id);
     try {
-      // const proposalCounts = { totalProposals: 0, wonProposals : 0, lostProposals: 0, newProposals: 0, percentage: 0};
+      const proposalCounts = { totalProposals: totalProposals, wonProposals : wonProposals, lostProposals: lostProposals, newProposals: newProposals, percentage: percentage};
       dispatch(updateProposal({ proposalId: id, data: { 'result': option }}))
       await SERVICES.updateProposalResult(id, option);
-      // const prevOption = prev[0].result;
+      const prevOption = prev[0].result;
       if(option==="Lost"){
-        
+        proposalCounts.lostProposals += 1;
       }
       else if(option==="Won"){
-
+        proposalCounts.wonProposals += 1;
       }
+
+      if(prevOption==="Lost"){
+        proposalCounts.lostProposals -= 1;
+      }
+      else if(prevOption==="Won"){
+        proposalCounts.wonProposals -= 1;
+      }
+      console.log(proposalCounts);
+      dispatch(initData(proposalCounts));
+      
     } catch (error) {
       console.log(error);
       dispatch(updateProposal({ proposalId: id, data: { 'result': prev[0].result }}));

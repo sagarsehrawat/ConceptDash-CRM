@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import './AddProject.css'
+import './AddProposal.css'
 import headerIcon from '../../../Images/Projects.svg';
 // import tick from '../../../assets/icons/Primary_Color_Tick.svg'
-import IndependentProject from './types/IndependentProject';
+import IndependentProject from './types/IndependentProposals';
 import FormUtils from '../../../utils/FormUtils';
 import TaskListUtils from '../utils/TaskListUtils';
 import TFButton from '../../../components/ui/TFButton/TFButton';

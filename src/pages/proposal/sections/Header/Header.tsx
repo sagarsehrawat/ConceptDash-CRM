@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
 import TFButton from '../../../../components/ui/TFButton/TFButton';
 import ICONS from '../../../../constants/Icons';
-import AddProject from '../../forms/AddProject';
+import AddProject from '../../forms/AddProposal';
 
 type Props = {
     api: number,

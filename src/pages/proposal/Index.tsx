@@ -4,7 +4,7 @@ import HeaderCards from './sections/HeaderCards/HeaderCards';
 import SearchFilter from './sections/SearchFilter/SearchFilter';
 import Pages from './sections/Pages/Pages';
 import Table from './sections/Table/Table';
-import ProposalDetail from './sections/ProjectDetail/ProjectDetail';
+import ProposalDetail from './sections/ProposalDetail/ProposalDetail';
 
 type Props = {
   isCollapsed: boolean

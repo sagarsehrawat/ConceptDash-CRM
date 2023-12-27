@@ -4,9 +4,8 @@ import { initData, selectTotalProposals, selectLostProposals, selectWonProposals
 import SERVICES from '../../../../services/Services'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-// import { icons } from "../../../../assets/icons";
-// const { total_rfp_icon, new_rfp_icon, trending_rfp_icon, trending_up_icon } =
-//     icons;
+import { icons } from "../../../../assets/icons";
+// const { total_rfp_icon, new_rfp_icon, trending_rfp_icon, trending_up_icon } = icons;
 
 
 type Props = {
@@ -21,13 +20,14 @@ const HeaderCards = ({ api }: Props) => {
     const lostProposals = useSelector(selectLostProposals)
     const newProposals = useSelector(selectNewProposals)
     const percentage = useSelector(selecteNewPercentage)
+    const proposalCounts = { totalProposals: 0, wonProposals : 0, lostProposals: 0, newProposals: 0, percentage: 0};
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await SERVICES.proposalCount();
                 console.log(response.res[0]);
-                const proposalCounts = { totalProposals: 0, wonProposals : 0, lostProposals: 0, newProposals: 0, percentage: 0};
+                // const proposalCounts = { totalProposals: 0, wonProposals : 0, lostProposals: 0, newProposals: 0, percentage: 0};
 
                 proposalCounts.totalProposals = response.res[0].total_proposals;
                 proposalCounts.wonProposals = response.res[0].won_proposals;
@@ -47,7 +47,7 @@ const HeaderCards = ({ api }: Props) => {
     // const cardData = [
     //     {
     //       icon: total_rfp_icon,
-    //       rfp: countData.total_rfps,
+    //       rfp: proposalCounts.total_rfps,
     //       percent: countData.total_rfps,
     //       heading: "Total RFP's",
     //     },
