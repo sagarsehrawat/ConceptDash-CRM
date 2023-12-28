@@ -8,6 +8,10 @@ import ARROW_DROPDOWN_OPEN_BLACK from '../assets/icons/Arrow_Dropdown_Open_Black
 import ARROW_DROPDOWN_CLOSE_BLACK from '../assets/icons/Arrow_Dropdown_Close_Black.svg'
 import CHEVRON_LEFT_BLACK from '../assets/icons/Chevron_left_Black.svg'
 import CHEVRON_DOWN_PRIMARY from '../assets/icons/Chevron_Down_Primary.svg'
+import INFO from '../assets/icons/Info.svg'
+import EDIT from '../assets/icons/Edit.svg'
+import DELETE from '../assets/icons/Delete.svg'
+import PLUSGREY from '../assets/icons/PlusGrey.svg'
 import TRENDING_UP_GREEN from '../assets/icons/Trending_Up_Green.svg'
 import TRENDING_DOWN_RED from '../assets/icons/Trending_Down_Red.svg'
 import FINANCE_PRIMARY from '../assets/icons/Finance_Primary.svg'
@@ -32,6 +36,10 @@ const ICONS = {
     ARROW_DROPDOWN_CLOSE_BLACK,
     CHEVRON_LEFT_BLACK,
     CHEVRON_DOWN_PRIMARY,
+    INFO,
+    EDIT,
+    DELETE,
+    PLUSGREY,
     TRENDING_UP_GREEN,
     TRENDING_DOWN_RED,
     FINANCE_PRIMARY,

@@ -29,14 +29,16 @@ function TTMMain(props) {
       marginLeft:'12px'
     }
   }
+  const [exists, setexists] = useState(true)
   return (
       <div style={{ marginTop: "8px" }}>
+
         <div style={{display:'flex', flexDirection:'row'}}>
           
           <FontAwesomeIcon icon={faArrowLeft} color="#70757A" style={{ borderRadius:'20px', padding:'5px', backgroundColor:'#DBDBF4', border:'1px solid #DBDBF4', marginLeft: "16px", cursor: "pointer" }} onClick={()=>setshowTTM(false)}/>
           <div style={styles.heading}>TTM : {Name}</div>
         </div>
-        <Box
+        {exists?<><Box
           sx={{
             width: "100%",
             typography: "body1",
@@ -102,8 +104,8 @@ function TTMMain(props) {
               </TabList>
             </Box>
             <TabPanel value="1">
-              <div style={{ width: '100%', float: 'left', marginLeft: '5px', marginTop: '20px' }}>
-                <TTMTable Name={Name} Id={Id}/>
+              <div style={{ width: '100%', float: 'left', marginTop: '20px' }}>
+                <TTMTable Name={Name} Id={Id} setexists={setexists}/>
               </div>
             </TabPanel>
             <TabPanel value="2" style={{padding:'0px'}}>
@@ -113,7 +115,7 @@ function TTMMain(props) {
             </TabPanel>
             
           </TabContext>
-        </Box>
+        </Box></>:'No data to show'}
       </div>
   )
 }

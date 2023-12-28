@@ -1,0 +1,118 @@
+[
+    {
+        "task": "Project Initiation Phase",
+        "subtasks": [
+            {
+                "task": "Collection of Background Data"
+            },
+            {
+                "task": "Review Background Data and Outline Design Deliverables"
+            },
+            {
+                "task": "Create drawing data"
+            },
+            {
+                "task": "Coordination with relevant authorities"
+            }
+        ]
+    },
+    {
+        "task": "Investigations",
+        "subtasks": [
+            {
+                "task": "Review of Previous Assessments and recommend additional investigations if required"
+            }
+        ]
+    },
+    {
+        "task": "Preliminary Design Phase",
+        "subtasks": [
+            {
+                "task": "Setup Template, Coordinate System, Georeference"
+            },
+            {
+                "task": "Incorporation of Existing Surface Conditions from Georeference or Survey Data (if recieved)"
+            },
+            {
+                "task": "Refer TAC & MTO & relevant Specifications"
+            },
+            {
+                "task": "Generate Existing Ground Profile & Design Grades"
+            },
+            {
+                "task": "Design Alignment"
+            },
+            {
+                "task": "Determine Proposed Design"
+            },
+            {
+                "task": "Create Profile View"
+            },
+            {
+                "task": "Construct Assemblies"
+            },
+            {
+                "task": "Development of Corridor, Sample Lines, Section View"
+            },
+            {
+                "task": "Perform Analysis of Generated Model"
+            },
+            {
+                "task": "Perform Design Optimization of Analysed Model"
+            }
+        ]
+    },
+    {
+        "task": "Detailed Subdivision Design",
+        "subtasks": [
+            {
+                "task": "FSSWMR Report Update"
+            },
+            {
+                "task": "Removals"
+            },
+            {
+                "task": "Grading Plans"
+            },
+            {
+                "task": "Plan Profile for Internal Streets"
+            },
+            {
+                "task": "Sections"
+            },
+            {
+                "task": "Staging and Traffic Control Plan"
+            },
+            {
+                "task": "Errosion Sediment Control"
+            },
+            {
+                "task": "Property Plans/ Easement Drawings"
+            },
+            {
+                "task": "Detailed Phasing of Construction of the stormwater management facility"
+            },
+            {
+                "task": "Final Design Submission"
+            }
+        ]
+    },
+    {
+        "task": "Landscape Design",
+        "subtasks": [
+            {
+                "task": "Buffer Enhancement Plan"
+            },
+            {
+                "task": "Tree Replacement Calculation"
+            },
+            {
+                "task": "Streetscape Plan"
+            }
+        ]
+    },
+    {
+        "task": "BOQ and Cost Estimation",
+        "subtasks": []
+    }
+]
