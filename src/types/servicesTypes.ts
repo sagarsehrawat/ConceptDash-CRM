@@ -131,7 +131,12 @@ declare module "Services"{
     }
 
     export interface GetProjectById {
-        success : true,
+        success : boolean,
         res : Project
+    }
+
+    export interface GetInvoicesResponse {
+        success: boolean,
+        res: Invoice[]
     }
 }

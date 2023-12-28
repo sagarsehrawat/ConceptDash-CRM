@@ -6,7 +6,11 @@ import TFDateChip from "../../../../components/form/TFDateChip/TFDateChip";
 import TFChip from "../../../../components/form/TFChip/TFChip";
 import TFViewChip from "../../../../components/ui/TFViewChip/TFViewChip";
 
-const TableRow = () => {
+type Props = {
+  setpage: Function;
+};
+
+const TableRow = ({setpage}: Props) => {
   const [isVisible, setisVisible] = useState<boolean>(false);
   return (
     <>
@@ -76,14 +80,6 @@ const TableRow = () => {
                     className={styles["table-heading"]}
                     style={{ width: "160px", background: "#F9FAFC" }}
                   ></th>
-                  <th
-                    className={styles["table-heading"]}
-                    style={{ width: "50px", background: "#F9FAFC" }}
-                  ></th>
-                  <th
-                    className={styles["table-heading"]}
-                    style={{ width: "50px", background: "#F9FAFC" }}
-                  ></th>
                 </thead>
                 <tbody>
                   <tr>
@@ -104,13 +100,7 @@ const TableRow = () => {
                       <b>$ 120,000</b>
                     </td>
                     <td className={`${styles["table-cell2"]} ${styles['border']}`}>
-                      <TFViewChip label="Invoice" onClick={() => {}} />
-                    </td>
-                    <td className={`${styles["table-cell2"]} ${styles['border']}`}>
-                      <TFIcon icon={ICONS.EDIT_GREY} onClick={() => {}} />
-                    </td>
-                    <td className={`${styles["table-cell2"]} ${styles['border']}`}>
-                      <TFIcon icon={ICONS.DELETE_GREY} onClick={() => {}} />
+                      <TFViewChip label="Invoice" onClick={() => {setpage("INVOICE_GENERATOR")}} />
                     </td>
                   </tr>
                 </tbody>

@@ -91,8 +91,6 @@ const TableHeader = () => {
           />
         </th>
         <th className="table-heading" style={{ width: "172px" }}></th>
-        <th className="table-heading" style={{ width: "50px" }}></th>
-        <th className="table-heading" style={{ width: "50px" }}></th>
       </tr>
     </thead>
   );

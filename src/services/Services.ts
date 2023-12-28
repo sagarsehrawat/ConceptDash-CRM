@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, ProjectCountResponse, GetRostersListResponse, GetEmployeesListResponse, GetProjectsResponse, UpdateResponse, GetProjectById, GetTrackingRfpsResponse, BudgetCountResponse, GetBudgetCitiesResponse, GetCityBudgetResponse } from "Services";
+import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, ProjectCountResponse, GetRostersListResponse, GetEmployeesListResponse, GetProjectsResponse, UpdateResponse, GetProjectById, GetTrackingRfpsResponse, BudgetCountResponse, GetBudgetCitiesResponse, GetCityBudgetResponse, GetInvoicesResponse } from "Services";
 import moment from "moment";
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -796,6 +796,24 @@ const SERVICES = {
             throw error;
         }
     },
+
+    getInvoices: async (invoiceType: string): Promise<GetInvoicesResponse> => {
+        try {
+            const response = await axios.get(APIS.DELETE_PROJECT,
+                {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                        invoiceType
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetInvoicesResponse;
+        } catch (error) {
+            throw error;
+        }
+    }
 };
 
 export default SERVICES;

@@ -1,8 +1,6 @@
 import React from 'react'
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
 import TFChip from '../../../../components/form/TFChip/TFChip';
-import TFIcon from '../../../../components/ui/TFIcon/TFIcon';
-import ICONS from '../../../../constants/Icons';
 import TFViewChip from '../../../../components/ui/TFViewChip/TFViewChip';
 
 type Props = {
@@ -44,12 +42,6 @@ const TableRow = ({setpage}: Props) => {
             label='Invoice'
             onClick={() => {setpage("INVOICE_GENERATOR")}} 
         />
-        </td>
-        <td className='table-cell'>
-            <TFIcon icon={ICONS.EDIT_GREY} onClick={() => {}} />
-        </td>
-        <td className='table-cell'>
-            <TFIcon icon={ICONS.DELETE_GREY} onClick={() => {}} />
         </td>
     </tr>
   )

@@ -33,7 +33,8 @@ const APIS = {
     UPDATE_BUDGET: '/budget/update',
     UPDATE_PROJECT: '/project/update',
     ADD_PROPOSAL: '/api/add/proposal',
-    DELETE_PROJECT: '/project/delete'
+    DELETE_PROJECT: '/project/delete',
+    GET_INVOICES: '/finance/invoices'
 };
 
 export default APIS;

@@ -22,8 +22,10 @@ const Index = ({ variant }: Props) => {
       />
       <HeaderCards variant={variant} />
       <Header variant={variant} tab={selectedTab.toString()} />
-      {selectedTab === "Projects" && <ProjectTable />}
-      {selectedTab !== "Projects" && <Table setpage={setpage}/>}
+      {selectedTab === "Projects" && <ProjectTable setpage={setpage} />}
+      {selectedTab === "Recieved" && <Table setpage={setpage} invoiceType='Recieved'/>}
+      {selectedTab === "Pending" && <Table setpage={setpage} invoiceType='Pending'/>}
+      {selectedTab === "Overdue" && <Table setpage={setpage} invoiceType='Overdue'/>}
     </>
   );
   if(page === "INVOICE_GENERATOR") return <InvoiceGenerator setpage={setpage} />
