@@ -42,7 +42,13 @@ const APIS = {
     UPDATE_PROPOSAL_BOOKMARK:  '/proposal/update/proposal/bookmark',
     GET_ORGANIZATION_LIST: 'client/get/organization/list',
     DELETE_PROPOSALS: 'proposal/delete/proposals',
-    DELETE_PROJECT: '/project/delete'
+    DELETE_PROJECT: '/project/delete',
+    GET_INVOICES: '/finance/invoices',
+    GET_PROJECT_INVOICES: '/finance/projects/id',
+    GET_INVOICE_PROJECTS: '/finance/projects',
+    GET_INVOICE_DETAILS: '/finance/invoice/details',
+    GET_FINANCE_COUNT: '/finance/header',
+    GENERATE_PROJECT_INVOICE: '/finance/invoice/generate'
 };
 
 export default APIS;

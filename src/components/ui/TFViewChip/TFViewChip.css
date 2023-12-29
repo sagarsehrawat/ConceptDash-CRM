@@ -1,0 +1,19 @@
+.tf-view-chip {
+    display: flex;
+padding: 2px 10px;
+justify-content: center;
+align-items: center;
+gap: var(--8-pad, 8px);
+border-radius: 6px;
+border: 1px solid #E2E8F0;
+cursor: pointer;
+}
+
+.tf-view-chip-label {
+    color: var(--Black-text, #3D424F);
+font-family: Roboto;
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: 20px; /* 142.857% */
+}

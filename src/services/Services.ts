@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, ProjectCountResponse, GetRostersListResponse, GetEmployeesListResponse, GetProjectsResponse, UpdateResponse, GetProjectById, GetTrackingRfpsResponse, BudgetCountResponse, GetBudgetCitiesResponse, GetCityBudgetResponse, ProposalCountResponse ,GetProposalsResponse,GetProposalById, GetOrganizationsListResponse} from "Services";
+import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, ProjectCountResponse, GetRostersListResponse, GetEmployeesListResponse, GetProjectsResponse, UpdateResponse, GetProjectById, GetTrackingRfpsResponse, BudgetCountResponse, GetBudgetCitiesResponse, GetCityBudgetResponse, ProposalCountResponse ,GetProposalsResponse,GetProposalById, GetOrganizationsListResponse, GetInvoicesResponse, GetInvoiceProjectResponse, GetInvoiceDetailResponse, GetFinanceCountResponse} from "Services";
 import moment from "moment";
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -1043,6 +1043,113 @@ const SERVICES = {
                 throw response.data as ErrorResponse
             }
             return response.data as DeleteResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getInvoices: async (invoiceType: string): Promise<GetInvoicesResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_INVOICES,
+                {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                        type: invoiceType,
+                        search: ''
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetInvoicesResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getInvoiceProjects: async (): Promise<GetInvoiceProjectResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_INVOICE_PROJECTS,
+                {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetInvoiceProjectResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    generateInvoice: async (projectId: number): Promise<AddResponse> => {
+        try {
+            const response = await axios.post(APIS.GENERATE_PROJECT_INVOICE,
+                {projectId},
+                {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as AddResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getProjectInvoices: async (projectId: number): Promise<GetInvoicesResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_PROJECT_INVOICES,
+                {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                        projectid: projectId
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetInvoicesResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getInvoiceDetails: async (invoiceId: number): Promise<GetInvoiceDetailResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_INVOICE_DETAILS,
+                {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                        invoiceid: invoiceId
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetInvoiceDetailResponse;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getFinanceCount: async (): Promise<GetFinanceCountResponse> => {
+        try {
+            const response = await axios.get(APIS.GET_FINANCE_COUNT,
+                {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                    },
+                });
+            if (response.data.success === false) {
+                throw response.data as ErrorResponse
+            }
+            return response.data as GetFinanceCountResponse;
         } catch (error) {
             throw error;
         }

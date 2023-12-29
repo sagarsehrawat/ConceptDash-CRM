@@ -5,3 +5,4 @@ declare module "*.svg" {
   }
   declare module 'redux-batched-subscribe';
   declare module 'redux-logger';
+  declare module "*.module.css"

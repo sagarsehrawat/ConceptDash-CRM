@@ -285,7 +285,8 @@ const ProposalDetail = ({ proposalId, setProposalId }: Props) => {
     
 
 
-    const handleTabChange = (tabValue: number) => {
+    const handleTabChange = (tab: string | number) => {
+        const tabValue = parseInt(tab.toString());
         setTab(tabValue);
         if (tabRefs[tabValue] && tabRefs[tabValue]?.current) {
             tabRefs[tabValue].current?.scrollIntoView({

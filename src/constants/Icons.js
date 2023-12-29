@@ -12,6 +12,18 @@ import INFO from '../assets/icons/Info.svg'
 import EDIT from '../assets/icons/Edit.svg'
 import DELETE from '../assets/icons/Delete.svg'
 import PLUSGREY from '../assets/icons/PlusGrey.svg'
+import TRENDING_UP_GREEN from '../assets/icons/Trending_Up_Green.svg'
+import TRENDING_DOWN_RED from '../assets/icons/Trending_Down_Red.svg'
+import FINANCE_PRIMARY from '../assets/icons/Finance_Primary.svg'
+import DONE_GREEN from '../assets/icons/Done_Green.svg'
+import CLOCK_YELLOW from '../assets/icons/Clock_Yellow.svg'
+import CLIPBOARD_PRIMARY from '../assets/icons/Clipboard_Primary.svg'
+import DONE_PRIMARY from '../assets/icons/Done_Primary.svg'
+import CLOCK_PRIMARY from '../assets/icons/Clock_Primary.svg'
+import WARNING_PRIMARY from '../assets/icons/Warning_Primary.svg'
+import EDIT_GREY from '../assets/icons/Edit_Grey.svg'
+import DELETE_GREY from '../assets/icons/Delete_Grey.svg'
+import EYE_GREY from '../assets/icons/Eye_Grey.svg'
 
 const ICONS = {
     MAGNIFYING_GLASS_WHITE,
@@ -27,7 +39,19 @@ const ICONS = {
     INFO,
     EDIT,
     DELETE,
-    PLUSGREY
+    PLUSGREY,
+    TRENDING_UP_GREEN,
+    TRENDING_DOWN_RED,
+    FINANCE_PRIMARY,
+    DONE_GREEN,
+    CLOCK_YELLOW,
+    CLIPBOARD_PRIMARY,
+    DONE_PRIMARY,
+    CLOCK_PRIMARY,
+    WARNING_PRIMARY,
+    EDIT_GREY,
+    DELETE_GREY,
+    EYE_GREY,
 };
 
 export default ICONS;

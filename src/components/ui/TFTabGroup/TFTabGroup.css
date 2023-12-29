@@ -1,6 +1,6 @@
 .tf-tab-group {
     display: flex;
     align-items: flex-start;
-    gap: var(--12-pad, 12px);
+    gap: var(--32-pad, 32px);
     justify-content: start;
 }

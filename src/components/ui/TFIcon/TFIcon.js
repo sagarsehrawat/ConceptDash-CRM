@@ -12,7 +12,7 @@ TFIcon.propTypes = {
   /**
   * Placeholder for the SearchBar
   */
-  icon: PropTypes.oneOf(Object.keys(ICONS)),
+  icon: PropTypes.oneOf(Object.values(ICONS)),
   /**
   * Alt Text for Icon
   */
