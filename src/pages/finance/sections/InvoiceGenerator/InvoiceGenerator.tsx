@@ -44,7 +44,7 @@ const InvoiceGenerator = ({ invoiceId, setInvoiceId }: Props) => {
         footerButtonLabel="Approve & Generate Invoice"
       >
         {isLoading ? (
-          <div className="d-flex justify-content-center align-items-center">
+          <div className="d-flex justify-content-center align-items-center" style={{flex: "1"}}>
             <LoadingSpinner />
           </div>
         ) : (
@@ -83,7 +83,7 @@ const InvoiceGenerator = ({ invoiceId, setInvoiceId }: Props) => {
                   <div className={styles["card"]}>
                     <div className={styles["card-container"]}>
                       <p className={styles["card-heading"]}>
-                        Bill To:{" "}
+                        Ship To:{" "}
                         <p className={styles["card-subheading"]}>
                           {invoice.company_name ?? ""}
                         </p>

@@ -1494,7 +1494,7 @@ const Dashboard = () => {
                     Invoice AR
                   </p>
                 </div>:<></>}
-               {prop3? <div
+               {/**prop3? <div
                   style={{...
                     nav === 25
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -1519,7 +1519,7 @@ const Dashboard = () => {
                   >
                     Invoice AP
                   </p>
-                </div>:<></>}
+                  </div>:<></>*/}
                 {privileges.includes('View Contacts') ? <div
                   style={
                     nav === 11
