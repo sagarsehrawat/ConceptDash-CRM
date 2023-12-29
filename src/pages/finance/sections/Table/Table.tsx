@@ -7,13 +7,13 @@ import SERVICES from "../../../../services/Services";
 import LoadingSpinner from "../../../../Main/Loader/Loader";
 
 type Props = {
-  setpage: Function;
+  setInvoiceId: Function;
   invoiceType: string;
 };
 
-const Table = ({ setpage, invoiceType }: Props) => {
+const Table = ({ setInvoiceId, invoiceType }: Props) => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const Table = ({ setpage, invoiceType }: Props) => {
           <tbody>
             {
               invoices.map((invoice) => (
-                <TableRow invoice={invoice} setpage={setpage} />
+                <TableRow invoice={invoice} setInvoiceId={setInvoiceId} />
               ))
             }
           </tbody>

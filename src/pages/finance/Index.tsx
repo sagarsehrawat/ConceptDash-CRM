@@ -12,8 +12,8 @@ type Props = {
 
 const Index = ({ variant }: Props) => {
   const [selectedTab, setselectedTab] = useState<string>("Projects");
-  const [page, setpage] = useState<string>("DEFAULT");
-  if(page === "DEFAULT") return (
+  const [invoiceId, setInvoiceId] = useState<number | null>(null);
+  if(invoiceId === null) return (
     <>
       <Tabs
         variant={variant}
@@ -22,13 +22,14 @@ const Index = ({ variant }: Props) => {
       />
       <HeaderCards variant={variant} />
       <Header variant={variant} tab={selectedTab.toString()} />
-      {selectedTab === "Projects" && <ProjectTable setpage={setpage} />}
-      {selectedTab === "Recieved" && <Table setpage={setpage} invoiceType='Recieved'/>}
-      {selectedTab === "Pending" && <Table setpage={setpage} invoiceType='Pending'/>}
-      {selectedTab === "Overdue" && <Table setpage={setpage} invoiceType='Overdue'/>}
+      {selectedTab === "Projects" && <ProjectTable setInvoiceId={setInvoiceId} />}
+      {selectedTab === "All Invoices" && <Table setInvoiceId={setInvoiceId} invoiceType='All'/>}
+      {selectedTab === "Recieved Invoices" && <Table setInvoiceId={setInvoiceId} invoiceType='Recieved'/>}
+      {selectedTab === "Pending Invoices" && <Table setInvoiceId={setInvoiceId} invoiceType='Pending'/>}
+      {selectedTab === "Overdue Invoices" && <Table setInvoiceId={setInvoiceId} invoiceType='Overdue'/>}
     </>
   );
-  if(page === "INVOICE_GENERATOR") return <InvoiceGenerator setpage={setpage} />
+  if(invoiceId !== null) return <InvoiceGenerator invoiceId={invoiceId} setInvoiceId={setInvoiceId} />
 };
 
 export default Index;

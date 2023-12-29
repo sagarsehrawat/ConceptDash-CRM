@@ -2,12 +2,13 @@ import React from "react";
 import "./TFHeaderCard.css";
 import TFIcon from "../TFIcon/TFIcon";
 import ICONS from "../../../constants/Icons";
+import Utils from "../../../utils/Utils";
 
 type Props = {
   variant: "PERCENTAGE" | "NOT_PERCENTAGE";
   label: string;
   icon: string;
-  value: string | number;
+  value: number | null;
   percentage?: number;
   iconBgColor?: string;
 };
@@ -21,7 +22,7 @@ const TFHeaderCard = ({ variant, label, icon, value, percentage = 0, iconBgColor
       </div>
       <div className="d-flex flex-column">
         <p className="tf-header-card-heading">{label}</p>
-        <p className="tf-header-card-subheading">{value.toString()}</p>
+        <p className="tf-header-card-subheading">{Utils.formatMoney(value)}</p>
       </div>
     </div>
   ) : (
@@ -32,7 +33,7 @@ const TFHeaderCard = ({ variant, label, icon, value, percentage = 0, iconBgColor
         </div>
         <div className="d-flex flex-column">
           <p className="tf-header-card-heading">{label}</p>
-          <p className="tf-header-card-subheading">{value.toString()}</p>
+          <p className="tf-header-card-subheading">{Utils.formatMoney(value)}</p>
         </div>
       </div>
       <div className="tf-header-card-footer">

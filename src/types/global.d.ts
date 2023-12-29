@@ -163,9 +163,11 @@ declare global{
     interface Invoice {
         invoice_id: number;
         invoice_code: string;
-        due_date: moment.Moment;
+        due_date: moment.Moment | string;
+        date_created: moment.Moment | string;
         project_id: number;
         project_name: string;
+        project_code: string;
         bill_to: number | null;
         ship_to: number | null;
         company_name: string;
@@ -173,15 +175,31 @@ declare global{
         business_phone: string | null;
         payment_status: 'Recieved' | 'Overdue' | 'Pending';
         invoice_status: 'Pending' | 'Denied' | 'Approved';
+        subtotal: number;
         total: number;
-        discount: number;
+        project_value: number | null;
+        discount: number | null;
         tax: number;
-        shipping: number;
+        recieved_amount: number | null;
+        shipping: number | null;
         rows: {
             description: string;
-            quantity: string;
+            quantity: number;
             unit: number;
             unitPrice: number;
+            total: number;
         }[];
+    }
+
+    interface InvoiceProject {
+        project_id: number;
+        project_code: string;
+        project_name: string;
+        recieved: number | null;
+        pending: number | null;
+        overdue: number | null;
+        project_value: number | null;
+        recieved_amount: number | null;
+        balance: number | null;
     }
 }

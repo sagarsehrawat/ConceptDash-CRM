@@ -27,7 +27,7 @@ const Tabs = ({variant, selectedTab, setselectedTab} : Props) => {
         },
         {
             label: "Pending",
-            value: "Pedning Invoices",
+            value: "Pending Invoices",
             focusedIcon: ICONS.CLOCK_PRIMARY
         },
         {

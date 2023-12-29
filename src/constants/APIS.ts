@@ -1,6 +1,6 @@
 const APIS = {
-    BASE_URL : 'https://crm-api.conceptdash.ca',
-    // BASE_URL : 'http://localhost:8080',
+    // BASE_URL : 'https://crm-api.conceptdash.ca',
+    BASE_URL : 'http://localhost:8080',
     SERVER_STATUS : `/`,
     GET_RFP_COUNT : '/api/get/rfp/count',
     GET_PROJECT_COUNT: '/project/fetch/count',
@@ -43,7 +43,12 @@ const APIS = {
     GET_ORGANIZATION_LIST: 'client/get/organization/list',
     DELETE_PROPOSALS: 'proposal/delete/proposals',
     DELETE_PROJECT: '/project/delete',
-    GET_INVOICES: '/finance/invoices'
+    GET_INVOICES: '/finance/invoices',
+    GET_PROJECT_INVOICES: '/finance/projects/id',
+    GET_INVOICE_PROJECTS: '/finance/projects',
+    GET_INVOICE_DETAILS: '/finance/invoice/details',
+    GET_FINANCE_COUNT: '/finance/header',
+    GENERATE_PROJECT_INVOICE: '/finance/invoice/generate'
 };
 
 export default APIS;
