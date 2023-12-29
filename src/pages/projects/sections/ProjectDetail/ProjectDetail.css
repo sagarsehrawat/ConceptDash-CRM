@@ -9,6 +9,14 @@
     overflow-y: hidden;
 }
 
+.project-detail-tabs-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
 .project-detail-header {
     display: inline-flex;
     padding: 0px var(--8-pad, 8px);

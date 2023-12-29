@@ -85,7 +85,7 @@ const PROJECT_FORM: ProjectForm = {
 };
 
 const ProjectDetail = ({ projectId, setProjectId }: Props) => {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [project, setProject] = useState<ProjectForm>(PROJECT_FORM);
     const [tasklist, setTasklist] = useState([]);
     const [openTasks, setOpenTasks] = useState([]);
@@ -146,6 +146,8 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
                     designInfo: projectResponse.res.extra_info?.designInfo ?? [],
                     childProjects: projectResponse.res.child_projects_info ?? []
                 });
+
+                console.log(project)
                 if (projectResponse.res.tasklist) {
                     setTasklist(projectResponse.res.tasklist ?? []);
                     setOpenTasks(projectResponse.res.tasklist.map((task: any) => task.taskId));
@@ -190,12 +192,13 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
         }
     }
 
-    const handleTabChange = (tabValue: number) => {
-        setTab(tabValue);
+    const handleTabChange = (tabValue: number | string) => {
+        const tab = parseInt(tabValue.toString())
+        setTab(tab);
 
         // Assuming 'Task List' is the tab that corresponds to the Tasklist component
-        if (tabRefs[tabValue] && tabRefs[tabValue]?.current) {
-            tabRefs[tabValue].current?.scrollIntoView({
+        if (tabRefs[tab] && tabRefs[tab]?.current) {
+            tabRefs[tab].current?.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start',
             });
@@ -249,6 +252,15 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
         }
     }
 
+    const generateInvoice = async () => {
+        try {
+            await SERVICES.generateInvoice(projectId);
+        } catch (error) {
+            console.log(error);
+            dispatch(showErrorModal('Something Went Wrong!'));
+        }
+    }
+
     return isLoading
         ? <div className='d-flex justify-content-center align-items-center w-100 h-100'><LoadingSpinner /></div>
         : (
@@ -269,6 +281,11 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
                                 { label: 'Project Details', value: 0 },
                                 { label: 'Task List', value: 1 },
                             ]}
+                        />
+                        <TFButton
+                            label='Generate Invoice'
+                            variant={'secondary'}
+                            handleClick={generateInvoice}
                         />
                     </div>
 

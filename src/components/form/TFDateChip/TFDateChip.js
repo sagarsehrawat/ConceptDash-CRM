@@ -97,7 +97,6 @@ const TFDateChip = ({
                             <DateCalendar
                                 value={moment(value).isValid() ? moment(value) : moment()}
                                 onChange={(e) => {
-                                    console.log(e);
                                     setDate(e.format('DD-MM-YYYY'));
                                     onChange(name, e);
                                     setisVisible(false);

@@ -29,7 +29,6 @@ type Props = {
   setProjectId: Function;
 }
 
-
 const Table = ({ api, setApi, currPage, filter, search, setPages, setProjectId }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedProjects, setselectedProjects] = useState<number[]>([]);

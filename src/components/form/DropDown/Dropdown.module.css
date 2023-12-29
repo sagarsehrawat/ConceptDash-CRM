@@ -28,9 +28,6 @@
 }
 
 .options-container {
-  max-height: 300px;
-  overflow-y: auto;
-  overflow-x: hidden;
   position: absolute;
   width: fit-content;
   background-color: white;
@@ -39,12 +36,26 @@
   border-radius: 12px;
   margin-top: 12px;
 }
+.optionsContainerMain {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 .option {
   white-space: nowrap;
   padding: 6px 16px;
   cursor: pointer;
   width: 100%;
   font-weight: 400;
+}
+.checkLabel {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-weight: 400;
+  padding: 8px 0px 4px 0px;
+  cursor: pointer;
 }
 .option:hover {
   background-color: #f4f5f5;
@@ -70,4 +81,24 @@
 .search-icon {
   height: 18px;
   width: 18px;
+}
+.checkBelow {
+  padding: 6px 16px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.done,
+.clear {
+  border: none;
+  outline: none;
+  background-color: #8361fe;
+  border-radius: 5px;
+  padding: 8px 20px;
+  color: white;
+}
+.clear {
+  background-color: white;
+  border: 1px solid #58636e;
+  color: #58636e;
 }

@@ -32,8 +32,23 @@ const APIS = {
     ADD_BUDGET: '/budget/add',
     UPDATE_BUDGET: '/budget/update',
     UPDATE_PROJECT: '/project/update',
-    ADD_PROPOSAL: '/api/add/proposal',
-    DELETE_PROJECT: '/project/delete'
+    ADD_PROPOSAL: '/proposal/add/proposal',
+    GET_PROPOSAL_COUNT: '/proposal/get/proposal/count',
+    GET_PROPOSALS:  '/proposal/get/page/proposals',
+    GET_PROPOSALS_BY_ID:  '/proposal/get/list/proposals/id',
+    UPDATE_PROPOSAL:  '/proposal/update/proposal',
+    UPDATE_PROPOSAL_RESULT:  '/proposal/update/proposal/result',
+    UPDATE_PROPOSAL_PRIORITY:  '/proposal/update/proposal/priority',
+    UPDATE_PROPOSAL_BOOKMARK:  '/proposal/update/proposal/bookmark',
+    GET_ORGANIZATION_LIST: 'client/get/organization/list',
+    DELETE_PROPOSALS: 'proposal/delete/proposals',
+    DELETE_PROJECT: '/project/delete',
+    GET_INVOICES: '/finance/invoices',
+    GET_PROJECT_INVOICES: '/finance/projects/id',
+    GET_INVOICE_PROJECTS: '/finance/projects',
+    GET_INVOICE_DETAILS: '/finance/invoice/details',
+    GET_FINANCE_COUNT: '/finance/header',
+    GENERATE_PROJECT_INVOICE: '/finance/invoice/generate'
 };
 
 export default APIS;

@@ -1,0 +1,61 @@
+.outer-container {
+    display: flex;
+    position: relative;
+    gap: 8px;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.options-modal-container {
+    position: absolute;
+    left:100%;
+    top:10%;
+    z-index: 10;
+    margin-left: 16px;
+    width: 264px;
+    /* height: 112px; */
+    border-radius: 6px;
+    background: #FFF;
+
+    /* New Card shadow */
+    box-shadow: 0px 4px 25px 0px rgba(0, 0, 0, 0.08);
+    display: inline-flex;
+    padding: 8px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.options-modal-inner-container {
+    display: flex;
+    padding: 10px 0px;
+    flex-direction: column;
+    align-items: flex-start;
+    /* border-radius: var(--8-pad, 8px); */
+    border: none;
+    background: #FFF;
+    /* box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.08), 0px 2px 6px 2px rgba(0, 0, 0, 0.15); */
+    height: 32px;
+    width: 248px;
+    display: flex;
+    padding: 6px var(--8-pad, 8px);
+
+    justify-content: center;
+    gap: 60px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.options-modal-inner-container:hover {
+    background: #DDDFEB;
+}
+
+.option-text {
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 153.846% */
+    margin-left: 4px;
+}

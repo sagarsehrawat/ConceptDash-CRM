@@ -5,7 +5,7 @@ import TFTab from '../TFTab/TFTab'
 type Props = {
   tabs?: { label: string, value: string | number, icon?: string, focusedIcon?: string }[],
   selectedTab: string | number,
-  onTabChange: Function
+  onTabChange: (val: string | number) => void;
 }
 
 const TFTabGroup = ({ tabs, selectedTab, onTabChange }: Props) => {

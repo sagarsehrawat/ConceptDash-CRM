@@ -49,11 +49,13 @@ import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
 import RFP from "../../pages/rfps/Index.tsx";
 import TestDemo from "../../pages/calendar/index";
-import Proposal from "../../pages/proposals/index";
+// import Proposal from "../../pages/proposals/index";
 import Employee from "../../pages/employee/index";
 import notificationIcon from '../../Images/Notification icon.svg'
 import Customers from "../../pages/customers/index";
 import Project from "../../pages/projects/Index.tsx";
+import Proposal from "../../pages/proposal/Index.tsx";
+import Finance from "../../pages/finance/Index.tsx";
 import BudgetCities from "../../pages/budgetCities/Index";
 import Tasks from "../../pages/tasks/index";
 import AddTask from "../../pages/tasks/forms/AddTask";
@@ -558,11 +560,13 @@ const Dashboard = () => {
     if (nav === 2) return <Tasks isCollapsed={isCollapsed} />;
     if (nav === 3) return <BudgetCities isCollapsed={isCollapsed} />;
     if (nav === 4) return <RFP isCollapsed={isCollapsed} />
-    if (nav === 17) return <Proposal isCollapsed={isCollapsed} />
+    if (nav === 17) return <Proposal isCollapsed={isCollapsed} setnav={setnav}/>
     if (nav === 5) return <PMSelector isCollapsed={isCollapsed} />
     if (nav === 6) return <Project isCollapsed={isCollapsed} setnav={setnav}/>
+    // if (nav === 7) return <Proposal isCollapsed={isCollapsed} />;
     if (nav === 7) return <Employee isCollapsed={isCollapsed} />;
     if (nav === 8) return <TestDemo />;
+    // if (nav === 9) return <ExpenseUpdate />;
     if (nav === 10) return <CompanyUpdate />;
     if (nav === 11) return <Customers isCollapsed={isCollapsed} />;
     if (nav === 12) return <Privileges />;
@@ -574,10 +578,13 @@ const Dashboard = () => {
     if(nav === 21) return <People isCollapsed={isCollapsed} setnav={setnav}  setContactPersonData={setContactPersonData}/>
     if(nav === 22) return <ContactPerson isCollapsed={isCollapsed} contactPersonData={contactPersonData} setnav={setnav}/>
     if(nav === 23) return <CompanyPage isCollapsed={isCollapsed} organizationData={organizationData} setnav={setnav} setContactPersonData={setContactPersonData}/>
+    if(nav === 24) return <Finance variant="AR" />
+    if(nav === 25) return <Finance variant="AP" />
   };
 
   const [prop, setprop] = useState(false)
   const [prop2, setprop2] = useState(false)
+  const [prop3, setprop3] = useState(false)
   const[checkwish,setcheckwish] = useState(false)
   const currentdate= new Date()
 
@@ -1357,9 +1364,9 @@ const Dashboard = () => {
                 </div> : <></>}
                 {privileges.includes('View Contacts') ? <div
                   style={{...
-                    prop
+                    prop2
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
-                      : mystyles.sidebarMenuItem, backgroundColor:prop?'#F0F0F1':'#fbfbfb', boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)"
+                      : mystyles.sidebarMenuItem, backgroundColor:prop2?'#F0F0F1':'#fbfbfb', boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)"
                   }}
                   onClick={()=>{setprop2(!prop2)}}
                 >
@@ -1434,6 +1441,85 @@ const Dashboard = () => {
                     People
                   </p>
                 </div>:<></>}
+                {true ? <div
+                  style={{...
+                    prop3
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem, backgroundColor:prop3?'#F0F0F1':'#fbfbfb', boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)"
+                  }}
+                  onClick={()=>{setprop3(!prop3)}}
+                >
+                  <div
+                    style={
+                        mystyles.sidebarMenuItemIcon.nonCollapsed
+                    }
+                  >
+                    <img
+                      src={/* nav === 5 ? proposalsActive :  */proposalsInactive}
+                      alt="Dashboard Icon"
+                    />
+                  </div>
+                  <p
+                    style={
+                         mystyles.sidebarMenuItemText
+                    }
+                  >
+                    Finance
+                  </p>
+                  <div style={{marginLeft:'4em'}}>{prop3?<FontAwesomeIcon icon={faChevronDown} />:<FontAwesomeIcon icon={faChevronRight} />}</div>
+                </div> : <></>}
+                {prop3?<div
+                  style={{...
+                    nav === 24
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem, backgroundColor:nav===24?PRIMARY_COLOR:'#F0F0F1'
+                  }}
+                  onClick={(e) => setnav(24)}
+                >
+                  <div
+                    style={{...
+                      nav === 24
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)", backgroundColor: nav===24?PRIMARY_COLOR:'#F0F0F1'
+                    }}
+                  >
+                  </div>
+                  <p
+                    style={
+                      nav === 24
+                        ? mystyles.sidebarMenuItemTextActive
+                        : mystyles.sidebarMenuItemText
+                    }
+                  >
+                    Invoice AR
+                  </p>
+                </div>:<></>}
+               {/**prop3? <div
+                  style={{...
+                    nav === 25
+                      ? mystyles.sidebarMenuItemActive.nonCollapsed
+                      : mystyles.sidebarMenuItem, backgroundColor:nav===25?PRIMARY_COLOR:'#F0F0F1'
+                  }}
+                  onClick={(e) => setnav(25)}
+                >
+                  <div
+                    style={{...
+                      nav === 25
+                        ? mystyles.sidebarMenuItemIconActive.nonCollapsed
+                        : mystyles.sidebarMenuItemIcon.nonCollapsed, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0)",backgroundColor: nav===25?PRIMARY_COLOR:'#F0F0F1'
+                    }}
+                  >
+                  </div>
+                  <p
+                    style={
+                      nav === 25
+                        ? mystyles.sidebarMenuItemTextActive
+                        : mystyles.sidebarMenuItemText
+                    }
+                  >
+                    Invoice AP
+                  </p>
+                  </div>:<></>*/}
                 {privileges.includes('View Contacts') ? <div
                   style={
                     nav === 11

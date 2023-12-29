@@ -41,7 +41,7 @@
   }
   
   .tableFixHead .table {
-    border-collapse: collapse;
+    border-collapse: separate;
     width: 100%;
   }
   
@@ -58,6 +58,7 @@
     text-align: center;
     border: none;
     background-color: white;
+    position: relative;
   }
   
   .normals{
@@ -169,7 +170,8 @@
         width: fit-content;
         position: sticky;
         left: 0;
-        padding-left: 24px;
+        /* padding-left: 24px; */
+        z-index: 2;
       }
       /* .totals{
         position: absolute;
