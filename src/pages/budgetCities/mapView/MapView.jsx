@@ -6,7 +6,7 @@ import arrowLeft from "../../../assets/icons/Arrow_Left.svg";
 import { Circle, MapContainer, Marker, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import LoadingSpinner from "../../../Main/Loader/Loader";
-import tableIcon from "../../../assets/icons/Table_Icon.svg";
+import rightPurple from "../../../assets/icons/Right_Purple.svg";
 import back from "../../../assets/icons/Arrow_Left.svg";
 import { Icon } from "leaflet";
 import moment from "moment";
@@ -455,7 +455,7 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
                   }}
                   className={styles.backToTable}
                 >
-                  <img src={tableIcon} alt="" /> Table View
+                  Go to Table View <img src={rightPurple} alt="" />
                 </div>
                 {budgets.showBudgets && (
                   <div className={styles.metricsContainer}>
