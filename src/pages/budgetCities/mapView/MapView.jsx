@@ -132,7 +132,7 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
         tempData.push(tempObj);
       }
     });
-    tempData = tempData.filter((e) => e.capital_budget_23 > 0);
+    // tempData = tempData.filter((e) => e.capital_budget_23 > 0);
     tempData.sort((a, b) => b.capital_budget_23 - a.capital_budget_23);
     setCenter(tempData[0].geographical_coordinates);
     setRegionData(tempData);
@@ -145,9 +145,9 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
         tempData.push(city);
       }
     });
-    console.log("before: ", tempData);
-    tempData = tempData.filter((e) => e.capital_budget_23 > 0);
-    console.log("after: ", tempData);
+    // console.log("before: ", tempData);
+    // tempData = tempData.filter((e) => e.capital_budget_23 > 0);
+    // console.log("after: ", tempData);
     tempData.sort((a, b) => b.capital_budget_23 - a.capital_budget_23);
     setZoom(10);
     setCenter(tempData[0].city_coordinates);
@@ -264,68 +264,67 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
               }}
               options={createRegionOptions(regionData)}
             />
-            {(citiesData.showCities || budgets.showBudgets) && (
-              <Dropdown
-                name={"Cities"}
-                value={cityID}
-                search
-                onChange={(val) => {
-                  handleCitySelect(val);
-                }}
-                options={createCityOptions(citiesData.cities)}
-              />
-            )}
-            {cityID && (
-              <>
-                <Dropdown
-                  name={"Year"}
-                  value={year}
-                  search
-                  onChange={(val) => {
-                    setYear(val);
-                  }}
-                  options={[
-                    { label: "2021", value: "2021" },
-                    { label: "2022", value: "2022" },
-                    { label: "2023", value: "2023" },
-                    { label: "2024", value: "2024" },
-                  ]}
-                />
-                <Dropdown
-                  name={"Budget Category"}
-                  value={filter.budgetCategory}
-                  search
-                  checkbox
-                  onChange={(val) => {
-                    setfilter({ ...filter, budgetCategory: val });
-                  }}
-                  options={[
-                    { label: "Design", value: "Design" },
-                    { label: "Construction", value: "Construction" },
-                  ]}
-                />
-                <Dropdown
-                  name={"Department"}
-                  value={filter.dept}
-                  search
-                  checkbox
-                  onChange={(val) => {
-                    setfilter({ ...filter, dept: val });
-                  }}
-                  options={depts}
-                />
-                <Dropdown
-                  name={"Project Category"}
-                  value={filter.cat}
-                  search
-                  checkbox
-                  onChange={(val) => {
-                    setfilter({ ...filter, cat: val });
-                  }}
-                  options={projectCategories}
-                />
-              </>
-            )}
+            <Dropdown
+              name={"Cities"}
+              value={cityID}
+              search
+              disable={!(citiesData.showCities || budgets.showBudgets)}
+              onChange={(val) => {
+                handleCitySelect(val);
+              }}
+              options={createCityOptions(citiesData.cities)}
+            />
+            <Dropdown
+              name={"Year"}
+              value={year}
+              search
+              disable={!cityID}
+              onChange={(val) => {
+                setYear(val);
+              }}
+              options={[
+                { label: "2021", value: "2021" },
+                { label: "2022", value: "2022" },
+                { label: "2023", value: "2023" },
+                { label: "2024", value: "2024" },
+              ]}
+            />
+            <Dropdown
+              name={"Budget Category"}
+              value={filter.budgetCategory}
+              search
+              disable={!cityID}
+              checkbox
+              onChange={(val) => {
+                setfilter({ ...filter, budgetCategory: val });
+              }}
+              options={[
+                { label: "Design", value: "Design" },
+                { label: "Construction", value: "Construction" },
+              ]}
+            />
+            <Dropdown
+              name={"Department"}
+              value={filter.dept}
+              search
+              disable={!cityID}
+              checkbox
+              onChange={(val) => {
+                setfilter({ ...filter, dept: val });
+              }}
+              options={depts}
+            />
+            <Dropdown
+              name={"Project Category"}
+              value={filter.cat}
+              search
+              disable={!cityID}
+              checkbox
+              onChange={(val) => {
+                setfilter({ ...filter, cat: val });
+              }}
+              options={projectCategories}
+            />
           </div>
         )}
         {!expand && (
@@ -456,7 +455,7 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
                   }}
                   className={styles.backToTable}
                 >
-                  <img src={tableIcon} alt="" /> Back to Table View
+                  <img src={tableIcon} alt="" /> Table View
                 </div>
                 {budgets.showBudgets && (
                   <div className={styles.metricsContainer}>
@@ -478,7 +477,8 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
                       {
                         citiesData.cities.filter((e) => e.city_id === cityID)[0]
                           ?.city
-                      }
+                      }{" "}
+                      ({budgets.budgets.length})
                     </div>
                     {budgets.budgets.map((e) => {
                       return (
@@ -533,7 +533,9 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
                       </div>
                       Back
                     </div>
-                    <div>{selectedRegion}</div>
+                    <div>
+                      {selectedRegion} ({citiesData.cities.length})
+                    </div>
                     {citiesData.cities.map((city) => {
                       return (
                         <div
@@ -584,7 +586,7 @@ const MapView = ({ expand, setExpand, citiesMain, isLoading }) => {
                 )}
                 {!citiesData.showCities && !budgets.showBudgets && (
                   <div className={styles.metricsContainer}>
-                    <div>Regions</div>
+                    <div>Regions ({regionData.length})</div>
                     {regionData.map((region) => {
                       return (
                         <div

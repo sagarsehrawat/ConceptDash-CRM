@@ -13,7 +13,7 @@ type Props = {
 };
 const Index = (props: Props) => {
   const [value, setValue] = useState<string>("");
-  const [expand, setExpand] = useState<boolean>(false);
+  const [expand, setExpand] = useState<boolean>(true);
   const [cityId, setCityId] = useState<number | null>(null);
   const dispatch = useDispatch();
   const cities = useSelector(selectCities);
