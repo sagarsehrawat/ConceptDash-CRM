@@ -40,6 +40,7 @@ interface FormType {
   submissionDate: string;
   rfpNumber: string;
   client: string;
+  clientId: string | number;
   files: Array<any>;
   source: string;
   city: string;
@@ -61,6 +62,7 @@ const FORM: FormType = {
   submissionDate: "",
   rfpNumber: "",
   client: "",
+  clientId: "",
   files: [],
   source: "",
   city: "",
@@ -73,7 +75,7 @@ const AddNewRfp = (props: Props) => {
   const { show, setShow, api, setApi, isEditing = false, editForm } = props;
 
   const { add_rfp_icon } = icons;
-  console.log(editForm)
+  console.log(editForm);
   const dispatch = useDispatch();
   const [form, setForm] = useState(
     isEditing && editForm
@@ -94,6 +96,7 @@ const AddNewRfp = (props: Props) => {
             : "",
           rfpNumber: editForm.rfp_number ?? "",
           client: editForm.client ?? "",
+          clientId: editForm.client_id ?? "",
           files: [],
           source: editForm.source ?? "",
           city: editForm.city ?? "",
@@ -115,6 +118,9 @@ const AddNewRfp = (props: Props) => {
   const [managers, setManagers] = useState<
     Array<{ label: string | number; value: string | number }>
   >([]);
+  const [clients, setclients] = useState<
+    Array<{ label: string | number; value: string | number }>
+  >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [uploadedFiles, setUploadedFiles] = useState([form.files]);
 
@@ -125,6 +131,7 @@ const AddNewRfp = (props: Props) => {
         const cityResponse = await SERVICES.getCities();
         const departmentResponse = await SERVICES.getDepartments();
         const managersResponse = await SERVICES.getManagers();
+        const clientsResponse = await SERVICES.getOrganizationsList();
         setCities(
           Utils.convertToTypeaheadOptions(cityResponse.res, "City", "City_ID")
         );
@@ -140,6 +147,13 @@ const AddNewRfp = (props: Props) => {
             managersResponse.res,
             "Full_Name",
             "Employee_ID"
+          )
+        );
+        setclients(
+          Utils.convertToTypeaheadOptions(
+            clientsResponse.res,
+            "company_name",
+            "company_id"
           )
         );
         setIsLoading(false);
@@ -209,9 +223,6 @@ const AddNewRfp = (props: Props) => {
       case "rfpNumber":
         formUtils.typeInputForm(key, value);
         break;
-      case "client":
-        formUtils.typeInputForm(key, value);
-        break;
       case "files":
         formUtils.inputFilesForm(key, value);
         break;
@@ -219,6 +230,9 @@ const AddNewRfp = (props: Props) => {
         formUtils.dropdownForm(key, value);
         break;
       case "city":
+        formUtils.typeaheadForm(key, value);
+        break;
+      case "client":
         formUtils.typeaheadForm(key, value);
         break;
       case "remarks":
@@ -242,11 +256,15 @@ const AddNewRfp = (props: Props) => {
         form.projectCatId,
         form.source,
         form.managerNameId,
-        moment(form?.startDate).isValid()? moment(form.startDate).format("YYYY-MM-DD"): "",
-        moment(form?.submissionDate).isValid()? moment(form.submissionDate).format("YYYY-MM-DD"): "",
+        moment(form?.startDate).isValid()
+          ? moment(form.startDate).format("YYYY-MM-DD")
+          : "",
+        moment(form?.submissionDate).isValid()
+          ? moment(form.submissionDate).format("YYYY-MM-DD")
+          : "",
         form.projectName,
         form.rfpNumber,
-        form.client,
+        form.clientId,
         form.cityId,
         form.remarks
       );
@@ -266,15 +284,21 @@ const AddNewRfp = (props: Props) => {
     formData.append("projectCatId", form.projectCatId.toString());
     formData.append("projectManagerId", form.managerNameId.toString());
     formData.append("projectName", form.projectName);
-    formData.append("startDate", moment(form?.startDate).isValid()
-    ? moment(form.startDate).format("YYYY-MM-DD")
-    : "");
-    formData.append("submissionDate", moment(form?.startDate).isValid()
-    ? moment(form.submissionDate).format("YYYY-MM-DD")
-    : "");
+    formData.append(
+      "startDate",
+      moment(form?.startDate).isValid()
+        ? moment(form.startDate).format("YYYY-MM-DD")
+        : ""
+    );
+    formData.append(
+      "submissionDate",
+      moment(form?.startDate).isValid()
+        ? moment(form.submissionDate).format("YYYY-MM-DD")
+        : ""
+    );
     formData.append("rfpNumber", form.rfpNumber);
     formData.append("source", form.source);
-    formData.append("client", form.client);
+    formData.append("client", form.clientId.toString());
     formData.append("cityId", form.cityId.toString());
     formData.append("action", form.action);
     formData.append("remarks", form.remarks);
@@ -315,9 +339,12 @@ const AddNewRfp = (props: Props) => {
   return (
     <>
       {show && (
-        <AddForm heading={!isEditing?"Add New RFP":"Update RFP"} heading_icon={add_rfp_icon}>
+        <AddForm
+          heading={!isEditing ? "Add New RFP" : "Update RFP"}
+          heading_icon={add_rfp_icon}
+        >
           {isLoading ? (
-            <div style={{marginTop:'50%'}}/*  className="w-100 h-100" */>
+            <div style={{ marginTop: "50%" }} /*  className="w-100 h-100" */>
               <LoadingSpinner />
             </div>
           ) : (
@@ -344,18 +371,20 @@ const AddNewRfp = (props: Props) => {
                     placeholder="Choose City"
                     onChange={handleForm}
                     options={cities}
-                    width="740px"
+                    width="100%"
                   />
                 </div>
 
                 <div className="d-flex justify-content-start align-item-center mb-3">
                   <label>Client</label>
-                  <TFInput
+                  <TFTypeahead
                     placeholder="Add Client"
                     name="client"
-                    value={form.client}
+                    defaultValue={form.client}
                     onChange={handleForm}
+                    options={clients}
                     width="100%"
+                    required
                   />
                 </div>
 
@@ -377,10 +406,27 @@ const AddNewRfp = (props: Props) => {
                     onChange={(e) => handleForm(e.target.name, e.target.value)}
                   >
                     <option>Select Source</option>
-                    <option selected={form.source==="Construct Connect"} value="Construct Connect">Construct Connect</option>
-                    <option selected={form.source==="Bids and Tenders"} value="Bids and Tenders">Bids and Tenders</option>
-                    <option selected={form.source==="Biddingo"} value="Biddingo">Biddingo</option>
-                    <option selected={form.source==="Merx"} value="Merx">Merx</option>
+                    <option
+                      selected={form.source === "Construct Connect"}
+                      value="Construct Connect"
+                    >
+                      Construct Connect
+                    </option>
+                    <option
+                      selected={form.source === "Bids and Tenders"}
+                      value="Bids and Tenders"
+                    >
+                      Bids and Tenders
+                    </option>
+                    <option
+                      selected={form.source === "Biddingo"}
+                      value="Biddingo"
+                    >
+                      Biddingo
+                    </option>
+                    <option selected={form.source === "Merx"} value="Merx">
+                      Merx
+                    </option>
                   </select>
                 </div>
 
@@ -470,44 +516,46 @@ const AddNewRfp = (props: Props) => {
                   />
                 </div>
 
-                {!isEditing??<div className="justify-content-center align-item-center mb-5 mt-5 upload-file-container">
-                  <h2>Upload Attachments</h2>
-                  <p>Upload any files/documents related to the RFP here.</p>
-                  {/* <label>Upload</label> */}
-                  <div className="d-flex justify-content-start align-item-center mb-5 mt-5">
-                    <div className="upload-label">Upload</div>
-                    <div className="upload-wrapper">
-                      <div className="upload-inst">
-                        <h6>Upload Files</h6>
-                        <p>
-                          Click here to upload the file
-                          <i> (less than 500MB)</i>
-                        </p>
-                      </div>
-                      <div className="file-upload-div">
-                        <div className="text-center">
-                          <img src={icons.upload_icon} />
-                          <h5>Drag and Drop to upload file</h5>
-                          <p>Or</p>
-                          <div className="upload-btn-wrapper">
-                            <button className="btn">Browse file</button>
-                            <input
-                              type="file"
-                              name="files"
-                              onChange={(e) =>
-                                handleForm(e.target.name, e.target.files)
-                              }
-                              multiple
-                            />
-                          </div>
-                          <p className="mt-4">
-                            You can upload png, jpeg, xml or pdf
+                {!isEditing ?? (
+                  <div className="justify-content-center align-item-center mb-5 mt-5 upload-file-container">
+                    <h2>Upload Attachments</h2>
+                    <p>Upload any files/documents related to the RFP here.</p>
+                    {/* <label>Upload</label> */}
+                    <div className="d-flex justify-content-start align-item-center mb-5 mt-5">
+                      <div className="upload-label">Upload</div>
+                      <div className="upload-wrapper">
+                        <div className="upload-inst">
+                          <h6>Upload Files</h6>
+                          <p>
+                            Click here to upload the file
+                            <i> (less than 500MB)</i>
                           </p>
+                        </div>
+                        <div className="file-upload-div">
+                          <div className="text-center">
+                            <img src={icons.upload_icon} />
+                            <h5>Drag and Drop to upload file</h5>
+                            <p>Or</p>
+                            <div className="upload-btn-wrapper">
+                              <button className="btn">Browse file</button>
+                              <input
+                                type="file"
+                                name="files"
+                                onChange={(e) =>
+                                  handleForm(e.target.name, e.target.files)
+                                }
+                                multiple
+                              />
+                            </div>
+                            <p className="mt-4">
+                              You can upload png, jpeg, xml or pdf
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>}
+                )}
 
                 <div className="project-modal-footer w-100">
                   <TFButton
@@ -516,7 +564,7 @@ const AddNewRfp = (props: Props) => {
                     variant="secondary"
                   />
                   <TFButton
-                    label={isEditing?"Update RFP":"Add RFP"}
+                    label={isEditing ? "Update RFP" : "Add RFP"}
                     handleClick={handleSubmit}
                     variant="primary"
                   />

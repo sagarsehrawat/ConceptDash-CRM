@@ -10,6 +10,7 @@ declare global{
         city_id : number | null,
         city : string | null,
         client : string | null,
+        client_id : number | null,
         created_at : moment.Moment,
         department : string | null,
         department_id : number | null,
