@@ -4,7 +4,7 @@ import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead";
 import TFDateChip from "../../../../components/form/TFDateChip/TFDateChip";
 import TFMultiSelect from "../../../../components/form/TFMultiSelect/TFMultiSelect";
 
-const RosterProject = ({ form, handleForm, cities, managers, employees }) => {
+const RosterProject = ({ form, handleForm, cities, managers, employees, clients }) => {
   return (
     <>
       {/* Project Details */}
@@ -37,6 +37,19 @@ const RosterProject = ({ form, handleForm, cities, managers, employees }) => {
             defaultValue={form.city}
             onChange={handleForm}
             options={cities}
+          />
+        </div>
+
+                {/* Client */}
+                <div className="d-flex flex-row gap-8 w-100">
+          <p className="project-label">Client</p>
+          <TFTypeahead
+            name='client'
+            placeholder='Choose Client'
+            width='100%'
+            defaultValue={form.client}
+            onChange={handleForm}
+            options={clients}
           />
         </div>
 

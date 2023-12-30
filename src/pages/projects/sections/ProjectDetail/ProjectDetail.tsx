@@ -34,6 +34,8 @@ type ProjectForm = {
     projectValue: string;
     city: string;
     cityId: string;
+    client: string;
+    clientId: string;
     status: string;
     dueDate: string;
     followUpDate: string;
@@ -64,6 +66,8 @@ const PROJECT_FORM: ProjectForm = {
     projectName: '',
     city: '',
     cityId: '',
+    client: '',
+    clientId: '',
     status: 'Not Started',
     dueDate: '',
     followUpDate: '',
@@ -85,7 +89,7 @@ const PROJECT_FORM: ProjectForm = {
 };
 
 const ProjectDetail = ({ projectId, setProjectId }: Props) => {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [project, setProject] = useState<ProjectForm>(PROJECT_FORM);
     const [tasklist, setTasklist] = useState([]);
     const [openTasks, setOpenTasks] = useState([]);
@@ -95,6 +99,7 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
     const [employees, setEmployees] = useState<TypeaheadOptions>([]);
     const [projectCategories, setProjectCategories] = useState<TypeaheadOptions>([]);
     const [cities, setCities] = useState<TypeaheadOptions>([]);
+    const [clients, setClients] = useState<TypeaheadOptions>([]);
     const formUtils = FormUtils(setProject);
     const dispatch = useDispatch();
 
@@ -116,8 +121,10 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
                 const citiesResponse = await SERVICES.getCities();
                 setCities(Utils.convertToTypeaheadOptions(citiesResponse.res, 'City', 'City_ID'));
 
+                const clientResponse = await SERVICES.getOrganizationsList();
+                setClients(Utils.convertToTypeaheadOptions(clientResponse.res, 'company_name', 'company_id'));
+
                 const projectResponse = await SERVICES.getProjectById(projectId);
-                console.log(projectResponse)
                 setProject({
                     projectType: projectResponse.res.project_type,
                     department: projectResponse.res.department ?? '',
@@ -145,7 +152,9 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
                     priority: projectResponse.res.extra_info?.priority ?? '',
                     designChecklist: projectResponse.res.extra_info?.designChecklist ?? [],
                     designInfo: projectResponse.res.extra_info?.designInfo ?? [],
-                    childProjects: projectResponse.res.child_projects_info ?? []
+                    childProjects: projectResponse.res.child_projects_info ?? [],
+                    client: projectResponse.res.company_name ?? '',
+                    clientId: projectResponse.res.client_id ?? '',
                 });
 
                 console.log(project)
@@ -193,12 +202,13 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
         }
     }
 
-    const handleTabChange = (tabValue: number) => {
-        setTab(tabValue);
+    const handleTabChange = (tabValue: number | string) => {
+        const tab = parseInt(tabValue.toString())
+        setTab(tab);
 
         // Assuming 'Task List' is the tab that corresponds to the Tasklist component
-        if (tabRefs[tabValue] && tabRefs[tabValue]?.current) {
-            tabRefs[tabValue].current?.scrollIntoView({
+        if (tabRefs[tab] && tabRefs[tab]?.current) {
+            tabRefs[tab].current?.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start',
             });
@@ -207,11 +217,11 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
 
     const handleFormType = () => {
         if (project.projectType === 'Roster') return <></>;
-        if (project.departmentId === '1') return <Transportation form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
-        else if (project.departmentId === '7') return <Estimation form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
-        else if (project.departmentId === '8' && project.projectCategoryId === '68') return <Products form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
+        if (project.departmentId === '1') return <Transportation form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients} />
+        else if (project.departmentId === '7') return <Estimation form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients} />
+        else if (project.departmentId === '8' && project.projectCategoryId === '68') return <Products form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients} />
 
-        return <Default form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
+        return <Default form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients} />
     }
 
     const handleSubmit = async () => {
@@ -252,6 +262,15 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
         }
     }
 
+    const generateInvoice = async () => {
+        try {
+            await SERVICES.generateInvoice(projectId);
+        } catch (error) {
+            console.log(error);
+            dispatch(showErrorModal('Something Went Wrong!'));
+        }
+    }
+
     return isLoading
         ? <div className='d-flex justify-content-center align-items-center w-100 h-100'><LoadingSpinner /></div>
         : (
@@ -272,6 +291,11 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
                                 { label: 'Project Details', value: 0 },
                                 { label: 'Task List', value: 1 },
                             ]}
+                        />
+                        <TFButton
+                            label='Generate Invoice'
+                            variant={'secondary'}
+                            handleClick={generateInvoice}
                         />
                     </div>
 

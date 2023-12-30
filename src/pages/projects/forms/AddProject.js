@@ -25,6 +25,8 @@ const FORM = {
     projectName: '',
     city: '',
     cityId: '',
+    client: '',
+    clientId: '',
     status: 'Not Started',
     dueDate: '',
     followUpDate: '',
@@ -56,6 +58,7 @@ const AddProject = ({ onHide, api, setApi }) => {
     const [managers, setManagers] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [rosters, setRosters] = useState([]);
+    const [clients, setClients] = useState([]);
     const [projectCategories, setProjectCategories] = useState([]);
     const [cities, setCities] = useState([]);
 
@@ -65,11 +68,10 @@ const AddProject = ({ onHide, api, setApi }) => {
             try {
                 const departmentsResponse = await SERVICES.getDepartments();
                 setDepartments(Utils.convertToTypeaheadOptions(departmentsResponse.res, 'Department', 'Department_ID'));
-                console.log(departments)
+
                 const projectManagersResponse = await SERVICES.getManagers();
-                console.log(projectManagersResponse.res)
                 setManagers(Utils.convertToTypeaheadOptions(projectManagersResponse.res, 'Full_Name', 'Employee_ID'));
-                console.log(managers)
+
                 const employeesResponse = await SERVICES.getEmployeesList();
                 setEmployees(Utils.convertToTypeaheadOptions(employeesResponse.res, 'Full_Name', 'Employee_ID'));
 
@@ -78,6 +80,9 @@ const AddProject = ({ onHide, api, setApi }) => {
 
                 const rosterResponse = await SERVICES.getRostersList();
                 setRosters(Utils.convertToTypeaheadOptions(rosterResponse.res, 'project_name', 'project_id'));
+
+                const clientResponse = await SERVICES.getOrganizationsList();
+                setClients(Utils.convertToTypeaheadOptions(clientResponse.res, 'company_name', 'company_id'))
             } catch (error) {
                 console.log(error);
             }
@@ -127,6 +132,7 @@ const AddProject = ({ onHide, api, setApi }) => {
                 setTaskList(tasks);
                 setOpenTasks(tasks.map(task => task.taskId));
             case 'roster':
+            case 'client':
             case 'projectCategory':
             case 'projectManager':
             case 'city':
@@ -141,11 +147,11 @@ const AddProject = ({ onHide, api, setApi }) => {
     const handleProjectType = (projectType) => {
         switch (projectType) {
             case 'Independent Project':
-                return <IndependentProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories} managers={managers} employees={employees} />
+                return <IndependentProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories} managers={managers} employees={employees} clients={clients}/>
             case 'Roster Project':
-                return <RosterProject form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
+                return <RosterProject form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients}/>
             case 'Child Project':
-                return <ChildProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories} rosters={rosters} managers={managers} employees={employees} />
+                return <ChildProject form={form} handleForm={handleForm} departments={departments} cities={cities} projectCategories={projectCategories} rosters={rosters} managers={managers} employees={employees} clients={clients}/>
             default:
                 return <></>
         }
@@ -161,6 +167,7 @@ const AddProject = ({ onHide, api, setApi }) => {
                 form.projectValue,
                 form.projectCategoryId,
                 form.cityId,
+                form.clientId,
                 form.status,
                 form.dueDate,
                 form.followUpDate,

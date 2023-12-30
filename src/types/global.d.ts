@@ -38,6 +38,8 @@ declare global{
         child_projects_info: Project[] | null;
         city: string | null;
         city_id: string | null;
+        client_id: string | null;
+        company_name: string | null;
         date_created: moment.Moment;
         department: string | null;
         department_id: string | null;
@@ -159,5 +161,48 @@ declare global{
         budget_year: string;
         source: string | null;
         serial_no: string | null;
+    }
+
+    interface Invoice {
+        invoice_id: number;
+        invoice_code: string;
+        due_date: moment.Moment | string;
+        date_created: moment.Moment | string;
+        project_id: number;
+        project_name: string;
+        project_code: string;
+        bill_to: number | null;
+        ship_to: number | null;
+        company_name: string;
+        address: string | null;
+        business_phone: string | null;
+        payment_status: 'Recieved' | 'Overdue' | 'Pending';
+        invoice_status: 'Pending' | 'Denied' | 'Approved';
+        subtotal: number;
+        total: number;
+        project_value: number | null;
+        discount: number | null;
+        tax: number;
+        recieved_amount: number | null;
+        shipping: number | null;
+        rows: {
+            description: string;
+            quantity: number;
+            unit: number;
+            unitPrice: number;
+            total: number;
+        }[];
+    }
+
+    interface InvoiceProject {
+        project_id: number;
+        project_code: string;
+        project_name: string;
+        recieved: number | null;
+        pending: number | null;
+        overdue: number | null;
+        project_value: number | null;
+        recieved_amount: number | null;
+        balance: number | null;
     }
 }

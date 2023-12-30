@@ -6,6 +6,7 @@ const AuthState = (props) => {
     const [privileges, setPrivileges] = useState(initialState)
 
     return <AuthContext.Provider value={{privileges, setPrivileges}}>{props.children}</AuthContext.Provider>
+    
 }
 
 export default AuthState;

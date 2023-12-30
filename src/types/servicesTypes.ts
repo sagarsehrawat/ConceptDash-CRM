@@ -156,12 +156,37 @@ declare module "Services"{
     }
 
     export interface GetProjectById {
-        success : true,
+        success : boolean,
         res : Project
     }
 
     export interface GetProposalById {
         success : true,
         res : Proposal
+    }
+
+    export interface GetInvoicesResponse {
+        success: boolean,
+        res: Invoice[]
+    }
+
+    export interface GetInvoiceDetailResponse {
+        success: boolean,
+        res: Invoice
+    }
+
+    export interface GetFinanceCountResponse {
+        success: boolean,
+        res: {
+            recieved: number | null;
+            pending: number | null;
+            overdue: number | null;
+            total: number | null;
+        }
+    }
+        
+    export interface GetInvoiceProjectResponse {
+        success: boolean,
+        res: InvoiceProject[]
     }
 }
