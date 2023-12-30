@@ -454,7 +454,7 @@ const SERVICES = {
     },
 
 
-    updateRfp: async (id: number, departmentId: number | string, projectCatId: number | string, source: string, projectManagerId: number | string, startDate: string, submissionDate: string, projectName: string, rfpNumber: string, client: string, cityId: number | string, remarks: string): Promise<UpdateResponse> => {
+    updateRfp: async (id: number, departmentId: number | string, projectCatId: number | string, source: string, projectManagerId: number | string, startDate: string, submissionDate: string, projectName: string, rfpNumber: string, client: number | string, cityId: number | string, remarks: string): Promise<UpdateResponse> => {
         try {
             const response = await axios.post(APIS.UPDATE_RFP,
                 {

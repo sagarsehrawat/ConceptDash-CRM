@@ -29,7 +29,7 @@ import TFOptionsModal from "../../../../components/modals/TFOptionsModal/TFOptio
 import TFInput from "../../../../components/form/TFInput/TFInput";
 
 function TTMTable(props) {
-  const { Name, Id, setexists } = props;
+  const { Name, Id, setexists, ttmid } = props;
   const [change, setchange] = useState(false);
   const [show, setShow] = useState(false);
   const handleCloseStage1 = () => setShow(false);
@@ -69,6 +69,7 @@ function TTMTable(props) {
           headers: {
             auth: "Rose " + localStorage.getItem("auth"),
             proposalId: Id,
+            ttmid: ttmid,
           },
         })
         .then((res) => {

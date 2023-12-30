@@ -69,6 +69,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
       try {
         setIsLoading(true);
         const response = await SERVICES.getRfps(50, currPage, filter, search, sort);
+        console.log(response.res[0].client)
         dispatch(initRFPs(response.res));
         setPages(response.totalPages);
         setIsLoading(false);
@@ -78,12 +79,11 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
     }
     fetchData();
   }, [api, currPage]);
-  const [transitionRFPData, setTransitionRFPData] = useState<RFP>()
   const handleStatusUpdate = async (rfpId: number, action: string) => {
     if(action==="Go") {
       setShowConversionModal(true);
       setTransitionRFPId(rfpId);
-    } if (action === 'External') {
+    } else if (action === 'External') {
       setshowClientModal(rfpId)
     } else {
       const prevRfp = rfps.filter(rfp => rfp.rfp_id === rfpId);
@@ -109,12 +109,6 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
   };
 
   const handleStatusGoUpdate = async () => {
-      for(let i=0;i<rfps.length;i++) {
-        if(rfps[i].rfp_id===transitionRFPId) {
-          setTransitionRFPData(rfps[i]);
-          break;
-        }
-      }
       const prevRfp = rfps.filter(rfp => rfp.rfp_id === transitionRFPId);
       try {
         dispatch(updateRFP({ rfpId: transitionRFPId, data: { 'action': "Go" } }))
@@ -123,26 +117,26 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         console.log(error);
         dispatch(updateRFP({ rfpId: transitionRFPId , data: { action: prevRfp[0].action } }));
       }
-      await SERVICES.addProposal(
-        transitionRFPData?.department_id,
-        transitionRFPData?.project_cat_id,
-        "",
-        "",
-        "",
-        transitionRFPData?.project_manager_id,
-        transitionRFPData?.project_name,
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        transitionRFPData?.city_id,
-        transitionRFPId,
-      )
+      // await SERVICES.addProposal(
+      //   transitionRFPData?.department_id,
+      //   transitionRFPData?.project_cat_id,
+      //   "",
+      //   "",
+      //   "",
+      //   transitionRFPData?.project_manager_id,
+      //   transitionRFPData?.project_name,
+      //   "",
+      //   "",
+      //   "",
+      //   "",
+      //   "",
+      //   "",
+      //   "",
+      //   "",
+      //   "",
+      //   transitionRFPData?.city_id,
+      //   transitionRFPId,
+      // )
       setShowConversionModal(false);
   }
   const handleDateUpdate = async (rfpId: number, key: keyof RFP, date: string) => {

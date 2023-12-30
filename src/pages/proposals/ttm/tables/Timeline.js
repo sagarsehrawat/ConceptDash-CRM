@@ -19,9 +19,9 @@ useEffect(() => {
         headers: { auth: "Rose " + localStorage.getItem("auth"), proposalId:Id }
       })
       .then((res) => {
-          let data = JSON.parse(res.data.res[0].Data)
-          let empRates = JSON.parse(res.data.res[0].Employee_Info)
-          let desigs = JSON.parse(res.data.res[0].Designations)
+          let data = JSON.parse(res.data.res.data)
+          let empRates = JSON.parse(res.data.res.employee_info)
+          let desigs = JSON.parse(res.data.res.designations)
           setemps(empRates)
           seteditingData(data)
           setdesigs(desigs)

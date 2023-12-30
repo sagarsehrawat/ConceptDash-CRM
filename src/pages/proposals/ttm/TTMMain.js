@@ -13,7 +13,7 @@ import { faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 function TTMMain(props) {
-    const {setshowTTM, Name, Id} = props
+    const {setshowTTM, Name, Id, ttmid} = props
     const [value1, setValue1] = useState("1");
   const handleChange = (event, newValue) => {
     setValue1(newValue);
@@ -105,7 +105,7 @@ function TTMMain(props) {
             </Box>
             <TabPanel value="1">
               <div style={{ width: '100%', float: 'left', marginTop: '20px' }}>
-                <TTMTable Name={Name} Id={Id} setexists={setexists}/>
+                <TTMTable ttmid={ttmid} Name={Name} Id={Id} setexists={setexists}/>
               </div>
             </TabPanel>
             <TabPanel value="2" style={{padding:'0px'}}>
