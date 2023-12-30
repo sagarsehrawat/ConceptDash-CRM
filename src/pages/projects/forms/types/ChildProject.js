@@ -5,18 +5,18 @@ import Estimation from "../department-projects/Estimation";
 import Default from "../department-projects/Default";
 import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead";
 
-const ChildProject = ({ form, handleForm, departments, cities, projectCategories, rosters, managers, employees }) => {
+const ChildProject = ({ form, handleForm, departments, cities, projectCategories, rosters, managers, employees, clients }) => {
   // Handle Changing of Departments in Form
   const handleDepartmentProject = (department, projectCategory = null) => {
     switch (department) {
       case 'Traffic and transportation Engineering':
-        return <Transportation form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
+        return <Transportation form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients} />
       case 'Estimation':
-        return <Estimation form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
+        return <Estimation form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients} />
       case 'Products':
-        if (projectCategory === 'EzStorm') return <Products form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
+        if (projectCategory === 'EzStorm') return <Products form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients} />
       default:
-        return <Default form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
+        return <Default form={form} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients} />
     }
   }
 

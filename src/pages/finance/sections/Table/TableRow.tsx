@@ -19,14 +19,14 @@ const TableRow = ({ setInvoiceId, invoice }: Props) => {
           <p>
             {invoice.invoice_code.split(" ").map((e, idx) => {
               if (idx === 2) return <b>{e}</b>;
-              return e;
+              return e+ " ";
             })}
           </p>
           <p>{Utils.formatDate(invoice.date_created)}</p>
         </div>
       </td>
       <td className="table-cell">
-        <b>Concept Dash</b>
+        <b>{invoice.company_name}</b>
       </td>
       <td className="table-cell">
         {Utils.convertProjectCodeToArray(invoice.project_code).map((e, idx) => {

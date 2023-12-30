@@ -4,19 +4,39 @@ import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead";
 import TFDateChip from "../../../../components/form/TFDateChip/TFDateChip";
 import TFMultiSelect from "../../../../components/form/TFMultiSelect/TFMultiSelect";
 
-const Transportation = ({ form, handleForm, cities, managers, employees }) => {
+const Transportation = ({
+  form,
+  handleForm,
+  cities,
+  managers,
+  employees,
+  clients,
+}) => {
   return (
     <>
       {/* City */}
       <div className="d-flex flex-row gap-8 w-100">
         <p className="project-label">City</p>
         <TFTypeahead
-          name='city'
-          placeholder='Choose City'
-          width='100%'
+          name="city"
+          placeholder="Choose City"
+          width="100%"
           defaultValue={form.city}
           onChange={handleForm}
           options={cities}
+        />
+      </div>
+
+      {/* Client */}
+      <div className="d-flex flex-row gap-8 w-100">
+        <p className="project-label">Client</p>
+        <TFTypeahead
+          name="client"
+          placeholder="Choose Client"
+          width="100%"
+          defaultValue={form.client}
+          onChange={handleForm}
+          options={clients}
         />
       </div>
 
@@ -24,7 +44,7 @@ const Transportation = ({ form, handleForm, cities, managers, employees }) => {
       <div className="d-flex flex-row gap-8 w-100">
         <p className="project-label">Status</p>
         <TFChip
-          name='status'
+          name="status"
           value={form.status}
           options={["Not Started", "In Progress", "Completed"]}
           onChange={handleForm}
@@ -56,7 +76,7 @@ const Transportation = ({ form, handleForm, cities, managers, employees }) => {
       <div className="d-flex flex-row gap-8 w-100">
         <p className="project-label">Client Response</p>
         <TFChip
-          name='clientResponse'
+          name="clientResponse"
           value={form.clientResponse}
           options={["Recieved", "Waiting", "Approved"]}
           onChange={handleForm}
@@ -66,11 +86,7 @@ const Transportation = ({ form, handleForm, cities, managers, employees }) => {
       {/* Due Date */}
       <div className="d-flex flex-row gap-8 w-100">
         <p className="project-label">Due Date</p>
-        <TFDateChip
-          value={form.dueDate}
-          name='dueDate'
-          onChange={handleForm}
-        />
+        <TFDateChip value={form.dueDate} name="dueDate" onChange={handleForm} />
       </div>
 
       {/* Follow Up Date*/}
@@ -78,7 +94,7 @@ const Transportation = ({ form, handleForm, cities, managers, employees }) => {
         <p className="project-label">Follow-up Date</p>
         <TFDateChip
           value={form.followUpDate}
-          name='followUpDate'
+          name="followUpDate"
           onChange={handleForm}
         />
       </div>
@@ -87,9 +103,9 @@ const Transportation = ({ form, handleForm, cities, managers, employees }) => {
       <div className="d-flex flex-row gap-8 w-100">
         <p className="project-label">Project Manager</p>
         <TFTypeahead
-          name='projectManager'
-          placeholder='Choose Project Manager'
-          width='100%'
+          name="projectManager"
+          placeholder="Choose Project Manager"
+          width="100%"
           defaultValue={form.projectManager}
           onChange={handleForm}
           options={managers}

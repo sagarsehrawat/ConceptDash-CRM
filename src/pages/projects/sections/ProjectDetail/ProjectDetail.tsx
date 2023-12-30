@@ -34,6 +34,8 @@ type ProjectForm = {
     projectValue: string;
     city: string;
     cityId: string;
+    client: string;
+    clientId: string;
     status: string;
     dueDate: string;
     followUpDate: string;
@@ -64,6 +66,8 @@ const PROJECT_FORM: ProjectForm = {
     projectName: '',
     city: '',
     cityId: '',
+    client: '',
+    clientId: '',
     status: 'Not Started',
     dueDate: '',
     followUpDate: '',
@@ -95,6 +99,7 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
     const [employees, setEmployees] = useState<TypeaheadOptions>([]);
     const [projectCategories, setProjectCategories] = useState<TypeaheadOptions>([]);
     const [cities, setCities] = useState<TypeaheadOptions>([]);
+    const [clients, setClients] = useState<TypeaheadOptions>([]);
     const formUtils = FormUtils(setProject);
     const dispatch = useDispatch();
 
@@ -115,6 +120,9 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
 
                 const citiesResponse = await SERVICES.getCities();
                 setCities(Utils.convertToTypeaheadOptions(citiesResponse.res, 'City', 'City_ID'));
+
+                const clientResponse = await SERVICES.getOrganizationsList();
+                setClients(Utils.convertToTypeaheadOptions(clientResponse.res, 'company_name', 'company_id'));
 
                 const projectResponse = await SERVICES.getProjectById(projectId);
                 setProject({
@@ -144,7 +152,9 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
                     priority: projectResponse.res.extra_info?.priority ?? '',
                     designChecklist: projectResponse.res.extra_info?.designChecklist ?? [],
                     designInfo: projectResponse.res.extra_info?.designInfo ?? [],
-                    childProjects: projectResponse.res.child_projects_info ?? []
+                    childProjects: projectResponse.res.child_projects_info ?? [],
+                    client: projectResponse.res.company_name ?? '',
+                    clientId: projectResponse.res.client_id ?? '',
                 });
 
                 console.log(project)
@@ -207,11 +217,11 @@ const ProjectDetail = ({ projectId, setProjectId }: Props) => {
 
     const handleFormType = () => {
         if (project.projectType === 'Roster') return <></>;
-        if (project.departmentId === '1') return <Transportation form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
-        else if (project.departmentId === '7') return <Estimation form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
-        else if (project.departmentId === '8' && project.projectCategoryId === '68') return <Products form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
+        if (project.departmentId === '1') return <Transportation form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients} />
+        else if (project.departmentId === '7') return <Estimation form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients} />
+        else if (project.departmentId === '8' && project.projectCategoryId === '68') return <Products form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients} />
 
-        return <Default form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} />
+        return <Default form={project} handleForm={handleForm} cities={cities} managers={managers} employees={employees} clients={clients} />
     }
 
     const handleSubmit = async () => {

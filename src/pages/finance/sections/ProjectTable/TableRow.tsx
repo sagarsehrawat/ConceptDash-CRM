@@ -137,7 +137,7 @@ const TableRow = ({ setInvoiceId, invoiceProject }: Props) => {
                             <p>
                               {invoice.invoice_code.split(" ").map((e, idx) => {
                                 if (idx === 2) return <b>{e}</b>;
-                                return e;
+                                return e + " ";
                               })}
                             </p>
                             <p>{Utils.formatDate(invoice.date_created)}</p>
@@ -151,7 +151,7 @@ const TableRow = ({ setInvoiceId, invoiceProject }: Props) => {
                         <td
                           className={`${styles["table-cell2"]} ${styles["border"]}`}
                         >
-                          Concept Dash
+                          {invoice.company_name}
                         </td>
                         <td
                           className={`${styles["table-cell2"]} ${styles["border"]}`}
