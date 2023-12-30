@@ -92,7 +92,9 @@ const Dropdown = ({
       <div
         className={styles[`dropdown-container`]}
         style={{
-          backgroundColor: checkbox
+          backgroundColor: disable
+            ? "#858585"
+            : checkbox
             ? value.length > 0
               ? "#8361FE"
               : "#FFFFFF"
@@ -100,6 +102,7 @@ const Dropdown = ({
             ? "#8361FE"
             : "#FFFFFF",
           border: !value ? "1px solid #70757A" : "none",
+          cursor: disable ? "not-allowed" : "pointer",
         }}
         onClick={() => {
           if (!disable) setOpen(!open);
@@ -193,8 +196,8 @@ const Dropdown = ({
                         value={elem?.value}
                         onChange={() => handleCheck(elem)}
                         checked={
-                          checkedItems.filter((e) => e === elem.value)
-                            .length > 0
+                          checkedItems.filter((e) => e === elem.value).length >
+                          0
                         }
                       />
                       <label className={styles.checkLabel} htmlFor={idx}>
