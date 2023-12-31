@@ -87,7 +87,7 @@ import CompanyPage from "../v3/Contacts/Pages/CompanyPage.tsx";
 const Dashboard = () => {
   const { collapseSidebar } = useProSidebar();
   const navigate = useNavigate();
-  const [nav, setnav] = useState(0);
+  const [nav, setnav] = useState(localStorage.getItem('employeeId')==='7'?3:0);
   const [plusDropdown, setplusDropdown] = useState(null);
   const [city, setcity] = useState({});
   const [project, setproject] = useState({});
@@ -122,11 +122,11 @@ const Dashboard = () => {
 
   const [showProfile, setshowProfile] = useState(false);
   const handleCloseProfile = () => setshowProfile(false);
-  const handleShowProfile = () => setshowProfile(true);
+  const handleShowProfile = () => setshowProfile(localStorage.getItem('employeeId')==='7'?false:true);
 
   const [notifShow, setnotifShow] = useState(false);
   const handleCloseNotif = () => setnotifShow(false);
-  const handleShowNotif = () => setnotifShow(true);
+  const handleShowNotif = () => setnotifShow(localStorage.getItem('employeeId')==='7'?false:true);
 
   const [showCityForm, setShowCityForm] = useState(false);
   const handleCloseCityForm = () => setShowCityForm(false);
@@ -607,7 +607,7 @@ const Dashboard = () => {
           style={mystyles.topNavbar}
         >
           {nav===4?<div style={{...mystyles.topBarHeading, marginRight: isCollapsed?'71vw':'60vw'}}>RFP's</div>:<></>}
-          <NavDropdown title={<FontAwesomeIcon
+          <NavDropdown hidden={localStorage.getItem('employeeId')==='7'} title={<FontAwesomeIcon
             icon={faCirclePlus}
             color={PRIMARY_COLOR}
             style={mystyles.plusIcon}
@@ -777,7 +777,7 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-                <div
+                {localStorage.getItem('employeeId')==='7'?<></>:<div
                   style={
                     nav === 2
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -797,7 +797,7 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
+                </div>}
                 {privileges.includes('View Budget') ? <div
                   style={
                     nav === 3
@@ -903,7 +903,7 @@ const Dashboard = () => {
                     />
                   </div>
                 </div> : <></>}
-                <div
+                {localStorage.getItem('employeeId')==='7'?<></>:<div
                   style={
                     nav === 8
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -923,16 +923,16 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
+                </div>}
                 {/* Campaign */}
-                <div 
+                {localStorage.getItem('employeeId')==='7'?<></>:<div 
                   style={nav === 19 ? mystyles.sidebarMenuItemActive.collapsed : mystyles.sidebarMenuItem} 
                   onClick={(e) => setnav(19)}
                 >
                   <div style={nav === 19 ? mystyles.sidebarMenuItemIconActive.collapsed : mystyles.sidebarMenuItemIcon.collapsed} >
                     <img src={nav === 19 ? campaignActive : campaignInactive} alt="Dashboard Icon" />
                   </div>
-                </div>
+                </div>}
                 {privileges.includes('View Companies') ? <div
                   style={
                     nav === 10
@@ -997,7 +997,7 @@ const Dashboard = () => {
                     />
                   </div>
                 </div> : <></>}
-                <div
+                {localStorage.getItem('employeeId')==='7'?<></>:<div
                   style={
                     nav === 16
                       ? mystyles.sidebarMenuItemActive.collapsed
@@ -1017,7 +1017,7 @@ const Dashboard = () => {
                       alt="Dashboard Icon"
                     />
                   </div>
-                </div>
+                </div>}
               </div>
             </>
             : <>
@@ -1057,7 +1057,7 @@ const Dashboard = () => {
                     Dashboard
                   </p>
                 </div>
-                <div
+                {localStorage.getItem('employeeId')==='7'?<></>:<div
                   style={
                     nav === 2
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -1086,7 +1086,7 @@ const Dashboard = () => {
                   >
                     Tasks List
                   </p>
-                </div>
+                </div>}
                 {privileges.includes('View Budget') ? <div
                   style={
                     nav === 3
@@ -1290,7 +1290,7 @@ const Dashboard = () => {
                     Employees
                   </p>
                 </div> : <></>}
-                <div
+                {localStorage.getItem('employeeId')==='7'?<></>:<div
                   style={
                     nav === 8
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -1319,9 +1319,9 @@ const Dashboard = () => {
                   >
                     Calendar
                   </p>
-                </div>
+                </div>}
                 {/* Campaign */}
-                <div 
+                {localStorage.getItem('employeeId')==='7'?<></>:<div 
                   style={ nav === 19 ? mystyles.sidebarMenuItemActive.nonCollapsed:  mystyles.sidebarMenuItem}
                   onClick={(e) => setnav(19)}
                 >
@@ -1331,7 +1331,7 @@ const Dashboard = () => {
                   <p style={nav === 19 ? mystyles.sidebarMenuItemTextActive : mystyles.sidebarMenuItemText} >
                     Campaign
                   </p>
-                </div>
+                </div>}
                 {privileges.includes('View Companies') ? <div
                   style={
                     nav === 10
@@ -1441,7 +1441,7 @@ const Dashboard = () => {
                     People
                   </p>
                 </div>:<></>}
-                {true ? <div
+                {localStorage.getItem('employeeId')==='7'?<></>: <div
                   style={{...
                     prop3
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -1467,7 +1467,7 @@ const Dashboard = () => {
                     Finance
                   </p>
                   <div style={{marginLeft:'4em'}}>{prop3?<FontAwesomeIcon icon={faChevronDown} />:<FontAwesomeIcon icon={faChevronRight} />}</div>
-                </div> : <></>}
+                </div>}
                 {prop3?<div
                   style={{...
                     nav === 24
@@ -1550,7 +1550,7 @@ const Dashboard = () => {
                     Contacts
                   </p>
                 </div> : <></>}
-                <div
+                {localStorage.getItem('employeeId')==='7'?<></>:<div
                   style={
                     nav === 16
                       ? mystyles.sidebarMenuItemActive.nonCollapsed
@@ -1579,7 +1579,7 @@ const Dashboard = () => {
                   >
                     Announcements
                   </p>
-                </div>
+                </div>}
               </div>
             </>}
         </Sidebar>
