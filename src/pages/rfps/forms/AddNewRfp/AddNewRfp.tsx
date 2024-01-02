@@ -516,7 +516,7 @@ const AddNewRfp = (props: Props) => {
                   />
                 </div>
 
-                {!isEditing ?? (
+                {isEditing?<></>: (
                   <div className="justify-content-center align-item-center mb-5 mt-5 upload-file-container">
                     <h2>Upload Attachments</h2>
                     <p>Upload any files/documents related to the RFP here.</p>
