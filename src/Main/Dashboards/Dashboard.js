@@ -606,7 +606,7 @@ const Dashboard = () => {
           className="d-flex justify-content-end"
           style={mystyles.topNavbar}
         >
-          {nav===4?<div style={{...mystyles.topBarHeading, marginRight: isCollapsed?'71vw':'60vw'}}>RFP's</div>:<></>}
+          {nav===4?<div style={{...mystyles.topBarHeading, marginRight: isCollapsed?'71vw':'56vw'}}>RFP's</div>:<></>}
           <NavDropdown hidden={localStorage.getItem('employeeId')==='7'} title={<FontAwesomeIcon
             icon={faCirclePlus}
             color={PRIMARY_COLOR}

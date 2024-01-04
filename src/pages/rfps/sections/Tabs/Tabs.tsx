@@ -80,7 +80,7 @@ const Tabs = ({setcurrPage, pages, search, currPage, setPages, api, setApi, valu
                     textTransform: "capitalize",
                   }}
                   sx={{ fontSize: 12 }}
-                  label="Request for proposals"
+                  label="Request for proposals (RFPs)"
                   value="1"
                 />
                 
@@ -104,15 +104,15 @@ const Tabs = ({setcurrPage, pages, search, currPage, setPages, api, setApi, valu
             
             <HeaderCards />
             </div>
-            <TabPanel value="1">
-              <div style={{ width: '100%', float: 'left', marginTop: '20px' }}>
+            <TabPanel value="1" style={{padding:'0px'}}>
+              <div style={{ width: '100%', float: 'left' }}>
                 <SearchFilter api={api} setApi={setApi} value={value} setValue={setValue} filter={filter} setFilter={setFilter} isCollapsed={isCollapsed} />
                 <Table api={api} setApi={setApi} currPage={currPage} setPages={setPages} filter={filter} search={search} isCollapsed={isCollapsed}/>
                 <Pages pages={pages} currPage={currPage} setcurrPage={setcurrPage} />
               </div>
             </TabPanel>
             <TabPanel value="2" style={{padding:'0px'}}>
-              <div style={{ width: '100%', float: 'left', marginTop:'20px'}}>
+              <div style={{ width: '100%', float: 'left'}}>
                 <SearchFilter api={api} setApi={setApi} value={value} setValue={setValue} filter={filter} setFilter={setFilter} isCollapsed={isCollapsed} />
                 <TrackingTable api={api} setApi={setApi} filter={filter} search={search} isCollapsed={isCollapsed}/>
               </div>
