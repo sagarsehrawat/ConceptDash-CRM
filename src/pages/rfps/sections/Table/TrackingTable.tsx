@@ -224,6 +224,10 @@ const TrackingTable = ({ api, setApi, filter, search, isCollapsed }: Props) => {
                     {sortModal('Project_Name')}
                   </th>
                   <th className='table-heading' style={{ width: "150px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('City')}>City</p>
+                    {sortModal('City')}
+                  </th>
+                  <th className='table-heading' style={{ width: "150px" }}>
                     <p className='table-heading-text' onClick={() => setShowSortModal('Client')}>Client</p>
                     {sortModal('Client')}
                   </th>
@@ -297,6 +301,7 @@ const TrackingTable = ({ api, setApi, filter, search, isCollapsed }: Props) => {
                           </div>
                         </div>
                       </td>
+                      <td className='table-cell'>{rfp.city}</td>
                       <td className='table-cell'>{rfp.client}</td>
                       <td className='table-cell'>
                         {rfp.organizations?.map((e)=>{
