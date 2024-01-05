@@ -14,10 +14,10 @@ import {
   UPDATE_RFP,
   PRIMARY_COLOR,
   GET_MANAGERS
-} from "../../../Main/Constants/Constants";
+} from "../../../../Main/Constants/Constants";
 import Modal from "react-bootstrap/Modal";
-import LoadingSpinner from "../../../Main/Loader/Loader";
-import TFButton from "../../../components/ui/TFButton/TFButton";
+import LoadingSpinner from "../../../../Main/Loader/Loader";
+import TFButton from "../../../../components/ui/TFButton/TFButton";
 const styles = {
   nameHeading: {
     height: "20px",

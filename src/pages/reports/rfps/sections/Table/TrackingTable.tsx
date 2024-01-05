@@ -1,21 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react'
-import SERVICES from '../../../../services/Services';
+import SERVICES from '../../../../../services/Services';
 import { useDispatch, useSelector } from 'react-redux';
-import { initRFPs, selectRFPs, updateRFP } from '../../../../redux/slices/rfpSlice';
-import LoadingSpinner from '../../../../Main/Loader/Loader';
+import { initRFPs, selectRFPs, updateRFP } from '../../../../../redux/slices/rfpSlice';
+import LoadingSpinner from '../../../../../Main/Loader/Loader';
 import './Table.css'
-import TFChip from '../../../../components/form/TFChip/TFChip';
+import TFChip from '../../../../../components/form/TFChip/TFChip';
 import { Button, Form } from 'react-bootstrap';
-import open from '../../../../Images/openinDrive.svg'
+import open from '../../../../../Images/openinDrive.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp, faEdit, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
-import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
-import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
-import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
-import TFConversionModal from '../../../../components/modals/TFConversionModal/TFConversionModal';
+import { selectPrivileges } from '../../../../../redux/slices/privilegeSlice';
+import TFDateChip from '../../../../../components/form/TFDateChip/TFDateChip';
+import TFDeleteModal from '../../../../../components/modals/TFDeleteModal/TFDeleteModal';
+import { PRIMARY_COLOR } from '../../../../../Main/Constants/Constants';
+import TFConversionModal from '../../../../../components/modals/TFConversionModal/TFConversionModal';
 import AddNewRfp from '../../forms/AddNewRfp/AddNewRfp';
-import TFClientModal from '../../../../components/modals/TFClientModal/TFClientModal';
 
 interface FilterType {
   dept: (string | number)[],
@@ -28,14 +27,12 @@ interface FilterType {
 type Props = {
   api: number,
   setApi: Function,
-  currPage: number,
-  setPages: Function,
   filter: FilterType,
   search: string,
   isCollapsed: boolean
 }
 
-const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }: Props) => {
+const TrackingTable = ({ api, setApi, filter, search, isCollapsed }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedRfps, setselectedRfps] = useState<number[]>([]);
   const tableRef = useRef(null);
@@ -45,7 +42,6 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
 
   const [showDelete, setShowDelete] = useState<boolean>(false);
   const [showConversionModal, setShowConversionModal] = useState<boolean>(false);
-  const [showClientModal, setshowClientModal] = useState<number | null>(null);
   
   const sortRef = useRef<HTMLDivElement>(null);
   const [showSortModal, setShowSortModal] = useState<string>("");
@@ -68,23 +64,21 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await SERVICES.getRfps(50, currPage, filter, search, sort);
-        console.log(response.res[0].client)
-        dispatch(initRFPs(response.res));
-        setPages(response.totalPages);
+        const trackingResponse = await SERVICES.getTrackingRfps(filter, search, sort);
+        console.log(trackingResponse.res)
+        dispatch(initRFPs(trackingResponse.res));
         setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
     }
     fetchData();
-  }, [api, currPage]);
+  }, [api]);
+  const [transitionRFPData, setTransitionRFPData] = useState<RFP>()
   const handleStatusUpdate = async (rfpId: number, action: string) => {
     if(action==="Go") {
       setShowConversionModal(true);
       setTransitionRFPId(rfpId);
-    } else if (action === 'External') {
-      setshowClientModal(rfpId)
     } else {
       const prevRfp = rfps.filter(rfp => rfp.rfp_id === rfpId);
       try {
@@ -97,18 +91,13 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
     }
   };
 
-  const handleRatingUpdate = async (rfpId: number, rating: string) => {
-      const prevRfp = rfps.filter(rfp => rfp.rfp_id === rfpId);
-      try {
-        dispatch(updateRFP({ rfpId, data: { 'rating': parseInt(rating)  } }))
-        await SERVICES.updateRfpRating(rfpId, parseInt(rating));
-      } catch (error) {
-        console.log(error);
-        dispatch(updateRFP({ rfpId, data: { rating: prevRfp[0].rating } }));
-      }
-  };
-
   const handleStatusGoUpdate = async () => {
+      for(let i=0;i<rfps.length;i++) {
+        if(rfps[i].rfp_id===transitionRFPId) {
+          setTransitionRFPData(rfps[i]);
+          break;
+        }
+      }
       const prevRfp = rfps.filter(rfp => rfp.rfp_id === transitionRFPId);
       try {
         dispatch(updateRFP({ rfpId: transitionRFPId, data: { 'action': "Go" } }))
@@ -117,26 +106,26 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         console.log(error);
         dispatch(updateRFP({ rfpId: transitionRFPId , data: { action: prevRfp[0].action } }));
       }
-      // await SERVICES.addProposal(
-      //   transitionRFPData?.department_id,
-      //   transitionRFPData?.project_cat_id,
-      //   "",
-      //   "",
-      //   "",
-      //   transitionRFPData?.project_manager_id,
-      //   transitionRFPData?.project_name,
-      //   "",
-      //   "",
-      //   "",
-      //   "",
-      //   "",
-      //   "",
-      //   "",
-      //   "",
-      //   "",
-      //   transitionRFPData?.city_id,
-      //   transitionRFPId,
-      // )
+      await SERVICES.addProposal(
+        transitionRFPData?.department_id,
+        transitionRFPData?.project_cat_id,
+        "",
+        "",
+        "",
+        transitionRFPData?.project_manager_id,
+        transitionRFPData?.project_name,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        transitionRFPData?.city_id,
+        transitionRFPId,
+      )
       setShowConversionModal(false);
   }
   const handleDateUpdate = async (rfpId: number, key: keyof RFP, date: string) => {
@@ -149,6 +138,17 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
       dispatch(updateRFP({ rfpId, data: { [key]: prevRfp[0][key] } }));
     }
   }
+
+  const handleRatingUpdate = async (rfpId: number, rating: string) => {
+    const prevRfp = rfps.filter(rfp => rfp.rfp_id === rfpId);
+    try {
+      dispatch(updateRFP({ rfpId, data: { 'rating': parseInt(rating)  } }))
+      await SERVICES.updateRfpRating(rfpId, parseInt(rating));
+    } catch (error) {
+      console.log(error);
+      dispatch(updateRFP({ rfpId, data: { rating: prevRfp[0].rating } }));
+    }
+   };
 
   const handleDelete = async () => {
     try {
@@ -208,21 +208,6 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
         </div>
       </div>
       : <></>;
-      
-  const handleOrganizations = async (orgs:TypeaheadOptions) => {
-    const valuesArray = orgs.map((item) => parseInt(item.value));
-    const prevRfp = rfps.filter(rfp => rfp.rfp_id === showClientModal);
-      try {
-        dispatch(updateRFP({ rfpId: showClientModal!, data: { 'action': 'External' } }))
-        await SERVICES.updateRfpStatus(showClientModal!, 'External', valuesArray);
-      } catch (error) {
-        console.log(error);
-        dispatch(updateRFP({ rfpId: showClientModal!, data: { action: prevRfp[0].action } }));
-      }
-      finally {
-        setshowClientModal(null)
-      }
-  }
   return (
     <>
       {
@@ -241,6 +226,9 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                   <th className='table-heading' style={{ width: "150px" }}>
                     <p className='table-heading-text' onClick={() => setShowSortModal('Client')}>Client</p>
                     {sortModal('Client')}
+                  </th>
+                  <th className='table-heading' style={{ width: "150px" }}>
+                    <p className='table-heading-text'>External Organizations</p>
                   </th>
                   <th className='table-heading' style={{ width: "190px" }}>
                     <p className='table-heading-text' onClick={() => setShowSortModal('Source')}>Source</p>
@@ -310,6 +298,11 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                         </div>
                       </td>
                       <td className='table-cell'>{rfp.client}</td>
+                      <td className='table-cell'>
+                        {rfp.organizations?.map((e)=>{
+                          return e.organization_name+ ', '
+                        })}
+                      </td>
                       <td className='table-cell'>{rfp.source}</td>
                       <td className='table-cell'>
                         <TFChip
@@ -402,10 +395,8 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
           isEditing={true}
           editForm={editForm}
         />}
-
-      {showClientModal!==null && <TFClientModal show={showClientModal!==null} onHide={() => setshowClientModal(null)} onSubmit={handleOrganizations} />}
     </>
   )
 }
 
-export default Table
+export default TrackingTable

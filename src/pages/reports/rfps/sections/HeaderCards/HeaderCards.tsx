@@ -6,9 +6,9 @@ import React, { useEffect, useState } from "react";
 //   selectPercentage,
 //   selectTotalRFPs,
 // } from "../../../../redux/slices/rfpSlice";
-import SERVICES from "../../../../services/Services";
+import SERVICES from "../../../../../services/Services";
 import "./HeaderCards.css";
-import { icons } from "../../../../assets/icons";
+import { icons } from "../../../../../assets/icons";
 import "./HeaderCards.scss";
 
 const HeaderCards = () => {
