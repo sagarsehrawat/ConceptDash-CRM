@@ -347,14 +347,14 @@ const AddNewRfp = (props: Props) => {
   //   //   (item: any) => item.name !== fileName
   //   // )
   //   // uploadedFiles = newArray;
-  //   newArr = uploadedFiles?.filter(
-  //     (item: any) => item.name !== fileName
-  //   )
+  //   // newArr = uploadedFiles?.filter(
+  //   //   (item: any) => item.name !== fileName
+  //   // )
   //   // uploadedFiles = newArr;
-  //   setNewArr(newArr);
+  //   // setNewArr(newArr);
   //   console.log("uploaded after deleting", uploadedFiles);
   //   console.log(form.files);
-  //   console.log("newArray",newArr)
+  //   // console.log("newArray",newArr)
   // };
 
   // useEffect(() => {
@@ -546,7 +546,7 @@ const AddNewRfp = (props: Props) => {
                 {isEditing ? (
                   <></>
                 ) : (
-                  <div className="justify-content-center align-item-center mb-5 mt-5 upload-file-container">
+                  <div className="justify-content-center align-item-center mb-4 mt-5 upload-file-container">
                     <h2>Upload Attachments</h2>
                     <p>Upload any files/documents related to the RFP here.</p>
                     {/* <label>Upload</label> */}

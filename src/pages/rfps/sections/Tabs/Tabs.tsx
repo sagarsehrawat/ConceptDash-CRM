@@ -80,7 +80,7 @@ const Tabs = ({setcurrPage, pages, search, currPage, setPages, api, setApi, valu
                     textTransform: "capitalize",
                   }}
                   sx={{ fontSize: 12 }}
-                  label="Request for proposals (RFPs)"
+                  label="Request for proposals (RFP’s)"
                   value="1"
                 />
                 

@@ -239,6 +239,10 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                     {sortModal('Project_Name')}
                   </th>
                   <th className='table-heading' style={{ width: "150px" }}>
+                    <p className='table-heading-text' onClick={() => setShowSortModal('City')}>City</p>
+                    {sortModal('City')}
+                  </th>
+                  <th className='table-heading' style={{ width: "150px" }}>
                     <p className='table-heading-text' onClick={() => setShowSortModal('Client')}>Client</p>
                     {sortModal('Client')}
                   </th>
@@ -309,6 +313,7 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, isCollapsed }:
                           </div>
                         </div>
                       </td>
+                      <td className='table-cell'>{rfp.city}</td>
                       <td className='table-cell'>{rfp.client}</td>
                       <td className='table-cell'>{rfp.source}</td>
                       <td className='table-cell'>
