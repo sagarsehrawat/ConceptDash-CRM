@@ -252,12 +252,14 @@ const SERVICES = {
         }
     },
 
-    updateBudgetCity1: async (year22: string, year23: string, remarks: string, id: number, population: string, geographicArea: string, municipalityType: string, cityId: number): Promise<UpdateResponse> => {
+    updateBudgetCity1: async (year22: string, year23: string, year24: string, year25: string, remarks: string, id: number, population: string, geographicArea: string, municipalityType: string, cityId: number): Promise<UpdateResponse> => {
         try {
             const response = await axios.put(APIS.UPDATE_BUDGET_CITY1,
                 {
                     year22,
                     year23,
+                    year24,
+                    year25,
                     remarks,
                     id,
                     population,
@@ -277,17 +279,21 @@ const SERVICES = {
         }
     },
 
-    updateBudgetCity2: async (year22: string, year23: string, remarks: string, id: number, website: string, website22: string, website23: string): Promise<UpdateResponse> => {
+    updateBudgetCity2: async (year22: string, year23: string, year24: string, year25: string, remarks: string, id: number, website: string, website22: string, website23: string, website24: string, website25: string): Promise<UpdateResponse> => {
         try {
             const response = await axios.put(APIS.UPDATE_BUDGET_CITY2,
                 {
                     year22,
                     year23,
+                    year24,
+                    year25,
                     remarks,
                     id,
                     website,
                     website22,
-                    website23
+                    website23,
+                    website24,
+                    website25
                 },
                 {
                     headers: { auth: "Rose " + localStorage.getItem("auth"), },

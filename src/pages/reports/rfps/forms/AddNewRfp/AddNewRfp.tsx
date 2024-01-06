@@ -74,7 +74,8 @@ const FORM: FormType = {
 const AddNewRfp = (props: Props) => {
   const { show, setShow, api, setApi, isEditing = false, editForm } = props;
 
-  const { add_rfp_icon } = icons;
+  const { add_rfp_icon, jpeg_icon, pdf_icon, xml_icon, png_icon, } =
+    icons;
   console.log(editForm);
   const dispatch = useDispatch();
   const [form, setForm] = useState(
@@ -122,7 +123,8 @@ const AddNewRfp = (props: Props) => {
     Array<{ label: string | number; value: string | number }>
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [uploadedFiles, setUploadedFiles] = useState([form.files]);
+  let uploadedFiles:any = [];
+  // let [newArr, setNewArr] = useState<any>([uploadedFiles])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -305,13 +307,17 @@ const AddNewRfp = (props: Props) => {
 
     for (let i = 0; i < form.files.length; i++) {
       formData.append("files", form.files[i]);
-      setUploadedFiles([...uploadedFiles, form.files[i]]);
+      // setUploadedFiles([...uploadedFiles, form.files[i]]);
     }
     try {
-      await SERVICES.addRfp(formData);
-      dispatch(showSuccessModal("RFP Added."));
-      setApi(api + 1);
-      setShow(!show);
+      if(form.projectName) {
+        await SERVICES.addRfp(formData);
+        dispatch(showSuccessModal("RFP Added."));
+        setApi(api + 1);
+        setShow(!show);
+      } else {
+        dispatch(showErrorModal("Please enter RFP Name"));
+      }
     } catch (error) {
       console.log(error);
       dispatch(showErrorModal("Something went wrong."));
@@ -330,11 +336,30 @@ const AddNewRfp = (props: Props) => {
   //   setFile(file);
   // }
 
-  // for (let i = 0; i < form.files.length; i++) {
-  // console.log("files", form.files[i]?.name);
-  // uploadedFiles.push(form.files[i]?.name);
-  // console.log("uploaded", uploadedFiles);
-  // }
+  for (let i = 0; i < form.files.length; i++) {
+    // console.log("files", form.files[i]?.name);
+    uploadedFiles.push(form.files[i]);
+  }
+
+  // const handleRemove = (fileName: any) => {
+  //   console.log("index", fileName)
+  //   // const newArray = uploadedFiles?.filter(
+  //   //   (item: any) => item.name !== fileName
+  //   // )
+  //   // uploadedFiles = newArray;
+  //   // newArr = uploadedFiles?.filter(
+  //   //   (item: any) => item.name !== fileName
+  //   // )
+  //   // uploadedFiles = newArr;
+  //   // setNewArr(newArr);
+  //   console.log("uploaded after deleting", uploadedFiles);
+  //   console.log(form.files);
+  //   // console.log("newArray",newArr)
+  // };
+
+  // useEffect(() => {
+  //    console.log("hh")
+  // },[uploadedFiles,])
 
   return (
     <>
@@ -352,7 +377,9 @@ const AddNewRfp = (props: Props) => {
               <div className="add-new-rfp-form-wrapper">
                 <div className="d-flex justify-content-start align-item-center mb-3">
                   {/* <h3>Enter RFP Name</h3> */}
-                  <label>Enter RFP Name</label>
+                  <label>
+                    Enter RFP Name<span>*</span>
+                  </label>
                   <TFInput
                     placeholder="RFP Name"
                     name="projectName"
@@ -516,8 +543,10 @@ const AddNewRfp = (props: Props) => {
                   />
                 </div>
 
-                {isEditing?<></>: (
-                  <div className="justify-content-center align-item-center mb-5 mt-5 upload-file-container">
+                {isEditing ? (
+                  <></>
+                ) : (
+                  <div className="justify-content-center align-item-center mb-4 mt-5 upload-file-container">
                     <h2>Upload Attachments</h2>
                     <p>Upload any files/documents related to the RFP here.</p>
                     {/* <label>Upload</label> */}
@@ -545,6 +574,7 @@ const AddNewRfp = (props: Props) => {
                                   handleForm(e.target.name, e.target.files)
                                 }
                                 multiple
+                                accept="application/pdf, image/jpeg, text/xml, image/png"
                               />
                             </div>
                             <p className="mt-4">
@@ -557,7 +587,45 @@ const AddNewRfp = (props: Props) => {
                   </div>
                 )}
 
-                <div className="project-modal-footer w-100">
+                {uploadedFiles.length > 0 && (
+                  <div className="uploaded-wrapper" id="uploaded-files">
+                    <div className="upload-label"></div>
+                    <div>
+                      <h4>Uploaded Files</h4>
+                      <div>
+                        {uploadedFiles?.map((item: any, key: any) => {
+                          return (
+                            <div key={key} className="uploaded-labels">
+                              <div>
+                                <img
+                                  src={
+                                    item.type === "application/pdf"
+                                      ? pdf_icon
+                                      : item.type === "image/jpeg"
+                                      ? jpeg_icon
+                                      : item.type === "text/xml"
+                                      ? xml_icon
+                                      : item.type === "image/png"
+                                      ? png_icon
+                                      : ""
+                                  }
+                                />
+                              </div>
+                              <div className="file-name">{item.name}</div>
+                              {/* <div onClick={() => handleRemove(item.name)}>
+                                <img src={cross_icon} />
+                              </div> */}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                
+              </div>
+              <div className="project-modal-footer w-100">
                   <TFButton
                     label="Cancel"
                     handleClick={() => setShow(!show)}
@@ -569,7 +637,6 @@ const AddNewRfp = (props: Props) => {
                     variant="primary"
                   />
                 </div>
-              </div>
             </>
           )}
         </AddForm>
