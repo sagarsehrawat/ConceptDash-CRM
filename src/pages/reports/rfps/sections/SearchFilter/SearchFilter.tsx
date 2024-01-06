@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import TFSearchBar from '../../../../components/ui/TFSearchBar/TFSearchBar';
-import TFButton from '../../../../components/ui/TFButton/TFButton';
+import TFSearchBar from '../../../../../components/ui/TFSearchBar/TFSearchBar';
+import TFButton from '../../../../../components/ui/TFButton/TFButton';
 import { Button, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faX } from '@fortawesome/free-solid-svg-icons';
-import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
-import LoadingSpinner from '../../../../Main/Loader/Loader';
-import filterIcon from '../../../../Images/Filter.svg'
-import SERVICES from '../../../../services/Services';
+import { PRIMARY_COLOR } from '../../../../../Main/Constants/Constants';
+import LoadingSpinner from '../../../../../Main/Loader/Loader';
+import filterIcon from '../../../../../Images/Filter.svg'
+import SERVICES from '../../../../../services/Services';
 import './SearchFilter.css'
 import AddNewRfp from '../../forms/AddNewRfp/AddNewRfp';
-import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
+import { selectPrivileges } from '../../../../../redux/slices/privilegeSlice';
 import { useSelector } from 'react-redux'
-import ICONS from '../../../../constants/Icons';
+import ICONS from '../../../../../constants/Icons';
 
 
 

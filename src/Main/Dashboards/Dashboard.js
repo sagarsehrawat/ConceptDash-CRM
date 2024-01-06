@@ -47,7 +47,7 @@ import adminSettings from "../../Images/adminSettings.svg";
 import logout from "../../Images/logout.svg";
 import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
-import RFP from "../../pages/rfps/Index.tsx";
+import RFP from "../../pages/reports/rfps/Index.tsx";
 import TestDemo from "../../pages/calendar/index";
 // import Proposal from "../../pages/proposals/index";
 import Employee from "../../pages/employee/index";
@@ -61,7 +61,7 @@ import Tasks from "../../pages/tasks/index";
 import AddTask from "../../pages/tasks/forms/AddTask";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
-import RFPform from "../../pages/rfps/forms/AddRfp.tsx";
+import RFPform from "../../pages/reports/rfps/forms/AddRfp.tsx";
 import ProposalForm from "../../pages/proposals/forms/ProposalForm";
 import projectForm from '../../Images/projectForm.svg'
 import cross from '../../Images/cross.svg'

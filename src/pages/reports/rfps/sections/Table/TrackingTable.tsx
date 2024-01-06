@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
-import SERVICES from '../../../../services/Services';
+import SERVICES from '../../../../../services/Services';
 import { useDispatch, useSelector } from 'react-redux';
-import { initRFPs, selectRFPs, updateRFP } from '../../../../redux/slices/rfpSlice';
-import LoadingSpinner from '../../../../Main/Loader/Loader';
+import { initRFPs, selectRFPs, updateRFP } from '../../../../../redux/slices/rfpSlice';
+import LoadingSpinner from '../../../../../Main/Loader/Loader';
 import './Table.css'
-import TFChip from '../../../../components/form/TFChip/TFChip';
+import TFChip from '../../../../../components/form/TFChip/TFChip';
 import { Button, Form } from 'react-bootstrap';
-import open from '../../../../Images/openinDrive.svg'
+import open from '../../../../../Images/openinDrive.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp, faEdit, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { selectPrivileges } from '../../../../redux/slices/privilegeSlice';
-import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
-import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
-import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
-import TFConversionModal from '../../../../components/modals/TFConversionModal/TFConversionModal';
+import { selectPrivileges } from '../../../../../redux/slices/privilegeSlice';
+import TFDateChip from '../../../../../components/form/TFDateChip/TFDateChip';
+import TFDeleteModal from '../../../../../components/modals/TFDeleteModal/TFDeleteModal';
+import { PRIMARY_COLOR } from '../../../../../Main/Constants/Constants';
+import TFConversionModal from '../../../../../components/modals/TFConversionModal/TFConversionModal';
 import AddNewRfp from '../../forms/AddNewRfp/AddNewRfp';
 
 interface FilterType {

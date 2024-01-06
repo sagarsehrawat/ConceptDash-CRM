@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import TFButton from '../../../../components/ui/TFButton/TFButton'
+import TFButton from '../../../../../components/ui/TFButton/TFButton'
 import { useSelector } from 'react-redux'
-import { selectPrivileges } from '../../../../redux/slices/privilegeSlice'
+import { selectPrivileges } from '../../../../../redux/slices/privilegeSlice'
 // import AddRfp from '../../forms/AddRfp'
-import ICONS from '../../../../constants/Icons'
+import ICONS from '../../../../../constants/Icons'
 import AddNewRfp from '../../forms/AddNewRfp/AddNewRfp'
 
 type Props = {

@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import FormUtils from "../../../utils/FormUtils";
+import FormUtils from "../../../../utils/FormUtils";
 import { Modal } from "react-bootstrap";
-import TFIcon from "../../../components/ui/TFIcon/TFIcon";
-import tIcon from "../../../Images/taskIcon.svg";
-import cross from "../../../Images/cross.svg";
+import TFIcon from "../../../../components/ui/TFIcon/TFIcon";
+import tIcon from "../../../../Images/taskIcon.svg";
+import cross from "../../../../Images/cross.svg";
 import "./Form.css";
-import TFButton from "../../../components/ui/TFButton/TFButton";
-import SERVICES from "../../../services/Services";
-import Utils from "../../../utils/Utils";
-import TFTypeahead from "../../../components/form/TFTypeahead/TFTypeahead";
-import TFInput from "../../../components/form/TFInput/TFInput";
-import LoadingSpinner from "../../../Main/Loader/Loader";
+import TFButton from "../../../../components/ui/TFButton/TFButton";
+import SERVICES from "../../../../services/Services";
+import Utils from "../../../../utils/Utils";
+import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead";
+import TFInput from "../../../../components/form/TFInput/TFInput";
+import LoadingSpinner from "../../../../Main/Loader/Loader";
 import { useDispatch } from 'react-redux';
 import moment from "moment";
-import { showErrorModal, showSuccessModal } from "../../../redux/slices/alertSlice";
+import { showErrorModal, showSuccessModal } from "../../../../redux/slices/alertSlice";
 
 type Props = {
   show: boolean;

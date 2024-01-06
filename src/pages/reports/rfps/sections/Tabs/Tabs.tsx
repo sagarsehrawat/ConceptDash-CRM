@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import { PRIMARY_COLOR } from '../../../../Main/Constants/Constants';
+import { PRIMARY_COLOR } from '../../../../../Main/Constants/Constants';
 import SearchFilter from '../SearchFilter/SearchFilter';
 import Pages from '../Pages/Pages';
 import Table from '../Table/Table';
