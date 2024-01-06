@@ -22,6 +22,10 @@ type Form = {
     website_23: string;
     year_22: string;
     year_23: string;
+    website_24: string;
+    website_25: string;
+    year_24: string;
+    year_25: string;
     remarks: string;
 }
 
@@ -33,6 +37,10 @@ const UpdateCity = ({ show, onHide, city }: Props) => {
         website_23: city.website_23,
         year_22: city.year_22,
         year_23: city.year_23,
+        website_24: city.website_24,
+        website_25: city.website_25,
+        year_24: city.year_24,
+        year_25: city.year_25,
         remarks: city.remarks,
     });
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -48,11 +56,15 @@ const UpdateCity = ({ show, onHide, city }: Props) => {
             await SERVICES.updateBudgetCity2(
                 form.year_22,
                 form.year_23,
+                form.year_24,
+                form.year_25,
                 form.remarks,
                 city.city_budget_id,
                 form.website,
                 form.website_22,
                 form.website_23,
+                form.website_24,
+                form.website_25,
             );
 
             dispatch(updateCity({
@@ -106,7 +118,7 @@ const UpdateCity = ({ show, onHide, city }: Props) => {
                             </div>
 
                             <div className='d-flex flex-column w-100'>
-                                <p className='project-label'>City</p>
+                                <p className='project-label'>Website 2022</p>
                                 <TFInput
                                     name='website_22'
                                     placeholder='2022 Website'
@@ -117,12 +129,34 @@ const UpdateCity = ({ show, onHide, city }: Props) => {
                             </div>
 
                             <div className='d-flex flex-column w-100'>
-                                <p className='project-label'>City</p>
+                                <p className='project-label'>Website 2023</p>
                                 <TFInput
                                     name='website_23'
                                     placeholder='2023 Website'
                                     width='100%'
                                     value={form.website_23}
+                                    onChange={handleForm}
+                                />
+                            </div>
+
+                            <div className='d-flex flex-column w-100'>
+                                <p className='project-label'>Website 2024</p>
+                                <TFInput
+                                    name='website_24'
+                                    placeholder='2024 Website'
+                                    width='100%'
+                                    value={form.website_24}
+                                    onChange={handleForm}
+                                />
+                            </div>
+
+                            <div className='d-flex flex-column w-100'>
+                                <p className='project-label'>Website 2025</p>
+                                <TFInput
+                                    name='website_25'
+                                    placeholder='2025 Website'
+                                    width='100%'
+                                    value={form.website_25}
                                     onChange={handleForm}
                                 />
                             </div>
@@ -149,6 +183,38 @@ const UpdateCity = ({ show, onHide, city }: Props) => {
                                         name='year_23'
                                         placeholder='Choose Budget'
                                         value={form.year_23}
+                                        onChange={handleForm}
+                                        options={[
+                                            { label: 'Done', value: 'Done' },
+                                            { label: 'Not Found', value: 'Not Found' },
+                                            { label: 'Draft Budget', value: 'Draft Budget' },
+                                        ]}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className='d-flex flex-row justify-content-around gap-12 w-100'>
+                                <div className='d-flex flex-column w-100'>
+                                    <p className='project-label'>Update 2024 Budget Status</p>
+                                    <TFSelect
+                                        name='year_24'
+                                        placeholder='Choose Budget'
+                                        value={form.year_24}
+                                        onChange={handleForm}
+                                        options={[
+                                            { label: 'Done', value: 'Done' },
+                                            { label: 'Not Found', value: 'Not Found' },
+                                            { label: 'Draft Budget', value: 'Draft Budget' },
+                                        ]}
+                                    />
+                                </div>
+
+                                <div className='d-flex flex-column w-100'>
+                                    <p className='project-label'>Update 2025 Budget Status</p>
+                                    <TFSelect
+                                        name='year_25'
+                                        placeholder='Choose Budget'
+                                        value={form.year_25}
                                         onChange={handleForm}
                                         options={[
                                             { label: 'Done', value: 'Done' },

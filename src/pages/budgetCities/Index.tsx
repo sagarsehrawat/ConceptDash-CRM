@@ -25,7 +25,7 @@ const Index = (props: Props) => {
         setIsLoading(true);
 
         const response = await SERVICES.getBudgetCities();
-
+        console.log(response.res)
         dispatch(initCities(response.res));
 
         setIsLoading(false);

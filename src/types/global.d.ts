@@ -143,6 +143,10 @@ declare global{
         website_22: string;
         year_23: string;
         website_23: string;
+        year_24: string;
+        website_24: string;
+        year_25: string;
+        website_25: string;
         remarks: string;
         capital_budget_23: number | null;
     }

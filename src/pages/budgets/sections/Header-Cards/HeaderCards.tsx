@@ -41,8 +41,8 @@ const HeaderCards = ({ city }: Props) => {
                                     <img src={website} alt="Website Icon" />
                                 </div>
                                 <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
-                                    <p className='header-card-heading'>2022 Budget Website</p>
-                                    <a className='header-card-link' href={city.website_22} target="_blank" rel="noreferrer">{clipWebsite(city.website_22) ?? "-"}</a>
+                                    <p className='header-card-heading'>2023 Budget Website</p>
+                                    <a className='header-card-link' href={city.website_23} target="_blank" rel="noreferrer">{clipWebsite(city.website_23) ?? "-"}</a>
                                 </div>
                             </div>
 
@@ -51,8 +51,8 @@ const HeaderCards = ({ city }: Props) => {
                                     <img src={website} alt="Website Icon" />
                                 </div>
                                 <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
-                                    <p className='header-card-heading'>2023 Budget Website</p>
-                                    <a className='header-card-link' href={city.website_23} target="_blank" rel="noreferrer">{clipWebsite(city.website_23) ?? "-"}</a>
+                                    <p className='header-card-heading'>2024 Budget Website</p>
+                                    <a className='header-card-link' href={city.website_24} target="_blank" rel="noreferrer">{clipWebsite(city.website_24) ?? "-"}</a>
                                 </div>
                             </div>
                         </div>
@@ -73,8 +73,8 @@ const HeaderCards = ({ city }: Props) => {
                                     <img src={dollar} alt="Website Icon" />
                                 </div>
                                 <div className='d-flex flex-column' style={{ marginLeft: "8px" }}>
-                                    <p className='header-card-heading'>2022 Budget Status</p>
-                                    <a className='header-card-link' href={city.website_22} target="_blank" rel="noreferrer">{city.year_23}</a>
+                                    <p className='header-card-heading'>2024 Budget Status</p>
+                                    <a className='header-card-link' href={city.website_24} target="_blank" rel="noreferrer">{city.year_24}</a>
                                 </div>
                             </div>
 

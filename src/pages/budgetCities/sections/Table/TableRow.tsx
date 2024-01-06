@@ -38,7 +38,7 @@ const TableRow = ({ city, tableRef, setCityId }: Props) => {
                 </td>
                 <td className='table-cell'>
                     <TFChip
-                        value={city.year_22}
+                        value={city.year_23}
                         name={city.city_budget_id}
                         tableRef={tableRef}
                         options={["Not Found", "Draft Budget", "Done"]}
@@ -46,7 +46,15 @@ const TableRow = ({ city, tableRef, setCityId }: Props) => {
                 </td>
                 <td className='table-cell'>
                     <TFChip
-                        value={city.year_23}
+                        value={city.year_24}
+                        name={city.city_budget_id}
+                        tableRef={tableRef}
+                        options={["Not Found", "Draft Budget", "Done"]}
+                    />
+                </td>
+                <td className='table-cell'>
+                    <TFChip
+                        value={city.year_25}
                         name={city.city_budget_id}
                         tableRef={tableRef}
                         options={["Not Found", "Draft Budget", "Done"]}
