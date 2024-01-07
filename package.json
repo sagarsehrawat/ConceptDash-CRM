@@ -126,6 +126,7 @@
     "@storybook/storybook-deployer": "^2.8.16",
     "@storybook/testing-library": "^0.2.0",
     "@types/draft-js": "^0.11.16",
+    "@types/leaflet": "^1.9.8",
     "@types/react-bootstrap-table2-toolkit": "^2.1.7",
     "@types/redux-batched-subscribe": "^0.1.7",
     "babel-plugin-named-exports-order": "^0.0.2",
