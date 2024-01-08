@@ -33,13 +33,20 @@ const Index = (props: Props) => {
     setpropID(a);
     setshowTTM(true);
   };
-  const [expand, setExpand] = useState<boolean>(false);
+  const [expand, setExpand] = useState<boolean>(true);
 
   return !showTTM ? (
     <>
       {proposalId === 0 ? (
         expand ? (
-          <ProposalsMap expand={expand} setExpand={setExpand} />
+          <ProposalsMap
+            expand={expand}
+            setExpand={setExpand}
+            api={api}
+            setApi={setApi}
+            filter={filter}
+            setFilter={setfilter}
+          />
         ) : (
           <>
             <div className="d-flex justify-content-between align-items-center">
@@ -57,7 +64,14 @@ const Index = (props: Props) => {
                 />
               </div>
               <div style={{ marginRight: "32px" }}>
-                <ProposalsMap expand={expand} setExpand={setExpand} />
+                <ProposalsMap
+                  expand={expand}
+                  setExpand={setExpand}
+                  api={api}
+                  setApi={setApi}
+                  filter={filter}
+                  setFilter={setfilter}
+                />
               </div>
             </div>
 
