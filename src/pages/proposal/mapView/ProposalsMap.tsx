@@ -1,12 +1,29 @@
 import React, { useState } from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import styles from "./ProposalsMap.module.css";
-import { LatLngExpression } from "leaflet";
+import { DivIcon, Icon, LatLngExpression, point } from "leaflet";
+import { useSelector } from "react-redux";
+import { selectProposals } from "../../../redux/slices/proposalSlice";
+import MarkerClusterGroup from "react-leaflet-cluster";
+import pinIcon from "../../../assets/icons/Pin.svg";
 
 type Props = {
   expand: boolean;
   setExpand: Function;
 };
+
+const createClusterCustomIcon = function (cluster: any) {
+  return new DivIcon({
+    html: `<span class=${styles.clusterIcon}>${cluster.getChildCount()}</span>`,
+    className: styles["cluster-icon"],
+    iconSize: point(33, 33, true),
+  });
+};
+
+const customIcon = new Icon({
+  iconUrl: pinIcon,
+  iconSize: [38, 38],
+});
 
 const ProposalsMap = ({ expand, setExpand }: Props) => {
   const [type, setType] = useState<number>(1); //1: Regular, 2: Satellite
@@ -15,6 +32,8 @@ const ProposalsMap = ({ expand, setExpand }: Props) => {
   ]);
   const [zoom, setZoom] = useState<number>(8);
   console.log(expand, setExpand, setType, setCenter, setZoom);
+  const proposals = useSelector(selectProposals);
+  console.log(proposals);
 
   return (
     <div className={expand ? styles["container-expanded"] : styles.container}>
@@ -38,87 +57,32 @@ const ProposalsMap = ({ expand, setExpand }: Props) => {
               }`}
               subdomains={["mt0", "mt1", "mt2", "mt3"]}
             />
-            {/* {citiesData.showCities || budgets.showBudgets
-        ? citiesData.cities.map((e, idx) => {
-            if (e.city_coordinates) {
-              return (
-                <>
-                  <Circle
-                    center={[
-                      Number(e.city_coordinates[0]),
-                      Number(e.city_coordinates[1]),
-                    ]}
-                    radius={getRadius(
-                      Number(e.capital_budget_23),
-                      200,
-                      true
-                    )}
-                    pathOptions={{
-                      color: "#8361fe",
-                      fillColor: "#8361fe",
-                      fillOpacity: getOpacity(
-                        Number(e.capital_budget_23),
-                        true
-                      ),
-                    }}
-                    eventHandlers={{
-                      click: () => {
-                        handleCitySelect(
-                          e?.city_id,
-                          e?.city_coordinates
-                        );
-                      },
-                    }}
-                  />
-                  <Marker
-                    eventHandlers={{
-                      click: () => {
-                        handleCitySelect(
-                          e?.city_id,
-                          e?.city_coordinates
-                        );
-                      },
-                    }}
-                    key={idx}
-                    icon={customIcon}
-                    position={[
-                      Number(e.city_coordinates[0]),
-                      Number(e.city_coordinates[1]),
-                    ]}
-                  />
-                </>
-              );
-            } else {
-              return <></>;
-            }
-          })
-        : regionData.map((e) => {
-            if (e.geographical_coordinates) {
-              return (
-                <Circle
-                  center={[
-                    Number(e.geographical_coordinates[0]),
-                    Number(e.geographical_coordinates[1]),
-                  ]}
-                  radius={getRadius(Number(e.capital_budget_23), 1000)}
-                  pathOptions={{
-                    color: "#8361fe",
-                    fillColor: "#8361fe",
-                    fillOpacity: getOpacity(
-                      Number(e.capital_budget_23)
-                    ),
-                  }}
-                  eventHandlers={{
-                    click: () => {
-                      handleRegionSelect(e?.geographic_area);
-                    },
-                  }}
-                />
-              );
-            } else {
-              return <></>;
-            }
-          })} */}
+            <MarkerClusterGroup
+              iconCreateFunction={createClusterCustomIcon}
+              chunkedLoading
+            >
+              {proposals &&
+                proposals.map((proposal, idx) => {
+                  if (
+                    proposal.city_coordinates &&
+                    proposal.city_coordinates.length === 2
+                  ) {
+                    console.log(proposal.city_coordinates);
+                    return (
+                      <Marker
+                        key={idx}
+                        icon={customIcon}
+                        position={[
+                          Number(proposal.city_coordinates[0]),
+                          Number(proposal.city_coordinates[1]),
+                        ]}
+                      ></Marker>
+                    );
+                  } else {
+                    return <></>;
+                  }
+                })}
+            </MarkerClusterGroup>
           </>
         </MapContainer>
       </div>
