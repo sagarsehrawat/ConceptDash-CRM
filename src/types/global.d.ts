@@ -138,6 +138,7 @@ declare global{
         municipality_type: string;
         municipality_status: string;
         geographic_area: string;
+        geographical_coordinates: string[];
         city_budget_id: number;
         year_22: string;
         website_22: string;
@@ -145,6 +146,7 @@ declare global{
         website_23: string;
         remarks: string;
         capital_budget_23: number | null;
+        city_coordinates: string[];
     }
 
     interface Budget {

@@ -12,46 +12,29 @@ import { Icon } from "leaflet";
 import moment from "moment";
 import SERVICES from "../../../services/Services";
 import Dropdown from "../../../Components/form/DropDown/Dropdown";
+import Utils from "../../../utils/Utils";
 
-interface City {
-  city_id: string;
-  city_coordinates: string[];
-  capital_budget_23: number;
-  city: string;
-  geographic_area: string;
-  geographical_coordinates: string[];
-}
-interface citiesDataprops {
-  showCities: boolean;
-  cities: City[];
-}
-interface MapViewProps {
+type MapViewProps = {
   expand: boolean;
   setExpand: React.Dispatch<React.SetStateAction<boolean>>;
   citiesMain: City[];
   isLoading: boolean;
+};
+
+interface citiesDataprops {
+  showCities: boolean;
+  cities: City[];
 }
 interface filterprops {
   dept: string[];
   cat: string[];
   budgetCategory: string[];
 }
-interface budgetarrayProps {
-  budget_amount: number;
-  project_name: string;
-}
-interface BudgetProps {
+
+type BudgetProps = {
   showBudgets: boolean;
-  budgets: budgetarrayProps[];
-}
-interface deptsprops {
-  label: string;
-  value: number | string;
-}
-interface projectCategoriesprops {
-  label: string;
-  value: number | string;
-}
+  budgets: Budget[];
+};
 
 const getRadius = (
   budget: number,
@@ -108,9 +91,16 @@ const getOpacity = (budget: number, city: Boolean = false) => {
 const createRegionOptions = (data: City[]) => {
   let temp = [{ label: "All Regions", value: "" }];
   if (data.length > 0) {
-    data.forEach((e) => {
-      temp.push({ label: e.geographic_area, value: e.geographic_area });
-    });
+    temp.push(
+      ...Utils.convertToTypeaheadOptions(
+        data,
+        "geographic_area",
+        "geographic_area"
+      )
+    );
+    // data.forEach((e) => {
+    //   temp.push({ label: e.geographic_area, value: e.geographic_area });
+    // });
   }
   return temp;
 };
@@ -118,9 +108,10 @@ const createRegionOptions = (data: City[]) => {
 const createCityOptions = (data: City[]) => {
   let temp = [{ label: "All Cities", value: "" }];
   if (data.length > 0) {
-    data.forEach((e) => {
-      temp.push({ label: e.city, value: e.city_id });
-    });
+    temp.push(...Utils.convertToTypeaheadOptions(data, "city_id", "city"));
+    // data.forEach((e) => {
+    //   temp.push({ label: e.city, value: e.city_id });
+    // });
   }
   return temp;
 };
@@ -151,7 +142,7 @@ const MapView: React.FC<MapViewProps> = ({
   });
   const [center, setCenter] = useState<string[]>(["45.4215", "-75.6972"]);
   const [zoom, setZoom] = useState<number>(8);
-  const [cityID, setCityID] = useState<string>("");
+  const [cityID, setCityID] = useState<number>(0);
   const [year, setYear] = useState<string>(moment().year().toString());
   const [filter, setfilter] = useState<filterprops>({
     dept: [],
@@ -163,10 +154,10 @@ const MapView: React.FC<MapViewProps> = ({
     budgets: [],
   });
   const [loading, setLoading] = useState<Boolean>(false);
-  const [depts, setdepts] = useState<deptsprops[]>([]);
-  const [projectCategories, setProjectCategories] = useState<
-    projectCategoriesprops[]
-  >([]);
+  const [depts, setdepts] = useState<TypeaheadOptions>([]);
+  const [projectCategories, setProjectCategories] = useState<TypeaheadOptions>(
+    []
+  );
 
   const createRegionData = (cities: City[]) => {
     let tempData: City[] = [];
@@ -177,21 +168,35 @@ const MapView: React.FC<MapViewProps> = ({
       if (tempIndex !== -1) {
         tempData[tempIndex].capital_budget_23 =
           Number(city.capital_budget_23) +
-          tempData[tempIndex].capital_budget_23;
+          (tempData[tempIndex].capital_budget_23 ?? 0);
       } else {
         let tempObj: City = {
-          city_id: "",
+          city_id: 0,
           city: "",
           city_coordinates: ["", ""],
           capital_budget_23: Number(city.capital_budget_23),
           geographical_coordinates: city.geographical_coordinates,
           geographic_area: city.geographic_area,
+          province: "",
+          country: "",
+          population_2021: "",
+          website: "",
+          municipality_type: "",
+          municipality_status: "",
+          city_budget_id: 0,
+          year_22: "",
+          website_22: "",
+          year_23: "",
+          website_23: "",
+          remarks: "",
         };
         tempData.push(tempObj);
       }
     });
     // tempData = tempData.filter((e) => e.capital_budget_23 > 0);
-    tempData.sort((a, b) => b.capital_budget_23 - a.capital_budget_23);
+    tempData.sort(
+      (a, b) => (b.capital_budget_23 ?? 0) - (a.capital_budget_23 ?? 0)
+    );
     setCenter(tempData[0].geographical_coordinates);
     setRegionData(tempData);
   };
@@ -207,7 +212,8 @@ const MapView: React.FC<MapViewProps> = ({
     // tempData = tempData.filter((e) => e.capital_budget_23 > 0);
     // console.log("after: ", tempData);
     tempData.sort(
-      (a: City, b: City) => b.capital_budget_23 - a.capital_budget_23
+      (a: City, b: City) =>
+        (b.capital_budget_23 ?? 0) - (a.capital_budget_23 ?? 0)
     );
     setZoom(10);
     setCenter(tempData[0].city_coordinates);
@@ -223,17 +229,20 @@ const MapView: React.FC<MapViewProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       const departmentsResponse = await SERVICES.getDepartments();
-      let tempDeptArr: deptsprops[] = [];
+      let tempDeptArr: TypeaheadOptions = [];
       departmentsResponse.res.forEach((e) => {
-        tempDeptArr.push({ label: e.Department, value: e.Department_ID });
+        tempDeptArr.push({
+          label: e.Department,
+          value: e.Department_ID.toString(),
+        });
       });
       setdepts(tempDeptArr);
       const projectCategoryResponse = await SERVICES.getProjectCategories("");
-      let tempProjArr: deptsprops[] = [];
+      let tempProjArr: TypeaheadOptions = [];
       projectCategoryResponse.res.forEach((e) => {
         tempProjArr.push({
           label: e.Project_Category,
-          value: e.Project_Cat_ID,
+          value: e.Project_Cat_ID.toString(),
         });
       });
       setProjectCategories(tempProjArr);
@@ -248,7 +257,7 @@ const MapView: React.FC<MapViewProps> = ({
         const response = await SERVICES.getCityBudgets(
           year,
           "",
-          parseInt(cityID),
+          cityID,
           filter
         );
         setCitiesData({ ...citiesData, showCities: false });
@@ -268,7 +277,7 @@ const MapView: React.FC<MapViewProps> = ({
         setLoading(false);
       }
     };
-    if (cityID !== "") {
+    if (cityID !== 0) {
       fetchData();
     }
   }, [cityID, year, filter]);
@@ -288,13 +297,13 @@ const MapView: React.FC<MapViewProps> = ({
       setCitiesData({ showCities: false, cities: [] });
     }
     setBudgets({ showBudgets: false, budgets: [] });
-    setCityID("");
+    setCityID(0);
     setOpenRightBar(true);
     setSelectedRegion(val);
   };
 
-  const handleCitySelect = (val: string, coordinate: string[] = ["", ""]) => {
-    if (val !== "") {
+  const handleCitySelect = (val: number, coordinate: string[] = ["", ""]) => {
+    if (val !== 0) {
       setZoom(12);
       if (coordinate) {
         setCenter(coordinate);
@@ -336,7 +345,7 @@ const MapView: React.FC<MapViewProps> = ({
               value={cityID}
               search
               disable={!(citiesData.showCities || budgets.showBudgets)}
-              onChange={(val: string): void => {
+              onChange={(val: number): void => {
                 handleCitySelect(val);
               }}
               options={createCityOptions(citiesData.cities)}
@@ -537,7 +546,7 @@ const MapView: React.FC<MapViewProps> = ({
                       onClick={() => {
                         setBudgets({ showBudgets: false, budgets: [] });
                         setCitiesData({ ...citiesData, showCities: true });
-                        setCityID("");
+                        setCityID(0);
                         setZoom(10);
                       }}
                       className={styles.backToRegions}
@@ -555,7 +564,7 @@ const MapView: React.FC<MapViewProps> = ({
                       }{" "}
                       ({budgets.budgets.length})
                     </div>
-                    {budgets.budgets.map((e: budgetarrayProps) => {
+                    {budgets.budgets.map((e: Budget) => {
                       return (
                         <div className={styles.metric}>
                           <div className="d-flex justify-content-between">
@@ -567,7 +576,9 @@ const MapView: React.FC<MapViewProps> = ({
                             <div
                               style={{ fontWeight: "600", fontSize: "12px" }}
                             >
-                              {addComma(e?.budget_amount)}
+                              {e.budget_amount
+                                ? addComma(e?.budget_amount)
+                                : ""}
                             </div>
                           </div>
                           <div
@@ -582,10 +593,14 @@ const MapView: React.FC<MapViewProps> = ({
                               style={{
                                 height: "100%",
                                 backgroundColor: "#8361FE",
-                                width: getWidth(
-                                  e?.budget_amount,
-                                  budgets.budgets[0].budget_amount * 1.2
-                                ),
+                                width:
+                                  e.budget_amount &&
+                                  budgets.budgets[0].budget_amount
+                                    ? getWidth(
+                                        e?.budget_amount,
+                                        budgets.budgets[0].budget_amount * 1.2
+                                      )
+                                    : 0,
                                 borderRadius: "8px",
                               }}
                             ></div>
@@ -631,7 +646,7 @@ const MapView: React.FC<MapViewProps> = ({
                             <div
                               style={{ fontWeight: "600", fontSize: "12px" }}
                             >
-                              {addComma(city?.capital_budget_23)}
+                              {addComma(city?.capital_budget_23 ?? 0)}
                             </div>
                           </div>
                           <div
@@ -647,8 +662,9 @@ const MapView: React.FC<MapViewProps> = ({
                                 height: "100%",
                                 backgroundColor: "#8361FE",
                                 width: getWidth(
-                                  city?.capital_budget_23,
-                                  citiesData.cities[0].capital_budget_23 * 1.2
+                                  city?.capital_budget_23 ?? 0,
+                                  (citiesData.cities[0].capital_budget_23 ??
+                                    0) * 1.2
                                 ),
                                 borderRadius: "8px",
                               }}
@@ -679,7 +695,7 @@ const MapView: React.FC<MapViewProps> = ({
                             <div
                               style={{ fontWeight: "600", fontSize: "12px" }}
                             >
-                              {addComma(region?.capital_budget_23)}
+                              {addComma(region?.capital_budget_23 ?? 0)}
                             </div>
                           </div>
                           <div
@@ -695,8 +711,8 @@ const MapView: React.FC<MapViewProps> = ({
                                 height: "100%",
                                 backgroundColor: "#8361FE",
                                 width: getWidth(
-                                  region?.capital_budget_23,
-                                  regionData[0].capital_budget_23 * 1.2
+                                  region?.capital_budget_23 ?? 0,
+                                  (regionData[0].capital_budget_23 ?? 0) * 1.2
                                 ),
                                 borderRadius: "8px",
                               }}
