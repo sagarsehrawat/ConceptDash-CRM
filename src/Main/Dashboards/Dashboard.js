@@ -77,7 +77,7 @@ import Profile from "../../pages/profile/index";
 import Announcements from "../../pages/announcements/index";
 import AddBudgetCity from "../Form/AddBudgetCity";
 import TTMMain from "../../pages/proposals/ttm/TTMMain";
-import CampaignRoot from "../v3/campaign/CampaignRoot";
+import CampaignRoot from "../../pages/campaign";
 import { useDispatch } from "react-redux";
 import { initPrivileges } from "../../redux/slices/privilegeSlice";
 import AllOrganisations from "../v3/Contacts/Index/AllOrganisations.tsx";

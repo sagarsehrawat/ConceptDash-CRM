@@ -1,0 +1,39 @@
+.cmp-fse-container {
+  display: flex;
+  width: 728px;
+  padding: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--8-pad, 8px);
+  border: 1px solid red;
+  border-radius: var(--12-pad, 12px);
+  border: 1px solid #feb9b9;
+  background: #fff5f5;
+}
+
+.cmp-fse-container > div {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cmp-fse-container > div > div {
+  display: flex;
+  align-items: center;
+  gap: var(--12-pad, 12px);
+}
+
+.cmp-fse-container > div > div > img {
+  width: 56px;
+  height: 56px;
+}
+
+.cmp-fse-container > div > div > p {
+  color: var(--Black-text, #3d424f);
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 150% */
+}
