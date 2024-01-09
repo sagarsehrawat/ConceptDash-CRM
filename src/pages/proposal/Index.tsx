@@ -33,7 +33,7 @@ const Index = (props: Props) => {
     setpropID(a);
     setshowTTM(true);
   };
-  const [expand, setExpand] = useState<boolean>(true);
+  const [expand, setExpand] = useState<boolean>(false);
 
   return !showTTM ? (
     <>
