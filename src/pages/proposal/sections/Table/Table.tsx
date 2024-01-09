@@ -65,7 +65,6 @@ const Table = ({ api, setApi, currPage, filter, search, setPages, setProposalId,
       try {
         setIsLoading(true);
         setSelectedProposals([]);
-
         const response = await SERVICES.getProposals(50, currPage, filter, search, sort, localStorage.getItem("employeeId") ?? '');
         console.log(response.res)
         dispatch(initproposals(response.res));
