@@ -15,6 +15,7 @@ import rightPurple from "../../../assets/icons/Right_Purple.svg";
 import SERVICES from "../../../services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingSpinner from "../../../Main/Loader/Loader";
+import Dropdown from "../../../components/form/DropDown/Dropdown";
 
 type Props = {
   expand: boolean;
@@ -46,7 +47,64 @@ const customIcon = new Icon({
   iconSize: [38, 38],
 });
 
-const ProposalsMap = ({ expand, setExpand, api, filter }: Props) => {
+const createCityOptions = (
+  data: Array<{
+    City_ID: number | string;
+    City: string;
+  }>
+) => {
+  let temp: Array<{ value: number | string; label: string }> = [];
+  if (data.length > 0) {
+    data.forEach((e) => {
+      temp.push({ label: e.City, value: e.City_ID });
+    });
+  }
+  return temp;
+};
+const createDeptOptions = (
+  data: Array<{
+    Department_ID: string | number;
+    Department: string;
+  }>
+) => {
+  let temp: Array<{ value: number | string; label: string }> = [];
+  if (data.length > 0) {
+    data.forEach((e) => {
+      temp.push({ label: e.Department, value: e.Department_ID });
+    });
+  }
+  return temp;
+};
+const createProjOptions = (
+  data: Array<{
+    Project_Cat_ID: number;
+    Project_Category: string;
+  }>
+) => {
+  let temp: Array<{ value: number | string; label: string }> = [];
+  if (data.length > 0) {
+    data.forEach((e) => {
+      temp.push({ label: e.Project_Category, value: e.Project_Cat_ID });
+    });
+  }
+  return temp;
+};
+const createEmpOptions = (
+  data: Array<{
+    Employee_ID: number;
+    Full_Name: string;
+  }>
+) => {
+  let temp: Array<{ value: number | string; label: string }> = [];
+  if (data.length > 0) {
+    data.forEach((e) => {
+      temp.push({ label: e.Full_Name, value: e.Employee_ID });
+    });
+  }
+  return temp;
+};
+
+const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
   const [type, setType] = useState<number>(1); //1: Regular, 2: Satellite
   const [center, setCenter] = useState<LatLngExpression | undefined>([
     45.4215, -75.6972,
@@ -54,10 +112,22 @@ const ProposalsMap = ({ expand, setExpand, api, filter }: Props) => {
   const [zoom, setZoom] = useState<number>(8);
   const [openRightBar, setOpenRightBar] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  console.log(expand, setExpand, setType, setCenter, setZoom);
+  const [isLoading2, setIsLoading2] = useState<boolean>(false);
+  const [cities, setcities] = useState<
+    Array<{ value: number | string; label: string }>
+  >([]);
+  const [depts, setdepts] = useState<
+    Array<{ value: number | string; label: string }>
+  >([]);
+  const [projectCategories, setProjectCategories] = useState<
+    Array<{ value: number | string; label: string }>
+  >([]);
+  const [employees, setemployees] = useState<
+    Array<{ value: number | string; label: string }>
+  >([]);
+  console.log(setType, setCenter, setZoom);
   const proposals = useSelector(selectProposals);
   const dispatch = useDispatch();
-  console.log(proposals);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,6 +142,12 @@ const ProposalsMap = ({ expand, setExpand, api, filter }: Props) => {
           localStorage.getItem("employeeId") ?? ""
         );
         dispatch(initproposals(response.res));
+        if (response.res.length > 0) {
+          setCenter([
+            Number(response.res[0].city_coordinates[0]),
+            Number(response.res[0].city_coordinates[1]),
+          ]);
+        }
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -80,11 +156,82 @@ const ProposalsMap = ({ expand, setExpand, api, filter }: Props) => {
     fetchData();
   }, [api, filter, expand, dispatch]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading2(true);
+      const citiesResponse = await SERVICES.getCities();
+
+      const departmentsResponse = await SERVICES.getDepartments();
+
+      const employeeResponse = await SERVICES.getManagers();
+
+      const projectCategoryResponse = await SERVICES.getProjectCategories("");
+      setIsLoading2(false);
+      setcities(createCityOptions(citiesResponse.res));
+      setdepts(createDeptOptions(departmentsResponse.res));
+      setemployees(createEmpOptions(employeeResponse.res));
+      setProjectCategories(createProjOptions(projectCategoryResponse.res));
+    };
+    fetchData();
+  }, []);
+
   if (isLoading) {
     return <LoadingSpinner />;
   } else {
     return (
       <div className={expand ? styles["container-expanded"] : styles.container}>
+        {expand && (
+          <div className={styles.header}>
+            <Dropdown
+              name={"Cities"}
+              value={filter.city}
+              checkbox
+              type={false}
+              search
+              disable={isLoading2}
+              onChange={(val: string | number) => {
+                setFilter({ ...filter, city: val });
+              }}
+              options={cities}
+            />
+            <Dropdown
+              name={"Department"}
+              value={filter.dept}
+              checkbox
+              type={false}
+              search
+              disable={isLoading2}
+              onChange={(val: string | number) => {
+                setFilter({ ...filter, dept: val });
+              }}
+              options={depts}
+            />
+            <Dropdown
+              name={"Project Category"}
+              value={filter.cat}
+              checkbox
+              type={false}
+              search
+              disable={isLoading2}
+              onChange={(val: string | number) => {
+                setFilter({ ...filter, cat: val });
+              }}
+              options={projectCategories}
+            />
+            <Dropdown
+              name={"Manager"}
+              value={filter.manager}
+              checkbox
+              type={false}
+              search
+              disable={isLoading2}
+              onChange={(val: string | number) => {
+                setFilter({ ...filter, manager: val });
+              }}
+              options={employees}
+            />
+          </div>
+        )}
         {!expand && (
           <div onClick={() => setExpand(true)} className={styles.expand}>
             <img src={expandIcon} alt="" />
@@ -120,7 +267,6 @@ const ProposalsMap = ({ expand, setExpand, api, filter }: Props) => {
                       proposal.city_coordinates &&
                       proposal.city_coordinates.length === 2
                     ) {
-                      console.log(proposal.city_coordinates);
                       return (
                         <Marker
                           key={idx}
