@@ -189,6 +189,10 @@ const MapView: React.FC<MapViewProps> = ({
           year_23: "",
           website_23: "",
           remarks: "",
+          year_24: "",
+          website_24: "",
+          year_25: "",
+          website_25: "",
         };
         tempData.push(tempObj);
       }
