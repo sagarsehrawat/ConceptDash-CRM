@@ -11,6 +11,7 @@ import filterIcon from "../../../../Images/Filter.svg";
 import ICONS from "../../../../constants/Icons";
 import AddBudget from "../../forms/AddBudget";
 import TFSelect from "../../../../components/form/TFSelect/TFSelect";
+import moment from "moment";
 
 type Props = {
   api: number;
@@ -140,6 +141,17 @@ const SearchFilter = ({
     return (
       filter.budgetCategory.length + filter.cat.length + filter.dept.length
     );
+  };
+
+  const generateYearOptions = () => {
+    const currentYear = moment().year();
+    const yearOptions = [];
+  
+    for (let i = currentYear - 3; i <= currentYear + 3; i++) {
+      yearOptions.push({ label: i.toString(), value: i.toString() });
+    }
+  
+    return yearOptions;
   };
 
   return (
@@ -375,12 +387,7 @@ const SearchFilter = ({
           <TFSelect
             value={year}
             onChange={(_name: string, value: string) => setYear(value)}
-            options={[
-              { label: "2021", value: "2021" },
-              { label: "2022", value: "2022" },
-              { label: "2023", value: "2023" },
-              { label: "2024", value: "2024" },
-            ]}
+            options={generateYearOptions()}
           />
         </div>
         <div>

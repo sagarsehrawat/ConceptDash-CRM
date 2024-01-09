@@ -24,6 +24,22 @@ import WARNING_PRIMARY from '../assets/icons/Warning_Primary.svg'
 import EDIT_GREY from '../assets/icons/Edit_Grey.svg'
 import DELETE_GREY from '../assets/icons/Delete_Grey.svg'
 import EYE_GREY from '../assets/icons/Eye_Grey.svg'
+import CAMPAIGN_CHEVRON_LEFT from "../assets/icons/Campaign_Chevron_Left.svg"
+import CAMPAIGN_FILE_UPLOAD from "../assets/icons/Campaign_File_Upload.svg"
+import CAMPAIGN_SELECT_CROSS from "../assets/icons/Campaign_Select_Cross.svg"
+import CAMPAIGN_CHOOSE_TEMPLATE_SEARCH from "../assets/icons/Campaign_Choose_Template_Search.svg"
+import CAMPAIGN_ADD_MORE_ATTRIBUTES_PLUS from "../assets/icons/Campaign_Add_More_Attributes_Plus.svg"
+import CAMPAIGN_FILE_EXCCED from "../assets/images/CampaignPage/file-excced.png"
+import CAMPAIGN_JPEG from "../assets/images/CampaignPage/jpeg.png"
+import CAMPAIGN_PDF from "../assets/images/CampaignPage/pdf.png"
+import CAMPAIGN_PNG from "../assets/images/CampaignPage/png.png"
+import CAMPAIGN_CREATE_NEW_CAMPAIGN from "../Images/create-new-campaign.svg"
+import CAMPAIGN_PAGINATION_LEFT from "../Images/left.svg";
+import CAMPAIGN_PAGINATION_RIGHT from "../Images/right1.svg";
+import CAMPAIGN_BACK_ARROW from "../Images/back-arrow.svg";
+import CAMPAIGN_ACCOUNT from "../Images/account.svg";
+import CAMPAIGN_CLOCK from "../Images/clock.svg";
+import CAMPAIGN_TAG from "../Images/tag.svg";
 
 const ICONS = {
     MAGNIFYING_GLASS_WHITE,
@@ -52,6 +68,22 @@ const ICONS = {
     EDIT_GREY,
     DELETE_GREY,
     EYE_GREY,
+    CAMPAIGN_CHEVRON_LEFT,
+    CAMPAIGN_FILE_UPLOAD,
+    CAMPAIGN_SELECT_CROSS,
+    CAMPAIGN_CHOOSE_TEMPLATE_SEARCH,
+    CAMPAIGN_ADD_MORE_ATTRIBUTES_PLUS,
+    CAMPAIGN_FILE_EXCCED,
+    CAMPAIGN_JPEG,
+    CAMPAIGN_PDF,
+    CAMPAIGN_PNG,
+    CAMPAIGN_CREATE_NEW_CAMPAIGN,
+    CAMPAIGN_PAGINATION_LEFT,
+    CAMPAIGN_PAGINATION_RIGHT,
+    CAMPAIGN_BACK_ARROW,
+    CAMPAIGN_ACCOUNT,
+    CAMPAIGN_CLOCK,
+    CAMPAIGN_TAG
 };
 
 export default ICONS;

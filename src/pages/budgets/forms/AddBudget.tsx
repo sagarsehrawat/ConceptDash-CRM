@@ -150,6 +150,17 @@ const AddBudget = ({ show, onHide, budget = null, setApi = () => { }, cityId=0 }
     }
   }
 
+  const generateYearOptions = () => {
+    const currentYear = moment().year();
+    const yearOptions = [];
+  
+    for (let i = currentYear - 3; i <= currentYear + 3; i++) {
+      yearOptions.push({ label: i.toString(), value: i.toString() });
+    }
+  
+    return yearOptions;
+  };
+
   return (
     <TFModal
       show={show}
@@ -248,14 +259,8 @@ const AddBudget = ({ show, onHide, budget = null, setApi = () => { }, cityId=0 }
                   value={form.year}
                   readOnly={budget !== null}
                   onChange={handleForm}
-                  options={[
-                    { label: '2021', value: '2021' },
-                    { label: '2022', value: '2022' },
-                    { label: '2023', value: '2023' },
-                    { label: '2024', value: '2024' },
-                    { label: '2025', value: '2025' },
-                  ]}
-                />
+                  options={generateYearOptions()}
+                  />
               </div>
             </div>
           </div>

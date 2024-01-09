@@ -48,7 +48,23 @@ const APIS = {
     GET_INVOICE_PROJECTS: '/finance/projects',
     GET_INVOICE_DETAILS: '/finance/invoice/details',
     GET_FINANCE_COUNT: '/finance/header',
-    GENERATE_PROJECT_INVOICE: '/finance/invoice/generate'
+    GENERATE_PROJECT_INVOICE: '/finance/invoice/generate',
+    // CAMPAIGN
+    CAMPAIGN_BASE_URL: "https://ses-campaign.conceptdash.ca",
+    GET_CATEGORIES: "/ses/category/get?q=*",
+    GET_TEMPLATES(q: string){
+        return `/ses/template/get?q=${q}`;
+    },
+    SEND_CAMPAIGN: "/ses/campaign/send",
+    GET_CAMPAIGN(text: string,page: number){
+        return `/ses/campaign/get?text=${text === "" ? "*" : text}&page=${page}`
+    },
+    GET_CAMPAIGN_BY_ID(cmpId: number){
+        return `/ses/campaign/report/number?cmpId=${cmpId}`
+    },
+    GET_CAMPAIGN_CONTACT_REPORT(cmpId: number, page: number, event: string){
+        return `/ses/campaign/report/contact?cmpId=${cmpId}&page=${page}&event=${event}`
+    }
 };
 
 export default APIS;

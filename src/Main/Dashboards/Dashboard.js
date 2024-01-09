@@ -47,7 +47,7 @@ import adminSettings from "../../Images/adminSettings.svg";
 import logout from "../../Images/logout.svg";
 import CompanyUpdate from "../Update/CompanyUpdate";
 import Home from "./Home";
-import RFP from "../../pages/rfps/Index.tsx";
+import RFP from "../../pages/reports/rfps/Index.tsx";
 import TestDemo from "../../pages/calendar/index";
 // import Proposal from "../../pages/proposals/index";
 import Employee from "../../pages/employee/index";
@@ -61,7 +61,7 @@ import Tasks from "../../pages/tasks/index";
 import AddTask from "../../pages/tasks/forms/AddTask";
 import GreenAlert from "../Loader/GreenAlert";
 import RedAlert from "../Loader/RedAlert";
-import RFPform from "../../pages/rfps/forms/AddRfp.tsx";
+import RFPform from "../../pages/reports/rfps/forms/AddRfp.tsx";
 import ProposalForm from "../../pages/proposals/forms/ProposalForm";
 import projectForm from '../../Images/projectForm.svg'
 import cross from '../../Images/cross.svg'
@@ -77,7 +77,7 @@ import Profile from "../../pages/profile/index";
 import Announcements from "../../pages/announcements/index";
 import AddBudgetCity from "../Form/AddBudgetCity";
 import TTMMain from "../../pages/proposals/ttm/TTMMain";
-import CampaignRoot from "../v3/campaign/CampaignRoot";
+import CampaignRoot from "../../pages/campaign";
 import { useDispatch } from "react-redux";
 import { initPrivileges } from "../../redux/slices/privilegeSlice";
 import AllOrganisations from "../v3/Contacts/Index/AllOrganisations.tsx";
@@ -606,7 +606,7 @@ const Dashboard = () => {
           className="d-flex justify-content-end"
           style={mystyles.topNavbar}
         >
-          {nav===4?<div style={{...mystyles.topBarHeading, marginRight: isCollapsed?'71vw':'60vw'}}>RFP's</div>:<></>}
+          {nav===4?<div style={{...mystyles.topBarHeading, marginRight: isCollapsed?'71vw':'56vw'}}>RFP's</div>:<></>}
           <NavDropdown hidden={localStorage.getItem('employeeId')==='7'} title={<FontAwesomeIcon
             icon={faCirclePlus}
             color={PRIMARY_COLOR}

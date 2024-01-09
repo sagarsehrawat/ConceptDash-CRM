@@ -8,6 +8,7 @@ import alertSlice from './slices/alertSlice.ts'
 import projectSlice from './slices/projectSlice.ts'
 import budgetSlice from './slices/budgetSlice.ts'
 import proposalSlice from './slices/proposalSlice.ts'
+import campaignListSlice from './slices/campaignListSlice.js'
 
 const debounceNotify = _.debounce((notify) => notify())
 
@@ -17,7 +18,8 @@ const reducer = {
     alerts: alertSlice,
     proposals: proposalSlice,
     projects: projectSlice,
-    budgets: budgetSlice
+    budgets: budgetSlice,
+    campaignList: campaignListSlice
 }
 
 export default configureStore({

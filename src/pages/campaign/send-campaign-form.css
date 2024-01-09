@@ -1,0 +1,156 @@
+.cmp-container {
+  display: flex;
+  padding: 54px 80px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--32-pad, 32px);
+}
+
+.cmp-inner-container {
+  display: flex;
+  width: 728px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.cmp-send-campaign-top-btn-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cmp-send-campaign-top-btn-container > p {
+  color: var(--Black-text, #3d424f);
+  font-family: Roboto;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px; /* 155.556% */
+}
+
+.cmp-componet-header-container {
+  display: flex;
+  width: 728px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cmp-componet-header-container > div:first-child {
+  display: flex;
+  padding: 6px var(--8-pad, 8px);
+  justify-content: center;
+  align-items: center;
+  gap: var(--8-pad, 8px);
+}
+
+.cmp-componet-header-container > div:first-child > p {
+  color: var(--Black-text, #3d424f);
+  text-align: center;
+  font-family: Roboto;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 32px; /* 145.455% */
+}
+
+.cmp-componet-header-container > div:nth-child(2) {
+  display: flex;
+  padding: 0px var(--8-pad, 8px);
+  justify-content: center;
+  align-items: center;
+  gap: var(--8-pad, 8px);
+}
+
+.cmp-componet-header-container > div:nth-child(2) > p {
+  color: var(--Dark-grey, #70757a);
+  text-align: center;
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+}
+
+.cmp-add-sender-details-fields-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--8-pad, 8px);
+  align-self: stretch;
+}
+
+.cmp-add-campaign-details-fields-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--12-pad, 12px);
+}
+
+.cmp-add-more-attributes-btn {
+  display: inline-flex;
+  padding: 6px var(--8-pad, 8px);
+  align-items: center;
+  gap: var(--8-pad, 8px);
+  border-radius: 6px;
+  background: #f6f7f7;
+  border: none;
+}
+
+.cmp-add-more-attributes-btn > p {
+  color: var(--Dark-grey, #70757a);
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+}
+
+.cmp-send-campaign-form-footer-container {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  padding: 16px 20px;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 20px;
+  background: #fff;
+  box-shadow: 0px -2px 2px 0px rgba(235, 233, 241, 0.45);
+}
+
+.cmp-send-campaign-form-footer-container > button:first-child {
+  display: flex;
+  padding: var(--8-pad, 8px) 16px;
+  justify-content: center;
+  align-items: center;
+  gap: var(--8-pad, 8px);
+  border-radius: 5px;
+  border: 1px solid var(--Mob-Primary-colour, #8361fe);
+
+  /* Dashboard Menu selection shadow */
+  box-shadow: 0px 4px 8px 0px rgba(88, 82, 246, 0.25);
+  outline: none;
+  color: var(--Mob-Primary-colour, #8361fe);
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+}
+
+.cmp-send-campaign-form-footer-container > button:nth-child(2) {
+  display: flex;
+  padding: 6px 20px;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  background: var(--Mob-Primary-colour, #8361fe);
+  border: none;
+  outline: none;
+  color: #fbfbfb;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 150% */
+}

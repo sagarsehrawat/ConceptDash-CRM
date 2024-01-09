@@ -17,10 +17,13 @@ const TableHeader = () => {
                     Capital Budget
                 </th>
                 <th className='table-heading' style={{ width: "110px" }}>
-                    2022 Budget
+                    2023 Budget
                 </th>
                 <th className='table-heading' style={{ width: "110px" }}>
-                    2023 Budget
+                    2024 Budget
+                </th>
+                <th className='table-heading' style={{ width: "110px" }}>
+                    2025 Budget
                 </th>
                 <th className='table-heading' style={{ width: "240px" }}>
                     Remarks

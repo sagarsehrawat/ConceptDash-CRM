@@ -1,0 +1,98 @@
+.filter-searchbar-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #FFFFFF;
+    padding: 12px 32px 18px 32px;
+    border-radius: 12px;
+}
+
+.rfps-header {
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px; /* 155.556% */
+    margin-bottom: 3px;
+}
+
+.filter-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 8px;
+    width: 115px;
+    height: 36px;
+    left: 268px;
+    top: 220px;
+    background: #FFFFFF;
+    border: 1px solid #EBE9F1;
+    border-radius: 6px;
+    margin-right: 12p;
+}
+
+.filter-modal-heading {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #0A0A0A;
+    margin: 0px;
+}
+
+.filter-subcontainer {
+    width: 130px;
+    height: 216px;
+    overflow-y: scroll;
+}
+
+.filter-sub-subcontainer{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 4px;
+    gap: 10px;
+    width: 120px;
+    height: 24px;
+    background: #F7F7F9;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+.filter-subheading {
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+}
+
+.filter-city-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 2px 50px 2px 4px;
+    gap: 4px;
+    width: 120px;
+    height: 20px;
+    background: #F3F3F4;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 8px;
+}
+
+.filter-body-text {
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    color: #0A0A0A;
+}
