@@ -11,7 +11,7 @@ import back from "../../../assets/icons/Arrow_Left.svg";
 import { Icon } from "leaflet";
 import moment from "moment";
 import SERVICES from "../../../services/Services";
-import Dropdown from "../../../omponents/form/DropDown/Dropdown";
+import Dropdown from "../../../Components/form/DropDown/Dropdown";
 
 interface City {
   city_id: string;
@@ -179,7 +179,7 @@ const MapView: React.FC<MapViewProps> = ({
           Number(city.capital_budget_23) +
           tempData[tempIndex].capital_budget_23;
       } else {
-        let tempObj = {
+        let tempObj: City = {
           city_id: "",
           city: "",
           city_coordinates: ["", ""],
