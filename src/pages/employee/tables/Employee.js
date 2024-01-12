@@ -26,7 +26,7 @@ import phoneIcon from "../../../Images/phone.svg";
 import locationIcon from "../../../Images/location.svg";
 import nineDots from "../../../Images/dots-nine.svg";
 import listIcon from "../../../Images/list.svg";
-import editIcon from "../../../Images/edit.svg";
+import editIcon from "../../../assets/icons/edit_pen.svg";
 import bdayIcon from "../../../Images/bday.svg";
 import drinksIcon from "../../../Images/drinks.svg";
 import travelIcon from "../../../Images/travel.svg";
@@ -527,6 +527,7 @@ function Employee(props) {
     editIcon: {
       marginLeft: "6px",
       marginTop: "8px",
+      cursor: "pointer",
     },
     bottompart11: {
       marginTop: "14px",
@@ -567,8 +568,8 @@ function Employee(props) {
     bottomPart2Heading: {
       width: "105px",
       height: "20px",
-      // marginLeft: "20px",
-      marginTop: "8px",
+      marginLeft: "30px",
+      marginTop: "14px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 600,
@@ -665,6 +666,8 @@ function Employee(props) {
       display: "flex",
       flexDirection: "row",
       padding: "0px",
+      marginTop: "30px",
+      // marginRight: "100px",
     },
     personalDetMovies: {
       width: "39px",
@@ -1381,7 +1384,8 @@ function Employee(props) {
         </div>
       </div>
       <div style={styles.secondHeading}>
-        <span>{tableFilter.length>0?tableFilter.length:employee.length}</span> Employee
+        <span style={{color: "#8361FE"}}>{tableFilter.length>0?tableFilter.length:employee.length}</span> 
+        <span> Employee</span>
       </div>
       {grid ? (
         <div
@@ -2252,7 +2256,7 @@ function Employee(props) {
                                   <TabContext value={value1}>
                                     <Box sx={{}}>
                                       <TabList
-                                        centered
+                                        // centered
                                         onChange={handleChange}
                                         aria-label=""
                                         TabIndicatorProps={{
@@ -2271,8 +2275,9 @@ function Employee(props) {
                                               value1 == 1
                                                 ? PRIMARY_COLOR
                                                 : "#70757A",
+                                                textTransform: 'capitalize',
                                           }}
-                                          sx={{ fontSize: 10 }}
+                                          sx={{ fontSize: 13 }}
                                           label="Professional Details"
                                           value="1"
                                         />
@@ -2282,8 +2287,9 @@ function Employee(props) {
                                               value1 == 2
                                                 ? PRIMARY_COLOR
                                                 : "#70757A",
+                                                textTransform: 'capitalize',
                                           }}
-                                          sx={{ fontSize: 10 }}
+                                          sx={{ fontSize: 13 }}
                                           label="Personal Details"
                                           value="2"
                                         />
@@ -2609,12 +2615,16 @@ function Employee(props) {
                                             className="row justify-content-start"
                                             style={{
                                               display: "flex",
-                                              flexDirection: "row",
+                                              flexDirection: "column",
                                               marginTop: "49px",
                                               width: "693px",
                                               marginLeft: "42px",
+                                              // background: "red"
                                             }}
                                           >
+                                          <span style={{color: "#70757A",fontFamily: "'Roboto'",fontStyle: "normal",fontWeight: 400,fontSize: "14px", alignItems: 'start', justifyContent: 'start', textAlign: "start"}}>
+                                              Entertainment
+                                          </span>
                                             <div style={styles.entSection}>
                                               <img src={entertainmentIcon} />
                                               <div
@@ -3008,21 +3018,16 @@ function Employee(props) {
                 dialogClassName="filter-dialog"
                 animation={false}
             >
-              <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
-                    <div className='d-flex flex-row'>
-                        <img src={projectForm} />
-                        <div style={styles.addHeading}>Add Employee</div>
-                    </div>
-                    <div><img onClick={handleClose} style={{marginRight:'25px',float: 'right'}} src={cross} /></div>
-                </div>
                     {
+                      <>
                         <PreHireEmployeeForm
-                            setRed={setred}
-                            setGreen={setgreen}
-                            closeModal={handleClose}
-                            api={apiCall}
-                            apiCall={setCall}
+                          setRed={setred}
+                          setGreen={setgreen}
+                          closeModal={handleClose}
+                          api={apiCall}
+                          apiCall={setCall}
                         />
+                        </>
                     }
             </Modal>
             <Modal
