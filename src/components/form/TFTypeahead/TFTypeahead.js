@@ -19,7 +19,9 @@ const TFTypeahead = ({
 
   // Handle Blur functionality to choose option when moves away from input
   const handleBlur = () => {
-    const exactMatch = options.find((option) => option.label === value);
+    const exactMatch = options.find((option) => {
+      return (option.label || option.Title || option.Department || option.Full_Name) === value;
+    })
     if (value === "") {
       setIsValid(true);
       onChange(name, { label: "", value: "" });
@@ -53,17 +55,19 @@ const TFTypeahead = ({
         {isVisible ? (
           <div className="typeahead-options-modal" style={{ width: width }}>
             {options.map((option) => {
-              if (option.label.toLowerCase().includes(value.toLowerCase())) {
+              const label = option.label || option.Title || option.Department || option.Full_Name || "";
+              const key = option.value || option.Title_ID || option.Department_ID || option.Employee_ID || "";
+              if (label.toLowerCase().includes(value.toLowerCase())) {
                 return (
                   <div
                     className="typeahead-option"
                     onMouseDown={() => {
-                      setValue(option.label);
+                      setValue(label);
                       onChange(name, option);
                     }}
-                    key={option.value}
+                    key={key}
                   >
-                    {option.label}
+                    {label}
                   </div>
                 );
               } else {
@@ -71,9 +75,9 @@ const TFTypeahead = ({
               }
             })}
             {options.every(
-              (option) =>
-                !option.label.toLowerCase().includes(value.toLowerCase())
-            ) && (
+              (option) =>{
+                return !(option.label || option.Title || option.Department || option.Full_Name)?.toLowerCase().includes(value.toLowerCase())
+            }) && (
               <div className="typeahead-no-match-found" key="0">
                 No Match Found
               </div>

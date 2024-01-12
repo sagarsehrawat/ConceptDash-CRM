@@ -12,8 +12,8 @@ const FormUtils = (setForm) => ({
         setForm((prev) => {
             return {
                 ...prev,
-                [key]: value.label,
-                [`${key}Id`]: value.value
+                [key]: value.label || value,
+                [`${key}Id`]: value.value || value
             }
         });
     },
