@@ -159,6 +159,8 @@ declare global {
     website_25: string;
     remarks: string;
     capital_budget_23: number | null;
+    city_coordinates: string[];
+    geographical_coordinates: string[];
   }
 
   interface Budget {
