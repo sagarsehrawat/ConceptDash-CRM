@@ -1,0 +1,177 @@
+.container {
+    width: 210px;
+    height: 168px;
+    border-radius: var(--12-pad, 12px);
+    border: 1px solid #fff;
+    background: #fff;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    /* height of the container */
+    .leaflet-container {
+      height: 168px;
+      width: 210px;
+    }
+  }
+  .container-expanded {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    /* height of the container */
+    .leaflet-container {
+      height: 100vh;
+      width: 100vw;
+    }
+  }
+  .map-container {
+    height: 100%;
+    width: 100%;
+  }
+  .clusterIcon {
+    background-color: #333;
+    height: 3rem;
+    width: 3rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    box-shadow: 0 0 0px 5px #628927;
+  }
+  .expand {
+    border-radius: 6px;
+    border: 1px solid #7367f0;
+    background: rgba(115, 103, 240, 0.4);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+    z-index: 1001;
+  }
+  .rightBar,
+  .rightBarClose {
+    z-index: 1001;
+    position: absolute;
+    width: 238px;
+    height: 100%;
+    background: #fff;
+    right: 0px;
+    top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: right 0.5s;
+  }
+  .contents {
+    /* border: 2px solid black; */
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .backToTable {
+    display: inline-flex;
+    padding: 8px 16px 8px 24px;
+    align-items: center;
+    gap: 8px;
+    border-radius: 6px;
+    background: #f6f4ff;
+    color: #8361fe;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 24px;
+  }
+  .rightBarClose {
+    right: -238px;
+  }
+  .open {
+    width: 40px;
+    height: 80px;
+    border-radius: 6px 0px 0px 6px;
+    background: #fbfbfb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: absolute;
+    left: -40px;
+  }
+  .header {
+    position: absolute;
+    /* border: 2px solid black; */
+    z-index: 1001;
+    margin-top: 20px;
+    margin-left: 84px;
+    display: flex;
+    gap: 12px;
+  }
+  .projectList {
+    /* border: 2px solid black; */
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    gap: 8px;
+    width: 210px;
+  }
+  .projectListItem {
+    border: 1px solid #dadada;
+    background: #fff;
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: #3d424f;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .title {
+    color: #3d424f;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    width: 100%;
+    padding: 0px 16px;
+  }
+  .proposalDetails {
+    /* border: 2px solid black; */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #3d424f;
+    font-size: 12px;
+  }
+  .metric {
+    display: flex;
+    gap: 8px;
+  }
+  .label {
+    font-weight: 600;
+    min-width: 20%;
+  }
+  .value {
+    max-width: 80%;
+  }
+  .back {
+    /* border: 2px solid black; */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+    padding: 8px 16px 8px 24px;
+    font-weight: 500;
+    font-size: 16px;
+  }
+  
