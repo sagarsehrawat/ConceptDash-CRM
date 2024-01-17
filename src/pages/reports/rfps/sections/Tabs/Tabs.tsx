@@ -61,7 +61,14 @@ const Tabs = ({
   return (
     <>
       {expand && value1 === "1" ? (
-        <RFPMaps expand={expand} setExpand={setExpand} />
+        <RFPMaps
+          expand={expand}
+          setExpand={setExpand}
+          filter={filter}
+          setFilter={setFilter}
+          api={api}
+          setApi={setApi}
+        />
       ) : (
         <div style={{ marginTop: "8px" }}>
           <Box
@@ -130,7 +137,14 @@ const Tabs = ({
                 </div>
                 {value1 === "1" && (
                   <div style={{ marginRight: "32px" }}>
-                    <RFPMaps expand={expand} setExpand={setExpand} />
+                    <RFPMaps
+                      expand={expand}
+                      setExpand={setExpand}
+                      filter={filter}
+                      setFilter={setFilter}
+                      api={api}
+                      setApi={setApi}
+                    />
                   </div>
                 )}
               </div>

@@ -8,6 +8,7 @@ declare global {
     action: string;
     city_id: number | null;
     city: string | null;
+    city_coordinates: string[];
     client: string | null;
     client_id: number | null;
     created_at: moment.Moment;
