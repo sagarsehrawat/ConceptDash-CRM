@@ -39,7 +39,9 @@ declare global {
     child_projects_info: Project[] | null;
     city: string | null;
     city_id: string | null;
+    city_coordinates: string[];
     client_id: string | null;
+    client: string | null;
     company_name: string | null;
     date_created: moment.Moment;
     department: string | null;
@@ -60,6 +62,8 @@ declare global {
     project_name: string;
     project_type: string;
     project_value: string | null;
+    province: string | null;
+    result: string;
     status: string;
     description: string | null;
     team_member_ids: number[];
