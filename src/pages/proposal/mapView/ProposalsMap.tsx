@@ -105,7 +105,7 @@ const createEmpOptions = (
 };
 
 const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
-  const [type, setType] = useState<number>(1); //1: Regular, 2: Satellite
+  const type = 1;
   const [center, setCenter] = useState<LatLngExpression | undefined>([
     45.4215, -75.6972,
   ]);
@@ -126,7 +126,6 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
     Array<{ value: number | string; label: string }>
   >([]);
   const [currentProposal, setcurrentProposal] = useState<Proposal | null>(null);
-  console.log(setType, setCenter, setZoom);
   const proposals = useSelector(selectProposals);
   const dispatch = useDispatch();
 
@@ -145,14 +144,14 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
         dispatch(initproposals(response.res));
         setZoom(8);
         setcurrentProposal(null);
-        if (response.res.length > 0) {
+        if (response.res.length > 0 && response.res[0].city_coordinates) {
           setCenter([
             Number(response.res[0].city_coordinates[0]),
             Number(response.res[0].city_coordinates[1]),
           ]);
         }
       } catch (error) {
-        console.log("here: ", error);
+        console.log(error);
       }
       setIsLoading(false);
     };
@@ -280,10 +279,11 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
                           ]}
                           eventHandlers={{
                             click: () => {
-                              setCenter([
-                                Number(proposal.city_coordinates[0]),
-                                Number(proposal.city_coordinates[1]),
-                              ]);
+                              if (proposal.city_coordinates)
+                                setCenter([
+                                  Number(proposal.city_coordinates[0]),
+                                  Number(proposal.city_coordinates[1]),
+                                ]);
                               setZoom(14);
                               setcurrentProposal(proposal);
                             },
@@ -315,10 +315,11 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
                 <div
                   onClick={() => {
                     setZoom(8);
-                    setCenter([
-                      Number(proposals[0].city_coordinates[0]),
-                      Number(proposals[0].city_coordinates[1]),
-                    ]);
+                    if (proposals[0].city_coordinates)
+                      setCenter([
+                        Number(proposals[0].city_coordinates[0]),
+                        Number(proposals[0].city_coordinates[1]),
+                      ]);
                     setcurrentProposal(null);
                   }}
                   className={styles.back}
@@ -389,10 +390,11 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
                     return (
                       <div
                         onClick={() => {
-                          setCenter([
-                            Number(e.city_coordinates[0]),
-                            Number(e.city_coordinates[1]),
-                          ]);
+                          if (e.city_coordinates)
+                            setCenter([
+                              Number(e.city_coordinates[0]),
+                              Number(e.city_coordinates[1]),
+                            ]);
                           setZoom(14);
                           setcurrentProposal(e);
                         }}
