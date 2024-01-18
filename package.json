@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "overrides": {
-    "react-refresh":"0.14.0"
+    "react-refresh": "0.14.0"
   },
   "dependencies": {
     "@babel/core": "^7.23.3",
