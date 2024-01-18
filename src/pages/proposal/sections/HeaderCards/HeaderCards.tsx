@@ -70,8 +70,8 @@ const HeaderCards = ({ api }: Props) => {
                     <p className='header-card-subheading'>{lostProposals}</p>
                 </div>
             </div>
-            <div className='header-line'></div>
-            <p className='heading-2' style={{ marginLeft: "32px" }}>Proposals</p>
+            {/* <div className='header-line'></div> */}
+           
         </>
     )
 }
