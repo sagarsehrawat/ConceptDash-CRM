@@ -4,8 +4,10 @@ import { initData, selectCompletedProjects, selectNewProjects, selectOngoingProj
 import SERVICES from '../../../../services/Services'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-
-const HeaderCards = () => {
+type Props = {
+    api: number,
+}
+const HeaderCards = ({ api }: Props) => {
     const dispatch = useDispatch();
     const newProjects = useSelector(selectNewProjects)
     const ongoingProjects = useSelector(selectOngoingProjects)
@@ -32,7 +34,7 @@ const HeaderCards = () => {
             }
         }
         fetchData();
-    }, [])
+    }, [api])
 
     return (
         <>
@@ -66,8 +68,7 @@ const HeaderCards = () => {
                     <p className='header-card-subheading'>{totalProjects}</p>
                 </div>
             </div>
-            <div className='header-line'></div>
-            <p className='heading-2' style={{ marginLeft: "32px" }}>Projects</p>
+
         </>
     )
 }

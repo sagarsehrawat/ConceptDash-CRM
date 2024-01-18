@@ -6,6 +6,10 @@ import Pages from './sections/Pages/Pages';
 import Table from './sections/Table/Table';
 import ProjectDetail from './sections/ProjectDetail/ProjectDetail';
 import ProjectMap from "./mapView/ProjectMap.tsx";
+import TFButton from "../../components/ui/TFButton/TFButton";
+import { useSelector } from "react-redux";
+import { selectPrivileges } from "../../redux/slices/privilegeSlice";
+import ICONS from "../../constants/Icons";
 type Props = {
   isCollapsed: boolean;
 }
@@ -25,6 +29,8 @@ const Index = (props: Props) => {
   const [projectId, setProjectId] = useState<number>(0);
 
   const [expand, setExpand] = useState<boolean>(false);
+  const privileges: string[] = useSelector(selectPrivileges);
+  const [show, setShow] = useState<boolean>(false);
   return projectId === 0 ? (
     expand ? (
       <ProjectMap
@@ -39,19 +45,15 @@ const Index = (props: Props) => {
       <>
         <div className="d-flex justify-content-between align-items-center">
           <div>
-            <Header api={api} setApi={setApi} />
-            <HeaderCards />
-            <SearchFilter
+            <Header  
+              setShow={setShow}
+              show={show}
               api={api}
               setApi={setApi}
-              value={value}
-              setValue={setValue}
-              filter={filter}
-              setFilter={setfilter}
-              isCollapsed={props.isCollapsed}
             />
+             <HeaderCards api={api} />
           </div>
-          <div style={{ marginRight: "32px" }}>
+          <div style={{ marginRight: "32px" ,  marginTop: "12px"}}>
             <ProjectMap
               expand={expand}
               setExpand={setExpand}
@@ -62,7 +64,36 @@ const Index = (props: Props) => {
             />
           </div>
         </div>
-
+        <div
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "8px",
+                marginTop: "12px",
+                padding: "12px 32px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+              }}
+            >
+              <div style={{ gap: "8px" }}>
+                <p className="heading-2">Projects</p>
+                <SearchFilter
+                  api={api}
+                  setApi={setApi}
+                  value={value}
+                  setValue={setValue}
+                  filter={filter}
+                  setFilter={setfilter}
+                  isCollapsed={props.isCollapsed}
+                />
+              </div>
+              <TFButton
+                icon={ICONS.PLUS_WHITE}
+                label="Add New Projects"
+                disabled={!privileges.includes("Add Project")}
+                handleClick={() => setShow(true)}
+              />
+            </div>
         <Table
           api={api}
           setApi={setApi}
