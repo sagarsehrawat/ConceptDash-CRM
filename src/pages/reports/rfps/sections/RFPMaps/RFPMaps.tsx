@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from "react";
+import styles from "./RFPMaps.module.css";
+import pinIcon from "../../../../../assets/icons/Pin.svg";
+import expandIcon from "../../../../../assets/icons/Expand.svg";
+import arrowRight from "../../../../../assets/icons/Arrow_Right.svg";
+import arrowLeft from "../../../../../assets/icons/Arrow_Left.svg";
+import rightPurple from "../../../../../assets/icons/Right_Purple.svg";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
-import styles from "./ProposalsMap.module.css";
 import { DivIcon, Icon, LatLngExpression, point } from "leaflet";
-import {
-  initproposals,
-  selectProposals,
-} from "../../../redux/slices/proposalSlice";
 import MarkerClusterGroup from "react-leaflet-cluster";
-import pinIcon from "../../../assets/icons/Pin.svg";
-import expandIcon from "../../../assets/icons/Expand.svg";
-import arrowRight from "../../../assets/icons/Arrow_Right.svg";
-import arrowLeft from "../../../assets/icons/Arrow_Left.svg";
-import rightPurple from "../../../assets/icons/Right_Purple.svg";
-import SERVICES from "../../../services/Services";
 import { useDispatch, useSelector } from "react-redux";
-import LoadingSpinner from "../../../Main/Loader/Loader";
-import Dropdown from "../../../components/form/DropDown/Dropdown";
+import SERVICES from "../../../../../services/Services";
+import { initRFPs, selectRFPs } from "../../../../../redux/slices/rfpSlice";
+import Dropdown from "../../../../../components/form/DropDown/Dropdown";
+import LoadingSpinner from "../../../../../Main/Loader/Loader";
 
 type Props = {
   expand: boolean;
@@ -31,7 +28,7 @@ interface FilterType {
   cat: (string | number)[];
   city: (string | number)[];
   manager: (string | number)[];
-  bookmark: boolean;
+  source: (string | number)[];
 }
 
 const createClusterCustomIcon = function (cluster: any) {
@@ -75,20 +72,6 @@ const createDeptOptions = (
   }
   return temp;
 };
-const createProjOptions = (
-  data: Array<{
-    Project_Cat_ID: number;
-    Project_Category: string;
-  }>
-) => {
-  let temp: Array<{ value: number | string; label: string }> = [];
-  if (data.length > 0) {
-    data.forEach((e) => {
-      temp.push({ label: e.Project_Category, value: e.Project_Cat_ID });
-    });
-  }
-  return temp;
-};
 const createEmpOptions = (
   data: Array<{
     Employee_ID: number;
@@ -104,7 +87,14 @@ const createEmpOptions = (
   return temp;
 };
 
-const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
+const RFPMaps = ({
+  setExpand,
+  expand,
+  filter,
+  setFilter,
+  api,
+  setApi,
+}: Props) => {
   const type = 1;
   const [center, setCenter] = useState<LatLngExpression | undefined>([
     45.4215, -75.6972,
@@ -112,6 +102,8 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
   const [zoom, setZoom] = useState<number>(8);
   const [openRightBar, setOpenRightBar] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const dispatch = useDispatch();
+  const rfps = useSelector(selectRFPs);
   const [isLoading2, setIsLoading2] = useState<boolean>(false);
   const [cities, setcities] = useState<
     Array<{ value: number | string; label: string }>
@@ -119,31 +111,41 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
   const [depts, setdepts] = useState<
     Array<{ value: number | string; label: string }>
   >([]);
-  const [projectCategories, setProjectCategories] = useState<
-    Array<{ value: number | string; label: string }>
-  >([]);
   const [employees, setemployees] = useState<
     Array<{ value: number | string; label: string }>
   >([]);
-  const [currentProposal, setcurrentProposal] = useState<Proposal | null>(null);
-  const proposals = useSelector(selectProposals);
-  const dispatch = useDispatch();
+  const [currentRFP, setcurrentRFP] = useState<RFP | null>(null);
+  console.log(
+    setExpand,
+    expand,
+    setCenter,
+    setZoom,
+    isLoading,
+    setFilter,
+    setApi,
+    isLoading2,
+    cities,
+    depts,
+    employees,
+    currentRFP
+  );
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await SERVICES.getProposals(
+        const response = await SERVICES.getRfps(
           expand ? 999999 : 50,
           1,
           filter,
           "",
-          "created_at DESC",
-          localStorage.getItem("employeeId") ?? ""
+          "RFP_ID DESC"
         );
-        dispatch(initproposals(response.res));
+        console.log("Response::::::: ", response.res);
+        dispatch(initRFPs(response.res));
+        setcurrentRFP(null);
         setZoom(8);
-        setcurrentProposal(null);
+
         if (response.res.length > 0 && response.res[0].city_coordinates) {
           setCenter([
             Number(response.res[0].city_coordinates[0]),
@@ -162,17 +164,12 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
     const fetchData = async () => {
       setIsLoading2(true);
       const citiesResponse = await SERVICES.getCities();
-
       const departmentsResponse = await SERVICES.getDepartments();
-
       const employeeResponse = await SERVICES.getManagers();
-
-      const projectCategoryResponse = await SERVICES.getProjectCategories("");
       setIsLoading2(false);
       setcities(createCityOptions(citiesResponse.res));
       setdepts(createDeptOptions(departmentsResponse.res));
       setemployees(createEmpOptions(employeeResponse.res));
-      setProjectCategories(createProjOptions(projectCategoryResponse.res));
     };
     fetchData();
   }, []);
@@ -207,18 +204,6 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
                 setFilter({ ...filter, dept: val });
               }}
               options={depts}
-            />
-            <Dropdown
-              name={"Project Category"}
-              value={filter.cat}
-              checkbox
-              type={false}
-              search
-              disable={isLoading2}
-              onChange={(val: string | number) => {
-                setFilter({ ...filter, cat: val });
-              }}
-              options={projectCategories}
             />
             <Dropdown
               name={"Manager"}
@@ -263,29 +248,29 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
                 iconCreateFunction={createClusterCustomIcon}
                 chunkedLoading
               >
-                {proposals &&
-                  proposals.map((proposal, idx) => {
+                {rfps &&
+                  rfps.map((rfp, idx) => {
                     if (
-                      proposal.city_coordinates &&
-                      proposal.city_coordinates.length === 2
+                      rfp.city_coordinates &&
+                      rfp.city_coordinates.length === 2
                     ) {
                       return (
                         <Marker
                           key={idx}
                           icon={customIcon}
                           position={[
-                            Number(proposal.city_coordinates[0]),
-                            Number(proposal.city_coordinates[1]),
+                            Number(rfp.city_coordinates[0]),
+                            Number(rfp.city_coordinates[1]),
                           ]}
                           eventHandlers={{
                             click: () => {
-                              if (proposal.city_coordinates)
+                              if (rfp.city_coordinates)
                                 setCenter([
-                                  Number(proposal.city_coordinates[0]),
-                                  Number(proposal.city_coordinates[1]),
+                                  Number(rfp.city_coordinates[0]),
+                                  Number(rfp.city_coordinates[1]),
                                 ]);
                               setZoom(14);
-                              setcurrentProposal(proposal);
+                              setcurrentRFP(rfp);
                             },
                           }}
                         ></Marker>
@@ -311,16 +296,16 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
               >
                 Go to Table View <img src={rightPurple} alt="" />
               </div>
-              {currentProposal && (
+              {currentRFP && (
                 <div
                   onClick={() => {
                     setZoom(8);
-                    if (proposals[0].city_coordinates)
+                    if (rfps[0].city_coordinates)
                       setCenter([
-                        Number(proposals[0].city_coordinates[0]),
-                        Number(proposals[0].city_coordinates[1]),
+                        Number(rfps[0].city_coordinates[0]),
+                        Number(rfps[0].city_coordinates[1]),
                       ]);
-                    setcurrentProposal(null);
+                    setcurrentRFP(null);
                   }}
                   className={styles.back}
                 >
@@ -328,65 +313,63 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
                 </div>
               )}
               <div className={styles.title}>
-                {currentProposal
-                  ? "Proposal Details:"
-                  : `Proposals: ${proposals.length}`}
+                {currentRFP ? "RFP Details:" : `RFPs: ${rfps.length}`}
               </div>
               <div className={styles.projectList}>
-                {currentProposal && (
+                {currentRFP && (
                   <div className={styles.proposalDetails}>
                     <div className={styles.metric}>
                       <div className={styles.label}>Name:</div>
                       <div className={styles.value}>
-                        {currentProposal.project_name ?? "Not Available"}
+                        {currentRFP.project_name ?? "Not Available"}
                       </div>
                     </div>
                     <div className={styles.metric}>
                       <div className={styles.label}>City:</div>
                       <div className={styles.value}>
-                        {currentProposal.city ?? "Not Available"}
-                      </div>
-                    </div>
-                    <div className={styles.metric}>
-                      <div className={styles.label}>Province:</div>
-                      <div className={styles.value}>
-                        {currentProposal.province ?? "Not Available"}
-                      </div>
-                    </div>
-                    <div className={styles.metric}>
-                      <div className={styles.label}>Project Manager:</div>
-                      <div className={styles.value}>
-                        {currentProposal.project_manager ?? "Not Available"}
-                      </div>
-                    </div>
-                    <div className={styles.metric}>
-                      <div className={styles.label}>Department:</div>
-                      <div className={styles.value}>
-                        {currentProposal.department ?? "Not Available"}
-                      </div>
-                    </div>
-                    <div className={styles.metric}>
-                      <div className={styles.label}>Project Category:</div>
-                      <div className={styles.value}>
-                        {currentProposal.project_category ?? "Not Available"}
+                        {currentRFP.city ?? "Not Available"}
                       </div>
                     </div>
                     <div className={styles.metric}>
                       <div className={styles.label}>Client:</div>
                       <div className={styles.value}>
-                        {currentProposal.client ?? "Not Available"}
+                        {currentRFP.client ?? "Not Available"}
                       </div>
                     </div>
                     <div className={styles.metric}>
-                      <div className={styles.label}>Result:</div>
+                      <div className={styles.label}>Source:</div>
                       <div className={styles.value}>
-                        {currentProposal.result ?? "Not Available"}
+                        {currentRFP.source ?? "Not Available"}
+                      </div>
+                    </div>
+                    <div className={styles.metric}>
+                      <div className={styles.label}>RFP Number:</div>
+                      <div className={styles.value}>
+                        {currentRFP.rfp_number ?? "Not Available"}
+                      </div>
+                    </div>
+                    <div className={styles.metric}>
+                      <div className={styles.label}>Project Manager:</div>
+                      <div className={styles.value}>
+                        {currentRFP.manager_name ?? "Not Available"}
+                      </div>
+                    </div>
+                    <div className={styles.metric}>
+                      <div className={styles.label}>Department:</div>
+                      <div className={styles.value}>
+                        {currentRFP.department ?? "Not Available"}
+                      </div>
+                    </div>
+                    <div className={styles.metric}>
+                      <div className={styles.label}>Project Category:</div>
+                      <div className={styles.value}>
+                        {currentRFP.project_category ?? "Not Available"}
                       </div>
                     </div>
                   </div>
                 )}
-                {!currentProposal &&
-                  proposals.map((e) => {
+                {!currentRFP &&
+                  rfps.map((e) => {
                     return (
                       <div
                         onClick={() => {
@@ -396,7 +379,7 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
                               Number(e.city_coordinates[1]),
                             ]);
                           setZoom(14);
-                          setcurrentProposal(e);
+                          setcurrentRFP(e);
                         }}
                         className={styles.projectListItem}
                       >
@@ -419,4 +402,4 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
   }
 };
 
-export default ProposalsMap;
+export default RFPMaps;
