@@ -26,7 +26,7 @@ import phoneIcon from "../../../Images/phone.svg";
 import locationIcon from "../../../Images/location.svg";
 import nineDots from "../../../Images/dots-nine.svg";
 import listIcon from "../../../Images/list.svg";
-import editIcon from "../../../Images/edit.svg";
+import editIcon from "../../../assets/icons/edit_pen.svg";
 import bdayIcon from "../../../Images/bday.svg";
 import drinksIcon from "../../../Images/drinks.svg";
 import travelIcon from "../../../Images/travel.svg";
@@ -48,6 +48,7 @@ function Employee(props) {
   const { isCollapsed } = props;
   const { privileges, setPrivileges } = useContext(AuthenticationContext);
   const [apiCall, setCall] = useState(0);
+  const [apiCall1, setCall1] = useState(0);
   const [green, setgreen] = useState(false);
   const [red, setred] = useState(false);
 
@@ -70,6 +71,11 @@ function Employee(props) {
   const [filterModal, setfilterModal] = useState(false);
   const closeFilterModal = () => setfilterModal(false);
   const openFilterModal = () => setfilterModal(true);
+
+  //Filter Modal1
+  const [filterModal1, setfilterModal1] = useState(false);
+  const closeFilterModal1 = () => setfilterModal1(false);
+  const openFilterModal1 = () => setfilterModal1(true);
 
   const styles = {
     headerContainer: {
@@ -521,6 +527,7 @@ function Employee(props) {
     editIcon: {
       marginLeft: "6px",
       marginTop: "8px",
+      cursor: "pointer",
     },
     bottompart11: {
       marginTop: "14px",
@@ -561,8 +568,8 @@ function Employee(props) {
     bottomPart2Heading: {
       width: "105px",
       height: "20px",
-      // marginLeft: "20px",
-      marginTop: "8px",
+      marginLeft: "30px",
+      marginTop: "14px",
       fontFamily: "'Roboto'",
       fontStyle: "normal",
       fontWeight: 600,
@@ -659,6 +666,8 @@ function Employee(props) {
       display: "flex",
       flexDirection: "row",
       padding: "0px",
+      marginTop: "30px",
+      // marginRight: "100px",
     },
     personalDetMovies: {
       width: "39px",
@@ -770,7 +779,7 @@ function Employee(props) {
     },
     filterModal: {
       position: "absolute",
-      width: "350px",
+      width: "220px",
       height: "fit-content",
       left: isCollapsed ? "375px" : "535px",
       top: "207px",
@@ -778,8 +787,18 @@ function Employee(props) {
       boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
       borderRadius: "6px",
     },
+    filterModal1: {
+      position: "absolute",
+      width: "220px",
+      height: "fit-content",
+      left: isCollapsed ? "500px" : "700px",
+      top: "207px",
+      background: "#FFFFFF",
+      boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+      borderRadius: "6px",
+    },
     filterSubcontainer: {
-      width: "130px",
+      width: "250px",
       height: "216px",
       overflowY: "scroll",
     },
@@ -798,7 +817,7 @@ function Employee(props) {
       alignItems: "flex-start",
       padding: "4px",
       gap: "10px",
-      width: "120px",
+      width: "180px",
       height: "24px",
       background: "#F7F7F9",
       borderRadius: "6px",
@@ -849,6 +868,7 @@ function Employee(props) {
       fontWeight: 400,
       fontSize: "14px",
       lineHeight: "20px",
+      marginRight: "130px",
     },
   };
   const modalcss = empModal
@@ -885,27 +905,14 @@ function Employee(props) {
   const [depts, setdepts] = useState([]);
   const [titles, settitles] = useState([]);
   const [returnData, setreturnData] = useState({ dept: [], title: [] });
+  const [returnData1, setreturnData1] = useState({ dept: [], title: [] });
+
   useEffect(() => {
     setisLoadingEmp(true);
     setisLoadingDepts(true);
     setisLoadingTitles(true);
+
     const call = async () => {
-      
-      await axios
-        .get(HOST + GET_PAGE_EMPLOYEES, {
-          headers: {
-            auth: "Rose " + localStorage.getItem("auth"),
-            filter: JSON.stringify(returnData),
-            sort: sort,
-          },
-        })
-        .then((res) => {
-          setemployee(res.data.res);
-          setdataSource(res.data.res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
       await axios
         .get(HOST + GET_DEPARTMENTS, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
@@ -917,6 +924,17 @@ function Employee(props) {
         .catch((err) => {
           console.log(err);
         });
+      setisLoadingEmp(false);
+    };
+    call();
+  }, []);
+
+  useEffect(() => {
+    setisLoadingEmp(true);
+    setisLoadingDepts(true);
+    setisLoadingTitles(true);
+
+    const call = async () => {
       await axios
         .get(HOST + GET_JOB_TITLES, {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
@@ -932,6 +950,7 @@ function Employee(props) {
     };
     call();
   }, []);
+
   useEffect(() => {
     setisLoadingEmp(true);
     const call = async () => {
@@ -955,6 +974,31 @@ function Employee(props) {
     };
     call();
   }, [apiCall]);
+
+  useEffect(() => {
+    setisLoadingEmp(true);
+    const call = async () => {
+      await axios
+        .get(HOST + GET_PAGE_EMPLOYEES, {
+          headers: {
+            auth: "Rose " + localStorage.getItem("auth"),
+            filter: JSON.stringify(returnData1),
+            sort: sort,
+          },
+        })
+        .then((res) => {
+          console.log(res.data.res)
+          setemployee(res.data.res);
+          setdataSource(res.data.res);
+          setisLoadingEmp(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    call();
+  }, [apiCall1]);
+
   const handleFilter = (key, value) => {
     if (returnData[key].includes(value)) {
       setreturnData((prevFilter) => ({
@@ -963,6 +1007,20 @@ function Employee(props) {
       }));
     } else {
       setreturnData((prevFilter) => ({
+        ...prevFilter,
+        [key]: [...prevFilter[key], value],
+      }));
+    }
+  };
+
+  const handleFilter1 = (key, value) => {
+    if (returnData1[key].includes(value)) {
+      setreturnData1((prevFilter) => ({
+        ...prevFilter,
+        [key]: prevFilter[key].filter((element) => element !== value),
+      }));
+    } else {
+      setreturnData1((prevFilter) => ({
         ...prevFilter,
         [key]: [...prevFilter[key], value],
       }));
@@ -998,6 +1056,9 @@ function Employee(props) {
   };
   const filterSize = () => {
     return returnData.dept.length + returnData.title.length;
+  };
+  const filterSize1 = () => {
+    return returnData1.dept.length + returnData1.title.length;
   };
   const [rowData, setrowData] = useState([]);
   const handleUpdate = (e) => {
@@ -1044,7 +1105,7 @@ function Employee(props) {
           }}
           onClick={openFilterModal}
         >
-          <img src={filterIcon} alt="Filter Icon" />
+          {/* <img src={filterIcon} alt="Filter Icon" /> */}
           <p
             style={{
               fontStyle: "normal",
@@ -1054,10 +1115,36 @@ function Employee(props) {
               margin: "0",
             }}
           >
-            Save Filters
+            Department
             {filterSize() > 0 ? `/ ${filterSize()}` : ""}
           </p>
           {filterSize() > 0 ? (
+            <></>
+          ) : (
+            <FontAwesomeIcon icon={faChevronDown} color="#70757A" />
+          )}
+        </Button>
+        <Button
+          style={{
+            ...styles.filterButton,
+            backgroundColor: filterSize1() > 0 ? "#DBDBF4" : "white",
+          }}
+          onClick={openFilterModal1}
+        >
+          {/* <img src={filterIcon} alt="Filter Icon" /> */}
+          <p
+            style={{
+              fontStyle: "normal",
+              fontWeight: 400,
+              fontSize: "14px",
+              color: "#0A0A0A",
+              margin: "0",
+            }}
+          >
+            Position
+            {filterSize1() > 0 ? `/ ${filterSize1()}` : ""}
+          </p>
+          {filterSize1() > 0 ? (
             <></>
           ) : (
             <FontAwesomeIcon icon={faChevronDown} color="#70757A" />
@@ -1111,7 +1198,7 @@ function Employee(props) {
                     backgroundColor: "white",
                     border: "none",
                     color: PRIMARY_COLOR,
-                    marginRight: "32px",
+                    marginRight: "100px",
                   }}
                   disabled={filterSize() === 0}
                   onClick={(e) => setreturnData({ dept: [], title: [] })}
@@ -1162,15 +1249,88 @@ function Employee(props) {
                   })
                 )}
               </div>
+            </div>
+            <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
+                            <Button style={styles.filterButton3} onClick={(e) => { setCall(apiCall + 1); closeFilterModal(); }}>Filter</Button>
+                        </div>
+          </div>
+        </Modal>
+        <Modal
+          show={filterModal1}
+          onHide={closeFilterModal1}
+          style={styles.filterModal1}
+          dialogClassName="filter-dialog"
+          backdropClassName="filter-backdrop"
+          animation={false}
+        >
+          <div
+            style={{
+              width: "350px",
+              height: "356px",
+              boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+              borderRadius: "6px",
+            }}
+          >
+            <div
+              className="d-flex flex-row justify-content-between align-items-center"
+              style={{
+                marginTop: "16px",
+                marginLeft: "20px",
+                marginRight: "30px",
+                marginBottom: "20px",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "'Roboto'",
+                  fontStyle: "normal",
+                  fontWeight: 500,
+                  fontSize: "16px",
+                  lineHeight: "24px",
+                  color: "#0A0A0A",
+                  margin: "0px",
+                }}
+              >
+                Filters
+              </p>
+              <div className="d-flex align-items-center">
+                <Button
+                  style={{
+                    fontFamily: "'Roboto'",
+                    fontStyle: "normal",
+                    fontWeight: 400,
+                    fontSize: "14px",
+                    backgroundColor: "white",
+                    border: "none",
+                    color: PRIMARY_COLOR,
+                    marginRight: "100px",
+                  }}
+                  disabled={filterSize1() === 0}
+                  onClick={(e) => setreturnData1({ dept: [], title: [] })}
+                >
+                  Clear All
+                </Button>
+                <FontAwesomeIcon
+                  icon={faX}
+                  style={{ height: "9px", cursor: "pointer" }}
+                  color={PRIMARY_COLOR}
+                  onClick={closeFilterModal1}
+                />
+              </div>
+            </div>
+            <div
+              className="d-flex flex-row justify-content-between"
+              style={{ marginLeft: "20px", marginRight: "20px" }}
+            >
               <div
                 style={styles.filterSubcontainer}
                 className="filter-container"
               >
                 <p style={styles.filterSubheading}>
                   Position{" "}
-                  {returnData.title.length === 0
+                  {returnData1.title.length === 0
                     ? ""
-                    : `/${returnData.title.length}`}
+                    : `/${returnData1.title.length}`}
                 </p>
                 {isLoadingTitles ? (
                   <LoadingSpinner />
@@ -1180,13 +1340,13 @@ function Employee(props) {
                       <div
                         style={{
                           ...styles.filterSubSubContainer,
-                          backgroundColor: returnData.title.includes(
+                          backgroundColor: returnData1.title.includes(
                             e.Title_ID
                           )
                             ? "#DBDBF4"
                             : "#F7F7F9",
                         }}
-                        onClick={() => handleFilter("title", e.Title_ID)}
+                        onClick={() => handleFilter1("title", e.Title_ID)}
                       >
                         <p style={styles.filterBodyText}>{e.Title}</p>
                       </div>
@@ -1196,7 +1356,7 @@ function Employee(props) {
               </div>
             </div>
             <div className='d-flex flex-row justify-content-end' style={{ marginLeft: "20px", marginRight: "20px", marginTop: "20px" }}>
-                            <Button style={styles.filterButton3} onClick={(e) => { setCall(apiCall + 1); closeFilterModal(); }}>Filter</Button>
+                            <Button style={styles.filterButton3} onClick={(e) => { setCall1(apiCall1 + 1); closeFilterModal(); }}>Filter</Button>
                         </div>
           </div>
         </Modal>
@@ -1224,7 +1384,8 @@ function Employee(props) {
         </div>
       </div>
       <div style={styles.secondHeading}>
-        <span>{tableFilter.length>0?tableFilter.length:employee.length}</span> Employee
+        <span style={{color: "#8361FE"}}>{tableFilter.length>0?tableFilter.length:employee.length}</span> 
+        <span> Employee</span>
       </div>
       {grid ? (
         <div
@@ -2095,7 +2256,7 @@ function Employee(props) {
                                   <TabContext value={value1}>
                                     <Box sx={{}}>
                                       <TabList
-                                        centered
+                                        // centered
                                         onChange={handleChange}
                                         aria-label=""
                                         TabIndicatorProps={{
@@ -2114,8 +2275,9 @@ function Employee(props) {
                                               value1 == 1
                                                 ? PRIMARY_COLOR
                                                 : "#70757A",
+                                                textTransform: 'capitalize',
                                           }}
-                                          sx={{ fontSize: 10 }}
+                                          sx={{ fontSize: 13 }}
                                           label="Professional Details"
                                           value="1"
                                         />
@@ -2125,8 +2287,9 @@ function Employee(props) {
                                               value1 == 2
                                                 ? PRIMARY_COLOR
                                                 : "#70757A",
+                                                textTransform: 'capitalize',
                                           }}
-                                          sx={{ fontSize: 10 }}
+                                          sx={{ fontSize: 13 }}
                                           label="Personal Details"
                                           value="2"
                                         />
@@ -2452,12 +2615,16 @@ function Employee(props) {
                                             className="row justify-content-start"
                                             style={{
                                               display: "flex",
-                                              flexDirection: "row",
+                                              flexDirection: "column",
                                               marginTop: "49px",
                                               width: "693px",
                                               marginLeft: "42px",
+                                              // background: "red"
                                             }}
                                           >
+                                          <span style={{color: "#70757A",fontFamily: "'Roboto'",fontStyle: "normal",fontWeight: 400,fontSize: "14px", alignItems: 'start', justifyContent: 'start', textAlign: "start"}}>
+                                              Entertainment
+                                          </span>
                                             <div style={styles.entSection}>
                                               <img src={entertainmentIcon} />
                                               <div
@@ -2851,21 +3018,16 @@ function Employee(props) {
                 dialogClassName="filter-dialog"
                 animation={false}
             >
-              <div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '22px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
-                    <div className='d-flex flex-row'>
-                        <img src={projectForm} />
-                        <div style={styles.addHeading}>Add Employee</div>
-                    </div>
-                    <div><img onClick={handleClose} style={{marginRight:'25px',float: 'right'}} src={cross} /></div>
-                </div>
                     {
+                      <>
                         <PreHireEmployeeForm
-                            setRed={setred}
-                            setGreen={setgreen}
-                            closeModal={handleClose}
-                            api={apiCall}
-                            apiCall={setCall}
+                          setRed={setred}
+                          setGreen={setgreen}
+                          closeModal={handleClose}
+                          api={apiCall}
+                          apiCall={setCall}
                         />
+                        </>
                     }
             </Modal>
             <Modal

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
-import styles from "./ProposalsMap.module.css";
+import styles from "./ProjectMap.module.css";
 import { DivIcon, Icon, LatLngExpression, point } from "leaflet";
 import {
-  initproposals,
-  selectProposals,
-} from "../../../redux/slices/proposalSlice";
+  initProjects,
+  selectProjects,
+} from "../../../redux/slices/projectSlice";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import pinIcon from "../../../assets/icons/Pin.svg";
 import expandIcon from "../../../assets/icons/Expand.svg";
@@ -104,8 +104,8 @@ const createEmpOptions = (
   return temp;
 };
 
-const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
-  const type = 1;
+const ProjectMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
+  const [type, setType] = useState<number>(1); //1: Regular, 2: Satellite
   const [center, setCenter] = useState<LatLngExpression | undefined>([
     45.4215, -75.6972,
   ]);
@@ -125,35 +125,37 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
   const [employees, setemployees] = useState<
     Array<{ value: number | string; label: string }>
   >([]);
-  const [currentProposal, setcurrentProposal] = useState<Proposal | null>(null);
-  const proposals = useSelector(selectProposals);
+  const [currentProject, setcurrentProject] = useState<Project | null>(null);
+  console.log(setType, setCenter, setZoom);
+  const projects = useSelector(selectProjects);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await SERVICES.getProposals(
+       
+        const response = await SERVICES.getProjects(
           expand ? 999999 : 50,
           1,
           filter,
           "",
-          "created_at DESC",
-          localStorage.getItem("employeeId") ?? ""
+          "date_created DESC",
         );
-        dispatch(initproposals(response.res));
+        dispatch(initProjects(response.res));
         setZoom(8);
-        setcurrentProposal(null);
-        if (response.res.length > 0 && response.res[0].city_coordinates) {
+        setcurrentProject(null);
+        if (response.res.length > 0) {
+            console.log(response.res[0])
           setCenter([
             Number(response.res[0].city_coordinates[0]),
             Number(response.res[0].city_coordinates[1]),
           ]);
         }
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
-      setIsLoading(false);
     };
     fetchData();
   }, [api, filter, expand, dispatch]);
@@ -259,41 +261,38 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
                 }`}
                 subdomains={["mt0", "mt1", "mt2", "mt3"]}
               />
-              <MarkerClusterGroup
+             <MarkerClusterGroup
                 iconCreateFunction={createClusterCustomIcon}
                 chunkedLoading
               >
-                {proposals &&
-                  proposals.map((proposal, idx) => {
-                    if (
-                      proposal.city_coordinates &&
-                      proposal.city_coordinates.length === 2
-                    ) {
-                      return (
-                        <Marker
-                          key={idx}
-                          icon={customIcon}
-                          position={[
-                            Number(proposal.city_coordinates[0]),
-                            Number(proposal.city_coordinates[1]),
-                          ]}
-                          eventHandlers={{
-                            click: () => {
-                              if (proposal.city_coordinates)
-                                setCenter([
-                                  Number(proposal.city_coordinates[0]),
-                                  Number(proposal.city_coordinates[1]),
-                                ]);
-                              setZoom(14);
-                              setcurrentProposal(proposal);
-                            },
-                          }}
-                        ></Marker>
-                      );
-                    } else {
-                      return <></>;
-                    }
-                  })}
+                {projects &&
+                  projects
+                    .filter(
+                      (project) =>
+                        project.city_coordinates &&
+                        project.city_coordinates.length === 2 &&
+                        project.city_coordinates.every((coord) => coord !== null)
+                    )
+                    .map((project, idx) => (
+                      <Marker
+                        key={idx}
+                        icon={customIcon}
+                        position={[
+                          Number(project.city_coordinates[0]),
+                          Number(project.city_coordinates[1]),
+                        ]}
+                        eventHandlers={{
+                          click: () => {
+                            setCenter([
+                              Number(project.city_coordinates[0]),
+                              Number(project.city_coordinates[1]),
+                            ]);
+                            setZoom(14);
+                            setcurrentProject(project);
+                          },
+                        }}
+                      ></Marker>
+                    ))}
               </MarkerClusterGroup>
             </>
           </MapContainer>
@@ -311,16 +310,15 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
               >
                 Go to Table View <img src={rightPurple} alt="" />
               </div>
-              {currentProposal && (
+              {currentProject && (
                 <div
                   onClick={() => {
                     setZoom(8);
-                    if (proposals[0].city_coordinates)
-                      setCenter([
-                        Number(proposals[0].city_coordinates[0]),
-                        Number(proposals[0].city_coordinates[1]),
-                      ]);
-                    setcurrentProposal(null);
+                    setCenter([
+                      Number(projects[0].city_coordinates[0]),
+                      Number(projects[0].city_coordinates[1]),
+                    ]);
+                    setcurrentProject(null);
                   }}
                   className={styles.back}
                 >
@@ -328,75 +326,74 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
                 </div>
               )}
               <div className={styles.title}>
-                {currentProposal
-                  ? "Proposal Details:"
-                  : `Proposals: ${proposals.length}`}
+                {currentProject
+                  ? "Project Details:"
+                  : `Projects: ${projects.length}`}
               </div>
               <div className={styles.projectList}>
-                {currentProposal && (
+                {currentProject && (
                   <div className={styles.proposalDetails}>
                     <div className={styles.metric}>
                       <div className={styles.label}>Name:</div>
                       <div className={styles.value}>
-                        {currentProposal.project_name ?? "Not Available"}
+                        {currentProject.project_name ?? "Not Available"}
                       </div>
                     </div>
                     <div className={styles.metric}>
                       <div className={styles.label}>City:</div>
                       <div className={styles.value}>
-                        {currentProposal.city ?? "Not Available"}
+                        {currentProject.city ?? "Not Available"}
                       </div>
                     </div>
                     <div className={styles.metric}>
                       <div className={styles.label}>Province:</div>
                       <div className={styles.value}>
-                        {currentProposal.province ?? "Not Available"}
+                        {currentProject.province ?? "Not Available"}
                       </div>
                     </div>
                     <div className={styles.metric}>
                       <div className={styles.label}>Project Manager:</div>
                       <div className={styles.value}>
-                        {currentProposal.project_manager ?? "Not Available"}
+                        {currentProject.project_manager ?? "Not Available"}
                       </div>
                     </div>
                     <div className={styles.metric}>
                       <div className={styles.label}>Department:</div>
                       <div className={styles.value}>
-                        {currentProposal.department ?? "Not Available"}
+                        {currentProject.department ?? "Not Available"}
                       </div>
                     </div>
                     <div className={styles.metric}>
                       <div className={styles.label}>Project Category:</div>
                       <div className={styles.value}>
-                        {currentProposal.project_category ?? "Not Available"}
+                        {currentProject.project_category ?? "Not Available"}
                       </div>
                     </div>
                     <div className={styles.metric}>
                       <div className={styles.label}>Client:</div>
                       <div className={styles.value}>
-                        {currentProposal.client ?? "Not Available"}
+                        {currentProject.client ?? "Not Available"}
                       </div>
                     </div>
                     <div className={styles.metric}>
                       <div className={styles.label}>Result:</div>
                       <div className={styles.value}>
-                        {currentProposal.result ?? "Not Available"}
+                        {currentProject.result ?? "Not Available"}
                       </div>
                     </div>
                   </div>
                 )}
-                {!currentProposal &&
-                  proposals.map((e) => {
+                {!currentProject &&
+                  projects.map((e) => {
                     return (
                       <div
                         onClick={() => {
-                          if (e.city_coordinates)
-                            setCenter([
-                              Number(e.city_coordinates[0]),
-                              Number(e.city_coordinates[1]),
-                            ]);
+                          setCenter([
+                            Number(e.city_coordinates[0]),
+                            Number(e.city_coordinates[1]),
+                          ]);
                           setZoom(14);
-                          setcurrentProposal(e);
+                          setcurrentProject(e);
                         }}
                         className={styles.projectListItem}
                       >
@@ -419,4 +416,4 @@ const ProposalsMap = ({ expand, setExpand, api, filter, setFilter }: Props) => {
   }
 };
 
-export default ProposalsMap;
+export default ProjectMap;

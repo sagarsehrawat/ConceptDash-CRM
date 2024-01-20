@@ -121,7 +121,7 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
   
     return (
       <>
-        <div className='d-flex flex-row' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
+        <div className='d-flex flex-row' style={{ marginTop: "8px"}}>
           {/* Searchbar */}
           <TFSearchBar
                 placeholder={"Projects"}
@@ -148,12 +148,21 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
             backdropClassName="filter-backdrop"
             animation={false}
           >
-            <div style={{ width: "786px", height: "356px", boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)", borderRadius: "6px" }}>
+            
               <div
-                className='d-flex flex-row justify-content-between align-items-center'
-                style={{ margin: "16px 30px 20px 20px" }}>
-                <p className='filter-modal-heading'>Filters</p>
-                <div className='d-flex align-items-center'>
+             style={{
+              width: "786px",
+              height: "356px",
+              boxShadow: "0px 4px 25px rgba(0, 0, 0, 0.08)",
+              borderRadius: "6px",
+            }}
+          >
+            <div
+              className="d-flex flex-row justify-content-between align-items-center"
+              style={{ margin: "16px 30px 20px 20px" }}
+            >
+              <p className="filter-modal-heading">Filters</p>
+              <div className="d-flex align-items-center">
                   <Button
                     style={{ fontFamily: "'Roboto'", fontStyle: "normal", fontWeight: 400, fontSize: "14px", backgroundColor: "white", border: "none", color: PRIMARY_COLOR, marginRight: "32px" }}
                     disabled={filterSize() === 0}
@@ -181,7 +190,10 @@ const SearchFilter = ({ api, setApi, value, setValue, filter, setFilter, isColla
                 className='d-flex flex-row justify-content-between'
                 style={{ marginLeft: "20px", marginRight: "20px" }}>
                 <div className='filter-container filter-subcontainer'>
-                  <p className='filter-subheading'>City {filter.city.length === 0 ? "" : `/${filter.city.length}`}</p>
+                <p className="filter-subheading">
+                  City{" "}
+                  {filter.city.length === 0 ? "" : `/${filter.city.length}`}
+                </p>
                   <input
                     type="text"
                     className='searchInput filter-city-input'
