@@ -1,17 +1,18 @@
 import React, { useEffect, useState,useRef } from "react";
 import peopleblack from '../icons/people_black_24dp (2) 1.svg'
 import TFButton from "../../../../components/ui/TFButton/TFButton"
-import { HOST, ADD_PEOPLE, GET_ORGANIZATION_LIST } from "../../../Constants/Constants";
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
 import FormUtils from "../../../../utils/FormUtils.js";
-import axios from "axios";
 import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead.js";
 import Utils from '../../../../utils/Utils'
+import { useDispatch } from 'react-redux';
+import SERVICES from "../../../../services/Services";
+import { showErrorModal } from "../../../../redux/slices/alertSlice";
 
 type Props={
     show: boolean,
     setShow: Function
-    id : number | null
+    id? : number | null
     api : number
     setApi: Function
 } 
@@ -26,54 +27,53 @@ const AddNewPerson = ({setShow,api, setApi}: Props) => {
       lineHeight: "20px", 
     },
   };
-  const [formData, setFormData] = useState({
+  const [formData,  setFormData] = useState({
+    id: 0,
+    company_id: 0,
+    company_type_id: [],
     name: '',
-    jobTitle: '',
-    companyType: 'Client',
-    companyName: '',
-    companyNameId: null,
-    contactType: 'Primary',
+    company_type: "Client" ,
+    contact_type: "Primary" ,
     email: '',
-    phone: '',
-    altphone: '',
-    cv: '', // Will store the file object
-    address: '',
-    cityId: '',
+    job_title: '',
+    phone:'',
+    cv: '',
     remarks: '',
+    alternate_phone: '',
+    address: '',
+    city: '',
+    company_name: '',
+    company_nameId : 0
   });
   const formUtils = FormUtils(setFormData);
-
-  
   const inputRef = useRef(null);
-
   const [organization,setOrganization] = useState<any>()
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const call1 = async () => {
         try {
-            const response = await axios.get(HOST + GET_ORGANIZATION_LIST, {
-                headers: {
-                    auth: "Rose " + localStorage.getItem("auth"),
-                },
-            });
-            if (response.data.success) {
-                console.log(response.data.res);
-                setOrganization(Utils.convertToTypeaheadOptions(response.data.res, 'company_name', 'company_id'));
+            const response = await SERVICES.getOrganizationList();
+            if (response.success) {
+                console.log(response);
+                setOrganization(Utils.convertToTypeaheadOptions(response.res, 'company_name', 'company_id'));
                
-            } else {
-                console.error(response.data.error);
-            }
+            } 
         } catch (error) {
             console.error('Error fetching data:', error);
+            
         }
     };
 
     call1();
 }, []);
-const handleForm = (key: string|number, value: string|number) => {
+const handleForm = (key: string|number, value: string|number|null) => {
   console.log(key, value);
    switch (key) {
-       case "companyName":
+       case "company_name":
+             console.log(key +" "+ value)
              formUtils.typeaheadForm(key, value);
+             console.log(formData.company_name);
              break;
              default:
           formUtils.typeInputForm(key,value)
@@ -83,49 +83,47 @@ const handleForm = (key: string|number, value: string|number) => {
   const handleSubmit = async () => {
     try {
         console.log(formData)
-      const response = await axios.post( HOST + ADD_PEOPLE,{
-        name: formData.name,
-        jobTitle: formData.jobTitle,
-        companyType: formData.companyType,
-        companyID: formData.companyNameId,
-        contactType: formData.contactType,
-        email: formData.email,
-        phone: formData.phone,
-         cv: formData.cv,
-         address: formData.address,
-         cityId: 1,
-         remarks: formData.remarks,
-         alternatePhone: formData.altphone
-      }, 
-      {
-        headers: {
-          auth: "Rose " + localStorage.getItem("auth"),
-        },
-      });
+      const response = await SERVICES.addPeople(
+        formData.name,
+        formData.job_title,
+        formData.company_type,
+        formData.company_nameId,
+        formData.contact_type,
+        formData.email,
+        formData.phone,
+        formData.cv,
+        formData.address,
+        formData.remarks,
+        formData.alternate_phone
+      )
         console.log('API Response:', response);
 
         setFormData({
-          name: '',
-          jobTitle: '',
-          companyType: 'Client',
-          companyName: '',
-          companyNameId: null,
-          contactType: 'Primary',
-          email: '',
-          phone: '',
-          altphone: '',
-          cv: '', // Will store the file object
-          address: '',
-          cityId: '',
-          remarks: '',
-        });
+          company_nameId:0,
+          id: 0,
+    company_id: 0,
+    company_type_id: [],
+    name: '',
+    company_type: "Client" ,
+    contact_type: "Primary" ,
+    email: '',
+    job_title: '',
+    phone:'',
+    cv: '',
+    remarks: '',
+    alternate_phone: '',
+    address: '',
+    city: '',
+    company_name: '',
+    });
         setShow(false)
         setApi(api+1);
       } 
      catch (error) {
       console.error('API Error:', error);
+      dispatch(showErrorModal("Something Went Wrong!"));
+
     }
-     console.log(formData);
   };
   return (
     <>
@@ -159,21 +157,21 @@ const handleForm = (key: string|number, value: string|number) => {
         <div style={{display: "flex",flexDirection: "column",alignItems: "flex-start",gap:" var(--8-pad, 8px)"}}>
            <div style={{display:"flex",width: "624px",height: "var(--32-pad, 32px)"}}>
             <div style={{...styles.text,display: "flex",width: "160px",alignItems:"center",gap: "var(--8-pad, 8px)"}}>Job Title</div>
-            <input type="text" placeholder="Type in Role" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'}style={{...styles.text,display:"flex",width:"456px",padding:" 6px var(--8-pad, 8px)",alignItems: "center",gap:" var(--12-pad, 12px)",outline:"none", border: "none",background: "#F6F7F7"}} value={formData.jobTitle}    required={true}
-            onChange={(e) => handleForm(e.target.name, e.target.value)} name="jobTitle" />
+            <input type="text" placeholder="Type in Role" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'}style={{...styles.text,display:"flex",width:"456px",padding:" 6px var(--8-pad, 8px)",alignItems: "center",gap:" var(--12-pad, 12px)",outline:"none", border: "none",background: "#F6F7F7"}} value={formData.job_title}    required={true}
+            onChange={(e) => handleForm(e.target.name, e.target.value)} name="job_title" />
            </div>
            <div style={{display:"flex"}}>
            <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Label</div>
            <TFChip
-                          name="companyType"
-                          value={formData.companyType}
+                          name="company_type"
+                          value={formData.company_type}
                           onChange={handleForm} 
                           options={["Client", "Consultant","Partner","Subconsultant"]}
                         /> </div>
           <div style={{display:"flex"}}>
              <div style={{...styles.text,display: "flex",width:"160px",alignItems: "center",gap:" var(--8-pad, 8px)"}}>Organisation</div>
              <div><TFTypeahead
-            name='companyName'
+            name='company_name'
             placeholder='ABC Startup'
             width='100%'
             onChange={handleForm}
@@ -182,8 +180,8 @@ const handleForm = (key: string|number, value: string|number) => {
           <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Contact Type</div>
           <TFChip
-                          value={formData.contactType}
-                          name="contactType"
+                          value={formData.contact_type}
+                          name="contact_type"
                           onChange={handleForm}
                           options={["Primary","Secondary","Tertiary"]}
                         />
@@ -200,7 +198,7 @@ const handleForm = (key: string|number, value: string|number) => {
           </div>
           <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Alternate number</div>
-          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter alternative contact number" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="altphone" value={formData.altphone}  onChange={(e) => handleForm(e.target.name, e.target.value)} />
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter alternative contact number" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="alternate_phone" value={formData.alternate_phone}  onChange={(e) => handleForm(e.target.name, e.target.value)} />
          
           </div>
           <div style={{display:"flex"}}>
@@ -247,10 +245,11 @@ const handleForm = (key: string|number, value: string|number) => {
         </div>
         <div className='project-modal-footer w-100'>
         <div style={{display: "flex",gap: "20px",width:"624px",padding:" 16px 20px",justifyContent: "flex-end",alignItems: "flex-start",background: "#FFF",boxShadow: "0px -2px 2px 0px rgba(235, 233, 241, 0.45)"}}>
-            <button style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "center",alignItems: "center",gap: "var(--8-pad, 8px)", borderRadius: "5px",border: "1px solid var(--mob-primary-colour, #8361FE)",boxShadow: "0px 4px 8px 0px rgba(88, 82, 246, 0.25)"}}
-             onClick={()=>setShow(false)}>
-             Cancel
-            </button>
+        <TFButton
+                    label="Cancel"
+                    handleClick={() => setShow(false)}
+                    variant="secondary"
+                  />
             <TFButton label='Add People' handleClick={handleSubmit} />
            </div>
            </div>

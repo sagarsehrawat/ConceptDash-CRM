@@ -6,8 +6,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import  {PERSON_DETAILS, PRIMARY_COLOR,HOST,GENERAL_NOTES,PROJECT_NOTES, ADD_GENERAL_NOTES,ADD_PROJECT_NOTES} from "../../../Constants/Constants";
-import TFSearchBar from '../../../../components/ui/TFSearchBar/TFSearchBar'
+import  { PRIMARY_COLOR,HOST,PROJECT_NOTES, ADD_GENERAL_NOTES,ADD_PROJECT_NOTES} from "../../../Constants/Constants";
 import NotesCard from './NotesCard'
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
 import axios from 'axios';
@@ -16,39 +15,23 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import nochat from '../icons/Frame 1000005109emptychat.svg'
 import moment from 'moment';
+import SERVICES from '../../../../services/Services';
 
-type PersonData = {
-  name: string;
-  contact_type: string;
-  job_title: string;
-  company_type: string;
-  email: string;
-  phone: string;
-  // Add other properties as needed
-};
+
 
 type Props={
   contactPersonData: any,
-  id: Number
+  id: number
   api:number
   setApi:Function
 }
 const    ProfileClient = (props:Props) => {
    const [value1, setValue1] = useState(1);
-    const [value, setValue] = useState("");
-    const [personData, setPersonData] = useState<PersonData>({
-      name: '',
-      contact_type: '',
-      job_title: '',
-      company_type: '',
-      email: '',
-      phone: '',
-      // Add other properties as needed with their initial values
-    });
+    const [personData, setPersonData] = useState<Person>();
         const[isLoading, setisLoading] = useState(false);
     const [generalText, setGeneralText] = useState('');
-    const [generalChat, setGeneralChat] = useState([]);
-    const [reminders, setReminders] = useState([]);
+    const [generalChat, setGeneralChat] = useState<any>([]);
+    const [reminders, setReminders] = useState<any>([]);
     const [projectChat, setProjectChat] = useState([]);
     const [showGeneralBox, setShowGeneralBox] = useState<Boolean>(true);
     const [showProjectBox, setShowProjectBox] = useState<Boolean>(true);
@@ -249,38 +232,28 @@ const handleChange = (event: React.SyntheticEvent, newValue: any) => {
        } as React.CSSProperties,
         }
         useEffect(() => {
+          setisLoading(true);
           const call = async () => {
-            setisLoading(true);
-              await axios
-                  .get(HOST + PERSON_DETAILS, {
-                      headers: {
-                          auth: "Rose " + localStorage.getItem("auth"),
-                          id: JSON.stringify(props.id) 
-                      },
-                  })
+              await SERVICES.getPersonDetails(props.id)
                   .then((res) => {
-                       setPersonData(res.data.res[0]);
+                    
+                       setPersonData(res);
                        props.setApi(props.api+1)
-                       console.log(personData);
+                       console.log(res);
                   })
                   .catch((err) => {
                       console.log(err);
                   });
           }
+          setisLoading(false);
           call()
-          setisLoading(false)
       }, [props.id]);  
       useEffect(() => {
         const call1 = async () => {
-            await axios
-                .get(HOST + GENERAL_NOTES, {
-                    headers: {
-                        auth: "Rose " + localStorage.getItem("auth"),
-                        peopleid: JSON.stringify(props.id)
-                    },
-                })
+            await SERVICES.getGeneralNote(props.id)
                 .then((res) => {
-                     res.data.res[0] ? setGeneralChat(res.data.res[0].general) : setGeneralChat([]);
+                    console.log(res);
+                     res.res[0] ? setGeneralChat(res.res[0].general) : setGeneralChat([]);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -290,6 +263,7 @@ const handleChange = (event: React.SyntheticEvent, newValue: any) => {
     }, [props.id,personData,props.api]) 
     useEffect(() => {
       const call1 = async () => {
+        
           await axios
               .get(HOST + PROJECT_NOTES, {
                   headers: {
@@ -299,6 +273,7 @@ const handleChange = (event: React.SyntheticEvent, newValue: any) => {
                   },
               })
               .then((res) => {
+                  console.log(res);
                    res.data.res[0] ? setProjectChat( res.data.res[0].chat ) : setProjectChat([]);
                    console.log(projectChat);
                    
@@ -310,18 +285,20 @@ const handleChange = (event: React.SyntheticEvent, newValue: any) => {
       call1()
   }, [props.id,personData,props.api]) 
   const updateReminders = () => {
+
     const generalReminders = (generalChat.length > 0 && generalChat?.filter((each: { reminder: string; }) => each.reminder === 'true')) || [];
     const projectReminders = (projectChat.length > 0 && projectChat?.filter((each: { reminder: string; })  => each.reminder === 'true')) || [];
     setReminders([...generalReminders, ...projectReminders]);
+
 }
 
 useEffect(() => {
     updateReminders();
+
 }, [generalChat, projectChat,props.api]); 
 
   const handleSave = async () => {
     try {
-      
       const response = await axios.post(HOST + ADD_GENERAL_NOTES,
         {
           name: localStorage.getItem("employeeName"),
@@ -374,16 +351,16 @@ useEffect(() => {
       // Handle error as needed
     }
   };
-
+ console.log(isLoading)
   return (
     isLoading ?
-          <div className='w-100' style={{ height: '492px' }}>
+          <div className='w-100' style={{ height: '492px'}}>
             <LoadingSpinner />
           </div> : 
-     <div style={{marginLeft:"20px", background: "#F8FAFB"}}>
+     <div style={{marginLeft:"20px", background: "#F8FAFB", flexGrow:"1"}}>
           <div style={styles.header}>
             <div style={{display: "flex",flexDirection: "column",justifyContent: "center",alignItems: "flex-start",}}>
-            <div style={styles.name}>{personData?.name} <TFChip value={personData?.contact_type}/></div>
+            <div style={styles.name}>{personData?.name} <TFChip value={personData?.contact_type ?? ''}/></div>
             <div style={styles.position}>{personData?.job_title}</div>
             </div>
             <div style={{display:"flex", gap:"12px"}}>  
@@ -392,17 +369,16 @@ useEffect(() => {
           </div>
           <div style={styles.details}>
             <div style={{ display: "flex", width: "120px", padding: "0px var(--8-pad, 8px)", flexDirection: "column", alignItems: "flex-start", gap: "var(--8-pad, 8px)" }}>
-              <div style={styles.subheading}>Label<TFChip value={personData?.company_type}/></div>
+              <div style={styles.subheading}>Label<TFChip value={personData?.company_type ?? ''}/></div>
               </div>
               <div style={{display: "flex", width: "210px", padding: "0px var(--8-pad, 8px) 0px 24px", flexDirection: "column", alignItems: "flex-start", gap: "var(--8-pad, 8px)", borderRight: "1px solid var(--New-Outline, #EBEDF8)"}}>
-          <div style={styles.subheading}>Project <div style={styles.headingdata}>Taskforce phase 2</div></div>
+          <div style={styles.subheading}>Project <div style={styles.headingdata}></div></div>
           </div>
           <div style={{ display: "flex", width: "218px", padding: "0px var(--8-pad, 8px) 0px 24px", flexDirection: "column", alignItems: "flex-start", gap: "var(--8-pad, 8px)" }}><div style={styles.subheading}>Email <div style={styles.headingdata}>{personData?.email}</div></div></div>
           <div style={{  display: "flex",flexDirection: "column",alignItems: "flex-start",padding: "0px var(--8-pad, 8px) 0px 24px", gap:"var(--8-pad, 8px)"}}><div style={styles.subheading}>Phone <div style={styles.headingdata}>{personData?.phone}</div></div></div>
           </div>
           <div style={{display:"flex"}}>
             <div style={styles.note}>
-               
               <div style={{display: "flex",padding: "4px 0px",justifyContent:"center",alignItems: "center",gap:"6px"}}>
                  <img src={notesIcon} alt=""/><div style={styles.name}>Notes</div>
                 </div>
@@ -458,11 +434,11 @@ useEffect(() => {
             </Box>
             <TabPanel value="1" style={{padding:'0px'}}>
             <div style={{ width: '100%', float: 'left', display:'flex', flexDirection:'column', gap:"16px",}}>
-              <TFSearchBar
+              {/* <TFSearchBar
           placeholder={'Project Name'}
           searchFunc={[value, setValue]}
           style={{ 'margin-right': '12px', }}
-        />
+        /> */}
           <div style={{display: "flex",width: "437px",flexDirection: "column",alignItems: "flex-start",gap: "5px"}}>
         { showProjectBox ?  (<div style={styles.textarea} onClick={()=>setShowProjectBox(false)}>
             <div style={{...styles.subcontent2, lineHeight: "24px", fontSize:"14px"}}>Take a note</div>
@@ -538,7 +514,7 @@ useEffect(() => {
             <div style={styles.name}>Notes Taken</div>
             {
     generalChat && generalChat.length > 0 ?
-        generalChat.map((each, index) => 
+        generalChat.map((each: { note: string; name: string; date: string; reminder: boolean; reminderDate: string; }, index: number) => 
             <NotesCard 
                 id={props?.id} 
                 setApi={props.setApi} 

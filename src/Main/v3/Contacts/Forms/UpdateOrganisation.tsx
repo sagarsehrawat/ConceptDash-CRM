@@ -5,22 +5,11 @@ import { HOST,UPDATE_ORGANIZATION } from "../../../Constants/Constants";
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
 import FormUtils from "../../../../utils/FormUtils.js";
 import axios from "axios";
-type Dataprop={
-  company_id: number;
-  company_name: string;
-  address: string;
-  company_type: string;
-  contact_type: string;
-  email: string;
-  website: string;
-  fax:string;
-  altphone: string;
-}
 
 type Props={
     show: boolean,
     setShow: Function
-    data:Dataprop,
+    data: Organization,
     api:number
     setApi: Function
 } 
@@ -44,7 +33,7 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
     email:data.email,
     website:data.website,
     phone:data.fax,
-    altphone:data.altphone,
+    alternate_phone:data.alternate_phone,
     cv: '',
   });
   const formUtils = FormUtils(setFormData);
@@ -60,17 +49,18 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post( HOST + UPDATE_ORGANIZATION,{
-        companyId: formData.company_id,
-        companyName: formData.companyName,
-        companyType: formData.label,
-        contactType: formData.contact,
+        company_id: formData.company_id,
+        company_name: formData.companyName,
+        company_type: formData.label,
+        contact_type: formData.contact,
         email: formData.email,
         website:formData.website,
         fax: formData.phone,
          cv: formData.cv,
          address: formData.address,
-         cityId: "+91567",  // Assuming "altphone" corresponds to "cityId"
-         notes: ""
+         city_id: 1,  // Assuming "altphone" corresponds to "cityId"
+         notes: "",
+         alternate_phone : formData.alternate_phone
       }, 
       {
         headers: {
@@ -80,18 +70,19 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
         console.log('API Response:', response);
         setApi(api+1)
         setFormData({
-            company_id:0,
-            companyName: '',
-            address: '',
-            label: 'Client',
-            contact: 'Primary',
-            email: '',
-            website:"",
-            phone: '',
-            altphone: '',
-            cv: '',
+          company_id:0,
+          companyName:'',
+          address:'',
+          label:'Client',
+          contact:'Primary',
+          email:'',
+          website:'',
+          phone:null,
+          alternate_phone:null,
+          cv: '',
         });
         setShow(false)
+        setApi(api+1)
       } 
      catch (error) {
       console.error('API Error:', error);
@@ -131,11 +122,11 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
         <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Address</div>
           <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter address" style={{...styles.text, fontWeight:"400px",display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} 
-          value={formData.address} name="address" required={true} onChange={(e) => handleForm(e.target.name, e.target.value)} />          </div>
+          value={formData.address ?? ''} name="address" required={true} onChange={(e) => handleForm(e.target.name, e.target.value)} />          </div>
            <div style={{display:"flex"}}>
            <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Label</div>
            <TFChip
-                          value={formData.label}
+                          value={formData.label ?? ''}
                           name="label"
                           onChange={handleForm}
                           options={["Client", "Consultant","Partner","Subconsultant"]}
@@ -143,29 +134,29 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
          </div>
           <div style={{display:"flex"}}>
              <div style={{...styles.text,display: "flex",width:"160px",alignItems: "center",gap:" var(--8-pad, 8px)"}}>Website</div>
-             <input  type="text" placeholder="ABC STARTUP" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} value={formData.website} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)} onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} name="website"></input>
+             <input  type="text" placeholder="ABC STARTUP" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} value={formData.website ?? ''} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)} onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} name="website"></input>
           </div>
           <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Contact Type</div>
           <TFChip        
                           name="contact"
-                          value={formData.contact}
+                          value={formData.contact ?? ''}
                           onChange={handleForm}
                           options={["Primary", "Secondary","Tertiary"]}
                         />
           </div>
           <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Email</div>
-          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter email id" style={{...styles.text, fontWeight:"400px",display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="email" value={formData.email} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter email id" style={{...styles.text, fontWeight:"400px",display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="email" value={formData.email ?? ''} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
          
           </div>
-          <div style={{display:"flex"}}>
+          {/* <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Alternate number</div>
-          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter alternative contact number" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="altphone" value={formData.altphone} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
-          </div>
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter alternative contact number" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="alternate_phone" value={formData.alternate_phone} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
+          </div> */}
           <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Fax</div>
-          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter Phone no." style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="phone" value={formData.phone} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter Phone no." style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="phone" value={formData.phone ?? ''} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
          
           </div>
           </div>  
@@ -208,10 +199,11 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
         </div>
         <div className='project-modal-footer w-100'>
         <div style={{display: "flex",gap: "20px",width:"624px",padding:" 16px 20px",justifyContent: "flex-end",alignItems: "flex-start",background: "#FFF",boxShadow: "0px -2px 2px 0px rgba(235, 233, 241, 0.45)"}}>
-            <button style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "center",alignItems: "center",gap: "var(--8-pad, 8px)", borderRadius: "5px",border: "1px solid var(--mob-primary-colour, #8361FE)",boxShadow: "0px 4px 8px 0px rgba(88, 82, 246, 0.25)"}}
-             onClick={()=>setShow(false)}>
-             Cancel
-            </button>
+        <TFButton
+                    label="Cancel"
+                    handleClick={() => setShow(false)}
+                    variant="secondary"
+                  />
             <TFButton label='Update Organization' handleClick={handleSubmit} />
            </div>
            </div>

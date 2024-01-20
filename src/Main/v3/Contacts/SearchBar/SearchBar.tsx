@@ -20,7 +20,7 @@ interface FilterType {
   companyType: (string | number)[],
 }
 const SearchBar = ({search,setSearch,api,setApi,name,setShow, } : Props) => {
- 
+     name = name === "org" ? "Organization" : "Person"
   return (
     <>
 <>

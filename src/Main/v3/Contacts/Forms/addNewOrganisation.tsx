@@ -1,10 +1,11 @@
 import React, {useState,useRef } from "react";
 import peopleblack from '../icons/people_black_24dp (2) 1.svg'
 import TFButton from "../../../../components/ui/TFButton/TFButton"
-import { HOST,ADD_ORGANIZATION } from "../../../Constants/Constants";
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
 import FormUtils from "../../../../utils/FormUtils.js";
-import axios from "axios";
+import SERVICES from "../../../../services/Services";
+import { useDispatch } from 'react-redux';
+import { showErrorModal } from "../../../../redux/slices/alertSlice";
 type Props={
     show: boolean,
     setShow: Function,
@@ -23,17 +24,17 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
     },
   };
   const [formData, setFormData] = useState({
-    companyName: '',
+    company_name: '',
     address: '',
-    label: 'Consultant',
-    contact: 'Secondary',
+    business_phone: '',
+    fax: '',
     email: '',
-    website:"",
-    phone: '',
-    altphone: '',
-    cv: '',
+    website: '',
+    contact_type: "Primary",
+    company_type: "Client" ,
   });
   const formUtils = FormUtils(setFormData);
+  const dispatch = useDispatch();
 
   const handleForm =  (key: string|number, value: string|number) => {
    
@@ -45,40 +46,38 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
   
   const handleSubmit = async () => {
     try {
-      const response = await axios.post( HOST + ADD_ORGANIZATION,{
-        companyName: formData.companyName,
-        companyType: formData.label,
-        contactType: formData.contact,
-        email: formData.email,
-        website:formData.website,
-        fax: '',
-         cv: formData.cv,
-         address: formData.address,
-         cityId: 1,
-      }, 
-      {
-        headers: {
-          auth: "Rose " + localStorage.getItem("auth"),
-        },
-      });
+      const response = await SERVICES.addOrganization(
+         formData.company_name,
+         formData.address,
+         formData.business_phone,
+         formData.fax,
+         formData.email,
+         formData.website,
+         formData.contact_type,
+         formData.company_type,
+
+      );
         console.log('API Response:', response);
 
         setFormData({
-            companyName: '',
-            address: '',
-            label: 'Client',
-            contact: 'Primary',
-            email: '',
-            website:"",
-            phone: '',
-            altphone: '',
-            cv: '',
+          company_name: '',
+          address: '',
+          business_phone: '',
+          fax: '',
+          email: '',
+          website: '',
+          contact_type: "Primary",
+          company_type: "Client" ,
         });
         setApi(api+1);
         setShow(false)
+  
       } 
      catch (error) {
       console.error('API Error:', error);
+      dispatch(showErrorModal("Something Went Wrong!"));
+
+
     }
      console.log(formData);
   };
@@ -103,10 +102,10 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
         <div style={{display: "flex",flexDirection: "column",alignItems: "flex-start",gap:" var(--8-pad, 8px)"}}> 
         <input
           type="text"
-          name="companyName"
+          name="company_name"
           className="project-input project-name-input"
           placeholder="Enter Organization Name"
-          value={formData.companyName}
+          value={formData.company_name}
           required={true}
           onChange={(e) => handleForm(e.target.name, e.target.value)}
           ref={inputRef}
@@ -120,8 +119,8 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
            <div style={{display:"flex"}}>
            <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Label</div>
            <TFChip
-                          name="label"
-                          value={formData.label}
+                          name="company_type"
+                          value={formData.company_type}
                           onChange={handleForm} 
                           options={["Client", "Consultant","Partner","Subconsultant"]}                        />
          </div>
@@ -132,8 +131,8 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
           <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Contact Type</div>
           <TFChip        
-                          name="contact"
-                          value={formData.contact}
+                          name="contact_type"
+                          value={formData.contact_type}
                           onChange={handleForm}
                           options={["Primary", "Secondary","Tertiary"]}
                         />
@@ -145,11 +144,11 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
           </div>
           <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Alternate number</div>
-          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter alternative contact number" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="altphone" value={formData.altphone} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter alternative contact number" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="fax" value={formData.fax} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
           </div>
           <div style={{display:"flex"}}>
           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Fax</div>
-          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter Phone no." style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="phone" value={formData.phone} required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter Phone no." style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="business_phone" value={formData.business_phone}required={true} onChange={(e) => handleForm(e.target.name, e.target.value)}></input>
          
           </div>
           </div>  
@@ -157,10 +156,11 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
         </div>
         <div className='project-modal-footer w-100'>
         <div style={{display: "flex",gap: "20px",width:"624px",padding:" 16px 20px",justifyContent: "flex-end",alignItems: "flex-start",background: "#FFF",boxShadow: "0px -2px 2px 0px rgba(235, 233, 241, 0.45)"}}>
-        <button style={{display: "flex",padding: "var(--8-pad, 8px) 16px",justifyContent: "center",alignItems: "center",gap: "var(--8-pad, 8px)", borderRadius: "5px",border: "1px solid var(--mob-primary-colour, #8361FE)",boxShadow: "0px 4px 8px 0px rgba(88, 82, 246, 0.25)"}}
-             onClick={()=>setShow(false)}>
-             Cancel
-            </button>
+        <TFButton
+                    label="Cancel"
+                    handleClick={() => setShow(false)}
+                    variant="secondary"
+                  />
             <TFButton label='Add Organization' handleClick={handleSubmit} />
            </div>
            </div>

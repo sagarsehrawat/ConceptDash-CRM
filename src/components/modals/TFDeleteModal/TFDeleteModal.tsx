@@ -10,9 +10,11 @@ type Props = {
   onHide: Function,
   onDelete: Function,
   label: string,
+  variant?: "default" | "custom",
+
 };
 
-const TFDeleteModal = ({ show, onHide, onDelete, label }: Props) => {
+const TFDeleteModal = ({ show, onHide, onDelete, label, variant = "default"  }: Props) => {
 
   const [value, setvalue] = useState<string>("")
 
@@ -39,12 +41,21 @@ const TFDeleteModal = ({ show, onHide, onDelete, label }: Props) => {
                     associated with this field  will be lost.
                   </div>
               </div>
+              {!variant || variant === "default" ? (
               <div className="tf-delete-modal-input">
-                  <TFInput name='input' placeholder='Type the word delete' width='100%' onChange={onChange}/>
+                <TFInput
+                  name='input'
+                  placeholder='Type the word delete'
+                  width='100%'
+                  onChange={onChange}
+                />
               </div>
+            ) : null}
+
               <div className="tf-delete-modal-footer d-flex d-row justify-content-between">
                   <TFButton label="Cancel" variant='secondary' className='tf-modal-delete-button-cancel' handleClick={()=>onHide()}/>
-                  <TFButton label="Yes, Delete" variant='primary' disabled={value!=="delete"} handleClick={()=>{onDelete(); setvalue(""); onHide();}} className='tf-modal-delete-button'/>
+                  <TFButton label="Yes, Delete" variant='primary' disabled={variant === "custom" ? false : value !== "delete"}
+                  handleClick={()=>{onDelete(); setvalue(""); onHide();}} className='tf-modal-delete-button'/>
               </div>
           </div>
         </div>

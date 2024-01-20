@@ -2,7 +2,7 @@ import React from 'react'
 import peopleicon from '../icons/people_black_24dp (2) 1.svg'
 type Props = {
     name : string,
-    count : number,
+    count : string,
 };
 
 const CardTemplate = (props: Props) => {

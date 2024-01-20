@@ -219,4 +219,64 @@ declare global {
     recieved_amount: number | null;
     balance: number | null;
   }
+
+  interface Organization {
+      alternate_phone?: any;    
+      company_id: number;
+      company_name: string;
+      label: string;
+      company_type_id:Array,
+      address: string | null,
+      city_id: number ,
+      business_phone: number | null,
+      fax: number | null,
+      email: string | null,
+      website: string | null,
+      notes: string | null,
+      contact_type: "Primary"| "Secondary" | "Tertiary" |  null,
+      cv: null,
+      category: string | null,
+      status: string | null,
+      events: {
+          "Open": Array,
+          "Click": Array,
+          "Bounce": Array,
+          "Delivery": Array,
+          "Complaint": Array,
+          "Subscription": Array
+      };
+      company_type: "Client" | "Partner" | "Consultant" | "SubConsultant" | null;
+      city: string;
+  }
+  interface Person {
+    id: number;
+    company_id: number;
+    company_type_id: number[];
+    name: string;
+    company_type: "Client" | "Partner" | "Consultant" | "SubConsultant" | null;
+    contact_type: "Primary" | "Secondary" | "Tertiary" | null;
+    email: string | null;
+    job_title: string | null;
+    phone: string;
+    cv: null;
+    remarks: string | null;
+    alternate_phone: string | null;
+    address: string;
+    city_id: number;
+    status: string;
+    events: {
+        "Open": any[];
+        "Click": any[];
+        "Bounce": any[];
+        "Delivery": any[];
+        "Complaint": any[];
+        "Subscription": any[];
+    };
+    label: string | null;
+    city: string;
+    company_name: string;
+    company_nameId? : number;
+} 
+
 }
+

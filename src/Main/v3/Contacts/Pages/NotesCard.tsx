@@ -3,11 +3,11 @@ import editicon from '../icons/edit_black_24dp (1) 2edit_grey.svg'
 import deleteicon from '../icons/delete_black_24dp 3.svg'
 import notificon from '../icons/notifications_black_24dp (3) 1.svg'
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
-import { HOST,UPDATE_GENERAL_NOTES, UPDATE_PROJECT_NOTES,DELETE_GENERAL_NOTES, DELETE_PROJECT_NOTES} from '../../../Constants/Constants';
-import axios from 'axios';
 import { Modal, Button } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
+import SERVICES from '../../../../services/Services';
 type Note = {
   note: string;
   name: string;
@@ -25,136 +25,81 @@ type Props={
      id: any
 }
 const NotesCard = (props : Props) => {
+  console.log(props);
    const [isDateChipOpen, setDateChipOpen] = useState<Boolean>(false);
    const [showModal, setShowModal] = useState<boolean>(false);
    const [editModal, setEditModal] = useState<string>(props.data.note);
-
+   const [del,showDel] = useState<boolean>(false);
    useEffect(() => {
     
     if (props.data && props.data.note) {
         setEditModal(props.data.note);
     }
 }, [props.data]); 
-   const handleDelete1 = () => {
-    axios.post(HOST + DELETE_PROJECT_NOTES, {
-      peopleId: props.id, 
-      projectId: 1,
-      index: props.index,
-    }, {
-      headers: {
-        auth: "Rose " + localStorage.getItem("auth")
-      }
-    },)
+   const handleDelete1 = async() => {
+    await SERVICES.deleteProjectNotes(props.id,1,props.index)
       .then((response) => {
-        console.log('API Updated:', response.data);
+        console.log('API Updated:', response);
         props.setApi(props.api+1);
       })
       .catch((error) => {
         console.error('Error updating API:', error);
       });
   };
-  const handleDelete = () => {
-    axios.post(HOST + DELETE_GENERAL_NOTES, {
-      peopleId: props.id, 
-      index: props.index,
-    }, {
-      headers: {
-        auth: "Rose " + localStorage.getItem("auth")
-      }
-    },)
+  const handleDelete = async() => {
+    await SERVICES.deleteGeneralNotes(props.id,props.index)
       .then((response) => {
-        console.log('API Updated:', response.data);
+        console.log('API Updated:', response);
         props.setApi(props.api+1);
       })
       .catch((error) => {
         console.error('Error updating API:', error);
       });
   };
-   const handleDateChange = () => {
-      axios.post(HOST + UPDATE_GENERAL_NOTES, {
-        name: props.data.name,
-        date: props.data.date,
-        notes: props.data.note,
-        peopleId: props.id,
-        index: props.index,
-        reminder: true,
-        reminderDate: props.data.date,
-      }, {
-        headers: {
-          auth: "Rose " + localStorage.getItem("auth")
-        }
-      },)
+   const handleDateChange = async() => {
+    await SERVICES.editGeneralNotes(props.data.name,props.data.date,props.data.note,props.id,props.index,true,'')
+    .then((response) => {
+      console.log('API Updated:', response);
+     setShowModal(false);
+     props.setApi(props.api+1)
+
+    })
         .then((response) => {
-          console.log('API Updated:', response.data);
+          console.log('API Updated:', response);
           props.setApi(props.api+1);
         })
         .catch((error) => {
           console.error('Error updating API:', error);
         });
     };
-    const handleDateChange1 = () => {
-      axios.post(HOST + UPDATE_PROJECT_NOTES, {
-        name: props.data.name,
-        date: props.data.date,
-        notes: props.data.note,
-        peopleId: props.id,
-        projectId: 1,
-        index: props.index,
-        reminder: true,
-        reminderDate: props.data.date,
-      }, {
-        headers: {
-          auth: "Rose " + localStorage.getItem("auth")
-        }
+    const handleDateChange1 = async() => {
+      await SERVICES.editProjectNotes(props.data.name,props.data.date,props.data.note,props.id,1,props.index,true,'')
+      .then((response) => {
+        console.log('API Updated:', response);
+       setShowModal(false);
+       props.setApi(props.api+1)
+
       })
-        .then((response) => {
-          console.log('API Updated:', response.data);
-          props.setApi(props.api+1)
-        })
-        .catch((error) => {
-          console.error('Error updating API:', error);
-        });
+      .catch((error) => {
+        console.error('Error updating API:', error);
+      });
     };
-    const handleEditChange = () => {
-      axios.post(HOST + UPDATE_GENERAL_NOTES, {
-        name: props.data.name,
-        date: props.data.date,
-        notes: editModal,
-        peopleId: props.id,
-        index: props.index,
-        reminder: props.data.reminder,
-        reminderDate: props.data.reminderDate,
-      }, {
-        headers: {
-          auth: "Rose " + localStorage.getItem("auth")
-        }
-      })
+    const handleEditChange = async() => {
+      await SERVICES.editGeneralNotes(props.data.name,props.data.date,editModal,props.id,props.index,props.data.reminder,props.data.reminderDate)
+          .then((response) => {
+            console.log('API Updated:', response);
+           setShowModal(false);
+           props.setApi(props.api+1)
+  
+          })
+          .catch((error) => {
+            console.error('Error updating API:', error);
+          });
+      };  
+    const handleEditChange1 = async() => {
+    await SERVICES.editProjectNotes(props.data.name,props.data.date,editModal,props.id,1,props.index,props.data.reminder,props.data.reminderDate)
         .then((response) => {
-          console.log('API Updated:', response.data);
-         setShowModal(false);
-         props.setApi(props.api+1)
-        })
-        .catch((error) => {
-          console.error('Error updating API:', error);
-        });
-    }
-    const handleEditChange1 = () => {
-      axios.post(HOST + UPDATE_PROJECT_NOTES, {
-        name: props.data.name,
-        date: props.data.date,
-        notes: editModal,
-        peopleId: props.id,
-        projectId:1,
-        index: props.index,
-        reminder: props.data.reminder,
-        reminderDate: props.data.reminderDate,
-      }, {
-        headers: {
-          auth: "Rose " + localStorage.getItem("auth")
-        }
-      })
-        .then((response) => {
-          console.log('API Updated:', response.data);
+          console.log('API Updated:', response);
          setShowModal(false);
          props.setApi(props.api+1)
 
@@ -228,7 +173,7 @@ const NotesCard = (props : Props) => {
             <div style={styles.subcontent1}>{props.data.name}&nbsp;&nbsp;&nbsp;&nbsp;{props.data.date}</div>
             <div style={styles.subcontent2}>
                <img src={editicon}  alt="" onClick={openModal}/>
-               <img src={deleteicon} alt="" onClick={props.value === "General" ?  handleDelete : handleDelete1} />
+               {props.value !== 'General' && <img src={deleteicon} alt="" onClick={()=>showDel(true)} />}
                {isDateChipOpen ? (
                <TFDateChip
                  onChange={(date) => {
@@ -267,7 +212,8 @@ const NotesCard = (props : Props) => {
           </Button>
         </Modal.Footer>
       </Modal>
-
+       {<TFDeleteModal variant= "custom" show={del} onHide={()=>showDel(false)} onDelete={props.value === "General" ?  handleDelete : handleDelete1} 
+          label='Notes'/>}
             </div>
             </div>
         </div>

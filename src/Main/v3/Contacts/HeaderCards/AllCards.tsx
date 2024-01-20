@@ -1,12 +1,12 @@
 
 import React, { useState,useEffect } from 'react'
 import peopleicon from '../icons/people_black_24dp (2) 1.svg'
-import {HOST, ORGANIZATION_COUNT,PEOPLE_COUNT } from '../../../Constants/Constants';
-import axios from 'axios'
+import SERVICES from '../../../../services/Services';
 type Props = {
     name : string,
     count : number,
     setValue1: Function,
+    api : number
 }
 
 const AllCards = (props: Props) => {
@@ -49,26 +49,25 @@ const AllCards = (props: Props) => {
         letterSpacing: '0.103px',
       },
       }
-      const [client, setClient] = useState<number>(0);
-      const [consultants, setConsultants] = useState<number>(0);
-      const [Subconsultant,setsubconsultant] = useState<number>(0)
-      const [partners, setParnters] = useState<number>(0);
+      const [client, setClient] = useState<string>('0');
+      const [consultants, setConsultants] = useState<string>('0');
+      const [partners, setParnters] = useState<string>('0');
+      const [total,setTotal] = useState<string>('0');
   
       useEffect(() => {
-        const apiUrl = props.name === 'People' ? HOST + PEOPLE_COUNT : HOST + ORGANIZATION_COUNT;
         const call = async () => {
-              await axios
-                  .get(apiUrl, {
-                      headers: {
-                          auth: "Rose " + localStorage.getItem("auth"),
-                      },
-                  })
+          await SERVICES.getOrgPeopleCount(props.name)
                   .then((res) => {
-                       res.data.res.map((each: { company_type: string; count_per_type: React.SetStateAction<number>; })=>{
+                    console.log(res);
+                     setClient('0');
+                     setConsultants('0');
+                     setParnters('0');
+                     setTotal('0')
+                       res.res.map((each: { company_type: string; count_per_type: React.SetStateAction<string>; total_count : React.SetStateAction<string> })=>{
                         if(each.company_type==='Consultant')  setConsultants(each.count_per_type)
                         else if(each.company_type==='Client')  setClient(each.count_per_type)
                         else if(each.company_type==='Partner')  setParnters(each.count_per_type)
-                        else if(each.company_type==='Subconsultant')  setsubconsultant(each.count_per_type)
+                       setTotal(each.total_count);
                        })
                   })
                   .catch((err) => {
@@ -76,7 +75,7 @@ const AllCards = (props: Props) => {
                   });
           }
           call()
-      }, [])
+      }, [props.api,props.name])
   return (
     <>            {console.log(props)}   
                   <div className='d-flex flex-row' style={styles.cardMain}>
@@ -84,24 +83,24 @@ const AllCards = (props: Props) => {
                <div style={{width:"48px", height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}}><img src={peopleicon} style={{width:"24px",height:"24px", margin:"12px"}} alt="" /></div>
                              <div style={{display:"flex",flexDirection:"column", alignItems:"flex-start"}}>
                              <p style={styles.topContainerHeading}>All {props.name}</p>
-                            <p style={{ ...styles.topContainerSubheading}}>{Number(client)+Number(partners)+Number(consultants)+Number(Subconsultant)}</p>
+                            <p style={{ ...styles.topContainerSubheading}}>{total}</p>
                              </div>
                         </div>
-                        <div style={styles.card} onClick={()=> props.setValue1("2")}>
+                        <div style={styles.card} onClick={()=> props.setValue1("Clients")}>
                         <div style={{width:"48px", height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}}><img src={peopleicon} style={{width:"24px",height:"24px", margin:"12px"}} alt="" /></div>
                              <div style={{display:"flex",flexDirection:"column", alignItems:"flex-start"}}>
                              <p style={styles.topContainerHeading}>Clients</p>
                             <p style={{ ...styles.topContainerSubheading}}>{client}</p>
                              </div>
                         </div>
-                        <div style={styles.card}  onClick={()=> props.setValue1("3")}>
+                        <div style={styles.card}  onClick={()=> props.setValue1("Consultants")}>
                             <div style={{width:"48px", height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}}><img src={peopleicon} style={{width:"24px",height:"24px", margin:"12px"}} alt="" /></div>
                              <div style={{display:"flex",flexDirection:"column", alignItems:"flex-start"}}>
                              <p style={styles.topContainerHeading}>Consultants</p>
                             <p style={{ ...styles.topContainerSubheading}}>{consultants}</p>
                              </div>
                         </div>
-                        <div style={styles.card}  onClick={()=> props.setValue1("4")}>
+                        <div style={styles.card}  onClick={()=> props.setValue1("Partners")}>
                         <div style={{width:"48px", height:"48px",borderRadius:"var(--8-pad, 8px)",background:"#F7F5FF"}}><img src={peopleicon} style={{width:"24px",height:"24px", margin:"12px"}} alt="" /></div>
                              <div style={{display:"flex",flexDirection:"column", alignItems:"flex-start"}}>
                              <p style={styles.topContainerHeading}>Partners</p>
@@ -109,7 +108,7 @@ const AllCards = (props: Props) => {
                              </div>
                         </div>
                     </div>
-                    <p className='heading-2'style={{marginLeft:"32px"}}>Total {props.name}</p>
+                    <p className='heading-2'style={{marginLeft:"32px"}}>Total {props.name == "org" ? "Organization" : "Person"}</p>
     </>
   )
 }

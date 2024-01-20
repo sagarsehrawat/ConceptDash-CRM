@@ -1,47 +1,40 @@
 import React,{useEffect, useState} from 'react';
 import CardTemplate from '../HeaderCards/CardTemplate'
 import SearchBar from '../SearchBar/SearchBar';
-import OrgTable from '../Tables/OrgTable';
-import axios from 'axios';
-import { ORGANIZATION_COUNT, PEOPLE_COUNT, HOST } from '../../../Constants/Constants';
-import PeopleTable from '../Tables/PeopleTable';
+import OrgTable from '../Tables/OrganizationTable/OrgTable';
+import PeopleTable from '../Tables/PeopleTable/PeopleTable';
 import AddNewOrganisation from '../Forms/addNewOrganisation';
 import AddNewPerson from '../Forms/AddnewPerson';
 import Pagination from '../Pagination/Pagination';
+import SERVICES from '../../../../services/Services';
 type Props= {
-    case: String;
+    case: string;
     setnav: Function
-    setOrganizationData : Function | null
-    setContactPersonData : Function | null
+    setOrganizationData? : Function
+    setContactPersonData? : Function 
 }
 const Partners = (props: Props) => {
     const [api, setApi] = useState<number>(0);
     const [value, setValue] = useState<string>('');
-    const [count,setCount] = useState<number>(0);
+    const [count,setCount] = useState<string>('0');
     const [show, setShow] = useState<boolean>(false)
     const [pages, setpages] = useState<number>(1);
     const [currPage, setcurrPage] = useState<number>(1);
     useEffect(() => {
-        const apiUrl = props.case === "org" ? HOST + ORGANIZATION_COUNT : HOST + PEOPLE_COUNT;
-
         const call = async () => {
-            await axios
-                .get(apiUrl, {
-                    headers: {
-                        auth: "Rose " + localStorage.getItem("auth"),
-                    },
-                })
+     await SERVICES.getOrgPeopleCount(props.case)
                 .then((res) => {
                      console.log(res);
-                     let clientData = res.data.res.filter((each: { company_type: string; }) => each.company_type === 'Partner');
-                     if (clientData.length > 0)  setCount(clientData[0].count_per_type);
+                     setCount('0');
+                     let clientData = res.res.filter((each: { company_type: string; }) => each.company_type === 'Partner');
+                     if (clientData && clientData.length > 0) setCount(clientData[0].count_per_type);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         }
         call()
-    }, [props.case])
+    }, [props.case, api])
 
       return (
           <>

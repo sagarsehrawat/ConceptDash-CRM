@@ -574,8 +574,8 @@ const Dashboard = () => {
     if (nav === 16) return <Announcements  isCollapsed={isCollapsed}/>
     if (nav === 18) return <TTMMain isCollapsed={isCollapsed}/>
     if(nav === 19)return <CampaignRoot isCollapsed={isCollapsed} />
-    if(nav === 20) return <AllOrganisations isCollapsed={isCollapsed} setnav={setnav} setOrganizationData={setOrganizationData}/>
-    if(nav === 21) return <People isCollapsed={isCollapsed} setnav={setnav}  setContactPersonData={setContactPersonData}/>
+    if(nav === 20) return <AllOrganisations variant="org" isCollapsed={isCollapsed} setnav={setnav} setOrganizationData={setOrganizationData}/>
+    if(nav === 21) return <People variant="people" isCollapsed={isCollapsed} setnav={setnav}  setContactPersonData={setContactPersonData}/>
     if(nav === 22) return <ContactPerson isCollapsed={isCollapsed} contactPersonData={contactPersonData} setnav={setnav}/>
     if(nav === 23) return <CompanyPage isCollapsed={isCollapsed} organizationData={organizationData} setnav={setnav} setContactPersonData={setContactPersonData}/>
     if(nav === 24) return <Finance variant="AR" />
