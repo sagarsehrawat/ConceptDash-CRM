@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect, useRef} from 'react'
 import editicon from '../icons/edit_black_24dp (1) 2edit_grey.svg'
 import deleteicon from '../icons/delete_black_24dp 3.svg'
 import notificon from '../icons/notifications_black_24dp (3) 1.svg'
@@ -8,6 +8,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
 import SERVICES from '../../../../services/Services';
+
 type Note = {
   note: string;
   name: string;
@@ -23,6 +24,7 @@ type Props={
    api:number
      setApi : Function
      id: any
+     projectId : number
 }
 const NotesCard = (props : Props) => {
   console.log(props);
@@ -37,7 +39,7 @@ const NotesCard = (props : Props) => {
     }
 }, [props.data]); 
    const handleDelete1 = async() => {
-    await SERVICES.deleteProjectNotes(props.id,1,props.index)
+    await SERVICES.deleteProjectNotes(props.id,props.projectId,props.index)
       .then((response) => {
         console.log('API Updated:', response);
         props.setApi(props.api+1);
@@ -56,8 +58,8 @@ const NotesCard = (props : Props) => {
         console.error('Error updating API:', error);
       });
   };
-   const handleDateChange = async() => {
-    await SERVICES.editGeneralNotes(props.data.name,props.data.date,props.data.note,props.id,props.index,true,'')
+   const handleDateChange = async(value: string) => {
+    await SERVICES.editGeneralNotes(props.data.name,props.data.date,props.data.note,props.id,props.index,true,value)
     .then((response) => {
       console.log('API Updated:', response);
      setShowModal(false);
@@ -72,8 +74,9 @@ const NotesCard = (props : Props) => {
           console.error('Error updating API:', error);
         });
     };
-    const handleDateChange1 = async() => {
-      await SERVICES.editProjectNotes(props.data.name,props.data.date,props.data.note,props.id,1,props.index,true,'')
+    const handleDateChange1 = async(value: any) => {
+      console.log(value);
+      await SERVICES.editProjectNotes(props.data.name,props.data.date,props.data.note,props.id,props.projectId,props.index,true,value)
       .then((response) => {
         console.log('API Updated:', response);
        setShowModal(false);
@@ -97,7 +100,7 @@ const NotesCard = (props : Props) => {
           });
       };  
     const handleEditChange1 = async() => {
-    await SERVICES.editProjectNotes(props.data.name,props.data.date,editModal,props.id,1,props.index,props.data.reminder,props.data.reminderDate)
+    await SERVICES.editProjectNotes(props.data.name,props.data.date,editModal,props.id,props.projectId,props.index,props.data.reminder,props.data.reminderDate)
         .then((response) => {
           console.log('API Updated:', response);
          setShowModal(false);
@@ -116,6 +119,19 @@ const NotesCard = (props : Props) => {
    setShowModal(false);
  };
 
+ const dateChipRef = useRef(null);
+
+//  useEffect(() => {
+//    const handleClickOutside = (event: { target: any }) => {
+//      if (dateChipRef.current && !dateChipRef.current.contains(event.target)) {
+//        setDateChipOpen(false);
+//      }
+//    };
+//    document.addEventListener('click', handleClickOutside);
+//    return () => {
+//      document.removeEventListener('click', handleClickOutside);
+//    };
+//  }, [dateChipRef]);
      const styles={
         Card:{
             display: 'flex',
@@ -173,14 +189,16 @@ const NotesCard = (props : Props) => {
             <div style={styles.subcontent1}>{props.data.name}&nbsp;&nbsp;&nbsp;&nbsp;{props.data.date}</div>
             <div style={styles.subcontent2}>
                <img src={editicon}  alt="" onClick={openModal}/>
-               {props.value !== 'General' && <img src={deleteicon} alt="" onClick={()=>showDel(true)} />}
+               <img src={deleteicon} alt="" onClick={()=>showDel(true)} />
                {isDateChipOpen ? (
                <TFDateChip
-                 onChange={(date) => {
-                 console.log(props.data);
-                 console.log(date);
-                 props.value === "General" ?  handleDateChange() : handleDateChange1();
-                setDateChipOpen(!isDateChipOpen) ;
+                 name={props.projectId}
+                 value = { props.data.reminderDate ?? props.data.date}
+                 tableRef={dateChipRef}
+                 onChange={(name, value) => {
+                 console.log(name,value);
+                 props.value === "General" ?  handleDateChange(value) : handleDateChange1(value);
+                 setDateChipOpen(!isDateChipOpen) ;
                  }}
                />
              ):

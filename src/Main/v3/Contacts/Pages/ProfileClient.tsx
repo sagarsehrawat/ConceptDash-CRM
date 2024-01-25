@@ -1,21 +1,17 @@
 import React,{useState,useEffect} from 'react'
 import TFButton from '../../../../components/ui/TFButton/TFButton'
 import notesIcon from '../icons/Layer_1notes.svg'
-import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
-import  { PRIMARY_COLOR,HOST,PROJECT_NOTES, ADD_GENERAL_NOTES,ADD_PROJECT_NOTES} from "../../../Constants/Constants";
 import NotesCard from './NotesCard'
 import TFChip from '../../../../components/form/TFChip/TFChip.js';
-import axios from 'axios';
 import LoadingSpinner from '../../../../Main/Loader/Loader';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import nochat from '../icons/Frame 1000005109emptychat.svg'
-import moment from 'moment';
+import moment, { MomentInput } from 'moment';
 import SERVICES from '../../../../services/Services';
+import TFTypeahead from '../../../../components/form/TFTypeahead/TFTypeahead.js';
+import Utils from '../../../../utils/Utils';
+import NoteTabs from '../Tabs/NoteTabs.tsx';
 
 
 
@@ -26,23 +22,50 @@ type Props={
   setApi:Function
 }
 const    ProfileClient = (props:Props) => {
-   const [value1, setValue1] = useState(1);
     const [personData, setPersonData] = useState<Person>();
         const[isLoading, setisLoading] = useState(false);
     const [generalText, setGeneralText] = useState('');
     const [generalChat, setGeneralChat] = useState<any>([]);
     const [reminders, setReminders] = useState<any>([]);
-    const [projectChat, setProjectChat] = useState([]);
+    const [projectChat, setProjectChat] = useState<any>([]);
     const [showGeneralBox, setShowGeneralBox] = useState<Boolean>(true);
     const [showProjectBox, setShowProjectBox] = useState<Boolean>(true);
-
+    const [projectList, setProjectList] = useState<any>()
     const [projectText, setProjectText] =useState('');
+    const [projectId, setProjectId] = useState<any>(null);
+    const [selectedTab, setselectedTab] = useState<string>("Project");
+
+useEffect(()=>{
+  setisLoading(true);
+  const call = async()=>{
+    await SERVICES.getProjectList()
+    .then((res)=>{
+        console.log("we here!!")
+        console.log(res);
+        if(res.success)
+        setProjectList(Utils.convertToTypeaheadOptions(res.res, 'project_name', 'project_id'));
+      })
+    .catch((err)=>{
+      console.log(err)
+    });
+  }
+  setisLoading(false);
+  console.log(projectList);
+
+  call();
+},[])
+
+const handleproject = (key: any,val: any) => {
+  // setProjectId(null);
+   console.log(key)
+   setProjectId(val);
+   if(val.label == '' && val.value == '')
+    setProjectId(null);
+    props.setApi(props.api+1);
+   console.log(projectId);
 
 
-const handleChange = (event: React.SyntheticEvent, newValue: any) => {
-  console.log(event);
-  setValue1(newValue);
-};
+}
 
     const styles={
         header:{
@@ -264,17 +287,10 @@ const handleChange = (event: React.SyntheticEvent, newValue: any) => {
     useEffect(() => {
       const call1 = async () => {
         
-          await axios
-              .get(HOST + PROJECT_NOTES, {
-                  headers: {
-                      auth: "Rose " + localStorage.getItem("auth"),
-                      peopleid: JSON.stringify(props.id),
-                      projectid: 1 
-                  },
-              })
+          await SERVICES.getProjectNote( props.id, projectId?.value ?? 1)
               .then((res) => {
                   console.log(res);
-                   res.data.res[0] ? setProjectChat( res.data.res[0].chat ) : setProjectChat([]);
+                   res.res[0] ? setProjectChat( res.res[0].chat ) : setProjectChat([]);
                    console.log(projectChat);
                    
               })
@@ -299,21 +315,12 @@ useEffect(() => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.post(HOST + ADD_GENERAL_NOTES,
-        {
-          name: localStorage.getItem("employeeName"),
-          date: moment().format('YYYY-MM-DD'),
-          notes: generalText,
-          reminder: 'false',
-          peopleId: JSON.stringify(props.id), 
-        },
-        {
-          headers: {
-            auth: "Rose " + localStorage.getItem("auth"),
-          },
-        }
+      const response = await SERVICES.addGeneralNotes( localStorage.getItem("employeeName"),
+            moment().format('D MMM, YYYY'),
+             generalText,
+             'false',
+             props.id, 
       );
-
       setGeneralText('');
       setShowProjectBox(false); 
       props.setApi(props.api+1)
@@ -326,20 +333,14 @@ useEffect(() => {
   const handleSave2 = async () => {
     try {
       
-      const response = await axios.post(HOST + ADD_PROJECT_NOTES,
-        {
-          name: localStorage.getItem("employeeName"),
-          date:moment().format('YYYY-MM-DD'),
-          notes: projectText,
-          reminder: 'false',
-          peopleId: props.id, 
-          projectId: 1
-        },
-        {
-          headers: {
-            auth: "Rose " + localStorage.getItem("auth"),
-          },
-        }
+      const response = await SERVICES.addProjectNotes
+      (
+           localStorage.getItem("employeeName"),
+          moment().format('D MMM, YYYY'),
+          projectText,
+          'false',
+           props.id, 
+           projectId.value
       );
 
       setProjectText('');
@@ -382,65 +383,21 @@ useEffect(() => {
               <div style={{display: "flex",padding: "4px 0px",justifyContent:"center",alignItems: "center",gap:"6px"}}>
                  <img src={notesIcon} alt=""/><div style={styles.name}>Notes</div>
                 </div>
-                <Box
-          sx={{
-            width: "100%",
-            typography: "body1",
-            float: "left",
-          }}
-          style={{ margin: "0" }}>
-                <TabContext value={value1.toString()}>
-            <Box sx={{}}>
-              <TabList
-                centered
-                onChange={handleChange}
-                aria-label=""
-                TabIndicatorProps={{
-                  style: {
-                    backgroundColor: PRIMARY_COLOR,
-                  },
-                }}
-                sx={{                
-                  float: "left",
-                  height: "57px",
-                  marginBottom:"16px"
-                }}
-              >
-                <Tab
-                  style={{
-                    color: value1 == 1 ? PRIMARY_COLOR : "#70757A",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    paddingBottom: 0
-                  }}
-                  sx={{ fontSize: 12,  textTransform :"none" }}
-                  label="Project"
-                  value="1"
-                />
-                <Tab
-                  style={{
-                    color: value1 == 2 ? PRIMARY_COLOR : "#70757A",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    paddingBottom: 0,
-                  }}
-                  sx={{ fontSize: 12,  textTransform :"none" }}
-                  label="General"
-                  value="2"
-                />
-              </TabList>
-            </Box>
-            <TabPanel value="1" style={{padding:'0px'}}>
+            <NoteTabs
+            selectedTab={selectedTab}
+            setselectedTab={setselectedTab}
+      />
+            {selectedTab == "Project" &&
             <div style={{ width: '100%', float: 'left', display:'flex', flexDirection:'column', gap:"16px",}}>
-              {/* <TFSearchBar
-          placeholder={'Project Name'}
-          searchFunc={[value, setValue]}
-          style={{ 'margin-right': '12px', }}
-        /> */}
+         <TFTypeahead
+            name='project_name'
+            placeholder='Search Project'
+            width='100%'
+            onChange={handleproject}
+            options={projectList}
+          />    
           <div style={{display: "flex",width: "437px",flexDirection: "column",alignItems: "flex-start",gap: "5px"}}>
-        { showProjectBox ?  (<div style={styles.textarea} onClick={()=>setShowProjectBox(false)}>
+        { (showProjectBox ) ?  (<div style={styles.textarea} onClick={()=>setShowProjectBox(false)}>
             <div style={{...styles.subcontent2, lineHeight: "24px", fontSize:"14px"}}>Take a note</div>
            </div>) : 
            ( <div>
@@ -461,21 +418,22 @@ useEffect(() => {
        
         <div style={{display: "flex",alignItems: "flex-start",gap: "var(--12-pad, 12px)"}}>
         <button style={styles.resume} onClick={()=>setShowProjectBox(true)}>Cancel</button>
-        <TFButton label="Save" handleClick={handleSave2}  disabled={!projectText || projectText.trim() === ''} />
+        <TFButton label="Save" handleClick={handleSave2}  disabled={(!projectText || projectText.trim() === '') ||  projectId ==null} /> 
         </div>
         </div>
         </div> )}
        </div>
-          <div style={styles.name}>Notes Taken</div>
+          <div style={styles.name}>{projectId ? `Notes Taken for ${projectId.label}`:`Notes Taken`}</div>
           {
-    projectChat && projectChat.length > 0 ?
-    projectChat.map((each, index) => 
+    projectChat && projectId && projectChat.length > 0 ?
+    projectChat.map((each: { note: string; name: string; date: string; reminder: boolean; reminderDate: string; }, index: number) => 
         <NotesCard 
             id={props?.id} 
             data={each} 
             index={index} 
             setApi={props.setApi} 
-            api={props.api} 
+            api={props.api}
+            projectId = {projectId.value}
             value="Project"
         />
     ) :
@@ -483,9 +441,8 @@ useEffect(() => {
         <img src={nochat} alt="No Chat Available"/>
     </div>
 }
-    </div>
-            </TabPanel>
-            <TabPanel value="2" style={{padding:'0px'}}>
+    </div>}
+           {selectedTab == "General" && 
             <div style={{ width: '100%', float: 'left', display:'flex', flexDirection:'column', gap:"16px" }}>
             { showGeneralBox ?  (<div style={styles.textarea} onClick={()=>setShowGeneralBox(false)}>
             <div style={{...styles.subcontent2, lineHeight: "24px", fontSize:"14px"}}>Take a note</div>
@@ -521,6 +478,7 @@ useEffect(() => {
                 api={props.api} 
                 data={each} 
                 index={index} 
+                projectId = {1}
                 value="General"
             />
         ) :
@@ -528,20 +486,18 @@ useEffect(() => {
             <img src={nochat} alt="No General Chat Available"/>
         </div>
 }
-              </div>
-            </TabPanel>
-          </TabContext>
-          </Box></div>
+              </div>}
+      </div>
           <div style={styles.reminders}>
               <div style={styles.remindersHeading}>Reminders</div>
               {reminders && reminders.length > 0  ? (<div style={styles.reminderContents}>
               {
-reminders?.map((each: { note: string; name: string }) => {
+reminders?.map((each: { reminderDate: MomentInput; note: string; name: string; }) => {
         return (
             <div style={styles.reminderBox}>
                 <div style={{...styles.headingdata, padding:"0px 16px"}} dangerouslySetInnerHTML={{ __html: each.note }} />
                 <div style={styles.reminderDate}>
-                    {each.name}
+                    {moment(each.reminderDate).format("DD MMM, YYYY")}
                 </div>
             </div>
         );

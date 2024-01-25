@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, ProjectCountResponse, GetRostersListResponse, GetEmployeesListResponse, GetProjectsResponse, UpdateResponse, GetProjectById, GetTrackingRfpsResponse, BudgetCountResponse, GetBudgetCitiesResponse, GetCityBudgetResponse, ProposalCountResponse ,GetProposalsResponse,GetProposalById, GetOrganizationsListResponse, GetInvoicesResponse, GetInvoiceProjectResponse, GetInvoiceDetailResponse, GetFinanceCountResponse, orgLableUpdateResponce, peopleLabelUpdateResponce, getPeopleResponce, getOrganizationsResponce,OrganizationList,OrgPeopleCount,orgDetails, editProjectNote, generalNoteList,getAllPeopleInOrganization} from "Services";
+import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, ProjectCountResponse, GetRostersListResponse, GetEmployeesListResponse, GetProjectsResponse, UpdateResponse, GetProjectById, GetTrackingRfpsResponse, BudgetCountResponse, GetBudgetCitiesResponse, GetCityBudgetResponse, ProposalCountResponse ,GetProposalsResponse,GetProposalById, GetOrganizationsListResponse, GetInvoicesResponse, GetInvoiceProjectResponse, GetInvoiceDetailResponse, GetFinanceCountResponse, orgLableUpdateResponce, peopleLabelUpdateResponce, getPeopleResponce, getOrganizationsResponce,OrganizationList,OrgPeopleCount,orgDetails, editProjectNote, generalNoteList,getAllPeopleInOrganization, getProjectListResponse,projectNoteList} from "Services";
 import moment from "moment";
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -563,6 +563,23 @@ const SERVICES = {
         } catch (error) {
             throw error;
         }
+    },
+
+    getProjectList : async () : Promise<getProjectListResponse> =>{
+      try{
+        const response = await axios.get(APIS.GET_PROJECT_LIST,{
+            headers:{
+                auth :"Rose " + localStorage.getItem("auth")
+            }
+        });
+        if(response.data.success == false)
+           throw response.data as ErrorResponse
+
+           return response.data as getProjectListResponse
+      }
+      catch(error){
+        throw error
+      }
     },
 
     getProposals: async (limit: number, currentPage: number, filter: Object, search: string, sort: string, employeeId: string): Promise<GetProposalsResponse> => {
@@ -1619,9 +1636,67 @@ const SERVICES = {
                         if(response.data.success == false)
                          throw response.data as ErrorResponse
                         return response.data as generalNoteList
-                    }
+                    },
+                    getProjectNote : async(peopleId: number, projectId: number) :Promise<projectNoteList> =>{
+                        const response = await  axios
+                        .get(APIS.PROJECT_NOTES, {
+                            headers: {
+                                auth: "Rose " + localStorage.getItem("auth"),
+                                peopleid: JSON.stringify(peopleId),
+                                projectid : projectId
+                            },
+                        })
+                        if(response.data.success == false)
+                         throw response.data as ErrorResponse
+                        return response.data as projectNoteList
+                   },
+                   addGeneralNotes : async(name : string| null, date: string,note : string,reminder: string,peopleId: string | number) : Promise<AddResponse> =>{
+                    const response = await axios.post(APIS.ADD_GENERAL_NOTES,
+                        {
+                          name: name,
+                          date: date,
+                          notes: note,
+                          reminder: reminder,
+                          peopleId: peopleId, 
+                        },
+                        {
+                          headers: {
+                            auth: "Rose " + localStorage.getItem("auth"),
+                          },
+                        }
+                      );
+
+                      if(response.data.success == false)
+                       throw response.data as ErrorResponse
+
+                       return response.data as AddResponse
+                   },
+
+                   addProjectNotes : async(name : string| null, date: string,note : string,reminder: string,peopleId: number, projectId : number) : Promise<AddResponse> =>{
+                    const response = await axios.post(APIS.ADD_PROJECT_NOTES,
+                        {
+                          name: name,
+                          date: date,
+                          notes: note,
+                          reminder: reminder,
+                          peopleId: peopleId,
+                          projectId : projectId 
+                        },
+                        {
+                          headers: {
+                            auth: "Rose " + localStorage.getItem("auth"),
+                          },
+                        }
+                      );
+
+                      if(response.data.success == false)
+                       throw response.data as ErrorResponse
+
+                       return response.data as AddResponse
+                   }
+
+                   }
                  
       
-};
 
 export default SERVICES;

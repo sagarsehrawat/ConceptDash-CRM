@@ -11,6 +11,7 @@ const APIS = {
     GET_PROJECT_CATEGORIES : '/api/get/list/projectCategories',
     GET_MANAGERS_LIST : '/api/get/list/managers',
     GET_EMPLOYEES_LIST : '/api/get/employeeNames',
+    GET_PROJECT_LIST : '/project/fetch/list',
     GET_RFPS : '/api/get/page/rfps',
     GET_TRACKING_RFPS : '/api/get/page/trackingrfps',
     GET_PROJECTS : '/project/fetch',

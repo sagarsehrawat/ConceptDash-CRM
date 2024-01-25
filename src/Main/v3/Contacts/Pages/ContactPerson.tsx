@@ -117,15 +117,15 @@ lineHeight: "20px", /* 142.857% */
           await SERVICES.getOrganizationDetails(props.contactPersonData.company_id)
               .then((res) => {
                    console.log(res.res[0]);
-                   setOrganisationData(res.res[0]);
-                   setIsLoading(false);
-                 
+                   setOrganisationData(res.res[0]);                 
               })
               .catch((err) => {
                   console.log(err);
               });
-      }
+     }
       call()
+      setIsLoading(false);
+
   }, [])  
 
   useEffect(() => {

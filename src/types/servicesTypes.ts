@@ -59,6 +59,13 @@ declare module "Services"{
             company_name : string,
         }>
     }
+    export interface getProjectListResponse {
+        success : boolean,
+        res : Array<{
+            project_id : number | string,
+            project_name : string
+        }>
+    }
 
     export interface GetDepartmetnsResponse {
         success : boolean,
@@ -259,7 +266,19 @@ declare module "Services"{
                     reminderDate : string 
                 }>
             }>
-    }
+    }   
+    export interface projectNoteList {
+        success : boolean
+        res : Array<{
+            chat : Array<{
+                date : string,
+                name : string,
+                note : string,
+                reminder : boolean,
+                reminderDate : string 
+            }>
+        }>
+}
     export interface getAllPeopleInOrganization {
         success : boolean
         res : Array<Person>

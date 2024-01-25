@@ -1412,7 +1412,7 @@ const Dashboard = () => {
                         : mystyles.sidebarMenuItemText
                     }
                   >
-                    Organisations
+                    Organizations
                   </p>
                 </div>:<></>}
                 {prop2?<div
