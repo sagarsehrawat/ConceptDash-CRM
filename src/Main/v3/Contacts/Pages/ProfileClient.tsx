@@ -209,7 +209,7 @@ useEffect(() => {
             onChange={handleproject}
             options={projectList}
           />    
-          <div style={{display: "flex",width: "437px",flexDirection: "column",alignItems: "flex-start",gap: "5px"}}>
+          <div style={{display: "flex",flexDirection: "column",gap: "5px"}}>
         { (showProjectBox ) ?  (<div className={Styles.textarea} onClick={()=>setShowProjectBox(false)}>
             <div className={Styles.subcontent2} style={{ lineHeight: "24px", fontSize:"14px"}}>Take a note</div>
            </div>) : 
