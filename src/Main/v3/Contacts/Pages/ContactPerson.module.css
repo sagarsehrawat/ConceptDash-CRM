@@ -1,0 +1,133 @@
+.card {
+    width: -webkit-fill-available;
+    height: 225px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    border: 1px solid var(--New-Outline, #EBEDF8);
+    background: #FFF;
+    margin: 20px;
+  }
+  .contactPersonMain{
+        height: 100vh;
+        width: 350px;
+        flex-shrink: 0;
+        border-right: 1px solid var(--New-Outline, #EBEDF8);
+        background: #FFF;      
+  }
+  .borderLine{
+        border: 1px solid #EBEDF8;
+        background: #E8EAEF;
+        height: 1px;
+        flex-shrink: 0;
+        margin-top: 12px;
+        margin-bottom: 16px;      
+  }
+  .allPeopleCard{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--8-pad, 8px);
+        align-self: stretch;      
+  }
+  .allPeopleCard2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+  }
+  .allPeopleCardText {
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+  }
+  
+  
+  .company {
+    color: #728492;
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+  
+  .companyName {
+    color: #3D424F;
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    margin-left: 20px;
+  }
+  
+  .companyDetails {
+    color: var(--New-grey, #728492);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    margin-left: 20px;
+    margin-bottom: 12px;
+    margin-top: 2px;
+  }
+  
+  .searchCard {
+    display: flex;
+    padding: 16px 16px 16px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--8-pad, 8px);
+    border-radius: 16px;
+    border: 1px solid var(--New-Outline, #EBEDF8);
+    margin: 16px 20px;
+  }
+  
+  .searchCard1 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--8-pad, 8px);
+    align-self: stretch;
+  }
+  
+  peopleCard {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--12-pad, 12px);
+    align-self: stretch;
+  }
+  
+  .backbtn {
+    width: 85px;
+    height: 37px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    border: 1px solid #E8EAEF;
+    background: #FFF;
+    position: fixed;
+    top: 8px;
+    left: 246px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    gap: 5px;
+  }
+  
+  .back {
+    color: #37325A;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+  }
+  

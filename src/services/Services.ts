@@ -1556,7 +1556,7 @@ const SERVICES = {
                      return response.data as DeleteResponse
                  },
                  deleteGeneralNotes : async (peopleId : number,index: number) : Promise<DeleteResponse> =>{
-                    const  response = await  axios.post(APIS.DELETE_PROJECT_NOTES, {
+                    const  response = await  axios.post(APIS.DELETE_GENERAL_NOTES, {
                         peopleId: peopleId, 
                         index: index,
                       }, {

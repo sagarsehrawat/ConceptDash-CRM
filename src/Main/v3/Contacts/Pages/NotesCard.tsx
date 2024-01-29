@@ -8,7 +8,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
 import SERVICES from '../../../../services/Services';
-
+import Styles from './NotesCard.module.css'
 type Note = {
   note: string;
   name: string;
@@ -132,62 +132,12 @@ const NotesCard = (props : Props) => {
 //      document.removeEventListener('click', handleClickOutside);
 //    };
 //  }, [dateChipRef]);
-     const styles={
-        Card:{
-            display: 'flex',
-            padding: 'var(--12-pad, 12px) 16px',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            gap: '5 px',
-            alignSelf: 'stretch',
-            borderRadius: 'var(--12-pad, 12px)',
-  border: '1px solid var(--New-Outline, #EBEDF8)',
-  background: '#FFF',
-        }  as React.CSSProperties,
-        content:{
-            color: 'var(--Black-text, #3D424F)',
-            fontFamily: 'Roboto',
-            fontSize: '14px',
-            fontStyle: 'normal',
-            fontWeight: 400,
-            lineHeight: '24px', // 171.429%
-            width: '403px'
-          },
-          subcontent:{
-            display: 'flex',
-            padding: '0px var(--8-pad, 8px)',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            alignSelf: 'stretch',
-          },
-          subcontent1:{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--12-pad, 12px)',
-                    color: 'var(--New-grey, #728492)',
-                    fontFamily: 'Roboto',
-                    fontSize: '12px',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    lineHeight: '16px', // 133.333%
-                  
-          },
-         subcontent2:{ 
-          display: 'flex',
-          alignItems: 'center',
-          gap: 'var(--8-pad, 8px)',
-          // padding : '0px var(--8-pad, 8px)',
-          // justifyContent: 'space-between',
-          // alignSelf: 'stretch'
-        }   
-          
-     }
   return (
-    <div style={styles.Card}>
-        <div style={styles.content} dangerouslySetInnerHTML={{ __html: props.data.note }} />
-        <div style={styles.subcontent}>
-            <div style={styles.subcontent1}>{props.data.name}&nbsp;&nbsp;&nbsp;&nbsp;{props.data.date}</div>
-            <div style={styles.subcontent2}>
+    <div className={Styles.Card}>
+        <div className={Styles.content} dangerouslySetInnerHTML={{ __html: props.data.note }} />
+        <div className={Styles.subcontent}>
+            <div className={Styles.subcontent1}>{props.data.name}&nbsp;&nbsp;&nbsp;&nbsp;{props.data.date}</div>
+            <div className={Styles.subcontent2}>
                <img src={editicon}  alt="" onClick={openModal}/>
                <img src={deleteicon} alt="" onClick={()=>showDel(true)} />
                {isDateChipOpen ? (
