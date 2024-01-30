@@ -109,7 +109,7 @@ const OrgTable = (props: Props) => {
         };
 
         fetchData();
-    }, [props.search,props.api,props.currPage]);
+    }, [props.search, props.api, props.currPage]);
     return (
         <> 
          {isLoading ?

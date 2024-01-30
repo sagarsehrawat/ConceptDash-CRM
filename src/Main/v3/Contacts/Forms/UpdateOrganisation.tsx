@@ -95,7 +95,7 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
             className='tf-modal-backdrop d-flex justify-content-end align-items-start'
             >
                <div>
-      <div style={{display: "inline-flex", padding: "54px 48px",flexDirection: "column", alignItems: "flex-start", gap: "20px", background:"#fff", height:"900px"}}>
+      <div style={{display: "inline-flex",margin: "auto",  padding: "54px 48px",flexDirection: "column", alignItems: "flex-start", gap: "20px", background:"#fff", height:"100vh", width: "50vw"}}>
         <div style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -197,8 +197,8 @@ const UpdateOrganisation= ({setShow,data,setApi,api}: Props) => {
            </div>
         </div> */}
         </div>
-        <div className='project-modal-footer w-100'>
-        <div style={{display: "flex",gap: "20px",width:"624px",padding:" 16px 20px",justifyContent: "flex-end",alignItems: "flex-start",background: "#FFF",boxShadow: "0px -2px 2px 0px rgba(235, 233, 241, 0.45)"}}>
+        <div className='project-modal-footer w-100' style={{boxShadow: "none"}}>
+        <div style={{display: "flex",gap: "20px",marginRight: "20px" ,justifyContent: "flex-end",alignItems: "flex-start",border: "transparent"}}>
         <TFButton
                     label="Cancel"
                     handleClick={() => setShow(false)}
