@@ -161,7 +161,7 @@ const CompanyTable = (props : Props) => {
   </div>
 </div>
  </div>
-       {edit && <UpdateAddPerson  setApi={setApi} show={edit} setShow={setEdit} data={editform} api={api} />}
+       {edit && <UpdateAddPerson setselectedPeople={setselectedPeople}  setApi={setApi} show={edit} setShow={setEdit} data={editform} api={api} />}
        {<TFDeleteModal show={showDelete} onHide={()=>{setShowDelete(false);setselectedPeople([]); setApi(api+1)}} onDelete={handleDelete} label='People'/>}
 
         </>

@@ -1,0 +1,48 @@
+.Card {
+    display: flex;
+    padding: var(--12-pad, 12px) 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    align-self: stretch;
+    border-radius: var(--12-pad, 12px);
+    border: 1px solid var(--New-Outline, #EBEDF8);
+    background: #FFF;
+  }
+  
+  .content {
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    width: 403px;
+  }
+  
+  .subcontent {
+    display: flex;
+    padding: 0px var(--8-pad, 8px);
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+  }
+  
+  .subcontent1 {
+    display: flex;
+    align-items: center;
+    gap: var(--12-pad, 12px);
+    color: var(--New-grey, #728492);
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+  }
+  
+  .subcontent2 {
+    display: flex;
+    align-items: center;
+    gap: var(--8-pad, 8px);
+  }
+  

@@ -109,7 +109,7 @@ const OrgTable = (props: Props) => {
         };
 
         fetchData();
-    }, [props.search, props.api, props.currPage]);
+    }, [props.api,props.currPage]);
     return (
         <> 
          {isLoading ?
@@ -174,7 +174,7 @@ const OrgTable = (props: Props) => {
               </div>
             </div>
              </div>    
-             {edit && <UpdateOrganisation api={props.api} setApi={props.setApi} show={edit} setShow={setEdit} data ={editform}/>}
+             {edit && <UpdateOrganisation api={props.api} setApi={props.setApi} show={edit} setShow={setEdit} data ={editform} setselectedOrganizations = {setselectedOrganizations}/>}
        {<TFDeleteModal show={showDelete} onHide={()=>{setShowDelete(false);setselectedOrganizations([])}} onDelete={handleDelete}  label='People'/>} 
              </>
             

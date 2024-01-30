@@ -8,6 +8,7 @@ import Utils from '../../../../utils/Utils'
 import { useDispatch } from 'react-redux';
 import SERVICES from "../../../../services/Services";
 import { showErrorModal } from "../../../../redux/slices/alertSlice";
+import Styles from './addNewOrganisation.module.css'
 
 type Props={
     show: boolean,
@@ -17,16 +18,7 @@ type Props={
     setApi: Function
 } 
 const AddNewPerson = ({setShow,api, setApi}: Props) => {
-  const styles = {
-    text: {
-      color: "var(--Dark-grey, #70757A)",
-      fontFamily: "Roboto",
-      fontSize: "14px",
-      fontStyle: "normal",
-      fontWeight: 500,
-      lineHeight: "20px", 
-    },
-  };
+ 
   const [formData,  setFormData] = useState({
     id: 0,
     company_id: 0,
@@ -128,22 +120,17 @@ const handleForm = (key: string|number, value: string|number|null) => {
   return (
     <>
         <div
-            className='tf-modal-backdrop d-flex justify-content-end align-items-start'
+            className={`tf-modal-backdrop ${Styles.main}`}
             >
                <div>
-      <div style={{display: "inline-flex", padding: "54px 48px",flexDirection: "column", alignItems: "flex-start", gap: "20px", background:"#fff", height:"900px"}}>
-        <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    gap: '20px',       
-        }}>
-              <div style={{display: "flex",alignItems: "flex-start", gap:"20px"}}> 
+               <div className={Styles.main1}>
+               <div className={Styles.main2}>
+              <div style={{display: "flex",gap:"20px"}}> 
                   <img src={peopleblack} alt=""/>
                   <div className='heading-2'>Add new People</div>
               </div>
         </div>
-        <div style={{display: "flex",flexDirection: "column",alignItems: "flex-start",gap:" var(--8-pad, 8px)"}}> 
+        <div className={Styles.formInput}> 
         <input
           type="text"
           name="name"
@@ -154,14 +141,14 @@ const handleForm = (key: string|number, value: string|number|null) => {
           required={true}
           onChange={(e) => handleForm(e.target.name, e.target.value)}
         />    
-        <div style={{display: "flex",flexDirection: "column",alignItems: "flex-start",gap:" var(--8-pad, 8px)"}}>
-           <div style={{display:"flex",width: "624px",height: "var(--32-pad, 32px)"}}>
-            <div style={{...styles.text,display: "flex",width: "160px",alignItems:"center",gap: "var(--8-pad, 8px)"}}>Job Title</div>
-            <input type="text" placeholder="Type in Role" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'}style={{...styles.text,display:"flex",width:"456px",padding:" 6px var(--8-pad, 8px)",alignItems: "center",gap:" var(--12-pad, 12px)",outline:"none", border: "none",background: "#F6F7F7"}} value={formData.job_title}    required={true}
+        <div className={Styles.formInput}>
+           <div style={{display:"flex"}}>
+            <div className={`${Styles.text} ${Styles.address}`}>Job Title</div>
+            <input type="text" placeholder="Type in Role" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} className={`${Styles.text} ${Styles.addressInput}`} value={formData.job_title}    required={true}
             onChange={(e) => handleForm(e.target.name, e.target.value)} name="job_title" />
            </div>
            <div style={{display:"flex"}}>
-           <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Label</div>
+           <div className={`${Styles.text} ${Styles.address}`}>Label</div>
            <TFChip
                           name="company_type"
                           value={formData.company_type}
@@ -169,7 +156,7 @@ const handleForm = (key: string|number, value: string|number|null) => {
                           options={["Client", "Consultant","Partner","Subconsultant"]}
                         /> </div>
           <div style={{display:"flex"}}>
-             <div style={{...styles.text,display: "flex",width:"160px",alignItems: "center",gap:" var(--8-pad, 8px)"}}>Organisation</div>
+             <div className={`${Styles.text} ${Styles.address}`}>Organisation</div>
              <div><TFTypeahead
             name='company_name'
             placeholder='ABC Startup'
@@ -178,7 +165,7 @@ const handleForm = (key: string|number, value: string|number|null) => {
             options={organization}
           />    </div></div>
           <div style={{display:"flex"}}>
-          <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Contact Type</div>
+          <div className={`${Styles.text} ${Styles.address}`}>Contact Type</div>
           <TFChip
                           value={formData.contact_type}
                           name="contact_type"
@@ -187,23 +174,23 @@ const handleForm = (key: string|number, value: string|number|null) => {
                         />
           </div>
           <div style={{display:"flex"}}>
-          <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Email</div>
-          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter email id" style={{...styles.text, fontWeight:"400px",display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="email" value={formData.email} onChange={(e )=>handleForm(e.target.name, e.target.value)} />
+          <div className={`${Styles.text} ${Styles.address}`}>Email</div>
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter email id"className={`${Styles.text} ${Styles.addressInput}`}  name="email" value={formData.email} onChange={(e )=>handleForm(e.target.name, e.target.value)} />
          
           </div>
           <div style={{display:"flex"}}>
-          <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Phone</div>
-          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter Phone no." style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="phone" value={formData.phone}  onChange={(e) => handleForm(e.target.name, e.target.value)} />
+          <div className={`${Styles.text} ${Styles.address}`}>Phone</div>
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter Phone no." className={`${Styles.text} ${Styles.addressInput}`}  name="phone" value={formData.phone}  onChange={(e) => handleForm(e.target.name, e.target.value)} />
          
           </div>
           <div style={{display:"flex"}}>
-          <div style={{...styles.text,display: "flex",width: "160px",alignItems: "center",gap: "var(--8-pad, 8px)"}}>Alternate number</div>
-          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter alternative contact number" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} name="alternate_phone" value={formData.alternate_phone}  onChange={(e) => handleForm(e.target.name, e.target.value)} />
+          <div className={`${Styles.text} ${Styles.address}`}>Alternate number</div>
+          <input  type="text" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter alternative contact number" className={`${Styles.text} ${Styles.addressInput}`} name="alternate_phone" value={formData.alternate_phone}  onChange={(e) => handleForm(e.target.name, e.target.value)} />
          
           </div>
           <div style={{display:"flex"}}>
-             <div style={{...styles.text,display: "flex",width:"160px",alignItems: "center",gap:" var(--8-pad, 8px)"}}>Remarks</div>
-             <input  type="text"  onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter Remarks" style={{...styles.text,fontWeight:"400px", display: "flex",width: "456px",padding: "6px var(--8-pad, 8px)",alignItems: "center",gap: "var(--12-pad, 12px)",outline:"none",border:"none"}} value={formData.remarks}  onChange={(e) => handleForm(e.target.name, e.target.value)} name="remarks"></input>
+             <div className={`${Styles.text} ${Styles.address}`}>Remarks</div>
+             <input  type="text"  onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} placeholder="Enter Remarks" className={`${Styles.text} ${Styles.addressInput}`} value={formData.remarks}  onChange={(e) => handleForm(e.target.name, e.target.value)} name="remarks"></input>
           </div>
           </div>  
         </div>
@@ -244,7 +231,7 @@ const handleForm = (key: string|number, value: string|number|null) => {
         </div> */}
         </div>
         <div className='project-modal-footer w-100'>
-        <div style={{display: "flex",gap: "20px",width:"624px",padding:" 16px 20px",justifyContent: "flex-end",alignItems: "flex-start",background: "#FFF",boxShadow: "0px -2px 2px 0px rgba(235, 233, 241, 0.45)"}}>
+        <div className={Styles.footerComp}>
         <TFButton
                     label="Cancel"
                     handleClick={() => setShow(false)}

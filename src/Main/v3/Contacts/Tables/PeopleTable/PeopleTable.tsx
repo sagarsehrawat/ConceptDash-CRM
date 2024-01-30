@@ -105,7 +105,7 @@ const PeopleTable = (props : Props) => {
       };
 
       fetchData();
-  }, [props.search,props.api,props.currPage]);
+  }, [props.api,props.currPage]);
     return (
         <> 
              {console.log(selectedPeople)}
@@ -170,7 +170,7 @@ const PeopleTable = (props : Props) => {
   </div>
 </div>
 </div>
-{edit && <UpdateAddPerson api={props.api} setApi={props.setApi} show={edit} setShow={setEdit} data ={editform}/>}
+{edit && <UpdateAddPerson api={props.api} setselectedPeople = {setselectedPeople} setApi={props.setApi} show={edit} setShow={setEdit} data ={editform}/>}
        {<TFDeleteModal show={showDelete} onHide={()=>setShowDelete(false)} onDelete={handleDelete} label='People'/>}
         </>
     )
