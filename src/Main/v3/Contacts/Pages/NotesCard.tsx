@@ -3,12 +3,12 @@ import editicon from '../icons/edit_black_24dp (1) 2edit_grey.svg'
 import deleteicon from '../icons/delete_black_24dp 3.svg'
 import notificon from '../icons/notifications_black_24dp (3) 1.svg'
 import TFDateChip from '../../../../components/form/TFDateChip/TFDateChip';
-import { Modal, Button } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import TFDeleteModal from '../../../../components/modals/TFDeleteModal/TFDeleteModal';
 import SERVICES from '../../../../services/Services';
 import Styles from './NotesCard.module.css'
+import TFModal from '../../../../components/modals/TFModal/TFModal';
 type Note = {
   note: string;
   name: string;
@@ -155,7 +155,7 @@ const NotesCard = (props : Props) => {
              ):
                <img src={notificon} alt="" onClick={()=>setDateChipOpen(!isDateChipOpen)}/>
              }
-      <Modal show={showModal} onHide={closeModal} centered style={{width:"400px", position:"fixed", left:"50%"}} >
+      {/* <Modal show={showModal} onHide={closeModal} centered style={{width:"400px", position:"fixed", left:"50%"}} >
         <Modal.Header closeButton>
           <Modal.Title>Edit Note</Modal.Title>
         </Modal.Header>
@@ -180,7 +180,28 @@ const NotesCard = (props : Props) => {
             Save
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
+      <TFModal
+  show={showModal}
+  onHide={closeModal}
+  heading="Edit Note"
+  onHandleSubmit={() => { props.value == "General" ? handleEditChange(): handleEditChange1() }}
+  style={{ width: "400px", position: "fixed", left: "50%" }}
+>
+  <CKEditor
+    editor={ClassicEditor}
+    config={{         
+      toolbar: ['bold', 'italic', 'link', 'numberedList', 'bulletedList', '|', 'undo', 'redo']
+    }}                
+    data={editModal}
+    onChange={(event, editor) => {
+      const data = editor.getData();
+      console.log(event);
+      setEditModal(data);
+    }}
+  />
+</TFModal>
+
        {<TFDeleteModal variant= "custom" show={del} onHide={()=>showDel(false)} onDelete={props.value === "General" ?  handleDelete : handleDelete1} 
           label='Notes'/>}
             </div>
