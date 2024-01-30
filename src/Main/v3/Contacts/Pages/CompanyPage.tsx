@@ -33,7 +33,9 @@ const CompanyPage = (props:Props) => {
     const [showModal,setShowModal] =useState<boolean>(false);
     const [api,setapi] = useState<number>(0);
   return (
-    <>  <div className={Styles.backbtn} onClick={()=>props.setnav(20)}><img src={backarrow} alt=''/>
+    <>    {console.log(props.organizationData)}
+
+       <div className={Styles.backbtn} onClick={()=>props.setnav(20)}><img src={backarrow} alt=''/>
      <div className={Styles.back}>Back</div></div>
     <div className={Styles.companyMainDiv}> 
        <div style={{width: "-webkit-fill-available",height: "166px"}}>
@@ -51,7 +53,7 @@ const CompanyPage = (props:Props) => {
                          <div className={Styles.addressHeader}> Address,City,Country</div>
                     </div>
               </div>
-              <div className={Styles.resumeHeader}>
+              <div className={Styles.resumeCard}>
                      <img src={eye} alt=""/> 
                      <div className={Styles.resume2}>Resume</div>
                     </div>
@@ -78,7 +80,7 @@ const CompanyPage = (props:Props) => {
          </div>
          </div>
          </div>
-         <div className={Styles.orgMainHeader}>
+         <div className={Styles.orgMainHeder}>
             <div className={Styles.orgHeader}>
               People In {props.organizationData?.company_name}
             </div>
@@ -93,7 +95,7 @@ const CompanyPage = (props:Props) => {
        </div>
          </div>
           { showModal && <AddNewPerson  show={showModal} setShow={setShowModal} id={props.organizationData?.company_id} api={api} setApi={setapi} />}
-         <CompanyTable isCollapsed={props.isCollapsed} id={props.organizationData?.company_id} setApi={setapi} api={api} search='' setnav={props.setnav} setContactPersonData={props.setContactPersonData }/>
+         <CompanyTable  isCollapsed={props.isCollapsed} id={props.organizationData?.company_id} setApi={setapi} api={api} search='' setnav={props.setnav} setContactPersonData={props.setContactPersonData }/>
     </div>
     </div>
     </>

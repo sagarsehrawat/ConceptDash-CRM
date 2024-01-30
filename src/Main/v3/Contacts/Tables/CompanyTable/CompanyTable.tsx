@@ -20,7 +20,7 @@ type Props ={
   id : number 
 }
 const CompanyTable = (props : Props) => {
-    const { isCollapsed,api,setApi } = props
+    const { isCollapsed,api,setApi,id } = props
     const [isLoading, setIsLoading] = useState(false);
     const tableRef = useRef(null);
     const [selectedPeople, setselectedPeople]= useState([]);
@@ -161,7 +161,7 @@ const CompanyTable = (props : Props) => {
   </div>
 </div>
  </div>
-       {edit && <UpdateAddPerson setselectedPeople={setselectedPeople}  setApi={setApi} show={edit} setShow={setEdit} data={editform} api={api} />}
+       {edit && <UpdateAddPerson varient ='people' id={id} setselectedPeople={setselectedPeople}  setApi={setApi} show={edit} setShow={setEdit} data={editform} api={api} />}
        {<TFDeleteModal show={showDelete} onHide={()=>{setShowDelete(false);setselectedPeople([]); setApi(api+1)}} onDelete={handleDelete} label='People'/>}
 
         </>

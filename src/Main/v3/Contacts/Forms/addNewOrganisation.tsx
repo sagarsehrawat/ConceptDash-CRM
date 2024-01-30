@@ -39,13 +39,13 @@ const AddNewOrganisation= ({setApi,api,setShow}: Props) => {
     try {
       const response = await SERVICES.addOrganization(
          formData.company_name,
-         formData.address,
-         formData.business_phone,
-         formData.fax,
-         formData.email,
-         formData.website,
-         formData.contact_type,
-         formData.company_type,
+         formData.address ?? '',
+         formData.business_phone ?? '',
+         formData.fax ?? '',
+         formData.email ?? '',
+         formData.website ?? '',
+         formData.contact_type ?? '',
+         formData.company_type ?? '',
 
       );
         console.log('API Response:', response);

@@ -88,6 +88,7 @@ const NotesCard = (props : Props) => {
       });
     };
     const handleEditChange = async() => {
+      console.log(editModal);
       await SERVICES.editGeneralNotes(props.data.name,props.data.date,editModal,props.id,props.index,props.data.reminder,props.data.reminderDate)
           .then((response) => {
             console.log('API Updated:', response);

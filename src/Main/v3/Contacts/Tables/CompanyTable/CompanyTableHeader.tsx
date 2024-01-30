@@ -10,7 +10,7 @@ const CompanyTableHeader = () => {
             Name&nbsp;&nbsp;
           </div>
         </th>
-        <th scope="col" className={`fixed-header2 ${Styles.tableHeading}`} style={{ width: "140px" }}>
+        <th scope="col" className={`fixed-header2 ${Styles.tableHeading}`} style={{ width: "140px", paddingLeft:"20px" }}>
           <div className={`${Styles.headingContent} hover`}>
             Label&nbsp;&nbsp;
           </div>
@@ -30,7 +30,7 @@ const CompanyTableHeader = () => {
             Email&nbsp;&nbsp;
           </div>
         </th>
-        <th scope="col" className={`fixed-header2 ${Styles.tableHeading}`} style={{ width: "140px" }}>
+        <th scope="col" className={`fixed-header2 ${Styles.tableHeading}`} style={{ width: "140px", paddingLeft:"60px" }}>
         <div className={`${Styles.headingContent} hover`}>
             Action&nbsp;&nbsp;
           </div>

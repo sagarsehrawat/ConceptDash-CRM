@@ -18,9 +18,11 @@ type Props={
     api:number,
     setApi: Function
     setselectedPeople : Function
+    id? : number
+    varient ? : string
 } 
   
-const UpdatePerson = ({setShow,data,api,setApi, setselectedPeople}: Props) => {
+const UpdatePerson = ({setShow,data,api,setApi, setselectedPeople,id,varient}: Props) => {
   const [formData, setFormData] = useState(data);
   const formUtils = FormUtils(setFormData);
 
@@ -65,15 +67,15 @@ const handleForm = (key: string|number, value: string|number) => {
       const response = await SERVICES.updatePeople(
         formData.id,
         formData.name,
-        formData.job_title,
+        formData.job_title ?? '',
         formData.company_type,
-        formData.company_id,
+        formData.company_id ?? id, 
         formData.contact_type,
-        formData.email,
-        formData.phone,
+        formData.email ?? ' ',
+        formData.phone ?? '',
         formData.address ?? '',
-        formData.remarks,
-        formData.alternate_phone,
+        formData.remarks ?? '',
+        formData.alternate_phone ?? '',
       );
         console.log('API Response:', response);
 
@@ -145,7 +147,7 @@ const handleForm = (key: string|number, value: string|number) => {
             <div className={`${Styles.text} ${Styles.address}`}>Job Title</div>
             <input type="text" placeholder="Type in Role" onFocus={(e) => e.target.style.backgroundColor = '#F6F7F7'} onBlur={(e) => e.target.style.backgroundColor = 'white'} className={`${Styles.text} ${Styles.addressInput}`} value={formData.job_title ?? ''}    required={true}
             onChange={(e) => handleForm(e.target.name, e.target.value)} name="job_title" />           </div>
-           <div style={{display:"flex"}}>
+            <div style={{display:"flex"}}>
            <div className={`${Styles.text} ${Styles.address}`}>Label</div>
            <TFChip
                           name="company_type"
@@ -153,7 +155,7 @@ const handleForm = (key: string|number, value: string|number) => {
                           onChange={handleForm} 
                           options={["Client", "Consultant","Partner","Subconsultant"]}
                         />  </div>
-          <div style={{display:"flex"}}>
+       {!varient &&   <div style={{display:"flex"}}>
              <div className={`${Styles.text} ${Styles.address}`}>Organisation</div>
              <div><TFTypeahead
             name='company_name'
@@ -162,7 +164,8 @@ const handleForm = (key: string|number, value: string|number) => {
             onChange={handleForm}
             options={organization}
             defaultValue={formData.company_name}
-          />    </div>          </div>
+          />    </div>  
+                  </div>}
           <div style={{display:"flex"}}>
           <div className={`${Styles.text} ${Styles.address}`}>Contact Type</div>
           <TFChip
