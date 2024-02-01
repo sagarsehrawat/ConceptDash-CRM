@@ -11,6 +11,7 @@ const APIS = {
     GET_PROJECT_CATEGORIES : '/api/get/list/projectCategories',
     GET_MANAGERS_LIST : '/api/get/list/managers',
     GET_EMPLOYEES_LIST : '/api/get/employeeNames',
+    GET_PROJECT_LIST : '/project/fetch/list',
     GET_RFPS : '/api/get/page/rfps',
     GET_TRACKING_RFPS : '/api/get/page/trackingrfps',
     GET_PROJECTS : '/project/fetch',
@@ -40,7 +41,6 @@ const APIS = {
     UPDATE_PROPOSAL_RESULT:  '/proposal/update/proposal/result',
     UPDATE_PROPOSAL_PRIORITY:  '/proposal/update/proposal/priority',
     UPDATE_PROPOSAL_BOOKMARK:  '/proposal/update/proposal/bookmark',
-    GET_ORGANIZATION_LIST: 'client/get/organization/list',
     DELETE_PROPOSALS: 'proposal/delete/proposals',
     DELETE_PROJECT: '/project/delete',
     GET_INVOICES: '/finance/invoices',
@@ -64,7 +64,41 @@ const APIS = {
     },
     GET_CAMPAIGN_CONTACT_REPORT(cmpId: number, page: number, event: string){
         return `/ses/campaign/report/contact?cmpId=${cmpId}&page=${page}&event=${event}`
-    }
+    },
+
+    // Client 
+    ORGANIZATION_COUNT:'/client/get/organization/count',
+    PEOPLE_COUNT:'/client/get/people/count',
+    ADD_PEOPLE : '/client/add/people',
+    ADD_ORGANIZATION : '/client/add/organization',
+    UPDATE_ORGANIZATION : '/client/update/organization',
+    DELETE_ORGANIZATION : '/client/delete/organization',
+    UPDATE_PEOPLE : '/client/update/people',
+    DELETE_PEOPLE : '/client/delete/people',
+    ALL_PEOPLE_IN_ORGANIZATION:'/client/get/people/all',
+    GET_ORGANIZATION_LIST : '/client/get/organization/list',
+    GET_ALL_ORGANIZATION:'/client/get/page/organization',
+    GET_ALL_PEOPLE:'/client/get/page/people',
+    ORGANIZATION_DETAILS:'/client/get/organization',
+    PERSON_DETAILS:'/client/get/people',
+
+    GENERAL_NOTES:'/client/get/people/generalchats',
+    PROJECT_NOTES:'/client/get/people/projectspecific',
+    ADD_GENERAL_NOTES:'/client/add/people/generalchats',
+    ADD_PROJECT_NOTES:'/client/add/people/projectspecific', 
+
+    UPDATE_GENERAL_NOTES:"/client/update/people/generalchats",
+    UPDATE_PROJECT_NOTES:"/client/update/people/projectspecific",
+
+    DELETE_GENERAL_NOTES:'/client/delete/people/generalchat',
+    DELETE_PROJECT_NOTES:'/client/delete/people/projectspecific',
+    //  DELETE_GENERAL_NOTES:"/client/delete/people/generalchats"
+
+    UPDATE_ORGANIZATION_LABEL : "/client/update/organization/label",
+    UPDATE_PEOPLE_LABEL:'/client/update/people/label',
+    UPDATE_ORGANIZATION_CONTACT_TPYE :"/client/update/organization/contacttype",
+    UPDATE_PEOPLE_CONTACT_TPYE :"/client/update/people/contacttype"
+
 };
 
 export default APIS;

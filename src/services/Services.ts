@@ -1,6 +1,6 @@
 import axios from "axios";
 import APIS from "../constants/APIS.ts";
-import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, ProjectCountResponse, GetRostersListResponse, GetEmployeesListResponse, GetProjectsResponse, UpdateResponse, GetProjectById, GetTrackingRfpsResponse, BudgetCountResponse, GetBudgetCitiesResponse, GetCityBudgetResponse, ProposalCountResponse ,GetProposalsResponse,GetProposalById, GetOrganizationsListResponse, GetInvoicesResponse, GetInvoiceProjectResponse, GetInvoiceDetailResponse, GetFinanceCountResponse} from "Services";
+import { AddResponse, DeleteResponse, ErrorResponse, GetCitiesResponse, GetDepartmetnsResponse, GetGoogleDriveUrlResponse, GetManagerNamesResponse, GetProjectCategoriesResponse, GetRfpsResponse, RfpCountResponse, ProjectCountResponse, GetRostersListResponse, GetEmployeesListResponse, GetProjectsResponse, UpdateResponse, GetProjectById, GetTrackingRfpsResponse, BudgetCountResponse, GetBudgetCitiesResponse, GetCityBudgetResponse, ProposalCountResponse ,GetProposalsResponse,GetProposalById, GetOrganizationsListResponse, GetInvoicesResponse, GetInvoiceProjectResponse, GetInvoiceDetailResponse, GetFinanceCountResponse, orgLableUpdateResponce, peopleLabelUpdateResponce, getPeopleResponce, getOrganizationsResponce,OrganizationList,OrgPeopleCount,orgDetails, editProjectNote, generalNoteList,getAllPeopleInOrganization, getProjectListResponse,projectNoteList} from "Services";
 import moment from "moment";
 axios.defaults.baseURL = APIS.BASE_URL
 
@@ -565,6 +565,23 @@ const SERVICES = {
         }
     },
 
+    getProjectList : async () : Promise<getProjectListResponse> =>{
+      try{
+        const response = await axios.get(APIS.GET_PROJECT_LIST,{
+            headers:{
+                auth :"Rose " + localStorage.getItem("auth")
+            }
+        });
+        if(response.data.success == false)
+           throw response.data as ErrorResponse
+
+           return response.data as getProjectListResponse
+      }
+      catch(error){
+        throw error
+      }
+    },
+
     getProposals: async (limit: number, currentPage: number, filter: Object, search: string, sort: string, employeeId: string): Promise<GetProposalsResponse> => {
         console.log(employeeId)
         try {
@@ -882,7 +899,7 @@ const SERVICES = {
         debriefing: string,
         folderId: string,
         team: { label: string, value: string | number }[],
-        bookmark: any[],
+        bookmark: any[], 
         priority: string,
         proposalGeneratorLink: string,
         rating: string,
@@ -1162,6 +1179,524 @@ const SERVICES = {
             throw error;
         }
     },
-};
+
+    getOrganizations: async (search: string, caseType?: string, offset: number = 0): Promise<getOrganizationsResponce> => {
+        try {
+            // Making an HTTP GET request using Axios
+            const response = await axios.get(APIS.GET_ALL_ORGANIZATION, {
+                headers: {
+                    auth: "Rose " + localStorage.getItem("auth"),
+                    search: search || '',
+                    filter: JSON.stringify({
+                        companyType: caseType ? [caseType] : [],
+                    }),
+                    sort: "company_name ASC",
+                    offset: offset,
+                    limit: 50
+                },
+            });
+                if (response.data.success === false) {
+                throw response.data as ErrorResponse;
+            }
+    
+            return response.data as getOrganizationsResponce;
+        } catch (error) {
+            throw error;
+        }
+    },
+    getPeople : async (search: string, caseType?: string, offset: number = 0): Promise<getPeopleResponce> => {
+        try {
+          const response = await axios.get(APIS.GET_ALL_PEOPLE, {
+            headers: {
+              auth: "Rose " + localStorage.getItem("auth"),
+              search: search || '',
+              filter: JSON.stringify({
+                companyType: caseType ? [caseType] : []
+              }),
+              offset: offset,
+              sort: "company_name ASC",
+              limit: 50
+            },
+          });
+      
+          // Handling response
+          if (response.data.success === false) {
+            throw response.data as ErrorResponse;
+          }
+      
+          return response.data as getPeopleResponce;
+        } catch (error) {
+          throw error;
+        }
+      },
+      
+      deleteOrganizations : async (selectedOrganizations: string[]): Promise<DeleteResponse> => {
+        try {
+          const response = await axios.post(APIS.DELETE_ORGANIZATION, {
+            company_ids: selectedOrganizations,
+          }, {
+            headers: {
+              auth: "Rose " + localStorage.getItem("auth"),
+            },
+          });
+      
+          if (response.data.success === false) {
+            throw response.data as ErrorResponse;
+          }
+      
+          return response.data as DeleteResponse;
+        } catch (error) {
+          throw error;
+        }
+      },
+       
+      deletePeople : async (selectedPeople: string[]): Promise<DeleteResponse> => {
+        try {
+          // Making an HTTP POST request using Axios
+          const response = await axios.post(APIS.DELETE_PEOPLE, {
+            ids: selectedPeople,
+          }, {
+            headers: {
+              auth: "Rose " + localStorage.getItem("auth"),
+            },
+          });
+      
+          // Handling response
+          if (response.data.success === false) {
+            throw response.data as ErrorResponse;
+          }
+      
+          return response.data as DeleteResponse;
+        } catch (error) {
+          throw error;
+        }
+      },
+      orgLableUpdate : async (id: number, value : string) : Promise <orgLableUpdateResponce> =>{
+        try{
+            const response = await axios.post( APIS.UPDATE_ORGANIZATION_LABEL,
+                {
+                id: id,
+                newCompanyType: value,
+                },
+              {
+                headers: {
+                  auth: "Rose " + localStorage.getItem("auth"),
+                },
+              });
+              if(response.data.success === false)
+                throw response.data as ErrorResponse
+
+              return response.data as orgLableUpdateResponce
+        }
+        catch(error){
+            throw error
+        }
+      },
+      peopleLableUpdate : async (id: number, value : string) : Promise <peopleLabelUpdateResponce> =>{
+        try{
+            const response = await axios.post( APIS.UPDATE_PEOPLE_LABEL,
+                {
+                id: id,
+                newCompanyType: value,
+                },
+              {
+                headers: {
+                  auth: "Rose " + localStorage.getItem("auth"),
+                },
+              });
+              if(response.data.success === false)
+                throw response.data as ErrorResponse
+
+              return response.data as peopleLabelUpdateResponce
+        }
+        catch(error){
+            throw error
+        }
+      },
+      orgContacttypeUpdate : async (id: number, value : string) : Promise <orgLableUpdateResponce> =>{
+        try{
+            const response = await axios.post( APIS.UPDATE_ORGANIZATION_CONTACT_TPYE,
+                {
+                id: id,
+                newContactType: value,
+                },
+              {
+                headers: {
+                  auth: "Rose " + localStorage.getItem("auth"),
+                },
+              });
+              if(response.data.success === false)
+                throw response.data as ErrorResponse
+
+              return response.data as orgLableUpdateResponce
+        }
+        catch(error){
+            throw error
+        }
+      },
+      peopleContacttypeUpdate : async (id: number, value : string) : Promise <orgLableUpdateResponce> =>{
+        try{
+            const response = await axios.post( APIS.UPDATE_PEOPLE_CONTACT_TPYE,
+                {
+                id: id,
+                newContactType: value,
+                },
+              {
+                headers: {
+                  auth: "Rose " + localStorage.getItem("auth"),
+                },
+              });
+              if(response.data.success === false)
+                throw response.data as ErrorResponse
+
+              return response.data as orgLableUpdateResponce
+        }
+        catch(error){
+            throw error
+        }
+      },
+      getAllPeopleInOrganization : async(id:number , search: string) : Promise<getAllPeopleInOrganization> =>{
+        try{
+            const response = await axios.get(APIS.ALL_PEOPLE_IN_ORGANIZATION,
+                {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth"),
+                         companyid: id,
+                         search: search
+                    },
+                });
+                if(response.data.success === false)
+                throw response.data as ErrorResponse
+
+              return response.data as getAllPeopleInOrganization
+
+        }
+        catch(error){
+            throw error;
+        }
+      },
+      getOrganizationDetails : async(id: number) : Promise<orgDetails> =>{
+        const response = await axios
+        .get(APIS.ORGANIZATION_DETAILS, {
+            headers: {
+                auth: "Rose " + localStorage.getItem("auth"),
+                companyId: id 
+            },
+        })
+        if(response.data.success == false) 
+          throw response.data as ErrorResponse
+        return response.data as orgDetails
+
+      },
+      getOrganizationList : async() : Promise<OrganizationList> =>{
+        try{
+            const response = await axios.get(APIS.GET_ORGANIZATION_LIST,
+                {
+                    headers: {
+                        auth: "Rose " + localStorage.getItem("auth")
+                    },
+                });
+                if(response.data.success === false)
+                throw response.data as ErrorResponse
+
+              return response.data as OrganizationList
+
+        }
+        catch(error){
+            throw error;
+        }
+      },
+      addPeople : async (    
+        name: string,
+        job_title: string,
+        company_type: string,
+        company_id:  number,
+        contact_type: string,
+        email: string,
+        phone: string,
+         cv: string,
+         address: string,
+         remarks: string,
+         alternate_phone: string
+         ): Promise<AddResponse> =>{
+            try {
+                const response = await axios.post(APIS.ADD_PEOPLE,
+                    {
+                        name: name,
+                        job_title: job_title,
+                        company_type: company_type,
+                        company_id: company_id,
+                        contact_type: contact_type,
+                        email: email,
+                        phone: phone,
+                         cv: cv,
+                         address: address,
+                        //  city_id: 1,
+                         remarks: remarks,
+                         alternate_phone: alternate_phone
+                    },
+                    {
+                        headers: {
+                            auth: 'Rose ' + localStorage.getItem('auth'),
+                        },
+                    });
+                if (response.data.success === false) {
+                    throw response.data as ErrorResponse
+                }
+                return response.data as AddResponse;
+            } catch (error) {
+                throw error;
+            }
+         },
+
+         addOrganization : async (    
+            company_name: string,
+    address: string,
+    business_phone:string,
+    fax: string,
+    email: string,
+    website: string,
+    contact_type: string,
+    company_type: string ,
+             ): Promise<AddResponse> =>{
+                try {
+                    const response = await axios.post(APIS.ADD_ORGANIZATION,
+                        {
+                            company_name,
+                            address,
+                            business_phone,
+                            fax,
+                            email,
+                            website,
+                            contact_type,
+                            company_type 
+                        },
+                        {
+                            headers: {
+                                auth: 'Rose ' + localStorage.getItem('auth'),
+                            },
+                        });
+                    if (response.data.success === false) {
+                        throw response.data as ErrorResponse
+                    }
+                    return response.data as AddResponse;
+                } catch (error) {
+                    throw error;
+                }
+             },
+
+         updatePeople : async (  
+                id: number,
+                name: string,
+                job_title: string| null,
+                company_type: string |null,
+                company_id: string | number,
+                contact_type: string | null,
+                email: string| null,
+                phone: string | null,
+                 address: string | null,
+                 remarks: string | null,
+                 alternate_phone: string | null
+                 ) : Promise<UpdateResponse> =>{
+                    try {
+                        const response = await axios.post(APIS.UPDATE_PEOPLE,
+                            {
+                                id: id,
+                                name: name,
+                                job_title: job_title,
+                                company_type: company_type,
+                                company_id: company_id,
+                                contact_type: contact_type,
+                                email: email,
+                                phone: phone,
+                                //  cv: cv,
+                                 address: address,
+                                //  city_id: 1,
+                                 remarks: remarks,
+                                 alternate_phone: alternate_phone
+                            },
+                            {
+                                headers: {
+                                    auth: 'Rose ' + localStorage.getItem('auth'),
+                                },
+                            });
+                        if (response.data.success === false) {
+                            throw response.data as ErrorResponse
+                        }
+                        return response.data as UpdateResponse;
+                    } catch (error) {
+                        throw error;
+                    }
+                 },
+                 getOrgPeopleCount : async (caseType: string) : Promise <OrgPeopleCount> =>{
+                    let apiUrl = caseType === "org" ? APIS.ORGANIZATION_COUNT :  APIS.PEOPLE_COUNT;
+                 const response = await axios
+                 .get(apiUrl, {
+                     headers: {
+                         auth: "Rose " + localStorage.getItem("auth"),
+                     },
+                 })
+                 if(response.data.success === false)
+                  throw response.data as ErrorResponse
+
+                  return response.data as OrgPeopleCount
+                 },
+                 deleteProjectNotes : async (peopleId : number,projectId: number,index: number) : Promise<DeleteResponse> =>{
+                    const  response = await  axios.post(APIS.DELETE_PROJECT_NOTES, {
+                        peopleId: peopleId, 
+                        projectId: projectId,
+                        index: index,
+                      }, {
+                        headers: {
+                          auth: "Rose " + localStorage.getItem("auth")
+                        }
+                      })
+                      if(response.data.success == false)
+                        throw response.data as ErrorResponse
+                     return response.data as DeleteResponse
+                 },
+                 deleteGeneralNotes : async (peopleId : number,index: number) : Promise<DeleteResponse> =>{
+                    const  response = await  axios.post(APIS.DELETE_GENERAL_NOTES, {
+                        peopleId: peopleId, 
+                        index: index,
+                      }, {
+                        headers: {
+                          auth: "Rose " + localStorage.getItem("auth")
+                        }
+                      })
+                      if(response.data.success == false)
+                        throw response.data as ErrorResponse
+                     return response.data as DeleteResponse
+                 },
+
+                 editProjectNotes :
+                  async (nam: string,date: string,notes:string,peopleId:number,projectId:number,index:number,reminder:boolean,reminderDate:string)
+                   : Promise <editProjectNote> =>{
+                     const response = await axios.post(APIS.UPDATE_PROJECT_NOTES, {
+                        name: nam,
+                        date: date,
+                        notes: notes,
+                        peopleId: peopleId,
+                        projectId:projectId,
+                        index: index,
+                        reminder: reminder,
+                        reminderDate: reminderDate,
+                      }, {
+                        headers: {
+                          auth: "Rose " + localStorage.getItem("auth")
+                        }
+                      })
+
+                      if(response.data.success == false)
+                        throw response.data as ErrorResponse
+                    return response.data as editProjectNote
+                   },
+                   editGeneralNotes :
+                   async (nam: string,date: string,notes:string,peopleId:number,index:number,reminder:boolean,reminderDate:string)
+                    : Promise <editProjectNote> =>{
+                      const response = await axios.post(APIS.UPDATE_PROJECT_NOTES, {
+                         name: nam,
+                         date: date,
+                         notes: notes,
+                         peopleId: peopleId,
+                         index: index,
+                         reminder: reminder,
+                         reminderDate: reminderDate,
+                       }, {
+                         headers: {
+                           auth: "Rose " + localStorage.getItem("auth")
+                         }
+                       })
+ 
+                       if(response.data.success == false)
+                         throw response.data as ErrorResponse
+                     return response.data as editProjectNote
+                    },
+                    getPersonDetails : async(id: number) : Promise<Person> =>{
+                        const response = await  axios
+                        .get(APIS.PERSON_DETAILS, {
+                            headers: {
+                                auth: "Rose " + localStorage.getItem("auth"),
+                                id: JSON.stringify(id) 
+                            },
+                        })
+                        if(response.data.success == false)
+                         throw response.data as ErrorResponse
+                        return response.data.res[0] as Person
+                        
+                    },
+                    getGeneralNote : async(id: number) :Promise<generalNoteList> =>{
+                        const response = await  axios
+                        .get(APIS.GENERAL_NOTES, {
+                            headers: {
+                                auth: "Rose " + localStorage.getItem("auth"),
+                                peopleid: JSON.stringify(id)
+                            },
+                        })
+                        if(response.data.success == false)
+                         throw response.data as ErrorResponse
+                        return response.data as generalNoteList
+                    },
+                    getProjectNote : async(peopleId: number, projectId: number) :Promise<projectNoteList> =>{
+                        const response = await  axios
+                        .get(APIS.PROJECT_NOTES, {
+                            headers: {
+                                auth: "Rose " + localStorage.getItem("auth"),
+                                peopleid: JSON.stringify(peopleId),
+                                projectid : projectId
+                            },
+                        })
+                        if(response.data.success == false)
+                         throw response.data as ErrorResponse
+                        return response.data as projectNoteList
+                   },
+                   addGeneralNotes : async(name : string| null, date: string,note : string,reminder: string,peopleId: string | number) : Promise<AddResponse> =>{
+                    const response = await axios.post(APIS.ADD_GENERAL_NOTES,
+                        {
+                          name: name,
+                          date: date,
+                          notes: note,
+                          reminder: reminder,
+                          peopleId: peopleId, 
+                        },
+                        {
+                          headers: {
+                            auth: "Rose " + localStorage.getItem("auth"),
+                          },
+                        }
+                      );
+
+                      if(response.data.success == false)
+                       throw response.data as ErrorResponse
+
+                       return response.data as AddResponse
+                   },
+
+                   addProjectNotes : async(name : string| null, date: string,note : string,reminder: string,peopleId: number, projectId : number) : Promise<AddResponse> =>{
+                    const response = await axios.post(APIS.ADD_PROJECT_NOTES,
+                        {
+                          name: name,
+                          date: date,
+                          notes: note,
+                          reminder: reminder,
+                          peopleId: peopleId,
+                          projectId : projectId 
+                        },
+                        {
+                          headers: {
+                            auth: "Rose " + localStorage.getItem("auth"),
+                          },
+                        }
+                      );
+
+                      if(response.data.success == false)
+                       throw response.data as ErrorResponse
+
+                       return response.data as AddResponse
+                   }
+
+                   }
+                 
+      
 
 export default SERVICES;

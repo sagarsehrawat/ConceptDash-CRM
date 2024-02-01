@@ -1,0 +1,67 @@
+.main{
+    display: flex;
+    justify-content: end;
+    align-items: start;
+}
+
+.text {
+    color: var(--Dark-grey, #70757A);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+.main1{
+        display: inline-flex;
+        padding: 54px 48px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        background: #fff;
+        height: 100vh;   
+}
+
+.main2{
+    display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.formInput {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--8-pad, 8px);
+}
+
+.address{
+
+  display: flex;
+  width: 160px;
+  align-items: center;
+  gap: var(--8-pad, 8px);
+
+}
+.addressInput{
+  font-weight: 400;
+  display: flex;
+  width: 456px;
+  padding: 6px var(--8-pad, 8px);
+  align-items: center;
+  gap: var(--12-pad, 12px);
+  outline: none;
+  border: none;
+}
+.footercomp{
+    display: flex;
+    gap: 20px;
+    width: 624px;
+    padding: 16px 20px;
+    justify-content: flex-end;
+    align-items: flex-start;
+    background: #FFF;
+    box-shadow: 0px -2px 2px 0px rgba(235, 233, 241, 0.45);
+}

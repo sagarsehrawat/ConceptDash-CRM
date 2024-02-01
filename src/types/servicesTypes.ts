@@ -59,6 +59,13 @@ declare module "Services"{
             company_name : string,
         }>
     }
+    export interface getProjectListResponse {
+        success : boolean,
+        res : Array<{
+            project_id : number | string,
+            project_name : string
+        }>
+    }
 
     export interface GetDepartmetnsResponse {
         success : boolean,
@@ -188,5 +195,92 @@ declare module "Services"{
     export interface GetInvoiceProjectResponse {
         success: boolean,
         res: InvoiceProject[]
+    }
+
+    export interface orgLableUpdateResponce {
+            success: boolean,
+            res:Organization
+    }
+    export interface peopleLabelUpdateResponce {
+        success : boolean,
+        res: Person
+    }
+
+    export interface getOrganizationsResponce {
+        success: boolean
+        res: Array<Organization>
+        totalPages: number
+    }
+    export interface getPeopleResponce {
+        success: boolean
+        res: Array<Person>
+        totalPages: number
+    }
+    export interface OrganizationList {
+        success : boolean
+        res : Array<{company_id : number, company_name : string}>
+    }
+    export interface OrgPeopleCount {
+        success:boolean
+        res : Array <{
+                company_type: string,
+                count_per_type: string,
+                total_count: string
+        }>
+    }
+
+    export interface orgDetails {
+        
+           success : boolean,
+           res : Array<Person>
+        
+    }
+    export interface editProjectNote {
+        success : boolean,
+        res : Array <{
+            date : string,
+            name : string,
+            note : string,
+            reminder : boolean,
+            reminderDate : string
+        }>
+    }
+    export interface editGeneralNote {
+        success : boolean,
+        res : Array <{
+            date : string,
+            name : string,
+            note : string,
+            reminder : boolean,
+            reminderDate : string
+        }>
+    }
+        export interface generalNoteList {
+            success : boolean
+            res : Array<{
+                general : Array<{
+                    date : string,
+                    name : string,
+                    note : string,
+                    reminder : boolean,
+                    reminderDate : string 
+                }>
+            }>
+    }   
+    export interface projectNoteList {
+        success : boolean
+        res : Array<{
+            chat : Array<{
+                date : string,
+                name : string,
+                note : string,
+                reminder : boolean,
+                reminderDate : string 
+            }>
+        }>
+}
+    export interface getAllPeopleInOrganization {
+        success : boolean
+        res : Array<Person>
     }
 }

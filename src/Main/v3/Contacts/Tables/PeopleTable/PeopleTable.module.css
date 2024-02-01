@@ -1,0 +1,216 @@
+/* styles.module.css */
+
+.table {
+    width: 100%;
+    overflow-x: hidden;
+    z-index: 0;
+  }
+  
+  .tableHeader {
+    height: 34px;
+    background: #f7f7f9;
+    text-align: center;
+    border-bottom: 0;
+  }
+  
+  .tableHeading {
+    width: 220px;
+    padding: 6px var(--8-pad, 8px);
+    align-items: center;
+    gap: var(--8-pad, 8px);
+    flex-shrink: 0;
+  }
+  
+  .headingContent {
+    color: var(--New-grey, #728492);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+  }
+  
+  .tableBody {
+    background: #ffffff;
+  }
+  
+  .tableRow {
+    width: 100%;
+    background: #ffffff;
+    vertical-align: top;
+  }
+  
+  .tableCell {
+    height: 58px;
+    border-bottom: 1px solid #ebe9f1;
+    padding: 12px 32px;
+    gap: 10px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #0a0a0a;
+    margin-left: 8px;
+    text-align: left;
+    vertical-align: middle;
+  }
+  
+  .filterButton {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 8px;
+    width: 115px;
+    height: 36px;
+    left: 268px;
+    top: 220px;
+    background: #ffffff;
+    border: 1px solid #ebe9f1;
+    border-radius: 6px;
+    margin-right: 12px;
+  }
+  
+  .filterModal {
+    position: absolute;
+    width: 786px;
+    height: fit-content;
+    left: 336px;
+    top: 324px;
+    background: #ffffff;
+    box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 6px;
+  }
+  
+  .filterSubcontainer {
+    width: 130px;
+    height: 216px;
+    overflow-y: scroll;
+  }
+  
+  .filterSubheading {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #0a0a0a;
+    margin-bottom: 8px;
+  }
+  
+  .filterSubSubContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 4px;
+    gap: 10px;
+    width: 120px;
+    height: 24px;
+    background: #f7f7f9;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+  
+  .filterBodyText {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #0a0a0a;
+  }
+  
+  .filterButton2 {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 4px 12px;
+    gap: 10px;
+    height: 28px;
+    background: #ffffff;
+    border: 1px solid #7367f0;
+    border-radius: 6px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: right;
+    color: #7367f0;
+  }
+  
+  .filterButton3 {
+    padding: 4px 12px;
+    gap: 10px;
+    width: 56px;
+    height: 28px;
+    background: PRIMARY_COLOR;
+    border: 1px solid #6519e1;
+    box-shadow: 0px 4px 8px rgba(88, 82, 246, 0.25);
+    border-radius: 6px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  
+  .floatingContainer {
+    box-sizing: border-box;
+    position: absolute;
+    width: 522px;
+    height: 76px;
+    left: 34.236vw;
+    top: 636px;
+    background: #ffffff;
+    border: 1px solid #6519e1;
+    box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 6px;
+    z-index: 1000;
+  }
+  
+  .floatinContainerText {
+    width: 14px;
+    height: 36px;
+    margin-left: 32px;
+    margin-top: 26px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 36px;
+    color: PRIMARY_COLOR;
+    display: inline-block;
+  }
+  
+  .floatingContainerText2 {
+    width: 128px;
+    height: 24px;
+    left: 58px;
+    top: 32px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #0a0a0a;
+    display: inline-block;
+    margin-left: 12px;
+  }
+  
+  .floatingContainerLine {
+    width: 46px;
+    height: 0px;
+    border: 1px solid #ebe9f1;
+    transform: rotate(90deg);
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+  

@@ -3,7 +3,7 @@ import OrganisationCards from '../HeaderCards/AllCards'
 import SearchBar from '../SearchBar/SearchBar';
 import AddNewPerson from '../Forms/AddnewPerson';
 import Pagination from '../Pagination/Pagination';
-import PeopleTable from '../Tables/PeopleTable';
+import PeopleTable from '../Tables/PeopleTable/PeopleTable';
 
 
 type Props= {
@@ -22,7 +22,7 @@ const People = (props: Props) => {
       
       return (
           <>
-               <OrganisationCards name={props.name} count={0} setValue1={props.setValue1}/>
+               <OrganisationCards api={api} name={props.name} count={0} setValue1={props.setValue1}/>
                <SearchBar search={value} setSearch={setValue} api={api} setApi={setApi} name={props.name} show={show} setShow={setShow}  filter={filter} setFilter={setfilter}/>
                {show && <AddNewPerson  api={api} setApi={setApi} show={show} setShow={setShow} id={null} />}
                <PeopleTable api={api} setApi={setApi} currPage={currPage} setPages={setpages} search={value} setContactPersonData={props.setContactPersonData} setnav={props.setnav}/>

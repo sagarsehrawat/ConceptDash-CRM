@@ -1,0 +1,248 @@
+.header {
+    display: inline-flex;
+    padding: 16px 20px;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-radius: 16px 16px 0px 0px;
+    border: 1px solid var(--New-Outline, #EBEDF8);
+    background: #FFF;
+    margin-right: 20px;
+    margin-top: 20px;
+    width: -webkit-fill-available;
+  }
+  .header2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+ .details2{
+        display: flex;
+        width: 120px;
+        padding: 0px var(--8-pad, 8px);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--8-pad, 8px);
+      
+ }
+ .projectHeading{
+    display: flex;
+    width: 210px;
+    padding: 0px var(--8-pad, 8px) 0px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--8-pad, 8px);
+    border-right: 1px solid var(--New-Outline, #EBEDF8);
+  }
+  .emailHeading{
+    display: flex;
+    width: 218px;
+    padding: 0px var(--8-pad, 8px) 0px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--8-pad, 8px);
+  }
+  .phoneHeading{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0px var(--8-pad, 8px) 0px 24px;
+      gap: var(--8-pad, 8px);
+  
+  }
+  .takeNoteCard{
+      display: flex;
+      padding: var(--8-pad, 8px) 16px;
+      justify-content: flex-end;
+      align-items: center;
+      align-self: stretch;
+      width: 437px;
+      border-radius: 0px 0px var(--12-pad, 12px) var(--12-pad, 12px);
+      border: 1px solid var(--New-Outline, #EBEDF8);
+      background: #FFF;    
+  }
+  .name {
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.103px;
+    display: flex;
+    gap: var(--8-pad, 8px);
+  }
+  
+  .position {
+    color: #8B9FAF;
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0.103px;
+  }
+  
+  .resume {
+    display: inline-flex;
+    padding: var(--8-pad, 8px) 24px var(--8-pad, 8px) 16px;
+    align-items: center;
+    gap: var(--8-pad, 8px);
+    border-radius: 6px;
+    border: 1px solid #8361FE;
+    color: #8361FE;
+  }
+  
+  .details {
+    display: inline-flex;
+    align-items: flex_start;
+    padding: var(--12-pad, 12px) 20px;
+    border-radius: 0px 0px 16px 16px;
+    border-right: 1px solid var(--New-Outline, #EBEDF8);
+    border-bottom: 1px solid var(--New-Outline, #EBEDF8);
+    border-left: 1px solid var(--New-Outline, #EBEDF8);
+    background: #FFF;
+    width: -webkit-fill-available;
+    margin-right: 20px;
+  }
+  
+  .subheading {
+    color: #8B9FAF;
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+  }
+  
+  .headingdata {
+    display: flex;
+    align-items: center;
+    gap: var(--8-pad, 8px);
+    align-self: stretch;
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+  }
+  
+  .reminderDate {
+    display: flex;
+    padding: 0px 16px;
+    align-items: center;
+    gap: 381px;
+    align-self: stretch;
+    color: var(--New-grey, #728492);
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+  }
+  
+  .note {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 16px;
+    border: 1px solid var(--New-Outline, #EBEDF8);
+    flex: 100;
+    background: #FFF;
+    margin-right: 20px;
+    margin-top: 24px;
+  }
+  
+  .reminders {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 278px;
+    padding: var(--12-pad, 12px) 0px 16px 0px;
+    gap: var(--8-pad, 8px);
+    border-radius: 16px;
+    border: 1px solid var(--New-Outline, #EBEDF8);
+    background: #FFF;
+    margin-top: 24px;
+    margin-right: 20px;
+    height: fit-content;
+  }
+  
+  .remindersHeading {
+    display: flex;
+    padding: var(--8-pad, 8px) 16px;
+    align-items: center;
+    gap: 16px;
+    align-self: stretch;
+    color: var(--Black-text, #3D424F);
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    border-bottom: 1px solid var(--New-Outline, #EBEDF8);
+  }
+  
+  .reminderContents {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+  }
+  
+  .reminderBox {
+    display: flex;
+    width: 275px;
+    padding: var(--8-pad, 8px) 0px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 4px;
+    border-bottom: 1px solid var(--New-Outline, #EBEDF8);
+  }
+  
+  .subcontent1 {
+    display: flex;
+    align-items: center;
+    gap: var(--12-pad, 12px);
+    align-self: Stretch;
+  }
+  
+  .subcontent2 {
+    color: var(--New-grey, #728492);
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+  }
+  
+  .textarea {
+    display: flex;
+    height: 64px;
+    padding: var(--12-pad, 12px) 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    align-self: stretch;
+    border-radius: var(--12-pad, 12px);
+    border: 1px solid var(--New-Outline, #EBEDF8);
+    background: #F8FAFC;
+  }
+  
+  .emptychat {
+    display: flex;
+    padding: var(--12-pad, 12px) 16px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 5px;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: var(--12-pad, 12px);
+    border: 1px solid var(--New-Outline, #EBEDF8);
+    background: #F8F7FF;
+  }
+  

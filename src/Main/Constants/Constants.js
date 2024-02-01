@@ -1,6 +1,6 @@
 export const HOST = 'https://crm-api.conceptdash.ca'
 // export const HOST = 'http://localhost:8080'
-
+ 
 // get apis
 export const GET_CELEBRATIONS='/api/get/celebrations'
 export const GET_ALL_USERS = '/api/get/customers'
@@ -251,3 +251,6 @@ export const UPDATE_PROJECT_NOTES="/client/update/people/projectspecific"
 export const DELETE_GENERAL_NOTES='/client/delete/people/generalchat'
 export const DELETE_PROJECT_NOTES='/client/delete/people/projectspecific'
 // export const DELETE_GENERAL_NOTES="/client/delete/people/generalchats"
+
+export const UPDATE_ORGANIZATION_LABEL = "/client/update/organization/label";
+export const UPDATE_PEOPLE_LABEL='/client/update/people/label'
