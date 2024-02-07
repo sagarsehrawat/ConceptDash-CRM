@@ -257,7 +257,7 @@ const AddBudget = ({ show, onHide, budget = null, setApi = () => { }, cityId=0 }
                   name='year'
                   placeholder='Choose Year'
                   value={form.year}
-                  readOnly={budget !== null}
+                  // readOnly={budget !== null}
                   onChange={handleForm}
                   options={generateYearOptions()}
                   />
