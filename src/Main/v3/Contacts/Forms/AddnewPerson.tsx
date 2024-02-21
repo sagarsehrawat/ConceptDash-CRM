@@ -1,7 +1,7 @@
 import React, { useEffect, useState,useRef } from "react";
 import peopleblack from '../icons/people_black_24dp (2) 1.svg'
 import TFButton from "../../../../components/ui/TFButton/TFButton"
-import TFChip from '../../../../components/form/TFChip/TFChip.js';
+import TFChip from '../../../../components/form/TFChip/TFChip';
 import FormUtils from "../../../../utils/FormUtils.js";
 import TFTypeahead from "../../../../components/form/TFTypeahead/TFTypeahead.js";
 import Utils from '../../../../utils/Utils'

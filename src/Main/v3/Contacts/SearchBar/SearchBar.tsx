@@ -24,7 +24,7 @@ const SearchBar = ({search,setSearch,api,setApi,name,setShow, } : Props) => {
   return (
     <>
 <>
-  <div className='d-flex flex-row justify-content-between' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px" }}>
+  <div className='d-flex flex-row justify-content-between' style={{ marginTop: "8px", marginBottom: "24px", marginLeft: "32px", marginRight: "32px" }}>
     {/* Searchbar */}
     <TFSearchBar
       placeholder={'name,label'}
