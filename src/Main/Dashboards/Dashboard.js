@@ -1681,26 +1681,35 @@ const Dashboard = () => {
       </Modal>
 
       <Modal
-            backdrop="static"
             size="lg"
             keyboard={false}
             show={showCityForm}
             onHide={handleCloseCityForm}
+            backdrop="static"
+            style={mystyles.addModal}
+            dialogClassName="filter-dialog"
+            animation={false}
           >
-            <Modal.Header closeButton>
-              <Modal.Title>Add City</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {
-                <AddCity
-                  setRed={setred}
-                  setGreen={setgreen}
-                  closeModal={handleCloseCityForm}
-                />
-              }
-            </Modal.Body>
-          </Modal>
 
+<div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={mystyles.addHeading}>Add City</div>
+                    </div>
+                    <div><img onClick={handleCloseCityForm} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
+                {
+                <AddCity
+              setRed={setred}
+              setGreen={setgreen}
+              closeModal={handleCloseCityForm}
+              api={apiCall}
+              apiCall={setCall}
+            />
+          }
+      </Modal>
+
+       
           <Modal
             backdrop="static"
             size="lg"
@@ -1742,26 +1751,35 @@ const Dashboard = () => {
               }
             </Modal.Body>
           </Modal>
+      
           <Modal
-            backdrop="static"
             size="lg"
             keyboard={false}
             show={cityform}
             onHide={handleclosecityform}
+            backdrop="static"
+            style={mystyles.addModal}
+            dialogClassName="filter-dialog"
+            animation={false}
           >
-            <Modal.Header closeButton>
-              <Modal.Title>Add New Budget City</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-            {
+
+<div className='d-flex flex-row justify-content-between align-items-center' style={{marginTop: '20px', marginLeft: '20px', display: 'flex', flexDirection:'row'}}>
+                    <div className='d-flex flex-row'>
+                        <img src={tIcon} />
+                        <div style={mystyles.addHeading}>Add Budget Cities</div>
+                    </div>
+                    <div><img onClick={handleclosecityform} style={{marginRight:'26px', marginTop:'6px',float: 'right'}} src={cross} /></div>
+                </div>
+                {
                 <AddBudgetCity
-                  setRed={setred}
-                  setGreen={setgreen}
-                  closeModal={handleclosecityform}
-                />
-              }
-            </Modal.Body>
-          </Modal>
+              setRed={setred}
+              setGreen={setgreen}
+              closeModal={handleclosecityform}
+              api={apiCall}
+              apiCall={setCall}
+            />
+          }
+      </Modal>
     </>
   );
 };
