@@ -48,7 +48,7 @@ function NewUser() {
                 }
               } 
               else {
-                setemployeeid(res.data.res[0].Employee_ID);
+                setemployeeid(res.data.res[0].employee_id);
               }
             })
             .catch((err) => {

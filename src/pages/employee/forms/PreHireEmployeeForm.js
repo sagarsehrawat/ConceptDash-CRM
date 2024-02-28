@@ -24,6 +24,7 @@ import LoadingSpinner from "../../../Main/Loader/Loader";
 import TFDateChip from "../../../components/form/TFDateChip/TFDateChip";
 import { icons } from "../../../assets/icons";
 import emp_icon from "../../../assets/icons/emp.svg";
+import Dropdown from "../../../components/form/DropDown/Dropdown";
 
 const FORM = {
   firstName: "",
@@ -36,6 +37,7 @@ const FORM = {
   managerName: "",
   businessPhone: "",
   alternativeNo: "",
+  dashboard: ""
 };
 
 const PreHireEmployeeForm = (props) => {
@@ -58,7 +60,6 @@ const PreHireEmployeeForm = (props) => {
   const handleShowTitleForm = () => setShowTitleForm(true);
 
   useEffect(() => {
-    console.log("Inside out");
     const call = async () => {
       await axios
         .get(HOST + GET_JOB_TITLES, {
@@ -75,6 +76,7 @@ const PreHireEmployeeForm = (props) => {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
+          console.log(res.data.res)
           setDepartments(res.data.res);
         })
         .catch((err) => {
@@ -131,6 +133,9 @@ const PreHireEmployeeForm = (props) => {
       case "alternativeNo":
         formUtils.typeInputForm(key, value);
         break;
+      case "dashboard":
+        formUtils.typeaheadForm(key, value);
+        break;
     }
   };
   const handleSubmit = async (e) => {
@@ -138,14 +143,7 @@ const PreHireEmployeeForm = (props) => {
     if (
       !form.firstName ||
       !form.lastName ||
-      !form.workEmail ||
-      !form.personalEmail ||
-      !form.jobTitle ||
-      !form.joiningDate ||
-      !form.department ||
-      !form.managerName ||
-      !form.businessPhone ||
-      !form.alternativeNo
+      !form.workEmail
     ) {
       window.alert("Please fill in all required fields");
       return;
@@ -166,6 +164,7 @@ const PreHireEmployeeForm = (props) => {
           directManagerId: form.managerName,
           business: form.businessPhone,
           mobile: form.alternativeNo,
+          dashboard: "Engineer"
         },
         { headers: { auth: "Rose " + localStorage.getItem("auth") } }
       )
@@ -272,58 +271,7 @@ const PreHireEmployeeForm = (props) => {
                 />
               </div>
 
-              <div
-                className="d-flex justify-content-start align-item-center mb-3"
-                style={{
-                  marginTop: "0px",
-                  marginLeft: "0px",
-                  marginRight: "0px",
-                }}
-              >
-                <label>Dashboard Priority</label>
-                <Row>
-                  <Form.Group
-                    style={{
-                      height: "20px",
-                      fontFamily: "'Roboto'",
-                      fontStyle: "normal",
-                      fontWeight: 500,
-                      fontSize: "14px",
-                      lineHeight: "20px",
-                      color: "#70757A",
-                    }}
-                  >
-                    <Form.Check
-                      value="Manager"
-                      inline
-                      type="radio"
-                      defaultChecked
-                      name="group1"
-                      id="1"
-                      label="Manager"
-                    />
-                    <Form.Check
-                      value="Engineer"
-                      inline
-                      type="radio"
-                      defaultChecked
-                      name="group1"
-                      id="1"
-                      label="Engineer"
-                    />
-                    <Form.Check
-                      value="Admin"
-                      inline
-                      type="radio"
-                      defaultChecked
-                      name="group1"
-                      id="1"
-                      label="Admin"
-                    />
-                  </Form.Group>
-                </Row>
-              </div>
-
+              
               <div className="d-flex justify-content-start align-item-center mb-3">
                 <label>Department</label>
                 <TFTypeahead
