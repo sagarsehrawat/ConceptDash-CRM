@@ -25,6 +25,7 @@ import TFDateChip from "../../../components/form/TFDateChip/TFDateChip";
 import { icons } from "../../../assets/icons";
 import emp_icon from "../../../assets/icons/emp.svg";
 import Dropdown from "../../../components/form/DropDown/Dropdown";
+import Utils from '../../../utils/Utils'
 
 const FORM = {
   firstName: "",
@@ -66,7 +67,7 @@ const PreHireEmployeeForm = (props) => {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
-          setjobTitles(res.data.res);
+          setjobTitles(Utils.convertToTypeaheadOptions(res.data.res, 'Title', 'Title_ID'));
         })
         .catch((err) => {
           console.log(err);
@@ -76,8 +77,7 @@ const PreHireEmployeeForm = (props) => {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
-          console.log(res.data.res)
-          setDepartments(res.data.res);
+          setDepartments(Utils.convertToTypeaheadOptions(res.data.res, 'Department', 'Department_ID'));
         })
         .catch((err) => {
           console.log(err);
@@ -87,8 +87,7 @@ const PreHireEmployeeForm = (props) => {
           headers: { auth: "Rose " + localStorage.getItem("auth") },
         })
         .then((res) => {
-          console.log(res.data.res);
-          setemployees(res.data.res);
+          setemployees(Utils.convertToTypeaheadOptions(res.data.res, 'Full_Name', 'Employee_ID'));
         })
         .catch((err) => {
           console.log(err);
@@ -98,10 +97,9 @@ const PreHireEmployeeForm = (props) => {
   }, [apiCallCity]);
 
   const formUtils = FormUtils(setForm);
-
+console.log(jobTitles)
   const handleForm = (key, value) => {
-    console.log("Key", key);
-    console.log("Value", value);
+    console.log(key, value)
     switch (key) {
       case "firstName":
         formUtils.typeInputForm(key, value);
@@ -116,16 +114,16 @@ const PreHireEmployeeForm = (props) => {
         formUtils.typeInputForm(key, value);
         break;
       case "jobTitle":
-        formUtils.typeaheadForm(key, value.Title);
+        formUtils.typeaheadForm(key, value);
         break;
       case "joiningDate":
         formUtils.typeInputForm(key, value);
         break;
       case "department":
-        formUtils.typeaheadForm(key, value.Department);
+        formUtils.typeaheadForm(key, value);
         break;
       case "managerName":
-        formUtils.typeaheadForm(key, value.Full_Name);
+        formUtils.typeaheadForm(key, value);
         break;
       case "businessPhone":
         formUtils.typeInputForm(key, value);
@@ -150,6 +148,7 @@ const PreHireEmployeeForm = (props) => {
     }
     setIsLoading(true);
     setIsSubmit(true);
+    console.log(form)
     axios
       .post(
         HOST + ADD_EMPLOYEE,
@@ -158,10 +157,10 @@ const PreHireEmployeeForm = (props) => {
           lastName: form.lastName,
           emailWork: form.workEmail,
           emailPersonal: form.personalEmail,
-          jobTitleId: form.jobTitle,
+          jobTitleId: form.jobTitleId,
           joiningDate: form.joiningDate,
-          departmentId: form.department,
-          directManagerId: form.managerName,
+          departmentId: form.departmentId,
+          directManagerId: form.managerNameId,
           business: form.businessPhone,
           mobile: form.alternativeNo,
           dashboard: "Engineer"
