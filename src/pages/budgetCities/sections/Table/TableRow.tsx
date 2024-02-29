@@ -132,7 +132,6 @@ console.log(scrollPosition)
                             color="#70757A"
                             height="18px"
                             onClick={handleArrowRightClick}
-                            
                         />
                     </div>
                 </td>
