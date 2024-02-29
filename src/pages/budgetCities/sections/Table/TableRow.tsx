@@ -1,22 +1,72 @@
 import { faArrowRight, faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { MutableRefObject, useState } from 'react'
+import React, { MutableRefObject, useState,useEffect } from 'react'
 import TFChip from '../../../../components/form/TFChip/TFChip';
 import UpdateBudgetCity from '../../forms/UpdateBudgetCity';
 
 type Props = {
     city: City;
-    tableRef: MutableRefObject<null>;
+    tableRef: MutableRefObject<HTMLDivElement | null>
     setCityId: Function;
 }
 
 const TableRow = ({ city, tableRef, setCityId }: Props) => {
     const [updateModal, setUpdateModal] = useState<boolean>(false);
+    const [scrollPosition, setScrollPosition] = useState<number>(0);
+
+    useEffect(() => {
+        const savedScrollPosition = localStorage.getItem('tableScrollPosition');
+        if (savedScrollPosition) {
+          setScrollPosition(parseInt(savedScrollPosition, 10));
+        }
+      }, []);
+
+    // useEffect(() => {
+    //     const savedScrollPosition = scrollPosition;
+    //     if (savedScrollPosition) {
+    //       setScrollPosition(scrollPosition);
+    //     }
+    //   }, []);
+
+    // Set the scroll position when tableRef changes
+    useEffect(() => {
+        if (tableRef.current instanceof HTMLDivElement) {
+            tableRef.current.scrollTop = scrollPosition;
+        }
+    }, [scrollPosition, tableRef]);
+
+console.log(scrollPosition)
     const addComma = (num: string | number | null) => {
         if (num === null || num === "" || num === undefined) return ""
         const n = num
         return `$ ${n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
     }
+    const handleArrowRightClick = () => {
+        if (tableRef.current instanceof HTMLDivElement) {
+             const newScrollPosition = tableRef.current.scrollTop;
+             localStorage.setItem('tableScrollPosition', newScrollPosition.toString());
+            console.log("Setting scroll position to:", newScrollPosition);
+
+            console.log("Current scroll position:", tableRef.current.scrollTop);
+        }
+        setCityId(city.city_id);
+    };
+
+    // const handleArrowRightClick = () => {
+    //     if (tableRef.current instanceof HTMLDivElement) {
+    //         const newScrollPosition = tableRef.current.scrollTop;
+
+    //         console.log(newScrollPosition)
+    //         setScrollPosition(newScrollPosition);
+    //     }
+    //     if(scrollPosition){
+    //         console.log(scrollPosition)
+    //         setCityId(city.city_id);
+    //     }
+    // };
+
+
+
 
     return (
         <>
@@ -65,7 +115,7 @@ const TableRow = ({ city, tableRef, setCityId }: Props) => {
                         {city.remarks}
                     </p>
                 </td>
-                <td className='table-cell'>
+                <td className='table-cell' style={{ position: "sticky", right: 0, zIndex: 1, backgroundColor: "white" }}>
                     <div className='d-flex flex-row'>
                         <FontAwesomeIcon
                             icon={faPencil}
@@ -81,9 +131,7 @@ const TableRow = ({ city, tableRef, setCityId }: Props) => {
                             style={{ cursor: "pointer" }}
                             color="#70757A"
                             height="18px"
-                            onClick={() => {
-                                setCityId(city.city_id);
-                            }}
+                            onClick={handleArrowRightClick}
                         />
                     </div>
                 </td>
@@ -92,6 +140,8 @@ const TableRow = ({ city, tableRef, setCityId }: Props) => {
             {updateModal && <UpdateBudgetCity show={updateModal} onHide={() => setUpdateModal(false)} city={city} />}
         </>
     )
+    
 }
+
 
 export default TableRow

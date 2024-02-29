@@ -14,7 +14,7 @@ const TableHeader = () => {
                     Population
                 </th>
                 <th className='table-heading' style={{ width: "150px" }}>
-                    Capital Budget
+                    Capital Budget      2024
                 </th>
                 <th className='table-heading' style={{ width: "110px" }}>
                     2023 Budget
@@ -28,9 +28,10 @@ const TableHeader = () => {
                 <th className='table-heading' style={{ width: "240px" }}>
                     Remarks
                 </th>
-                <th className='table-heading' style={{ width: "120px" }}>
-                    Action
-                </th>
+               
+                <th className='table-heading fixed-header-column' style={{ width: "150px", position: "sticky", right: 0, zIndex: 1}}>
+                <p className='table-heading-text'>Action</p>
+        </th>
             </tr>
         </thead>
     )
