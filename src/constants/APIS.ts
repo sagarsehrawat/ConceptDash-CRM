@@ -1,6 +1,6 @@
 const APIS = {
-    // BASE_URL : 'https://crm-api.conceptdash.ca',
-     BASE_URL : 'http://localhost:8080',
+    BASE_URL : 'https://crm-api.conceptdash.ca',
+    //  BASE_URL : 'http://localhost:8080',
     SERVER_STATUS : `/`,
     GET_RFP_COUNT : '/api/get/rfp/count',
     GET_PROJECT_COUNT: '/project/fetch/count',
